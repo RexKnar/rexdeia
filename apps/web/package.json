@@ -9,7 +9,9 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@clerk/nextjs": "^4.19.0",
     "next": "^13.4.1",
+    "next-intl": "^2.14.6",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "ui": "workspace:*"
@@ -19,6 +21,9 @@
     "@types/react": "^18.0.22",
     "@types/react-dom": "^18.0.7",
     "eslint-config-custom": "workspace:*",
+    "prettier": "^2.5.1",
+    "prettier-plugin-packagejson": "^2.4.3",
+    "prettier-plugin-tailwindcss": "^0.3.0",
     "tsconfig": "workspace:*",
     "typescript": "^4.5.3"
   }
