@@ -1,4 +1,5 @@
 import { ClerkProvider } from '@clerk/nextjs';
+import "configs/tailwind/styles.css";
 
 export const metadata = {
   title: 'Capeo - Simplifying the way you manage your business',
