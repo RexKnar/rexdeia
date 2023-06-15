@@ -1,0 +1,8 @@
+{
+  "name": "utils",
+  "version": "0.0.0",
+  "dependencies": {
+    "clsx": "^1.2.1",
+    "tailwind-merge": "^1.13.1"
+  }
+}

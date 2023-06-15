@@ -1,6 +1,12 @@
+import { cn } from 'utils';
+
 export default function Page() {
-  return <>
-    <p className="rounded-full ml-4 uppercase">Save Changes</p>
-    <button className="rounded-full ml-4 uppercase bg-amber-500">Save Changes</button>
-    </>;
+  return (
+    <>
+      <p className="ml-4 rounded-full uppercase">Save Changes</p>
+      <button className={cn('ml-4 rounded-full bg-amber-500 uppercase')}>
+        Save Changes
+      </button>
+    </>
+  );
 }
