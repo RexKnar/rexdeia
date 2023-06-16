@@ -11,10 +11,23 @@
   "devDependencies": {
     "@types/react": "^18.2.0",
     "@types/react-dom": "^18.2.0",
+    "configs": "workspace:*",
     "eslint": "^7.32.0",
     "eslint-config-custom": "workspace:*",
     "react": "^17.0.2",
     "tsconfig": "workspace:*",
     "typescript": "^4.5.2"
+  },
+  "dependencies": {
+    "@radix-ui/react-slot": "^1.0.2",
+    "autoprefixer": "^10.4.14",
+    "utils": "workspace:*",
+    "class-variance-authority": "^0.6.0",
+    "clsx": "^1.2.1",
+    "lucide-react": "^0.244.0",
+    "postcss": "^8.4.24",
+    "tailwind": "^4.0.0",
+    "tailwind-merge": "^1.13.1",
+    "tailwindcss-animate": "^1.0.6"
   }
 }

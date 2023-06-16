@@ -1,3 +1,4 @@
+import { Button } from 'ui';
 import { cn } from 'utils';
 
 export default function Page() {
@@ -7,6 +8,10 @@ export default function Page() {
       <button className={cn('ml-4 rounded-full bg-amber-500 uppercase')}>
         Save Changes
       </button>
+
+      <Button className="ml-4" variant="outline">
+        Save Changes
+      </Button>
     </>
   );
 }
