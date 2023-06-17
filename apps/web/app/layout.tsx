@@ -1,5 +1,4 @@
-import { ClerkProvider } from '@clerk/nextjs';
-import "configs/tailwind/styles.css";
+import 'configs/tailwind/styles.css';
 
 export const metadata = {
   title: 'Capeo - Simplifying the way you manage your business',
@@ -12,10 +11,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <ClerkProvider>
-      <html lang="en">
-        <body>{children}</body>
-      </html>
-    </ClerkProvider>
+    <html lang="en">
+      <body>{children}</body>
+    </html>
   );
 }

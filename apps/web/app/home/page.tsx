@@ -9,9 +9,7 @@ export default function Page() {
         Save Changes
       </button>
 
-      <Button className="ml-4" variant="outline">
-        Save Changes
-      </Button>
+      <Button className="ml-4">Save Changes</Button>
     </>
   );
 }

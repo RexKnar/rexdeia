@@ -1,4 +1,3 @@
-import { UserButton } from '@clerk/nextjs';
 import { Button, Header } from 'ui';
 
 export default function Page() {
@@ -6,9 +5,6 @@ export default function Page() {
     <>
       <Header text="Web" />
       <Button />
-      <div>
-        <UserButton afterSignOutUrl="/" />
-      </div>
     </>
   );
 }
