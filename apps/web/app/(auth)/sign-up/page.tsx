@@ -1,35 +1,55 @@
+import Link from 'next/link';
 import { Button, Input } from 'ui';
 
 export const metadata = {
-  title: 'Sign in | Capeo',
-  description: 'Capeo is a business management platform for small businesses.',
+  title: 'Sign up | Capeo',
+  description: 'Start managing your business with Capeo.',
 };
 
 export default function Page() {
   return (
     <div className="flex h-screen flex-col sm:flex-row">
       <section
-        className="bg-primary hidden flex-grow sm:flex sm:w-auto"
+        className="bg-primary hidden flex-grow bg-center bg-no-repeat sm:flex sm:w-auto"
         style={{
           backgroundImage: 'url(/assets/images/sign-in-banner.png)',
-          backgroundRepeat: 'repeat',
         }}
       ></section>
 
       <section className="flex h-screen w-full translate-y-0 transform flex-col justify-center px-8 opacity-100 transition-all duration-500 ease-in-out md:w-4/12">
         <div className="flex">
-          <span className="text-primary text-3xl font-semibold">Welcome</span>
+          <span className="text-primary text-3xl font-semibold">
+            Create Account
+          </span>
         </div>
 
-        <p className="text-gray-600">Sign in to your account to get started.</p>
+        <p className="text-gray-600">
+          Sign up to start managing your business.
+        </p>
 
         <form className="mt-4">
           <div>
+            <label className="block text-gray-700">Full Name</label>
+            <Input
+              type="text"
+              className="mt-2"
+              placeholder="Enter your full name"
+            />
+          </div>
+          <div className="mt-4">
             <label className="block text-gray-700">Email Address</label>
             <Input
               type="email"
               className="mt-2"
               placeholder="Enter your email address"
+            />
+          </div>
+          <div className="mt-4">
+            <label className="block text-gray-700">Phone Number</label>
+            <Input
+              type="number"
+              className="mt-2"
+              placeholder="Enter your phone number"
             />
           </div>
           <div className="mt-4">
@@ -42,9 +62,15 @@ export default function Page() {
           </div>
           <div className="mt-6 w-full">
             <Button type="submit" className="w-full text-white">
-              Sign in
+              Next
             </Button>
           </div>
+          <p className="mt-4 text-center text-gray-500">
+            Already have an account?{' '}
+            <Link href="/sign-in" className="text-primary font-semibold">
+              Sign in
+            </Link>
+          </p>
         </form>
       </section>
     </div>
