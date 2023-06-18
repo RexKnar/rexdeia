@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { Button, Input } from 'ui';
-import { signIn } from "next-auth/react";
+import { signIn } from 'next-auth/react';
 
 export const metadata = {
   title: 'Sign up | Capeo',
@@ -9,13 +9,18 @@ export const metadata = {
 
 export default function Page() {
   async function signupHandler(event) {
-    event.preventDefault()
+    event.preventDefault();
 
-    const name = event.target.name.value
-    const email = event.target.email.value
-    const password = event.target.password.value
+    const name = event.target.name.value;
+    const email = event.target.email.value;
+    const password = event.target.password.value;
 
-    await signIn('credentials', { callbackUrl: '/', name: name, password: password, email: email })
+    await signIn('credentials', {
+      callbackUrl: '/',
+      name: name,
+      password: password,
+      email: email,
+    });
   }
 
   return (

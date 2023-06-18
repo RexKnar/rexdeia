@@ -1,79 +1,79 @@
-import { PrismaAdapter } from "@next-auth/prisma-adapter"
-import { db } from "./db"
-import { getServerSession, NextAuthOptions } from "next-auth";
+import { PrismaAdapter } from '@next-auth/prisma-adapter';
+import { db } from './db';
+import { getServerSession, NextAuthOptions } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
-import { nanoid } from "nanoid";
+import { nanoid } from 'nanoid';
 
 export const authOptions: NextAuthOptions = {
-    adapter: PrismaAdapter(db),
-    session: {
-      strategy: 'jwt',
-    },
-    pages: {
-      signIn: '/signin',
-    },
-    providers: [
-        CredentialsProvider({
-          name: 'Credentials',
-          credentials: {
-            email: { label: 'email', type: 'text' },
-            password: { label: 'Password', type: 'password' },
-          },
-          authorize(credentials, req) {
-            const user = { id: '1', email: 'b.arunselvakumar@gmail.com' };
-            return user;
-          },
-        }),
-      ],
-      debug: true,
-    callbacks: {
-      async session({ token, session }) {
-        if (token) {
-          session.user.id = token.id
-          session.user.name = token.name
-          session.user.email = token.email
-          session.user.image = token.picture
-          session.user.username = token.username
-        }
-  
-        return session
+  adapter: PrismaAdapter(db),
+  session: {
+    strategy: 'jwt',
+  },
+  pages: {
+    signIn: '/signin',
+  },
+  providers: [
+    CredentialsProvider({
+      name: 'Credentials',
+      credentials: {
+        email: { label: 'email', type: 'text' },
+        password: { label: 'Password', type: 'password' },
       },
-  
-      async jwt({ token, user }) {
-        const dbUser = await db.user.findFirst({
+      authorize(credentials, req) {
+        const user = { id: '1', email: 'b.arunselvakumar@gmail.com' };
+        return user;
+      },
+    }),
+  ],
+  debug: true,
+  callbacks: {
+    async session({ token, session }) {
+      if (token) {
+        session.user.id = token.id;
+        session.user.name = token.name;
+        session.user.email = token.email;
+        session.user.image = token.picture;
+        session.user.username = token.username;
+      }
+
+      return session;
+    },
+
+    async jwt({ token, user }) {
+      const dbUser = await db.user.findFirst({
+        where: {
+          email: token.email,
+        },
+      });
+
+      if (!dbUser) {
+        token.id = user!.id;
+        return token;
+      }
+
+      if (!dbUser.username) {
+        await db.user.update({
           where: {
-            email: token.email,
+            id: dbUser.id,
           },
-        })
-  
-        if (!dbUser) {
-          token.id = user!.id
-          return token
-        }
-  
-        if (!dbUser.username) {
-          await db.user.update({
-            where: {
-              id: dbUser.id,
-            },
-            data: {
-              username: nanoid(10),
-            },
-          })
-        }
-  
-        return {
-          id: dbUser.id,
-          name: dbUser.name,
-          email: dbUser.email,
-          picture: dbUser.image,
-          username: dbUser.username,
-        }
-      },
-      redirect() {
-        return '/'
-      },
+          data: {
+            username: nanoid(10),
+          },
+        });
+      }
+
+      return {
+        id: dbUser.id,
+        name: dbUser.name,
+        email: dbUser.email,
+        picture: dbUser.image,
+        username: dbUser.username,
+      };
     },
-  }
-  
-  export const getAuthSession = () => getServerSession(authOptions)
+    redirect() {
+      return '/';
+    },
+  },
+};
+
+export const getAuthSession = () => getServerSession(authOptions);
