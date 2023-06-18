@@ -1,4 +1,5 @@
 import 'configs/tailwind/styles.css';
+import Providers from "../lib/Providers";
 
 export const metadata = {
   title: 'Capeo - Simplifying the way you manage your business',
@@ -12,7 +13,11 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body>
+        <Providers>
+          {children}
+        </Providers>
+      </body>
     </html>
   );
 }

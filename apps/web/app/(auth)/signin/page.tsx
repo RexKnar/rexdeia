@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import { Button, Input } from 'ui';
 
 export const metadata = {
@@ -46,6 +47,13 @@ export default function Page() {
             </Button>
           </div>
         </form>
+        <p className="mt-4 text-center text-gray-500">
+          Don't have an account yet?{' '}
+          <Link href="/signup" className="text-primary font-semibold">
+            Click here
+          </Link>
+          {` `} to create one.
+        </p>
       </section>
     </div>
   );

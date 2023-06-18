@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { Button, Input } from 'ui';
+import { signIn } from "next-auth/react";
 
 export const metadata = {
   title: 'Sign up | Capeo',
@@ -7,6 +8,16 @@ export const metadata = {
 };
 
 export default function Page() {
+  async function signupHandler(event) {
+    event.preventDefault()
+
+    const name = event.target.name.value
+    const email = event.target.email.value
+    const password = event.target.password.value
+
+    await signIn('credentials', { callbackUrl: '/', name: name, password: password, email: email })
+  }
+
   return (
     <div className="flex h-screen flex-col sm:flex-row">
       <section
@@ -27,10 +38,11 @@ export default function Page() {
           Sign up to start managing your business.
         </p>
 
-        <form className="mt-4">
+        <form className="mt-4" onSubmit={signupHandler}>
           <div>
             <label className="block text-gray-700">Full Name</label>
             <Input
+              name="name"
               type="text"
               className="mt-2"
               placeholder="Enter your full name"
@@ -39,6 +51,7 @@ export default function Page() {
           <div className="mt-4">
             <label className="block text-gray-700">Email Address</label>
             <Input
+              name="email"
               type="email"
               className="mt-2"
               placeholder="Enter your email address"
@@ -55,6 +68,7 @@ export default function Page() {
           <div className="mt-4">
             <label className="block text-gray-700">Password</label>
             <Input
+              name="password"
               type="password"
               className="mt-2"
               placeholder="Enter your password"
@@ -67,7 +81,7 @@ export default function Page() {
           </div>
           <p className="mt-4 text-center text-gray-500">
             Already have an account?{' '}
-            <Link href="/sign-in" className="text-primary font-semibold">
+            <Link href="/signin" className="text-primary font-semibold">
               Sign in
             </Link>
           </p>
