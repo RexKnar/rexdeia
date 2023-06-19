@@ -3,6 +3,7 @@ import { db } from './db';
 import { getServerSession, NextAuthOptions } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import { nanoid } from 'nanoid';
+import bcrypt from 'bcrypt';
 
 export const authOptions: NextAuthOptions = {
   adapter: PrismaAdapter(db),
@@ -19,8 +20,45 @@ export const authOptions: NextAuthOptions = {
         email: { label: 'email', type: 'text' },
         password: { label: 'Password', type: 'password' },
       },
-      authorize(credentials, req) {
-        const user = { id: '1', email: 'b.arunselvakumar@gmail.com' };
+      async authorize(credentials) {
+        console.log(credentials);
+        if(!credentials.email || !credentials.password) {
+          throw new Error('Please enter an email and password')
+        }
+        
+        const user = await db.user.findFirst({
+          where: {
+            email: credentials.email
+          }
+        });
+
+        console.log(user);
+
+        if (!user || !user?.password) {
+          console.log(user);
+          const hashedPassword = await bcrypt.hash(credentials.password, 10);
+
+          const createdUser = await db.user.create({
+            data: {
+              name: credentials.name,
+              email: credentials.email,
+              password: hashedPassword,
+            }
+          });
+
+          console.log(createdUser);
+
+          return createdUser;
+        }
+
+        // check to see if password matches
+        const passwordMatch = await bcrypt.compare(credentials.password, user.password)
+
+        // if password does not match
+        if (!passwordMatch) {
+          throw new Error('Incorrect password')
+        }
+
         return user;
       },
     }),
