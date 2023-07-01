@@ -2,7 +2,7 @@ import endpointInfo from './endpoints';
 
 export async function makeAPICall<T>(
   apiName: string,
-  payload: Record<string, unknown>,
+  payload: Record<string, unknown> = {},
   params: Record<string, string> = {},
   substitutions: Record<string, string> = {}
 ): Promise<T> {

@@ -2,6 +2,7 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from '../../../lib/auth';
 import { redirect } from 'next/navigation';
 import { SetupForm } from '../../../lib/components/auth/SetupForm';
+import { getOrganisationsByUserId } from '../../api/user/organization/service';
 
 export const metadata = {
   title: 'Capeo | Setup',
@@ -12,6 +13,11 @@ export default async function Page() {
   const session = await getServerSession(authOptions);
   if (!session) {
     redirect('/signin');
+  }
+
+  const userOrganizations = await getOrganisationsByUserId(session.user.id);
+  if (userOrganizations.length) {
+    redirect('/');
   }
 
   return (
