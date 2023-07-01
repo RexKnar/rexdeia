@@ -2,7 +2,7 @@ import Link from 'next/link';
 import { Button, Input } from 'ui';
 
 export const metadata = {
-  title: 'Sign in | Capeo',
+  title: 'Capeo | Sign in',
   description: 'Capeo is a business management platform for small businesses.',
 };
 

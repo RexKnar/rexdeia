@@ -3,33 +3,45 @@
 import { Button, Input } from "ui";
 import Link from "next/link";
 import { signIn } from "next-auth/react";
+import { useForm } from "react-hook-form";
+import { makeAPICall } from "../../api";
+import { REGISTER_USER } from "../../endpoints";
 
 export function SignUpForm() {
-  async function signupHandler(event) {
-    event.preventDefault();
+  const { register, handleSubmit, formState: { errors } } = useForm();
+  async function signupHandler({ name, email, password, phoneNumber }) {
+    try {
+      await makeAPICall(REGISTER_USER, {
+        name: name,
+        email: email,
+        password: password,
+        phoneNumber: phoneNumber
+      });
 
-    const name = event.target.name.value;
-    const email = event.target.email.value;
-    const password = event.target.password.value;
-
-    await signIn('credentials', {
-      callbackUrl: '/',
-      name: name,
-      password: password,
-      email: email,
-    });
+      await signIn('credentials', {
+        name: name,
+        email: email,
+        password: password,
+        callbackUrl: '/setup',
+        phoneNumber: phoneNumber
+      });
+    }
+    catch (error) {
+      console.log(error);
+    }
   }
 
   return (
-    <form className="mt-4" onSubmit={signupHandler}>
+    <form className="mt-4" onSubmit={handleSubmit(signupHandler)}>
       <div>
         <label className="block text-gray-700">Full Name</label>
         <Input
-          name="name"
           type="text"
           className="mt-2"
           placeholder="Enter your full name"
+          {...register('name', { required: true })}
         />
+        {errors.name && <p>Name is required</p>}
       </div>
       <div className="mt-4">
         <label className="block text-gray-700">Email Address</label>
@@ -38,15 +50,20 @@ export function SignUpForm() {
           type="email"
           className="mt-2"
           placeholder="Enter your email address"
+          {...register('email', { required: true })}
         />
+        {errors.email && <p>Email is required</p>}
       </div>
       <div className="mt-4">
         <label className="block text-gray-700">Phone Number</label>
         <Input
           type="number"
           className="mt-2"
+          name="phoneNumber"
           placeholder="Enter your phone number"
+          {...register('phoneNumber', { required: true })}
         />
+        {errors.phoneNumber && <p>Phone number is required</p>}
       </div>
       <div className="mt-4">
         <label className="block text-gray-700">Password</label>
@@ -55,7 +72,9 @@ export function SignUpForm() {
           type="password"
           className="mt-2"
           placeholder="Enter your password"
+          {...register('password', { required: true })}
         />
+        {errors.password && <p>Password is required</p>}
       </div>
       <div className="mt-6 w-full">
         <Button type="submit" className="w-full text-white">

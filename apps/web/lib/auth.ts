@@ -21,9 +21,8 @@ export const authOptions: NextAuthOptions = {
         password: { label: 'Password', type: 'password' },
       },
       async authorize(credentials) {
-        console.log(credentials);
         if(!credentials.email || !credentials.password) {
-          throw new Error('Please enter an email and password')
+          throw new Error('EMAIL_PASSWORD_NOT_PROVIDED');
         }
         
         const user = await db.user.findFirst({
@@ -32,31 +31,10 @@ export const authOptions: NextAuthOptions = {
           }
         });
 
-        console.log(user);
-
-        if (!user || !user?.password) {
-          console.log(user);
-          const hashedPassword = await bcrypt.hash(credentials.password, 10);
-
-          const createdUser = await db.user.create({
-            data: {
-              name: credentials.name,
-              email: credentials.email,
-              password: hashedPassword,
-            }
-          });
-
-          console.log(createdUser);
-
-          return createdUser;
-        }
-
-        // check to see if password matches
         const passwordMatch = await bcrypt.compare(credentials.password, user.password)
 
-        // if password does not match
         if (!passwordMatch) {
-          throw new Error('Incorrect password')
+          throw new Error('INVALID_PASSWORD');
         }
 
         return user;

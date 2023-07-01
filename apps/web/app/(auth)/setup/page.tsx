@@ -1,11 +1,19 @@
-import { SignUpForm } from "../../../lib/components/auth/SignUpForm";
+import { getServerSession } from "next-auth";
+import { authOptions } from "../../../lib/auth";
+import { redirect } from "next/navigation";
+import { SetupForm } from "../../../lib/components/auth/SetupForm";
 
 export const metadata = {
-  title: 'Capeo | Sign up',
+  title: 'Capeo | Setup',
   description: 'Start managing your business with Capeo.',
 };
 
-export default function Page() {
+export default async function Page() {
+  const session = await getServerSession(authOptions);
+  if (!session) {
+    redirect('/signin');
+  }
+
   return (
     <div className="flex h-screen flex-col sm:flex-row">
       <section
@@ -18,15 +26,15 @@ export default function Page() {
       <section className="flex h-screen w-full translate-y-0 transform flex-col justify-center px-8 opacity-100 transition-all duration-500 ease-in-out md:w-4/12">
         <div className="flex">
           <span className="text-primary text-3xl font-semibold">
-            Create Account
+            Setup
           </span>
         </div>
 
         <p className="text-gray-600">
-          Sign up to start managing your business.
+          Begin your journey by setting up your account
         </p>
 
-        <SignUpForm />
+        <SetupForm />
       </section>
     </div>
   );
