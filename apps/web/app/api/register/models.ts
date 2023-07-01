@@ -3,4 +3,4 @@ export type RegisterUserModel = {
   email: string;
   password: string;
   phoneNumber: string;
-}
+};

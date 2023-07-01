@@ -1,21 +1,25 @@
 'use client';
 
-import { Button, Input } from "ui";
-import Link from "next/link";
-import { signIn } from "next-auth/react";
-import { useForm } from "react-hook-form";
-import { makeAPICall } from "../../api";
-import { REGISTER_USER } from "../../endpoints";
+import { Button, Input } from 'ui';
+import Link from 'next/link';
+import { signIn } from 'next-auth/react';
+import { useForm } from 'react-hook-form';
+import { makeAPICall } from '../../api';
+import { REGISTER_USER } from '../../endpoints';
 
 export function SignUpForm() {
-  const { register, handleSubmit, formState: { errors } } = useForm();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
   async function signupHandler({ name, email, password, phoneNumber }) {
     try {
       await makeAPICall(REGISTER_USER, {
         name: name,
         email: email,
         password: password,
-        phoneNumber: phoneNumber
+        phoneNumber: phoneNumber,
       });
 
       await signIn('credentials', {
@@ -23,10 +27,9 @@ export function SignUpForm() {
         email: email,
         password: password,
         callbackUrl: '/setup',
-        phoneNumber: phoneNumber
+        phoneNumber: phoneNumber,
       });
-    }
-    catch (error) {
+    } catch (error) {
       console.log(error);
     }
   }
@@ -88,5 +91,5 @@ export function SignUpForm() {
         </Link>
       </p>
     </form>
-  )
+  );
 }

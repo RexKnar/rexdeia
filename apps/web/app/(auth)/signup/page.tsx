@@ -1,4 +1,4 @@
-import { SignUpForm } from "../../../lib/components/auth/SignUpForm";
+import { SignUpForm } from '../../../lib/components/auth/SignUpForm';
 
 export const metadata = {
   title: 'Capeo | Sign up',

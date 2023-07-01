@@ -21,17 +21,20 @@ export const authOptions: NextAuthOptions = {
         password: { label: 'Password', type: 'password' },
       },
       async authorize(credentials) {
-        if(!credentials.email || !credentials.password) {
+        if (!credentials.email || !credentials.password) {
           throw new Error('EMAIL_PASSWORD_NOT_PROVIDED');
         }
-        
+
         const user = await db.user.findFirst({
           where: {
-            email: credentials.email
-          }
+            email: credentials.email,
+          },
         });
 
-        const passwordMatch = await bcrypt.compare(credentials.password, user.password)
+        const passwordMatch = await bcrypt.compare(
+          credentials.password,
+          user.password
+        );
 
         if (!passwordMatch) {
           throw new Error('INVALID_PASSWORD');

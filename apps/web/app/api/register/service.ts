@@ -1,6 +1,6 @@
 import { db } from '../../../lib/db';
 import { RegisterUserModel } from './models';
-import bcrypt from "bcrypt";
+import bcrypt from 'bcrypt';
 
 export async function registerUser(user: RegisterUserModel) {
   const existingUser = await db.user.findFirst({
