@@ -1,4 +1,4 @@
-export type RegisterUserModel = {
+export type UserToRegisterModel = {
   name: string;
   email: string;
   password: string;

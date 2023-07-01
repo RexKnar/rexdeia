@@ -1,12 +1,20 @@
 import Link from 'next/link';
 import { Button, Input } from 'ui';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '../../../lib/auth';
+import { redirect } from 'next/navigation';
 
 export const metadata = {
   title: 'Capeo | Sign in',
   description: 'Capeo is a business management platform for small businesses.',
 };
 
-export default function Page() {
+export default async function Page() {
+  const session = await getServerSession(authOptions);
+  if (session) {
+    redirect('/');
+  }
+
   return (
     <div className="flex h-screen flex-col sm:flex-row">
       <section

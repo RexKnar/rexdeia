@@ -1,32 +1,23 @@
-import { z } from 'zod';
 import { NextRequest, NextResponse } from 'next/server';
-import { registerUser } from './service';
+import { addUser } from './service';
+import { validateAddUser } from './validator';
 
 export async function POST(request: NextRequest) {
-  const schema = z.object({
-    name: z.string(),
-    email: z.string().email(),
-    password: z.string().min(6),
-    phoneNumber: z.string().regex(/^[0-9]+$/),
-  });
-
-  const { name, phoneNumber, email, password } = await request.json();
+  const payload = await request.json();
 
   try {
-    schema.parse({ name, phoneNumber, email, password });
-    const createdUser = await registerUser({
-      name,
-      phoneNumber,
-      email,
-      password,
-    });
-    return new NextResponse(JSON.stringify({ user: createdUser }), {
+    await validateAddUser(payload);
+    const createdUser = await addUser(payload);
+
+    return new NextResponse(JSON.stringify(createdUser), {
       status: 201,
     });
   } catch (e) {
-    console.log(e);
     return new NextResponse(JSON.stringify({ error: e.message }), {
-      status: 400,
+      status:
+        e.message === 'VALIDATION_ERROR' || e.message === 'USER_ALREADY_EXISTS'
+          ? 400
+          : 500,
     });
   }
 }

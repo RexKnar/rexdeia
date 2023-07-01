@@ -11,6 +11,9 @@ import { useForm } from 'react-hook-form';
 import { useState } from 'react';
 import { cn, titilize } from 'utils';
 import { Button, Input } from 'ui';
+import { CREATE_ORGANIZATION } from '../../endpoints';
+import { makeAPICall } from '../../api';
+import { useRouter } from 'next/navigation';
 
 type InstituteCardProps = {
   name: string;
@@ -53,10 +56,19 @@ export function SetupForm() {
     handleSubmit,
     formState: { errors },
   } = useForm();
+  const router = useRouter();
 
-  const onSubmit = (data: { institute: string }) => {
-    console.log(data); // Replace this with your API call
-  };
+  async function onSubmit({ institute, name }) {
+    try {
+      await makeAPICall(CREATE_ORGANIZATION, {
+        name,
+        institute,
+      });
+      router.push('/');
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="mt-4">

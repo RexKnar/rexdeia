@@ -1,11 +1,19 @@
 import { SignUpForm } from '../../../lib/components/auth/SignUpForm';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '../../../lib/auth';
+import { redirect } from 'next/navigation';
 
 export const metadata = {
   title: 'Capeo | Sign up',
   description: 'Start managing your business with Capeo.',
 };
 
-export default function Page() {
+export default async function Page() {
+  const session = await getServerSession(authOptions);
+  if (session) {
+    redirect('/');
+  }
+
   return (
     <div className="flex h-screen flex-col sm:flex-row">
       <section
