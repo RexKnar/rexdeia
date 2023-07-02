@@ -19,15 +19,16 @@
     "typescript": "^4.5.2"
   },
   "dependencies": {
+    "@radix-ui/react-navigation-menu": "^1.1.3",
     "@radix-ui/react-slot": "^1.0.2",
     "autoprefixer": "^10.4.14",
-    "utils": "workspace:*",
     "class-variance-authority": "^0.6.0",
     "clsx": "^1.2.1",
     "lucide-react": "^0.244.0",
     "postcss": "^8.4.24",
     "tailwind": "^4.0.0",
     "tailwind-merge": "^1.13.1",
-    "tailwindcss-animate": "^1.0.6"
+    "tailwindcss-animate": "^1.0.6",
+    "utils": "workspace:*"
   }
 }
