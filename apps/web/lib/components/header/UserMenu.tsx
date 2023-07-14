@@ -20,7 +20,7 @@ export function UserMenu() {
       <DropdownMenuTrigger asChild>
         <Button variant="outline">Open</Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="w-56">
+      <DropdownMenuContent className="w-56" align="end">
         <DropdownMenuLabel>My Account</DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>

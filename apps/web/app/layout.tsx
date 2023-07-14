@@ -1,5 +1,6 @@
 import 'configs/tailwind/styles.css';
 import Providers from '../lib/Providers';
+import { Toast } from 'ui';
 
 export const metadata = {
   title: 'Capeo - Simplifying the way you manage your business',
@@ -14,7 +15,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <Providers>{children}</Providers>
+        <Providers>
+          {children}
+          <Toast />
+        </Providers>
       </body>
     </html>
   );
