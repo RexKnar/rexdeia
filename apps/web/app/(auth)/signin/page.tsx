@@ -1,8 +1,8 @@
 import Link from 'next/link';
-import { Button, Input } from 'ui';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '../../../lib/auth';
 import { redirect } from 'next/navigation';
+import { SignInForm } from '../../../lib/components/auth/SignInForm';
 
 export const metadata = {
   title: 'Capeo | Sign in',
@@ -16,7 +16,7 @@ export default async function Page() {
   }
 
   return (
-    <div className="flex h-screen flex-col sm:flex-row">
+    <section className="flex h-screen flex-col sm:flex-row">
       <section
         className="bg-primary hidden flex-grow sm:flex sm:w-auto"
         style={{
@@ -32,29 +32,8 @@ export default async function Page() {
 
         <p className="text-gray-600">Sign in to your account to get started.</p>
 
-        <form className="mt-4">
-          <div>
-            <label className="block text-gray-700">Email Address</label>
-            <Input
-              type="email"
-              className="mt-2"
-              placeholder="Enter your email address"
-            />
-          </div>
-          <div className="mt-4">
-            <label className="block text-gray-700">Password</label>
-            <Input
-              type="password"
-              className="mt-2"
-              placeholder="Enter your password"
-            />
-          </div>
-          <div className="mt-6 w-full">
-            <Button type="submit" className="w-full text-white">
-              Sign in
-            </Button>
-          </div>
-        </form>
+        <SignInForm />
+
         <p className="mt-4 text-center text-gray-500">
           Don't have an account yet?{' '}
           <Link href="/signup" className="text-primary font-semibold">
@@ -63,6 +42,6 @@ export default async function Page() {
           {` `} to create one.
         </p>
       </section>
-    </div>
+    </section>
   );
 }

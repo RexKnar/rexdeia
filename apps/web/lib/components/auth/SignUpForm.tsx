@@ -13,6 +13,7 @@ export function SignUpForm() {
     handleSubmit,
     formState: { errors },
   } = useForm();
+
   async function signupHandler({ name, email, password, phoneNumber }) {
     try {
       await makeAPICall(REGISTER_USER, {
