@@ -1,73 +1,63 @@
+'use client';
+
 import {
-  Button,
+  Avatar,
+  AvatarImage,
   DropdownMenu,
-  DropdownMenuSub,
+  AvatarFallback,
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuGroup,
-  DropdownMenuPortal,
   DropdownMenuTrigger,
   DropdownMenuContent,
-  DropdownMenuShortcut,
   DropdownMenuSeparator,
-  DropdownMenuSubContent,
-  DropdownMenuSubTrigger,
 } from 'ui';
+import { useSession } from 'next-auth/react';
 
 export function UserMenu() {
+  const { data: session, status } = useSession();
+
+  if (status === 'loading' || status === 'unauthenticated') {
+    return (
+      <Avatar className="cursor-pointer">
+        <AvatarImage src="https://github.com/shadcn.png" />
+      </Avatar>
+    );
+  }
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="outline">Open</Button>
+        <Avatar className="cursor-pointer">
+          <AvatarImage src="https://github.com/shadcn.png" />
+          <AvatarFallback>{session.user.name[0]}</AvatarFallback>
+        </Avatar>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="w-56" align="end">
-        <DropdownMenuLabel>My Account</DropdownMenuLabel>
-        <DropdownMenuSeparator />
+      <DropdownMenuContent className="w-56" align="end" sideOffset={15}>
+        <section className="flex flex-col items-center p-4">
+          <Avatar className="h-16 w-16 cursor-pointer">
+            <AvatarImage src="https://github.com/shadcn.png" />
+            <AvatarFallback>{session.user.name[0]}</AvatarFallback>
+          </Avatar>
+          <div className="flex flex-col items-center">
+            <p className="line-clamp-1 text-base">{session.user.name}</p>
+            <p className="line-clamp-1 text-sm text-gray-500">
+              {session.user.email}
+            </p>
+          </div>
+        </section>
+        <DropdownMenuLabel>Account</DropdownMenuLabel>
         <DropdownMenuGroup>
-          <DropdownMenuItem>
+          <DropdownMenuItem className="cursor-pointer hover:bg-gray-500">
             Profile
-            <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
           </DropdownMenuItem>
-          <DropdownMenuItem>
-            Billing
-            <DropdownMenuShortcut>⌘B</DropdownMenuShortcut>
-          </DropdownMenuItem>
-          <DropdownMenuItem>
+          <DropdownMenuItem className="cursor-pointer hover:bg-gray-500">
             Settings
-            <DropdownMenuShortcut>⌘S</DropdownMenuShortcut>
-          </DropdownMenuItem>
-          <DropdownMenuItem>
-            Keyboard shortcuts
-            <DropdownMenuShortcut>⌘K</DropdownMenuShortcut>
           </DropdownMenuItem>
         </DropdownMenuGroup>
-        <DropdownMenuSeparator />
-        <DropdownMenuGroup>
-          <DropdownMenuItem>Team</DropdownMenuItem>
-          <DropdownMenuSub>
-            <DropdownMenuSubTrigger>Invite users</DropdownMenuSubTrigger>
-            <DropdownMenuPortal>
-              <DropdownMenuSubContent>
-                <DropdownMenuItem>Email</DropdownMenuItem>
-                <DropdownMenuItem>Message</DropdownMenuItem>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem>More...</DropdownMenuItem>
-              </DropdownMenuSubContent>
-            </DropdownMenuPortal>
-          </DropdownMenuSub>
-          <DropdownMenuItem>
-            New Team
-            <DropdownMenuShortcut>⌘+T</DropdownMenuShortcut>
-          </DropdownMenuItem>
-        </DropdownMenuGroup>
-        <DropdownMenuSeparator />
-        <DropdownMenuItem>GitHub</DropdownMenuItem>
-        <DropdownMenuItem>Support</DropdownMenuItem>
-        <DropdownMenuItem disabled>API</DropdownMenuItem>
-        <DropdownMenuSeparator />
-        <DropdownMenuItem>
+        <DropdownMenuSeparator className="bg-gray-100 text-gray-500" />
+        <DropdownMenuItem className="cursor-pointer hover:bg-gray-500">
           Log out
-          <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

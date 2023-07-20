@@ -50,6 +50,7 @@ export function SignInForm() {
       <label className="mt-4 block text-gray-700">Password</label>
       <Input
         type="password"
+        className="mt-1"
         placeholder="Enter your password"
         {...register('password', {
           required: 'Your password is needed to sign in.',
