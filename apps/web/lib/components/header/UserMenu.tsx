@@ -48,15 +48,15 @@ export function UserMenu() {
         </section>
         <DropdownMenuLabel>Account</DropdownMenuLabel>
         <DropdownMenuGroup>
-          <DropdownMenuItem className="cursor-pointer hover:bg-gray-500">
+          <DropdownMenuItem className="cursor-pointer hover:bg-primary hover:text-white">
             Profile
           </DropdownMenuItem>
-          <DropdownMenuItem className="cursor-pointer hover:bg-gray-500">
+          <DropdownMenuItem className="cursor-pointer hover:bg-primary hover:text-white">
             Settings
           </DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator className="bg-gray-100 text-gray-500" />
-        <DropdownMenuItem className="cursor-pointer hover:bg-gray-500">
+        <DropdownMenuItem className="cursor-pointer hover:bg-primary hover:text-white">
           Log out
         </DropdownMenuItem>
       </DropdownMenuContent>
