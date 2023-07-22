@@ -30,7 +30,7 @@ export function SignUpForm() {
         phoneNumber: phoneNumber,
       });
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   }
   return (
@@ -82,7 +82,7 @@ export function SignUpForm() {
           name="phoneNumber"
           placeholder="Enter your phone number"
           {...register('phoneNumber', {
-            required: 'Your phoneNumber address is needed to sign up',
+            required: 'Your phone number is needed to sign up',
           })}
         />
         <p
