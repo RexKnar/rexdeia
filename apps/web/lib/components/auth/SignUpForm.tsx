@@ -22,7 +22,6 @@ export function SignUpForm() {
         password: password,
         phoneNumber: phoneNumber,
       });
-
       await signIn('credentials', {
         name: name,
         email: email,
@@ -34,7 +33,6 @@ export function SignUpForm() {
       console.log(error);
     }
   }
-
   return (
     <form className="mt-4" onSubmit={handleSubmit(signupHandler)}>
       <div>
@@ -43,9 +41,17 @@ export function SignUpForm() {
           type="text"
           className="mt-2"
           placeholder="Enter your full name"
-          {...register('name', { required: true })}
+          {...register('name', { required: 'Your name is needed to sign up' })}
         />
-        {errors.name && <p>Name is required</p>}
+        <p
+          className={`h-2 p-1 text-sm text-red-600 ${
+            errors.name
+              ? 'opacity-100 transition-opacity duration-300'
+              : 'opacity-0 transition-opacity duration-300'
+          }`}
+        >
+          {errors.name?.message as string}
+        </p>
       </div>
       <div className="mt-4">
         <label className="block text-gray-700">Email Address</label>
@@ -54,9 +60,19 @@ export function SignUpForm() {
           type="email"
           className="mt-2"
           placeholder="Enter your email address"
-          {...register('email', { required: true })}
+          {...register('email', {
+            required: 'Your email address is needed to sign up',
+          })}
         />
-        {errors.email && <p>Email is required</p>}
+        <p
+          className={`h-2 p-1 text-sm text-red-600 ${
+            errors.email
+              ? 'opacity-100 transition-opacity duration-300'
+              : 'opacity-0 transition-opacity duration-300'
+          }`}
+        >
+          {errors.email?.message as string}
+        </p>
       </div>
       <div className="mt-4">
         <label className="block text-gray-700">Phone Number</label>
@@ -65,9 +81,19 @@ export function SignUpForm() {
           className="mt-2"
           name="phoneNumber"
           placeholder="Enter your phone number"
-          {...register('phoneNumber', { required: true })}
+          {...register('phoneNumber', {
+            required: 'Your phoneNumber address is needed to sign up',
+          })}
         />
-        {errors.phoneNumber && <p>Phone number is required</p>}
+        <p
+          className={`h-2 p-1 text-sm text-red-600 ${
+            errors.phoneNumber
+              ? 'opacity-100 transition-opacity duration-300'
+              : 'opacity-0 transition-opacity duration-300'
+          }`}
+        >
+          {errors.phoneNumber?.message as string}
+        </p>
       </div>
       <div className="mt-4">
         <label className="block text-gray-700">Password</label>
@@ -76,9 +102,19 @@ export function SignUpForm() {
           type="password"
           className="mt-2"
           placeholder="Enter your password"
-          {...register('password', { required: true })}
+          {...register('password', {
+            required: 'Password is needed to sign up',
+          })}
         />
-        {errors.password && <p>Password is required</p>}
+        <p
+          className={`h-2 p-1 text-sm text-red-600 ${
+            errors.password
+              ? 'opacity-100 transition-opacity duration-300'
+              : 'opacity-0 transition-opacity duration-300'
+          }`}
+        >
+          {errors.password?.message as string}
+        </p>
       </div>
       <div className="mt-6 w-full">
         <Button type="submit" className="w-full text-white">
