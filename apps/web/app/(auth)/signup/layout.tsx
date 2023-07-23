@@ -5,14 +5,10 @@ export const metadata = {
   description: 'Capeo is a business management platform for small businesses.',
 };
 
-export default function RootLayout({
+export default function SignUpLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  return (
-    <html lang="en">
-      <body>{children}</body>
-    </html>
-  );
+  return <section>{children}</section>;
 }

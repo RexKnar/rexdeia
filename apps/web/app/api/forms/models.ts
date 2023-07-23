@@ -1,37 +1,43 @@
-type FormFieldValidationRules = {
-  email?: boolean;
-  required?: boolean;
-  minLength?: number;
-  maxLength?: number;
-};
+import { z } from 'zod';
 
-type FormFieldOption = {
-  label: string;
-  value: string;
-};
+const FormFieldValidationRules = z.object({
+  email: z.boolean().optional(),
+  required: z.boolean().optional(),
+  minLength: z.number().optional(),
+  maxLength: z.number().optional(),
+});
 
-type FormField = {
-  id: string;
-  type: string;
-  label: string;
-  placeholder: string;
-  value: string;
-  visible: boolean;
-  options?: FormFieldOption[];
-  validationRules?: FormFieldValidationRules;
-};
+const FormFieldOption = z.object({
+  label: z.string(),
+  value: z.string(),
+});
 
-type FormSection = {
-  sectionTitle: string;
-  sectionDescription: string;
-  sectionFields: FormField[];
-};
+const FormField = z.object({
+  id: z.string(),
+  type: z.string(),
+  label: z.string(),
+  value: z.string(),
+  visible: z.boolean(),
+  placeholder: z.string(),
+  options: z.array(FormFieldOption).optional(),
+  validationRules: FormFieldValidationRules.optional(),
+});
 
-export type CreateFormRequestPayload = {
-  title?: string;
-  description?: string;
-  formSections: FormSection[];
-};
+const FormSection = z.object({
+  sectionTitle: z.string(),
+  sectionDescription: z.string(),
+  sectionFields: z.array(FormField),
+});
+
+export const CreateFormRequestPayloadSchema = z.object({
+  title: z.string().optional(),
+  description: z.string().optional(),
+  formSections: z.array(FormSection),
+});
+
+export type CreateFormRequestPayload = z.infer<
+  typeof CreateFormRequestPayloadSchema
+>;
 
 export type FormModel = {
   id: string;

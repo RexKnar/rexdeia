@@ -1,6 +1,7 @@
 import { Method } from './types';
 
 export const REGISTER_USER = `REGISTER_USER`;
+export const ONBOARD_ACCOUNT = `ONBOARD_ACCOUNT`;
 export const CREATE_ORGANIZATION = `CREATE_ORGANIZATION`;
 
 type EndpointDetails = Record<
@@ -12,6 +13,10 @@ export default <EndpointDetails>{
   [REGISTER_USER]: {
     requestType: `POST`,
     endpoint: `/api/register`,
+  },
+  [ONBOARD_ACCOUNT]: {
+    requestType: `POST`,
+    endpoint: `/api/onboarding/account`,
   },
   [CREATE_ORGANIZATION]: {
     requestType: `POST`,

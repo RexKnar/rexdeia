@@ -6,6 +6,7 @@ import { signIn } from 'next-auth/react';
 import { useForm } from 'react-hook-form';
 import { makeAPICall } from '../../api';
 import { REGISTER_USER } from '../../endpoints';
+import { useRouter } from 'next/navigation';
 
 export function SignUpForm() {
   const {
@@ -13,6 +14,8 @@ export function SignUpForm() {
     handleSubmit,
     formState: { errors },
   } = useForm();
+
+  const router = useRouter();
 
   async function signupHandler({ name, email, password, phoneNumber }) {
     try {
@@ -22,15 +25,19 @@ export function SignUpForm() {
         password: password,
         phoneNumber: phoneNumber,
       });
-      await signIn('credentials', {
+      debugger;
+      const result = await signIn('credentials', {
         name: name,
         email: email,
+        redirect: false,
         password: password,
-        callbackUrl: '/setup',
         phoneNumber: phoneNumber,
+        callbackUrl: '/onboarding',
       });
     } catch (error) {
       console.error(error);
+    } finally {
+      router.push('/onboarding');
     }
   }
   return (
