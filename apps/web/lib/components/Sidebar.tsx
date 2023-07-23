@@ -26,7 +26,7 @@ export function Sidebar() {
         router.push(path);
       }
     },
-    [router]
+    [router],
   );
 
   return (

@@ -3,7 +3,7 @@
 import {
   CheckCircle,
   GraduationCap,
-  Icon,
+  LucideIcon,
   PersonStanding,
   School2,
 } from 'lucide-react';
@@ -17,9 +17,9 @@ import { useRouter } from 'next/navigation';
 
 type InstituteCardProps = {
   name: string;
-  IconComponent: Icon;
   isSelected: boolean;
   onClick: () => void;
+  IconComponent: LucideIcon;
 };
 
 function InstituteCard(props: InstituteCardProps) {
@@ -37,7 +37,7 @@ function InstituteCard(props: InstituteCardProps) {
         <div
           className={cn(
             'absolute left-2 top-0 mt-2',
-            isSelected ? 'visible' : 'invisible'
+            isSelected ? 'visible' : 'invisible',
           )}
         >
           <CheckCircle />

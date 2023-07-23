@@ -5,7 +5,6 @@ import { Onboarding } from '../../lib/components/auth/Onboarding';
 
 export default async function Page() {
   const session = await getServerSession(authOptions);
-  console.log('session', session);
   if (!session) {
     redirect('/signin');
   }

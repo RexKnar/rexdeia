@@ -46,3 +46,8 @@ export type FormModel = {
   organizationId: string;
   json: CreateFormRequestPayload;
 };
+
+export type SearchFormModel = {
+  type: 'Admission';
+  organizationId: string;
+};

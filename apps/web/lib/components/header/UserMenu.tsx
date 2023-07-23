@@ -12,7 +12,7 @@ import {
   DropdownMenuContent,
   DropdownMenuSeparator,
 } from 'ui';
-import { useSession } from 'next-auth/react';
+import { useSession, signOut } from 'next-auth/react';
 
 export function UserMenu() {
   const { data: session, status } = useSession();
@@ -56,7 +56,14 @@ export function UserMenu() {
           </DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator className="bg-gray-100 text-gray-500" />
-        <DropdownMenuItem className="hover:bg-primary cursor-pointer hover:text-white">
+        <DropdownMenuItem
+          className="hover:bg-primary cursor-pointer hover:text-white"
+          onClick={() => {
+            signOut({
+              callbackUrl: '/signin',
+            });
+          }}
+        >
           Log out
         </DropdownMenuItem>
       </DropdownMenuContent>

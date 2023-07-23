@@ -7,7 +7,7 @@ const schema = z.object({
 });
 
 export async function validateAddOrganization(
-  payload: CreateOrganizationRequestPayload
+  payload: CreateOrganizationRequestPayload,
 ) {
   try {
     schema.parse(payload);

@@ -1,12 +1,20 @@
 import { db } from '../../../lib/db';
-import { FormModel } from './models';
+import { FormModel, SearchFormModel } from './models';
 
 export async function addForm(form: FormModel) {
-  const createdForm = await db.form.create({
+  return await db.form.create({
     data: {
       ...form,
     },
   });
+}
 
-  return createdForm;
+export async function searchForms(searchFormModel: SearchFormModel) {
+  const { organizationId, type } = searchFormModel;
+  return await db.form.findMany({
+    where: {
+      type: type,
+      organizationId: organizationId,
+    },
+  });
 }
