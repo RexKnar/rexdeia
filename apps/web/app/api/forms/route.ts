@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { validateAddOrganization } from './validator';
-import { addOrganization } from './service';
 import { authOptions } from '../../../lib/auth';
 import { getServerSession } from 'next-auth';
+import { validateAddForm } from './validator';
+import { addForm } from './service';
 
 export async function POST(request: NextRequest) {
   const session = await getServerSession(authOptions);
@@ -14,13 +14,13 @@ export async function POST(request: NextRequest) {
 
   try {
     const payload = await request.json();
-    await validateAddOrganization(payload);
-    const createdUser = await addOrganization({
+
+    await validateAddForm(payload);
+    const createdForm = await addForm({
       ...payload,
-      userId: session.user.id,
     });
 
-    return new NextResponse(JSON.stringify(createdUser), {
+    return new NextResponse(JSON.stringify(createdForm), {
       status: 201,
     });
   } catch (e) {

@@ -46,25 +46,41 @@ model User {
   password      String
   phoneNumber   String
 
-  image    String?
-  accounts Account[]
-  sessions Session[]
+  image             String?
+  accounts          Account[]
+  sessions          Session[]
   userOrganizations UserOrganization[]
 }
 
 model Organization {
-  id            String            @id @default(auto()) @map("_id") @db.ObjectId
-  name          String
-  institute     String
-  description   String?
-  image         String?
-  users         UserOrganization[]
+  id          String             @id @default(auto()) @map("_id") @db.ObjectId
+  name        String
+  institute   String
+  description String?
+  image       String?
+  users       UserOrganization[]
+  forms       Form[]
 }
 
 model UserOrganization {
-  id            String            @id @default(auto()) @map("_id") @db.ObjectId
-  user          User              @relation(fields: [userId], references: [id])
-  userId        String            @db.ObjectId
-  organization  Organization      @relation(fields: [organizationId], references: [id])
-  organizationId String           @db.ObjectId
+  id             String       @id @default(auto()) @map("_id") @db.ObjectId
+  user           User         @relation(fields: [userId], references: [id])
+  userId         String       @db.ObjectId
+  organization   Organization @relation(fields: [organizationId], references: [id])
+  organizationId String       @db.ObjectId
+}
+
+enum FormType {
+  Admission
+}
+
+model Form {
+  id             String        @id @default(auto()) @map("_id") @db.ObjectId
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+  type           FormType
+  json           Json
+  isActive       Boolean       @default(false)
+  Organization   Organization? @relation(fields: [organizationId], references: [id])
+  organizationId String?       @db.ObjectId
 }
