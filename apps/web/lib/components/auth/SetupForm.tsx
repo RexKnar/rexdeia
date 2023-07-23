@@ -64,7 +64,8 @@ export function SetupForm() {
         name,
         institute,
       });
-      router.push('/');
+      debugger;
+      router.push('/onboarding');
     } catch (error) {
       console.log(error);
     }

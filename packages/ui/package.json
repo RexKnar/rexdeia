@@ -9,14 +9,14 @@
     "generate:component": "turbo gen react-component"
   },
   "devDependencies": {
-    "@types/react": "^18.2.0",
-    "@types/react-dom": "^18.2.0",
+    "@types/react": "^18.2.15",
+    "@types/react-dom": "^18.2.7",
     "configs": "workspace:*",
-    "eslint": "^7.32.0",
+    "eslint": "^8.45.0",
     "eslint-config-custom": "workspace:*",
-    "react": "^17.0.2",
+    "react": "^18.2.0",
     "tsconfig": "workspace:*",
-    "typescript": "^4.5.2"
+    "typescript": "^5.1.6"
   },
   "dependencies": {
     "@radix-ui/react-avatar": "^1.0.3",
@@ -25,12 +25,12 @@
     "@radix-ui/react-slot": "^1.0.2",
     "@radix-ui/react-toast": "^1.1.4",
     "autoprefixer": "^10.4.14",
-    "class-variance-authority": "^0.6.0",
-    "clsx": "^1.2.1",
-    "lucide-react": "^0.244.0",
-    "postcss": "^8.4.24",
+    "class-variance-authority": "^0.7.0",
+    "clsx": "^2.0.0",
+    "lucide-react": "^0.263.0",
+    "postcss": "^8.4.27",
     "tailwind": "^4.0.0",
-    "tailwind-merge": "^1.13.1",
+    "tailwind-merge": "^1.14.0",
     "tailwindcss-animate": "^1.0.6",
     "utils": "workspace:*"
   }

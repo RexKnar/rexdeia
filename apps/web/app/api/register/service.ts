@@ -7,6 +7,7 @@ export async function addUser(user: UserToRegisterModel) {
   return await db.user.create({
     data: {
       ...user,
+      username: user.email,
       password: hashedPassword,
     },
   });
