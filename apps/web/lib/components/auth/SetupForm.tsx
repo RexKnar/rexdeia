@@ -108,9 +108,17 @@ export function SetupForm() {
           placeholder={`Enter name of the ${
             selected === 'others' ? 'institute' : selected
           }`}
-          {...register('name', { required: true })}
+          {...register('name', {required: 'Name is required'})}
         />
-        {errors.name && <p>Name is required</p>}
+        <p
+          className={`h-2 p-1 text-sm text-red-600 ${
+            errors.name
+              ? 'opacity-100 transition-opacity duration-300'
+              : 'opacity-0 transition-opacity duration-300'
+          }`}
+        >
+          {errors.name?.message as string}
+        </p>
       </div>
       <div className="mt-6 w-full">
         <Button type="submit" className="w-full text-white">
