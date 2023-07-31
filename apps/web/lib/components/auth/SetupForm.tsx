@@ -108,7 +108,7 @@ export function SetupForm() {
           placeholder={`Enter name of the ${
             selected === 'others' ? 'institute' : selected
           }`}
-          {...register('name', {required: 'Name is required'})}
+          {...register('name', { required: 'Name is required' })}
         />
         <p
           className={`h-2 p-1 text-sm text-red-600 ${
