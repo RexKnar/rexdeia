@@ -16,7 +16,7 @@ export function AdmissionForm({ formConfig }) {
       <p className="text-gray-600 text-center mb-4">{formConfig.json.description}</p>
       {formConfig.json.formSections.map((section) => (
         <div key={section.sectionTitle} className="px-12 mt-3">
-          <h2 className="text-primary text-3xl font-semibold text-center">{section.sectionTitle}</h2>
+          <h2 className="text-primary text-3xl font-semibold">{section.sectionTitle}</h2>
           <p>{section.sectionDescription}</p>
           {section.sectionFields.map((field) => {
             if (field.visible) {
