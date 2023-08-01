@@ -7,12 +7,15 @@ import { useForm } from 'react-hook-form';
 import { makeAPICall } from '../../api';
 import { REGISTER_USER } from '../../endpoints';
 
+import React, { useState } from 'react';
+
 export function SignUpForm() {
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm();
+  const [apiError, setApiError] = useState(0);
 
   async function signupHandler({ name, email, password, phoneNumber }) {
     try {
@@ -32,6 +35,7 @@ export function SignUpForm() {
       debugger;
     } catch (error) {
       debugger;
+      setApiError(1)
       console.error(error);
     }
   }
@@ -67,14 +71,10 @@ export function SignUpForm() {
           })}
         />
         <p
-          className={`h-2 p-1 text-sm text-red-600 ${
-            errors.email
-              ? 'opacity-100 transition-opacity duration-300'
-              : 'opacity-0 transition-opacity duration-300'
-          }`}
+          className={`h-2 p-1 text-sm text-red-600 `}
         >
-          {errors.email?.message as string}
-        </p>
+          {apiError?'Email id exist' : errors.email?.message as string}
+        </p>        
       </div>
       <div className="mt-4">
         <label className="block text-gray-700">Phone Number</label>

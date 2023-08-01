@@ -6,7 +6,9 @@ export async function POST(request: NextRequest) {
   const payload = await request.json();
 
   try {
+    
     await validateAddUser(payload);
+
     const createdUser = await addUser(payload);
 
     return new NextResponse(JSON.stringify(createdUser), {
