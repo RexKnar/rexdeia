@@ -1,7 +1,6 @@
 'use client';
 import { useForm } from 'react-hook-form';
 import { FormModel } from '../../../app/api/forms/models';
-import 'configs/tailwind/styles.css';
 export function AdmissionForm({ formConfig }) {
   const {
     register,
