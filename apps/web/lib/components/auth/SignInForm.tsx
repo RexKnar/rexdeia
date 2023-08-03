@@ -4,22 +4,27 @@ import { Button, Input } from 'ui';
 import { useForm } from 'react-hook-form';
 import { signIn } from 'next-auth/react';
 
+
 export function SignInForm() {
   const {
     register,
     handleSubmit,
     formState: { errors },
+    setError
   } = useForm();
 
   async function signInHandler({ email, password }) {
-    try {
+    try {    
       await signIn('credentials', {
         email: email,
         password: password,
-        callbackUrl: '/',
-      });
+        callbackUrl: '/'
+      });     
     } catch (error) {
-      console.log(error);
+      setError("password", {
+        type: "manual",
+        message: "invalid email or password",
+      })
     }
   }
 
