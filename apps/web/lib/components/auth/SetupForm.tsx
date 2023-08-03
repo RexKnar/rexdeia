@@ -3,6 +3,7 @@
 import {
   CheckCircle,
   GraduationCap,
+  Loader2,
   LucideIcon,
   PersonStanding,
   School2,
@@ -54,7 +55,7 @@ export function SetupForm() {
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isSubmitting },
   } = useForm();
   const router = useRouter();
 
@@ -122,6 +123,11 @@ export function SetupForm() {
       </div>
       <div className="mt-6 w-full">
         <Button type="submit" className="w-full text-white">
+          {isSubmitting && (
+            <div className="flex h-screen items-center justify-center">
+              <Loader2 className="mr-2 h-6 w-6 animate-spin text-white" />
+            </div>
+          )}
           Next
         </Button>
       </div>
