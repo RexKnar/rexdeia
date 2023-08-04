@@ -35,7 +35,7 @@ export function SignUpForm() {
       debugger;
     } catch (error) {
       debugger;
-      setApiError(1)
+      setApiError(1);
       console.error(error);
     }
   }
@@ -70,11 +70,9 @@ export function SignUpForm() {
             required: 'Your email address is needed to sign up',
           })}
         />
-        <p
-          className={`h-2 p-1 text-sm text-red-600 `}
-        >
-          {apiError?'Email id exist' : errors.email?.message as string}
-        </p>        
+        <p className={`h-2 p-1 text-sm text-red-600 `}>
+          {apiError ? 'Email id exist' : (errors.email?.message as string)}
+        </p>
       </div>
       <div className="mt-4">
         <label className="block text-gray-700">Phone Number</label>

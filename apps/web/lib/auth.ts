@@ -37,9 +37,9 @@ export const authOptions: NextAuthOptions = {
         );
 
         if (!passwordMatch) {
-          throw null
+          throw null;
         }
-        
+
         return user;
       },
     }),
