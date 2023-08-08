@@ -10,6 +10,7 @@ export function SignInForm() {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
+    setError,
   } = useForm();
 
   async function signInHandler({ email, password }) {

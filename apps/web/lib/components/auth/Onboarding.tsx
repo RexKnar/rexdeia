@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react';
 import { ONBOARD_ACCOUNT } from '../../endpoints';
 import { makeAPICall } from '../../api';
 import { useRouter } from 'next/navigation';
+import { Loader2 } from 'lucide-react';
 
 export function Onboarding() {
   const [isErrored, setIsErrored] = useState(false);
@@ -34,5 +35,22 @@ export function Onboarding() {
     return <>Error</>;
   }
 
-  return <>Onboarding User</>;
+  return (
+    <>
+     <section
+        className="bg-primary hidden flex-grow sm:flex sm:w-auto bg-repeat"
+        style={{
+          backgroundImage: 'url(/assets/images/sign-in-banner.png)',
+        }}
+      >
+      <div className="w-[100vw] h-[100vh] flex justify-center items-center"
+      >
+        <div className="flex h-screen items-center justify-center">
+          <Loader2 className="mr-2 h-10 w-10 animate-spin text-white" />
+          <h1 className="text-3xl lato-light text-white">Just a moment, we're getting things ready for you...</h1>
+        </div>
+      </div>
+      </section>
+    </>
+  );
 }
