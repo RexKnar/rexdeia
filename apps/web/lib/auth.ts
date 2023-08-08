@@ -37,10 +37,8 @@ export const authOptions: NextAuthOptions = {
         );
 
         if (!passwordMatch) {
-          // throw new Error('INVALID_PASSWORD');
-          throw null;
+          throw new Error('INVALID_PASSWORD');
         }
-
         return user;
       },
     }),
