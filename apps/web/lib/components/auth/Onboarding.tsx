@@ -38,26 +38,17 @@ export function Onboarding() {
   return (
     <>
      <section
-        className="bg-primary hidden flex-grow sm:flex sm:w-auto"
+        className="bg-primary hidden flex-grow sm:flex sm:w-auto bg-repeat"
         style={{
           backgroundImage: 'url(/assets/images/sign-in-banner.png)',
-          backgroundRepeat: 'repeat',
         }}
       >
-      <div
-        style={{
-          width: '100vW',
-          height: '100vh',
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-        }}
+      <div className="w-[100vw] h-[100vh] flex justify-center items-center"
       >
         <div className="flex h-screen items-center justify-center">
           <Loader2 className="mr-2 h-10 w-10 animate-spin text-white" />
           <h1 className="text-3xl lato-light text-white">Just a moment, we're getting things ready for you...</h1>
         </div>
-        
       </div>
       </section>
     </>

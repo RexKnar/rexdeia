@@ -22,10 +22,6 @@ export function SignInForm() {
       });
     } catch (error) {
       console.log(error);
-      setError('password', {
-        type: 'manual',
-        message: 'Invalid password',
-      });
     }
   }
 
