@@ -10,6 +10,7 @@ export function SignInForm() {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
+    setError,
   } = useForm();
 
   async function signInHandler({ email, password }) {
@@ -21,6 +22,10 @@ export function SignInForm() {
       });
     } catch (error) {
       console.log(error);
+      setError('password', {
+        type: 'manual',
+        message: 'Invalid password',
+      });
     }
   }
 
