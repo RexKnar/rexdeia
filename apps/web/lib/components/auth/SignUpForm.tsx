@@ -6,7 +6,6 @@ import { signIn } from 'next-auth/react';
 import { useForm } from 'react-hook-form';
 import { makeAPICall } from '../../api';
 import { REGISTER_USER } from '../../endpoints';
-import { useState } from 'react';
 import { Loader2 } from 'lucide-react';
 
 export function SignUpForm() {
@@ -24,19 +23,26 @@ export function SignUpForm() {
         password: password,
         phoneNumber: phoneNumber,
       });
+    } catch (error) {
+      console.log(error);
+      // TODO: Handle error
+    }
+
+    try {
       await signIn('credentials', {
         name: name,
         email: email,
+        redirect: false,
         password: password,
         callbackUrl: '/setup',
         phoneNumber: phoneNumber,
       });
-      debugger;
     } catch (error) {
-      debugger;
-      console.error(error);
+      console.log(error);
+      // TODO: Handle error
     }
   }
+
   return (
     <form className="mt-4" onSubmit={handleSubmit(signupHandler)}>
       <div>
