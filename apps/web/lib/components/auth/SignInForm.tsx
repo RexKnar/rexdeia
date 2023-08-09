@@ -1,14 +1,15 @@
 'use client';
 
-import { Alert, AlertDescription, Button, Input } from "ui";
+import { Alert, AlertDescription, Button, Input } from 'ui';
 import { useForm } from 'react-hook-form';
 import { signIn } from 'next-auth/react';
-import { AlertCircleIcon, Loader2 } from "lucide-react";
-import { useSearchParams } from "next/navigation";
+import { AlertCircleIcon, Loader2 } from 'lucide-react';
+import { useSearchParams } from 'next/navigation';
 
 const errors = {
-  INVALID_PASSWORD: 'The username or password you entered is incorrect. Please try again.',
-}
+  INVALID_PASSWORD:
+    'The username or password you entered is incorrect. Please try again.',
+};
 
 export function SignInForm() {
   const {
@@ -34,16 +35,12 @@ export function SignInForm() {
 
   return (
     <form className="mt-4" onSubmit={handleSubmit(signInHandler)}>
-      {
-        error && (
-          <Alert className="mb-2">
-            <AlertCircleIcon className="h-4 w-4" />
-            <AlertDescription>
-              {errors[error]}
-            </AlertDescription>
-          </Alert>
-        )
-      }
+      {error && (
+        <Alert className="mb-2">
+          <AlertCircleIcon className="h-4 w-4" />
+          <AlertDescription>{errors[error]}</AlertDescription>
+        </Alert>
+      )}
       <label className="block text-gray-700">Email Address</label>
       <Input
         type="email"
@@ -84,12 +81,18 @@ export function SignInForm() {
       >
         {fieldErrors.password?.message as string}
       </p>
-      <Button type="submit" className="mt-6 w-full w-full text-white" disabled={isSubmitting}>
+      <Button
+        type="submit"
+        className="mt-6 w-full w-full text-white"
+        disabled={isSubmitting}
+      >
         {isSubmitting ? (
           <div className="flex h-screen items-center justify-center">
             <Loader2 className="mr-2 h-6 w-6 animate-spin text-white" />
           </div>
-        ) : `Sign in`}
+        ) : (
+          `Sign in`
+        )}
       </Button>
     </form>
   );

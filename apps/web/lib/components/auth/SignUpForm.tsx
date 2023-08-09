@@ -23,8 +23,7 @@ export function SignUpForm() {
         password: password,
         phoneNumber: phoneNumber,
       });
-    }
-    catch (error) {
+    } catch (error) {
       console.log(error);
       // TODO: Handle error
     }
