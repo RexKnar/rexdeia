@@ -1,17 +1,24 @@
 'use client';
 
-import { Button, Input } from 'ui';
+import { Alert, AlertDescription, Button, Input } from "ui";
 import { useForm } from 'react-hook-form';
 import { signIn } from 'next-auth/react';
-import { useState } from 'react';
-import { Loader2 } from 'lucide-react';
+import { AlertCircleIcon, Loader2 } from "lucide-react";
+import { useSearchParams } from "next/navigation";
+
+const errors = {
+  INVALID_PASSWORD: 'The username or password you entered is incorrect. Please try again.',
+}
+
 export function SignInForm() {
   const {
     register,
     handleSubmit,
-    formState: { errors, isSubmitting },
-    setError,
+    formState: { errors: fieldErrors, isSubmitting },
   } = useForm();
+
+  const searchParams = useSearchParams();
+  const error = searchParams.get('error');
 
   async function signInHandler({ email, password }) {
     try {
@@ -27,6 +34,16 @@ export function SignInForm() {
 
   return (
     <form className="mt-4" onSubmit={handleSubmit(signInHandler)}>
+      {
+        error && (
+          <Alert className="mb-2">
+            <AlertCircleIcon className="h-4 w-4" />
+            <AlertDescription>
+              {errors[error]}
+            </AlertDescription>
+          </Alert>
+        )
+      }
       <label className="block text-gray-700">Email Address</label>
       <Input
         type="email"
@@ -42,12 +59,12 @@ export function SignInForm() {
       />
       <p
         className={`h-2 p-1 text-sm text-red-600 ${
-          errors.email
+          fieldErrors.email
             ? 'opacity-100 transition-opacity duration-300'
             : 'opacity-0 transition-opacity duration-300'
         }`}
       >
-        {errors.email?.message as string}
+        {fieldErrors.email?.message as string}
       </p>
       <label className="mt-4 block text-gray-700">Password</label>
       <Input
@@ -60,20 +77,19 @@ export function SignInForm() {
       />
       <p
         className={`h-2 p-1 text-sm text-red-600 ${
-          errors.password
+          fieldErrors.password
             ? 'opacity-100 transition-opacity duration-300'
             : 'opacity-0 transition-opacity duration-300'
         }`}
       >
-        {errors.password?.message as string}
+        {fieldErrors.password?.message as string}
       </p>
-      <Button type="submit" className="mt-6 w-full w-full text-white">
-        {isSubmitting && (
+      <Button type="submit" className="mt-6 w-full w-full text-white" disabled={isSubmitting}>
+        {isSubmitting ? (
           <div className="flex h-screen items-center justify-center">
             <Loader2 className="mr-2 h-6 w-6 animate-spin text-white" />
           </div>
-        )}
-        Sign in
+        ) : `Sign in`}
       </Button>
     </form>
   );
