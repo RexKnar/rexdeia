@@ -7,13 +7,11 @@ import { useForm } from 'react-hook-form';
 import { makeAPICall } from '../../api';
 import { REGISTER_USER } from '../../endpoints';
 
-import React, { useState } from 'react';
-
 export function SignUpForm() {
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isSubmitting },
   } = useForm();
   const [apiError, setApiError] = useState(0);
 
@@ -25,20 +23,26 @@ export function SignUpForm() {
         password: password,
         phoneNumber: phoneNumber,
       });
+    } catch (error) {
+      console.log(error);
+      // TODO: Handle error
+    }
+
+    try {
       await signIn('credentials', {
         name: name,
         email: email,
+        redirect: false,
         password: password,
         callbackUrl: '/setup',
         phoneNumber: phoneNumber,
       });
-      debugger;
     } catch (error) {
       debugger;
-      setApiError(1);
-      console.log(error);
+      console.error(error);
     }
   }
+
   return (
     <form className="mt-4" onSubmit={handleSubmit(signupHandler)}>
       <div>
@@ -118,6 +122,11 @@ export function SignUpForm() {
       </div>
       <div className="mt-6 w-full">
         <Button type="submit" className="w-full text-white">
+          {isSubmitting && (
+            <div className="flex h-screen items-center justify-center">
+              <Loader2 className="mr-2 h-6 w-6 animate-spin text-white" />
+            </div>
+          )}
           Next
         </Button>
       </div>

@@ -13,7 +13,7 @@ export async function validateAddUser(user: UserToRegisterModel) {
   try {
     schema.parse(user);
   } catch (e) {
-    throw new Error('VALIDATION_ERROR');
+    return Promise.reject(e);
   }
 
   const existingUser = await db.user.findFirst({
@@ -23,7 +23,7 @@ export async function validateAddUser(user: UserToRegisterModel) {
   });
 
   if (existingUser) {
-    throw new Error('USER_ALREADY_EXISTS');
+    return Promise.reject(new Error('USER_ALREADY_EXISTS'));
   }
 
   return schema.parse(user);

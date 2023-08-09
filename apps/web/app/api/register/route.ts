@@ -15,11 +15,8 @@ export async function POST(request: NextRequest) {
       status: 201,
     });
   } catch (e) {
-    return new NextResponse(JSON.stringify({ error: e.message }), {
-      status:
-        e.message === 'VALIDATION_ERROR' || e.message === 'USER_ALREADY_EXISTS'
-          ? 400
-          : 500,
+    return new NextResponse(e, {
+      status: 400,
     });
   }
 }

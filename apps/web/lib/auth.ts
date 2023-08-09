@@ -12,6 +12,7 @@ export const authOptions: NextAuthOptions = {
   },
   pages: {
     signIn: '/signin',
+    error: '/signin',
   },
   providers: [
     CredentialsProvider({
@@ -39,7 +40,6 @@ export const authOptions: NextAuthOptions = {
         if (!passwordMatch) {
           throw null;
         }
-
         return user;
       },
     }),
