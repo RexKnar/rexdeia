@@ -1,5 +1,5 @@
 'use client';
-
+'////////'
 import { Button, Input } from 'ui';
 import Link from 'next/link';
 import { signIn } from 'next-auth/react';
@@ -36,7 +36,7 @@ export function SignUpForm() {
     } catch (error) {
       debugger;
       setApiError(1);
-      console.error(error);
+      console.log(error);
     }
   }
   return (
