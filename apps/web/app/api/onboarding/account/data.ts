@@ -1,13 +1,13 @@
 export const admissionForm = {
-  title: 'Admission Form 2023-24',
-  description: 'This is the admission form for the academic year 2023-24.',
+  title: 'COLLEGE ADMISSION FORM',
+  description: "If you'd like to apply to our college, please fill in this College Admission Form and we will contact you as soon as possible.",
   formSections: [
     {
       sectionTitle: 'Personal Information',
       sectionDescription: 'Please fill out your personal information.',
       sectionFields: [
         {
-          id: '1',
+          id: 'firstName',
           type: 'text',
           label: 'First Name',
           value: '',
@@ -22,6 +22,19 @@ export const admissionForm = {
         {
           id: '2',
           type: 'text',
+          label: 'Middle Name',
+          value: '',
+          visible: true,
+          placeholder: 'Enter your middle name',
+          validationRules: {
+            required: false,
+            minLength: 1,
+            maxLength: 100,
+          },
+        },
+        {
+          id: '3',
+          type: 'text',
           label: 'Last Name',
           value: '',
           visible: true,
@@ -33,7 +46,7 @@ export const admissionForm = {
           },
         },
         {
-          id: '3',
+          id: '4',
           type: 'email',
           label: 'Email',
           value: '',
@@ -44,33 +57,201 @@ export const admissionForm = {
             email: true,
           },
         },
-      ],
-    },
-    {
-      sectionTitle: 'Additional Information',
-      sectionDescription: 'Please provide additional information.',
-      sectionFields: [
         {
-          id: '4',
-          type: 'dropdown',
-          label: 'Choose your favorite color',
+          id: '5',
+          type: 'text',
+          label: 'Contact Number',
           value: '',
           visible: true,
-          placeholder: 'Select a color',
+          placeholder: 'Enter your contact number',
+          validationRules: {
+            required: true,
+            email: true,
+          },
+        },
+        {
+          id: '6',
+          type: 'date',
+          label: 'Date of Birth',
+          value: '',
+          visible: true,
+          placeholder: 'select your DOB',
+          validationRules: {
+            required: true,
+          },
+        },
+        {
+          id: '7',
+          type: 'radio',
+          label: 'Gender',
+          name: "gender",
+          value: '',
+          visible: true,
           options: [
             {
-              label: 'Red',
-              value: 'red',
+              label: 'Male',
+              value: 'male',
             },
             {
-              label: 'Green',
-              value: 'green',
-            },
-            {
-              label: 'Blue',
-              value: 'blue',
+              label: 'Female',
+              value: 'female',
             },
           ],
+          validationRules: {
+            required: true,
+          },
+        },
+        
+        {
+          id: '8',
+          type: 'text',
+          label: "Father's Name",
+          value: '',
+          visible: true,
+          placeholder: 'enter your father name',
+          validationRules: {
+            required: true,
+          },
+        },
+        {
+          id: '9',
+          type: 'text',
+          label: "Father's Occupation",
+          value: '',
+          visible: true,
+          placeholder: 'enter your father name',
+          validationRules: {
+            required: true,
+          },
+        },
+        {
+          id: '10',
+          type: 'text',
+          label: "Mother's Name",
+          value: '',
+          visible: true,
+          placeholder: 'enter your father occupation',
+          validationRules: {
+            required: true,
+          },
+        },
+        {
+          id: '11',
+          type: 'text',
+          label: "Mother's Occupation",
+          value: '',
+          visible: true,
+          placeholder: 'enter your mother occupation',
+          validationRules: {
+            required: true,
+          },
+        },
+        {
+          id: '12',
+          type: 'text',
+          label: "Guardian's Name",
+          value: '',
+          visible: true,
+          placeholder: 'enter your guardian name',
+          validationRules: {
+            required: true,
+          },
+        },
+        {
+          id: '13',
+          type: 'text',
+          label: "Address Line 1",
+          value: '',
+          visible: true,
+          placeholder: 'address line 1',
+          validationRules: {
+            required: true,
+          },
+        },
+        {
+          id: '14',
+          type: 'text',
+          label: "Address Line 2",
+          value: '',
+          visible: true,
+          placeholder: 'address line 2',
+          validationRules: {
+            required: true,
+          },
+        },
+        {
+          id: '15',
+          type: 'text',
+          label: "Nationality",
+          value: '',
+          visible: true,
+          placeholder: 'enter nationality',
+          validationRules: {
+            required: true,
+          },
+        },
+        {
+          id: '16',
+          type: 'text',
+          label: "State",
+          value: '',
+          visible: true,
+          placeholder: 'enter state',
+          validationRules: {
+            required: true,
+          },
+        },
+        {
+          id: '17',
+          type: 'text',
+          label: "District",
+          value: '',
+          visible: true,
+          placeholder: 'enter district',
+          validationRules: {
+            required: true,
+          },
+        },
+        {
+          id: '18',
+          type: 'text',
+          label: "Postal / ZIP Code",
+          value: '',
+          visible: true,
+          placeholder: 'enter postal/zip code',
+          validationRules: {
+            required: true,
+          },
+        },
+        {
+          id: '19',
+          type: 'text',
+          label: "Religion",
+          value: '',
+          visible: true,
+          placeholder: 'enter your relegion',
+          validationRules: {
+            required: true,
+          },
+        },
+        {
+          id: '20',
+          type: 'text',
+          label: "Community",
+          value: '',
+          visible: true,
+          placeholder: 'enter your community',
+          validationRules: {
+            required: true,
+          },
+        },
+        {
+          id: '21',
+          type: 'text',
+          label: "Caste",
+          value: '',
+          visible: true,
+          placeholder: 'enter your caste',
           validationRules: {
             required: true,
           },

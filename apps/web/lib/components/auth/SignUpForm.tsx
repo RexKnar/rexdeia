@@ -32,7 +32,7 @@ export function SignUpForm() {
       await signIn('credentials', {
         name: name,
         email: email,
-        redirect: false,
+        redirect: true,
         password: password,
         callbackUrl: '/setup',
         phoneNumber: phoneNumber,
