@@ -125,12 +125,18 @@ export function SignUpForm() {
         </p>
       </div>
       <div className="mt-6 w-full">
-        <Button type="submit" className="w-full text-white" disabled={isSubmitting}>
+        <Button
+          type="submit"
+          className="w-full text-white"
+          disabled={isSubmitting}
+        >
           {isSubmitting ? (
             <div className="flex h-screen items-center justify-center">
               <Loader2 className="mr-2 h-6 w-6 animate-spin text-white" />
             </div>
-          ) : `Next`}
+          ) : (
+            `Next`
+          )}
         </Button>
       </div>
       <p className="mt-4 text-center text-gray-500">
