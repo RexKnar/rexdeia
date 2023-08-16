@@ -2,16 +2,49 @@
 import { useForm } from 'react-hook-form';
 import { FormModel } from '../../../app/api/forms/models';
 import { Loader2 } from 'lucide-react';
+import { ADD_ADMISSION } from '../../endpoints';
+import { makeAPICall } from '../../api';
 export function AdmissionForm({ formConfig }) {
   const {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
   } = useForm();
-  const onSubmit = (data) => console.log(data);
+  async function addAdmissionHandler(data:any) {
+    console.log(data[6]);
+    try {
+    await makeAPICall(ADD_ADMISSION, {
+        firstName: data[1],
+        middleName: data[2],
+        lastName: data[3],
+        emailid:data[4],
+        contactNumber:data[5],
+        dob:data[6],
+        gender:data[7],
+        fatherName:data[8],
+        fatherOccupation:data[9],
+        motherName:data[10],
+        motherOccupation:data[11],
+        guardianName:data[12],
+        addressLine1:data[13],
+        addressLine2:data[14],
+        nationality:data[15],
+        state:data[16],
+        district:data[17],
+        postalCode:data[18],
+        religion:data[19],
+        community:data[20],
+        caste:data[21]
+      });
+    } catch (error) {
+      console.log(error);
+      // TODO: Handle error
+    }
+  }
+
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="mt-4 w-full border p-5">
+     <form onSubmit={handleSubmit(addAdmissionHandler)} className="mt-4 w-full border p-5">
       <h1 className="text-primary text-center text-3xl font-semibold">
         {formConfig.json.title}
       </h1>
@@ -29,6 +62,7 @@ export function AdmissionForm({ formConfig }) {
               switch (field.type) {
                 case 'text':
                 case 'email':
+                case 'date':
                   return (
                     <div key={field.id}>
                       <label className="mt-5 block text-gray-700">
@@ -47,23 +81,17 @@ export function AdmissionForm({ formConfig }) {
                       )}
                     </div>
                   );
-                case 'dropdown':
+                case 'radio':
                   return (
                     <div key={field.id}>
                       <label className="mt-5 block text-gray-700">
                         {field.label}
                       </label>
-                      <select
-                        {...register(field.id, field.validationRules)}
-                        placeholder={field.placeholder}
-                        className="ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring mt-1 flex h-10 w-full rounded-md border border-gray-300 bg-transparent px-3 py-2 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-                      >
-                        {field.options.map((option, index) => (
-                          <option key={index} value={option.value}>
-                            {option.label}
-                          </option>
-                        ))}
-                      </select>
+                      {field.options.map((option, index) => (
+                        <><input type={field.type} name={field.name} value={option.value}  {...register(field.id, field.validationRules)} />
+                        <span className="me-3">{option.label}</span></>
+                      ))}
+
                       {errors[field.id] && (
                         <p className="h-2 p-1 text-sm text-red-600">
                           {field.label} is required
@@ -89,7 +117,7 @@ export function AdmissionForm({ formConfig }) {
             <Loader2 className="mr-2 h-6 w-6 animate-spin text-white" />
           </div>
         )}
-        Save
+        Apply Now
       </button>
     </form>
   );

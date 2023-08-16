@@ -7,7 +7,7 @@ export const admissionForm = {
       sectionDescription: 'Please fill out your personal information.',
       sectionFields: [
         {
-          id: 'firstName',
+          id: '1',
           type: 'text',
           label: 'First Name',
           value: '',
@@ -66,7 +66,6 @@ export const admissionForm = {
           placeholder: 'Enter your contact number',
           validationRules: {
             required: true,
-            email: true,
           },
         },
         {
