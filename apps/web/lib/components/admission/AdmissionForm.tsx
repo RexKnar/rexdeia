@@ -117,7 +117,7 @@ export function AdmissionForm({ formConfig }) {
             <Loader2 className="mr-2 h-6 w-6 animate-spin text-white" />
           </div>
         )}
-        Apply Now
+        Save
       </button>
     </form>
   );
