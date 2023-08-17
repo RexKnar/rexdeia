@@ -1,15 +1,14 @@
-import { db } from '../../../../lib/db';
+import { db } from '../../../lib/db';
 import { AddAdmissionModel } from './models';
 
 export async function addAdmission(admission: AddAdmissionModel) {
-  console.log(admission.firstName);
   return await db.admissionForm.create({
     data: {
       ...admission,
       firstName: admission.firstName,
       middleName: admission.middleName,
       lastName: admission.lastName,
-      emailid:admission.emailid,
+      emailId:admission.emailId,
       contactNumber: admission.contactNumber,
       dob: admission.dob,
       gender: admission.gender,

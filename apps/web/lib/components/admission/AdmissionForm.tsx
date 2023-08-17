@@ -11,30 +11,29 @@ export function AdmissionForm({ formConfig }) {
     formState: { errors, isSubmitting },
   } = useForm();
   async function addAdmissionHandler(data:any) {
-    console.log(data[6]);
     try {
     await makeAPICall(ADD_ADMISSION, {
-        firstName: data[1],
-        middleName: data[2],
-        lastName: data[3],
-        emailid:data[4],
-        contactNumber:data[5],
-        dob:data[6],
-        gender:data[7],
-        fatherName:data[8],
-        fatherOccupation:data[9],
-        motherName:data[10],
-        motherOccupation:data[11],
-        guardianName:data[12],
-        addressLine1:data[13],
-        addressLine2:data[14],
-        nationality:data[15],
-        state:data[16],
-        district:data[17],
-        postalCode:data[18],
-        religion:data[19],
-        community:data[20],
-        caste:data[21]
+      firstName: data[1],
+      middleName: data[2],
+      lastName: data[3],
+      emailId:data[4],
+      contactNumber:data[5],
+      dob:data[6],
+      gender:data[7],
+      fatherName:data[8],
+      fatherOccupation:data[9],
+      motherName:data[10],
+      motherOccupation:data[11],
+      guardianName:data[12],
+      addressLine1:data[13],
+      addressLine2:data[14],
+      nationality:data[15],
+      state:data[16],
+      district:data[17],
+      postalCode:data[18],
+      religion:data[19],
+      community:data[20],
+      caste:data[21]
       });
     } catch (error) {
       console.log(error);

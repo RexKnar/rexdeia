@@ -17,7 +17,7 @@ export default <EndpointDetails>{
   },
   [ADD_ADMISSION]: {
     requestType: `POST`,
-    endpoint: `/api/admission/add`,
+    endpoint: `/api/admission`,
   },
   [ONBOARD_ACCOUNT]: {
     requestType: `POST`,

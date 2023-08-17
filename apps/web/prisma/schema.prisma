@@ -57,7 +57,7 @@ model AdmissionForm {
   firstName     String
   middleName    String
   lastName    String
-  emailid String
+  emailId String
   contactNumber String
   dob String
   gender String

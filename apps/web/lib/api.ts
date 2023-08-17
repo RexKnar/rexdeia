@@ -29,6 +29,5 @@ export async function makeAPICall<T>(
     const error = await response.json();
     return new Promise((_, reject) => reject(error));
   }
-console.log(payload);
   return response.json() as Promise<T>;
 }

@@ -2,7 +2,7 @@ export type AddAdmissionModel = {
   firstName: string;
   middleName: string;
   lastName: string;
-  emailid:string;
+  emailId:string;
   contactNumber:string;
   dob:string;
   gender:string;
