@@ -13,27 +13,7 @@ export function AdmissionForm({ formConfig }) {
   async function addAdmissionHandler(data:any) {
     try {
     await makeAPICall(ADD_ADMISSION, {
-      firstName: data[1],
-      middleName: data[2],
-      lastName: data[3],
-      emailId:data[4],
-      contactNumber:data[5],
-      dob:data[6],
-      gender:data[7],
-      fatherName:data[8],
-      fatherOccupation:data[9],
-      motherName:data[10],
-      motherOccupation:data[11],
-      guardianName:data[12],
-      addressLine1:data[13],
-      addressLine2:data[14],
-      nationality:data[15],
-      state:data[16],
-      district:data[17],
-      postalCode:data[18],
-      religion:data[19],
-      community:data[20],
-      caste:data[21]
+      ...data
       });
     } catch (error) {
       console.log(error);
@@ -68,7 +48,7 @@ export function AdmissionForm({ formConfig }) {
                         {field.label}
                       </label>
                       <input
-                        {...register(field.id, field.validationRules)}
+                        {...register(field.name, field.validationRules)}
                         type={field.type}
                         placeholder={field.placeholder}
                         className="ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring mt-1 flex h-10 w-full rounded-md border border-gray-300 bg-transparent px-3 py-2 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
@@ -87,7 +67,9 @@ export function AdmissionForm({ formConfig }) {
                         {field.label}
                       </label>
                       {field.options.map((option, index) => (
-                        <><input type={field.type} name={field.name} value={option.value}  {...register(field.id, field.validationRules)} />
+                        <><input type={field.type} name={field.name} value={option.value}  
+                        {...register(field.name, field.validationRules)}
+                         />
                         <span className="me-3">{option.label}</span></>
                       ))}
 
