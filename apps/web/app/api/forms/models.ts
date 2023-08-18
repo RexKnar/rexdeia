@@ -15,6 +15,7 @@ const FormFieldOption = z.object({
 const FormField = z.object({
   id: z.string(),
   type: z.string(),
+  name:z.string(),
   label: z.string(),
   value: z.string(),
   visible: z.boolean(),
