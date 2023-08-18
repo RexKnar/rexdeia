@@ -1,0 +1,23 @@
+export type AddAdmissionModel = {
+  firstName: string;
+  middleName: string;
+  lastName: string;
+  emailId: string;
+  contactNumber: string;
+  dob: string;
+  gender: string;
+  fatherName: string;
+  fatherOccupation: string;
+  motherName: string;
+  motherOccupation: string;
+  guardianName: string;
+  addressLine1: string;
+  addressLine2: string;
+  nationality: string;
+  state: string;
+  district: string;
+  postalCode: string;
+  religion: string;
+  community: string;
+  caste: string;
+};

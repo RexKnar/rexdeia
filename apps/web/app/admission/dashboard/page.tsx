@@ -1,7 +1,8 @@
+import { AdmissionList } from '../../../lib/components/admission/AdmissionList';
 export default async function Page() {
   return (
     <>
-      <h1>Hello World</h1>
+      <AdmissionList/>
     </>
   );
 }
