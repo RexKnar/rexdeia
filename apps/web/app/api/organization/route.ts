@@ -24,7 +24,7 @@ export async function POST(request: NextRequest) {
       status: 201,
     });
   } catch (e) {
-    console.error(`-------->${e}`);
+    console.error(e);
     return new NextResponse(JSON.stringify({ error: e.message }), {
       status: e.message === 'VALIDATION_ERROR' ? 400 : 500,
     });
