@@ -15,7 +15,7 @@ export function SignInForm() {
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors: fieldErrors, isSubmitting },
   } = useForm();
 
   const searchParams = useSearchParams();
@@ -29,10 +29,7 @@ export function SignInForm() {
         callbackUrl: '/',
       });
     } catch (error) {
-      setError('password', {
-        type: 'manual',
-        message: 'invalid email or password',
-      });
+      console.log(error);
     }
   }
 

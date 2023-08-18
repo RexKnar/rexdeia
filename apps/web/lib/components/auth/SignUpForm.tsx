@@ -1,19 +1,25 @@
 'use client';
-'////////'
+
 import { Button, Input } from 'ui';
 import Link from 'next/link';
 import { signIn } from 'next-auth/react';
 import { useForm } from 'react-hook-form';
 import { makeAPICall } from '../../api';
 import { REGISTER_USER } from '../../endpoints';
+import { Loader2 } from 'lucide-react';
+
+const errorValue = {
+  too_small: 'Password must contain at least 6 characters.',
+  user_exists: 'Email id is already in use',
+};
 
 export function SignUpForm() {
   const {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
+    setError,
   } = useForm();
-  const [apiError, setApiError] = useState(0);
 
   async function signupHandler({ name, email, password, phoneNumber }) {
     try {
@@ -23,23 +29,41 @@ export function SignUpForm() {
         password: password,
         phoneNumber: phoneNumber,
       });
-    } catch (error) {
-      console.log(error);
-      // TODO: Handle error
-    }
 
-    try {
       await signIn('credentials', {
         name: name,
         email: email,
-        redirect: false,
+        redirect: true,
         password: password,
         callbackUrl: '/setup',
         phoneNumber: phoneNumber,
       });
     } catch (error) {
-      debugger;
-      console.error(error);
+      console.log(error);
+
+      if (
+        Array.isArray(error) &&
+        error.length > 0 &&
+        error[0].path &&
+        error[0].path[0] === 'password'
+      ) {
+        setError('password', {
+          type: 'manual',
+          message: errorValue[(error[0] as any).code],
+        });
+      }
+
+      if (
+        Array.isArray(error) &&
+        error.length > 0 &&
+        error[0].path &&
+        error[0].path[0] === 'email'
+      ) {
+        setError('email', {
+          type: 'manual',
+          message: errorValue[(error[0] as any).code],
+        });
+      }
     }
   }
 
@@ -74,8 +98,14 @@ export function SignUpForm() {
             required: 'Your email address is needed to sign up',
           })}
         />
-        <p className={`h-2 p-1 text-sm text-red-600 `}>
-          {apiError ? 'Email id exist' : (errors.email?.message as string)}
+        <p
+          className={`h-2 p-1 text-sm text-red-600 ${
+            errors.email
+              ? 'opacity-100 transition-opacity duration-300'
+              : 'opacity-0 transition-opacity duration-300'
+          }`}
+        >
+          {errors.email?.message as string}
         </p>
       </div>
       <div className="mt-4">

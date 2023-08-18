@@ -6,7 +6,6 @@ export async function POST(request: NextRequest) {
   const payload = await request.json();
 
   try {
-    
     await validateAddUser(payload);
 
     const createdUser = await addUser(payload);
@@ -15,6 +14,7 @@ export async function POST(request: NextRequest) {
       status: 201,
     });
   } catch (e) {
+    console.log(`API error`);
     return new NextResponse(e, {
       status: 400,
     });

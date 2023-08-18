@@ -23,7 +23,14 @@ export async function validateAddUser(user: UserToRegisterModel) {
   });
 
   if (existingUser) {
-    return Promise.reject(new Error('USER_ALREADY_EXISTS'));
+    let errorResponse = [
+      {
+        code: 'user_exists',
+        message: 'Email id is already in use',
+        path: ['email'],
+      },
+    ];
+    return Promise.reject(JSON.stringify(errorResponse));
   }
 
   return schema.parse(user);
