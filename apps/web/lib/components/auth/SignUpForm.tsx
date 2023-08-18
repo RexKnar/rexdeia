@@ -39,8 +39,6 @@ export function SignUpForm() {
         phoneNumber: phoneNumber,
       });
     } catch (error) {
-      console.log(error);
-
       if (
         Array.isArray(error) &&
         error.length > 0 &&
