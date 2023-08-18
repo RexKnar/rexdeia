@@ -56,14 +56,14 @@ model AdmissionForm {
   id            String    @id @default(auto()) @map("_id") @db.ObjectId
   firstName     String
   middleName    String
-  lastName    String
-  emailId String
+  lastName      String
+  emailId       String
   contactNumber String
-  dob String
-  gender String
-  fatherName String
-  fatherOccupation String
-  motherName String
+  dob           String
+  gender        String
+  fatherName        String
+  fatherOccupation  String
+  motherName        String
   motherOccupation String
   guardianName String
   addressLine1 String
