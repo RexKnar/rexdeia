@@ -53,28 +53,28 @@ model User {
 }
 
 model AdmissionForm {
-  id            String    @id @default(auto()) @map("_id") @db.ObjectId
-  firstName     String
-  middleName    String
-  lastName      String
-  emailId       String
-  contactNumber String
-  dob           String
-  gender        String
+  id                String    @id @default(auto()) @map("_id") @db.ObjectId
+  firstName         String
+  middleName        String
+  lastName          String
+  emailId           String
+  contactNumber     String
+  dob               String
+  gender            String
   fatherName        String
   fatherOccupation  String
   motherName        String
-  motherOccupation String
-  guardianName String
-  addressLine1 String
-  addressLine2 String
-  nationality String
-  state String
-  district String
-  postalCode String
-  religion String
-  community String
-  caste String
+  motherOccupation  String
+  guardianName      String
+  addressLine1      String
+  addressLine2      String
+  nationality       String
+  state             String
+  district          String
+  postalCode        String
+  religion          String
+  community         String
+  caste             String
 }
 
 model Organization {

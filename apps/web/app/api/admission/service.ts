@@ -8,7 +8,7 @@ export async function addAdmission(admission: AddAdmissionModel) {
       firstName: admission.firstName,
       middleName: admission.middleName,
       lastName: admission.lastName,
-      emailId:admission.emailId,
+      emailId: admission.emailId,
       contactNumber: admission.contactNumber,
       dob: admission.dob,
       gender: admission.gender,

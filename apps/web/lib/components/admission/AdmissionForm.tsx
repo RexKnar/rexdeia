@@ -1,19 +1,20 @@
 'use client';
+
 import { useForm } from 'react-hook-form';
-import { FormModel } from '../../../app/api/forms/models';
 import { Loader2 } from 'lucide-react';
 import { ADD_ADMISSION } from '../../endpoints';
 import { makeAPICall } from '../../api';
+
 export function AdmissionForm({ formConfig }) {
   const {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
   } = useForm();
-  async function addAdmissionHandler(data:any) {
+  async function addAdmissionHandler(data: Record<string, unknown>) {
     try {
-    await makeAPICall(ADD_ADMISSION, {
-      ...data
+      await makeAPICall(ADD_ADMISSION, {
+        ...data,
       });
     } catch (error) {
       console.log(error);
@@ -21,9 +22,11 @@ export function AdmissionForm({ formConfig }) {
     }
   }
 
-
   return (
-     <form onSubmit={handleSubmit(addAdmissionHandler)} className="mt-4 w-full border p-5">
+    <form
+      onSubmit={handleSubmit(addAdmissionHandler)}
+      className="mt-4 w-full border p-5"
+    >
       <h1 className="text-primary text-center text-3xl font-semibold">
         {formConfig.json.title}
       </h1>
@@ -67,10 +70,15 @@ export function AdmissionForm({ formConfig }) {
                         {field.label}
                       </label>
                       {field.options.map((option, index) => (
-                        <><input type={field.type} name={field.name} value={option.value}  
-                        {...register(field.name, field.validationRules)}
-                         />
-                        <span className="me-3">{option.label}</span></>
+                        <>
+                          <input
+                            type={field.type}
+                            name={field.name}
+                            value={option.value}
+                            {...register(field.name, field.validationRules)}
+                          />
+                          <span className="me-3">{option.label}</span>
+                        </>
                       ))}
 
                       {errors[field.id] && (
