@@ -29,7 +29,7 @@ export function Onboarding() {
     if (isOnboarded) {
       router.push('/');
     }
-  }, [isOnboarded]);
+  }, [isOnboarded, router]);
 
   if (isErrored) {
     return <>Error</>;
