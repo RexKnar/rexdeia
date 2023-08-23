@@ -1,6 +1,5 @@
 'use client';
 import { useEffect, useState } from 'react';
-import { getAdmissionList } from '../../../app/api/admission/service';
 import { makeAPICall } from '../../api';
 import { LIST_ADMISSION } from '../../endpoints';
 
@@ -15,7 +14,7 @@ export function AdmissionList() {
         // TODO: Handle error
       }
     })();
-  }, [admissionLists]);
+  }, []);
   return (
     <section className="w-full">
       <h1 className="text-primary mt-3 text-center text-3xl font-semibold">

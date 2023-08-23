@@ -20,7 +20,7 @@ export function AdmissionForm({ formConfig }) {
       // TODO: Handle error
     }
   }
-
+console.log(formConfig);
 
   return (
      <form onSubmit={handleSubmit(addAdmissionHandler)} className="mt-4 w-full border p-5">
