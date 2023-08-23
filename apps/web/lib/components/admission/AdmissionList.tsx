@@ -1,4 +1,5 @@
 'use client';
+
 import { useEffect, useState } from 'react';
 import { makeAPICall } from '../../api';
 import { LIST_ADMISSION } from '../../endpoints';
@@ -23,17 +24,23 @@ export function AdmissionList() {
       <table className="m-auto mt-5 table-auto border-collapse border border-slate-400 px-4">
         <tr>
           <th className="border border-slate-300 px-4">Sl.No</th>
-          <th className="border border-slate-300 px-4">Name of the Candidate</th>
+          <th className="border border-slate-300 px-4">
+            Name of the Candidate
+          </th>
           <th className="border border-slate-300 px-4">Email ID</th>
           <th className="border border-slate-300 px-4">Contact Number</th>
           <th className="border border-slate-300 px-4">Address</th>
         </tr>
         {admissionLists.map((item, index) => (
-          <tr>
+          <tr key={item.id}>
             <td className="border border-slate-300 px-4">{index + 1}</td>
-            <td className="border border-slate-300 px-4">{item.firstName + ' ' + item.lastName}</td>
+            <td className="border border-slate-300 px-4">
+              {item.firstName + ' ' + item.lastName}
+            </td>
             <td className="border border-slate-300 px-4">{item.emailId}</td>
-            <td className="border border-slate-300 px-4">{item.contactNumber}</td>
+            <td className="border border-slate-300 px-4">
+              {item.contactNumber}
+            </td>
             <td className="border border-slate-300 px-4">
               {item.addressLine1 + ', ' + item.addressLine2}
             </td>
