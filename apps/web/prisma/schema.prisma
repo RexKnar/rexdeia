@@ -77,6 +77,38 @@ model AdmissionForm {
   caste             String
 }
 
+model EnquiryForm {
+  id                String    @id @default(auto()) @map("_id") @db.ObjectId
+  name              String
+  date              String
+  emailId           String
+  contactNumber     String
+  dob               String
+  gender            String
+  age               String
+  maritalStatus     String
+  fatherName        String
+  fatherOccupation  String
+  motherName        String
+  motherOccupation  String
+  guardianName      String
+  guardianOccupation String
+  addressLine1      String
+  addressLine2      String
+  nationality       String
+  state             String
+  district          String
+  postalCode        String
+  schoolName10th         String
+  obtainedMark10th       String
+  yearOfPassing10th      String
+  mediumOfEducation10th  String
+  schoolName12th         String
+  obtainedMark12th      String
+  yearOfPassing12th      String
+  mediumOfEducation12th String
+}
+
 model Organization {
   id          String             @id @default(auto()) @map("_id") @db.ObjectId
   name        String
@@ -97,6 +129,7 @@ model UserOrganization {
 
 enum FormType {
   Admission
+  Enquiry
 }
 
 model Form {
