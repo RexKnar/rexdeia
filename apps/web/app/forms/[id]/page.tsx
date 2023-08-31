@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { AdmissionForm } from '../../../lib/components/shared/AdmissionForm';
+import { Form } from '../../../lib/components/shared/Form';
 import { searchForms } from '../../api/forms/service';
 
 export default async function Page({ params }: { params: { id: string } }) {
@@ -8,10 +8,10 @@ export default async function Page({ params }: { params: { id: string } }) {
     type: 'Admission',
     organizationId: params.id,
   });
-  const admissionForm = admissionForms[0];
+  const form = admissionForms[0];
   return (
     <>
-    <AdmissionForm formConfig={admissionForm} />;
+    <Form formConfig={form} />;
     </>
   );
 }

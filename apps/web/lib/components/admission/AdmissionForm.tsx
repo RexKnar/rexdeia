@@ -21,10 +21,8 @@ export function AdmissionForm({ formConfig }) {
       // TODO: Handle error
     }
   }
-  console.log(formConfig);
   const handleShare = () => {
     const shareableURL = `localhost:3000/forms/${formConfig.organizationId}`;
-    console.log(shareableURL);
     alert(shareableURL)
   };
   return (

@@ -4,7 +4,7 @@ import { useForm } from 'react-hook-form';
 import { Loader2 } from 'lucide-react';
 import { ADD_ADMISSION } from '../../endpoints';
 import { makeAPICall } from '../../api';
-export function AdmissionForm({ formConfig }) {
+export function Form({ formConfig }) {
   const {
     register,
     handleSubmit,
