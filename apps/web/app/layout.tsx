@@ -1,4 +1,5 @@
 import 'configs/tailwind/styles.css';
+import '../public/assets/css/font.css'
 import { HighlightInit } from '@highlight-run/next/highlight-init';
 
 export const metadata = {
