@@ -8,11 +8,17 @@ import { makeAPICall } from '../../api';
 import { REGISTER_USER } from '../../endpoints';
 import { Loader2 } from 'lucide-react';
 
+const errorValue = {
+  too_small: 'Password must contain at least 6 characters.',
+  user_exists: 'Email id is already in use',
+};
+
 export function SignUpForm() {
   const {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
+    setError,
   } = useForm();
 
   async function signupHandler({ name, email, password, phoneNumber }) {
@@ -23,11 +29,7 @@ export function SignUpForm() {
         password: password,
         phoneNumber: phoneNumber,
       });
-    } catch (error) {
-      console.log(error);
-    }
 
-    try {
       await signIn('credentials', {
         name: name,
         email: email,
@@ -37,7 +39,29 @@ export function SignUpForm() {
         phoneNumber: phoneNumber,
       });
     } catch (error) {
-      console.log(error);
+      if (
+        Array.isArray(error) &&
+        error.length > 0 &&
+        error[0].path &&
+        error[0].path[0] === 'password'
+      ) {
+        setError('password', {
+          type: 'manual',
+          message: errorValue[(error[0] as any).code],
+        });
+      }
+
+      if (
+        Array.isArray(error) &&
+        error.length > 0 &&
+        error[0].path &&
+        error[0].path[0] === 'email'
+      ) {
+        setError('email', {
+          type: 'manual',
+          message: errorValue[(error[0] as any).code],
+        });
+      }
     }
   }
 
