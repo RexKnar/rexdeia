@@ -53,59 +53,59 @@ model User {
 }
 
 model AdmissionForm {
-  id                String    @id @default(auto()) @map("_id") @db.ObjectId
-  firstName         String
-  middleName        String
-  lastName          String
-  emailId           String
-  contactNumber     String
-  dob               String
-  gender            String
-  fatherName        String
-  fatherOccupation  String
-  motherName        String
-  motherOccupation  String
-  guardianName      String
-  addressLine1      String
-  addressLine2      String
-  nationality       String
-  state             String
-  district          String
-  postalCode        String
-  religion          String
-  community         String
-  caste             String
+  id               String @id @default(auto()) @map("_id") @db.ObjectId
+  firstName        String
+  middleName       String
+  lastName         String
+  emailId          String
+  contactNumber    String
+  dob              String
+  gender           String
+  fatherName       String
+  fatherOccupation String
+  motherName       String
+  motherOccupation String
+  guardianName     String
+  addressLine1     String
+  addressLine2     String
+  nationality      String
+  state            String
+  district         String
+  postalCode       String
+  religion         String
+  community        String
+  caste            String
 }
 
 model EnquiryForm {
-  id                String    @id @default(auto()) @map("_id") @db.ObjectId
-  name              String
-  date              String
-  emailId           String
-  contactNumber     String
-  dob               String
-  gender            String
-  age               String
-  maritalStatus     String
-  fatherName        String
-  fatherOccupation  String
-  motherName        String
-  motherOccupation  String
-  guardianName      String
-  guardianOccupation String
-  addressLine1      String
-  addressLine2      String
-  nationality       String
-  state             String
-  district          String
-  postalCode        String
-  schoolName10th         String
-  obtainedMark10th       String
-  yearOfPassing10th      String
-  mediumOfEducation10th  String
-  schoolName12th         String
+  id                    String @id @default(auto()) @map("_id") @db.ObjectId
+  name                  String
+  date                  String
+  emailId               String
+  contactNumber         String
+  dob                   String
+  gender                String
+  age                   String
+  maritalStatus         String
+  fatherName            String
+  fatherOccupation      String
+  motherName            String
+  motherOccupation      String
+  guardianName          String
+  guardianOccupation    String
+  addressLine1          String
+  addressLine2          String
+  nationality           String
+  state                 String
+  district              String
+  postalCode            String
+  schoolName10th        String
+  obtainedMark10th      String
+  yearOfPassing10th     String
+  mediumOfEducation10th String
+  schoolName12th        String
   obtainedMark12th      String
-  yearOfPassing12th      String
+  yearOfPassing12th     String
   mediumOfEducation12th String
 }
 
@@ -134,8 +134,8 @@ enum FormType {
 
 model Form {
   id             String        @id @default(auto()) @map("_id") @db.ObjectId
-  createdAt      DateTime      @default(now())
-  updatedAt      DateTime      @updatedAt
+  createdAt      DateTime?     @default(now())
+  updatedAt      DateTime?     @default(now())
   type           FormType
   json           Json
   isActive       Boolean       @default(false)
