@@ -8,7 +8,6 @@ export async function GET(request: NextRequest) {
       status: 200,
     });
   } catch (e) {
-    console.log('error');
     return new NextResponse(e, {
       status: 400,
     });
