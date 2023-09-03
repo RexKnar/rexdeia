@@ -36,7 +36,11 @@ export function SignInForm() {
   }
 
   return (
-    <form className="mt-4" onSubmit={handleSubmit(signInHandler)}>
+    <form
+      className="mt-4"
+      autoComplete="off"
+      onSubmit={handleSubmit(signInHandler)}
+    >
       {error && (
         <Alert className="mb-2">
           <AlertCircleIcon className="h-4 w-4" />

@@ -1,4 +1,3 @@
-import Link from 'next/link';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '../../../lib/auth';
 import { redirect } from 'next/navigation';
@@ -6,6 +5,7 @@ import { SignInForm } from '../../../lib/components/auth/SignInForm';
 import logo from '../../../public/assets/images/acadx-logo.png';
 import Image from 'next/image';
 import { Button } from 'ui';
+
 export const metadata = {
   title: 'Capeo | Sign in',
   description: 'Capeo is a business management platform for small businesses.',
@@ -20,11 +20,9 @@ export default async function Page() {
   return (
     <section className="flex h-full flex-col sm:flex-row">
       <section
-        className="flex-grow sm:flex sm:w-auto"
+        className="hidden flex-grow bg-cover bg-center bg-no-repeat sm:flex sm:w-auto"
         style={{
           backgroundImage: 'url(/assets/images/signin-banner.png)',
-          backgroundRepeat: 'no-repeat',
-          backgroundSize: 'cover',
         }}
       ></section>
 
