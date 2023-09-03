@@ -33,22 +33,25 @@ export default async function Page() {
           <Image src={logo} alt={'logo'} width={150}></Image>
         </div>
         <div className="mt-8 flex">
-          <span className=" inter text-3xl font-semibold">Welcome</span>
+          <span className="text-3xl font-semibold">Welcome</span>
         </div>
 
-        <p className="inter text-base font-medium text-gray-800">
+        <p className="text-base font-medium text-gray-800">
           Sign in to your account to get started.
         </p>
 
         <SignInForm />
 
-        <p className="inter mt-12 text-center text-base font-semibold text-gray-800">
+        <p className="mt-12 text-center text-base font-semibold text-gray-800">
           Don't have an account?
         </p>
-        <Button type="submit" className="outline outline-gray-300 bg-transparent mt-3 w-full text-primary hover:text-white bg-transparent">
+        <Button
+          type="submit"
+          className="text-primary mt-3 w-full bg-transparent bg-transparent outline outline-gray-300 hover:text-white"
+        >
           Signup
         </Button>
-        <p className="inter mt-14 text-center text-base font-normal text-gray-700">
+        <p className="mt-14 text-center text-base font-normal text-gray-700">
           &copy; acadx 2023
         </p>
       </section>

@@ -43,12 +43,10 @@ export function SignInForm() {
           <AlertDescription>{errors[error]}</AlertDescription>
         </Alert>
       )}
-      <label className="sub-text inter block text-sm font-semibold">
-        Email
-      </label>
+      <label className="block text-sm font-semibold">Email</label>
       <Input
         type="email"
-        className="sub-text inter mt-2 text-sm"
+        className="mt-2 text-sm"
         placeholder="Enter your email"
         {...register('email', {
           required: 'Your email address is needed to sign in',
@@ -67,12 +65,10 @@ export function SignInForm() {
       >
         {fieldErrors.email?.message as string}
       </p>
-      <label className="sub-text inter mt-4 block text-sm font-semibold">
-        Password
-      </label>
+      <label className="mt-4 block text-sm font-semibold">Password</label>
       <Input
         type="password"
-        className="sub-text inter mt-1 text-sm"
+        className="mt-1 text-sm"
         placeholder="Enter your password"
         {...register('password', {
           required: 'Your password is needed to sign in.',
@@ -87,7 +83,7 @@ export function SignInForm() {
       >
         {fieldErrors.password?.message as string}
       </p>
-      <label className="inter mt-2 block text-end text-sm font-semibold text-gray-800">
+      <label className="mt-2 block text-end text-sm font-semibold text-gray-800">
         Forgot Password?
       </label>
       <Button
@@ -103,20 +99,20 @@ export function SignInForm() {
           `Sign in`
         )}
       </Button>
-      <label className="inter inter mt-8 block text-center text-base font-semibold text-gray-800">
+      <label className="mt-8 block text-center text-base font-semibold text-gray-800">
         or continue with{' '}
       </label>
       <div className="flex justify-center gap-4">
         <Button
           type="submit"
-          className="text-base mt-3 w-full bg-transparent bg-transparent text-gray-800 outline outline-gray-300 hover:text-white"
+          className="mt-3 w-full bg-transparent bg-transparent text-base text-gray-800 outline outline-gray-300 hover:text-white"
         >
           <Image src={googlelogo} alt={'logo'} className="mr-1"></Image>
           Google
         </Button>
         <Button
           type="submit"
-          className="text-base mt-3 w-full bg-transparent bg-transparent text-gray-800 outline outline-gray-300 hover:text-white"
+          className="mt-3 w-full bg-transparent bg-transparent text-base text-gray-800 outline outline-gray-300 hover:text-white"
         >
           <Image src={microsoftlogo} alt={'logo'} className="mr-1"></Image>
           Microsoft

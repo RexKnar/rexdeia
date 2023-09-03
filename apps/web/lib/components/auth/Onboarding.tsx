@@ -46,7 +46,7 @@ export function Onboarding() {
         <div className="flex h-[100vh] w-[100vw] items-center justify-center">
           <div className="flex h-screen items-center justify-center">
             <Loader2 className="mr-2 h-10 w-10 animate-spin text-white" />
-            <h1 className="lato-light text-3xl text-white">
+            <h1 className="text-3xl text-white">
               Just a moment, we're getting things ready for you...
             </h1>
           </div>
