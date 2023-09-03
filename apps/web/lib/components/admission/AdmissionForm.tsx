@@ -23,7 +23,7 @@ export function AdmissionForm({ formConfig }) {
   }
   const handleShare = () => {
     const shareableURL = `localhost:3000/forms/${formConfig.organizationId}`;
-    alert(shareableURL)
+    alert(shareableURL);
   };
   return (
     <form

@@ -13,7 +13,7 @@ export async function makeAPICall<T>(
     endpoint = endpoint.replace(`:${key}`, substitution);
   });
 
-  const url = new URL(`${process.env["NEXT_PUBLIC_API_URL"]}${endpoint}`);
+  const url = new URL(`${process.env['NEXT_PUBLIC_API_URL']}${endpoint}`);
   Object.keys(params).forEach((key) =>
     url.searchParams.append(key, params[key]),
   );
