@@ -1,11 +1,13 @@
 'use client';
 
 import { Alert, AlertDescription, Button, Input } from 'ui';
+import Image from 'next/image';
 import { useForm } from 'react-hook-form';
 import { signIn } from 'next-auth/react';
 import { AlertCircleIcon, Loader2 } from 'lucide-react';
 import { useSearchParams } from 'next/navigation';
-
+import googlelogo from '../../../public/assets/images/Google_logo.png';
+import microsoftlogo from '../../../public/assets/images/Microsoft_logo.png';
 const errors = {
   INVALID_PASSWORD:
     'The username or password you entered is incorrect. Please try again.',
@@ -41,11 +43,13 @@ export function SignInForm() {
           <AlertDescription>{errors[error]}</AlertDescription>
         </Alert>
       )}
-      <label className="block text-gray-700">Email Address</label>
+      <label className="sub-text inter block text-sm font-semibold">
+        Email
+      </label>
       <Input
         type="email"
-        className="mt-2"
-        placeholder="Enter your email address"
+        className="sub-text inter mt-2 text-sm"
+        placeholder="Enter your email"
         {...register('email', {
           required: 'Your email address is needed to sign in',
           pattern: {
@@ -63,10 +67,12 @@ export function SignInForm() {
       >
         {fieldErrors.email?.message as string}
       </p>
-      <label className="mt-4 block text-gray-700">Password</label>
+      <label className="sub-text inter mt-4 block text-sm font-semibold">
+        Password
+      </label>
       <Input
         type="password"
-        className="mt-1"
+        className="sub-text inter mt-1 text-sm"
         placeholder="Enter your password"
         {...register('password', {
           required: 'Your password is needed to sign in.',
@@ -81,9 +87,12 @@ export function SignInForm() {
       >
         {fieldErrors.password?.message as string}
       </p>
+      <label className="inter mt-2 block text-end text-sm font-semibold text-gray-800">
+        Forgot Password?
+      </label>
       <Button
         type="submit"
-        className="mt-6 w-full w-full text-white"
+        className="mt-10 w-full w-full text-white"
         disabled={isSubmitting}
       >
         {isSubmitting ? (
@@ -94,6 +103,25 @@ export function SignInForm() {
           `Sign in`
         )}
       </Button>
+      <label className="inter inter mt-8 block text-center text-base font-semibold text-gray-800">
+        or continue with{' '}
+      </label>
+      <div className="flex justify-center gap-4">
+        <Button
+          type="submit"
+          className="text-base mt-3 w-full bg-transparent bg-transparent text-gray-800 outline outline-gray-300 hover:text-white"
+        >
+          <Image src={googlelogo} alt={'logo'} className="mr-1"></Image>
+          Google
+        </Button>
+        <Button
+          type="submit"
+          className="text-base mt-3 w-full bg-transparent bg-transparent text-gray-800 outline outline-gray-300 hover:text-white"
+        >
+          <Image src={microsoftlogo} alt={'logo'} className="mr-1"></Image>
+          Microsoft
+        </Button>
+      </div>
     </form>
   );
 }

@@ -15,8 +15,7 @@ export function AdmissionList() {
         // TODO: Handle error
       }
     })();
-  }, [admissionLists]);
-
+  }, []);
   return (
     <section className="w-full">
       <h1 className="text-primary mt-3 text-center text-3xl font-semibold">
