@@ -1,34 +1,4 @@
 @font-face {
-    font-family: 'Lato-Black';
-    src: url('../fonts/Lato-Light.ttf') format('truetype');
-  }
-
-  @font-face {
-    font-family: 'Inter';
-    src: url('../fonts/Inter-VariableFont.ttf') format('truetype');
-  }
-
-  @font-face {
-    font-family: 'Rubik';
-    src: url('../fonts/RubikIso-Regular.ttf') format('truetype');
-  }
-
-  .lato-light {
-    font-family: 'Lato-Black', sans-serif;
-  }
-  .inter{
-    font-family: 'Inter', sans-serif;
-  }
-  .lato-light-color{
-    color:#A2A2A2;
-  }
-
-  .rubik{
-    font-family: 'Rubik', sans-serif;
-  }
-
-  .sub-text{
-    color:#8F92AB;
-
-  }
-  
+  font-family: 'Inter';
+  src: url('../fonts/Inter-VariableFont.ttf') format('truetype');
+}

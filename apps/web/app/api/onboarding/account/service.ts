@@ -1,4 +1,4 @@
-import { admissionForm } from './data';
+import { admissionForm, EnquiryForm } from './data';
 import { db } from '../../../../lib/db';
 
 export async function initializeAccountForUserId(userId: string) {
@@ -11,12 +11,19 @@ export async function initializeAccountForUserId(userId: string) {
     throw new Error('User not found');
   }
 
-  await db.form.create({
-    data: {
-      isActive: true,
-      type: 'Admission',
-      json: { ...admissionForm },
-      organizationId: user.userOrganizations[0].organizationId,
-    },
-  });
+  const createForm = async (type: string, json: Object) => {
+    return await db.form.create({
+      data: {
+        isActive: true,
+        // @ts-ignore
+        type,
+        // @ts-ignore
+        json: { ...json },
+        organizationId: user.userOrganizations[0].organizationId,
+      },
+    });
+  };
+
+  await createForm('Admission', admissionForm);
+  await createForm('Enquiry', EnquiryForm);
 }

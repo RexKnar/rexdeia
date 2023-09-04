@@ -3,7 +3,7 @@ import { getServerSession } from 'next-auth';
 import { redirect } from 'next/navigation';
 import { getOrganisationsByUserId } from '../../api/user/organization/service';
 import { searchForms } from '../../api/forms/service';
-import { AdmissionForm } from '../../../lib/components/admission/AdmissionForm';
+import { EnquiryForm } from '../../../lib/components/enquiry/EnquiryForm';
 
 export default async function Page() {
   const session = await getServerSession(authOptions);
@@ -17,10 +17,11 @@ export default async function Page() {
   }
 
   const defaultOrganization = organizations[0];
-  const admissionForms = await searchForms({
-    type: 'Admission',
+  const enquiryForms = await searchForms({
+    type: 'Enquiry',
     organizationId: defaultOrganization.organizationId,
   });
-  const admissionForm = admissionForms[0];
-  return <AdmissionForm formConfig={admissionForm} />;
+
+  const enquiryForm = enquiryForms[0];
+  return <EnquiryForm formConfig={enquiryForm} />;
 }

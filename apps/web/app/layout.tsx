@@ -1,7 +1,7 @@
 import 'configs/tailwind/styles.css';
 import '../public/assets/css/font.css'
 import '../public/assets/css/styles.css'
-import { HighlightInit } from '@highlight-run/next/highlight-init';
+import '../public/assets/css/font.css';
 
 export const metadata = {
   title: 'Capeo - Simplifying the way you manage your business',
@@ -15,17 +15,8 @@ export default function RootLayout({
 }) {
   return (
     <>
-      <HighlightInit
-        projectId={'3ej80wgp'}
-        tracingOrigins
-        networkRecording={{
-          enabled: true,
-          recordHeadersAndBody: true,
-          urlBlocklist: [],
-        }}
-      />
       <html lang="en">
-        <body>{children}</body>
+        <body className="h-screen">{children}</body>
       </html>
     </>
   );

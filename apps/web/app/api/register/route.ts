@@ -8,7 +8,6 @@ export async function POST(request: NextRequest) {
   try {
     await validateAddUser(payload);
     const createdUser = await addUser(payload);
-
     return new NextResponse(JSON.stringify(createdUser), {
       status: 201,
     });

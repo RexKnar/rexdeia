@@ -2,6 +2,7 @@ import { Method } from './types';
 
 export const REGISTER_USER = `REGISTER_USER`;
 export const ADD_ADMISSION = `ADD_ADMISSION`;
+export const ADD_ENQUIRY = `ADD_ENQUIRY`;
 export const LIST_ADMISSION = `LIST_ADMISSION`;
 export const ONBOARD_ACCOUNT = `ONBOARD_ACCOUNT`;
 export const CREATE_ORGANIZATION = `CREATE_ORGANIZATION`;
@@ -19,6 +20,10 @@ export default <EndpointDetails>{
   [ADD_ADMISSION]: {
     requestType: `POST`,
     endpoint: `/api/admission`,
+  },
+  [ADD_ENQUIRY]: {
+    requestType: `POST`,
+    endpoint: `/api/enquiry`,
   },
   [LIST_ADMISSION]: {
     requestType: `GET`,

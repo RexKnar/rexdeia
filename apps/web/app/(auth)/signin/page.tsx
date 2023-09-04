@@ -1,4 +1,3 @@
-import Link from 'next/link';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '../../../lib/auth';
 import { redirect } from 'next/navigation';
@@ -6,6 +5,7 @@ import { SignInForm } from '../../../lib/components/auth/SignInForm';
 import logo from '../../../public/assets/images/acadx-logo.png';
 import Image from 'next/image';
 import { Button } from 'ui';
+
 export const metadata = {
   title: 'Capeo | Sign in',
   description: 'Capeo is a business management platform for small businesses.',
@@ -23,11 +23,9 @@ export default async function Page() {
   return (
     <section className="flex h-full flex-col sm:flex-row">
       <section
-        className="flex-grow sm:flex sm:w-auto"
+        className="hidden flex-grow bg-cover bg-center bg-no-repeat sm:flex sm:w-auto"
         style={{
           backgroundImage: 'url(/assets/images/signin-banner.png)',
-          backgroundRepeat: 'no-repeat',
-          backgroundSize: 'cover',
         }}
       ></section>
 
@@ -36,16 +34,16 @@ export default async function Page() {
           <Image src={logo} alt={'logo'} width={150}></Image>
         </div>
         <div className="mt-8 flex">
-          <span className=" inter text-3xl font-semibold">Welcome</span>
+          <span className="text-3xl font-semibold">Welcome</span>
         </div>
 
-        <p className="inter text-base font-medium text-gray-800">
+        <p className="text-base font-medium text-gray-800">
           Sign in to your account to get started.
         </p>
 
         <SignInForm />
 
-        <p className="inter mt-12 text-center text-base font-semibold text-gray-800">
+        <p className="mt-12 text-center text-base font-semibold text-gray-800">
           Don't have an account?
         </p>
         <Button
@@ -54,7 +52,7 @@ export default async function Page() {
         >
           Signup
         </Button>
-        <p className="inter mt-14 text-center text-base font-normal text-gray-700">
+        <p className="mt-14 text-center text-base font-normal text-gray-700">
           &copy; acadx 2023
         </p>
       </section>

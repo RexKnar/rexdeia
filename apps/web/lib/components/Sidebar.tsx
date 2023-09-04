@@ -1,23 +1,38 @@
 'use client';
 
 import { Button } from 'ui';
-import { useCallback } from 'react';
-import { GraduationCap, LayoutDashboard, ListMinus } from 'lucide-react';
-import { useRouter } from 'next/navigation';
+import { useCallback, useState } from 'react';
+import {
+  GraduationCap,
+  HelpCircle,
+  LayoutDashboard,
+  ListMinus,
+} from 'lucide-react';
+import { useRouter, usePathname } from 'next/navigation';
 
 type MenuItem =
   | 'admission-dashboard'
   | 'admission-activities'
-  | 'admission-enroll-student';
+  | 'admission-enroll-student'
+  | 'admission-enquiry-student';
 
 const menuItemPaths: Record<MenuItem, string> = {
   'admission-dashboard': '/admission/dashboard',
   'admission-activities': '/admission/activities',
   'admission-enroll-student': '/admission/enroll-student',
+  'admission-enquiry-student': '/admission/enquiry',
 };
 
 export function Sidebar() {
   const router = useRouter();
+  const currentURL = usePathname();
+  const getKeyByValue = (object: object, value: string) => {
+    return Object.keys(object).find((key) => object[key] === value);
+  };
+
+  const [activeMenu, setActiveMenu] = useState(
+    getKeyByValue(menuItemPaths, currentURL),
+  );
 
   const handleMenuClick = useCallback(
     (item: MenuItem) => {
@@ -25,6 +40,7 @@ export function Sidebar() {
       if (path) {
         router.push(path);
       }
+      setActiveMenu(item);
     },
     [router],
   );
@@ -39,7 +55,11 @@ export function Sidebar() {
           <div className="space-y-1">
             <Button
               variant="secondary"
-              className="hover:bg-primary w-full justify-start bg-white hover:text-white"
+              className={`hover:bg-primary w-full justify-start bg-white hover:text-white ${
+                activeMenu == 'admission-dashboard'
+                  ? 'bg-primary text-white'
+                  : ''
+              } `}
               onClick={() => handleMenuClick('admission-dashboard')}
             >
               <LayoutDashboard className="mr-2 h-4 w-4" />
@@ -49,7 +69,11 @@ export function Sidebar() {
           <div className="space-y-1">
             <Button
               variant="secondary"
-              className="hover:bg-primary w-full justify-start bg-white hover:text-white"
+              className={`hover:bg-primary w-full justify-start bg-white hover:text-white ${
+                activeMenu == 'admission-activities'
+                  ? 'bg-primary text-white'
+                  : ''
+              } `}
               onClick={() => handleMenuClick('admission-activities')}
             >
               <ListMinus className="mr-2 h-4 w-4" />
@@ -59,11 +83,29 @@ export function Sidebar() {
           <div className="space-y-1">
             <Button
               variant="secondary"
-              className="hover:bg-primary w-full justify-start bg-white hover:text-white"
+              className={`hover:bg-primary w-full justify-start bg-white hover:text-white ${
+                activeMenu == 'admission-enroll-student'
+                  ? 'bg-primary text-white'
+                  : ''
+              } `}
               onClick={() => handleMenuClick('admission-enroll-student')}
             >
               <GraduationCap className="mr-2 h-4 w-4" />
               Enroll Student
+            </Button>
+          </div>
+          <div className="space-y-1">
+            <Button
+              variant="secondary"
+              className={`hover:bg-primary w-full justify-start bg-white hover:text-white ${
+                activeMenu == 'admission-enquiry-student'
+                  ? 'bg-primary text-white'
+                  : ''
+              } `}
+              onClick={() => handleMenuClick('admission-enquiry-student')}
+            >
+              <HelpCircle className="mr-2 h-4 w-4" />
+              Enquiry
             </Button>
           </div>
         </div>
