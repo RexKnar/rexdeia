@@ -4,6 +4,7 @@ export const REGISTER_USER = `REGISTER_USER`;
 export const ADD_ADMISSION = `ADD_ADMISSION`;
 export const ADD_ENQUIRY = `ADD_ENQUIRY`;
 export const LIST_ADMISSION = `LIST_ADMISSION`;
+export const LIST_ENQUIRY = `LIST_ENQUIRY`;
 export const ONBOARD_ACCOUNT = `ONBOARD_ACCOUNT`;
 export const CREATE_ORGANIZATION = `CREATE_ORGANIZATION`;
 
@@ -28,6 +29,10 @@ export default <EndpointDetails>{
   [LIST_ADMISSION]: {
     requestType: `GET`,
     endpoint: `/api/admissionlist`,
+  },
+  [LIST_ENQUIRY]: {
+    requestType: `POST`,
+    endpoint: `/api/enquiryList`,
   },
   [ONBOARD_ACCOUNT]: {
     requestType: `POST`,

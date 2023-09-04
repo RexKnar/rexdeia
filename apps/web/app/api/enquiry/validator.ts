@@ -3,7 +3,7 @@ import { z } from 'zod';
 
 const schema = z.object({});
 
-export async function validateAddUser(addEnquiry: AddEnquiryModel) {
+export async function validateAddEnquiry(addEnquiry: AddEnquiryModel) {
   try {
     schema.parse(addEnquiry);
   } catch (e) {
