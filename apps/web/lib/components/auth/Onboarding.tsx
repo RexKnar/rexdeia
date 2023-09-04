@@ -41,7 +41,6 @@ export function Onboarding() {
 
   return (
     <>
-<<<<<<< HEAD
       <div className="flex h-full flex-col sm:flex-row">
         <section
           className="hidden flex-grow  bg-left bg-no-repeat sm:flex sm:w-1/5"
@@ -54,20 +53,6 @@ export function Onboarding() {
         <section className="flex h-screen w-full translate-y-0 transform flex-col  p-8 opacity-100 transition-all duration-500 ease-in-out sm:w-4/5 md:w-4/5">
           <div className="mt-3 flex justify-center">
             <Image src={logo} alt={'logo'} width={150}></Image>
-=======
-      <section
-        className="bg-primary hidden flex-grow bg-repeat sm:flex sm:w-auto"
-        style={{
-          backgroundImage: 'url(/assets/images/sign-in-banner.png)',
-        }}
-      >
-        <div className="flex h-[100vh] w-[100vw] items-center justify-center">
-          <div className="flex h-screen items-center justify-center">
-            <Loader2 className="mr-2 h-10 w-10 animate-spin text-white" />
-            <h1 className="text-3xl text-white">
-              Just a moment, we're getting things ready for you...
-            </h1>
->>>>>>> ca1dad6e40b4e33983bcc7dec34d93015ee100bf
           </div>
           <div className="mt-36 flex justify-center">
             <Image
