@@ -16,6 +16,9 @@ export default async function Page() {
   if (session) {
     redirect('/');
   }
+  const handleSignup = () => {
+    redirect('/signup');
+  };
 
   return (
     <section className="flex h-full flex-col sm:flex-row">
@@ -45,7 +48,10 @@ export default async function Page() {
         <p className="inter mt-12 text-center text-base font-semibold text-gray-800">
           Don't have an account?
         </p>
-        <Button type="submit" className="outline outline-gray-300 bg-transparent mt-3 w-full text-primary hover:text-white bg-transparent">
+        <Button
+          type="submit"
+          className="text-primary mt-3 w-full bg-transparent bg-transparent outline outline-gray-300 hover:text-white"
+        >
           Signup
         </Button>
         <p className="inter mt-14 text-center text-base font-normal text-gray-700">

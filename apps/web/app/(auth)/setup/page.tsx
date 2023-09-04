@@ -3,7 +3,8 @@ import { authOptions } from '../../../lib/auth';
 import { redirect } from 'next/navigation';
 import { SetupForm } from '../../../lib/components/auth/SetupForm';
 import { getOrganisationsByUserId } from '../../api/user/organization/service';
-
+import Image from 'next/image';
+import logo from '../../../public/assets/images/acadx-logo.png';
 export const metadata = {
   title: 'Capeo | Setup',
   description: 'Start managing your business with Capeo.',
@@ -23,22 +24,25 @@ export default async function Page() {
   return (
     <div className="flex h-screen flex-col sm:flex-row">
       <section
-        className="bg-primary hidden flex-grow bg-center bg-no-repeat sm:flex sm:w-auto"
+        className="bg-primary hidden flex-grow  bg-left bg-no-repeat sm:flex sm:w-1/4"
         style={{
-          backgroundImage: 'url(/assets/images/sign-in-banner.png)',
+          backgroundImage: 'url(/assets/images/online-communication1.png)',
+          backgroundSize: 'cover',
         }}
       ></section>
 
-      <section className="flex h-screen w-full translate-y-0 transform flex-col justify-center px-8 opacity-100 transition-all duration-500 ease-in-out md:w-4/12">
-        <div className="flex">
-          <span className="text-primary text-3xl font-semibold">Setup</span>
+      <section className="flex h-screen w-full translate-y-0 transform flex-col  p-8 opacity-100 transition-all duration-500 ease-in-out sm:w-3/4 md:w-3/4">
+        <div className="mt-3 flex justify-center">
+          <Image src={logo} alt={'logo'} width={150}></Image>
         </div>
-
-        <p className="text-gray-600">
-          Begin your journey by setting up your account
-        </p>
-
-        <SetupForm />
+        <div className="mt-36 flex justify-center">
+          <p className="inter text-2xl font-semibold">
+            Please select the type of account you are creating.
+          </p>
+        </div>
+        <div className="mt-1 flex justify-center">
+          <SetupForm />
+        </div>
       </section>
     </div>
   );

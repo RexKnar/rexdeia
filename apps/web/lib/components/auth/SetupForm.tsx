@@ -131,7 +131,7 @@ export function SetupForm() {
               <Loader2 className="mr-2 h-6 w-6 animate-spin text-white" />
             </div>
           ) : (
-            `Next`
+            `Proceed`
           )}
         </Button>
       </div>
