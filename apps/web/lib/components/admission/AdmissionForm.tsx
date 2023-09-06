@@ -1,10 +1,8 @@
 'use client';
-
 import { useForm } from 'react-hook-form';
 import { Loader2 } from 'lucide-react';
 import { ADD_ADMISSION } from '../../endpoints';
 import { makeAPICall } from '../../api';
-import { useRouter } from 'next/router';
 export function AdmissionForm({ formConfig }) {
   const {
     register,
@@ -22,7 +20,7 @@ export function AdmissionForm({ formConfig }) {
     }
   }
   const handleShare = () => {
-    const shareableURL = `localhost:3000/forms/${formConfig.organizationId}`;
+    const shareableURL = `localhost:3000/forms/admissionForm/${formConfig.organizationId}`;
     alert(shareableURL);
   };
   return (

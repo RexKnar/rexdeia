@@ -20,12 +20,25 @@ export function EnquiryForm({ formConfig }) {
       console.log(error);
     }
   }
+  const handleShare = () => {
+    const shareableURL = `localhost:3000/forms/enquiryForm/${formConfig.organizationId}`;
+    alert(shareableURL);
+  };
 
   return (
     <form
       onSubmit={handleSubmit(addEnquiryHandler)}
       className="mt-4 w-full border p-5"
     >
+      <div className="flex justify-end">
+        <button
+          className="bg-primary text-primary-foreground hover:bg-primary/90 mt-6 h-12 cursor-pointer rounded-md px-5 text-white"
+          type="button"
+          onClick={handleShare}
+        >
+          Share
+        </button>
+      </div>
       <h1 className="text-primary text-center text-3xl font-semibold">
         {formConfig.json.title}
       </h1>
