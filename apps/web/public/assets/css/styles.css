@@ -10,3 +10,9 @@
 .flying-plane {
   animation: upAndDown 2s linear infinite; /* Adjust the duration and timing as needed */
 }
+
+
+.sub-text {
+  color: #8F92AB;
+
+}

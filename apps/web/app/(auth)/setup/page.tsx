@@ -22,23 +22,17 @@ export default async function Page() {
   }
 
   return (
-    <div className="flex h-screen flex-col sm:flex-row">
+    <div className="flex h-fit flex-col sm:flex-row">
       <section
-        className="bg-primary hidden flex-grow  bg-left bg-no-repeat sm:flex sm:w-1/4"
+        className="hidden flex-grow bg-cover bg-no-repeat sm:flex sm:w-1/4"
         style={{
           backgroundImage: 'url(/assets/images/online-communication1.png)',
-          backgroundSize: 'cover',
         }}
       ></section>
 
-      <section className="flex h-screen w-full translate-y-0 transform flex-col  p-8 opacity-100 transition-all duration-500 ease-in-out sm:w-3/4 md:w-3/4">
+      <section className="flex h-full w-full translate-y-0 transform flex-col  p-8 opacity-100 transition-all duration-500 ease-in-out sm:w-3/4 md:w-3/4">
         <div className="mt-3 flex justify-center">
           <Image src={logo} alt={'logo'} width={150}></Image>
-        </div>
-        <div className="mt-36 flex justify-center">
-          <p className="inter text-2xl font-semibold">
-            Please select the type of account you are creating.
-          </p>
         </div>
         <div className="mt-1 flex justify-center">
           <SetupForm />
