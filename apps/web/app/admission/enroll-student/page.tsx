@@ -21,7 +21,6 @@ export default async function Page() {
     type: 'Admission',
     organizationId: defaultOrganization.organizationId,
   });
-
   const admissionForm = admissionForms[0];
   return <AdmissionForm formConfig={admissionForm} />;
 }

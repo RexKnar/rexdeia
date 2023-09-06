@@ -2,7 +2,12 @@
 
 import { Button } from 'ui';
 import { useCallback, useState } from 'react';
-import { GraduationCap, HelpCircle, LayoutDashboard, ListMinus } from 'lucide-react';
+import {
+  GraduationCap,
+  HelpCircle,
+  LayoutDashboard,
+  ListMinus,
+} from 'lucide-react';
 import { useRouter, usePathname } from 'next/navigation';
 
 type MenuItem =
@@ -15,7 +20,7 @@ const menuItemPaths: Record<MenuItem, string> = {
   'admission-dashboard': '/admission/dashboard',
   'admission-activities': '/admission/activities',
   'admission-enroll-student': '/admission/enroll-student',
-  'admission-enquiry-student': '/admission/enquiry'
+  'admission-enquiry-student': '/admission/enquiry',
 };
 
 export function Sidebar() {
@@ -99,7 +104,7 @@ export function Sidebar() {
               } `}
               onClick={() => handleMenuClick('admission-enquiry-student')}
             >
-              <HelpCircle className="mr-2 h-4 w-4"/>
+              <HelpCircle className="mr-2 h-4 w-4" />
               Enquiry
             </Button>
           </div>

@@ -29,8 +29,3 @@ export async function addAdmission(admission: AddAdmissionModel) {
     },
   });
 }
-
-
-export async function getAdmissionList() {
-  return await db.admissionForm.findMany();
-}

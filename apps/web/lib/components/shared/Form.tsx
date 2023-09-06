@@ -1,11 +1,10 @@
 'use client';
-
+import 'configs/tailwind/styles.css';
 import { useForm } from 'react-hook-form';
 import { Loader2 } from 'lucide-react';
 import { ADD_ADMISSION } from '../../endpoints';
 import { makeAPICall } from '../../api';
-import { useRouter } from 'next/router';
-export function AdmissionForm({ formConfig }) {
+export function Form({ formConfig }) {
   const {
     register,
     handleSubmit,
@@ -21,25 +20,11 @@ export function AdmissionForm({ formConfig }) {
       // TODO: Handle error
     }
   }
-  const handleShare = () => {
-    const shareableURL = `localhost:3000/forms/${formConfig.organizationId}`;
-    alert(shareableURL);
-  };
   return (
     <form
       onSubmit={handleSubmit(addAdmissionHandler)}
       className="mt-4 w-full border p-5"
     >
-      <div className="flex justify-end">
-        <button
-          className="bg-primary text-primary-foreground hover:bg-primary/90 mt-6 h-12 cursor-pointer rounded-md px-5 text-white"
-          type="button"
-          onClick={handleShare}
-        >
-          Share
-        </button>
-      </div>
-
       <h1 className="text-primary text-center text-3xl font-semibold">
         {formConfig.json.title}
       </h1>

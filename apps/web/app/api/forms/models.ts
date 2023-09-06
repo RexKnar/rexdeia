@@ -42,13 +42,13 @@ export type CreateFormRequestPayload = z.infer<
 
 export type FormModel = {
   id: string;
-  type: 'Admission';
   isActive: boolean;
   organizationId: string;
+  type: 'Admission' | 'Enquiry';
   json: CreateFormRequestPayload;
 };
 
 export type SearchFormModel = {
-  type: 'Admission';
   organizationId: string;
+  type: 'Admission' | 'Enquiry';
 };
