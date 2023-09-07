@@ -6,6 +6,7 @@ import Image from 'next/image';
 import logo from '../../../public/assets/images/acadx-logo.png';
 import { Button } from 'ui';
 import Link from 'next/link';
+import { SignInForm } from '../../../lib/components/auth/SignInForm';
 export const metadata = {
   title: 'Capeo | Sign up',
   description: 'Start managing your business with Capeo.',
@@ -16,17 +17,16 @@ export default async function Page() {
   if (session) {
     redirect('/');
   }
-
   return (
-    <div className="flex h-screen flex-col sm:flex-row">
+    <section className="flex h-full flex-col sm:flex-row">
       <section
-        className="hidden flex-grow bg-center bg-cover bg-no-repeat sm:flex sm:w-auto"
+        className="hidden flex-grow bg-cover bg-center bg-no-repeat sm:flex sm:w-auto"
         style={{
           backgroundImage: 'url(/assets/images/signin-banner.png)',
         }}
       ></section>
 
-      <section className="flex h-screen w-full translate-y-0 transform flex-col justify-center px-8 opacity-100 transition-all duration-500 ease-in-out md:w-4/12">
+      <section className="flex h-full w-full translate-y-0 transform flex-col justify-between p-12 opacity-100 transition-all duration-500 ease-in-out md:w-4/12 overflow-auto">
         <div>
           <Image src={logo} alt={'logo'} width={150}></Image>
         </div>
@@ -54,6 +54,8 @@ export default async function Page() {
           &copy; acadx 2023
         </p>
       </section>
-    </div>
+    </section>
+
+
   );
 }
