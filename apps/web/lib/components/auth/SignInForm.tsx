@@ -113,14 +113,14 @@ export function SignInForm() {
       </label>
       <div className="flex flex-col sm:flex-row sm:gap-4">
         <Button
-          type="submit"
+          type="button"
           className="mt-3 w-full bg-transparent bg-transparent text-base text-gray-800 outline outline-gray-300 hover:text-white"
         >
           <Image src={googlelogo} alt={'logo'} className="mr-1"></Image>
           Google
         </Button>
         <Button
-          type="submit"
+          type="button"
           className="mt-3 w-full bg-transparent bg-transparent text-base text-gray-800 outline outline-gray-300 hover:text-white "
         >
           <Image src={microsoftlogo} alt={'logo'} className="mr-1"></Image>

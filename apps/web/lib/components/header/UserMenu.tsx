@@ -33,7 +33,7 @@ export function UserMenu() {
           <AvatarFallback>{session.user.name[0]}</AvatarFallback>
         </Avatar>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="w-56" align="end" sideOffset={15}>
+      <DropdownMenuContent className="bg-white w-56" align="end" sideOffset={15}>
         <section className="flex flex-col items-center p-4">
           <Avatar className="h-16 w-16 cursor-pointer">
             <AvatarImage src="https://avatars.githubusercontent.com/u/124599?v=4" />
@@ -41,7 +41,7 @@ export function UserMenu() {
           </Avatar>
           <div className="flex flex-col items-center">
             <p className="line-clamp-1 text-base">{session.user.name}</p>
-            <p className="line-clamp-1 text-sm text-gray-500">
+            <p className="line-clamp-1 text-sm text-gray-600">
               {session.user.email}
             </p>
           </div>

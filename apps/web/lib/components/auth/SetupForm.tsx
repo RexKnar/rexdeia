@@ -6,6 +6,7 @@ import {
   Loader2,
   LucideIcon,
   PersonStanding,
+  School,
   School2,
 } from 'lucide-react';
 import { useForm } from 'react-hook-form';
@@ -103,7 +104,7 @@ export function SetupForm() {
               />
               <InstituteCard
                 name="Other Institutes"
-                IconComponent={PersonStanding}
+                IconComponent={School}
                 isSelected={selected === 'others'}
                 onClick={() => setSelected('others')}
               />

@@ -22,9 +22,9 @@ export default async function Page() {
   }
 
   return (
-    <div className="flex h-fit flex-col sm:flex-row">
+    <section className="flex h-full flex-col sm:flex-row">
       <section
-        className="hidden flex-grow bg-cover bg-no-repeat sm:flex sm:w-1/4"
+        className="hidden flex-grow bg-cover bg-center bg-no-repeat sm:flex sm:w-auto"
         style={{
           backgroundImage: 'url(/assets/images/online-communication1.png)',
         }}
@@ -38,6 +38,6 @@ export default async function Page() {
           <SetupForm />
         </div>
       </section>
-    </div>
+    </section>
   );
 }

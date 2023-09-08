@@ -53,7 +53,7 @@ export function AdmissionForm({ formConfig }) {
             <AlertDialogTrigger asChild>
               <Button className="bg-primary text-primary-foreground hover:bg-primary/90 mt-6 h-12 cursor-pointer rounded-md px-5 text-white" variant="outline">Share</Button>
             </AlertDialogTrigger>
-            <AlertDialogContent>
+            <AlertDialogContent className="bg-white">
               <AlertDialogHeader>
                 <AlertDialogTitle>Copy the URL to share the admission form</AlertDialogTitle>
                 <AlertDialogDescription>
