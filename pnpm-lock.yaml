@@ -10,7 +10,7 @@ importers:
       prettier: ^3.0.0
       turbo: ^1.10.9
     devDependencies:
-      '@turbo/gen': 1.10.13_p35ng363u6hdnkpdl7uptulkfi
+      '@turbo/gen': 1.10.13_kpuv3buz4xyqturyqxj2gejvma
       eslint: 8.48.0
       eslint-config-custom: link:packages/eslint-config-custom
       prettier: 3.0.3
@@ -45,7 +45,7 @@ importers:
     specifiers:
       '@next-auth/prisma-adapter': ^1.0.7
       '@prisma/client': ^5.2.0
-      '@types/node': 20.5.9
+      '@types/node': 20.6.0
       '@types/react': 18.2.21
       '@types/react-dom': 18.2.7
       autoprefixer: ^10.4.14
@@ -94,7 +94,7 @@ importers:
       utils: link:../../packages/utils
       zod: 3.22.2
     devDependencies:
-      '@types/node': 20.5.9
+      '@types/node': 20.6.0
       '@types/react': 18.2.21
       '@types/react-dom': 18.2.7
       eslint-config-custom: link:../../packages/eslint-config-custom
@@ -1194,7 +1194,7 @@ packages:
     resolution: {integrity: sha512-vxhUy4J8lyeyinH7Azl1pdd43GJhZH/tP2weN8TntQblOY+A0XbT8DJk1/oCPuOOyg/Ja757rG0CgHcWC8OfMA==}
     dev: true
 
-  /@turbo/gen/1.10.13_p35ng363u6hdnkpdl7uptulkfi:
+  /@turbo/gen/1.10.13_kpuv3buz4xyqturyqxj2gejvma:
     resolution: {integrity: sha512-fwGVjeun2i0RIdq/20d2wpatPw9vE4Mbk60uB8rk8NENDXn2JLfbsh00mZ5KAEX5ZQUibh6tD+B7xROV8Eb7dQ==}
     hasBin: true
     dependencies:
@@ -1206,7 +1206,7 @@ packages:
       minimatch: 9.0.3
       node-plop: 0.26.3
       proxy-agent: 6.3.1
-      ts-node: 10.9.1_p35ng363u6hdnkpdl7uptulkfi
+      ts-node: 10.9.1_kpuv3buz4xyqturyqxj2gejvma
       update-check: 1.5.4
       validate-npm-package-name: 5.0.0
     transitivePeerDependencies:
@@ -1239,7 +1239,7 @@ packages:
     resolution: {integrity: sha512-ZUxbzKl0IfJILTS6t7ip5fQQM/J3TJYubDm3nMbgubNNYS62eXeUpoLUC8/7fJNiFYHTrGPQn7hspDUzIHX3UA==}
     dependencies:
       '@types/minimatch': 5.1.2
-      '@types/node': 20.5.9
+      '@types/node': 20.6.0
     dev: true
 
   /@types/inquirer/6.5.0:
@@ -1259,6 +1259,10 @@ packages:
 
   /@types/node/20.5.9:
     resolution: {integrity: sha512-PcGNd//40kHAS3sTlzKB9C9XL4K0sTup8nbG5lC14kzEteTNuAFh9u5nA0o5TWnSG2r/JNPRXFVcHJIIeRlmqQ==}
+    dev: true
+
+  /@types/node/20.6.0:
+    resolution: {integrity: sha512-najjVq5KN2vsH2U/xyh2opaSEz6cZMR2SetLIlxlj08nOcmPOemJmUK2o4kUzfLqfrWE0PIrNeE16XhYDd3nqg==}
     dev: true
 
   /@types/prop-types/15.7.5:
@@ -1282,7 +1286,7 @@ packages:
   /@types/through/0.0.30:
     resolution: {integrity: sha512-FvnCJljyxhPM3gkRgWmxmDZyAQSiBQQWLI0A0VFL0K7W1oRUrPJSqNO0NvTnLkBcotdlp3lKvaT0JrnyRDkzOg==}
     dependencies:
-      '@types/node': 20.5.9
+      '@types/node': 20.6.0
     dev: true
 
   /@types/tinycolor2/1.4.3:
@@ -5674,7 +5678,7 @@ packages:
     resolution: {integrity: sha512-Y/arvbn+rrz3JCKl9C4kVNfTfSm2/mEp5FSz5EsZSANGPSlQrpRI5M4PKF+mJnE52jOO90PnPSc3Ur3bTQw0gA==}
     dev: false
 
-  /ts-node/10.9.1_p35ng363u6hdnkpdl7uptulkfi:
+  /ts-node/10.9.1_kpuv3buz4xyqturyqxj2gejvma:
     resolution: {integrity: sha512-NtVysVPkxxrwFGUUxGYhfux8k78pQB3JqYBXlLRZgdGUqTO5wU/UyHop5p70iEbGhB7q5KmiZiU0Y3KlJrScEw==}
     hasBin: true
     peerDependencies:
@@ -5693,7 +5697,7 @@ packages:
       '@tsconfig/node12': 1.0.11
       '@tsconfig/node14': 1.0.3
       '@tsconfig/node16': 1.0.4
-      '@types/node': 20.5.9
+      '@types/node': 20.6.0
       acorn: 8.10.0
       acorn-walk: 8.2.0
       arg: 4.1.3
