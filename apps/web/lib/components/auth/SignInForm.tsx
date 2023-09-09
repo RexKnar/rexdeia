@@ -1,6 +1,11 @@
 'use client';
 
-import { Alert, AlertDescription, Button, Input } from 'ui';
+import {
+  Alert,
+  AlertDescription,
+  Button,
+  Input,
+} from 'ui';
 import Image from 'next/image';
 import { useForm } from 'react-hook-form';
 import { signIn } from 'next-auth/react';
@@ -92,7 +97,7 @@ export function SignInForm() {
       </label>
       <Button
         type="submit"
-        className="mt-10 w-full w-full text-white"
+        className="mt-10 w-full text-white"
         disabled={isSubmitting}
       >
         {isSubmitting ? (
@@ -106,17 +111,17 @@ export function SignInForm() {
       <label className="mt-8 block text-center text-base font-semibold text-gray-800">
         or continue with{' '}
       </label>
-      <div className="flex justify-center gap-4">
+      <div className="flex flex-col sm:flex-row sm:gap-4">
         <Button
-          type="submit"
+          type="button"
           className="mt-3 w-full bg-transparent bg-transparent text-base text-gray-800 outline outline-gray-300 hover:text-white"
         >
           <Image src={googlelogo} alt={'logo'} className="mr-1"></Image>
           Google
         </Button>
         <Button
-          type="submit"
-          className="mt-3 w-full bg-transparent bg-transparent text-base text-gray-800 outline outline-gray-300 hover:text-white"
+          type="button"
+          className="mt-3 w-full bg-transparent bg-transparent text-base text-gray-800 outline outline-gray-300 hover:text-white "
         >
           <Image src={microsoftlogo} alt={'logo'} className="mr-1"></Image>
           Microsoft

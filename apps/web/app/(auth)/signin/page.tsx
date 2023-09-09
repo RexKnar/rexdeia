@@ -5,6 +5,7 @@ import { SignInForm } from '../../../lib/components/auth/SignInForm';
 import logo from '../../../public/assets/images/acadx-logo.png';
 import Image from 'next/image';
 import { Button } from 'ui';
+import Link from 'next/link';
 
 export const metadata = {
   title: 'Capeo | Sign in',
@@ -26,7 +27,7 @@ export default async function Page() {
         }}
       ></section>
 
-      <section className="flex h-full w-full translate-y-0 transform flex-col justify-between p-12 opacity-100 transition-all duration-500 ease-in-out md:w-4/12">
+      <section className="flex h-full w-full translate-y-0 transform flex-col justify-between p-12 opacity-100 transition-all duration-500 ease-in-out md:w-4/12 overflow-auto">
         <div>
           <Image src={logo} alt={'logo'} width={150}></Image>
         </div>
@@ -43,12 +44,12 @@ export default async function Page() {
         <p className="mt-12 text-center text-base font-semibold text-gray-800">
           Don't have an account?
         </p>
-        <Button
-          type="submit"
-          className="text-primary mt-3 w-full bg-transparent bg-transparent outline outline-gray-300 hover:text-white"
+        <Link
+          href="/signup"
+          className="text-primary inter hover:bg-primary mt-3 h-[48px] w-full rounded rounded-md border border-2 border-gray-300 bg-transparent px-[14px]  py-[8px] text-center text-sm font-semibold hover:text-white"
         >
           Signup
-        </Button>
+        </Link>
         <p className="mt-14 text-center text-base font-normal text-gray-700">
           &copy; acadx 2023
         </p>
