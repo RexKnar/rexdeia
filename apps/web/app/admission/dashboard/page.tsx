@@ -11,7 +11,7 @@ export default async function Page() {
   return (
     <>
       <section className="w-full p-3">
-        <h1 className="text-primary mt-4 text-center text-3xl font-semibold">
+        <h1 className="mt-4 text-center text-3xl font-semibold text-primary">
           Admission List
         </h1>
         <div className="container mx-auto py-10">

@@ -4,9 +4,8 @@ import { authOptions } from '../../../lib/auth';
 import { redirect } from 'next/navigation';
 import Image from 'next/image';
 import logo from '../../../public/assets/images/acadx-logo.png';
-import { Button } from 'ui';
 import Link from 'next/link';
-import { SignInForm } from '../../../lib/components/auth/SignInForm';
+
 export const metadata = {
   title: 'Capeo | Sign up',
   description: 'Start managing your business with Capeo.',
@@ -26,7 +25,7 @@ export default async function Page() {
         }}
       ></section>
 
-      <section className="flex h-full w-full translate-y-0 transform flex-col justify-between p-12 opacity-100 transition-all duration-500 ease-in-out md:w-4/12 overflow-auto">
+      <section className="flex h-full w-full translate-y-0 transform flex-col justify-between overflow-auto p-12 opacity-100 transition-all duration-500 ease-in-out md:w-4/12">
         <div>
           <Image src={logo} alt={'logo'} width={150}></Image>
         </div>
@@ -46,7 +45,7 @@ export default async function Page() {
         </p>
         <Link
           href="/signin"
-          className="text-primary inter hover:bg-primary mt-3 h-[48px] w-full rounded rounded-md border border-2 border-gray-300 bg-transparent px-[14px]  py-[8px] text-center text-sm font-semibold hover:text-white"
+          className="mt-3 h-[48px] w-full rounded rounded-md border border-2 border-gray-300 bg-transparent px-[14px] py-[8px] text-center  text-sm font-semibold text-primary hover:bg-primary hover:text-white"
         >
           Signin
         </Link>
@@ -55,7 +54,5 @@ export default async function Page() {
         </p>
       </section>
     </section>
-
-
   );
 }

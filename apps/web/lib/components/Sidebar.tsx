@@ -55,7 +55,7 @@ export function Sidebar() {
           <div className="space-y-1">
             <Button
               variant="secondary"
-              className={`hover:bg-primary w-full justify-start bg-white hover:text-white ${
+              className={`w-full justify-start bg-white hover:bg-primary hover:text-white ${
                 activeMenu == 'admission-dashboard'
                   ? 'bg-primary text-white'
                   : ''
@@ -69,7 +69,7 @@ export function Sidebar() {
           <div className="space-y-1">
             <Button
               variant="secondary"
-              className={`hover:bg-primary w-full justify-start bg-white hover:text-white ${
+              className={`w-full justify-start bg-white hover:bg-primary hover:text-white ${
                 activeMenu == 'admission-activities'
                   ? 'bg-primary text-white'
                   : ''
@@ -83,7 +83,7 @@ export function Sidebar() {
           <div className="space-y-1">
             <Button
               variant="secondary"
-              className={`hover:bg-primary w-full justify-start bg-white hover:text-white ${
+              className={`w-full justify-start bg-white hover:bg-primary hover:text-white ${
                 activeMenu == 'admission-enroll-student'
                   ? 'bg-primary text-white'
                   : ''
@@ -97,7 +97,7 @@ export function Sidebar() {
           <div className="space-y-1">
             <Button
               variant="secondary"
-              className={`hover:bg-primary w-full justify-start bg-white hover:text-white ${
+              className={`w-full justify-start bg-white hover:bg-primary hover:text-white ${
                 activeMenu == 'admission-enquiry-student'
                   ? 'bg-primary text-white'
                   : ''

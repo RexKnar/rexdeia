@@ -7,7 +7,6 @@ import { makeAPICall } from '../../api';
 import {
   AlertDialog,
   AlertDialogAction,
-  AlertDialogCancel,
   AlertDialogContent,
   AlertDialogDescription,
   AlertDialogFooter,
@@ -34,14 +33,14 @@ export function AdmissionForm({ formConfig }) {
       // TODO: Handle error
     }
   }
-    const shareableURL = `localhost:3000/forms/${formConfig.organizationId}`;
-    const inputRef = useRef(null);
-    const handleCopyClick = () => {
-      if (inputRef.current) {
-        inputRef.current.select();
-        document.execCommand('copy');
-      }
-    };
+  const shareableURL = `localhost:3000/forms/${formConfig.organizationId}`;
+  const inputRef = useRef(null);
+  const handleCopyClick = () => {
+    if (inputRef.current) {
+      inputRef.current.select();
+      document.execCommand('copy');
+    }
+  };
   return (
     <>
       <form
@@ -51,11 +50,18 @@ export function AdmissionForm({ formConfig }) {
         <div className="flex justify-end">
           <AlertDialog>
             <AlertDialogTrigger asChild>
-              <Button className="bg-primary text-primary-foreground hover:bg-primary/90 mt-6 h-12 cursor-pointer rounded-md px-5 text-white" variant="outline">Share</Button>
+              <Button
+                className="text-primary-foreground mt-6 h-12 cursor-pointer rounded-md bg-primary px-5 text-white hover:bg-primary/90"
+                variant="outline"
+              >
+                Share
+              </Button>
             </AlertDialogTrigger>
             <AlertDialogContent className="bg-white">
               <AlertDialogHeader>
-                <AlertDialogTitle>Copy the URL to share the admission form</AlertDialogTitle>
+                <AlertDialogTitle>
+                  Copy the URL to share the admission form
+                </AlertDialogTitle>
                 <AlertDialogDescription>
                   <Input
                     type="text"
@@ -67,13 +73,15 @@ export function AdmissionForm({ formConfig }) {
                 </AlertDialogDescription>
               </AlertDialogHeader>
               <AlertDialogFooter>
-                <AlertDialogAction onClick={handleCopyClick }>Copy</AlertDialogAction>
+                <AlertDialogAction onClick={handleCopyClick}>
+                  Copy
+                </AlertDialogAction>
               </AlertDialogFooter>
             </AlertDialogContent>
           </AlertDialog>
         </div>
 
-        <h1 className="text-primary text-center text-3xl font-semibold">
+        <h1 className="text-center text-3xl font-semibold text-primary">
           {formConfig.json.title}
         </h1>
         <p className="mb-4 text-center text-gray-600">
@@ -81,7 +89,7 @@ export function AdmissionForm({ formConfig }) {
         </p>
         {formConfig.json.formSections.map((section) => (
           <div key={section.sectionTitle} className="mt-3 px-12">
-            <h2 className="text-primary text-3xl font-semibold">
+            <h2 className="text-3xl font-semibold text-primary">
               {section.sectionTitle}
             </h2>
             <p>{section.sectionDescription}</p>
@@ -145,7 +153,7 @@ export function AdmissionForm({ formConfig }) {
         ))}
         <button
           type="submit"
-          className="bg-primary text-primary-foreground hover:bg-primary/90 mt-6 h-12 w-full cursor-pointer rounded-md text-white"
+          className="text-primary-foreground mt-6 h-12 w-full cursor-pointer rounded-md bg-primary text-white hover:bg-primary/90"
         >
           {isSubmitting && (
             <div className="flex h-screen items-center justify-center">

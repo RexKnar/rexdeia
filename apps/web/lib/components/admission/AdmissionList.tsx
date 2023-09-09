@@ -1,18 +1,9 @@
 'use client';
-import { DataTable } from '../../../app/admission/dashboard/data-table';
-import { AdmissionListModel, columns } from '../../../app/admission/dashboard/columns';
+
 import { useEffect, useState } from 'react';
 import { makeAPICall } from '../../api';
 import { LIST_ADMISSION } from '../../endpoints';
-import {
-  Table,
-  TableBody,
-  TableCaption,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '../../../../../packages/ui/components/ui/Table';
+
 export function AdmissionList() {
   const [admissionLists, setAdmissionList] = useState([]);
   useEffect(() => {
@@ -28,7 +19,7 @@ export function AdmissionList() {
 
   return (
     <section className="w-full">
-      <h1 className="text-primary mt-3 text-center text-3xl font-semibold">
+      <h1 className="mt-3 text-center text-3xl font-semibold text-primary">
         Admission List
       </h1>
       <table className="m-auto mt-5 table-auto border-collapse border border-slate-400 px-4">
@@ -57,7 +48,6 @@ export function AdmissionList() {
           </tr>
         ))}
       </table>
-
     </section>
   );
 }
