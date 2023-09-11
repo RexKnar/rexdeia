@@ -1,11 +1,6 @@
 'use client';
 
-import {
-  Alert,
-  AlertDescription,
-  Button,
-  Input,
-} from 'ui';
+import { Alert, AlertDescription, Button, Input } from 'ui';
 import Image from 'next/image';
 import { useForm } from 'react-hook-form';
 import { signIn } from 'next-auth/react';

@@ -27,7 +27,7 @@ export default async function Page() {
         }}
       ></section>
 
-      <section className="flex h-full w-full translate-y-0 transform flex-col justify-between p-12 opacity-100 transition-all duration-500 ease-in-out md:w-4/12 overflow-auto">
+      <section className="flex h-full w-full translate-y-0 transform flex-col justify-between overflow-auto p-12 opacity-100 transition-all duration-500 ease-in-out md:w-4/12">
         <div>
           <Image src={logo} alt={'logo'} width={150}></Image>
         </div>
@@ -46,7 +46,7 @@ export default async function Page() {
         </p>
         <Link
           href="/signup"
-          className="text-primary inter hover:bg-primary mt-3 h-[48px] w-full rounded rounded-md border border-2 border-gray-300 bg-transparent px-[14px]  py-[8px] text-center text-sm font-semibold hover:text-white"
+          className="inter mt-3 h-[48px] w-full rounded rounded-md border border-2 border-gray-300 bg-transparent px-[14px] py-[8px] text-center  text-sm font-semibold text-primary hover:bg-primary hover:text-white"
         >
           Signup
         </Link>

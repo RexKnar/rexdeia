@@ -9,6 +9,7 @@ import { Check, Loader2 } from 'lucide-react';
 import Image from 'next/image';
 import logo from '../../../public/assets/images/acadx-logo.png';
 import lodingPlane from '../../../public/assets/images/loading-paperplane.png';
+
 export function Onboarding() {
   const [isErrored, setIsErrored] = useState(false);
   const [isOnboarded, setIsOnboarded] = useState(false);
@@ -19,9 +20,7 @@ export function Onboarding() {
     startTransition(() => {
       makeAPICall(ONBOARD_ACCOUNT, {})
         .then(() => {
-          setTimeout(() => {
-            setIsOnboarded(true);
-          }, 5000);
+          setIsOnboarded(true);
         })
         .catch(() => {
           setIsErrored(true);
@@ -63,7 +62,7 @@ export function Onboarding() {
             ></Image>
           </div>
           <div className="mt-1 justify-center">
-            <div className="inter justify-center mt-2 flex text-sm font-semibold">
+            <div className="inter mt-2 flex justify-center text-sm font-semibold">
               <div className="flex items-center">
                 <p className="mr-5">
                   <Check />
