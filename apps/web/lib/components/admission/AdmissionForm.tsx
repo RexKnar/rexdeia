@@ -34,7 +34,8 @@ export function AdmissionForm({ formConfig }) {
       // TODO: Handle error
     }
   }
-    const shareableURL = `localhost:3000/forms/${formConfig.organizationId}`;
+    const domain = window.location.host;
+    const shareableURL = `${domain}/forms/${formConfig.organizationId}`;
     const inputRef = useRef(null);
     const handleCopyClick = () => {
       if (inputRef.current) {

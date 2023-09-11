@@ -14,7 +14,7 @@ import {
 } from '../../../../../packages/ui/components/ui/DropdownMenu';
 export type AdmissionListModel = {
   id?: string;
-  slNo?: string;
+  slNo?: number;
   firstName?: string;
   emailId?: string;
   contactNumber?: string;
