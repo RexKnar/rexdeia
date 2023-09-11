@@ -1,5 +1,5 @@
 'use client';
-import React, { useEffect, useRef } from 'react';
+import React, { useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import { Loader2 } from 'lucide-react';
 import { ADD_ADMISSION } from '../../endpoints';
@@ -34,16 +34,14 @@ export function AdmissionForm({ formConfig }) {
       // TODO: Handle error
     }
   }
-  const domain = window.location.host;
-  console.log(domain);
-  const shareableURL = `${domain}/forms/${formConfig.organizationId}`;
-  const inputRef = useRef(null);
-  const handleCopyClick = () => {
-    if (inputRef.current) {
-      inputRef.current.select();
-      document.execCommand('copy');
-    }
-  };
+    const shareableURL = `localhost:3000/forms/${formConfig.organizationId}`;
+    const inputRef = useRef(null);
+    const handleCopyClick = () => {
+      if (inputRef.current) {
+        inputRef.current.select();
+        document.execCommand('copy');
+      }
+    };
   return (
     <>
       <form
@@ -53,18 +51,11 @@ export function AdmissionForm({ formConfig }) {
         <div className="flex justify-end">
           <AlertDialog>
             <AlertDialogTrigger asChild>
-              <Button
-                className="bg-primary text-primary-foreground hover:bg-primary/90 mt-6 h-12 cursor-pointer rounded-md px-5 text-white"
-                variant="outline"
-              >
-                Share
-              </Button>
+              <Button className="bg-primary text-primary-foreground hover:bg-primary/90 mt-6 h-12 cursor-pointer rounded-md px-5 text-white" variant="outline">Share</Button>
             </AlertDialogTrigger>
             <AlertDialogContent className="bg-white">
               <AlertDialogHeader>
-                <AlertDialogTitle>
-                  Copy the URL to share the admission form
-                </AlertDialogTitle>
+                <AlertDialogTitle>Copy the URL to share the admission form</AlertDialogTitle>
                 <AlertDialogDescription>
                   <Input
                     type="text"
@@ -76,9 +67,7 @@ export function AdmissionForm({ formConfig }) {
                 </AlertDialogDescription>
               </AlertDialogHeader>
               <AlertDialogFooter>
-                <AlertDialogAction onClick={handleCopyClick}>
-                  Copy
-                </AlertDialogAction>
+                <AlertDialogAction onClick={handleCopyClick }>Copy</AlertDialogAction>
               </AlertDialogFooter>
             </AlertDialogContent>
           </AlertDialog>
