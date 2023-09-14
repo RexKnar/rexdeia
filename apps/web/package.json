@@ -18,6 +18,7 @@
     "autoprefixer": "^10.4.14",
     "bcrypt": "^5.1.0",
     "configs": "workspace:*",
+    "fs": "0.0.1-security",
     "lucide-react": "^0.276.0",
     "nanoid": "^4.0.2",
     "next": "^13.4.12",

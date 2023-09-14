@@ -1,5 +1,5 @@
 import 'configs/tailwind/styles.css';
-import { Toast } from 'ui';
+import { Toaster } from "../../../../packages/ui/components/ui/Toaster"
 import { GraduationCap } from 'lucide-react';
 import { Suspense } from 'react';
 import Providers from '../../lib/Providers';
@@ -21,23 +21,14 @@ export default function RootLayout({
     <html lang="en">
       <Providers>
         <body>
-          <header className="border-color-50 flex items-center justify-between border px-4 py-2">
-            <div className="flex items-center gap-2">
-              <GraduationCap className="h-6 w-6" />
-              <p className="text-bold text-lg">Capeo</p>
-            </div>
-            <div className="flex gap-4">
-              <NavigationHeader />
-              <UserMenu />
-            </div>
-          </header>
           <main className="flex flex-row">
             <Suspense fallback={<div>Loading...</div>}>
               <Sidebar />
             </Suspense>
             {children}
+           
           </main>
-          <Toast />
+          <Toaster/>
         </body>
       </Providers>
     </html>

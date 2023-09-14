@@ -17,8 +17,8 @@ export type AdmissionListModel = {
   slNo?: number;
   firstName?: string;
   emailId?: string;
-  contactNumber?: string;
-  addressLine1?: string;
+  mobileNumber?: string;
+  residentialAddress?: string;
 };
 
 type CustomColumnDef<TData> = ColumnDef<TData> & {
@@ -69,7 +69,7 @@ export const columns: ColumnDef<AdmissionListModel>[] = [
     },
   },
   {
-    accessorKey: 'contactNumber',
+    accessorKey: 'mobileNumber',
     header: ({ column }) => {
       return (
         <Button
@@ -83,7 +83,7 @@ export const columns: ColumnDef<AdmissionListModel>[] = [
     },
   },
   {
-    accessorKey: 'addressLine1',
+    accessorKey: 'permanentAddress',
     header: ({ column }) => {
       return (
         <Button
