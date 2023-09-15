@@ -57,10 +57,10 @@ export function DataTable<TData, TValue>({
         <Input
           placeholder="Filter mobile..."
           value={
-            (table.getColumn('contactNumber')?.getFilterValue() as string) ?? ''
+            (table.getColumn('mobileNumber')?.getFilterValue() as string) ?? ''
           }
           onChange={(event) =>
-            table.getColumn('contactNumber')?.setFilterValue(event.target.value)
+            table.getColumn('mobileNumber')?.setFilterValue(event.target.value)
           }
           className="max-w-sm"
         />

@@ -4,108 +4,213 @@ import { useForm } from 'react-hook-form';
 import { Loader2 } from 'lucide-react';
 import { ADD_ADMISSION } from '../../endpoints';
 import { makeAPICall } from '../../api';
+import { useState } from 'react';
 export function Form({ formConfig }) {
   const {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
   } = useForm();
+  const [expandedSectionIndex, setExpandedSectionIndex] = useState(0);
   async function addAdmissionHandler(data: Record<string, unknown>) {
     try {
       await makeAPICall(ADD_ADMISSION, {
         ...data,
       });
-    } catch (error) {
-      console.log(error);
+    } catch (error1) {
+      console.log(error1);
       // TODO: Handle error
     }
   }
-  return (
-    <form
-      onSubmit={handleSubmit(addAdmissionHandler)}
-      className="mt-4 w-full border p-5"
-    >
-      <h1 className="text-center text-3xl font-semibold text-primary">
-        {formConfig.json.title}
-      </h1>
-      <p className="mb-4 text-center text-gray-600">
-        {formConfig.json.description}
-      </p>
-      {formConfig.json.formSections.map((section) => (
-        <div key={section.sectionTitle} className="mt-3 px-12">
-          <h2 className="text-3xl font-semibold text-primary">
-            {section.sectionTitle}
-          </h2>
-          <p>{section.sectionDescription}</p>
-          {section.sectionFields.map((field) => {
-            if (field.visible) {
-              switch (field.type) {
-                case 'text':
-                case 'email':
-                case 'date':
-                  return (
-                    <div key={field.id}>
-                      <label className="mt-5 block text-gray-700">
-                        {field.label}
-                      </label>
-                      <input
-                        {...register(field.name, field.validationRules)}
-                        type={field.type}
-                        placeholder={field.placeholder}
-                        className="ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring mt-1 flex h-10 w-full rounded-md border border-gray-300 bg-transparent px-3 py-2 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-                      />
-                      {errors[field.id] && (
-                        <p className="h-2 p-1 text-sm text-red-600">
-                          {field.label} is required
-                        </p>
-                      )}
-                    </div>
-                  );
-                case 'radio':
-                  return (
-                    <div key={field.id}>
-                      <label className="mt-5 block text-gray-700">
-                        {field.label}
-                      </label>
-                      {field.options.map((option, index) => (
-                        <>
-                          <input
-                            type={field.type}
-                            name={field.name}
-                            value={option.value}
-                            {...register(field.name, field.validationRules)}
-                          />
-                          <span className="me-3">{option.label}</span>
-                        </>
-                      ))}
+  const handleBackClick = () => {
+    setExpandedSectionIndex((prevIndex) => Math.max(prevIndex - 1, 0));
+  };
 
-                      {errors[field.id] && (
-                        <p className="h-2 p-1 text-sm text-red-600">
-                          {field.label} is required
-                        </p>
-                      )}
-                    </div>
-                  );
-                default:
-                  return null;
-              }
-            } else {
-              return null;
-            }
-          })}
-        </div>
-      ))}
-      <button
-        type="submit"
-        className="text-primary-foreground mt-6 h-12 w-full cursor-pointer rounded-md bg-primary text-white hover:bg-primary/90"
+  const handleNextClick = () => {
+    setExpandedSectionIndex((prevIndex) =>
+      Math.min(prevIndex + 1, formConfig.json.formSections.length - 1),
+    );
+  };
+  const isSubmitButtonVisible =
+    expandedSectionIndex === formConfig.json.formSections.length - 1;
+  return (
+    <>
+      <form
+        onSubmit={handleSubmit(addAdmissionHandler)}
+        className="mt-4 w-full p-5"
       >
-        {isSubmitting && (
-          <div className="flex h-screen items-center justify-center">
-            <Loader2 className="mr-2 h-6 w-6 animate-spin text-white" />
+        <h1 className="text-center text-3xl font-semibold text-primary">
+          {formConfig.json.title}
+        </h1>
+        <p className="mb-4 text-center text-black">
+          {formConfig.json.description}
+        </p>
+        <div className="flex justify-around gap-4">
+          <ul className="h-fit w-[215px] shrink-0 rounded-lg bg-white py-3">
+            <li>
+              {formConfig.json.formSections.map((section, index) => (
+                <div key={section.sectionTitle} className="mt-3 px-4">
+                  <h2
+                    className={`inter cursor-pointer px-2 text-sm font-semibold text-gray-800 ${
+                      expandedSectionIndex === index
+                        ? 'border-l-2 border-primary text-black'
+                        : 'hover:text-black'
+                    }`}
+                    onClick={() => setExpandedSectionIndex(index)}
+                  >
+                    {section.sectionTitle}
+                  </h2>
+                </div>
+              ))}
+            </li>
+          </ul>
+          <div className="rounded-lg bg-white p-8">
+            {formConfig.json.formSections.map((section, index) => (
+              <div key={section.sectionTitle} className="mt-3 px-12">
+                {expandedSectionIndex === index && (
+                  <>
+                    <h1 className="inter text-sm font-semibold">
+                      {section.sectionTitle}
+                    </h1>
+                    <div className="flex flex-wrap justify-between gap-3">
+                      {section.sectionFields.map((field) => {
+                        if (field.visible) {
+                          switch (field.type) {
+                            case 'text':
+                            case 'email':
+                            case 'date':
+                              return (
+                                <div key={field.id} className="w-[47%]">
+                                  <label className="mt-5 block text-gray-700">
+                                    {field.label}
+                                  </label>
+                                  <input
+                                    {...register(
+                                      field.name,
+                                      field.validationRules,
+                                    )}
+                                    type={field.type}
+                                    placeholder={field.placeholder}
+                                    className="ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring mt-1 flex h-10 w-full rounded-md border border-gray-300 bg-transparent px-3 py-2 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                                  />
+                                  {errors[field.name] && (
+                                    <p className="h-2 p-1 text-sm text-red-600">
+                                      {field.label} is required
+                                    </p>
+                                  )}
+                                </div>
+                              );
+                            case 'radio':
+                              return (
+                                <div key={field.id}>
+                                  <label className="mt-5 block text-gray-700">
+                                    {field.label}
+                                  </label>
+                                  {field.options.map((option, index) => (
+                                    <>
+                                      <input
+                                        type={field.type}
+                                        name={field.name}
+                                        value={option.value}
+                                        {...register(
+                                          field.name,
+                                          field.validationRules,
+                                        )}
+                                      />
+                                      <span className="me-3">
+                                        {option.label}
+                                      </span>
+                                    </>
+                                  ))}
+
+                                  {errors[field.name] && (
+                                    <p className="h-2 p-1 text-sm text-red-600">
+                                      {field.label} is required
+                                    </p>
+                                  )}
+                                </div>
+                              );
+                            case 'dropdown':
+                              return (
+                                <div key={field.id}>
+                                  <label className="mt-5 block text-gray-700">
+                                    {field.label}
+                                  </label>
+                                  <select
+                                    {...register(
+                                      field.name,
+                                      field.validationRules,
+                                    )}
+                                    placeholder={field.placeholder}
+                                    className="ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring mt-1 flex h-10 w-full rounded-md border border-gray-300 bg-transparent px-3 py-2 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                                  >
+                                    {field.options.map((option, index) => (
+                                      <option key={index} value={option.value}>
+                                        {option.label}
+                                      </option>
+                                    ))}
+                                  </select>
+                                  {errors[field.name] && (
+                                    <p className="h-2 p-1 text-sm text-red-600">
+                                      {field.label} is required
+                                    </p>
+                                  )}
+                                </div>
+                              );
+                            default:
+                              return null;
+                          }
+                        } else {
+                          return null;
+                        }
+                      })}
+                    </div>
+                  </>
+                )}
+              </div>
+            ))}
           </div>
-        )}
-        Save
-      </button>
-    </form>
+        </div>
+        <div className="flex justify-end gap-4">
+          <button
+            type="button"
+            className="text-primary-foreground mt-6 h-12 cursor-pointer rounded-md  bg-primary px-4 py-3 text-white hover:bg-primary/90"
+            onClick={handleBackClick}
+            disabled={expandedSectionIndex === 0}
+          >
+            Back
+          </button>
+
+          {isSubmitButtonVisible ? (
+            <button
+              type="submit"
+              className="text-primary-foreground mt-6 h-12 cursor-pointer rounded-md  bg-primary px-4 py-3 text-white hover:bg-primary/90"
+            >
+              {isSubmitting ? (
+                <div className="flex h-screen items-center justify-center">
+                  <Loader2 className="mr-2 h-6 w-6 animate-spin text-white" />
+                </div>
+              ) : (
+                'Submit'
+              )}
+            </button>
+          ) : (
+            <button
+              type="button"
+              onClick={handleNextClick}
+              className="text-primary-foreground mt-6 h-12 cursor-pointer rounded-md  bg-primary px-4 py-3 text-white hover:bg-primary/90"
+            >
+              {isSubmitting ? (
+                <div className="flex h-screen items-center justify-center">
+                  <Loader2 className="mr-2 h-6 w-6 animate-spin text-white" />
+                </div>
+              ) : (
+                'Save & Next'
+              )}
+            </button>
+          )}
+        </div>
+      </form>
+    </>
   );
 }
