@@ -5,6 +5,10 @@ export const ADD_ADMISSION = `ADD_ADMISSION`;
 export const ADD_ENQUIRY = `ADD_ENQUIRY`;
 export const LIST_ADMISSION = `LIST_ADMISSION`;
 export const LIST_ENQUIRY = `LIST_ENQUIRY`;
+export const LIST_DEPARTMENT = `LIST_DEPARTMENT`;
+export const ADD_DEPARTMENT = `ADD_DEPARTMENT`;
+export const GET_DEPARTMENT = `GET_DEPARTMENT`;
+export const UPDATE_DEPARTMENT = `UPDATE_DEPARTMENT`;
 export const ONBOARD_ACCOUNT = `ONBOARD_ACCOUNT`;
 export const CREATE_ORGANIZATION = `CREATE_ORGANIZATION`;
 
@@ -26,6 +30,10 @@ export default <EndpointDetails>{
     requestType: `POST`,
     endpoint: `/api/enquiry`,
   },
+  [ADD_DEPARTMENT]: {
+    requestType: `POST`,
+    endpoint: `/api/departmentAdd`,
+  },
   [LIST_ADMISSION]: {
     requestType: `GET`,
     endpoint: `/api/admissionlist`,
@@ -33,6 +41,18 @@ export default <EndpointDetails>{
   [LIST_ENQUIRY]: {
     requestType: `POST`,
     endpoint: `/api/enquiryList`,
+  },
+  [LIST_DEPARTMENT]: {
+    requestType: `GET`,
+    endpoint: `/api/departmentList`,
+  },
+  [GET_DEPARTMENT]: {
+    requestType: `POST`,
+    endpoint: `/api/department`,
+  },
+  [UPDATE_DEPARTMENT]: {
+    requestType: `PUT`,
+    endpoint: `/api/departmentEdit`,
   },
   [ONBOARD_ACCOUNT]: {
     requestType: `POST`,

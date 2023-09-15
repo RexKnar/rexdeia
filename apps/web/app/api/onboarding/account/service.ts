@@ -1,4 +1,4 @@
-import { admissionForm, EnquiryForm } from './data';
+import { admissionForm, EnquiryForm, departmentForm } from './data';
 import { db } from '../../../../lib/db';
 
 export async function initializeAccountForUserId(userId: string) {
@@ -26,4 +26,5 @@ export async function initializeAccountForUserId(userId: string) {
 
   await createForm('Admission', admissionForm);
   await createForm('Enquiry', EnquiryForm);
+  await createForm('Department', departmentForm);
 }

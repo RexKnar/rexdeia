@@ -109,6 +109,15 @@ model EnquiryForm {
   mediumOfEducation12th String
 }
 
+model DepartmentForm {
+  id               String @id @default(auto()) @map("_id") @db.ObjectId
+  departmentName   String
+  noOfYears        String
+  departmentCode   String
+  activeStatus     String
+  description      String
+}
+
 model Organization {
   id          String             @id @default(auto()) @map("_id") @db.ObjectId
   name        String
@@ -130,6 +139,7 @@ model UserOrganization {
 enum FormType {
   Admission
   Enquiry
+  Department
 }
 
 model Form {

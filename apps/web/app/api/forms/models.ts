@@ -50,5 +50,5 @@ export type FormModel = {
 
 export type SearchFormModel = {
   organizationId: string;
-  type: 'Admission' | 'Enquiry';
+  type: 'Admission' | 'Enquiry' | 'Department';
 };

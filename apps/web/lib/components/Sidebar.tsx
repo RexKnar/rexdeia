@@ -14,13 +14,16 @@ type MenuItem =
   | 'admission-dashboard'
   | 'admission-activities'
   | 'admission-enroll-student'
-  | 'admission-enquiry-student';
+  | 'admission-enquiry-student'
+  | 'admission-department-student';
 
 const menuItemPaths: Record<MenuItem, string> = {
   'admission-dashboard': '/admission/dashboard',
   'admission-activities': '/admission/activities',
   'admission-enroll-student': '/admission/enroll-student',
   'admission-enquiry-student': '/admission/enquiry',
+  'admission-department-student': '/admission/department'
+
 };
 
 export function Sidebar() {
@@ -106,6 +109,20 @@ export function Sidebar() {
             >
               <HelpCircle className="mr-2 h-4 w-4" />
               Enquiry
+            </Button>
+          </div>
+          <div className="space-y-1">
+            <Button
+              variant="secondary"
+              className={`hover:bg-primary w-full justify-start bg-white hover:text-white ${
+                activeMenu == 'admission-department-student'
+                  ? 'bg-primary text-white'
+                  : ''
+              } `}
+              onClick={() => handleMenuClick('admission-department-student')}
+            >
+              <HelpCircle className="mr-2 h-4 w-4" />
+              Department
             </Button>
           </div>
         </div>

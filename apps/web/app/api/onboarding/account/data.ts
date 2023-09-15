@@ -651,3 +651,88 @@ export const EnquiryForm = {
     },
   ],
 };
+
+export const departmentForm = {
+  title: 'DEPARTMENT FORM',
+  formSections: [
+    {
+      sectionFields: [
+        {
+          id: '1',
+          type: 'text',
+          label: 'Department Name',
+          name: 'departmentName',
+          value: '',
+          visible: true,
+          placeholder: 'Enter your department name',
+          validationRules: {
+            required: true,
+            minLength: 1,
+            maxLength: 100,
+          },
+        },
+        {
+          id: '2',
+          type: 'text',
+          label: 'No of Years',
+          name: 'noOfYears',
+          value: '',
+          visible: true,
+          placeholder: 'Enter no of years',
+          validationRules: {
+            required: false,
+            minLength: 1,
+            maxLength: 100,
+          },
+        },
+        {
+          id: '3',
+          type: 'text',
+          label: 'Department Code',
+          name: 'departmentCode',
+          value: '',
+          visible: true,
+          placeholder: 'Enter your Department Code',
+          validationRules: {
+            required: true,
+            minLength: 1,
+            maxLength: 100,
+          },
+        },
+        {
+          id: '4',
+          type: 'radio',
+          label: 'Active Status',
+          name: 'activeStatus',
+          value: '',
+          visible: true,
+          options: [
+            {
+              label: 'Active',
+              value: 'active',
+            },
+            {
+              label: 'Inactive',
+              value: 'inactive',
+            },
+          ],
+          validationRules: {
+            required: true,
+          },
+        },
+        {
+          id: '5',
+          type: 'text',
+          label: 'Note/Description',
+          name: 'description',
+          value: '',
+          visible: true,
+          placeholder: 'Enter Note/Description',
+          validationRules: {
+            required: true,
+          },
+        },       
+      ],
+    },
+  ],
+};
