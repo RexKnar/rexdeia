@@ -4,12 +4,12 @@ import { redirect } from 'next/navigation';
 import { SignInForm } from '../../../lib/components/auth/SignInForm';
 import logo from '../../../public/assets/images/acadx-logo.png';
 import Image from 'next/image';
-import { Button } from 'ui';
 import Link from 'next/link';
 
 export const metadata = {
-  title: 'Capeo | Sign in',
-  description: 'Capeo is a business management platform for small businesses.',
+  title: 'acadx | Sign in',
+  description:
+    'A one-stop platform to streamline every aspect of education management.',
 };
 
 export default async function Page() {
@@ -46,13 +46,13 @@ export default async function Page() {
         </p>
         <Link
           href="/signup"
-          className="inter mt-3 h-[48px] w-full rounded rounded-md border border-2 border-gray-300 bg-transparent px-[14px] py-[8px] text-center  text-sm font-semibold text-primary hover:bg-primary hover:text-white"
+          className="mt-3 h-[48px] w-full rounded rounded-md border border-2 border-gray-300 bg-transparent px-[14px] py-[8px] text-center  text-sm font-semibold text-primary hover:bg-primary hover:text-white"
         >
           Signup
         </Link>
-        <p className="mt-14 text-center text-base font-normal text-gray-700">
+        <footer className="mt-14 text-center text-base font-normal text-gray-700">
           &copy; acadx 2023
-        </p>
+        </footer>
       </section>
     </section>
   );
