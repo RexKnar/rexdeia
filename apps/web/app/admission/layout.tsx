@@ -1,5 +1,5 @@
 import 'configs/tailwind/styles.css';
-import { Toaster } from "../../../../packages/ui/components/ui/Toaster"
+import { Toaster } from '../../../../packages/ui/components/ui/Toaster';
 import { GraduationCap } from 'lucide-react';
 import { Suspense } from 'react';
 import Providers from '../../lib/Providers';
@@ -26,9 +26,8 @@ export default function RootLayout({
               <Sidebar />
             </Suspense>
             {children}
-           
           </main>
-          <Toaster/>
+          <Toaster />
         </body>
       </Providers>
     </html>
