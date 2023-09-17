@@ -1,22 +1,15 @@
 import 'configs/tailwind/styles.css';
-import { Toaster } from '../../../../packages/ui/components/ui/Toaster';
-import { GraduationCap } from 'lucide-react';
-import { Suspense } from 'react';
+import { ReactNode, Suspense } from 'react';
 import Providers from '../../lib/Providers';
-import { NavigationHeader } from '../../lib/components/NavigationHeader';
-import { UserMenu } from '../../lib/components/header/UserMenu';
 import { Sidebar } from '../../lib/components/Sidebar';
+import { Toaster } from 'ui';
 
 export const metadata = {
   title: 'Capeo - Simplifying the way you manage your business',
   description: 'Capeo is a business management platform for small businesses.',
 };
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="en">
       <Providers>

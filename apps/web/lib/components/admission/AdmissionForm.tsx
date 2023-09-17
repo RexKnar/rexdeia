@@ -1,10 +1,11 @@
 'use client';
+
 import React, { useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Loader2 } from 'lucide-react';
 import { ADD_ADMISSION } from '../../endpoints';
 import { makeAPICall } from '../../api';
-import { useToast } from '../../../../../packages/ui/components/ui/UseToast';
+import { useToast } from 'ui/hooks/useToast';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -17,8 +18,9 @@ import {
   Button,
   Input,
 } from 'ui';
+import { copyToClipboard } from 'utils';
+
 export function AdmissionForm({ formConfig }) {
-  let isModalOpen = false;
   const {
     register,
     handleSubmit,
@@ -69,14 +71,15 @@ export function AdmissionForm({ formConfig }) {
   const inputRef = useRef(null);
 
   const { toast } = useToast();
-  const handleCopyClick = () => {
+  const handleCopyClick = async () => {
     if (inputRef.current) {
       inputRef.current.select();
-      document.execCommand('copy');
+      await copyToClipboard(shareableURL);
+
+      toast({
+        description: 'URL copied to clipboard',
+      });
     }
-    toast({
-      description: 'URL copied to clipboard',
-    });
   };
   return (
     <>
@@ -132,7 +135,7 @@ export function AdmissionForm({ formConfig }) {
                   <h2
                     className={`inter px-2 text-sm font-semibold ${
                       selectedSectionIndex === index
-                        ? 'border-l-2 border-primary text-primary' // Apply the highlight class
+                        ? 'border-l-2 border-primary text-primary'
                         : 'text-gray-800'
                     }`}
                   >
@@ -210,8 +213,8 @@ export function AdmissionForm({ formConfig }) {
                                 <label className="mt-5 block text-gray-700">
                                   {field.label}
                                 </label>
-                                {field.options.map((option, index) => (
-                                  <>
+                                {field.options.map((option) => (
+                                  <React.Fragment key={option.value}>
                                     <input
                                       type={field.type}
                                       name={field.name}
@@ -222,7 +225,7 @@ export function AdmissionForm({ formConfig }) {
                                       )}
                                     />
                                     <span className="me-3">{option.label}</span>
-                                  </>
+                                  </React.Fragment>
                                 ))}
 
                                 {errors[field.name] && (
