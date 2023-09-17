@@ -1,5 +1,5 @@
-import { OrganizationModel } from './models';
 import { db } from '../../../lib/db';
+import { OrganizationModel } from './models';
 
 export async function addOrganization(organization: OrganizationModel) {
   const user = await db.user.findFirst({

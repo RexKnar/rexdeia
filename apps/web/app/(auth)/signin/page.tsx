@@ -1,10 +1,11 @@
-import { getServerSession } from 'next-auth';
-import { authOptions } from '../../../lib/auth';
-import { redirect } from 'next/navigation';
-import { SignInForm } from '../../../lib/components/auth/SignInForm';
-import logo from '../../../public/assets/images/acadx-logo.png';
 import Image from 'next/image';
 import Link from 'next/link';
+import { redirect } from 'next/navigation';
+import { getServerSession } from 'next-auth';
+
+import { authOptions } from '../../../lib/auth';
+import { SignInForm } from '../../../lib/components/auth/SignInForm';
+import logo from '../../../public/assets/images/acadx-logo.png';
 
 export const metadata = {
   title: 'acadx | Sign in',
@@ -42,7 +43,7 @@ export default async function Page() {
         <SignInForm />
 
         <p className="mt-12 text-center text-base font-semibold text-gray-800">
-          Don't have an account?
+          Don&apos;t have an account?
         </p>
         <Link
           href="/signup"

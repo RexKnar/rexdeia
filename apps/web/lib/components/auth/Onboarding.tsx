@@ -1,14 +1,14 @@
 'use client';
 
-import { startTransition } from 'react';
-import { useEffect, useState } from 'react';
-import { ONBOARD_ACCOUNT } from '../../endpoints';
-import { makeAPICall } from '../../api';
-import { useRouter } from 'next/navigation';
 import { Check, Loader2 } from 'lucide-react';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
+import { startTransition , useEffect, useState } from 'react';
+
 import logo from '../../../public/assets/images/acadx-logo.png';
 import lodingPlane from '../../../public/assets/images/loading-paperplane.png';
+import { makeAPICall } from '../../api';
+import { ONBOARD_ACCOUNT } from '../../endpoints';
 
 export function Onboarding() {
   const [isErrored, setIsErrored] = useState(false);

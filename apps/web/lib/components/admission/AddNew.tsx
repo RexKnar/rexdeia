@@ -5,8 +5,9 @@ import {
   TabsList,
   TabsTrigger,
 } from 'ui/components/ui/Tabs';
-import { EnquiryForm } from './EnquiryForm';
+
 import { AdmissionForm } from './AdmissionForm';
+import { EnquiryForm } from './EnquiryForm';
 
 export function AddNew({ formConfig }) {
   return (

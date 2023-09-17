@@ -1,5 +1,6 @@
-import { CreateOrganizationRequestPayload } from './models';
 import { z } from 'zod';
+
+import { CreateOrganizationRequestPayload } from './models';
 
 const schema = z.object({
   name: z.string(),

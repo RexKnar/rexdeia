@@ -5,7 +5,6 @@
   "types": "./index.ts",
   "license": "MIT",
   "scripts": {
-    "lint": "eslint \"**/*.ts*\"",
     "format": "prettier --write \"**/*.{ts,tsx,md}\""
   },
   "dependencies": {

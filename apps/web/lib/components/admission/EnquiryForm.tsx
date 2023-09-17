@@ -1,9 +1,10 @@
 'use client';
 
-import { useForm } from 'react-hook-form';
 import { Loader2 } from 'lucide-react';
-import { ADD_ENQUIRY } from '../../endpoints';
+import { useForm } from 'react-hook-form';
+
 import { makeAPICall } from '../../api';
+import { ADD_ENQUIRY } from '../../endpoints';
 
 export function EnquiryForm({ formConfig }) {
   const {

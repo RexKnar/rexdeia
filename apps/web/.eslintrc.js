@@ -1,8 +1,22 @@
 module.exports = {
-  root: true,
-  extends: ['eslint-config-custom'],
+  root: false,
+  extends: ['next', 'turbo', 'prettier'],
+  plugins: ['small-import', 'simple-import-sort', 'import'],
   rules: {
-    'react/no-unescaped-entities': 'off',
-    '@next/next/no-page-custom-font': 'off',
+    // Import related rules
+    'simple-import-sort/imports': 'error',
+    'simple-import-sort/exports': 'error',
+
+    'import/first': 'error',
+    'import/newline-after-import': 'error',
+    'import/no-duplicates': 'error',
+    'import/no-namespace': 'error',
+
+    'small-import/no-full-import': 'error',
+  },
+  parserOptions: {
+    babelOptions: {
+      presets: [require.resolve('next/babel')],
+    },
   },
 };

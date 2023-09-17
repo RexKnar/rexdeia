@@ -1,10 +1,11 @@
-import { SignUpForm } from '../../../lib/components/auth/SignUpForm';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '../../../lib/auth';
-import { redirect } from 'next/navigation';
 import Image from 'next/image';
-import logo from '../../../public/assets/images/acadx-logo.png';
 import Link from 'next/link';
+import { redirect } from 'next/navigation';
+import { getServerSession } from 'next-auth';
+
+import { authOptions } from '../../../lib/auth';
+import { SignUpForm } from '../../../lib/components/auth/SignUpForm';
+import logo from '../../../public/assets/images/acadx-logo.png';
 
 export const metadata = {
   title: 'acadx | Sign up',

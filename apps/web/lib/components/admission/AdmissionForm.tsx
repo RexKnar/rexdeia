@@ -1,11 +1,8 @@
 'use client';
 
+import { Loader2 } from 'lucide-react';
 import React, { useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { Loader2 } from 'lucide-react';
-import { ADD_ADMISSION } from '../../endpoints';
-import { makeAPICall } from '../../api';
-import { useToast } from 'ui/hooks/useToast';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -18,7 +15,11 @@ import {
   Button,
   Input,
 } from 'ui';
+import { useToast } from 'ui/hooks/useToast';
 import { copyToClipboard } from 'utils';
+
+import { makeAPICall } from '../../api';
+import { ADD_ADMISSION } from '../../endpoints';
 
 export function AdmissionForm({ formConfig }) {
   const {

@@ -1,13 +1,15 @@
 'use client';
 
-import { Alert, AlertDescription, Button, Input } from 'ui';
-import Image from 'next/image';
-import { useForm } from 'react-hook-form';
-import { signIn } from 'next-auth/react';
 import { AlertCircleIcon, Loader2 } from 'lucide-react';
+import Image from 'next/image';
 import { useSearchParams } from 'next/navigation';
+import { signIn } from 'next-auth/react';
+import { useForm } from 'react-hook-form';
+import { Alert, AlertDescription, Button, Input } from 'ui';
+
 import googlelogo from '../../../public/assets/images/Google_logo.png';
 import microsoftlogo from '../../../public/assets/images/Microsoft_logo.png';
+
 const errors = {
   INVALID_PASSWORD:
     'The username or password you entered is incorrect. Please try again.',

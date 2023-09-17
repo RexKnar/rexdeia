@@ -1,8 +1,10 @@
 import 'configs/tailwind/styles.css';
+
 import { ReactNode, Suspense } from 'react';
-import Providers from '../../lib/Providers';
-import { Sidebar } from '../../lib/components/Sidebar';
 import { Toaster } from 'ui';
+
+import { Sidebar } from '../../lib/components/Sidebar';
+import Providers from '../../lib/Providers';
 
 export const metadata = {
   title: 'Capeo - Simplifying the way you manage your business',

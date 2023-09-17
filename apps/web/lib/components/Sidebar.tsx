@@ -1,18 +1,19 @@
 'use client';
 
-import { Button } from 'ui';
-import { useCallback, useState } from 'react';
 import {
-  ChevronRight,
   ChevronDown,
+  ChevronRight,
   GraduationCap,
   HelpCircle,
   LayoutDashboard,
   ListMinus,
 } from 'lucide-react';
-import { useRouter, usePathname } from 'next/navigation';
-import { UserMenu } from './header/UserMenu';
+import { usePathname, useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
+import { useCallback, useState } from 'react';
+import { Button } from 'ui';
+
+import { UserMenu } from './header/UserMenu';
 
 type MenuItem =
   | 'admission-dashboard'
@@ -82,9 +83,7 @@ export function Sidebar() {
           <div className="mb-2 flex w-[292px] items-center justify-start gap-3 px-4 text-lg font-semibold tracking-tight">
             <UserMenu />
             <div className="w-[128px] text-left">
-              <h1 className="inter text-sm font-semibold">
-                St'Xaviers College
-              </h1>
+              <h1 className="inter text-sm font-semibold">ABC College</h1>
               <h2 className="inter text-sm font-normal text-gray-700">Admin</h2>
             </div>
           </div>

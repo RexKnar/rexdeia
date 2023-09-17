@@ -1,6 +1,7 @@
+import { getAdmissionList } from '../../api/admissionlist/service';
 import { AdmissionListModel, columns } from './columns';
 import { DataTable } from './data-table';
-import { getAdmissionList } from '../../api/admissionlist/service';
+
 async function getData(): Promise<AdmissionListModel[]> {
   const admissionList = await getAdmissionList();
   const data: AdmissionListModel[] = JSON.parse(JSON.stringify(admissionList));

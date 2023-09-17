@@ -1,18 +1,18 @@
 'use client';
 
+import { signOut,useSession } from 'next-auth/react';
 import {
   Avatar,
+  AvatarFallback,
   AvatarImage,
   DropdownMenu,
-  AvatarFallback,
+  DropdownMenuContent,
+  DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuLabel,
-  DropdownMenuGroup,
-  DropdownMenuTrigger,
-  DropdownMenuContent,
   DropdownMenuSeparator,
+  DropdownMenuTrigger,
 } from 'ui';
-import { useSession, signOut } from 'next-auth/react';
 
 export function UserMenu() {
   const { data: session, status } = useSession();
