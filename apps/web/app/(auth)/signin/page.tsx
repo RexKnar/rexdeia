@@ -46,7 +46,7 @@ export default async function Page() {
         </p>
         <Link
           href="/signup"
-          className="mt-3 h-[48px] w-full rounded rounded-md border border-2 border-gray-300 bg-transparent px-[14px] py-[8px] text-center  text-sm font-semibold text-primary hover:bg-primary hover:text-white"
+          className="mt-3 h-[48px] w-full rounded-md border-2 border-gray-300 bg-transparent px-[14px] py-[8px] text-center text-sm font-semibold text-primary hover:bg-primary hover:text-white"
         >
           Signup
         </Link>
