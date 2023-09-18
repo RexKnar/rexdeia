@@ -27,12 +27,9 @@ export function AdmissionForm({ formConfig }) {
     handleSubmit,
     formState: { errors, isSubmitting },
   } = useForm();
-
   const [currentStep, setCurrentStep] = useState(0);
   const totalSteps = formConfig.json.formSections.length;
-  const [formData, setFormData] = useState({});
   const [selectedSectionIndex, setSelectedSectionIndex] = useState(0);
-
   const nextStep = () => {
     if (currentStep < totalSteps - 1) {
       setCurrentStep(currentStep + 1);
@@ -48,13 +45,11 @@ export function AdmissionForm({ formConfig }) {
   };
 
   async function addAdmissionHandler(data: Record<string, unknown>) {
-    const updatedFormData = { ...formData, ...data };
-    setFormData(updatedFormData);
     if (currentStep === totalSteps - 1) {
-      console.log('Form data:', updatedFormData);
+      console.log('Form data:', data);
       try {
         await makeAPICall(ADD_ADMISSION, {
-          ...updatedFormData,
+          ...data,
         });
       } catch (error) {
         console.log(error);
