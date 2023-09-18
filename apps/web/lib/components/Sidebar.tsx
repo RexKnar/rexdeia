@@ -171,9 +171,9 @@ export function Sidebar() {
                 <div className="px-2 ml-4 border-l-2">
                   <div className="p-2 inter text-sm font-normal text-gray-800 rounded-lg">
                     <Button 
-                     className={`w-fit justify-start bg-white hover:bg-primary hover:text-white ${
+                     className={`w-[174px] justify-start bg-white hover:bg-gray-100 hover:text-gray-800 ${
                       activeMenu == "admission-addnew"
-                        ? "bg-primary text-white"
+                        ? "bg-gray-100 text-gray-800"
                         : ""
                     } `}
                     onClick={() => handleMenuClick("admission-addnew")}
@@ -181,9 +181,9 @@ export function Sidebar() {
                   </div>
                   <div className="p-2 inter text-sm font-normal text-gray-800 rounded-lg">
                     <Button 
-                     className={`w-fit justify-start bg-white hover:bg-primary hover:text-white ${
+                     className={`w-[174px] justify-start bg-white hover:bg-gray-100 hover:text-gray-800 ${
                       activeMenu == "admission-analytics"
-                        ? "bg-primary text-white"
+                        ? "bg-gray-100 text-gray-800"
                         : ""
                     } `}
                     onClick={() => handleMenuClick("admission-analytics")}
@@ -191,9 +191,9 @@ export function Sidebar() {
                   </div>
                   <div className="p-2 inter text-sm font-normal text-gray-800 rounded-lg">
                     <Button 
-                     className={`w-fit justify-start bg-white hover:bg-primary hover:text-white ${
+                     className={`w-[174px] justify-start bg-white hover:bg-gray-100 hover:text-gray-800 ${
                       activeMenu == "admission-configure"
-                        ? "bg-primary text-white"
+                        ? "bg-gray-100 text-gray-800"
                         : ""
                     } `}
                     onClick={() => handleMenuClick("admission-configure")}

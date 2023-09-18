@@ -18,18 +18,14 @@ import {
   Input,
 } from 'ui';
 export function AdmissionForm({ formConfig }) {
-  let isModalOpen = false;
   const {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
   } = useForm();
-
   const [currentStep, setCurrentStep] = useState(0);
   const totalSteps = formConfig.json.formSections.length;
-  const [formData, setFormData] = useState({});
   const [selectedSectionIndex, setSelectedSectionIndex] = useState(0);
-
   const nextStep = () => {
     if (currentStep < totalSteps - 1) {
       setCurrentStep(currentStep + 1);
@@ -40,18 +36,16 @@ export function AdmissionForm({ formConfig }) {
   const prevStep = () => {
     if (currentStep > 0) {
       setCurrentStep(currentStep - 1);
-      setSelectedSectionIndex(currentStep - 1); 
+      setSelectedSectionIndex(currentStep - 1);
     }
   };
 
   async function addAdmissionHandler(data: Record<string, unknown>) {
-    const updatedFormData = { ...formData, ...data };
-    setFormData(updatedFormData);
     if (currentStep === totalSteps - 1) {
-      console.log('Form data:', updatedFormData);
+      console.log('Form data:', data);
       try {
         await makeAPICall(ADD_ADMISSION, {
-          ...updatedFormData,
+          ...data,
         });
       } catch (error) {
         console.log(error);
@@ -132,7 +126,7 @@ export function AdmissionForm({ formConfig }) {
                   <h2
                     className={`inter px-2 text-sm font-semibold ${
                       selectedSectionIndex === index
-                        ? 'border-l-2 border-primary text-primary' // Apply the highlight class
+                        ? 'border-l-2 border-primary text-primary'
                         : 'text-gray-800'
                     }`}
                   >
@@ -148,10 +142,7 @@ export function AdmissionForm({ formConfig }) {
                 key={section.sectionTitle}
                 className="mt-3 px-12"
                 style={{
-                  display:
-                    currentStep === index
-                      ? 'block'
-                      : 'none',
+                  display: currentStep === index ? 'block' : 'none',
                 }}
               >
                 <>
@@ -186,7 +177,7 @@ export function AdmissionForm({ formConfig }) {
                                 )}
                               </div>
                             );
-                            case 'textarea':
+                          case 'textarea':
                             return (
                               <div key={field.id} className="w-[47%]">
                                 <label className="mt-5 block text-gray-700">
@@ -199,8 +190,7 @@ export function AdmissionForm({ formConfig }) {
                                   )}
                                   placeholder={field.placeholder}
                                   className="ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring mt-1 flex h-10 w-full rounded-md border border-gray-300 bg-transparent px-3 py-2 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-                                >
-                                </textarea>
+                                ></textarea>
                                 {errors[field.name] && (
                                   <p className="h-2 p-1 text-sm text-red-600">
                                     {field.label} is required
