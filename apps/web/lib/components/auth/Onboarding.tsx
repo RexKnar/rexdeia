@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation';
 import { startTransition, useEffect, useState } from 'react';
 
 import logo from '../../../public/assets/images/acadx-logo.png';
-import lodingPlane from '../../../public/assets/images/loading-paperplane.png';
+import loadingPlane from '../../../public/assets/images/loading-paperplane.png';
 import { makeAPICall } from '../../api';
 import { ONBOARD_ACCOUNT } from '../../endpoints';
 
@@ -61,7 +61,7 @@ export function Onboarding({ branchId, organizationId }: OnboardingProps) {
           <div className="mt-36 flex justify-center">
             <Image
               className="flying-plane"
-              src={lodingPlane}
+              src={loadingPlane}
               alt={'logo'}
               width={400}
             ></Image>

@@ -8,7 +8,8 @@ import {
   School2,
 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useSession } from 'next-auth/react';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Button, Input } from 'ui';
 import { titilize } from 'utils';
@@ -23,14 +24,17 @@ type SetupFormProps = {
 };
 
 export function SetupForm({ branchId, organizationId }: SetupFormProps) {
-  const [selected, setSelected] = useState('school');
+  const router = useRouter();
+  const { update, status } = useSession();
+  const [isSessionUpdated, setIsSessionUpdated] = useState(false);
 
   const {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
   } = useForm();
-  const router = useRouter();
+
+  const [selected, setSelected] = useState('school');
 
   async function onSubmit({ institute, name }) {
     try {
@@ -55,13 +59,23 @@ export function SetupForm({ branchId, organizationId }: SetupFormProps) {
 
       await Promise.all([updateOrganization, updateBranch]);
 
-      router.push(
-        `/onboarding?branch=${branchId}&organization=${organizationId}`
-      );
+      router.push(`/onboarding`);
     } catch (error) {
       console.log(error);
     }
   }
+
+  useEffect(() => {
+    if (status === 'authenticated' && !isSessionUpdated) {
+      update({
+        branchId,
+        organizationId,
+      });
+      setIsSessionUpdated(true);
+    }
+    // This is intentional as we wanted to update the session only once
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [status, isSessionUpdated]);
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="mt-4">

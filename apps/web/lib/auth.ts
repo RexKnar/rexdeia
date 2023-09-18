@@ -54,13 +54,25 @@ export const authOptions: NextAuthOptions = {
         session.user.email = token.email;
         session.user.image = token.picture;
         session.user.username = token.username;
+        session.branchId = token.branchId as string;
+        session.organizationId = token.organizationId as string;
         session.user.createdBranches = token.createdBranches as any[];
       }
 
       return session;
     },
 
-    async jwt({ token, user }) {
+    async jwt({ token, user, trigger, session }) {
+      console.log("🚀 ~ file: auth.ts:69 ~ jwt ~ token:", token);
+      console.log("🚀 ~ file: auth.ts:69 ~ jwt ~ trigger:", trigger);
+      console.log("🚀 ~ file: auth.ts:69 ~ jwt ~ session:", session);
+      if (trigger === 'update' && session.organizationId && session.branchId) {
+        
+        token.branchId = session.branchId;
+        console.log("🚀 ~ file: auth.ts:69 ~ jwt ~ token:", token)
+        token.organizationId = session.organizationId;
+      }
+
       const dbUser = await db.user.findFirst({
         where: {
           email: token.email,
@@ -88,6 +100,7 @@ export const authOptions: NextAuthOptions = {
       }
 
       return {
+        ...token,
         id: dbUser.id,
         name: dbUser.name,
         email: dbUser.email,

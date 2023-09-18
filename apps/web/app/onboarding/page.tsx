@@ -11,18 +11,18 @@ export default async function Page({
   searchParams: { [key: string]: string | string[] | undefined };
 }) {
   const session = await getServerSession(authOptions);
-  if (!session) {
+  if (!session?.branchId || !session.organizationId) {
     redirect('/signin');
   }
 
-  const selectedBranchId = searchParams.branch as string;
-  const selectedOrganizationId = searchParams.organization as string;
+  const selectedBranchId = session.branchId;
+  const selectedOrganizationId = session.organizationId;
 
   const branchesToSetup = session.user.createdBranches.filter(
     (branch) => branch.id === selectedBranchId
   );
 
-  if (branchesToSetup && branchesToSetup.length === 1) {
+  if (branchesToSetup?.length) {
     return (
       <Onboarding
         branchId={selectedBranchId}
