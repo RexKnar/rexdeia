@@ -12,6 +12,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '../../../../../packages/ui/components/ui/DropdownMenu';
+
 export type AdmissionListModel = {
   id?: string;
   slNo?: number;

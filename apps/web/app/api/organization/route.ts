@@ -1,8 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { validateAddOrganization } from './validator';
-import { addOrganization } from './service';
-import { authOptions } from '../../../lib/auth';
 import { getServerSession } from 'next-auth';
+
+import { authOptions } from '../../../lib/auth';
+import { addOrganization } from './service';
+import { validateAddOrganization } from './validator';
 
 export async function POST(request: NextRequest) {
   const session = await getServerSession(authOptions);

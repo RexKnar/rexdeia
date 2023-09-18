@@ -1,9 +1,10 @@
 import { PrismaAdapter } from '@next-auth/prisma-adapter';
-import { db } from './db';
+import bcrypt from 'bcrypt';
+import { nanoid } from 'nanoid';
 import { getServerSession, NextAuthOptions } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
-import { nanoid } from 'nanoid';
-import bcrypt from 'bcrypt';
+
+import { db } from './db';
 
 export const authOptions: NextAuthOptions = {
   adapter: PrismaAdapter(db),

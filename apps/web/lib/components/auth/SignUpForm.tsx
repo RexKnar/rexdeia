@@ -1,15 +1,16 @@
 'use client';
 
-import { Button, Input } from 'ui';
+import { Loader2 } from 'lucide-react';
+import Image from 'next/image';
 import Link from 'next/link';
 import { signIn } from 'next-auth/react';
 import { useForm } from 'react-hook-form';
-import { makeAPICall } from '../../api';
-import { REGISTER_USER } from '../../endpoints';
-import { Loader2 } from 'lucide-react';
-import Image from 'next/image';
+import { Button, Input } from 'ui';
+
 import googlelogo from '../../../public/assets/images/Google_logo.png';
 import microsoftlogo from '../../../public/assets/images/Microsoft_logo.png';
+import { makeAPICall } from '../../api';
+import { REGISTER_USER } from '../../endpoints';
 
 const errorValue = {
   too_small: 'Password must contain at least 6 characters.',

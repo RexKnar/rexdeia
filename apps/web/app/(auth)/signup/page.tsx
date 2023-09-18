@@ -1,14 +1,16 @@
-import { SignUpForm } from '../../../lib/components/auth/SignUpForm';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '../../../lib/auth';
-import { redirect } from 'next/navigation';
 import Image from 'next/image';
-import logo from '../../../public/assets/images/acadx-logo.png';
 import Link from 'next/link';
+import { redirect } from 'next/navigation';
+import { getServerSession } from 'next-auth';
+
+import { authOptions } from '../../../lib/auth';
+import { SignUpForm } from '../../../lib/components/auth/SignUpForm';
+import logo from '../../../public/assets/images/acadx-logo.png';
 
 export const metadata = {
-  title: 'Capeo | Sign up',
-  description: 'Start managing your business with Capeo.',
+  title: 'acadx | Sign up',
+  description:
+    'Your step to streamline every aspect of education management starts here.',
 };
 
 export default async function Page() {
@@ -16,6 +18,7 @@ export default async function Page() {
   if (session) {
     redirect('/');
   }
+
   return (
     <section className="flex h-full flex-col sm:flex-row">
       <section
@@ -35,23 +38,23 @@ export default async function Page() {
           </span>
         </div>
 
-        <p className="inter text-base font-medium text-gray-800">
-          Join the Acadx community and embark on a seamless academic experience.
+        <p className="text-base font-medium text-gray-800">
+          Join acadx and embark on a seamless academic experience.
         </p>
 
         <SignUpForm />
-        <p className="inter mt-12 text-center text-base font-semibold text-gray-800">
+        <p className="mt-12 text-center text-base font-semibold text-gray-800">
           Have an account?
         </p>
         <Link
           href="/signin"
-          className="mt-3 h-[48px] w-full rounded rounded-md border border-2 border-gray-300 bg-transparent px-[14px] py-[8px] text-center  text-sm font-semibold text-primary hover:bg-primary hover:text-white"
+          className="mt-3 h-[48px] w-full rounded-md border-2 border-gray-300 bg-transparent px-[14px] py-[8px] text-center  text-sm font-semibold text-primary hover:bg-primary hover:text-white"
         >
-          Signin
+          Sign In
         </Link>
-        <p className="inter mt-14 text-center text-base font-normal text-gray-700">
+        <footer className="inter mt-14 text-center text-base font-normal text-gray-700">
           &copy; acadx 2023
-        </p>
+        </footer>
       </section>
     </section>
   );

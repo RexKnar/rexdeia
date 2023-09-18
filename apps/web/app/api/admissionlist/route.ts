@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+
 import { getAdmissionList } from './service';
 
 export async function GET(request: NextRequest) {

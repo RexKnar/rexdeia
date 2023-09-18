@@ -123,7 +123,7 @@ export const admissionForm = {
         {
           id: '9',
           type: 'text',
-          label: "Aadhar Card Number",
+          label: 'Aadhar Card Number',
           name: 'aadharCardNumber',
           value: '',
           visible: true,
@@ -135,7 +135,7 @@ export const admissionForm = {
         {
           id: '10',
           type: 'text',
-          label: "Mother Tongue",
+          label: 'Mother Tongue',
           name: 'motherTongue',
           value: '',
           visible: true,
@@ -147,7 +147,7 @@ export const admissionForm = {
         {
           id: '11',
           type: 'text',
-          label: "Blood Group",
+          label: 'Blood Group',
           name: 'bloodGroup',
           value: '',
           visible: true,
@@ -159,7 +159,7 @@ export const admissionForm = {
         {
           id: '12',
           type: 'text',
-          label: "Religion",
+          label: 'Religion',
           name: 'religion',
           value: '',
           visible: true,
@@ -171,7 +171,7 @@ export const admissionForm = {
         {
           id: '13',
           type: 'text',
-          label: "Community",
+          label: 'Community',
           name: 'community',
           value: '',
           visible: true,
@@ -270,7 +270,7 @@ export const admissionForm = {
         {
           id: '5',
           type: 'text',
-          label: "Annual Income",
+          label: 'Annual Income',
           name: 'annualIncome',
           value: '',
           visible: true,
@@ -325,7 +325,8 @@ export const admissionForm = {
     },
     {
       sectionTitle: 'Information of Siblings',
-      sectionDescription: 'Please fill out the Information of Siblings studying in this institution.',
+      sectionDescription:
+        'Please fill out the Information of Siblings studying in this institution.',
       sectionFields: [
         {
           id: '1',
@@ -458,7 +459,7 @@ export const admissionForm = {
         {
           id: '3',
           type: 'text',
-          label: "Relationship Type",
+          label: 'Relationship Type',
           name: 'relationshipType',
           value: '',
           visible: true,
@@ -488,7 +489,7 @@ export const admissionForm = {
         {
           id: '1',
           type: 'textarea',
-          label: "Residential Address",
+          label: 'Residential Address',
           name: 'residentialAddress',
           value: '',
           visible: true,
@@ -500,7 +501,7 @@ export const admissionForm = {
         {
           id: '2',
           type: 'text',
-          label: "District",
+          label: 'District',
           name: 'residentialDistrict',
           value: '',
           visible: true,
@@ -512,7 +513,7 @@ export const admissionForm = {
         {
           id: '3',
           type: 'text',
-          label: "State",
+          label: 'State',
           name: 'residentialState',
           value: '',
           visible: true,
@@ -524,7 +525,7 @@ export const admissionForm = {
         {
           id: '4',
           type: 'text',
-          label: "Postal / ZIP Code",
+          label: 'Postal / ZIP Code',
           name: 'residentialPostalCode',
           value: '',
           visible: true,
@@ -536,7 +537,7 @@ export const admissionForm = {
         {
           id: '5',
           type: 'textarea',
-          label: "Permanent Address",
+          label: 'Permanent Address',
           name: 'permanentAddress',
           value: '',
           visible: true,
@@ -548,7 +549,7 @@ export const admissionForm = {
         {
           id: '6',
           type: 'text',
-          label: "District",
+          label: 'District',
           name: 'permanentDistrict',
           value: '',
           visible: true,
@@ -560,7 +561,7 @@ export const admissionForm = {
         {
           id: '7',
           type: 'text',
-          label: "State",
+          label: 'State',
           name: 'permanentState',
           value: '',
           visible: true,
@@ -572,7 +573,7 @@ export const admissionForm = {
         {
           id: '8',
           type: 'text',
-          label: "Postal / ZIP Code",
+          label: 'Postal / ZIP Code',
           name: 'permanentPostalCode',
           value: '',
           visible: true,
@@ -584,7 +585,7 @@ export const admissionForm = {
         {
           id: '9',
           type: 'text',
-          label: "Nationality",
+          label: 'Nationality',
           name: 'nationality',
           value: '',
           visible: true,
@@ -817,7 +818,7 @@ export const admissionForm = {
           validationRules: {
             required: true,
           },
-        }
+        },
       ],
     },
   ],

@@ -9,13 +9,14 @@ import {
   School,
   School2,
 } from 'lucide-react';
-import { useForm } from 'react-hook-form';
-import { useState } from 'react';
-import { cn, titilize } from 'utils';
-import { Button, Input } from 'ui';
-import { CREATE_ORGANIZATION } from '../../endpoints';
-import { makeAPICall } from '../../api';
 import { useRouter } from 'next/navigation';
+import { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { Button, Input } from 'ui';
+import { cn, titilize } from 'utils';
+
+import { makeAPICall } from '../../api';
+import { CREATE_ORGANIZATION } from '../../endpoints';
 
 type InstituteCardProps = {
   name: string;

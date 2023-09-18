@@ -58,8 +58,8 @@ export async function addAdmission(admission: AddAdmissionModel) {
       siblingRelation2: admission.siblingRelation2,
       yearOfPassing10th: admission.yearOfPassing10th,
       yearOfPassing12th: admission.yearOfPassing12th,
-      residentialAddress:admission.residentialAddress,
-      permanentAddress:admission.permanentAddress
+      residentialAddress: admission.residentialAddress,
+      permanentAddress: admission.permanentAddress,
     },
   });
 }

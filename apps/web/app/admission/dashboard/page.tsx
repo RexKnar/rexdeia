@@ -1,10 +1,11 @@
+import { getAdmissionList } from '../../api/admissionlist/service';
 import { AdmissionListModel, columns } from './columns';
 import { DataTable } from './data-table';
-import { getAdmissionList } from '../../api/admissionlist/service';
+
 async function getData(): Promise<AdmissionListModel[]> {
   const admissionList = await getAdmissionList();
   const data: AdmissionListModel[] = JSON.parse(JSON.stringify(admissionList));
-  return data.map((x,i)=>({slNo:i+1,...x}));
+  return data.map((x, i) => ({ slNo: i + 1, ...x }));
 }
 export default async function Page() {
   const data = await getData();

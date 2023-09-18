@@ -1,13 +1,16 @@
-import { getServerSession } from 'next-auth';
-import { authOptions } from '../../../lib/auth';
-import { redirect } from 'next/navigation';
-import { SetupForm } from '../../../lib/components/auth/SetupForm';
-import { getOrganisationsByUserId } from '../../api/user/organization/service';
 import Image from 'next/image';
+import { redirect } from 'next/navigation';
+import { getServerSession } from 'next-auth';
+
+import { authOptions } from '../../../lib/auth';
+import { SetupForm } from '../../../lib/components/auth/SetupForm';
 import logo from '../../../public/assets/images/acadx-logo.png';
+import { getOrganisationsByUserId } from '../../api/user/organization/service';
+
 export const metadata = {
-  title: 'Capeo | Setup',
-  description: 'Start managing your business with Capeo.',
+  title: 'acadx | Sign up',
+  description:
+    'Your step to streamline every aspect of education management starts here.',
 };
 
 export default async function Page() {
