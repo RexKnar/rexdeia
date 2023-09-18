@@ -1,10 +1,8 @@
 'use client';
+
+import { Loader2 } from 'lucide-react';
 import React, { useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { Loader2 } from 'lucide-react';
-import { ADD_ADMISSION } from '../../endpoints';
-import { makeAPICall } from '../../api';
-import { useToast } from '../../../../../packages/ui/components/ui/UseToast';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -17,8 +15,13 @@ import {
   Button,
   Input,
 } from 'ui';
+import { useToast } from 'ui/hooks/useToast';
+import { copyToClipboard } from 'utils';
+
+import { makeAPICall } from '../../api';
+import { ADD_ADMISSION } from '../../endpoints';
+
 export function AdmissionForm({ formConfig }) {
-  let isModalOpen = false;
   const {
     register,
     handleSubmit,
@@ -40,7 +43,7 @@ export function AdmissionForm({ formConfig }) {
   const prevStep = () => {
     if (currentStep > 0) {
       setCurrentStep(currentStep - 1);
-      setSelectedSectionIndex(currentStep - 1); 
+      setSelectedSectionIndex(currentStep - 1);
     }
   };
 
@@ -69,14 +72,15 @@ export function AdmissionForm({ formConfig }) {
   const inputRef = useRef(null);
 
   const { toast } = useToast();
-  const handleCopyClick = () => {
+  const handleCopyClick = async () => {
     if (inputRef.current) {
       inputRef.current.select();
-      document.execCommand('copy');
+      await copyToClipboard(shareableURL);
+
+      toast({
+        description: 'URL copied to clipboard',
+      });
     }
-    toast({
-      description: 'URL copied to clipboard',
-    });
   };
   return (
     <>
@@ -132,7 +136,7 @@ export function AdmissionForm({ formConfig }) {
                   <h2
                     className={`inter px-2 text-sm font-semibold ${
                       selectedSectionIndex === index
-                        ? 'border-l-2 border-primary text-primary' // Apply the highlight class
+                        ? 'border-l-2 border-primary text-primary'
                         : 'text-gray-800'
                     }`}
                   >
@@ -148,10 +152,7 @@ export function AdmissionForm({ formConfig }) {
                 key={section.sectionTitle}
                 className="mt-3 px-12"
                 style={{
-                  display:
-                    currentStep === index
-                      ? 'block'
-                      : 'none',
+                  display: currentStep === index ? 'block' : 'none',
                 }}
               >
                 <>
@@ -186,7 +187,7 @@ export function AdmissionForm({ formConfig }) {
                                 )}
                               </div>
                             );
-                            case 'textarea':
+                          case 'textarea':
                             return (
                               <div key={field.id} className="w-[47%]">
                                 <label className="mt-5 block text-gray-700">
@@ -199,8 +200,7 @@ export function AdmissionForm({ formConfig }) {
                                   )}
                                   placeholder={field.placeholder}
                                   className="ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring mt-1 flex h-10 w-full rounded-md border border-gray-300 bg-transparent px-3 py-2 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-                                >
-                                </textarea>
+                                ></textarea>
                                 {errors[field.name] && (
                                   <p className="h-2 p-1 text-sm text-red-600">
                                     {field.label} is required
@@ -214,8 +214,8 @@ export function AdmissionForm({ formConfig }) {
                                 <label className="mt-5 block text-gray-700">
                                   {field.label}
                                 </label>
-                                {field.options.map((option, index) => (
-                                  <>
+                                {field.options.map((option) => (
+                                  <React.Fragment key={option.value}>
                                     <input
                                       type={field.type}
                                       name={field.name}
@@ -226,7 +226,7 @@ export function AdmissionForm({ formConfig }) {
                                       )}
                                     />
                                     <span className="me-3">{option.label}</span>
-                                  </>
+                                  </React.Fragment>
                                 ))}
 
                                 {errors[field.name] && (

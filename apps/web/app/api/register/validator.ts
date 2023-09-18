@@ -1,6 +1,7 @@
-import { UserToRegisterModel } from './models';
-import { db } from '../../../lib/db';
 import { z } from 'zod';
+
+import { db } from '../../../lib/db';
+import { UserToRegisterModel } from './models';
 
 const schema = z.object({
   name: z.string(),

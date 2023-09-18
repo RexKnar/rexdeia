@@ -1,5 +1,5 @@
-import { AddEnquiryModel } from './models';
 import { z } from 'zod';
+import { AddEnquiryModel } from './models';
 
 const schema = z.object({});
 

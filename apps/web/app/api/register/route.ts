@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+
 import { addUser } from './service';
 import { validateAddUser } from './validator';
 

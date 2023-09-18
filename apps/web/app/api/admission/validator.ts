@@ -1,5 +1,6 @@
-import { AddAdmissionModel } from './models';
 import { z } from 'zod';
+
+import { AddAdmissionModel } from './models';
 
 const schema = z.object({
   firstName: z.string(),

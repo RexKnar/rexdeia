@@ -1,5 +1,8 @@
 'use client';
 
+import { User2Icon } from 'lucide-react';
+import Link from 'next/link';
+import React from 'react';
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -9,9 +12,6 @@ import {
   NavigationMenuTrigger,
 } from 'ui';
 import { cn } from 'utils';
-import React from 'react';
-import { User2Icon } from 'lucide-react';
-import Link from 'next/link';
 
 const components: { title: string; href: string; description: string }[] = [
   {

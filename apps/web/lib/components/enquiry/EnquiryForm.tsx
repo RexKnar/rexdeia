@@ -1,8 +1,9 @@
 'use client';
-import { useForm } from 'react-hook-form';
 import { Loader2 } from 'lucide-react';
-import { ADD_ENQUIRY } from '../../endpoints';
+import { useForm } from 'react-hook-form';
+
 import { makeAPICall } from '../../api';
+import { ADD_ENQUIRY } from '../../endpoints';
 
 export function EnquiryForm({ formConfig }) {
   const {
@@ -31,14 +32,14 @@ export function EnquiryForm({ formConfig }) {
     >
       <div className="flex justify-end">
         <button
-          className="bg-primary text-primary-foreground hover:bg-primary/90 mt-6 h-12 cursor-pointer rounded-md px-5 text-white"
+          className="text-primary-foreground mt-6 h-12 cursor-pointer rounded-md bg-primary px-5 text-white hover:bg-primary/90"
           type="button"
           onClick={handleShare}
         >
           Share
         </button>
       </div>
-      <h1 className="text-primary text-center text-3xl font-semibold">
+      <h1 className="text-center text-3xl font-semibold text-primary">
         {formConfig.json.title}
       </h1>
       <p className="mb-4 text-center text-gray-600">

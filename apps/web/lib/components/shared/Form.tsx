@@ -1,10 +1,13 @@
 'use client';
 import 'configs/tailwind/styles.css';
-import { useForm } from 'react-hook-form';
+
 import { Loader2 } from 'lucide-react';
-import { ADD_ADMISSION } from '../../endpoints';
-import { makeAPICall } from '../../api';
 import { useState } from 'react';
+import { useForm } from 'react-hook-form';
+
+import { makeAPICall } from '../../api';
+import { ADD_ADMISSION } from '../../endpoints';
+
 export function Form({ formConfig }) {
   const {
     register,
