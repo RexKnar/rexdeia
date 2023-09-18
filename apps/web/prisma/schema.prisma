@@ -46,10 +46,53 @@ model User {
   password      String
   phoneNumber   String
 
-  image             String?
-  accounts          Account[]
-  sessions          Session[]
-  userOrganizations UserOrganization[]
+  image               String?
+  accounts            Account[]
+  sessions            Session[]
+  userOrganizations   UserOrganization[]
+  CreatedBranch       Branch[]
+  CreatedOrganization Organization[]
+}
+
+model Branch {
+  id             String             @id @default(auto()) @map("_id") @db.ObjectId
+  name           String
+  address        String
+  organization   Organization       @relation(fields: [organizationId], references: [id])
+  organizationId String             @db.ObjectId
+  users          UserOrganization[]
+  forms          Form[]
+  isActivated    Boolean            @default(false)
+  createdAt      DateTime?          @default(now())
+  updatedAt      DateTime?          @default(now())
+  createdBy      User               @relation(fields: [createdById], references: [id])
+  createdById    String             @db.ObjectId
+}
+
+model Organization {
+  id          String             @id @default(auto()) @map("_id") @db.ObjectId
+  name        String
+  institute   String
+  description String?
+  image       String?
+  users       UserOrganization[]
+  branches    Branch[]
+  forms       Form[]
+  isActivated Boolean            @default(false)
+  createdAt   DateTime?          @default(now())
+  updatedAt   DateTime?          @default(now())
+  createdBy   User               @relation(fields: [createdById], references: [id])
+  createdById String             @db.ObjectId
+}
+
+model UserOrganization {
+  id             String       @id @default(auto()) @map("_id") @db.ObjectId
+  user           User         @relation(fields: [userId], references: [id])
+  userId         String       @db.ObjectId
+  organization   Organization @relation(fields: [organizationId], references: [id])
+  organizationId String       @db.ObjectId
+  branch         Branch?      @relation(fields: [branchId], references: [id])
+  branchId       String?      @db.ObjectId
 }
 
 model AdmissionForm {
@@ -143,36 +186,15 @@ model EnquiryForm {
   mediumOfEducation12th String
 }
 
-model Organization {
-  id          String             @id @default(auto()) @map("_id") @db.ObjectId
-  name        String
-  institute   String
-  description String?
-  image       String?
-  users       UserOrganization[]
-  forms       Form[]
-}
-
-model UserOrganization {
-  id             String       @id @default(auto()) @map("_id") @db.ObjectId
-  user           User         @relation(fields: [userId], references: [id])
-  userId         String       @db.ObjectId
-  organization   Organization @relation(fields: [organizationId], references: [id])
-  organizationId String       @db.ObjectId
-}
-
-enum FormType {
-  Admission
-  Enquiry
-}
-
 model Form {
   id             String        @id @default(auto()) @map("_id") @db.ObjectId
   createdAt      DateTime?     @default(now())
   updatedAt      DateTime?     @default(now())
-  type           FormType
+  type           String
   json           Json
   isActive       Boolean       @default(false)
-  Organization   Organization? @relation(fields: [organizationId], references: [id])
+  organization   Organization? @relation(fields: [organizationId], references: [id])
   organizationId String?       @db.ObjectId
+  branch         Branch?       @relation(fields: [branchId], references: [id])
+  branchId       String?       @db.ObjectId
 }

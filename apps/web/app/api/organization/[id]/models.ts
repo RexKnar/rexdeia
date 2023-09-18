@@ -1,5 +1,6 @@
 export type CreateOrganizationRequestPayload = {
   name: string;
+  description?: string;
   institute: 'school' | 'college' | 'other';
 };
 

@@ -1,29 +1,22 @@
 import { db } from '../../../../lib/db';
 import { admissionForm, EnquiryForm } from './data';
 
-export async function initializeAccountForUserId(userId: string) {
-  const user = await db.user.findUnique({
-    where: { id: userId },
-    include: { userOrganizations: true },
-  });
-
-  if (!user || !user.userOrganizations.length) {
-    throw new Error('User not found');
-  }
+export async function onboardEntities(branchId: string, organizationId: string) {
 
   const createForm = async (type: string, json: Object) => {
+    await db.form.deleteMany({ where: { type: type, branchId: branchId, organizationId: organizationId } });
+
     return await db.form.create({
       data: {
-        isActive: true,
-        // @ts-ignore
         type,
-        // @ts-ignore
-        json: { ...json },
-        organizationId: user.userOrganizations[0].organizationId,
+        isActive: true,
+        json: JSON.stringify(json),
+        branch: { connect: { id: branchId } },
+        organization: { connect: { id: organizationId } },
       },
     });
   };
 
-  await createForm('Admission', admissionForm);
   await createForm('Enquiry', EnquiryForm);
+  await createForm('Admission', admissionForm);
 }

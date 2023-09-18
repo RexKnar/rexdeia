@@ -10,7 +10,7 @@ export async function makeAPICall<T>(
 
   Object.keys(substitutions).forEach((key) => {
     const substitution = substitutions[key];
-    endpoint = endpoint.replace(`:${key}`, substitution);
+    endpoint = endpoint.replace(`[${key}]`, substitution);
   });
 
   const url = new URL(`${process.env['NEXT_PUBLIC_API_URL']}${endpoint}`);

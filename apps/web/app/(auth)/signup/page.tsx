@@ -43,6 +43,7 @@ export default async function Page() {
         </p>
 
         <SignUpForm />
+
         <p className="mt-12 text-center text-base font-semibold text-gray-800">
           Have an account?
         </p>

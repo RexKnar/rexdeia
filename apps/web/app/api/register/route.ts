@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 
-import { addUser } from './service';
+import { onBoardUserAndOrganization } from './service';
 import { validateAddUser } from './validator';
 
 export async function POST(request: NextRequest) {
@@ -8,7 +8,7 @@ export async function POST(request: NextRequest) {
 
   try {
     await validateAddUser(payload);
-    const createdUser = await addUser(payload);
+    const createdUser = await onBoardUserAndOrganization(payload);
     return new NextResponse(JSON.stringify(createdUser), {
       status: 201,
     });

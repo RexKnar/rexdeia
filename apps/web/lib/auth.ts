@@ -27,7 +27,7 @@ export const authOptions: NextAuthOptions = {
           throw new Error('EMAIL_PASSWORD_NOT_PROVIDED');
         }
 
-        const user = await db.user.findFirst({
+        const user = await db.user.findUnique({
           where: {
             email: credentials.email,
           },
@@ -54,6 +54,7 @@ export const authOptions: NextAuthOptions = {
         session.user.email = token.email;
         session.user.image = token.picture;
         session.user.username = token.username;
+        session.user.createdBranches = token.createdBranches as any[];
       }
 
       return session;
@@ -63,6 +64,10 @@ export const authOptions: NextAuthOptions = {
       const dbUser = await db.user.findFirst({
         where: {
           email: token.email,
+        },
+        include: {
+          CreatedBranch: true,
+          userOrganizations: true,
         },
       });
 
@@ -86,8 +91,9 @@ export const authOptions: NextAuthOptions = {
         id: dbUser.id,
         name: dbUser.name,
         email: dbUser.email,
-        picture: dbUser.image,
+        image: dbUser.image,
         username: dbUser.username,
+        createdBranches: dbUser.CreatedBranch,
       };
     },
   },
