@@ -7,6 +7,9 @@ import { useForm } from 'react-hook-form';
 import { makeAPICall } from '../../api';
 import { REGISTER_USER } from '../../endpoints';
 import { Loader2 } from 'lucide-react';
+import Image from 'next/image';
+import googlelogo from '../../../public/assets/images/Google_logo.png';
+import microsoftlogo from '../../../public/assets/images/Microsoft_logo.png';
 
 const errorValue = {
   too_small: 'Password must contain at least 6 characters.',
@@ -68,7 +71,9 @@ export function SignUpForm() {
   return (
     <form className="mt-4" onSubmit={handleSubmit(signupHandler)}>
       <div>
-        <label className="block text-gray-700">Full Name</label>
+        <label className="sub-text inter block text-sm font-semibold">
+          Full Name
+        </label>
         <Input
           type="text"
           className="mt-2"
@@ -86,7 +91,9 @@ export function SignUpForm() {
         </p>
       </div>
       <div className="mt-4">
-        <label className="block text-gray-700">Email Address</label>
+        <label className="sub-text inter block text-sm font-semibold">
+          Email Address
+        </label>
         <Input
           name="email"
           type="email"
@@ -107,7 +114,9 @@ export function SignUpForm() {
         </p>
       </div>
       <div className="mt-4">
-        <label className="block text-gray-700">Phone Number</label>
+        <label className="sub-text inter block text-sm font-semibold">
+          Phone Number
+        </label>
         <Input
           type="number"
           className="mt-2"
@@ -128,7 +137,9 @@ export function SignUpForm() {
         </p>
       </div>
       <div className="mt-4">
-        <label className="block text-gray-700">Password</label>
+        <label className="sub-text inter block text-sm font-semibold">
+          Password
+        </label>
         <Input
           name="password"
           type="password"
@@ -159,16 +170,29 @@ export function SignUpForm() {
               <Loader2 className="mr-2 h-6 w-6 animate-spin text-white" />
             </div>
           ) : (
-            `Next`
+            `Signup`
           )}
         </Button>
       </div>
-      <p className="mt-4 text-center text-gray-500">
-        Already have an account?{' '}
-        <Link href="/signin" className="text-primary font-semibold">
-          Sign in
-        </Link>
-      </p>
+      <label className="inter inter mt-8 block text-center text-base font-semibold text-gray-800">
+        or continue with{' '}
+      </label>
+      <div className="flex justify-center gap-4">
+        <Button
+          type="button"
+          className="mt-3 w-full bg-transparent bg-transparent text-base text-gray-800 outline outline-gray-300 hover:text-white"
+        >
+          <Image src={googlelogo} alt={'logo'} className="mr-1"></Image>
+          Google
+        </Button>
+        <Button
+          type="button"
+          className="mt-3 w-full bg-transparent bg-transparent text-base text-gray-800 outline outline-gray-300 hover:text-white"
+        >
+          <Image src={microsoftlogo} alt={'logo'} className="mr-1"></Image>
+          Microsoft
+        </Button>
+      </div>
     </form>
   );
 }

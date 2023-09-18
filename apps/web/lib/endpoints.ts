@@ -9,6 +9,7 @@ export const LIST_DEPARTMENT = `LIST_DEPARTMENT`;
 export const ADD_DEPARTMENT = `ADD_DEPARTMENT`;
 export const GET_DEPARTMENT = `GET_DEPARTMENT`;
 export const UPDATE_DEPARTMENT = `UPDATE_DEPARTMENT`;
+export const DELETE_DEPARTMENT = `DELETE_DEPARTMENT`;
 export const ONBOARD_ACCOUNT = `ONBOARD_ACCOUNT`;
 export const CREATE_ORGANIZATION = `CREATE_ORGANIZATION`;
 
@@ -49,6 +50,10 @@ export default <EndpointDetails>{
   [GET_DEPARTMENT]: {
     requestType: `POST`,
     endpoint: `/api/department`,
+  },
+  [DELETE_DEPARTMENT]: {
+    requestType: `DELETE`,
+    endpoint: `/api/departmentDelete`,
   },
   [UPDATE_DEPARTMENT]: {
     requestType: `PUT`,

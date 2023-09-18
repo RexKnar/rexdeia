@@ -46,7 +46,7 @@ export function EnquiryForm({ formConfig }) {
       </p>
       {formConfig.json.formSections.map((section) => (
         <div key={section.sectionTitle} className="mt-3 px-12">
-          <h2 className="text-primary text-3xl font-semibold">
+          <h2 className="text-3xl font-semibold text-primary">
             {section.sectionTitle}
           </h2>
           <p>{section.sectionDescription}</p>
@@ -110,7 +110,7 @@ export function EnquiryForm({ formConfig }) {
       ))}
       <button
         type="submit"
-        className="bg-primary text-primary-foreground hover:bg-primary/90 mt-6 h-12 w-full cursor-pointer rounded-md text-white"
+        className="text-primary-foreground mt-6 h-12 w-full cursor-pointer rounded-md bg-primary text-white hover:bg-primary/90"
       >
         {isSubmitting && (
           <div className="flex h-screen items-center justify-center">

@@ -1,4 +1,5 @@
 import 'configs/tailwind/styles.css';
+import '../public/assets/css/styles.css';
 import '../public/assets/css/font.css';
 
 export const metadata = {

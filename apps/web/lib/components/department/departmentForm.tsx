@@ -50,10 +50,12 @@ export function DepartmentForm({ formConfig }) {
   }
 
   useEffect(() => {
-    if(departmentId) {
+    if (departmentId) {
       (async function getDepartmentHandler() {
         try {
-          const department = await makeAPICall(GET_DEPARTMENT, { departmentId });
+          const department = await makeAPICall(GET_DEPARTMENT, {
+            departmentId,
+          });
           setDepartmentKeys(Object.keys(department[0]));
           setTimeout(() => {
             const arrayOfValues = Object.values(department[0]);
@@ -63,7 +65,7 @@ export function DepartmentForm({ formConfig }) {
           console.log(error);
         }
       })();
-    }    
+    }
   }, [departmentId]);
 
   const handleDepartmentValueChange = (index, e) => {
@@ -74,10 +76,14 @@ export function DepartmentForm({ formConfig }) {
 
   return (
     <form
-      onSubmit={!departmentId? handleSubmit(addDepartmentHandler) : editDepartmentHandler}
+      onSubmit={
+        !departmentId
+          ? handleSubmit(addDepartmentHandler)
+          : editDepartmentHandler
+      }
       className="mt-4 w-full border p-5"
     >
-      <h1 className="text-primary text-center text-3xl font-semibold">
+      <h1 className="text-center text-3xl font-semibold text-primary">
         {formConfig.json.title}
       </h1>
       <p className="mb-4 text-center text-gray-600">
@@ -85,7 +91,7 @@ export function DepartmentForm({ formConfig }) {
       </p>
       {formConfig.json.formSections.map((section) => (
         <div key={section.sectionTitle} className="mt-3 px-12">
-          <h2 className="text-primary text-3xl font-semibold">
+          <h2 className="text-3xl font-semibold text-primary">
             {section.sectionTitle}
           </h2>
           <p>{section.sectionDescription}</p>
@@ -150,8 +156,7 @@ export function DepartmentForm({ formConfig }) {
       ))}
       <button
         type="submit"
-        className="bg-primary text-primary-foreground hover:bg-primary/90 mt-6 h-12 w-full cursor-pointer rounded-md text-white"
-        // onClick={departmentId? editDepartmentHandler : addDepartmentHandler}
+        className="text-primary-foreground mt-6 h-12 w-full cursor-pointer rounded-md bg-primary text-white hover:bg-primary/90"
       >
         {isSubmitting && (
           <div className="flex h-screen items-center justify-center">

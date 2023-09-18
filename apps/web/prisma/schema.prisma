@@ -53,28 +53,62 @@ model User {
 }
 
 model AdmissionForm {
-  id               String @id @default(auto()) @map("_id") @db.ObjectId
-  firstName        String
-  middleName       String
-  lastName         String
-  emailId          String
-  contactNumber    String
-  dob              String
-  gender           String
-  fatherName       String
-  fatherOccupation String
-  motherName       String
-  motherOccupation String
-  guardianName     String
-  addressLine1     String
-  addressLine2     String
-  nationality      String
-  state            String
-  district         String
-  postalCode       String
-  religion         String
-  community        String
-  caste            String
+  id                    String @id @default(auto()) @map("_id") @db.ObjectId
+  aadharCardNumber      String
+  admissionMode         String
+  admissionType         String
+  annualIncome          String
+  bloodGroup            String
+  caste                 String
+  dob                   String
+  emailId               String
+  fatherName            String
+  fatherOccupation      String
+  firstName             String
+  firstLanguage         String
+  gender                String
+  guardiansOccupation   String
+  guardianName          String
+  guardianPhoneNumber   String
+  lastName              String
+  maritalStatus         String
+  mediumOfEducation10th String
+  mediumOfEducation12th String
+  middleName            String
+  mobileNumber          String
+  motherName            String
+  motherOccupation      String
+  motherTongue          String
+  nationality           String
+  noOfSiblings          String
+  obtainedMark10th      String
+  obtainedMark12th      String
+  community             String
+  courseOption1         String
+  courseOption2         String
+  parentsSeparated      String
+  permanentDistrict     String
+  permanentPostalCode   String
+  permanentState        String
+  phoneNumber           String
+  relationshipType      String
+  religion              String
+  residentialDistrict   String
+  residentialPostalCode String
+  residentialState      String
+  scholarship           String
+  schoolName10th        String
+  schoolName12th        String
+  siblingClass1         String
+  siblingClass2         String
+  siblingName1          String
+  siblingName2          String
+  siblingRelation1      String
+  siblingRelation2      String
+  yearOfPassing10th     String
+  yearOfPassing12th     String
+  residentialAddress    String
+  permanentAddress      String
 }
 
 model EnquiryForm {
@@ -116,6 +150,8 @@ model DepartmentForm {
   departmentCode   String
   activeStatus     String
   description      String
+  isDeleted        Boolean   @default(false)
+  deletedAt        DateTime?
 }
 
 model Organization {

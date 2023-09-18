@@ -1,124 +1,321 @@
 'use client';
+import React, { useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Loader2 } from 'lucide-react';
 import { ADD_ADMISSION } from '../../endpoints';
 import { makeAPICall } from '../../api';
+import { useToast } from '../../../../../packages/ui/components/ui/UseToast';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+  Button,
+  Input,
+} from 'ui';
 export function AdmissionForm({ formConfig }) {
+  let isModalOpen = false;
   const {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
   } = useForm();
+
+  const [currentStep, setCurrentStep] = useState(0);
+  const totalSteps = formConfig.json.formSections.length;
+  const [formData, setFormData] = useState({});
+  const [selectedSectionIndex, setSelectedSectionIndex] = useState(0);
+
+  const nextStep = () => {
+    if (currentStep < totalSteps - 1) {
+      setCurrentStep(currentStep + 1);
+      setSelectedSectionIndex(currentStep + 1);
+    }
+  };
+
+  const prevStep = () => {
+    if (currentStep > 0) {
+      setCurrentStep(currentStep - 1);
+      setSelectedSectionIndex(currentStep - 1); 
+    }
+  };
+
   async function addAdmissionHandler(data: Record<string, unknown>) {
-    try {
-      await makeAPICall(ADD_ADMISSION, {
-        ...data,
-      });
-    } catch (error) {
-      console.log(error);
-      // TODO: Handle error
+    const updatedFormData = { ...formData, ...data };
+    setFormData(updatedFormData);
+    if (currentStep === totalSteps - 1) {
+      console.log('Form data:', updatedFormData);
+      try {
+        await makeAPICall(ADD_ADMISSION, {
+          ...updatedFormData,
+        });
+      } catch (error) {
+        console.log(error);
+        // TODO: Handle error
+      }
+    } else {
+      nextStep();
     }
   }
-  const handleShare = () => {
-    const shareableURL = `localhost:3000/forms/admissionForm/${formConfig.organizationId}`;
-    alert(shareableURL);
+  let domain = '';
+  if (typeof window !== 'undefined') {
+    domain = window.location.host;
+  }
+  const shareableURL = `${domain}/forms/${formConfig.organizationId}`;
+  const inputRef = useRef(null);
+
+  const { toast } = useToast();
+  const handleCopyClick = () => {
+    if (inputRef.current) {
+      inputRef.current.select();
+      document.execCommand('copy');
+    }
+    toast({
+      description: 'URL copied to clipboard',
+    });
   };
   return (
-    <form
-      onSubmit={handleSubmit(addAdmissionHandler)}
-      className="mt-4 w-full border p-5"
-    >
-      <div className="flex justify-end">
-        <button
-          className="bg-primary text-primary-foreground hover:bg-primary/90 mt-6 h-12 cursor-pointer rounded-md px-5 text-white"
-          type="button"
-          onClick={handleShare}
-        >
-          Share
-        </button>
-      </div>
-
-      <h1 className="text-primary text-center text-3xl font-semibold">
-        {formConfig.json.title}
-      </h1>
-      <p className="mb-4 text-center text-gray-600">
-        {formConfig.json.description}
-      </p>
-      {formConfig.json.formSections.map((section) => (
-        <div key={section.sectionTitle} className="mt-3 px-12">
-          <h2 className="text-primary text-3xl font-semibold">
-            {section.sectionTitle}
-          </h2>
-          <p>{section.sectionDescription}</p>
-          {section.sectionFields.map((field) => {
-            if (field.visible) {
-              switch (field.type) {
-                case 'text':
-                case 'email':
-                case 'date':
-                  return (
-                    <div key={field.id}>
-                      <label className="mt-5 block text-gray-700">
-                        {field.label}
-                      </label>
-                      <input
-                        {...register(field.name, field.validationRules)}
-                        type={field.type}
-                        placeholder={field.placeholder}
-                        className="ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring mt-1 flex h-10 w-full rounded-md border border-gray-300 bg-transparent px-3 py-2 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-                      />
-                      {errors[field.id] && (
-                        <p className="h-2 p-1 text-sm text-red-600">
-                          {field.label} is required
-                        </p>
-                      )}
-                    </div>
-                  );
-                case 'radio':
-                  return (
-                    <div key={field.id}>
-                      <label className="mt-5 block text-gray-700">
-                        {field.label}
-                      </label>
-                      {field.options.map((option, index) => (
-                        <>
-                          <input
-                            type={field.type}
-                            name={field.name}
-                            value={option.value}
-                            {...register(field.name, field.validationRules)}
-                          />
-                          <span className="me-3">{option.label}</span>
-                        </>
-                      ))}
-
-                      {errors[field.id] && (
-                        <p className="h-2 p-1 text-sm text-red-600">
-                          {field.label} is required
-                        </p>
-                      )}
-                    </div>
-                  );
-                default:
-                  return null;
-              }
-            } else {
-              return null;
-            }
-          })}
-        </div>
-      ))}
-      <button
-        type="submit"
-        className="bg-primary text-primary-foreground hover:bg-primary/90 mt-6 h-12 w-full cursor-pointer rounded-md text-white"
+    <>
+      <form
+        onSubmit={handleSubmit(addAdmissionHandler)}
+        className="mt-4 w-full p-5"
       >
-        {isSubmitting && (
-          <div className="flex h-screen items-center justify-center">
-            <Loader2 className="mr-2 h-6 w-6 animate-spin text-white" />
+        <div className="flex justify-end">
+          <AlertDialog>
+            <AlertDialogTrigger asChild>
+              <Button
+                className="text-primary-foreground mt-6 h-12 cursor-pointer rounded-md bg-primary px-5 text-white hover:bg-primary/90"
+                variant="outline"
+              >
+                Share
+              </Button>
+            </AlertDialogTrigger>
+            <AlertDialogContent className="bg-white">
+              <AlertDialogHeader>
+                <AlertDialogTitle>
+                  Copy the URL to share the admission form
+                </AlertDialogTitle>
+                <AlertDialogDescription>
+                  <Input
+                    type="text"
+                    className="mt-2"
+                    value={shareableURL}
+                    readOnly
+                    ref={inputRef}
+                  />
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogAction onClick={handleCopyClick}>
+                  Copy
+                </AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
+        </div>
+
+        <h1 className="text-center text-3xl font-semibold text-primary">
+          {formConfig.json.title}
+        </h1>
+        <p className="mb-4 text-center text-black">
+          {formConfig.json.description}
+        </p>
+        <div className="flex justify-around gap-4">
+          <ul className="h-fit w-[215px] shrink-0 rounded-lg bg-white py-3">
+            <li>
+              {formConfig.json.formSections.map((section, index) => (
+                <div key={section.sectionTitle} className="mt-3 px-4">
+                  <h2
+                    className={`inter px-2 text-sm font-semibold ${
+                      selectedSectionIndex === index
+                        ? 'border-l-2 border-primary text-primary' // Apply the highlight class
+                        : 'text-gray-800'
+                    }`}
+                  >
+                    {section.sectionTitle}
+                  </h2>
+                </div>
+              ))}
+            </li>
+          </ul>
+          <div className="rounded-lg bg-white p-8">
+            {formConfig.json.formSections.map((section, index) => (
+              <div
+                key={section.sectionTitle}
+                className="mt-3 px-12"
+                style={{
+                  display:
+                    currentStep === index
+                      ? 'block'
+                      : 'none',
+                }}
+              >
+                <>
+                  <h1 className="inter text-sm font-semibold">
+                    {section.sectionTitle}
+                  </h1>
+                  <div className="flex flex-wrap justify-between gap-3">
+                    {section.sectionFields.map((field) => {
+                      if (field.visible) {
+                        switch (field.type) {
+                          case 'text':
+                          case 'email':
+                          case 'date':
+                            return (
+                              <div key={field.id} className="w-[47%]">
+                                <label className="mt-5 block text-gray-700">
+                                  {field.label}
+                                </label>
+                                <input
+                                  {...register(
+                                    field.name,
+                                    field.validationRules,
+                                  )}
+                                  type={field.type}
+                                  placeholder={field.placeholder}
+                                  className="ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring mt-1 flex h-10 w-full rounded-md border border-gray-300 bg-transparent px-3 py-2 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                                />
+                                {errors[field.name] && (
+                                  <p className="h-2 p-1 text-sm text-red-600">
+                                    {field.label} is required
+                                  </p>
+                                )}
+                              </div>
+                            );
+                            case 'textarea':
+                            return (
+                              <div key={field.id} className="w-[47%]">
+                                <label className="mt-5 block text-gray-700">
+                                  {field.label}
+                                </label>
+                                <textarea
+                                  {...register(
+                                    field.name,
+                                    field.validationRules,
+                                  )}
+                                  placeholder={field.placeholder}
+                                  className="ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring mt-1 flex h-10 w-full rounded-md border border-gray-300 bg-transparent px-3 py-2 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                                >
+                                </textarea>
+                                {errors[field.name] && (
+                                  <p className="h-2 p-1 text-sm text-red-600">
+                                    {field.label} is required
+                                  </p>
+                                )}
+                              </div>
+                            );
+                          case 'radio':
+                            return (
+                              <div key={field.id}>
+                                <label className="mt-5 block text-gray-700">
+                                  {field.label}
+                                </label>
+                                {field.options.map((option, index) => (
+                                  <>
+                                    <input
+                                      type={field.type}
+                                      name={field.name}
+                                      value={option.value}
+                                      {...register(
+                                        field.name,
+                                        field.validationRules,
+                                      )}
+                                    />
+                                    <span className="me-3">{option.label}</span>
+                                  </>
+                                ))}
+
+                                {errors[field.name] && (
+                                  <p className="h-2 p-1 text-sm text-red-600">
+                                    {field.label} is required
+                                  </p>
+                                )}
+                              </div>
+                            );
+                          case 'dropdown':
+                            return (
+                              <div key={field.id}>
+                                <label className="mt-5 block text-gray-700">
+                                  {field.label}
+                                </label>
+                                <select
+                                  {...register(
+                                    field.name,
+                                    field.validationRules,
+                                  )}
+                                  placeholder={field.placeholder}
+                                  className="ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring mt-1 flex h-10 w-full rounded-md border border-gray-300 bg-transparent px-3 py-2 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                                >
+                                  {field.options.map((option, index) => (
+                                    <option key={index} value={option.value}>
+                                      {option.label}
+                                    </option>
+                                  ))}
+                                </select>
+                                {errors[field.name] && (
+                                  <p className="h-2 p-1 text-sm text-red-600">
+                                    {field.label} is required
+                                  </p>
+                                )}
+                              </div>
+                            );
+                          default:
+                            return null;
+                        }
+                      } else {
+                        return null;
+                      }
+                    })}
+                  </div>
+                </>
+              </div>
+            ))}
           </div>
-        )}
-        Save
-      </button>
-    </form>
+        </div>
+        <div className="flex justify-end gap-4">
+          <button
+            type="button"
+            className="text-primary-foreground mt-6 h-12 cursor-pointer rounded-md  bg-primary px-4 py-3 text-white hover:bg-primary/90"
+            onClick={prevStep}
+            disabled={currentStep === 0}
+          >
+            Back
+          </button>
+
+          {currentStep === totalSteps - 1 ? (
+            <button
+              type="submit"
+              className="text-primary-foreground mt-6 h-12 cursor-pointer rounded-md  bg-primary px-4 py-3 text-white hover:bg-primary/90"
+            >
+              {isSubmitting ? (
+                <div className="flex h-screen items-center justify-center">
+                  <Loader2 className="mr-2 h-6 w-6 animate-spin text-white" />
+                </div>
+              ) : (
+                'Submit'
+              )}
+            </button>
+          ) : (
+            <button
+              type="button"
+              onClick={nextStep}
+              className="text-primary-foreground mt-6 h-12 cursor-pointer rounded-md  bg-primary px-4 py-3 text-white hover:bg-primary/90"
+            >
+              {isSubmitting ? (
+                <div className="flex h-screen items-center justify-center">
+                  <Loader2 className="mr-2 h-6 w-6 animate-spin text-white" />
+                </div>
+              ) : (
+                'Save & Next'
+              )}
+            </button>
+          )}
+        </div>
+      </form>
+    </>
   );
 }
