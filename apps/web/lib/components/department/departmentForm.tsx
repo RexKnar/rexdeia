@@ -34,11 +34,15 @@ export function DepartmentForm({ formConfig }) {
   }
 
   async function editDepartmentHandler() {
-    let newValue = {};
-    setDepartmentValue(departmentValue.unshift(departmentId));
+    let newValue = {}; 
+    let temDepartmentValue = [departmentId, ...departmentValue]
+    
+    
     departmentKeys.forEach((key, indux) => {
-      newValue[key] = departmentValue[indux];
+      newValue[key] = temDepartmentValue[indux];
     });
+    console.log(newValue)
+    debugger
     try {
       await makeAPICall(UPDATE_DEPARTMENT, {
         ...newValue,

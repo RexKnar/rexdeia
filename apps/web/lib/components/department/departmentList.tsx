@@ -75,7 +75,7 @@ export function DepartmentList() {
                 className="text-primary-foreground cursor-pointer rounded-md bg-primary text-white hover:bg-primary/90"
                 onClick={() => {
                   rout.push(
-                    `/admission/department/departmentForm?id=${item._id.$oid}`,
+                    `/admission/department/departmentForm?id=${item.id}`,
                   );
                 }}
               >
@@ -84,7 +84,7 @@ export function DepartmentList() {
               <button
                 className="text-primary-foreground cursor-pointer rounded-md bg-primary text-white hover:bg-primary/90"
                 onClick={() => {
-                  DeleteDepartmentHandler(item._id.$oid);
+                  DeleteDepartmentHandler(item.id);
                 }}
               >
                 Delete
