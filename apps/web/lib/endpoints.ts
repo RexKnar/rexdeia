@@ -10,6 +10,7 @@ export const ADD_DEPARTMENT = `ADD_DEPARTMENT`;
 export const GET_DEPARTMENT = `GET_DEPARTMENT`;
 export const UPDATE_DEPARTMENT = `UPDATE_DEPARTMENT`;
 export const DELETE_DEPARTMENT = `DELETE_DEPARTMENT`;
+export const LIST_REGULATION = `LIST_REGULATION`;
 export const ONBOARD_ACCOUNT = `ONBOARD_ACCOUNT`;
 export const CREATE_ORGANIZATION = `CREATE_ORGANIZATION`;
 
@@ -58,6 +59,10 @@ export default <EndpointDetails>{
   [UPDATE_DEPARTMENT]: {
     requestType: `PUT`,
     endpoint: `/api/departmentEdit`,
+  },
+  [LIST_REGULATION]: {
+    requestType: `GET`,
+    endpoint: `/api/getRegulation`,
   },
   [ONBOARD_ACCOUNT]: {
     requestType: `POST`,

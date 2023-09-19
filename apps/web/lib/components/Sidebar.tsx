@@ -24,7 +24,8 @@ type MenuItem =
   | 'admission-configure'
   | 'admission-analytics'
   | 'admission-addnew'
-  | "admission-department-student";
+  | "admission-department-student"
+  | "admission-regulation-student";
 
 const menuItemPaths: Record<MenuItem, string> = {
   'admission-dashboard': '/admission/dashboard',
@@ -35,7 +36,8 @@ const menuItemPaths: Record<MenuItem, string> = {
   'admission-configure': '/admission/configure',
   'admission-analytics': '/admission/analytics',
   'admission-addnew': '/admission/addnew',
-  "admission-department-student": "/admission/department"
+  "admission-department-student": "/admission/department",
+  "admission-regulation-student": "/admission/regulation"
 };
 
 export function Sidebar() {
@@ -221,6 +223,20 @@ export function Sidebar() {
             >
               <HelpCircle className="mr-2 h-4 w-4" />
               Department
+            </Button>
+          </div>
+          <div className="space-y-1">
+            <Button
+              variant="secondary"
+              className={`hover:bg-primary w-full justify-start bg-white hover:text-white ${
+                activeMenu == 'admission-regulation-student'
+                  ? 'bg-primary text-white'
+                  : ''
+              } `}
+              onClick={() => handleMenuClick('admission-regulation-student')}
+            >
+              <HelpCircle className="mr-2 h-4 w-4" />
+              Regulation
             </Button>
           </div>
         </div>

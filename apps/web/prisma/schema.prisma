@@ -154,6 +154,15 @@ model DepartmentForm {
   deletedAt        DateTime?
 }
 
+model RegulationForm {
+  id               String @id @default(auto()) @map("_id") @db.ObjectId
+  regulationName   String
+  announcedYear    String
+  endYear          String
+  isDeleted        Boolean   @default(false)
+  deletedAt        DateTime?
+}
+
 model Organization {
   id          String             @id @default(auto()) @map("_id") @db.ObjectId
   name        String

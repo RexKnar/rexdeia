@@ -1,10 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getDeparmentList } from './service';
+import { getRegulationList } from './service';
 
 export async function GET(request: NextRequest) {
   try {
-    const departmentList = await getDeparmentList();
-    return new NextResponse(JSON.stringify(departmentList), {
+    const regulationList = await getRegulationList();
+    return new NextResponse(JSON.stringify(regulationList), {
       status: 200,
     });
   } catch (e) {
