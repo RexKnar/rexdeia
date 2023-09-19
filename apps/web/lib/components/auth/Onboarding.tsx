@@ -1,16 +1,21 @@
 'use client';
 
-import { Check, Loader2 } from 'lucide-react';
+import { Check } from 'lucide-react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import { startTransition , useEffect, useState } from 'react';
+import { startTransition, useEffect, useState } from 'react';
 
 import logo from '../../../public/assets/images/acadx-logo.png';
-import lodingPlane from '../../../public/assets/images/loading-paperplane.png';
+import loadingPlane from '../../../public/assets/images/loading-paperplane.png';
 import { makeAPICall } from '../../api';
 import { ONBOARD_ACCOUNT } from '../../endpoints';
 
-export function Onboarding() {
+type OnboardingProps = {
+  branchId: string;
+  organizationId: string;
+};
+
+export function Onboarding({ branchId, organizationId }: OnboardingProps) {
   const [isErrored, setIsErrored] = useState(false);
   const [isOnboarded, setIsOnboarded] = useState(false);
 
@@ -18,7 +23,7 @@ export function Onboarding() {
 
   useEffect(() => {
     startTransition(() => {
-      makeAPICall(ONBOARD_ACCOUNT, {})
+      makeAPICall(ONBOARD_ACCOUNT, { branchId, organizationId })
         .then(() => {
           setIsOnboarded(true);
         })
@@ -26,7 +31,7 @@ export function Onboarding() {
           setIsErrored(true);
         });
     });
-  }, []);
+  }, [branchId, organizationId]);
 
   useEffect(() => {
     if (isOnboarded) {
@@ -56,7 +61,7 @@ export function Onboarding() {
           <div className="mt-36 flex justify-center">
             <Image
               className="flying-plane"
-              src={lodingPlane}
+              src={loadingPlane}
               alt={'logo'}
               width={400}
             ></Image>

@@ -5,5 +5,9 @@ export async function getOrganisationsByUserId(userId: string) {
     where: {
       userId: userId,
     },
+    include: {
+      branch: true,
+      organization: true,
+    },
   });
 }

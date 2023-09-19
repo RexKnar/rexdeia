@@ -23,7 +23,7 @@ type MenuItem =
   | 'admission-page'
   | 'admission-configure'
   | 'admission-analytics'
-  | 'admission-addnew';
+  | 'admission-add';
 
 const menuItemPaths: Record<MenuItem, string> = {
   'admission-dashboard': '/admission/dashboard',
@@ -33,7 +33,7 @@ const menuItemPaths: Record<MenuItem, string> = {
   'admission-page': '/admission/dashboard',
   'admission-configure': '/admission/configure',
   'admission-analytics': '/admission/analytics',
-  'admission-addnew': '/admission/addnew',
+  'admission-add': '/admission/add',
 };
 
 export function Sidebar() {
@@ -168,17 +168,17 @@ export function Sidebar() {
               {showSubmenu && (
                 <div className="px-2 ml-4 border-l-2">
                   <div className="p-2 inter text-sm font-normal text-gray-800 rounded-lg">
-                    <Button 
+                    <Button
                      className={`w-[174px] justify-start bg-white hover:bg-gray-100 hover:text-gray-800 ${
                       activeMenu == "admission-addnew"
                         ? "bg-gray-100 text-gray-800"
                         : ""
                     } `}
-                    onClick={() => handleMenuClick("admission-addnew")}
+                     onClick={() => handleMenuClick('admission-add')}
                     >Add new</Button>
                   </div>
                   <div className="p-2 inter text-sm font-normal text-gray-800 rounded-lg">
-                    <Button 
+                    <Button
                      className={`w-[174px] justify-start bg-white hover:bg-gray-100 hover:text-gray-800 ${
                       activeMenu == "admission-analytics"
                         ? "bg-gray-100 text-gray-800"
@@ -188,7 +188,7 @@ export function Sidebar() {
                     >Analytics</Button>
                   </div>
                   <div className="p-2 inter text-sm font-normal text-gray-800 rounded-lg">
-                    <Button 
+                    <Button
                      className={`w-[174px] justify-start bg-white hover:bg-gray-100 hover:text-gray-800 ${
                       activeMenu == "admission-configure"
                         ? "bg-gray-100 text-gray-800"

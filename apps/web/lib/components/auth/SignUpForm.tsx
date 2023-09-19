@@ -2,7 +2,6 @@
 
 import { Loader2 } from 'lucide-react';
 import Image from 'next/image';
-import Link from 'next/link';
 import { signIn } from 'next-auth/react';
 import { useForm } from 'react-hook-form';
 import { Button, Input } from 'ui';
@@ -13,8 +12,17 @@ import { makeAPICall } from '../../api';
 import { REGISTER_USER } from '../../endpoints';
 
 const errorValue = {
-  too_small: 'Password must contain at least 6 characters.',
   user_exists: 'Email id is already in use',
+  too_small: 'Password must contain at least 6 characters.',
+};
+
+type OnboardUserResponse = {
+  name: string;
+  email: string;
+  password: string;
+  phoneNumber: string;
+  createdBranchId: string;
+  createdOrganizationId: string;
 };
 
 export function SignUpForm() {
@@ -27,20 +35,21 @@ export function SignUpForm() {
 
   async function signupHandler({ name, email, password, phoneNumber }) {
     try {
-      await makeAPICall(REGISTER_USER, {
-        name: name,
-        email: email,
-        password: password,
-        phoneNumber: phoneNumber,
-      });
+      const { createdBranchId, createdOrganizationId } =
+        await makeAPICall<OnboardUserResponse>(REGISTER_USER, {
+          name: name,
+          email: email,
+          password: password,
+          phoneNumber: phoneNumber,
+        });
 
       await signIn('credentials', {
         name: name,
         email: email,
         redirect: true,
         password: password,
-        callbackUrl: '/setup',
         phoneNumber: phoneNumber,
+        callbackUrl: `/setup?branch=${createdBranchId}&organization=${createdOrganizationId}`,
       });
     } catch (error) {
       if (
@@ -50,7 +59,7 @@ export function SignUpForm() {
         error[0].path[0] === 'password'
       ) {
         setError('password', {
-          type: 'manual',
+          type: 'custom',
           message: errorValue[(error[0] as any).code],
         });
       }
@@ -62,7 +71,7 @@ export function SignUpForm() {
         error[0].path[0] === 'email'
       ) {
         setError('email', {
-          type: 'manual',
+          type: 'custom',
           message: errorValue[(error[0] as any).code],
         });
       }
