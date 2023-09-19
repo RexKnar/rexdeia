@@ -45,7 +45,7 @@ export function Sidebar() {
   };
 
   const [activeMenu, setActiveMenu] = useState(
-    getKeyByValue(menuItemPaths, currentURL)
+    getKeyByValue(menuItemPaths, currentURL),
   );
 
   const handleMenuClick = useCallback(
@@ -60,7 +60,7 @@ export function Sidebar() {
       // }
       setActiveMenu(item);
     },
-    [router]
+    [router],
   );
 
   const handleAdmissionsClick = () => {
@@ -166,42 +166,36 @@ export function Sidebar() {
                 </div>
               </Button>
               {showSubmenu && (
-                <div className="ml-4 border-l-2 px-2">
-                  <div className="inter rounded-lg p-2 text-sm font-normal text-gray-800">
+                <div className="px-2 ml-4 border-l-2">
+                  <div className="p-2 inter text-sm font-normal text-gray-800 rounded-lg">
                     <Button
-                      className={`w-fit justify-start bg-white hover:bg-primary hover:text-white ${
-                        activeMenu == 'admission-addnew'
-                          ? 'bg-primary text-white'
-                          : ''
-                      } `}
-                      onClick={() => handleMenuClick('admission-add')}
-                    >
-                      Add new
-                    </Button>
+                     className={`w-[174px] justify-start bg-white hover:bg-gray-100 hover:text-gray-800 ${
+                      activeMenu == "admission-addnew"
+                        ? "bg-gray-100 text-gray-800"
+                        : ""
+                    } `}
+                     onClick={() => handleMenuClick('admission-add')}
+                    >Add new</Button>
                   </div>
-                  <div className="inter rounded-lg p-2 text-sm font-normal text-gray-800">
+                  <div className="p-2 inter text-sm font-normal text-gray-800 rounded-lg">
                     <Button
-                      className={`w-fit justify-start bg-white hover:bg-primary hover:text-white ${
-                        activeMenu == 'admission-analytics'
-                          ? 'bg-primary text-white'
-                          : ''
-                      } `}
-                      onClick={() => handleMenuClick('admission-analytics')}
-                    >
-                      Analytics
-                    </Button>
+                     className={`w-[174px] justify-start bg-white hover:bg-gray-100 hover:text-gray-800 ${
+                      activeMenu == "admission-analytics"
+                        ? "bg-gray-100 text-gray-800"
+                        : ""
+                    } `}
+                    onClick={() => handleMenuClick("admission-analytics")}
+                    >Analytics</Button>
                   </div>
-                  <div className="inter rounded-lg p-2 text-sm font-normal text-gray-800">
+                  <div className="p-2 inter text-sm font-normal text-gray-800 rounded-lg">
                     <Button
-                      className={`w-fit justify-start bg-white hover:bg-primary hover:text-white ${
-                        activeMenu == 'admission-configure'
-                          ? 'bg-primary text-white'
-                          : ''
-                      } `}
-                      onClick={() => handleMenuClick('admission-configure')}
-                    >
-                      Configure
-                    </Button>
+                     className={`w-[174px] justify-start bg-white hover:bg-gray-100 hover:text-gray-800 ${
+                      activeMenu == "admission-configure"
+                        ? "bg-gray-100 text-gray-800"
+                        : ""
+                    } `}
+                    onClick={() => handleMenuClick("admission-configure")}
+                    >Configure</Button>
                   </div>
                 </div>
               )}
