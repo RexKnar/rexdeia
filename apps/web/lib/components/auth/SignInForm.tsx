@@ -30,7 +30,7 @@ export function SignInForm() {
       await signIn('credentials', {
         email: email,
         password: password,
-        callbackUrl: '/',
+        callbackUrl: '/workspace',
       });
     } catch (error) {
       console.log(error);

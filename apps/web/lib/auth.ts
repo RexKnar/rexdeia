@@ -63,13 +63,8 @@ export const authOptions: NextAuthOptions = {
     },
 
     async jwt({ token, user, trigger, session }) {
-      console.log("🚀 ~ file: auth.ts:69 ~ jwt ~ token:", token);
-      console.log("🚀 ~ file: auth.ts:69 ~ jwt ~ trigger:", trigger);
-      console.log("🚀 ~ file: auth.ts:69 ~ jwt ~ session:", session);
       if (trigger === 'update' && session.organizationId && session.branchId) {
-        
         token.branchId = session.branchId;
-        console.log("🚀 ~ file: auth.ts:69 ~ jwt ~ token:", token)
         token.organizationId = session.organizationId;
       }
 

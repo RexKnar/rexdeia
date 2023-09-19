@@ -1,10 +1,10 @@
 import React from 'react';
 
 import { Form } from '../../../lib/components/shared/Form';
-import { searchForms } from '../../api/forms/service';
+import { getFormByCriteria } from '../../api/forms/service';
 
 export default async function Page({ params }: { params: { id: string } }) {
-  const admissionForms = await searchForms({
+  const admissionForms = await getFormByCriteria({
     type: 'Admission',
     organizationId: params.id,
   });

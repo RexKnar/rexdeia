@@ -23,7 +23,7 @@ type MenuItem =
   | 'admission-page'
   | 'admission-configure'
   | 'admission-analytics'
-  | 'admission-addnew';
+  | 'admission-add';
 
 const menuItemPaths: Record<MenuItem, string> = {
   'admission-dashboard': '/admission/dashboard',
@@ -33,7 +33,7 @@ const menuItemPaths: Record<MenuItem, string> = {
   'admission-page': '/admission/dashboard',
   'admission-configure': '/admission/configure',
   'admission-analytics': '/admission/analytics',
-  'admission-addnew': '/admission/addnew',
+  'admission-add': '/admission/add',
 };
 
 export function Sidebar() {
@@ -45,7 +45,7 @@ export function Sidebar() {
   };
 
   const [activeMenu, setActiveMenu] = useState(
-    getKeyByValue(menuItemPaths, currentURL),
+    getKeyByValue(menuItemPaths, currentURL)
   );
 
   const handleMenuClick = useCallback(
@@ -60,7 +60,7 @@ export function Sidebar() {
       // }
       setActiveMenu(item);
     },
-    [router],
+    [router]
   );
 
   const handleAdmissionsClick = () => {
@@ -174,7 +174,7 @@ export function Sidebar() {
                           ? 'bg-primary text-white'
                           : ''
                       } `}
-                      onClick={() => handleMenuClick('admission-addnew')}
+                      onClick={() => handleMenuClick('admission-add')}
                     >
                       Add new
                     </Button>

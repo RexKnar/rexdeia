@@ -1,6 +1,6 @@
-// Inspired by react-hot-toast library
-import * as React from 'react';
+'use client';
 
+import { useEffect, useState } from 'react';
 import type { ToastActionElement, ToastProps } from '../components/ui/Toast';
 
 const TOAST_LIMIT = 1;
@@ -81,7 +81,7 @@ export const reducer = (state: State, action: Action): State => {
       return {
         ...state,
         toasts: state.toasts.map((t) =>
-          t.id === action.toast.id ? { ...t, ...action.toast } : t,
+          t.id === action.toast.id ? { ...t, ...action.toast } : t
         ),
       };
 
@@ -106,7 +106,7 @@ export const reducer = (state: State, action: Action): State => {
                 ...t,
                 open: false,
               }
-            : t,
+            : t
         ),
       };
     }
@@ -167,9 +167,9 @@ function toast({ ...props }: Toast) {
 }
 
 function useToast() {
-  const [state, setState] = React.useState<State>(memoryState);
+  const [state, setState] = useState<State>(memoryState);
 
-  React.useEffect(() => {
+  useEffect(() => {
     listeners.push(setState);
     return () => {
       const index = listeners.indexOf(setState);

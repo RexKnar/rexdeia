@@ -10,7 +10,7 @@ export async function onboardEntities(branchId: string, organizationId: string) 
       data: {
         type,
         isActive: true,
-        json: JSON.stringify(json),
+        json: json as any,
         branch: { connect: { id: branchId } },
         organization: { connect: { id: organizationId } },
       },
