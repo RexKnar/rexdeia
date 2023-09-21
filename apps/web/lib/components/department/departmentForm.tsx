@@ -1,14 +1,15 @@
 'use client';
-import { useForm } from 'react-hook-form';
 import { Loader2 } from 'lucide-react';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { useEffect, useState } from 'react';
+import { useForm } from 'react-hook-form';
+
+import { makeAPICall } from '../../api';
 import {
   ADD_DEPARTMENT,
   GET_DEPARTMENT,
   UPDATE_DEPARTMENT,
 } from '../../endpoints';
-import { makeAPICall } from '../../api';
-import { useRouter, useSearchParams } from 'next/navigation';
-import { useEffect, useState } from 'react';
 
 export function DepartmentForm({ formConfig }) {
   const searchParams = useSearchParams();

@@ -1,12 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { addDepartment } from './service';
+
+import { editDepartment } from './service';
 import { validateAddUser } from './validator';
 
-export async function POST(request: NextRequest) {
+export async function PUT(request: NextRequest) {
   const payload = await request.json();
   try {
     await validateAddUser(payload);
-    const createdUser = await addDepartment(payload);
+    const createdUser = await editDepartment(payload);
     return new NextResponse(JSON.stringify(createdUser), {
       status: 201,
     });

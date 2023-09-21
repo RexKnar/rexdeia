@@ -1,26 +1,26 @@
 'use client';
+import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
+
 import { makeAPICall } from '../../api';
 import { DELETE_DEPARTMENT, LIST_REGULATION } from '../../endpoints';
-import React from 'react';
-import { useRouter } from 'next/navigation';
 
 export function RegulationList() {
   const rout = useRouter();
-  const [departmentList, setDepartmentList] = useState([]);
+  const [regulationList, setRegulationList] = useState([]);
   useEffect(() => {
-    (async function ListDepartmentHandler() {
+    (async function ListRegulationHandler() {
       try {
-        setDepartmentList(await makeAPICall(LIST_REGULATION));
+        setRegulationList(await makeAPICall(LIST_REGULATION));
       } catch (error) {
         console.log(error);
       }
     })();
   }, []);
 
-  async function DeleteDepartmentHandler(departmentId) {
+  async function DeleteRegulationHandler(regulationId) {
     try {
-      await makeAPICall(DELETE_DEPARTMENT, { departmentId });
+      await makeAPICall(DELETE_DEPARTMENT, { regulationId });
       window.location.reload();
     } catch (error) {
       console.log(error);
@@ -33,9 +33,6 @@ export function RegulationList() {
         <button
           className="text-primary-foreground mt-6 h-12 cursor-pointer rounded-md bg-primary px-5 text-white hover:bg-primary/90"
           type="button"
-        //   onClick={() => {
-        //     rout.push(`/admission/department/departmentForm`);
-        //   }}
         >
           Add Regulation
         </button>
@@ -52,14 +49,14 @@ export function RegulationList() {
           <th className="border border-slate-300 px-4">End Year</th>
           <th className="border border-slate-300 px-4">Action</th>
         </tr>
-        {departmentList.map((item, index) => (
-          <tr>
+        {regulationList.map((item, index) => (
+          <tr key={index}>
             <td className="border border-slate-300 px-4">{index + 1}</td>
             <td className="border border-slate-300 px-4">
               {item.regulationName}
             </td>
-            <td className="border border-slate-300 px-4">{item.currentHod}</td>
-            <td className="border border-slate-300 px-4">{item.noOfFaculty}</td>
+            <td className="border border-slate-300 px-4">{item.announcedYear}</td>
+            <td className="border border-slate-300 px-4">{item.endYear}</td>
             <td className="border border-slate-300 px-4">
               <button
                 className="text-primary-foreground cursor-pointer rounded-md bg-primary text-white hover:bg-primary/90"
@@ -74,7 +71,7 @@ export function RegulationList() {
               <button
                 className="text-primary-foreground cursor-pointer rounded-md bg-primary text-white hover:bg-primary/90"
                 onClick={() => {
-                  DeleteDepartmentHandler(item.id);
+                  DeleteRegulationHandler(item.id);
                 }}
               >
                 Delete

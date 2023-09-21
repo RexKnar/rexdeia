@@ -11,6 +11,7 @@ export const GET_DEPARTMENT = `GET_DEPARTMENT`;
 export const UPDATE_DEPARTMENT = `UPDATE_DEPARTMENT`;
 export const DELETE_DEPARTMENT = `DELETE_DEPARTMENT`;
 export const LIST_REGULATION = `LIST_REGULATION`;
+export const LIST_COURSE = `LIST_COURSE`;
 export const ONBOARD_ACCOUNT = `ONBOARD_ACCOUNT`;
 export const CREATE_ORGANIZATION = `CREATE_ORGANIZATION`;
 
@@ -28,41 +29,45 @@ export default <EndpointDetails>{
     requestType: `POST`,
     endpoint: `/api/admission`,
   },
-  [ADD_ENQUIRY]: {
-    requestType: `POST`,
-    endpoint: `/api/enquiry`,
-  },
-  [ADD_DEPARTMENT]: {
-    requestType: `POST`,
-    endpoint: `/api/departmentAdd`,
-  },
   [LIST_ADMISSION]: {
     requestType: `GET`,
     endpoint: `/api/admissionlist`,
+  },
+  [ADD_ENQUIRY]: {
+    requestType: `POST`,
+    endpoint: `/api/enquiry`,
   },
   [LIST_ENQUIRY]: {
     requestType: `POST`,
     endpoint: `/api/enquiryList`,
   },
+  [ADD_DEPARTMENT]: {
+    requestType: `POST`,
+    endpoint: `/api/departmentPost`,
+  },
   [LIST_DEPARTMENT]: {
     requestType: `GET`,
-    endpoint: `/api/departmentList`,
+    endpoint: `/api/departmentListGet`,
+  },
+  [UPDATE_DEPARTMENT]: {
+    requestType: `PUT`,
+    endpoint: `/api/departmentPut`,
   },
   [GET_DEPARTMENT]: {
     requestType: `POST`,
-    endpoint: `/api/department`,
+    endpoint: `/api/departmentGet`,
   },
   [DELETE_DEPARTMENT]: {
     requestType: `DELETE`,
     endpoint: `/api/departmentDelete`,
-  },
-  [UPDATE_DEPARTMENT]: {
-    requestType: `PUT`,
-    endpoint: `/api/departmentEdit`,
-  },
+  }, 
   [LIST_REGULATION]: {
     requestType: `GET`,
-    endpoint: `/api/getRegulation`,
+    endpoint: `/api/regulationListGet`,
+  },
+  [LIST_COURSE]: {
+    requestType: `GET`,
+    endpoint: `/api/courseListGet`,
   },
   [ONBOARD_ACCOUNT]: {
     requestType: `POST`,

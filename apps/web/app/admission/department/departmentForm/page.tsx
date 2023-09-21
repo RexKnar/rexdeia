@@ -1,9 +1,10 @@
-import { DepartmentForm } from '../../../../lib/components/department/departmentForm';
-import { authOptions } from '../../../../lib/auth';
-import { getServerSession } from 'next-auth';
 import { redirect } from 'next/navigation';
-import { getOrganisationsByUserId } from '../../../api/user/organization/service';
+import { getServerSession } from 'next-auth';
+
+import { authOptions } from '../../../../lib/auth';
+import { DepartmentForm } from '../../../../lib/components/department/departmentForm';
 import { searchForms } from '../../../api/forms/service';
+import { getOrganisationsByUserId } from '../../../api/user/organization/service';
 
 export default async function Page() {
   const session = await getServerSession(authOptions);

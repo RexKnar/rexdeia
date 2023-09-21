@@ -163,6 +163,16 @@ model RegulationForm {
   deletedAt        DateTime?
 }
 
+model CourseForm {
+  id               String @id @default(auto()) @map("_id") @db.ObjectId
+  courseName       String
+  department       String
+  activeStatus     String
+  description      String
+  isDeleted        Boolean   @default(false)
+  deletedAt        DateTime?
+}
+
 model Organization {
   id          String             @id @default(auto()) @map("_id") @db.ObjectId
   name        String

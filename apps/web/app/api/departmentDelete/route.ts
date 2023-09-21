@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+
 import { deleteDeparment } from './service';
 
 export async function DELETE(request: NextRequest) {

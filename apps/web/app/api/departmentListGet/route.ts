@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+
 import { getDeparmentList } from './service';
 
 export async function GET(request: NextRequest) {

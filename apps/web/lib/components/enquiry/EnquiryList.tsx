@@ -1,9 +1,9 @@
 'use client';
+import { useRouter,useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
+
 import { makeAPICall } from '../../api';
 import { LIST_ENQUIRY } from '../../endpoints';
-import { useSearchParams } from 'next/navigation';
-import { useRouter } from 'next/navigation';
 
 export function EnquiryList() {
   const searchParams = useSearchParams();
@@ -36,7 +36,7 @@ export function EnquiryList() {
           <th className="border border-slate-300 px-4">Address</th>
         </tr>
         {enquiryList.map((item, index) => (
-          <tr>
+          <tr key={index}>
             <td className="border border-slate-300 px-4">{index + 1}</td>
             <td className="border border-slate-300 px-4">{item.name}</td>
             <td className="border border-slate-300 px-4">{item.emailId}</td>

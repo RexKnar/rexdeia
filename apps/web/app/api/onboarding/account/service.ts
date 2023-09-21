@@ -1,5 +1,5 @@
 import { db } from '../../../../lib/db';
-import { admissionForm, EnquiryForm, departmentForm } from './data';
+import { admissionForm, departmentForm,EnquiryForm } from './data';
 
 export async function initializeAccountForUserId(userId: string) {
   const user = await db.user.findUnique({

@@ -1,9 +1,10 @@
-import { AddDepartmentModel } from './models';
 import { z } from 'zod';
+
+import { EditDepartmentModel } from './models';
 
 const schema = z.object({});
 
-export async function validateAddUser(addDepartment: AddDepartmentModel) {
+export async function validateAddUser(addDepartment: EditDepartmentModel) {
   try {
     schema.parse(addDepartment);
   } catch (e) {
