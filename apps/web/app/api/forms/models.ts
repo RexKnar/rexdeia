@@ -48,7 +48,8 @@ export type FormModel = {
   json: CreateFormRequestPayload;
 };
 
-export type SearchFormModel = {
+export type FormCriteriaModel = {
+  branchId: string;
   organizationId: string;
   type: 'Admission' | 'Enquiry' | 'Department';
 };

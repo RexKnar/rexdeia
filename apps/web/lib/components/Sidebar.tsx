@@ -24,9 +24,10 @@ type MenuItem =
   | 'admission-configure'
   | 'admission-analytics'
   | 'admission-addnew'
-  | "admission-department-student"
-  | "admission-regulation-student"
-  | "admission-course-student";
+  | 'admission-department-student'
+  | 'admission-regulation-student'
+  | 'admission-course-student'
+  | 'admission-add';
 
 const menuItemPaths: Record<MenuItem, string> = {
   'admission-dashboard': '/admission/dashboard',
@@ -37,9 +38,10 @@ const menuItemPaths: Record<MenuItem, string> = {
   'admission-configure': '/admission/configure',
   'admission-analytics': '/admission/analytics',
   'admission-addnew': '/admission/addnew',
-  "admission-department-student": "/admission/department",
-  "admission-regulation-student": "/admission/regulation",
-  "admission-course-student": "/admission/course"
+  'admission-department-student': '/admission/department',
+  'admission-regulation-student': '/admission/regulation',
+  'admission-course-student': '/admission/course',
+  'admission-add': '/admission/add',
 };
 
 export function Sidebar() {
@@ -175,21 +177,21 @@ export function Sidebar() {
                 <div className="ml-4 border-l-2 px-2">
                   <div className="inter rounded-lg p-2 text-sm font-normal text-gray-800">
                     <Button
-                      className={`w-fit justify-start bg-white hover:bg-primary hover:text-white ${
+                      className={`w-[174px] justify-start bg-white hover:bg-gray-100 hover:text-gray-800 ${
                         activeMenu == 'admission-addnew'
-                          ? 'bg-primary text-white'
+                          ? 'bg-gray-100 text-gray-800'
                           : ''
                       } `}
-                      onClick={() => handleMenuClick('admission-addnew')}
+                      onClick={() => handleMenuClick('admission-add')}
                     >
                       Add new
                     </Button>
                   </div>
                   <div className="inter rounded-lg p-2 text-sm font-normal text-gray-800">
                     <Button
-                      className={`w-fit justify-start bg-white hover:bg-primary hover:text-white ${
+                      className={`w-[174px] justify-start bg-white hover:bg-gray-100 hover:text-gray-800 ${
                         activeMenu == 'admission-analytics'
-                          ? 'bg-primary text-white'
+                          ? 'bg-gray-100 text-gray-800'
                           : ''
                       } `}
                       onClick={() => handleMenuClick('admission-analytics')}
@@ -199,9 +201,9 @@ export function Sidebar() {
                   </div>
                   <div className="inter rounded-lg p-2 text-sm font-normal text-gray-800">
                     <Button
-                      className={`w-fit justify-start bg-white hover:bg-primary hover:text-white ${
+                      className={`w-[174px] justify-start bg-white hover:bg-gray-100 hover:text-gray-800 ${
                         activeMenu == 'admission-configure'
-                          ? 'bg-primary text-white'
+                          ? 'bg-gray-100 text-gray-800'
                           : ''
                       } `}
                       onClick={() => handleMenuClick('admission-configure')}
@@ -216,7 +218,7 @@ export function Sidebar() {
           <div className="space-y-1">
             <Button
               variant="secondary"
-              className={`hover:bg-primary w-full justify-start bg-white hover:text-white ${
+              className={`w-full justify-start bg-white hover:bg-primary hover:text-white ${
                 activeMenu == 'admission-department-student'
                   ? 'bg-primary text-white'
                   : ''
@@ -230,7 +232,7 @@ export function Sidebar() {
           <div className="space-y-1">
             <Button
               variant="secondary"
-              className={`hover:bg-primary w-full justify-start bg-white hover:text-white ${
+              className={`w-full justify-start bg-white hover:bg-primary hover:text-white ${
                 activeMenu == 'admission-regulation-student'
                   ? 'bg-primary text-white'
                   : ''
@@ -244,7 +246,7 @@ export function Sidebar() {
           <div className="space-y-1">
             <Button
               variant="secondary"
-              className={`hover:bg-primary w-full justify-start bg-white hover:text-white ${
+              className={`w-full justify-start bg-white hover:bg-primary hover:text-white ${
                 activeMenu == 'admission-course-student'
                   ? 'bg-primary text-white'
                   : ''

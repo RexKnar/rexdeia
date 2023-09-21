@@ -1,11 +1,13 @@
 import { db } from '../../../lib/db';
-import { SearchFormModel } from './models';
+import { FormCriteriaModel } from './models';
 
-export async function searchForms(searchFormModel: SearchFormModel) {
-  const { organizationId, type } = searchFormModel;
-  return await db.form.findMany({
+export async function getFormByCriteria(criteria: FormCriteriaModel) {
+  const { branchId, organizationId, type } = criteria;
+
+  return await db.form.findFirst({
     where: {
       type: type,
+      branchId: branchId,
       organizationId: organizationId,
     },
   });

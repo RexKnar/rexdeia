@@ -1,8 +1,9 @@
 import { Method } from './types';
 
+export const ADD_ENQUIRY = `ADD_ENQUIRY`;
 export const REGISTER_USER = `REGISTER_USER`;
 export const ADD_ADMISSION = `ADD_ADMISSION`;
-export const ADD_ENQUIRY = `ADD_ENQUIRY`;
+export const UPDATE_BRANCH = `UPDATE_BRANCH`;
 export const LIST_ADMISSION = `LIST_ADMISSION`;
 export const LIST_ENQUIRY = `LIST_ENQUIRY`;
 export const LIST_DEPARTMENT = `LIST_DEPARTMENT`;
@@ -13,7 +14,7 @@ export const DELETE_DEPARTMENT = `DELETE_DEPARTMENT`;
 export const LIST_REGULATION = `LIST_REGULATION`;
 export const LIST_COURSE = `LIST_COURSE`;
 export const ONBOARD_ACCOUNT = `ONBOARD_ACCOUNT`;
-export const CREATE_ORGANIZATION = `CREATE_ORGANIZATION`;
+export const UPDATE_ORGANIZATION = `UPDATE_ORGANIZATION`;
 
 type EndpointDetails = Record<
   string,
@@ -73,8 +74,12 @@ export default <EndpointDetails>{
     requestType: `POST`,
     endpoint: `/api/onboarding/account`,
   },
-  [CREATE_ORGANIZATION]: {
-    requestType: `POST`,
-    endpoint: `/api/organization`,
+  [UPDATE_ORGANIZATION]: {
+    requestType: `PUT`,
+    endpoint: `/api/organization/[organizationId]`,
+  },
+  [UPDATE_BRANCH]: {
+    requestType: `PUT`,
+    endpoint: `/api/branch/[branchId]`,
   },
 };
