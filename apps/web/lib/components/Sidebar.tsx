@@ -252,7 +252,7 @@ export function Sidebar() {
               onClick={() => handleMenuClick('admission-course-student')}
             >
               <HelpCircle className="mr-2 h-4 w-4" />
-              Corse
+              Course
             </Button>
           </div>
         </div>
