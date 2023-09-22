@@ -6,9 +6,7 @@ const schema = z.object({
   description: z.string().optional(),
 });
 
-export async function validateUpdateOrganizationDetails(
-  payload: unknown,
-) {
+export async function validateUpdateOrganizationDetails(payload: unknown) {
   try {
     schema.parse(payload);
   } catch (e) {

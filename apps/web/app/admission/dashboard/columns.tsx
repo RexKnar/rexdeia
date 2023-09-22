@@ -1,17 +1,9 @@
 'use client';
 
 import { ColumnDef } from '@tanstack/react-table';
-import { ArrowUpDown, MoreHorizontal } from 'lucide-react';
+import { ArrowUpDown } from 'lucide-react';
 
 import { Button } from '../../../../../packages/ui/components/ui/Button';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from '../../../../../packages/ui/components/ui/DropdownMenu';
 
 export type AdmissionListModel = {
   id?: string;
@@ -20,10 +12,6 @@ export type AdmissionListModel = {
   emailId?: string;
   mobileNumber?: string;
   residentialAddress?: string;
-};
-
-type CustomColumnDef<TData> = ColumnDef<TData> & {
-  accessor?: (row: TData, index: number) => any;
 };
 
 export const columns: ColumnDef<AdmissionListModel>[] = [

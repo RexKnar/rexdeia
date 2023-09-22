@@ -69,7 +69,7 @@ export function EnquiryForm({ formConfig }) {
                       <label className="mt-5 block text-gray-700">
                         {field.label}
                       </label>
-                      {field.options.map((option, index) => (
+                      {field.options.map((option) => (
                         <>
                           <input
                             type={field.type}
