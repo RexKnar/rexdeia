@@ -1,7 +1,10 @@
 import { db } from '../../../lib/db';
 import { AddAdmissionModel } from './models';
 
-export async function addAdmission(formId: string, admission: AddAdmissionModel) {
+export async function addAdmission(
+  formId: string,
+  admission: AddAdmissionModel,
+) {
   return await db.admissionForm.create({
     data: {
       ...admission,

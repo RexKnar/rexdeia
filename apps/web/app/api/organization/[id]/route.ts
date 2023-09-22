@@ -18,11 +18,8 @@ export async function PUT(request: Request, route: { params: { id: string } }) {
     const organizationId = route.params.id;
 
     await validateUpdateOrganizationDetails(payload);
-    
-    const organization = await updateOrganizationById(
-      organizationId,
-      payload,
-    );
+
+    const organization = await updateOrganizationById(organizationId, payload);
 
     return new NextResponse(JSON.stringify(organization), {
       status: 200,

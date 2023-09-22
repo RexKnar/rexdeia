@@ -16,7 +16,6 @@ export function Form({ formConfig }) {
   } = useForm();
   const [currentStep, setCurrentStep] = useState(0);
   const totalSteps = formConfig.json.formSections.length;
-  const [formData, setFormData] = useState({});
   const [selectedSectionIndex, setSelectedSectionIndex] = useState(0);
 
   const nextStep = () => {
@@ -140,7 +139,7 @@ export function Form({ formConfig }) {
                                 <label className="mt-5 block text-gray-700">
                                   {field.label}
                                 </label>
-                                {field.options.map((option, index) => (
+                                {field.options.map((option) => (
                                   <>
                                     <input
                                       type={field.type}

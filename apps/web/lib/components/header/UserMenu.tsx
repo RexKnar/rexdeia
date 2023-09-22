@@ -1,6 +1,6 @@
 'use client';
 
-import { signOut,useSession } from 'next-auth/react';
+import { signOut, useSession } from 'next-auth/react';
 import {
   Avatar,
   AvatarFallback,

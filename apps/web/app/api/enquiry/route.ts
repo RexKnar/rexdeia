@@ -8,7 +8,7 @@ export async function POST(request: NextRequest) {
   try {
     await validateAddUser(payload);
     const formId = request.nextUrl.searchParams.get('formId');
-    
+
     const createdEnquiry = await addEnquiry(formId, payload);
     return new NextResponse(JSON.stringify(createdEnquiry), {
       status: 201,

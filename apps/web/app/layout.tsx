@@ -2,6 +2,8 @@ import 'configs/tailwind/styles.css';
 import '../public/assets/css/styles.css';
 import '../public/assets/css/font.css';
 
+import type { ReactNode } from 'react';
+
 import Providers from '../lib/Providers';
 
 export const metadata = {
@@ -9,11 +11,7 @@ export const metadata = {
   description: 'Capeo is a business management platform for small businesses.',
 };
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <>
       <html lang="en">
