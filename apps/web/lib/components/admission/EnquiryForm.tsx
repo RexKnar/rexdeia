@@ -6,17 +6,29 @@ import { useForm } from 'react-hook-form';
 import { makeAPICall } from '../../api';
 import { ADD_ENQUIRY } from '../../endpoints';
 
-export function EnquiryForm({ formConfig }) {
+type EnquiryFormProps = {
+  formId: string;
+  formConfig: Record<string, any>;
+};
+
+export function EnquiryForm({ formConfig, formId }: EnquiryFormProps) {
   const {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
   } = useForm();
+
   async function addEnquiryHandler(data: Record<string, unknown>) {
     try {
-      await makeAPICall(ADD_ENQUIRY, {
-        ...data,
-      });
+      await makeAPICall(
+        ADD_ENQUIRY,
+        {
+          ...data,
+        },
+        {
+          formId: formId,
+        },
+      );
     } catch (error) {
       console.log(error);
     }
@@ -69,7 +81,7 @@ export function EnquiryForm({ formConfig }) {
                       <label className="mt-5 block text-gray-700">
                         {field.label}
                       </label>
-                      {field.options.map((option, index) => (
+                      {field.options.map((option) => (
                         <>
                           <input
                             type={field.type}

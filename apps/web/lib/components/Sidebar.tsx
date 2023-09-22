@@ -9,7 +9,6 @@ import {
   ListMinus,
 } from 'lucide-react';
 import { usePathname, useRouter } from 'next/navigation';
-import { useSession } from 'next-auth/react';
 import { useCallback, useState } from 'react';
 import { Button } from 'ui';
 
@@ -23,7 +22,7 @@ type MenuItem =
   | 'admission-page'
   | 'admission-configure'
   | 'admission-analytics'
-  | 'admission-addnew';
+  | 'admission-add';
 
 const menuItemPaths: Record<MenuItem, string> = {
   'admission-dashboard': '/admission/dashboard',
@@ -33,12 +32,11 @@ const menuItemPaths: Record<MenuItem, string> = {
   'admission-page': '/admission/dashboard',
   'admission-configure': '/admission/configure',
   'admission-analytics': '/admission/analytics',
-  'admission-addnew': '/admission/addnew',
+  'admission-add': '/admission/add',
 };
 
 export function Sidebar() {
   const router = useRouter();
-  const { data: session, status } = useSession();
   const currentURL = usePathname();
   const getKeyByValue = (object: object, value: string) => {
     return Object.keys(object).find((key) => object[key] === value);
@@ -54,10 +52,6 @@ export function Sidebar() {
       if (path) {
         router.push(path);
       }
-      // if (item !== "admission-page") {
-      //   setShowSubmenu(false);
-      //   setIsArrowDown(false);
-      // }
       setActiveMenu(item);
     },
     [router],
@@ -166,36 +160,42 @@ export function Sidebar() {
                 </div>
               </Button>
               {showSubmenu && (
-                <div className="px-2 ml-4 border-l-2">
-                  <div className="p-2 inter text-sm font-normal text-gray-800 rounded-lg">
-                    <Button 
-                     className={`w-[174px] justify-start bg-white hover:bg-gray-100 hover:text-gray-800 ${
-                      activeMenu == "admission-addnew"
-                        ? "bg-gray-100 text-gray-800"
-                        : ""
-                    } `}
-                    onClick={() => handleMenuClick("admission-addnew")}
-                    >Add new</Button>
+                <div className="ml-4 border-l-2 px-2">
+                  <div className="inter rounded-lg p-2 text-sm font-normal text-gray-800">
+                    <Button
+                      className={`w-[174px] justify-start bg-white hover:bg-gray-100 hover:text-gray-800 ${
+                        activeMenu == 'admission-addnew'
+                          ? 'bg-gray-100 text-gray-800'
+                          : ''
+                      } `}
+                      onClick={() => handleMenuClick('admission-add')}
+                    >
+                      Add new
+                    </Button>
                   </div>
-                  <div className="p-2 inter text-sm font-normal text-gray-800 rounded-lg">
-                    <Button 
-                     className={`w-[174px] justify-start bg-white hover:bg-gray-100 hover:text-gray-800 ${
-                      activeMenu == "admission-analytics"
-                        ? "bg-gray-100 text-gray-800"
-                        : ""
-                    } `}
-                    onClick={() => handleMenuClick("admission-analytics")}
-                    >Analytics</Button>
+                  <div className="inter rounded-lg p-2 text-sm font-normal text-gray-800">
+                    <Button
+                      className={`w-[174px] justify-start bg-white hover:bg-gray-100 hover:text-gray-800 ${
+                        activeMenu == 'admission-analytics'
+                          ? 'bg-gray-100 text-gray-800'
+                          : ''
+                      } `}
+                      onClick={() => handleMenuClick('admission-analytics')}
+                    >
+                      Analytics
+                    </Button>
                   </div>
-                  <div className="p-2 inter text-sm font-normal text-gray-800 rounded-lg">
-                    <Button 
-                     className={`w-[174px] justify-start bg-white hover:bg-gray-100 hover:text-gray-800 ${
-                      activeMenu == "admission-configure"
-                        ? "bg-gray-100 text-gray-800"
-                        : ""
-                    } `}
-                    onClick={() => handleMenuClick("admission-configure")}
-                    >Configure</Button>
+                  <div className="inter rounded-lg p-2 text-sm font-normal text-gray-800">
+                    <Button
+                      className={`w-[174px] justify-start bg-white hover:bg-gray-100 hover:text-gray-800 ${
+                        activeMenu == 'admission-configure'
+                          ? 'bg-gray-100 text-gray-800'
+                          : ''
+                      } `}
+                      onClick={() => handleMenuClick('admission-configure')}
+                    >
+                      Configure
+                    </Button>
                   </div>
                 </div>
               )}

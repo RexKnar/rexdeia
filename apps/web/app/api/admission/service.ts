@@ -1,7 +1,10 @@
 import { db } from '../../../lib/db';
 import { AddAdmissionModel } from './models';
 
-export async function addAdmission(admission: AddAdmissionModel) {
+export async function addAdmission(
+  formId: string,
+  admission: AddAdmissionModel,
+) {
   return await db.admissionForm.create({
     data: {
       ...admission,
@@ -60,6 +63,11 @@ export async function addAdmission(admission: AddAdmissionModel) {
       yearOfPassing12th: admission.yearOfPassing12th,
       residentialAddress: admission.residentialAddress,
       permanentAddress: admission.permanentAddress,
+      form: {
+        connect: {
+          id: formId,
+        },
+      },
     },
   });
 }

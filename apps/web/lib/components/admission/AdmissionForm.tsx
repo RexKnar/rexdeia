@@ -21,7 +21,12 @@ import { copyToClipboard } from 'utils';
 import { makeAPICall } from '../../api';
 import { ADD_ADMISSION } from '../../endpoints';
 
-export function AdmissionForm({ formConfig }) {
+type AdmissionFormProps = {
+  formId: string;
+  formConfig: Record<string, any>;
+};
+
+export function AdmissionForm({ formConfig, formId }: AdmissionFormProps) {
   const {
     register,
     handleSubmit,
@@ -46,11 +51,16 @@ export function AdmissionForm({ formConfig }) {
 
   async function addAdmissionHandler(data: Record<string, unknown>) {
     if (currentStep === totalSteps - 1) {
-      console.log('Form data:', data);
       try {
-        await makeAPICall(ADD_ADMISSION, {
-          ...data,
-        });
+        await makeAPICall(
+          ADD_ADMISSION,
+          {
+            ...data,
+          },
+          {
+            formId,
+          },
+        );
       } catch (error) {
         console.log(error);
         // TODO: Handle error

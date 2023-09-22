@@ -6,9 +6,26 @@ import { Onboarding } from '../../lib/components/auth/Onboarding';
 
 export default async function Page() {
   const session = await getServerSession(authOptions);
-  if (!session) {
+  if (!session?.branchId || !session.organizationId) {
     redirect('/signin');
   }
 
-  return <Onboarding />;
+  const selectedBranchId = session.branchId;
+  const selectedOrganizationId = session.organizationId;
+
+  const branchesToSetup = session.user.createdBranches.filter(
+    (branch) => branch.id === selectedBranchId,
+  );
+
+  if (branchesToSetup?.length) {
+    return (
+      <Onboarding
+        branchId={selectedBranchId}
+        organizationId={selectedOrganizationId}
+      />
+    );
+  }
+
+  // TODO: Add a page to select the branch to setup
+  return redirect('/');
 }

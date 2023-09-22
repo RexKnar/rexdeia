@@ -1,5 +1,3 @@
-import { number } from 'zod';
-
 export type AddAdmissionModel = {
   aadharCardNumber: string;
   admissionMode: string;

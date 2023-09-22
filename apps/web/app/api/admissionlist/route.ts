@@ -1,8 +1,8 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 
 import { getAdmissionList } from './service';
 
-export async function GET(request: NextRequest) {
+export async function GET() {
   try {
     const admissionList = await getAdmissionList();
     return new NextResponse(JSON.stringify(admissionList), {

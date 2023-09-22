@@ -1,15 +1,12 @@
 import { z } from 'zod';
 
-import { CreateOrganizationRequestPayload } from './models';
-
 const schema = z.object({
   name: z.string(),
   institute: z.string(),
+  description: z.string().optional(),
 });
 
-export async function validateAddOrganization(
-  payload: CreateOrganizationRequestPayload,
-) {
+export async function validateUpdateOrganizationDetails(payload: unknown) {
   try {
     schema.parse(payload);
   } catch (e) {
