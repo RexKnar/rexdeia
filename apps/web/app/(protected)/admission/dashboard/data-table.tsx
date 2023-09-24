@@ -12,6 +12,7 @@ import {
   useReactTable,
 } from '@tanstack/react-table';
 import React from 'react';
+import { Button, Input } from 'ui';
 import {
   Table,
   TableBody,
@@ -20,9 +21,6 @@ import {
   TableHeader,
   TableRow,
 } from 'ui/components/ui/Table';
-
-import { Button } from '../../../../../packages/ui/components/ui/Button';
-import { Input } from '../../../../../packages/ui/components/ui/Input';
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];

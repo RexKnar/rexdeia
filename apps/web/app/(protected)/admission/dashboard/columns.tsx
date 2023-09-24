@@ -2,8 +2,7 @@
 
 import { ColumnDef } from '@tanstack/react-table';
 import { ArrowUpDown } from 'lucide-react';
-
-import { Button } from '../../../../../packages/ui/components/ui/Button';
+import { Button } from 'ui';
 
 export type AdmissionListModel = {
   id?: string;

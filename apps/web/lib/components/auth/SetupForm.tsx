@@ -114,7 +114,7 @@ export function SetupForm({ branchId, organizationId }: SetupFormProps) {
         <input type="hidden" {...register('institute')} value={selected} />
       </section>
 
-      <div>
+      <section>
         <label className="block text-gray-700">{`${
           selected === 'others' ? 'Institute' : titilize(selected)
         }'s name`}</label>
@@ -135,8 +135,9 @@ export function SetupForm({ branchId, organizationId }: SetupFormProps) {
         >
           {errors.name?.message as string}
         </p>
-      </div>
-      <div className="mt-6 w-full">
+      </section>
+
+      <section className="mt-6 w-full">
         <Button
           type="submit"
           className="w-full text-white"
@@ -150,7 +151,7 @@ export function SetupForm({ branchId, organizationId }: SetupFormProps) {
             `Proceed`
           )}
         </Button>
-      </div>
+      </section>
     </form>
   );
 }
