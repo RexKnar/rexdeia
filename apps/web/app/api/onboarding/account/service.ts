@@ -1,5 +1,5 @@
 import { db } from '../../../../lib/db';
-import { admissionForm, departmentForm, EnquiryForm } from './data';
+import { admissionForm, EnquiryForm } from './data';
 
 export async function onboardEntities(
   branchId: string,
@@ -22,6 +22,5 @@ export async function onboardEntities(
   };
 
   await createForm('Enquiry', EnquiryForm);
-  await createForm('Department', departmentForm);
   await createForm('Admission', admissionForm);
 }

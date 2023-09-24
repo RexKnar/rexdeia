@@ -1,22 +1,11 @@
 'use client';
 import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
 
 import { makeAPICall } from '../../api';
-import { DELETE_DEPARTMENT, LIST_REGULATION } from '../../endpoints';
+import { DELETE_DEPARTMENT } from '../../endpoints';
 
-export function RegulationList() {
+export function RegulationList({ regulationList }) {
   const rout = useRouter();
-  const [regulationList, setRegulationList] = useState([]);
-  useEffect(() => {
-    (async function ListRegulationHandler() {
-      try {
-        setRegulationList(await makeAPICall(LIST_REGULATION));
-      } catch (error) {
-        console.log(error);
-      }
-    })();
-  }, []);
 
   async function DeleteRegulationHandler(regulationId) {
     try {
@@ -55,7 +44,9 @@ export function RegulationList() {
             <td className="border border-slate-300 px-4">
               {item.regulationName}
             </td>
-            <td className="border border-slate-300 px-4">{item.announcedYear}</td>
+            <td className="border border-slate-300 px-4">
+              {item.announcedYear}
+            </td>
             <td className="border border-slate-300 px-4">{item.endYear}</td>
             <td className="border border-slate-300 px-4">
               <button

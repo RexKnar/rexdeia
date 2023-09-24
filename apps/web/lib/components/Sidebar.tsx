@@ -9,7 +9,6 @@ import {
   ListMinus,
 } from 'lucide-react';
 import { usePathname, useRouter } from 'next/navigation';
-import { useSession } from 'next-auth/react';
 import { useCallback, useState } from 'react';
 import { Button } from 'ui';
 
@@ -46,7 +45,6 @@ const menuItemPaths: Record<MenuItem, string> = {
 
 export function Sidebar() {
   const router = useRouter();
-  const { data: session, status } = useSession();
   const currentURL = usePathname();
   const getKeyByValue = (object: object, value: string) => {
     return Object.keys(object).find((key) => object[key] === value);
@@ -62,10 +60,6 @@ export function Sidebar() {
       if (path) {
         router.push(path);
       }
-      // if (item !== "admission-page") {
-      //   setShowSubmenu(false);
-      //   setIsArrowDown(false);
-      // }
       setActiveMenu(item);
     },
     [router],

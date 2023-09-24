@@ -6,7 +6,7 @@ import { onboardEntities } from './service';
 
 export async function POST(request: Request) {
   const session = await getServerSession(authOptions);
-  const { branchId, organizationId } = await request.json() as {
+  const { branchId, organizationId } = (await request.json()) as {
     branchId: string;
     organizationId: string;
   };

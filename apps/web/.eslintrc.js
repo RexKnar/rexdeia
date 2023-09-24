@@ -1,8 +1,9 @@
 module.exports = {
   root: false,
-  extends: ['next', 'turbo', 'prettier'],
-  plugins: ['small-import', 'simple-import-sort', 'import'],
+  extends: ['next', 'turbo', 'eslint:recommended'],
+  plugins: ['small-import', 'simple-import-sort', 'import', 'prettier'],
   rules: {
+    'prettier/prettier': 'error',
     // Import related rules
     'simple-import-sort/imports': 'error',
     'simple-import-sort/exports': 'error',
@@ -19,4 +20,5 @@ module.exports = {
       presets: [require.resolve('next/babel')],
     },
   },
+  ignorePatterns: ['db.ts', 'next.config.js', 'next-env.d.ts', 'public/*'],
 };

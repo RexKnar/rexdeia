@@ -1,21 +1,12 @@
 'use client';
 import { Loader2 } from 'lucide-react';
-import { useRouter, useSearchParams } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 
 import { makeAPICall } from '../../api';
-import {
-  ADD_DEPARTMENT,
-  GET_DEPARTMENT,
-  UPDATE_DEPARTMENT,
-} from '../../endpoints';
+import { ADD_DEPARTMENT } from '../../endpoints';
 
-export function DepartmentForm({ formConfig }) {
-  const searchParams = useSearchParams();
-  const departmentId = searchParams.get('id');
-  const [departmentValue, setDepartmentValue] = useState([]);
-  const [departmentKeys, setDepartmentKeys] = useState([]);
+export function DepartmentForm() {
   const router = useRouter();
   const {
     register,
@@ -23,8 +14,8 @@ export function DepartmentForm({ formConfig }) {
     formState: { errors, isSubmitting },
   } = useForm();
   async function addDepartmentHandler(data: Record<string, unknown>) {
+    console.log(data);
     try {
-      console.log(data);
       await makeAPICall(ADD_DEPARTMENT, {
         ...data,
       });
@@ -34,131 +25,134 @@ export function DepartmentForm({ formConfig }) {
     }
   }
 
-  async function editDepartmentHandler() {
-    let newValue = {}; 
-    let temDepartmentValue = [departmentId, ...departmentValue]
-    
-    
-    departmentKeys.forEach((key, indux) => {
-      newValue[key] = temDepartmentValue[indux];
-    });
-    console.log(newValue)
-    debugger
-    try {
-      await makeAPICall(UPDATE_DEPARTMENT, {
-        ...newValue,
-      });
-      router.push('/admission/department');
-    } catch (error) {
-      console.log(error);
-    }
-  }
-
-  useEffect(() => {
-    if (departmentId) {
-      (async function getDepartmentHandler() {
-        try {
-          const department = await makeAPICall(GET_DEPARTMENT, {
-            departmentId,
-          });
-          setDepartmentKeys(Object.keys(department[0]));
-          setTimeout(() => {
-            const arrayOfValues = Object.values(department[0]);
-            setDepartmentValue(arrayOfValues.slice(1, 6));
-          }, 1000);
-        } catch (error) {
-          console.log(error);
-        }
-      })();
-    }
-  }, [departmentId]);
-
-  const handleDepartmentValueChange = (index, e) => {
-    const updatedValues = [...departmentValue];
-    updatedValues[index] = e.target.value;
-    setDepartmentValue(updatedValues);
-  };
-
   return (
     <form
-      onSubmit={
-        !departmentId
-          ? handleSubmit(addDepartmentHandler)
-          : editDepartmentHandler
-      }
+      onSubmit={handleSubmit(addDepartmentHandler)}
       className="mt-4 w-full border p-5"
     >
       <h1 className="text-center text-3xl font-semibold text-primary">
-        {formConfig.json.title}
+        DEPARTMENT FORM
       </h1>
       <p className="mb-4 text-center text-gray-600">
-        {formConfig.json.description}
+        If you'd like to apply to our college, please fill in this Department
+        Form and we will contact you as soon as possible.
       </p>
-      {formConfig.json.formSections.map((section) => (
-        <div key={section.sectionTitle} className="mt-3 px-12">
-          <h2 className="text-3xl font-semibold text-primary">
-            {section.sectionTitle}
-          </h2>
-          <p>{section.sectionDescription}</p>
-          {section.sectionFields.map((field, index) => {
-            if (field.visible) {
-              switch (field.type) {
-                case 'text':
-                case 'email':
-                case 'date':
-                  return (
-                    <div key={field.id}>
-                      <label className="mt-5 block text-gray-700">
-                        {field.label}
-                      </label>
-                      <input
-                        {...register(field.name, field.validationRules)}
-                        type={field.type}
-                        placeholder={field.placeholder}
-                        value={departmentValue[index]}
-                        onChange={(e) => handleDepartmentValueChange(index, e)}
-                        className="ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring mt-1 flex h-10 w-full rounded-md border border-gray-300 bg-transparent px-3 py-2 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-                      />
-                      {errors[field.id] && (
-                        <p className="h-2 p-1 text-sm text-red-600">
-                          {field.label} is required
-                        </p>
-                      )}
-                    </div>
-                  );
-                case 'radio':
-                  return (
-                    <div key={field.id}>
-                      <label className="mt-5 block text-gray-700">
-                        {field.label}
-                      </label>
-                      {field.options.map((option, index) => (
-                        <>
-                          <input
-                            type={field.type}
-                            name={field.name}
-                            value={option.value}
-                            {...register(field.name, field.validationRules)}
-                          />
-                          <span className="me-3">{option.label}</span>
-                        </>
-                      ))}
-                      {errors[field.id] && (
-                        <p className="h-2 p-1 text-sm text-red-600">
-                          {field.label} is required
-                        </p>
-                      )}
-                    </div>
-                  );
-                default:
-                  return null;
-              }
-            } else {
-              return null;
-            }
-          })}
+      <div className="mt-3 px-12">
+        <div>
+          <label className="mt-5 block text-gray-700">Department Name</label>
+          <input
+            {...register('departmentName', {
+              required: 'Department Name is Required',
+            })}
+            type="text"
+            placeholder="Enter your department name"
+            name="departmentName"
+            className="ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring mt-1 flex h-10 w-full rounded-md border border-gray-300 bg-transparent px-3 py-2 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+          />
+          <p
+            className={`h-2 p-1 text-sm text-red-600 ${
+              errors.departmentName
+                ? 'opacity-100 transition-opacity duration-300'
+                : 'opacity-0 transition-opacity duration-300'
+            }`}
+          >
+            {errors.departmentName?.message as string}
+          </p>
         </div>
-      ))}
+        <div>
+          <label className="mt-5 block text-gray-700">No of Years</label>
+          <input
+            {...register('noOfYears', {
+              required: 'No of Years is Required',
+            })}
+            type="text"
+            placeholder="Enter the No of Years"
+            name="noOfYears"
+            className="ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring mt-1 flex h-10 w-full rounded-md border border-gray-300 bg-transparent px-3 py-2 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+          />
+          <p
+            className={`h-2 p-1 text-sm text-red-600 ${
+              errors.noOfYears
+                ? 'opacity-100 transition-opacity duration-300'
+                : 'opacity-0 transition-opacity duration-300'
+            }`}
+          >
+            {errors.noOfYears?.message as string}
+          </p>
+        </div>
+        <div>
+          <label className="mt-5 block text-gray-700">Department Code</label>
+          <input
+            {...register('departmentCode', {
+              required: 'Department Code is Required',
+            })}
+            type="text"
+            placeholder="Enter your department code"
+            name="departmentCode"
+            className="ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring mt-1 flex h-10 w-full rounded-md border border-gray-300 bg-transparent px-3 py-2 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+          />
+          <p
+            className={`h-2 p-1 text-sm text-red-600 ${
+              errors.departmentCode
+                ? 'opacity-100 transition-opacity duration-300'
+                : 'opacity-0 transition-opacity duration-300'
+            }`}
+          >
+            {errors.departmentCode?.message as string}
+          </p>
+        </div>
+        <div>
+          <label className="mt-5 block text-gray-700">Active Status</label>
+          <input
+            {...register('activeStatus', {
+              required: 'Active Status is Required',
+            })}
+            type="radio"
+            name="activeStatus"
+            value={'active'}
+          />
+          <span className="me-3">Active</span>
+          <input
+            {...register('activeStatus', {
+              required: 'Active Status is Required',
+            })}
+            type="radio"
+            name="activeStatus"
+            value={'inActive'}
+          />
+          <span className="me-3">Inactive</span>
+          <p
+            className={`h-2 p-1 text-sm text-red-600 ${
+              errors.activeStatus
+                ? 'opacity-100 transition-opacity duration-300'
+                : 'opacity-0 transition-opacity duration-300'
+            }`}
+          >
+            {errors.activeStatus?.message as string}
+          </p>
+        </div>
+        <div>
+          <label className="mt-5 block text-gray-700">Note/Description</label>
+          <input
+            {...register('description', {
+              required: 'Description is Required',
+            })}
+            type="text"
+            placeholder="Enter Note/Description"
+            name="description"
+            className="ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring mt-1 flex h-10 w-full rounded-md border border-gray-300 bg-transparent px-3 py-2 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+          />
+          <p
+            className={`h-2 p-1 text-sm text-red-600 ${
+              errors.description
+                ? 'opacity-100 transition-opacity duration-300'
+                : 'opacity-0 transition-opacity duration-300'
+            }`}
+          >
+            {errors.description?.message as string}
+          </p>
+        </div>
+      </div>
       <button
         type="submit"
         className="text-primary-foreground mt-6 h-12 w-full cursor-pointer rounded-md bg-primary text-white hover:bg-primary/90"

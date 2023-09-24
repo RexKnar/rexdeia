@@ -190,7 +190,7 @@ model EnquiryForm {
   formId                String? @db.ObjectId
 }
 
-model DepartmentForm {
+model Department {
   id             String    @id @default(auto()) @map("_id") @db.ObjectId
   departmentName String
   noOfYears      String
@@ -201,7 +201,7 @@ model DepartmentForm {
   deletedAt      DateTime?
 }
 
-model RegulationForm {
+model Regulation {
   id             String    @id @default(auto()) @map("_id") @db.ObjectId
   regulationName String
   announcedYear  String
@@ -210,7 +210,7 @@ model RegulationForm {
   deletedAt      DateTime?
 }
 
-model CourseForm {
+model Course {
   id           String    @id @default(auto()) @map("_id") @db.ObjectId
   courseName   String
   department   String

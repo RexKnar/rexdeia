@@ -1,22 +1,11 @@
 'use client';
 import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
 
 import { makeAPICall } from '../../api';
-import { DELETE_DEPARTMENT, LIST_DEPARTMENT } from '../../endpoints';
+import { DELETE_DEPARTMENT } from '../../endpoints';
 
-export function DepartmentList() {
-  const rout = useRouter();
-  const [departmentList, setDepartmentList] = useState([]);
-  useEffect(() => {
-    (async function ListDepartmentHandler() {
-      try {
-        setDepartmentList(await makeAPICall(LIST_DEPARTMENT));
-      } catch (error) {
-        console.log(error);
-      }
-    })();
-  }, []);
+export function DepartmentList({ departmentList }) {
+  const router = useRouter();
 
   async function DeleteDepartmentHandler(departmentId) {
     try {
@@ -34,7 +23,7 @@ export function DepartmentList() {
           className="text-primary-foreground mt-6 h-12 cursor-pointer rounded-md bg-primary px-5 text-white hover:bg-primary/90"
           type="button"
           onClick={() => {
-            rout.push(`/admission/department/departmentForm`);
+            router.push(`/admission/department/departmentForm`);
           }}
         >
           Add Department
@@ -74,7 +63,7 @@ export function DepartmentList() {
               <button
                 className="text-primary-foreground cursor-pointer rounded-md bg-primary text-white hover:bg-primary/90"
                 onClick={() => {
-                  rout.push(
+                  router.push(
                     `/admission/department/departmentForm?id=${item.id}`,
                   );
                 }}

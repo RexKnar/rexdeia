@@ -20,7 +20,6 @@ export function EnquiryForm({ formConfig, formId }: EnquiryFormProps) {
 
   async function addEnquiryHandler(data: Record<string, unknown>) {
     try {
-      alert(formId);
       await makeAPICall(
         ADD_ENQUIRY,
         {
@@ -28,7 +27,7 @@ export function EnquiryForm({ formConfig, formId }: EnquiryFormProps) {
         },
         {
           formId: formId,
-        }
+        },
       );
     } catch (error) {
       console.log(error);
@@ -82,7 +81,7 @@ export function EnquiryForm({ formConfig, formId }: EnquiryFormProps) {
                       <label className="mt-5 block text-gray-700">
                         {field.label}
                       </label>
-                      {field.options.map((option, index) => (
+                      {field.options.map((option) => (
                         <>
                           <input
                             type={field.type}

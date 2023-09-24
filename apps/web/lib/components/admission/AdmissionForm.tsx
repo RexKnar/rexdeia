@@ -59,7 +59,7 @@ export function AdmissionForm({ formConfig, formId }: AdmissionFormProps) {
           },
           {
             formId,
-          }
+          },
         );
       } catch (error) {
         console.log(error);

@@ -1,22 +1,11 @@
 'use client';
 import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
 
 import { makeAPICall } from '../../api';
-import { DELETE_DEPARTMENT, LIST_COURSE } from '../../endpoints';
+import { DELETE_DEPARTMENT } from '../../endpoints';
 
-export function CourseList() {
+export function CourseList({ courseList }) {
   const rout = useRouter();
-  const [courseList, setCourseList] = useState([]);
-  useEffect(() => {
-    (async function ListCourseHandler() {
-      try {
-        setCourseList(await makeAPICall(LIST_COURSE));
-      } catch (error) {
-        console.log(error);
-      }
-    })();
-  }, []);
 
   async function DeleteCourseHandler(courseId) {
     try {
@@ -49,18 +38,18 @@ export function CourseList() {
           <th className="border border-slate-300 px-4">No of Sem</th>
           <th className="border border-slate-300 px-4">Department</th>
           <th className="border border-slate-300 px-4">Active Status</th>
-          <th className="border border-slate-300 px-4">Action</th>       
+          <th className="border border-slate-300 px-4">Action</th>
         </tr>
         {courseList.map((item, index) => (
           <tr key={index}>
             <td className="border border-slate-300 px-4">{index + 1}</td>
-            <td className="border border-slate-300 px-4">
-              {item.courseName}
-            </td>
+            <td className="border border-slate-300 px-4">{item.courseName}</td>
             <td className="border border-slate-300 px-4">{item.noOfYears}</td>
             <td className="border border-slate-300 px-4">{item.noOfSem}</td>
             <td className="border border-slate-300 px-4">{item.department}</td>
-            <td className="border border-slate-300 px-4">{item.activeStatus}</td>
+            <td className="border border-slate-300 px-4">
+              {item.activeStatus}
+            </td>
             <td className="border border-slate-300 px-4">
               <button
                 className="text-primary-foreground cursor-pointer rounded-md bg-primary text-white hover:bg-primary/90"

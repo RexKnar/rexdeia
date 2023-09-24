@@ -18,11 +18,8 @@ export async function PUT(request: Request, route: { params: { id: string } }) {
     const branchId = route.params.id;
 
     await validateUpdateBranchDetails(payload);
-    
-    const branch = await updateBranchById(
-      branchId,
-      payload,
-    );
+
+    const branch = await updateBranchById(branchId, payload);
 
     return new NextResponse(JSON.stringify(branch), {
       status: 200,
