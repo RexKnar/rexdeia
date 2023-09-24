@@ -33,7 +33,7 @@ export function DepartmentForm() {
         DEPARTMENT FORM
       </h1>
       <p className="mb-4 text-center text-gray-600">
-        If you'd like to apply to our college, please fill in this Department
+        If youd like to apply to our college, please fill in this Department
         Form and we will contact you as soon as possible.
       </p>
       <div className="mt-3 px-12">

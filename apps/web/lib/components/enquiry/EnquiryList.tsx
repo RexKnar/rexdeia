@@ -1,5 +1,5 @@
 'use client';
-import { useRouter,useSearchParams } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
 import { makeAPICall } from '../../api';
@@ -22,7 +22,7 @@ export function EnquiryList() {
   }, [page]);
   return (
     <section className="w-full">
-      <h1 className="text-primary mt-3 text-center text-3xl font-semibold">
+      <h1 className="mt-3 text-center text-3xl font-semibold text-primary">
         Enquiry List
       </h1>
       <table className="m-auto mt-5 table-auto border-collapse border border-slate-400 px-4">
@@ -52,7 +52,7 @@ export function EnquiryList() {
       <div className="flex flex-row gap-5">
         <button
           type="submit"
-          className="bg-primary text-primary-foreground hover:bg-primary/90 mt-6 h-6 cursor-pointer rounded-md text-white"
+          className="text-primary-foreground mt-6 h-6 cursor-pointer rounded-md bg-primary text-white hover:bg-primary/90"
           onClick={() => {
             rout.push(`?page=${Number(page) - 1}`);
           }}
@@ -61,7 +61,7 @@ export function EnquiryList() {
         </button>
         <button
           type="submit"
-          className="bg-primary text-primary-foreground hover:bg-primary/90 mt-6 h-6 cursor-pointer rounded-md text-white"
+          className="text-primary-foreground mt-6 h-6 cursor-pointer rounded-md bg-primary text-white hover:bg-primary/90"
           onClick={() => {
             rout.push(`?page=${Number(page) + 1}`);
           }}

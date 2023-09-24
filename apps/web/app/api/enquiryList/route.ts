@@ -10,7 +10,7 @@ export async function POST(request: NextRequest) {
       status: 200,
     });
   } catch (e) {
-    console.log("error");
+    console.log('error');
     return new NextResponse(e, {
       status: 400,
     });
