@@ -7,7 +7,7 @@ import { SetupForm } from '../../../lib/components/auth/SetupForm';
 import logo from '../../../public/assets/images/acadx-logo.png';
 
 export const metadata = {
-  title: 'acadx | Sign up',
+  title: 'acadx.io | Sign up',
   description:
     'Your step to streamline every aspect of education management starts here.',
 };

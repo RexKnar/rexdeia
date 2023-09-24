@@ -8,7 +8,7 @@ import { getFormByCriteria } from '../../../api/forms/service';
 export default async function Page() {
   const session = await getServerSession(authOptions);
   if (!session.branchId || !session.organizationId) {
-    return redirect('/signin');
+    return redirect('/signin?callbackUrl=/admission/add');
   }
 
   const [admissionForm, enquiryForm] = await Promise.all([
