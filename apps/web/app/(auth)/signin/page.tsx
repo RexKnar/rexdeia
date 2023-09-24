@@ -8,7 +8,7 @@ import { SignInForm } from '../../../lib/components/auth/SignInForm';
 import logo from '../../../public/assets/images/acadx-logo.png';
 
 export const metadata = {
-  title: 'acadx | Sign in',
+  title: 'acadx.io | Sign in',
   description:
     'A one-stop platform to streamline every aspect of education management.',
 };

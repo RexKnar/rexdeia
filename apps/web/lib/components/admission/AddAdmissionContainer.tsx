@@ -20,7 +20,7 @@ export function AddAdmissionContainer({
   admissionForm,
 }: AddAdmissionContainerProp) {
   return (
-    <section className="m-o mt-4 w-full bg-gray-100 p-5">
+    <section className="w-full p-5">
       <h1 className="inter text-2xl font-semibold">Add new</h1>
       <Tabs defaultValue="admission" className="mt-8">
         <TabsList>

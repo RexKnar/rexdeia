@@ -7,8 +7,8 @@ import { Sidebar } from '../../lib/components/Sidebar';
 import Providers from '../../lib/Providers';
 
 export const metadata = {
-  title: 'Capeo - Simplifying the way you manage your business',
-  description: 'Capeo is a business management platform for small businesses.',
+  title: 'acadx.io | Elevate your academic experience',
+  description: 'Your one stop platform for all your academic needs',
 };
 
 export default function RootLayout({ children }: { children: ReactNode }) {

@@ -16,9 +16,9 @@ import { UserMenu } from './header/UserMenu';
 
 type MenuItem =
   | 'admission-dashboard'
-  | 'admission-students'
-  | 'admission-staffs'
-  | 'admission-academics'
+  | 'students'
+  | 'staffs'
+  | 'academics'
   | 'admission-page'
   | 'admission-configure'
   | 'admission-analytics'
@@ -30,9 +30,9 @@ type MenuItem =
 
 const menuItemPaths: Record<MenuItem, string> = {
   'admission-dashboard': '/admission/dashboard',
-  'admission-students': '/admission/students',
-  'admission-staffs': '/admission/staffs',
-  'admission-academics': '/admission/academics',
+  students: '/students',
+  staffs: '/staffs',
+  academics: '/academics',
   'admission-page': '/admission/dashboard',
   'admission-configure': '/admission/configure',
   'admission-analytics': '/admission/analytics',
@@ -111,11 +111,9 @@ export function Sidebar() {
               <Button
                 variant="secondary"
                 className={`w-full justify-start bg-white hover:bg-primary hover:text-white ${
-                  activeMenu == 'admission-students'
-                    ? 'bg-primary text-white'
-                    : ''
+                  activeMenu == 'students' ? 'bg-primary text-white' : ''
                 } `}
-                onClick={() => handleMenuClick('admission-students')}
+                onClick={() => handleMenuClick('students')}
               >
                 <ListMinus className="mr-2 h-4 w-4" />
                 Students
@@ -125,11 +123,9 @@ export function Sidebar() {
               <Button
                 variant="secondary"
                 className={`w-full justify-start bg-white hover:bg-primary hover:text-white ${
-                  activeMenu == 'admission-staffs'
-                    ? 'bg-primary text-white'
-                    : ''
+                  activeMenu == 'staffs' ? 'bg-primary text-white' : ''
                 } `}
-                onClick={() => handleMenuClick('admission-staffs')}
+                onClick={() => handleMenuClick('staffs')}
               >
                 <GraduationCap className="mr-2 h-4 w-4" />
                 Staff
@@ -139,11 +135,9 @@ export function Sidebar() {
               <Button
                 variant="secondary"
                 className={`w-full justify-start bg-white hover:bg-primary hover:text-white ${
-                  activeMenu == 'admission-enquiry-academics'
-                    ? 'bg-primary text-white'
-                    : ''
+                  activeMenu == 'academics' ? 'bg-primary text-white' : ''
                 } `}
-                onClick={() => handleMenuClick('admission-academics')}
+                onClick={() => handleMenuClick('academics')}
               >
                 <HelpCircle className="mr-2 h-4 w-4" />
                 Academics

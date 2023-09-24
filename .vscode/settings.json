@@ -1,9 +1,7 @@
 {
-    "cSpell.words": [
-        "nextjs"
-    ],
-    "editor.tabSize": 2,
-    "editor.formatOnSave": true,
-    "editor.formatOnPaste": true,
-    "editor.acceptSuggestionOnEnter": "on"
+  "cSpell.words": ["acadx", "nextjs"],
+  "editor.tabSize": 2,
+  "editor.formatOnSave": true,
+  "editor.formatOnPaste": true,
+  "editor.acceptSuggestionOnEnter": "on"
 }
