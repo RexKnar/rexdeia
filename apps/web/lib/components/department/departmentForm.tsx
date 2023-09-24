@@ -14,7 +14,6 @@ export function DepartmentForm() {
     formState: { errors, isSubmitting },
   } = useForm();
   async function addDepartmentHandler(data: Record<string, unknown>) {
-    console.log(data);
     try {
       await makeAPICall(ADD_DEPARTMENT, {
         ...data,
