@@ -18,7 +18,7 @@ export function DepartmentForm() {
       await makeAPICall(ADD_DEPARTMENT, {
         ...data,
       });
-      router.push('/admission/department');
+      router.push('/academics/department');
     } catch (error) {
       console.log(error);
     }

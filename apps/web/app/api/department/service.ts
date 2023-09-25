@@ -40,3 +40,13 @@ export async function editDepartment(department: EditDepartmentModel) {
     },
   });
 }
+
+export async function getDepartmentList({ organizationId, branchId }) {
+  return await db.department.findMany({
+    where: {
+      isDeleted: false,
+      organizationId: organizationId,
+      branchId: branchId,
+    },
+  });
+}

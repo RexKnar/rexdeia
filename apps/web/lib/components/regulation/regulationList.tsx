@@ -8,6 +8,7 @@ export function RegulationList({ regulationList }) {
   const rout = useRouter();
 
   async function DeleteRegulationHandler(regulationId) {
+    // TODO
     try {
       await makeAPICall(DELETE_DEPARTMENT, { regulationId });
       window.location.reload();

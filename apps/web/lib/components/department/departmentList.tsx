@@ -23,7 +23,7 @@ export function DepartmentList({ departmentList }) {
           className="text-primary-foreground mt-6 h-12 cursor-pointer rounded-md bg-primary px-5 text-white hover:bg-primary/90"
           type="button"
           onClick={() => {
-            router.push(`/admission/department/departmentForm`);
+            router.push(`/academics/department/departmentForm`);
           }}
         >
           Add Department
@@ -64,7 +64,7 @@ export function DepartmentList({ departmentList }) {
                 className="text-primary-foreground cursor-pointer rounded-md bg-primary text-white hover:bg-primary/90"
                 onClick={() => {
                   router.push(
-                    `/admission/department/departmentForm?id=${item.id}`,
+                    `/academics/department/departmentForm?id=${item.id}`,
                   );
                 }}
               >

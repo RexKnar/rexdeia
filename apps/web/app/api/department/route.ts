@@ -1,14 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server';
 
 import { addDepartment, deleteDeparment, editDepartment } from './service';
-import { validateAddUser } from './validator';
+import { validateAddDepartment } from './validator';
 
 export async function POST(request: NextRequest) {
   const payload = await request.json();
   try {
-    await validateAddUser(payload);
-    const createdUser = await addDepartment(payload);
-    return new NextResponse(JSON.stringify(createdUser), {
+    await validateAddDepartment(payload);
+    const createdDepartment = await addDepartment(payload);
+    return new NextResponse(JSON.stringify(createdDepartment), {
       status: 201,
     });
   } catch (e) {
@@ -35,9 +35,9 @@ export async function DELETE(request: NextRequest) {
 export async function PUT(request: NextRequest) {
   const payload = await request.json();
   try {
-    await validateAddUser(payload);
-    const createdUser = await editDepartment(payload);
-    return new NextResponse(JSON.stringify(createdUser), {
+    await validateAddDepartment(payload);
+    const updateResponse = await editDepartment(payload);
+    return new NextResponse(JSON.stringify(updateResponse), {
       status: 201,
     });
   } catch (e) {

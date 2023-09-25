@@ -51,5 +51,5 @@ export type FormModel = {
 export type FormCriteriaModel = {
   branchId: string;
   organizationId: string;
-  type: 'Admission' | 'Enquiry' | 'Department';
+  type: 'Admission' | 'Enquiry';
 };
