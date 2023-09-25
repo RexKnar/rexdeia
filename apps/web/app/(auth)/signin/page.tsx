@@ -28,30 +28,30 @@ export default async function Page() {
         }}
       ></section>
 
-      <section className="flex h-full w-full translate-y-0 transform flex-col justify-between overflow-auto px-16 py-10  opacity-100 transition-all duration-500 ease-in-out md:w-4/12">
+      <section className="flex h-full w-full translate-y-0 transform flex-col justify-between overflow-auto px-20 opacity-100 transition-all duration-500 ease-in-out md:w-4/12 ">
         <div>
-          <Image src={logo} alt={'logo'} width={100}></Image>
+          <Image src={logo} className="pt-10" alt={'logo'} width={100}></Image>
         </div>
-        <div className="mt-10 flex">
+        <div className="mt-12 flex">
           <span className="text-xl font-semibold">Welcome</span>
         </div>
 
-        <p className="text-base font-normal text-gray-800">
+        <p className="text-sm font-normal text-gray-800">
           Sign in to your account to get started.
         </p>
 
         <SignInForm />
 
-        <p className="mt-8 text-center text-base font-normal text-gray-800">
+        <p className="mt-8 text-center text-sm font-semibold text-gray-800">
           Don&apos;t have an account?
         </p>
         <Link
           href="/signup"
-          className="mt-3 h-[48px] w-full rounded-md border-2 border-gray-300 bg-transparent px-[14px] py-[8px] text-center text-sm font-semibold text-primary hover:bg-primary hover:text-white"
+          className="mt-3 w-full rounded-md border-2 border-gray-300 bg-transparent p-2 text-center text-sm font-semibold text-primary hover:bg-primary hover:text-white"
         >
           Signup
         </Link>
-        <footer className="mt-14 text-center text-base font-normal text-[#9F9F9F]">
+        <footer className="mt-14 text-center text-sm font-normal text-[#9F9F9F]">
           &copy; acadx 2023
         </footer>
       </section>

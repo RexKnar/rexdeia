@@ -118,24 +118,24 @@ export function SignInForm() {
       </label>
       <Button
         type="submit"
-        className="mt-10 w-full text-white"
+        className="mt-6 w-full text-white"
         disabled={isSubmitting}
       >
         {isSubmitting ? (
           <div className="flex h-screen items-center justify-center">
-            <Loader2 className="mr-2 h-4 w-6 animate-spin text-white" />
+            <Loader2 className="mr-2 h-2 w-6 animate-spin text-white" />
           </div>
         ) : (
           `Signin`
         )}
       </Button>
-      <label className="mt-8 block text-center text-base font-normal text-gray-800">
+      <label className="mt-8 block text-center text-sm font-semibold text-gray-800">
         or continue with{' '}
       </label>
       <div className="flex flex-col sm:flex-row sm:gap-4">
         <Button
           type="button"
-          className="mt-3 w-full  bg-transparent text-base text-gray-800 outline outline-gray-300 hover:text-white"
+          className="mt-3 w-full bg-transparent p-2 text-base text-gray-800 outline outline-gray-300 hover:text-white"
         >
           <Image src={googlelogo} alt={'logo'} className="mr-1"></Image>
           Google
