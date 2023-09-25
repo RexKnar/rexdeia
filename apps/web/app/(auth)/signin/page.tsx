@@ -28,21 +28,21 @@ export default async function Page() {
         }}
       ></section>
 
-      <section className="flex h-full w-full translate-y-0 transform flex-col justify-between overflow-auto p-12 opacity-100 transition-all duration-500 ease-in-out md:w-4/12">
+      <section className="flex h-full w-full translate-y-0 transform flex-col justify-between overflow-auto px-16 py-10  opacity-100 transition-all duration-500 ease-in-out md:w-4/12">
         <div>
-          <Image src={logo} alt={'logo'} width={150}></Image>
+          <Image src={logo} alt={'logo'} width={100}></Image>
         </div>
-        <div className="mt-8 flex">
-          <span className="text-3xl font-semibold">Welcome</span>
+        <div className="mt-10 flex">
+          <span className="text-xl font-semibold">Welcome</span>
         </div>
 
-        <p className="text-base font-medium text-gray-800">
+        <p className="text-base font-normal text-gray-800">
           Sign in to your account to get started.
         </p>
 
         <SignInForm />
 
-        <p className="mt-12 text-center text-base font-semibold text-gray-800">
+        <p className="mt-8 text-center text-base font-normal text-gray-800">
           Don&apos;t have an account?
         </p>
         <Link
@@ -51,7 +51,7 @@ export default async function Page() {
         >
           Signup
         </Link>
-        <footer className="mt-14 text-center text-base font-normal text-gray-700">
+        <footer className="mt-14 text-center text-base font-normal text-[#9F9F9F]">
           &copy; acadx 2023
         </footer>
       </section>
