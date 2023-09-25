@@ -106,8 +106,8 @@ importers:
         specifier: 4.23.1
         version: 4.23.1(next@13.4.19)(react-dom@18.2.0)(react@18.2.0)
       next-intl:
-        specifier: 2.20.1
-        version: 2.20.1(next@13.4.19)(react@18.2.0)
+        specifier: 2.20.2
+        version: 2.20.2(next@13.4.19)(react@18.2.0)
       postcss:
         specifier: ^8.4.29
         version: 8.4.29
@@ -4953,8 +4953,8 @@ packages:
       uuid: 8.3.2
     dev: false
 
-  /next-intl@2.20.1(next@13.4.19)(react@18.2.0):
-    resolution: {integrity: sha512-Svb3XjXqmvqa0DtVUeKxNdSl4nYiovvC01YW/vyEGTobQIon1PbNppsNEHnT++jpgJOkadMsE9kqyV/7ss8X6g==}
+  /next-intl@2.20.2(next@13.4.19)(react@18.2.0):
+    resolution: {integrity: sha512-28IarFfRzuOjPo6fjAY2RMWVdeejuvzW7jzwVnBfHU6EB0GYwQPWIq1G5YK4gWb44R6dqnjjVDqphWrLwKE+Vw==}
     engines: {node: '>=10'}
     peerDependencies:
       next: ^10.0.0 || ^11.0.0 || ^12.0.0 || ^13.0.0
@@ -4964,7 +4964,7 @@ packages:
       negotiator: 0.6.3
       next: 13.4.19(react-dom@18.2.0)(react@18.2.0)
       react: 18.2.0
-      use-intl: 2.20.1(react@18.2.0)
+      use-intl: 2.20.2(react@18.2.0)
     dev: false
 
   /next@13.4.19(react-dom@18.2.0)(react@18.2.0):
@@ -6704,8 +6704,8 @@ packages:
       tslib: 2.6.2
     dev: false
 
-  /use-intl@2.20.1(react@18.2.0):
-    resolution: {integrity: sha512-3l5vWEzAI9cLj+1iq4w5ULc8p+ZXx6X6EJjKbOEzTfY/tOKyCcAnnEG/pHeQ3g/bK6dKPIusc+Px+Er/Q4J98A==}
+  /use-intl@2.20.2(react@18.2.0):
+    resolution: {integrity: sha512-Mvd16M2nAlXcOqm17jWCK69DmsSgn4h9dgvcZ6UbYAzdJQiuu5TFBVxd1f3xRRs2qXb94/E2j/1AcqzmN9TMtg==}
     engines: {node: '>=10'}
     peerDependencies:
       react: ^16.8.0 || ^17.0.0 || ^18.0.0
