@@ -5,7 +5,7 @@ import { makeAPICall } from '../../api';
 import { DELETE_DEPARTMENT } from '../../endpoints';
 
 export function RegulationList({ regulationList }) {
-  const rout = useRouter();
+  const router = useRouter();
 
   async function DeleteRegulationHandler(regulationId) {
     // TODO
@@ -23,6 +23,9 @@ export function RegulationList({ regulationList }) {
         <button
           className="text-primary-foreground mt-6 h-12 cursor-pointer rounded-md bg-primary px-5 text-white hover:bg-primary/90"
           type="button"
+          onClick={() => {
+            router.push(`/academics/regulation/regulationForm`);
+          }}
         >
           Add Regulation
         </button>
@@ -53,7 +56,7 @@ export function RegulationList({ regulationList }) {
               <button
                 className="text-primary-foreground cursor-pointer rounded-md bg-primary text-white hover:bg-primary/90"
                 onClick={() => {
-                  rout.push(
+                  router.push(
                     `/admission/department/departmentForm?id=${item.id}`,
                   );
                 }}

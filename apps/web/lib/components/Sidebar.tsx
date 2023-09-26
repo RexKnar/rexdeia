@@ -188,48 +188,48 @@ export function Sidebar() {
                 </div>
               )}
             </div>
-          </div>
-          <div className="space-y-1">
-            <Button
-              variant="secondary"
-              className={`w-full justify-start bg-white hover:bg-primary hover:text-white ${
-                activeMenu == 'academics-department-student'
-                  ? 'bg-primary text-white'
-                  : ''
-              } `}
-              onClick={() => handleMenuClick('academics-department-student')}
-            >
-              <HelpCircle className="mr-2 h-4 w-4" />
-              Department
-            </Button>
-          </div>
-          <div className="space-y-1">
-            <Button
-              variant="secondary"
-              className={`w-full justify-start bg-white hover:bg-primary hover:text-white ${
-                activeMenu == 'academics-regulation-student'
-                  ? 'bg-primary text-white'
-                  : ''
-              } `}
-              onClick={() => handleMenuClick('academics-regulation-student')}
-            >
-              <HelpCircle className="mr-2 h-4 w-4" />
-              Regulation
-            </Button>
-          </div>
-          <div className="space-y-1">
-            <Button
-              variant="secondary"
-              className={`w-full justify-start bg-white hover:bg-primary hover:text-white ${
-                activeMenu == 'academics-course-student'
-                  ? 'bg-primary text-white'
-                  : ''
-              } `}
-              onClick={() => handleMenuClick('academics-course-student')}
-            >
-              <HelpCircle className="mr-2 h-4 w-4" />
-              Course
-            </Button>
+            <div className="mb-6 space-y-1 px-2">
+              <Button
+                variant="secondary"
+                className={`w-full justify-start bg-white hover:bg-primary hover:text-white ${
+                  activeMenu == 'academics-department-student'
+                    ? 'bg-primary text-white'
+                    : ''
+                } `}
+                onClick={() => handleMenuClick('academics-department-student')}
+              >
+                <HelpCircle className="mr-2 h-4 w-4" />
+                Department
+              </Button>
+            </div>
+            <div className="mb-6 space-y-1 px-2">
+              <Button
+                variant="secondary"
+                className={`w-full justify-start bg-white hover:bg-primary hover:text-white ${
+                  activeMenu == 'academics-regulation-student'
+                    ? 'bg-primary text-white'
+                    : ''
+                } `}
+                onClick={() => handleMenuClick('academics-regulation-student')}
+              >
+                <HelpCircle className="mr-2 h-4 w-4" />
+                Regulation
+              </Button>
+            </div>
+            <div className="mb-6 space-y-1 px-2">
+              <Button
+                variant="secondary"
+                className={`w-full justify-start bg-white hover:bg-primary hover:text-white ${
+                  activeMenu == 'academics-course-student'
+                    ? 'bg-primary text-white'
+                    : ''
+                } `}
+                onClick={() => handleMenuClick('academics-course-student')}
+              >
+                <HelpCircle className="mr-2 h-4 w-4" />
+                Course
+              </Button>
+            </div>
           </div>
         </div>
       </div>

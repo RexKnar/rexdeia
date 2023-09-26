@@ -5,7 +5,7 @@ import { makeAPICall } from '../../api';
 import { DELETE_DEPARTMENT } from '../../endpoints';
 
 export function CourseList({ courseList }) {
-  const rout = useRouter();
+  const router = useRouter();
 
   async function DeleteCourseHandler(courseId) {
     try {
@@ -22,6 +22,9 @@ export function CourseList({ courseList }) {
         <button
           className="text-primary-foreground mt-6 h-12 cursor-pointer rounded-md bg-primary px-5 text-white hover:bg-primary/90"
           type="button"
+          onClick={() => {
+            router.push(`/academics/course/courseForm`);
+          }}
         >
           Add Course
         </button>
@@ -54,7 +57,7 @@ export function CourseList({ courseList }) {
               <button
                 className="text-primary-foreground cursor-pointer rounded-md bg-primary text-white hover:bg-primary/90"
                 onClick={() => {
-                  rout.push(
+                  router.push(
                     `/admission/department/departmentForm?id=${item.id}`,
                   );
                 }}

@@ -4,22 +4,22 @@ import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 
 import { makeAPICall } from '../../api';
-import { ADD_DEPARTMENT } from '../../endpoints';
+import { ADD_COURSE } from '../../endpoints';
 
-export function DepartmentForm() {
+export function CourseForm() {
   const router = useRouter();
   const {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
   } = useForm();
-  async function addDepartmentHandler(data: Record<string, unknown>) {
+  async function addCourseHandler(data: Record<string, unknown>) {
     data.isActive = data.isActive == 'true' ? true : false;
     try {
-      await makeAPICall(ADD_DEPARTMENT, {
+      await makeAPICall(ADD_COURSE, {
         ...data,
       });
-      router.push('/academics/department');
+      router.push('/academics/course');
     } catch (error) {
       console.log(error);
     }
@@ -27,78 +27,36 @@ export function DepartmentForm() {
 
   return (
     <form
-      onSubmit={handleSubmit(addDepartmentHandler)}
+      onSubmit={handleSubmit(addCourseHandler)}
       className="mt-4 w-full border p-5"
     >
       <h1 className="text-center text-3xl font-semibold text-primary">
-        DEPARTMENT FORM
+        COURSE FORM
       </h1>
       <p className="mb-4 text-center text-gray-600">
-        If youd like to apply to our college, please fill in this Department
-        Form and we will contact you as soon as possible.
+        If youd like to apply to our college, please fill in this Course Form
+        and we will contact you as soon as possible.
       </p>
       <div className="mt-3 px-12">
         <div>
-          <label className="mt-5 block text-gray-700">Department Name</label>
+          <label className="mt-5 block text-gray-700">Course Name</label>
           <input
-            {...register('departmentName', {
-              required: 'Department Name is Required',
+            {...register('courseName', {
+              required: 'Course Name is Required',
             })}
             type="text"
-            placeholder="Enter your department name"
-            name="departmentName"
+            placeholder="Enter your course name"
+            name="courseName"
             className="ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring mt-1 flex h-10 w-full rounded-md border border-gray-300 bg-transparent px-3 py-2 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
           />
           <p
             className={`h-2 p-1 text-sm text-red-600 ${
-              errors.departmentName
+              errors.courseName
                 ? 'opacity-100 transition-opacity duration-300'
                 : 'opacity-0 transition-opacity duration-300'
             }`}
           >
-            {errors.departmentName?.message as string}
-          </p>
-        </div>
-        <div>
-          <label className="mt-5 block text-gray-700">No of Years</label>
-          <input
-            {...register('noOfYears', {
-              required: 'No of Years is Required',
-            })}
-            type="text"
-            placeholder="Enter the No of Years"
-            name="noOfYears"
-            className="ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring mt-1 flex h-10 w-full rounded-md border border-gray-300 bg-transparent px-3 py-2 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-          />
-          <p
-            className={`h-2 p-1 text-sm text-red-600 ${
-              errors.noOfYears
-                ? 'opacity-100 transition-opacity duration-300'
-                : 'opacity-0 transition-opacity duration-300'
-            }`}
-          >
-            {errors.noOfYears?.message as string}
-          </p>
-        </div>
-        <div>
-          <label className="mt-5 block text-gray-700">Department Code</label>
-          <input
-            {...register('departmentCode', {
-              required: 'Department Code is Required',
-            })}
-            type="text"
-            placeholder="Enter your department code"
-            name="departmentCode"
-            className="ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring mt-1 flex h-10 w-full rounded-md border border-gray-300 bg-transparent px-3 py-2 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-          />
-          <p
-            className={`h-2 p-1 text-sm text-red-600 ${
-              errors.departmentCode
-                ? 'opacity-100 transition-opacity duration-300'
-                : 'opacity-0 transition-opacity duration-300'
-            }`}
-          >
-            {errors.departmentCode?.message as string}
+            {errors.courseName?.message as string}
           </p>
         </div>
         <div>

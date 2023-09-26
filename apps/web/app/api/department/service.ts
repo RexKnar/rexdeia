@@ -8,7 +8,7 @@ export async function addDepartment(department: AddDepartmentModel) {
       departmentName: department.departmentName,
       noOfYears: department.noOfYears,
       departmentCode: department.departmentCode,
-      activeStatus: department.activeStatus,
+      isActive: department.isActive,
       description: department.description,
     },
   });
@@ -35,7 +35,7 @@ export async function editDepartment(department: EditDepartmentModel) {
       departmentName: department.departmentName,
       noOfYears: department.noOfYears,
       departmentCode: department.departmentCode,
-      activeStatus: department.activeStatus,
+      isActive: department.isActive,
       description: department.description,
     },
   });
