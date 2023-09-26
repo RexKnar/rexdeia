@@ -80,7 +80,7 @@ export function SignInForm() {
       >
         {fieldErrors.email?.message as string}
       </p>
-      <label className="block text-sm font-medium text-slate-500">
+      <label className="mt-4 block text-sm font-medium text-slate-500">
         Password
       </label>
       <div className="relative">
@@ -111,7 +111,7 @@ export function SignInForm() {
       >
         {fieldErrors.password?.message as string}
       </p>
-      <label className="mt-2 block text-end text-sm font-semibold text-gray-800">
+      <label className="mt-4 block text-end text-sm font-semibold text-gray-800">
         Forgot Password?
       </label>
       <Button
