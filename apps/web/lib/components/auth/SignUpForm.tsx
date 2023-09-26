@@ -79,7 +79,7 @@ export function SignUpForm() {
   }
 
   return (
-    <form className="mt-4" onSubmit={handleSubmit(signupHandler)}>
+    <form className="mt-5" onSubmit={handleSubmit(signupHandler)}>
       <div>
         <label className="sub-text inter block text-sm font-semibold">
           Full Name
@@ -184,20 +184,20 @@ export function SignUpForm() {
           )}
         </Button>
       </div>
-      <label className="inter inter mt-8 block text-center text-base font-semibold text-gray-800">
+      <label className="inter inter mt-8 block text-center text-sm font-semibold text-gray-800">
         or continue with{' '}
       </label>
       <div className="flex justify-center gap-4">
         <Button
           type="button"
-          className="mt-3 w-full bg-transparent bg-transparent text-base text-gray-800 outline outline-gray-300 hover:text-white"
+          className="mt-3 w-full  bg-transparent text-base text-gray-800 outline outline-gray-300 hover:text-white"
         >
           <Image src={googlelogo} alt={'logo'} className="mr-1"></Image>
           Google
         </Button>
         <Button
           type="button"
-          className="mt-3 w-full bg-transparent bg-transparent text-base text-gray-800 outline outline-gray-300 hover:text-white"
+          className="mt-3 w-full  bg-transparent text-base text-gray-800 outline outline-gray-300 hover:text-white"
         >
           <Image src={microsoftlogo} alt={'logo'} className="mr-1"></Image>
           Microsoft
