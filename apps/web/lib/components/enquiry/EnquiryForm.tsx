@@ -1,5 +1,4 @@
 'use client';
-
 import { Loader2 } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 
@@ -21,12 +20,25 @@ export function EnquiryForm({ formConfig }) {
       console.log(error);
     }
   }
+  const handleShare = () => {
+    const shareableURL = `localhost:3000/forms/enquiryForm/${formConfig.organizationId}`;
+    alert(shareableURL);
+  };
 
   return (
     <form
       onSubmit={handleSubmit(addEnquiryHandler)}
       className="mt-4 w-full border p-5"
     >
+      <div className="flex justify-end">
+        <button
+          className="text-primary-foreground mt-6 h-12 cursor-pointer rounded-md bg-primary px-5 text-white hover:bg-primary/90"
+          type="button"
+          onClick={handleShare}
+        >
+          Share
+        </button>
+      </div>
       <h1 className="text-center text-3xl font-semibold text-primary">
         {formConfig.json.title}
       </h1>
