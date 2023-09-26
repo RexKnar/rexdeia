@@ -4,9 +4,10 @@ import {
   ChevronDown,
   ChevronRight,
   GraduationCap,
-  HelpCircle,
   LayoutDashboard,
-  ListMinus,
+  User2,
+  UserCircle2,
+  UserPlus2,
 } from 'lucide-react';
 import { usePathname, useRouter } from 'next/navigation';
 import { useCallback, useState } from 'react';
@@ -95,7 +96,7 @@ export function Sidebar() {
                 } `}
                 onClick={() => handleMenuClick('admission-dashboard')}
               >
-                <LayoutDashboard className="mr-2 h-4 w-4" />
+                <LayoutDashboard size={16} className="mr-2" />
                 Dashboard
               </Button>
             </div>
@@ -107,8 +108,12 @@ export function Sidebar() {
                 } `}
                 onClick={() => handleMenuClick('students')}
               >
-                <ListMinus className="mr-2 h-4 w-4" />
-                Students
+                <UserCircle2 size={16} className="mr-2" />
+
+                <div className="flex w-full items-center justify-between ">
+                  Students
+                  <ChevronRight className="mr-2 h-4 w-4" />
+                </div>
               </Button>
             </div>
             <div className="mb-6 space-y-1 px-2">
@@ -119,8 +124,11 @@ export function Sidebar() {
                 } `}
                 onClick={() => handleMenuClick('staffs')}
               >
-                <GraduationCap className="mr-2 h-4 w-4" />
-                Staff
+                <User2 size={16} className="mr-2" />
+                <div className="flex w-full items-center justify-between ">
+                  Staff
+                  <ChevronRight className="mr-2 h-4 w-4" />
+                </div>
               </Button>
             </div>
             <div className="mb-6 space-y-1 px-2">
@@ -131,8 +139,11 @@ export function Sidebar() {
                 } `}
                 onClick={() => handleMenuClick('academics')}
               >
-                <HelpCircle className="mr-2 h-4 w-4" />
-                Academics
+                <GraduationCap size={16} className="mr-2" />
+                <div className="flex w-full items-center justify-between ">
+                  Academics
+                  <ChevronRight className="mr-2 h-4 w-4" />
+                </div>
               </Button>
             </div>
             <div className="mb-6 space-y-1 px-2">
@@ -143,7 +154,7 @@ export function Sidebar() {
                 } `}
                 onClick={handleAdmissionsClick}
               >
-                <HelpCircle className="mr-2 h-4 w-4" />
+                <UserPlus2 size={18} className="mr-2" />
                 <div className="flex w-full items-center justify-between ">
                   Admissions
                   {isArrowDown ? (
