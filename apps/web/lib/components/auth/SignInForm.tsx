@@ -68,9 +68,7 @@ export function SignInForm() {
           })}
         />
         <div className="absolute inset-y-0 right-0 flex cursor-pointer items-center pr-2">
-          <div>
-            <User2 size={20} strokeWidth={0.5} />
-          </div>
+          <User2 size={20} strokeWidth={0.5} />
         </div>
       </div>
       <p
@@ -126,7 +124,7 @@ export function SignInForm() {
             <Loader2 className="mr-2 h-2 w-6 animate-spin text-white" />
           </div>
         ) : (
-          `Signin`
+          `Sign in`
         )}
       </Button>
       <label className="mt-8 block text-center text-sm font-semibold text-gray-800">

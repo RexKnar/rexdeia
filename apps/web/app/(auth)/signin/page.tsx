@@ -51,7 +51,7 @@ export default async function Page() {
         >
           Signup
         </Link>
-        <footer className="mt-14 text-center text-sm font-normal text-[#9F9F9F]">
+        <footer className="mt-14 text-center text-sm font-normal text-gray-700">
           &copy; acadx 2023
         </footer>
       </section>
