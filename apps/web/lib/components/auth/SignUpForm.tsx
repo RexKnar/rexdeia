@@ -1,8 +1,9 @@
 'use client';
 
-import { Loader2, Mail, PhoneCall, User2 } from 'lucide-react';
+import { Eye, EyeOff, Loader2, Mail, PhoneCall, User2 } from 'lucide-react';
 import Image from 'next/image';
 import { signIn } from 'next-auth/react';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Button, Input } from 'ui';
 
@@ -26,6 +27,7 @@ type OnboardUserResponse = {
 };
 
 export function SignUpForm() {
+  const [showPassword, setShowPassword] = useState(false);
   const {
     register,
     handleSubmit,
@@ -167,15 +169,25 @@ export function SignUpForm() {
         <label className="sub-text inter block text-sm font-semibold">
           Password
         </label>
-        <Input
-          name="password"
-          type="password"
-          className="mt-2"
-          placeholder="Enter your password"
-          {...register('password', {
-            required: 'Password is needed to sign up',
-          })}
-        />
+        <div className="relative">
+          <Input
+            type={showPassword ? 'text' : 'password'}
+            className="mt-2 text-sm"
+            placeholder="Enter your password"
+            {...register('password', {
+              required: 'Password is needed to sign up',
+            })}
+          />
+          <div className="absolute inset-y-0 right-0 flex cursor-pointer items-center pr-2 ">
+            <div onClick={() => setShowPassword(!showPassword)}>
+              {showPassword ? (
+                <Eye size={20} strokeWidth={0.5} />
+              ) : (
+                <EyeOff size={20} strokeWidth={0.5} />
+              )}
+            </div>
+          </div>
+        </div>
         <p
           className={`h-2 p-1 text-sm text-red-600 ${
             errors.password
