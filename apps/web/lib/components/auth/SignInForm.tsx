@@ -63,11 +63,10 @@ export function SignInForm() {
         })}
       />
       <p
-        className={`h-2 p-1 text-sm text-red-600 ${
-          fieldErrors.email
-            ? 'opacity-100 transition-opacity duration-300'
-            : 'opacity-0 transition-opacity duration-300'
-        }`}
+        className={`h-2 p-1 text-sm text-red-600 ${fieldErrors.email
+          ? 'opacity-100 transition-opacity duration-300'
+          : 'opacity-0 transition-opacity duration-300'
+          }`}
       >
         {fieldErrors.email?.message as string}
       </p>
@@ -81,16 +80,15 @@ export function SignInForm() {
         })}
       />
       <p
-        className={`h-2 p-1 text-sm text-red-600 ${
-          fieldErrors.password
-            ? 'opacity-100 transition-opacity duration-300'
-            : 'opacity-0 transition-opacity duration-300'
-        }`}
+        className={`h-2 p-1 text-sm text-red-600 ${fieldErrors.password
+          ? 'opacity-100 transition-opacity duration-300'
+          : 'opacity-0 transition-opacity duration-300'
+          }`}
       >
         {fieldErrors.password?.message as string}
       </p>
       <label className="mt-2 block text-end text-sm font-semibold text-gray-800">
-        Forgot Password?
+        <a href="/forgetPassword">Forgot Password?</a>
       </label>
       <Button
         type="submit"
