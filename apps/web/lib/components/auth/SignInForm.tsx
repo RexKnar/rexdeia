@@ -1,6 +1,6 @@
 'use client';
 
-import { AlertCircleIcon, Eye, EyeOff, Loader2, User2 } from 'lucide-react';
+import { AlertCircleIcon, Eye, EyeOff, Loader2, Mail } from 'lucide-react';
 import Image from 'next/image';
 import { useSearchParams } from 'next/navigation';
 import { signIn } from 'next-auth/react';
@@ -68,7 +68,7 @@ export function SignInForm() {
           })}
         />
         <div className="absolute inset-y-0 right-0 flex cursor-pointer items-center pr-2">
-          <User2 size={20} strokeWidth={0.5} />
+          <Mail size={18} strokeWidth={0.5} />
         </div>
       </div>
       <p
@@ -80,7 +80,7 @@ export function SignInForm() {
       >
         {fieldErrors.email?.message as string}
       </p>
-      <label className="block text-sm font-medium text-slate-500">
+      <label className="mt-4 block text-sm font-medium text-slate-500">
         Password
       </label>
       <div className="relative">
@@ -111,7 +111,7 @@ export function SignInForm() {
       >
         {fieldErrors.password?.message as string}
       </p>
-      <label className="mt-2 block text-end text-sm font-semibold text-gray-800">
+      <label className="mt-4 block text-end text-sm font-semibold text-gray-800">
         Forgot Password?
       </label>
       <Button
