@@ -1,6 +1,6 @@
 'use client';
 
-import { Loader2 } from 'lucide-react';
+import { Loader2, Mail, PhoneCall, User2 } from 'lucide-react';
 import Image from 'next/image';
 import { signIn } from 'next-auth/react';
 import { useForm } from 'react-hook-form';
@@ -84,12 +84,19 @@ export function SignUpForm() {
         <label className="sub-text inter block text-sm font-semibold">
           Full Name
         </label>
-        <Input
-          type="text"
-          className="mt-2"
-          placeholder="Enter your full name"
-          {...register('name', { required: 'Your name is needed to sign up' })}
-        />
+        <div className="relative">
+          <Input
+            type="text"
+            className="mt-2"
+            placeholder="Enter your full name"
+            {...register('name', {
+              required: 'Your name is needed to sign up',
+            })}
+          />
+          <div className="absolute inset-y-0 right-0 flex cursor-pointer items-center pr-2">
+            <User2 size={20} strokeWidth={0.5} />
+          </div>
+        </div>
         <p
           className={`h-2 p-1 text-sm text-red-600 ${
             errors.name
@@ -104,15 +111,20 @@ export function SignUpForm() {
         <label className="sub-text inter block text-sm font-semibold">
           Email Address
         </label>
-        <Input
-          name="email"
-          type="email"
-          className="mt-2"
-          placeholder="Enter your email address"
-          {...register('email', {
-            required: 'Your email address is needed to sign up',
-          })}
-        />
+        <div className="relative">
+          <Input
+            name="email"
+            type="email"
+            className="mt-2"
+            placeholder="Enter your email address"
+            {...register('email', {
+              required: 'Your email address is needed to sign up',
+            })}
+          />
+          <div className="absolute inset-y-0 right-0 flex cursor-pointer items-center pr-2">
+            <Mail size={18} strokeWidth={0.5} />
+          </div>
+        </div>
         <p
           className={`h-2 p-1 text-sm text-red-600 ${
             errors.email
@@ -127,15 +139,20 @@ export function SignUpForm() {
         <label className="sub-text inter block text-sm font-semibold">
           Phone Number
         </label>
-        <Input
-          type="number"
-          className="mt-2"
-          name="phoneNumber"
-          placeholder="Enter your phone number"
-          {...register('phoneNumber', {
-            required: 'Your phone number is needed to sign up',
-          })}
-        />
+        <div className="relative">
+          <Input
+            type="number"
+            className="mt-2"
+            name="phoneNumber"
+            placeholder="Enter your phone number"
+            {...register('phoneNumber', {
+              required: 'Your phone number is needed to sign up',
+            })}
+          />
+          <div className="absolute inset-y-0 right-0 flex cursor-pointer items-center pr-2">
+            <PhoneCall size={18} strokeWidth={0.5} />
+          </div>
+        </div>
         <p
           className={`h-2 p-1 text-sm text-red-600 ${
             errors.phoneNumber
