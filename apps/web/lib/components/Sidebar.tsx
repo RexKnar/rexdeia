@@ -4,6 +4,7 @@ import {
   ChevronDown,
   ChevronRight,
   GraduationCap,
+  HelpCircle,
   LayoutDashboard,
   User2,
   UserCircle2,
