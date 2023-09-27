@@ -4,7 +4,7 @@ import { AddEnquiryModel } from './models';
 
 const schema = z.object({});
 
-export async function validateAddUser(addEnquiry: AddEnquiryModel) {
+export async function validateAddEnquiry(addEnquiry: AddEnquiryModel) {
   try {
     schema.parse(addEnquiry);
   } catch (e) {
