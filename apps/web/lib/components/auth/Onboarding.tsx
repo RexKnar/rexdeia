@@ -67,7 +67,7 @@ export function Onboarding({ branchId, organizationId }: OnboardingProps) {
             ></Image>
           </div>
           <div className="mt-1 justify-center">
-            <div className="inter mt-2 flex justify-center text-sm font-semibold">
+            <div className="mt-2 flex justify-center text-sm font-semibold">
               <div className="flex items-center">
                 <p className="mr-5">
                   <Check />

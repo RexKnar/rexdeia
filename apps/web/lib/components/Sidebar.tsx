@@ -87,8 +87,8 @@ export function Sidebar() {
           <div className="mb-2 flex w-[292px] items-center justify-start gap-3 px-4 text-lg font-semibold tracking-tight">
             <UserMenu />
             <div className="w-[128px] text-left">
-              <h1 className="inter text-sm font-semibold">ABC College</h1>
-              <h2 className="inter text-sm font-normal text-gray-700">Admin</h2>
+              <h1 className="text-sm font-semibold">ABC College</h1>
+              <h2 className="text-sm font-normal text-gray-700">Admin</h2>
             </div>
           </div>
           <div className="mb-8 w-full border">
@@ -175,7 +175,7 @@ export function Sidebar() {
               </Button>
               {showSubmenu && (
                 <div className="ml-4 border-l-2 px-2">
-                  <div className="inter rounded-lg p-2 text-sm font-normal text-gray-800">
+                  <div className="rounded-lg p-2 text-sm font-normal text-gray-800">
                     <Button
                       className={`w-[174px] justify-start bg-white hover:bg-gray-100 hover:text-gray-800 ${
                         activeMenu == 'admission-addnew'
@@ -187,7 +187,7 @@ export function Sidebar() {
                       Add new
                     </Button>
                   </div>
-                  <div className="inter rounded-lg p-2 text-sm font-normal text-gray-800">
+                  <div className="rounded-lg p-2 text-sm font-normal text-gray-800">
                     <Button
                       className={`w-[174px] justify-start bg-white hover:bg-gray-100 hover:text-gray-800 ${
                         activeMenu == 'admission-analytics'
@@ -199,7 +199,7 @@ export function Sidebar() {
                       Analytics
                     </Button>
                   </div>
-                  <div className="inter rounded-lg p-2 text-sm font-normal text-gray-800">
+                  <div className="rounded-lg p-2 text-sm font-normal text-gray-800">
                     <Button
                       className={`w-[174px] justify-start bg-white hover:bg-gray-100 hover:text-gray-800 ${
                         activeMenu == 'admission-configure'

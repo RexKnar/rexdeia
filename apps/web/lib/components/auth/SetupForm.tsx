@@ -81,7 +81,7 @@ export function SetupForm({ branchId, organizationId }: SetupFormProps) {
     <form onSubmit={handleSubmit(onSubmit)} className="mt-4">
       <section>
         <div className="mb-3 mt-36 flex justify-center">
-          <p className="inter text-2xl font-semibold">
+          <p className="text-2xl font-semibold">
             Please select the type of account you are creating.
           </p>
         </div>

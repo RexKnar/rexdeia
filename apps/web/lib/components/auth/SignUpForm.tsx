@@ -213,7 +213,7 @@ export function SignUpForm() {
           )}
         </Button>
       </div>
-      <label className="inter inter mt-8 block text-center text-sm font-semibold text-gray-800">
+      <label className="inter mt-8 block text-center text-sm font-semibold text-gray-800">
         or continue with{' '}
       </label>
       <div className="flex justify-center gap-4">

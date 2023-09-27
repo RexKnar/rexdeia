@@ -24,7 +24,7 @@ export function AddAdmissionContainer({
     <section className="w-full bg-gray-50 p-5">
       <div className="flex">
         <PlusCircle className="ml-5 mt-1" />
-        <h1 className="inter ml-2 text-2xl font-semibold">Add New</h1>
+        <h1 className="ml-2 text-2xl font-semibold">Add New</h1>
       </div>
 
       <Tabs defaultValue="admission" className="mt-8">

@@ -1,10 +1,23 @@
 import 'configs/tailwind/styles.css';
 
+import { Inter, Roboto_Mono } from '@next/font/google';
 import { ReactNode, Suspense } from 'react';
 import { Toaster } from 'ui';
 
 import { Sidebar } from '../../lib/components/Sidebar';
 import Providers from '../../lib/Providers';
+
+const inter = Inter({
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-inter',
+});
+
+const roboto_mono = Roboto_Mono({
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-roboto-mono',
+});
 
 export const metadata = {
   title: 'acadx.io | Elevate your academic experience',
@@ -13,7 +26,7 @@ export const metadata = {
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="en" className={`${inter.variable} ${roboto_mono.variable}`}>
       <Providers>
         <body>
           <main className="flex flex-row">

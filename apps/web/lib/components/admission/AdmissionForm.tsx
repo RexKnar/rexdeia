@@ -162,7 +162,7 @@ export function AdmissionForm({ formConfig, formId }: AdmissionFormProps) {
                 }}
               >
                 <>
-                  <h1 className="inter mb-5 text-sm font-semibold">
+                  <h1 className="mb-5 text-sm font-semibold">
                     {section.sectionTitle}
                   </h1>
                   <div className="grid grid-cols-1 flex-wrap justify-between gap-4 md:grid md:grid-cols-1 lg:grid lg:grid-cols-3 ">
