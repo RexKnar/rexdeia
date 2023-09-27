@@ -1,22 +1,23 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import logo from '../../../public/assets/images/acadx-logo.png';
+
 import { ForgetPasswordForm } from '../../../lib/components/auth/ForgetPasswordForm';
+import logo from '../../../public/assets/images/acadx-logo.png';
 
 export default async function Page() {
-
-
-
   return (
-    <section className="flex h-full flex-col sm:flex-row justify-center">
+    <section className="flex h-full flex-col justify-center sm:flex-row">
       <section className="flex h-full w-full translate-y-0 transform flex-col justify-between overflow-auto px-20 opacity-100 transition-all duration-500 ease-in-out md:w-4/12 ">
         <div className="flex justify-center">
           <Image src={logo} className="pt-10 " alt={'logo'} width={100}></Image>
         </div>
         <div className="mt-10 flex flex-col">
-          <span className="text-2xl font-semibold mb-4">Verify Your Account</span>
+          <span className="mb-4 text-2xl font-semibold">
+            Verify Your Account
+          </span>
           <p className="text-sm font-normal text-gray-800">
-            Select option to verify your  account with <span className="text-blue-600">Acadx</span>
+            Select option to verify your account with{' '}
+            <span className="text-blue-600">Acadx</span>
           </p>
         </div>
         <ForgetPasswordForm />
@@ -35,9 +36,4 @@ export default async function Page() {
       </section>
     </section>
   );
-
-
-
-
-
 }

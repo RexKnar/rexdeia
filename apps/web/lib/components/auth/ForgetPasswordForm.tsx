@@ -1,18 +1,8 @@
 'use client';
-
-import { useForm } from 'react-hook-form';
-import { Mail, MailCheck, Smartphone } from 'lucide-react';
-import { Button, Input } from 'ui';
-
+import { MailCheck, Smartphone } from 'lucide-react';
+import { Button } from 'ui';
 
 export function ForgetPasswordForm() {
-
-  const {
-    register,
-    handleSubmit,
-    formState: { errors: fieldErrors, isSubmitting },
-  } = useForm();
-
   return (
     <form action="">
       <div className="flex flex-col sm:flex-row sm:gap-4">
@@ -20,7 +10,7 @@ export function ForgetPasswordForm() {
           type="button"
           className="mt-3 w-full bg-transparent p-2 text-base text-gray-800 outline outline-gray-300 hover:text-white"
         >
-          <div className="flex items-center flex-col text-center p">
+          <div className="p flex flex-col items-center text-center">
             <MailCheck size={18} className="" />
             <p className="text-sm">Verify via email</p>
           </div>
@@ -29,18 +19,16 @@ export function ForgetPasswordForm() {
           type="button"
           className="mt-3 w-full  bg-transparent text-base text-gray-800 outline outline-gray-300 hover:text-white "
         >
-          <div className="flex items-center flex-col text-center">
+          <div className="flex flex-col items-center text-center">
             <Smartphone size={18} className="" />
             <p className="text-sm">Verify via phone</p>
           </div>
         </Button>
       </div>
-      <Button
-        type="submit"
-        className="mt-10 w-full text-white"
-      > Send link
+      <Button type="submit" className="mt-10 w-full text-white">
+        {' '}
+        Send link
       </Button>
     </form>
-  )
-
+  );
 }

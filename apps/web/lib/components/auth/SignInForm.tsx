@@ -1,5 +1,4 @@
 'use client';
-
 import { AlertCircleIcon, Eye, EyeOff, Loader2, Mail } from 'lucide-react';
 import Image from 'next/image';
 import { useSearchParams } from 'next/navigation';
@@ -72,10 +71,11 @@ export function SignInForm() {
         </div>
       </div>
       <p
-        className={`h-2 p-1 text-sm text-red-600 ${fieldErrors.email
-          ? 'opacity-100 transition-opacity duration-300'
-          : 'opacity-0 transition-opacity duration-300'
-          }`}
+        className={`h-2 p-1 text-sm text-red-600 ${
+          fieldErrors.email
+            ? 'opacity-100 transition-opacity duration-300'
+            : 'opacity-0 transition-opacity duration-300'
+        }`}
       >
         {fieldErrors.email?.message as string}
       </p>
@@ -102,10 +102,11 @@ export function SignInForm() {
         </div>
       </div>
       <p
-        className={`h-2 p-1 text-sm text-red-600 ${fieldErrors.password
-          ? 'opacity-100 transition-opacity duration-300'
-          : 'opacity-0 transition-opacity duration-300'
-          }`}
+        className={`h-2 p-1 text-sm text-red-600 ${
+          fieldErrors.password
+            ? 'opacity-100 transition-opacity duration-300'
+            : 'opacity-0 transition-opacity duration-300'
+        }`}
       >
         {fieldErrors.password?.message as string}
       </p>
