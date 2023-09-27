@@ -15,10 +15,10 @@
     "prettier-plugin-tailwindcss": "^0.5.4",
     "turbo": "^1.10.14"
   },
-  "packageManager": "pnpm@8.7.6",
+  "packageManager": "pnpm@8.8.0",
   "name": "acadx",
   "engines": {
     "node": "18.18.0",
-    "pnpm": "8.7.6"
+    "pnpm": "8.8.0"
   }
 }
