@@ -23,7 +23,7 @@ export function CourseList({ courseList }) {
           className="text-primary-foreground mt-6 h-12 cursor-pointer rounded-md bg-primary px-5 text-white hover:bg-primary/90"
           type="button"
           onClick={() => {
-            router.push(`/academics/course/courseForm`);
+            router.push(`/academics/course/new`);
           }}
         >
           Add Course
@@ -57,9 +57,7 @@ export function CourseList({ courseList }) {
               <button
                 className="text-primary-foreground cursor-pointer rounded-md bg-primary text-white hover:bg-primary/90"
                 onClick={() => {
-                  router.push(
-                    `/admission/department/departmentForm?id=${item.id}`,
-                  );
+                  router.push(`/academics/course/new?id=${item.id}`);
                 }}
               >
                 Edit

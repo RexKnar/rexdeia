@@ -15,7 +15,6 @@ export function RegulationForm() {
   } = useForm();
   async function addRegulationHandler(data: Record<string, unknown>) {
     data.isActive = data.isActive == 'true' ? true : false;
-    console.log(data);
     try {
       await makeAPICall(ADD_REGULATION, {
         ...data,

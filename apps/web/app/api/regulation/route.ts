@@ -7,8 +7,8 @@ export async function POST(request: NextRequest) {
   const payload = await request.json();
   try {
     await validateAddRegulation(payload);
-    const createdDepartment = await addRegulation(payload);
-    return new NextResponse(JSON.stringify(createdDepartment), {
+    const createdRegulation = await addRegulation(payload);
+    return new NextResponse(JSON.stringify(createdRegulation), {
       status: 201,
     });
   } catch (e) {

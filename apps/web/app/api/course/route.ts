@@ -7,8 +7,8 @@ export async function POST(request: NextRequest) {
   const payload = await request.json();
   try {
     await validateAddCourse(payload);
-    const createdDepartment = await addCourse(payload);
-    return new NextResponse(JSON.stringify(createdDepartment), {
+    const createdCourse = await addCourse(payload);
+    return new NextResponse(JSON.stringify(createdCourse), {
       status: 201,
     });
   } catch (e) {

@@ -7,7 +7,7 @@ import { DepartmentForm } from '../../../../../lib/components/department/departm
 export default async function Page() {
   const session = await getServerSession(authOptions);
   if (!session.branchId || !session.organizationId) {
-    redirect('/signin');
+    return redirect('/signin?callbackUrl=/academics/department/new');
   }
   return <DepartmentForm />;
 }

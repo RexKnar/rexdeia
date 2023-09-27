@@ -2,12 +2,12 @@ import { redirect } from 'next/navigation';
 import { getServerSession } from 'next-auth';
 
 import { authOptions } from '../../../../../lib/auth';
-import { CourseForm } from '../../../../../lib/components/course/courseForm';
+import { RegulationForm } from '../../../../../lib/components/regulation/regulationForm';
 
 export default async function Page() {
   const session = await getServerSession(authOptions);
   if (!session.branchId || !session.organizationId) {
-    redirect('/signin');
+    return redirect('/signin?callbackUrl=/academics/regulation/new');
   }
-  return <CourseForm />;
+  return <RegulationForm />;
 }
