@@ -23,6 +23,10 @@ type MenuItem =
   | 'admission-page'
   | 'admission-configure'
   | 'admission-analytics'
+  | 'admission-addnew'
+  | 'academics-department-student'
+  | 'academics-regulation-student'
+  | 'academics-course-student'
   | 'admission-add';
 
 const menuItemPaths: Record<MenuItem, string> = {
@@ -33,6 +37,10 @@ const menuItemPaths: Record<MenuItem, string> = {
   'admission-page': '/admission/dashboard',
   'admission-configure': '/admission/configure',
   'admission-analytics': '/admission/analytics',
+  'admission-addnew': '/admission/addnew',
+  'academics-department-student': '/academics/department',
+  'academics-regulation-student': '/academics/regulation',
+  'academics-course-student': '/academics/course',
   'admission-add': '/admission/add',
 };
 
@@ -205,6 +213,48 @@ export function Sidebar() {
                 </div>
               )}
             </div>
+          </div>
+          <div className="space-y-1">
+            <Button
+              variant="secondary"
+              className={`w-full justify-start bg-white hover:bg-primary hover:text-white ${
+                activeMenu == 'academics-department-student'
+                  ? 'bg-primary text-white'
+                  : ''
+              } `}
+              onClick={() => handleMenuClick('academics-department-student')}
+            >
+              <HelpCircle className="mr-2 h-4 w-4" />
+              Department
+            </Button>
+          </div>
+          <div className="space-y-1">
+            <Button
+              variant="secondary"
+              className={`w-full justify-start bg-white hover:bg-primary hover:text-white ${
+                activeMenu == 'academics-regulation-student'
+                  ? 'bg-primary text-white'
+                  : ''
+              } `}
+              onClick={() => handleMenuClick('academics-regulation-student')}
+            >
+              <HelpCircle className="mr-2 h-4 w-4" />
+              Regulation
+            </Button>
+          </div>
+          <div className="space-y-1">
+            <Button
+              variant="secondary"
+              className={`w-full justify-start bg-white hover:bg-primary hover:text-white ${
+                activeMenu == 'academics-course-student'
+                  ? 'bg-primary text-white'
+                  : ''
+              } `}
+              onClick={() => handleMenuClick('academics-course-student')}
+            >
+              <HelpCircle className="mr-2 h-4 w-4" />
+              Course
+            </Button>
           </div>
         </div>
       </div>

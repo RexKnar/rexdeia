@@ -1,7 +1,7 @@
 import React from 'react';
 
-import { Form } from '../../../lib/components/shared/Form';
-import { getFormByCriteria } from '../../api/forms/service';
+import { Form } from '../../../../lib/components/shared/Form';
+import { getFormByCriteria } from '../../../api/forms/service';
 
 export default async function Page({ params }: { params: { id: string } }) {
   const admissionForms = await getFormByCriteria({
@@ -10,9 +10,5 @@ export default async function Page({ params }: { params: { id: string } }) {
     branchId: '5f1f0f1a0b1eaf001c3f2b1e', // TODO: get branchId from user
   });
   const form = admissionForms[0];
-  return (
-    <>
-      <Form formConfig={form} />;
-    </>
-  );
+  return <Form formConfig={form} />;
 }

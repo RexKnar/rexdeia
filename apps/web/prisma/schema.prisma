@@ -62,6 +62,8 @@ model Branch {
   organizationId String             @db.ObjectId
   users          UserOrganization[]
   forms          Form[]
+  department     Department[]
+  regulation     Regulation[]
   isActivated    Boolean            @default(false)
   createdAt      DateTime?          @default(now())
   updatedAt      DateTime?          @default(now())
@@ -78,6 +80,8 @@ model Organization {
   users       UserOrganization[]
   branches    Branch[]
   forms       Form[]
+  department  Department[]
+  regulation  Regulation[]
   isActivated Boolean            @default(false)
   createdAt   DateTime?          @default(now())
   updatedAt   DateTime?          @default(now())
@@ -188,6 +192,46 @@ model EnquiryForm {
   mediumOfEducation12th String
   form                  Form?   @relation(fields: [formId], references: [id])
   formId                String? @db.ObjectId
+}
+
+model Department {
+  id             String        @id @default(auto()) @map("_id") @db.ObjectId
+  departmentName String
+  noOfYears      String
+  departmentCode String
+  activeStatus   String
+  description    String
+  course         Course[]
+  isDeleted      Boolean       @default(false)
+  deletedAt      DateTime?
+  organization   Organization? @relation(fields: [organizationId], references: [id])
+  organizationId String?       @db.ObjectId
+  branch         Branch?       @relation(fields: [branchId], references: [id])
+  branchId       String?       @db.ObjectId
+}
+
+model Regulation {
+  id             String        @id @default(auto()) @map("_id") @db.ObjectId
+  regulationName String
+  announcedYear  String
+  endYear        String
+  isDeleted      Boolean       @default(false)
+  deletedAt      DateTime?
+  organization   Organization? @relation(fields: [organizationId], references: [id])
+  organizationId String?       @db.ObjectId
+  branch         Branch?       @relation(fields: [branchId], references: [id])
+  branchId       String?       @db.ObjectId
+}
+
+model Course {
+  id           String      @id @default(auto()) @map("_id") @db.ObjectId
+  courseName   String
+  activeStatus String
+  description  String
+  isDeleted    Boolean     @default(false)
+  deletedAt    DateTime?
+  department   Department? @relation(fields: [departmentId], references: [id])
+  departmentId String?     @db.ObjectId
 }
 
 model Form {
