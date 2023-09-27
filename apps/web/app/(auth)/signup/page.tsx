@@ -28,23 +28,23 @@ export default async function Page() {
         }}
       ></section>
 
-      <section className="flex h-full w-full translate-y-0 transform flex-col justify-between overflow-auto p-12 opacity-100 transition-all duration-500 ease-in-out md:w-4/12">
+      <section className="flex h-full w-full translate-y-0 transform flex-col justify-between overflow-auto px-20 opacity-100 transition-all duration-500 ease-in-out md:w-4/12">
         <div>
-          <Image src={logo} alt={'logo'} width={150}></Image>
+          <Image src={logo} className="pt-10" alt={'logo'} width={100}></Image>
         </div>
-        <div className="mt-8 flex">
-          <span className=" inter text-3xl font-semibold">
+        <div className="mt-14 flex">
+          <span className=" inter text-xl font-semibold">
             Create Your Account
           </span>
         </div>
 
-        <p className="text-base font-medium text-gray-800">
+        <p className="text-sm font-normal text-gray-800">
           Join acadx and embark on a seamless academic experience.
         </p>
 
         <SignUpForm />
 
-        <p className="mt-12 text-center text-base font-semibold text-gray-800">
+        <p className="mt-12 text-center text-sm font-semibold text-gray-800">
           Have an account?
         </p>
         <Link
@@ -53,7 +53,7 @@ export default async function Page() {
         >
           Sign In
         </Link>
-        <footer className="inter mt-14 text-center text-base font-normal text-gray-700">
+        <footer className="inter mt-14 text-center text-sm font-normal text-gray-700">
           &copy; acadx 2023
         </footer>
       </section>
