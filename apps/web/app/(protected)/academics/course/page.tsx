@@ -10,17 +10,15 @@ export default async function Page() {
   if (!session.branchId || !session.organizationId) {
     return redirect('/signin?callbackUrl=/academics/course');
   }
-  try {
-    const apiResponse = await getCourseList({
-      branchId: session.branchId,
-      organizationId: session.organizationId,
-    });
-    return (
-      <div className="flex flex-col">
-        <CourseList courseList={apiResponse} />
-      </div>
-    );
-  } catch (error) {
-    console.log(error);
-  }
+
+  const courses = await getCourseList({
+    branchId: session.branchId,
+    organizationId: session.organizationId,
+  });
+
+  return (
+    <div className="flex flex-col">
+      <CourseList courseList={courses} />
+    </div>
+  );
 }
