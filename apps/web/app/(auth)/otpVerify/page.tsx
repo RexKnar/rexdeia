@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 
-import { ForgetPasswordForm } from '../../../lib/components/auth/ForgetPasswordForm';
+import { OtpVerifyForm } from '../../../lib/components/auth/OtpVerifyForm';
 import logo from '../../../public/assets/images/acadx-logo.png';
 
 export default async function Page() {
@@ -11,15 +11,15 @@ export default async function Page() {
         <div className="flex justify-center">
           <Image src={logo} className="pt-10 " alt={'logo'} width={100}></Image>
         </div>
-        <ForgetPasswordForm />
+        <OtpVerifyForm />
         <p className=" mt-4 text-center text-sm font-semibold text-gray-800">
-          Don&apos;t receive the link?
+          Don&apos;t receive the otp?
         </p>
         <Link
           href="/signin"
           className=" w-full rounded-md border-2 border-gray-300 bg-transparent p-2 text-center text-sm font-semibold text-primary hover:bg-primary hover:text-white"
         >
-          Resend
+          Resend code
         </Link>
         <footer className="mt-14 text-center text-sm font-normal text-gray-700">
           &copy; acadx 2023
