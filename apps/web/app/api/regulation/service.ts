@@ -19,6 +19,20 @@ export async function addRegulation(regulation: AddRegulationModel) {
       announcedYear: regulation.announcedYear,
       endYear: regulation.endYear,
       isActive: regulation.isActive,
+      branchId: regulation.branchId,
+      organizationId: regulation.organizationId,
+    },
+  });
+}
+
+export async function deleteRegulation(regulationId: string) {
+  return await db.regulation.update({
+    where: {
+      id: regulationId,
+    },
+    data: {
+      isDeleted: true,
+      deletedAt: new Date(),
     },
   });
 }

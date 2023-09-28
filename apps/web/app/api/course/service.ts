@@ -25,3 +25,15 @@ export async function addCourse(course: AddCourseModel) {
     },
   });
 }
+
+export async function deletCourse(courseId: string) {
+  return await db.course.update({
+    where: {
+      id: courseId,
+    },
+    data: {
+      isDeleted: true,
+      deletedAt: new Date(),
+    },
+  });
+}

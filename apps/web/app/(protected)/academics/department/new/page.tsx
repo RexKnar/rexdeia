@@ -9,5 +9,11 @@ export default async function Page() {
   if (!session.branchId || !session.organizationId) {
     return redirect('/signin?callbackUrl=/academics/department/new');
   }
-  return <DepartmentForm />;
+  console.log(`-->${session.branchId}------>${session.organizationId}`);
+  return (
+    <DepartmentForm
+      branchId={session.branchId}
+      organizationId={session.organizationId}
+    />
+  );
 }

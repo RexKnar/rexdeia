@@ -9,5 +9,10 @@ export default async function Page() {
   if (!session.branchId || !session.organizationId) {
     return redirect('/signin?callbackUrl=/academics/regulation/new');
   }
-  return <RegulationForm />;
+  return (
+    <RegulationForm
+      branchId={session.branchId}
+      organizationId={session.organizationId}
+    />
+  );
 }

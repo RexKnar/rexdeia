@@ -10,11 +10,13 @@ export async function addDepartment(department: AddDepartmentModel) {
       departmentCode: department.departmentCode,
       isActive: department.isActive,
       description: department.description,
+      branchId: department.branchId,
+      organizationId: department.organizationId,
     },
   });
 }
 
-export async function deleteDeparment(departmentId) {
+export async function deleteDeparment(departmentId: string) {
   return await db.department.update({
     where: {
       id: departmentId,

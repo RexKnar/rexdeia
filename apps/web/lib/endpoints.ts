@@ -8,7 +8,9 @@ export const LIST_ADMISSION = `LIST_ADMISSION`;
 export const LIST_ENQUIRY = `LIST_ENQUIRY`;
 export const ADD_DEPARTMENT = `ADD_DEPARTMENT`;
 export const ADD_REGULATION = `ADD_REGULATION`;
+export const DELETE_REGULATION = `DELETE_REGULATION`;
 export const ADD_COURSE = `ADD_COURSE`;
+export const DELETE_COURSE = `DELETE_COURSE`;
 export const UPDATE_DEPARTMENT = `UPDATE_DEPARTMENT`;
 export const DELETE_DEPARTMENT = `DELETE_DEPARTMENT`;
 export const ONBOARD_ACCOUNT = `ONBOARD_ACCOUNT`;
@@ -56,8 +58,16 @@ export default <EndpointDetails>{
     requestType: `POST`,
     endpoint: `/api/regulation`,
   },
+  [DELETE_REGULATION]: {
+    requestType: `DELETE`,
+    endpoint: `/api/regulation`,
+  },
   [ADD_COURSE]: {
     requestType: `POST`,
+    endpoint: `/api/course`,
+  },
+  [DELETE_COURSE]: {
+    requestType: `DELETE`,
     endpoint: `/api/course`,
   },
   [ONBOARD_ACCOUNT]: {

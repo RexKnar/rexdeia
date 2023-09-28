@@ -1,4 +1,5 @@
 'use client';
+
 import { Loader2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
@@ -6,7 +7,7 @@ import { useForm } from 'react-hook-form';
 import { makeAPICall } from '../../api';
 import { ADD_REGULATION } from '../../endpoints';
 
-export function RegulationForm() {
+export function RegulationForm({ branchId, organizationId }) {
   const router = useRouter();
   const {
     register,
@@ -15,6 +16,8 @@ export function RegulationForm() {
   } = useForm();
   async function addRegulationHandler(data: Record<string, unknown>) {
     data.isActive = data.isActive == 'true' ? true : false;
+    data.branchId = branchId;
+    data.organizationId = organizationId;
     try {
       await makeAPICall(ADD_REGULATION, {
         ...data,

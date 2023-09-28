@@ -6,7 +6,7 @@ import { useForm } from 'react-hook-form';
 import { makeAPICall } from '../../api';
 import { ADD_DEPARTMENT } from '../../endpoints';
 
-export function DepartmentForm() {
+export function DepartmentForm({ branchId, organizationId }) {
   const router = useRouter();
   const {
     register,
@@ -15,6 +15,8 @@ export function DepartmentForm() {
   } = useForm();
   async function addDepartmentHandler(data: Record<string, unknown>) {
     data.isActive = data.isActive == 'true' ? true : false;
+    data.branchId = branchId;
+    data.organizationId = organizationId;
     try {
       await makeAPICall(ADD_DEPARTMENT, {
         ...data,
