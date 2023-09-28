@@ -1,11 +1,26 @@
-import { db } from '../../../../lib/db';
-import { BranchModel } from './models';
+import { getServerSession } from 'next-auth';
 
-export async function updateBranchById(id: string, branch: BranchModel) {
+import { authOptions } from '../../../../lib/auth';
+import { db } from '../../../../lib/db';
+import { UpdateBranchByIdModel } from '../../../../lib/domain';
+
+export async function updateBranchById(
+  id: string,
+  branch: UpdateBranchByIdModel,
+) {
+  const session = await getServerSession(authOptions);
+
   return await db.branch.update({
     data: {
+      ...branch,
       isActivated: true,
-      name: branch.name,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      createdBy: {
+        connect: {
+          id: session.user.id,
+        },
+      },
     },
     where: {
       id: id,

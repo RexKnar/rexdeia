@@ -28,7 +28,7 @@ export default async function Page() {
         }}
       ></section>
 
-      <section className="flex h-full w-full translate-y-0 transform flex-col justify-between overflow-auto px-20 opacity-100 transition-all duration-500 ease-in-out md:w-4/12">
+      <section className="flex h-full w-full translate-y-0 transform flex-col justify-between overflow-x-hidden px-20 opacity-100 transition-all duration-500 ease-in-out md:w-4/12">
         <div>
           <Image src={logo} className="pt-10" alt={'logo'} width={100}></Image>
         </div>
@@ -53,7 +53,7 @@ export default async function Page() {
         >
           Sign In
         </Link>
-        <footer className="inter mt-14 text-center text-sm font-normal text-gray-700">
+        <footer className="mt-14 text-center text-sm font-normal text-gray-700">
           &copy; acadx 2023
         </footer>
       </section>

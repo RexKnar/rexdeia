@@ -81,7 +81,7 @@ export function Form({ formConfig }) {
                 }}
               >
                 <>
-                  <h1 className="inter text-sm font-semibold">
+                  <h1 className="text-sm font-semibold">
                     {section.sectionTitle}
                   </h1>
                   <div className="flex flex-wrap justify-between gap-3">

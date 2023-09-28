@@ -6,7 +6,9 @@ import {
   GraduationCap,
   HelpCircle,
   LayoutDashboard,
-  ListMinus,
+  User2,
+  UserCircle2,
+  UserPlus2,
 } from 'lucide-react';
 import { usePathname, useRouter } from 'next/navigation';
 import { useCallback, useState } from 'react';
@@ -18,6 +20,7 @@ type MenuItem =
   | 'admission-dashboard'
   | 'students'
   | 'staffs'
+  | 'academics'
   | 'admission-page'
   | 'admission-configure'
   | 'admission-analytics'
@@ -31,6 +34,7 @@ const menuItemPaths: Record<MenuItem, string> = {
   'admission-dashboard': '/admission/dashboard',
   students: '/students',
   staffs: '/staffs',
+  academics: '/academics',
   'admission-page': '/admission/dashboard',
   'admission-configure': '/admission/configure',
   'admission-analytics': '/admission/analytics',
@@ -83,8 +87,8 @@ export function Sidebar() {
           <div className="mb-2 flex w-[292px] items-center justify-start gap-3 px-4 text-lg font-semibold tracking-tight">
             <UserMenu />
             <div className="w-[128px] text-left">
-              <h1 className="inter text-sm font-semibold">ABC College</h1>
-              <h2 className="inter text-sm font-normal text-gray-700">Admin</h2>
+              <h1 className="text-sm font-semibold">ABC College</h1>
+              <h2 className="text-sm font-normal text-gray-700">Admin</h2>
             </div>
           </div>
           <div className="mb-8 w-full border">
@@ -101,7 +105,7 @@ export function Sidebar() {
                 } `}
                 onClick={() => handleMenuClick('admission-dashboard')}
               >
-                <LayoutDashboard className="mr-2 h-4 w-4" />
+                <LayoutDashboard size={16} className="mr-2" />
                 Dashboard
               </Button>
             </div>
@@ -113,8 +117,12 @@ export function Sidebar() {
                 } `}
                 onClick={() => handleMenuClick('students')}
               >
-                <ListMinus className="mr-2 h-4 w-4" />
-                Students
+                <UserCircle2 size={16} className="mr-2" />
+
+                <div className="flex w-full items-center justify-between ">
+                  Students
+                  <ChevronRight className="mr-2 h-4 w-4" />
+                </div>
               </Button>
             </div>
             <div className="mb-6 space-y-1 px-2">
@@ -125,8 +133,26 @@ export function Sidebar() {
                 } `}
                 onClick={() => handleMenuClick('staffs')}
               >
-                <GraduationCap className="mr-2 h-4 w-4" />
-                Staff
+                <User2 size={16} className="mr-2" />
+                <div className="flex w-full items-center justify-between ">
+                  Staff
+                  <ChevronRight className="mr-2 h-4 w-4" />
+                </div>
+              </Button>
+            </div>
+            <div className="mb-6 space-y-1 px-2">
+              <Button
+                variant="secondary"
+                className={`w-full justify-start bg-white hover:bg-primary hover:text-white ${
+                  activeMenu == 'academics' ? 'bg-primary text-white' : ''
+                } `}
+                onClick={() => handleMenuClick('academics')}
+              >
+                <GraduationCap size={16} className="mr-2" />
+                <div className="flex w-full items-center justify-between ">
+                  Academics
+                  <ChevronRight className="mr-2 h-4 w-4" />
+                </div>
               </Button>
             </div>
             <div className="mb-6 space-y-1 px-2">
@@ -137,7 +163,7 @@ export function Sidebar() {
                 } `}
                 onClick={handleAdmissionsClick}
               >
-                <HelpCircle className="mr-2 h-4 w-4" />
+                <UserPlus2 size={18} className="mr-2" />
                 <div className="flex w-full items-center justify-between ">
                   Admissions
                   {isArrowDown ? (
@@ -149,7 +175,7 @@ export function Sidebar() {
               </Button>
               {showSubmenu && (
                 <div className="ml-4 border-l-2 px-2">
-                  <div className="inter rounded-lg p-2 text-sm font-normal text-gray-800">
+                  <div className="rounded-lg p-2 text-sm font-normal text-gray-800">
                     <Button
                       className={`w-[174px] justify-start bg-white hover:bg-gray-100 hover:text-gray-800 ${
                         activeMenu == 'admission-addnew'
@@ -161,7 +187,7 @@ export function Sidebar() {
                       Add new
                     </Button>
                   </div>
-                  <div className="inter rounded-lg p-2 text-sm font-normal text-gray-800">
+                  <div className="rounded-lg p-2 text-sm font-normal text-gray-800">
                     <Button
                       className={`w-[174px] justify-start bg-white hover:bg-gray-100 hover:text-gray-800 ${
                         activeMenu == 'admission-analytics'
@@ -173,7 +199,7 @@ export function Sidebar() {
                       Analytics
                     </Button>
                   </div>
-                  <div className="inter rounded-lg p-2 text-sm font-normal text-gray-800">
+                  <div className="rounded-lg p-2 text-sm font-normal text-gray-800">
                     <Button
                       className={`w-[174px] justify-start bg-white hover:bg-gray-100 hover:text-gray-800 ${
                         activeMenu == 'admission-configure'

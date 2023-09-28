@@ -20,7 +20,7 @@ export default async function Page() {
   }
 
   return (
-    <section className="flex h-full flex-col sm:flex-row">
+    <section className="flex h-screen flex-col overflow-x-hidden sm:flex-row">
       <section
         className="hidden flex-grow bg-cover bg-center bg-no-repeat sm:flex sm:w-auto"
         style={{
@@ -28,7 +28,7 @@ export default async function Page() {
         }}
       ></section>
 
-      <section className="flex h-full w-full translate-y-0 transform flex-col justify-between overflow-auto px-20 opacity-100 transition-all duration-500 ease-in-out md:w-4/12 ">
+      <section className="flex  h-screen w-full translate-y-0 transform flex-col justify-between overflow-x-hidden px-20 opacity-100 transition-all duration-500 ease-in-out md:w-4/12 ">
         <div>
           <Image src={logo} className="pt-10" alt={'logo'} width={100}></Image>
         </div>
@@ -51,7 +51,7 @@ export default async function Page() {
         >
           Signup
         </Link>
-        <footer className="mt-14 text-center text-sm font-normal text-gray-700">
+        <footer className="mt-8 text-center text-sm font-normal text-gray-700">
           &copy; acadx 2023
         </footer>
       </section>

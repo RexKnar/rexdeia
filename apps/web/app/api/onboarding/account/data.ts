@@ -56,7 +56,7 @@ export const admissionForm = {
           name: 'dob',
           value: '',
           visible: true,
-          placeholder: 'select your DOB',
+          placeholder: 'Select your DOB',
           validationRules: {
             required: true,
           },
@@ -80,7 +80,7 @@ export const admissionForm = {
           name: 'mobileNumber',
           value: '',
           visible: true,
-          placeholder: 'Enter your mobilenumber',
+          placeholder: 'Enter your mobile number',
           validationRules: {
             required: true,
           },
@@ -127,7 +127,7 @@ export const admissionForm = {
           name: 'aadharCardNumber',
           value: '',
           visible: true,
-          placeholder: 'enter your aadhar card number',
+          placeholder: 'Enter your aadhar card number',
           validationRules: {
             required: true,
           },
@@ -139,7 +139,7 @@ export const admissionForm = {
           name: 'motherTongue',
           value: '',
           visible: true,
-          placeholder: 'enter your mother tongue',
+          placeholder: 'Enter your mother tongue',
           validationRules: {
             required: true,
           },
@@ -151,7 +151,7 @@ export const admissionForm = {
           name: 'bloodGroup',
           value: '',
           visible: true,
-          placeholder: 'enter your blood group',
+          placeholder: 'Enter your blood group',
           validationRules: {
             required: true,
           },
@@ -163,7 +163,7 @@ export const admissionForm = {
           name: 'religion',
           value: '',
           visible: true,
-          placeholder: 'enter your religion',
+          placeholder: 'Enter your religion',
           validationRules: {
             required: true,
           },
@@ -175,7 +175,7 @@ export const admissionForm = {
           name: 'community',
           value: '',
           visible: true,
-          placeholder: 'enter your community',
+          placeholder: 'Enter your community',
           validationRules: {
             required: true,
           },
@@ -187,7 +187,7 @@ export const admissionForm = {
           name: 'caste',
           value: '',
           visible: true,
-          placeholder: 'enter your caste',
+          placeholder: 'Enter your caste',
           validationRules: {
             required: true,
           },
@@ -226,7 +226,7 @@ export const admissionForm = {
           name: 'fatherName',
           value: '',
           visible: true,
-          placeholder: 'enter your father name',
+          placeholder: 'Enter your father name',
           validationRules: {
             required: true,
           },
@@ -238,7 +238,7 @@ export const admissionForm = {
           name: 'fatherOccupation',
           value: '',
           visible: true,
-          placeholder: 'enter your father name',
+          placeholder: 'Enter your father occupation',
           validationRules: {
             required: true,
           },
@@ -250,7 +250,7 @@ export const admissionForm = {
           name: 'motherName',
           value: '',
           visible: true,
-          placeholder: 'enter your father occupation',
+          placeholder: 'Enter your mother name',
           validationRules: {
             required: true,
           },
@@ -262,7 +262,7 @@ export const admissionForm = {
           name: 'motherOccupation',
           value: '',
           visible: true,
-          placeholder: 'enter your mother occupation',
+          placeholder: 'Enter your mother occupation',
           validationRules: {
             required: true,
           },
@@ -274,7 +274,7 @@ export const admissionForm = {
           name: 'annualIncome',
           value: '',
           visible: true,
-          placeholder: 'enter annual income',
+          placeholder: 'Enter annual income',
           validationRules: {
             required: true,
           },
@@ -439,7 +439,7 @@ export const admissionForm = {
           name: 'guardianName',
           value: '',
           visible: true,
-          placeholder: 'enter your guardian name',
+          placeholder: 'Enter your guardian name',
           validationRules: {
             required: true,
           },
@@ -451,7 +451,7 @@ export const admissionForm = {
           name: 'guardiansOccupation',
           value: '',
           visible: true,
-          placeholder: 'enter guardian oocupation',
+          placeholder: 'Enter guardian oocupation',
           validationRules: {
             required: true,
           },
@@ -463,7 +463,7 @@ export const admissionForm = {
           name: 'relationshipType',
           value: '',
           visible: true,
-          placeholder: 'enter relationship type',
+          placeholder: 'Enter relationship type',
           validationRules: {
             required: true,
           },
@@ -475,7 +475,7 @@ export const admissionForm = {
           name: 'guardianPhoneNumber',
           value: '',
           visible: true,
-          placeholder: 'enter guardian phone number',
+          placeholder: 'Enter guardian phone number',
           validationRules: {
             required: true,
           },
@@ -493,7 +493,7 @@ export const admissionForm = {
           name: 'residentialAddress',
           value: '',
           visible: true,
-          placeholder: 'enter residential address',
+          placeholder: 'Enter residential address',
           validationRules: {
             required: true,
           },
@@ -505,7 +505,7 @@ export const admissionForm = {
           name: 'residentialDistrict',
           value: '',
           visible: true,
-          placeholder: 'enter district',
+          placeholder: 'Enter district',
           validationRules: {
             required: true,
           },
@@ -517,7 +517,7 @@ export const admissionForm = {
           name: 'residentialState',
           value: '',
           visible: true,
-          placeholder: 'enter state',
+          placeholder: 'Enter state',
           validationRules: {
             required: true,
           },
@@ -529,7 +529,7 @@ export const admissionForm = {
           name: 'residentialPostalCode',
           value: '',
           visible: true,
-          placeholder: 'enter postal code',
+          placeholder: 'Enter postal code',
           validationRules: {
             required: true,
           },
@@ -541,7 +541,7 @@ export const admissionForm = {
           name: 'permanentAddress',
           value: '',
           visible: true,
-          placeholder: 'enter permonent address',
+          placeholder: 'Enter permonent address',
           validationRules: {
             required: true,
           },
@@ -553,7 +553,7 @@ export const admissionForm = {
           name: 'permanentDistrict',
           value: '',
           visible: true,
-          placeholder: 'enter district',
+          placeholder: 'Enter district',
           validationRules: {
             required: true,
           },
@@ -565,7 +565,7 @@ export const admissionForm = {
           name: 'permanentState',
           value: '',
           visible: true,
-          placeholder: 'enter state',
+          placeholder: 'Enter state',
           validationRules: {
             required: true,
           },
@@ -577,7 +577,7 @@ export const admissionForm = {
           name: 'permanentPostalCode',
           value: '',
           visible: true,
-          placeholder: 'enter postal code',
+          placeholder: 'Enter postal code',
           validationRules: {
             required: true,
           },
@@ -589,7 +589,7 @@ export const admissionForm = {
           name: 'nationality',
           value: '',
           visible: true,
-          placeholder: 'enter nationality',
+          placeholder: 'Enter nationality',
           validationRules: {
             required: true,
           },
@@ -607,7 +607,7 @@ export const admissionForm = {
           name: 'schoolName10th',
           value: '',
           visible: true,
-          placeholder: 'enter your school name',
+          placeholder: 'Enter your school name',
           validationRules: {
             required: true,
           },
@@ -619,7 +619,7 @@ export const admissionForm = {
           name: 'yearOfPassing10th',
           value: '',
           visible: true,
-          placeholder: 'enter year of passing',
+          placeholder: 'Enter year of passing',
           validationRules: {
             required: true,
           },
@@ -631,7 +631,7 @@ export const admissionForm = {
           name: 'obtainedMark10th',
           value: '',
           visible: true,
-          placeholder: 'enter your mark',
+          placeholder: 'Enter your mark',
           validationRules: {
             required: true,
           },
@@ -643,7 +643,7 @@ export const admissionForm = {
           name: 'mediumOfEducation10th',
           value: '',
           visible: true,
-          placeholder: 'enter year medium of education',
+          placeholder: 'Enter year medium of education',
           validationRules: {
             required: true,
           },
@@ -655,7 +655,7 @@ export const admissionForm = {
           name: 'schoolName12th',
           value: '',
           visible: true,
-          placeholder: 'enter your school name',
+          placeholder: 'Enter your school name',
           validationRules: {
             required: true,
           },
@@ -667,7 +667,7 @@ export const admissionForm = {
           name: 'yearOfPassing12th',
           value: '',
           visible: true,
-          placeholder: 'enter year of passing',
+          placeholder: 'Enter year of passing',
           validationRules: {
             required: true,
           },
@@ -679,7 +679,7 @@ export const admissionForm = {
           name: 'obtainedMark12th',
           value: '',
           visible: true,
-          placeholder: 'enter your mark',
+          placeholder: 'Enter your mark',
           validationRules: {
             required: true,
           },
@@ -691,7 +691,7 @@ export const admissionForm = {
           name: 'mediumOfEducation12th',
           value: '',
           visible: true,
-          placeholder: 'enter year medium of education',
+          placeholder: 'Enter year medium of education',
           validationRules: {
             required: true,
           },
@@ -814,7 +814,7 @@ export const admissionForm = {
           name: 'firstLanguage',
           value: '',
           visible: true,
-          placeholder: 'enter your first language',
+          placeholder: 'Enter your first language',
           validationRules: {
             required: true,
           },
@@ -854,7 +854,7 @@ export const EnquiryForm = {
           name: 'date',
           value: '',
           visible: true,
-          placeholder: 'select todays date',
+          placeholder: 'Select todays date',
           validationRules: {
             required: true,
           },
@@ -891,7 +891,7 @@ export const EnquiryForm = {
           name: 'dob',
           value: '',
           visible: true,
-          placeholder: 'select your DOB',
+          placeholder: 'Select your DOB',
           validationRules: {
             required: true,
           },
@@ -957,7 +957,7 @@ export const EnquiryForm = {
           name: 'fatherName',
           value: '',
           visible: true,
-          placeholder: 'enter your father name',
+          placeholder: 'Enter your father name',
           validationRules: {
             required: true,
           },
@@ -969,7 +969,7 @@ export const EnquiryForm = {
           name: 'fatherOccupation',
           value: '',
           visible: true,
-          placeholder: 'enter your father name',
+          placeholder: 'Enter your father name',
           validationRules: {
             required: true,
           },
@@ -981,7 +981,7 @@ export const EnquiryForm = {
           name: 'motherName',
           value: '',
           visible: true,
-          placeholder: 'enter your father occupation',
+          placeholder: 'Enter your father occupation',
           validationRules: {
             required: true,
           },
@@ -993,7 +993,7 @@ export const EnquiryForm = {
           name: 'motherOccupation',
           value: '',
           visible: true,
-          placeholder: 'enter your mother occupation',
+          placeholder: 'Enter your mother occupation',
           validationRules: {
             required: true,
           },
@@ -1005,7 +1005,7 @@ export const EnquiryForm = {
           name: 'guardianName',
           value: '',
           visible: true,
-          placeholder: 'enter your guardian name',
+          placeholder: 'Enter your guardian name',
           validationRules: {
             required: true,
           },
@@ -1017,7 +1017,7 @@ export const EnquiryForm = {
           name: 'guardianOccupation',
           value: '',
           visible: true,
-          placeholder: 'enter your guardian occupation',
+          placeholder: 'Enter your guardian occupation',
           validationRules: {
             required: true,
           },
@@ -1053,7 +1053,7 @@ export const EnquiryForm = {
           name: 'nationality',
           value: '',
           visible: true,
-          placeholder: 'enter nationality',
+          placeholder: 'Enter nationality',
           validationRules: {
             required: true,
           },
@@ -1065,7 +1065,7 @@ export const EnquiryForm = {
           name: 'state',
           value: '',
           visible: true,
-          placeholder: 'enter state',
+          placeholder: 'Enter state',
           validationRules: {
             required: true,
           },
@@ -1077,7 +1077,7 @@ export const EnquiryForm = {
           name: 'district',
           value: '',
           visible: true,
-          placeholder: 'enter district',
+          placeholder: 'Enter district',
           validationRules: {
             required: true,
           },
@@ -1089,7 +1089,7 @@ export const EnquiryForm = {
           name: 'postalCode',
           value: '',
           visible: true,
-          placeholder: 'enter postal/zip code',
+          placeholder: 'Enter postal/zip code',
           validationRules: {
             required: true,
           },
@@ -1101,7 +1101,7 @@ export const EnquiryForm = {
           name: 'schoolName10th',
           value: '',
           visible: true,
-          placeholder: 'enter your school name',
+          placeholder: 'Enter your school name',
           validationRules: {
             required: true,
           },
@@ -1113,7 +1113,7 @@ export const EnquiryForm = {
           name: 'yearOfPassing10th',
           value: '',
           visible: true,
-          placeholder: 'enter year of passing',
+          placeholder: 'Enter year of passing',
           validationRules: {
             required: true,
           },
@@ -1125,7 +1125,7 @@ export const EnquiryForm = {
           name: 'obtainedMark10th',
           value: '',
           visible: true,
-          placeholder: 'enter your mark',
+          placeholder: 'Enter your mark',
           validationRules: {
             required: true,
           },
@@ -1137,7 +1137,7 @@ export const EnquiryForm = {
           name: 'mediumOfEducation10th',
           value: '',
           visible: true,
-          placeholder: 'enter year medium of education',
+          placeholder: 'Enter year medium of education',
           validationRules: {
             required: true,
           },
@@ -1149,7 +1149,7 @@ export const EnquiryForm = {
           name: 'schoolName12th',
           value: '',
           visible: true,
-          placeholder: 'enter your school name',
+          placeholder: 'Enter your school name',
           validationRules: {
             required: true,
           },
@@ -1161,7 +1161,7 @@ export const EnquiryForm = {
           name: 'yearOfPassing12th',
           value: '',
           visible: true,
-          placeholder: 'enter year of passing',
+          placeholder: 'Enter year of passing',
           validationRules: {
             required: true,
           },
@@ -1173,7 +1173,7 @@ export const EnquiryForm = {
           name: 'obtainedMark12th',
           value: '',
           visible: true,
-          placeholder: 'enter your mark',
+          placeholder: 'Enter your mark',
           validationRules: {
             required: true,
           },
@@ -1185,7 +1185,7 @@ export const EnquiryForm = {
           name: 'mediumOfEducation12th',
           value: '',
           visible: true,
-          placeholder: 'enter year medium of education',
+          placeholder: 'Enter year medium of education',
           validationRules: {
             required: true,
           },
