@@ -13,7 +13,7 @@ export default async function Page() {
         </div>
         <div className="mt-10 flex flex-col">
           <span className="mb-4 text-2xl font-semibold">
-            Verify Your Account
+            Recover Your Account
           </span>
           <p className="text-sm font-normal text-gray-800">
             Select option to verify your account with{' '}
