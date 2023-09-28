@@ -1,8 +1,9 @@
 'use client';
 
-import { Loader2 } from 'lucide-react';
+import { Eye, EyeOff, Loader2, Mail, PhoneCall, User2 } from 'lucide-react';
 import Image from 'next/image';
 import { signIn } from 'next-auth/react';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Button, Input } from 'ui';
 
@@ -26,6 +27,7 @@ type OnboardUserResponse = {
 };
 
 export function SignUpForm() {
+  const [showPassword, setShowPassword] = useState(false);
   const {
     register,
     handleSubmit,
@@ -79,17 +81,24 @@ export function SignUpForm() {
   }
 
   return (
-    <form className="mt-4" onSubmit={handleSubmit(signupHandler)}>
+    <form className="mt-5" onSubmit={handleSubmit(signupHandler)}>
       <div>
         <label className="sub-text inter block text-sm font-semibold">
           Full Name
         </label>
-        <Input
-          type="text"
-          className="mt-2"
-          placeholder="Enter your full name"
-          {...register('name', { required: 'Your name is needed to sign up' })}
-        />
+        <div className="relative">
+          <Input
+            type="text"
+            className="mt-2"
+            placeholder="Enter your full name"
+            {...register('name', {
+              required: 'Your name is needed to sign up',
+            })}
+          />
+          <div className="absolute inset-y-0 right-0 flex cursor-pointer items-center pr-2">
+            <User2 size={20} strokeWidth={0.5} />
+          </div>
+        </div>
         <p
           className={`h-2 p-1 text-sm text-red-600 ${
             errors.name
@@ -104,15 +113,20 @@ export function SignUpForm() {
         <label className="sub-text inter block text-sm font-semibold">
           Email Address
         </label>
-        <Input
-          name="email"
-          type="email"
-          className="mt-2"
-          placeholder="Enter your email address"
-          {...register('email', {
-            required: 'Your email address is needed to sign up',
-          })}
-        />
+        <div className="relative">
+          <Input
+            name="email"
+            type="email"
+            className="mt-2"
+            placeholder="Enter your email address"
+            {...register('email', {
+              required: 'Your email address is needed to sign up',
+            })}
+          />
+          <div className="absolute inset-y-0 right-0 flex cursor-pointer items-center pr-2">
+            <Mail size={18} strokeWidth={0.5} />
+          </div>
+        </div>
         <p
           className={`h-2 p-1 text-sm text-red-600 ${
             errors.email
@@ -127,15 +141,20 @@ export function SignUpForm() {
         <label className="sub-text inter block text-sm font-semibold">
           Phone Number
         </label>
-        <Input
-          type="number"
-          className="mt-2"
-          name="phoneNumber"
-          placeholder="Enter your phone number"
-          {...register('phoneNumber', {
-            required: 'Your phone number is needed to sign up',
-          })}
-        />
+        <div className="relative">
+          <Input
+            type="number"
+            className="mt-2"
+            name="phoneNumber"
+            placeholder="Enter your phone number"
+            {...register('phoneNumber', {
+              required: 'Your phone number is needed to sign up',
+            })}
+          />
+          <div className="absolute inset-y-0 right-0 flex cursor-pointer items-center pr-2">
+            <PhoneCall size={18} strokeWidth={0.5} />
+          </div>
+        </div>
         <p
           className={`h-2 p-1 text-sm text-red-600 ${
             errors.phoneNumber
@@ -150,15 +169,25 @@ export function SignUpForm() {
         <label className="sub-text inter block text-sm font-semibold">
           Password
         </label>
-        <Input
-          name="password"
-          type="password"
-          className="mt-2"
-          placeholder="Enter your password"
-          {...register('password', {
-            required: 'Password is needed to sign up',
-          })}
-        />
+        <div className="relative">
+          <Input
+            type={showPassword ? 'text' : 'password'}
+            className="mt-2 text-sm"
+            placeholder="Enter your password"
+            {...register('password', {
+              required: 'Password is needed to sign up',
+            })}
+          />
+          <div className="absolute inset-y-0 right-0 flex cursor-pointer items-center pr-2 ">
+            <div onClick={() => setShowPassword(!showPassword)}>
+              {showPassword ? (
+                <Eye size={20} strokeWidth={0.5} />
+              ) : (
+                <EyeOff size={20} strokeWidth={0.5} />
+              )}
+            </div>
+          </div>
+        </div>
         <p
           className={`h-2 p-1 text-sm text-red-600 ${
             errors.password
@@ -184,20 +213,20 @@ export function SignUpForm() {
           )}
         </Button>
       </div>
-      <label className="inter inter mt-8 block text-center text-base font-semibold text-gray-800">
+      <label className="inter inter mt-8 block text-center text-sm font-semibold text-gray-800">
         or continue with{' '}
       </label>
       <div className="flex justify-center gap-4">
         <Button
           type="button"
-          className="mt-3 w-full bg-transparent bg-transparent text-base text-gray-800 outline outline-gray-300 hover:text-white"
+          className="mt-3 w-full  bg-transparent text-base text-gray-800 outline outline-gray-300 hover:text-white"
         >
           <Image src={googlelogo} alt={'logo'} className="mr-1"></Image>
           Google
         </Button>
         <Button
           type="button"
-          className="mt-3 w-full bg-transparent bg-transparent text-base text-gray-800 outline outline-gray-300 hover:text-white"
+          className="mt-3 w-full  bg-transparent text-base text-gray-800 outline outline-gray-300 hover:text-white"
         >
           <Image src={microsoftlogo} alt={'logo'} className="mr-1"></Image>
           Microsoft

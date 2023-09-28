@@ -1,9 +1,10 @@
 'use client';
 
-import { AlertCircleIcon, Loader2 } from 'lucide-react';
+import { AlertCircleIcon, Eye, EyeOff, Loader2, Mail } from 'lucide-react';
 import Image from 'next/image';
 import { useSearchParams } from 'next/navigation';
 import { signIn } from 'next-auth/react';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Alert, AlertDescription, Button, Input } from 'ui';
 
@@ -16,6 +17,7 @@ const errors = {
 };
 
 export function SignInForm() {
+  const [showPassword, setShowPassword] = useState(false);
   const {
     register,
     handleSubmit,
@@ -49,19 +51,26 @@ export function SignInForm() {
           <AlertDescription>{errors[error]}</AlertDescription>
         </Alert>
       )}
-      <label className="block text-sm font-semibold">Email</label>
-      <Input
-        type="email"
-        className="mt-2 text-sm"
-        placeholder="Enter your email"
-        {...register('email', {
-          required: 'Your email address is needed to sign in',
-          pattern: {
-            value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i,
-            message: 'Please provide a valid email address',
-          },
-        })}
-      />
+      <label className="mt-5 block text-sm font-medium text-slate-500 ">
+        Email
+      </label>
+      <div className="relative">
+        <Input
+          type="email"
+          className="mt-2 text-sm"
+          placeholder="Enter your email"
+          {...register('email', {
+            required: 'Your email address is needed to sign in',
+            pattern: {
+              value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i,
+              message: 'Please provide a valid email address',
+            },
+          })}
+        />
+        <div className="absolute inset-y-0 right-0 flex cursor-pointer items-center pr-2">
+          <Mail size={18} strokeWidth={0.5} />
+        </div>
+      </div>
       <p
         className={`h-2 p-1 text-sm text-red-600 ${
           fieldErrors.email
@@ -71,15 +80,28 @@ export function SignInForm() {
       >
         {fieldErrors.email?.message as string}
       </p>
-      <label className="mt-4 block text-sm font-semibold">Password</label>
-      <Input
-        type="password"
-        className="mt-1 text-sm"
-        placeholder="Enter your password"
-        {...register('password', {
-          required: 'Your password is needed to sign in.',
-        })}
-      />
+      <label className="mt-4 block text-sm font-medium text-slate-500">
+        Password
+      </label>
+      <div className="relative">
+        <Input
+          type={showPassword ? 'text' : 'password'}
+          className="mt-2 text-sm"
+          placeholder="Enter your password"
+          {...register('password', {
+            required: 'Your password is needed to sign in.',
+          })}
+        />
+        <div className="absolute inset-y-0 right-0 flex cursor-pointer items-center pr-2 ">
+          <div onClick={() => setShowPassword(!showPassword)}>
+            {showPassword ? (
+              <Eye size={20} strokeWidth={0.5} />
+            ) : (
+              <EyeOff size={20} strokeWidth={0.5} />
+            )}
+          </div>
+        </div>
+      </div>
       <p
         className={`h-2 p-1 text-sm text-red-600 ${
           fieldErrors.password
@@ -89,36 +111,36 @@ export function SignInForm() {
       >
         {fieldErrors.password?.message as string}
       </p>
-      <label className="mt-2 block text-end text-sm font-semibold text-gray-800">
+      <label className="mt-4 block text-end text-sm font-semibold text-gray-800">
         Forgot Password?
       </label>
       <Button
         type="submit"
-        className="mt-10 w-full text-white"
+        className="mt-6 w-full text-white"
         disabled={isSubmitting}
       >
         {isSubmitting ? (
           <div className="flex h-screen items-center justify-center">
-            <Loader2 className="mr-2 h-6 w-6 animate-spin text-white" />
+            <Loader2 className="mr-2 h-2 w-6 animate-spin text-white" />
           </div>
         ) : (
           `Sign in`
         )}
       </Button>
-      <label className="mt-8 block text-center text-base font-semibold text-gray-800">
+      <label className="mt-8 block text-center text-sm font-semibold text-gray-800">
         or continue with{' '}
       </label>
       <div className="flex flex-col sm:flex-row sm:gap-4">
         <Button
           type="button"
-          className="mt-3 w-full bg-transparent bg-transparent text-base text-gray-800 outline outline-gray-300 hover:text-white"
+          className="mt-3 w-full bg-transparent p-2 text-base text-gray-800 outline outline-gray-300 hover:text-white"
         >
           <Image src={googlelogo} alt={'logo'} className="mr-1"></Image>
           Google
         </Button>
         <Button
           type="button"
-          className="mt-3 w-full bg-transparent bg-transparent text-base text-gray-800 outline outline-gray-300 hover:text-white "
+          className="mt-3 w-full  bg-transparent text-base text-gray-800 outline outline-gray-300 hover:text-white "
         >
           <Image src={microsoftlogo} alt={'logo'} className="mr-1"></Image>
           Microsoft
