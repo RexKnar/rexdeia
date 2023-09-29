@@ -8,13 +8,15 @@ export async function addDepartment(department: AddDepartmentModel) {
       departmentName: department.departmentName,
       noOfYears: department.noOfYears,
       departmentCode: department.departmentCode,
-      activeStatus: department.activeStatus,
+      isActive: department.isActive,
       description: department.description,
+      branchId: department.branchId,
+      organizationId: department.organizationId,
     },
   });
 }
 
-export async function deleteDeparment(departmentId) {
+export async function deleteDeparment(departmentId: string) {
   return await db.department.update({
     where: {
       id: departmentId,
@@ -35,7 +37,7 @@ export async function editDepartment(department: EditDepartmentModel) {
       departmentName: department.departmentName,
       noOfYears: department.noOfYears,
       departmentCode: department.departmentCode,
-      activeStatus: department.activeStatus,
+      isActive: department.isActive,
       description: department.description,
     },
   });
