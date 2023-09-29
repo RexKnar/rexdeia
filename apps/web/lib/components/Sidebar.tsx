@@ -68,8 +68,18 @@ export function Sidebar() {
   );
 
   const handleAdmissionsClick = () => {
-    toggleArrowDirection();
     handleMenuClick('admission-page');
+    toggleArrowDirection();
+  };
+
+  const handleStudentsClick = () => {
+    handleMenuClick('students');
+    toggleArrowDirection();
+  };
+
+  const handleStaffsClick = () => {
+    handleMenuClick('staffs');
+    toggleArrowDirection();
   };
 
   const [isArrowDown, setIsArrowDown] = useState(false);
@@ -84,23 +94,31 @@ export function Sidebar() {
     <div className="w-72 border pb-12">
       <div className="space-y-4 py-4">
         <div className=" py-2">
-          <div className="mb-2 flex w-[292px] items-center justify-start gap-3 px-4 text-lg font-semibold tracking-tight">
-            <UserMenu />
-            <div className="w-[128px] text-left">
-              <h1 className="text-sm font-semibold">ABC College</h1>
-              <h2 className="text-sm font-normal text-gray-700">Admin</h2>
+          <div className="mb-2 flex w-[292px] items-center justify-between gap-3 px-4 text-lg font-semibold tracking-tight">
+            <div className="justify-betweend flex w-[140px] text-left">
+              <div>
+                <UserMenu />
+              </div>
+              <div className="ml-2">
+                <h1 className="text-sm font-semibold">ABC College</h1>
+                <h2 className="text-sm font-normal text-gray-700">Admin</h2>
+              </div>
+            </div>
+            <div>
+              <ChevronDown className="mr-2  h-4 w-4" />
             </div>
           </div>
           <div className="mb-8 w-full border">
             <hr />
           </div>
+
           <div>
             <div className="mb-6 space-y-1 px-2">
               <Button
                 variant="secondary"
-                className={`w-full justify-start bg-white hover:bg-primary hover:text-white ${
+                className={`w-full justify-start bg-white text-sm font-normal text-gray-800 hover:bg-gray-200  ${
                   activeMenu == 'admission-dashboard'
-                    ? 'bg-primary text-white'
+                    ? 'bg-gray-200 font-semibold'
                     : ''
                 } `}
                 onClick={() => handleMenuClick('admission-dashboard')}
@@ -112,54 +130,67 @@ export function Sidebar() {
             <div className="mb-6 space-y-1 px-2">
               <Button
                 variant="secondary"
-                className={`w-full justify-start bg-white hover:bg-primary hover:text-white ${
-                  activeMenu == 'students' ? 'bg-primary text-white' : ''
+                className={`w-full justify-start bg-white text-sm font-normal text-gray-800 hover:bg-gray-200  ${
+                  activeMenu == 'students' ? ' bg-gray-50 font-semibold' : ''
                 } `}
-                onClick={() => handleMenuClick('students')}
+                onClick={() => handleStudentsClick()}
               >
                 <UserCircle2 size={16} className="mr-2" />
-
                 <div className="flex w-full items-center justify-between ">
                   Students
-                  <ChevronRight className="mr-2 h-4 w-4" />
+                  {isArrowDown ? (
+                    <ChevronDown className="mr-2 h-4 w-4" />
+                  ) : (
+                    <ChevronRight className="mr-2 h-4 w-4" />
+                  )}
                 </div>
               </Button>
             </div>
             <div className="mb-6 space-y-1 px-2">
               <Button
                 variant="secondary"
-                className={`w-full justify-start bg-white hover:bg-primary hover:text-white ${
-                  activeMenu == 'staffs' ? 'bg-primary text-white' : ''
+                className={`w-full justify-start bg-white text-sm font-normal text-gray-800 hover:bg-gray-200 ${
+                  activeMenu == 'staffs' ? 'bg-gray:200 font-semibold' : ''
                 } `}
-                onClick={() => handleMenuClick('staffs')}
+                onClick={() => handleStaffsClick()}
               >
                 <User2 size={16} className="mr-2" />
                 <div className="flex w-full items-center justify-between ">
                   Staff
-                  <ChevronRight className="mr-2 h-4 w-4" />
+                  {isArrowDown ? (
+                    <ChevronDown className="mr-2 h-4 w-4" />
+                  ) : (
+                    <ChevronRight className="mr-2 h-4 w-4" />
+                  )}
                 </div>
               </Button>
             </div>
             <div className="mb-6 space-y-1 px-2">
               <Button
                 variant="secondary"
-                className={`w-full justify-start bg-white hover:bg-primary hover:text-white ${
-                  activeMenu == 'academics' ? 'bg-primary text-white' : ''
+                className={`w-full justify-start bg-white text-sm font-normal text-gray-800 hover:bg-gray-200 ${
+                  activeMenu == 'academics' ? 'bg-gray-200 font-semibold' : ''
                 } `}
                 onClick={() => handleMenuClick('academics')}
               >
                 <GraduationCap size={16} className="mr-2" />
                 <div className="flex w-full items-center justify-between ">
                   Academics
-                  <ChevronRight className="mr-2 h-4 w-4" />
+                  {isArrowDown ? (
+                    <ChevronDown className="mr-2 h-4 w-4" />
+                  ) : (
+                    <ChevronRight className="mr-2 h-4 w-4" />
+                  )}
                 </div>
               </Button>
             </div>
             <div className="mb-6 space-y-1 px-2">
               <Button
                 variant="secondary"
-                className={`w-full justify-start bg-white hover:bg-primary hover:text-white ${
-                  activeMenu == 'admission-page' ? 'bg-primary text-white' : ''
+                className={`w-full justify-start bg-white text-sm font-normal text-gray-800 hover:bg-gray-200 ${
+                  activeMenu == 'admission-page'
+                    ? 'bg-gray-50 font-semibold'
+                    : ''
                 } `}
                 onClick={handleAdmissionsClick}
               >
@@ -167,9 +198,9 @@ export function Sidebar() {
                 <div className="flex w-full items-center justify-between ">
                   Admissions
                   {isArrowDown ? (
-                    <ChevronDown className="mr-2 h-4 w-4" /> // Display downwards arrow
+                    <ChevronDown className="mr-2 h-4 w-4" />
                   ) : (
-                    <ChevronRight className="mr-2 h-4 w-4" /> // Display right arrow
+                    <ChevronRight className="mr-2 h-4 w-4" />
                   )}
                 </div>
               </Button>
@@ -177,9 +208,9 @@ export function Sidebar() {
                 <div className="ml-4 border-l-2 px-2">
                   <div className="rounded-lg p-2 text-sm font-normal text-gray-800">
                     <Button
-                      className={`w-[174px] justify-start bg-white hover:bg-gray-100 hover:text-gray-800 ${
+                      className={`w-[174px] justify-start bg-white hover:bg-gray-200  ${
                         activeMenu == 'admission-addnew'
-                          ? 'bg-gray-100 text-gray-800'
+                          ? 'bg-gray-200 font-semibold'
                           : ''
                       } `}
                       onClick={() => handleMenuClick('admission-add')}
@@ -189,9 +220,9 @@ export function Sidebar() {
                   </div>
                   <div className="rounded-lg p-2 text-sm font-normal text-gray-800">
                     <Button
-                      className={`w-[174px] justify-start bg-white hover:bg-gray-100 hover:text-gray-800 ${
+                      className={`w-[174px] justify-start bg-white hover:bg-gray-200 ${
                         activeMenu == 'admission-analytics'
-                          ? 'bg-gray-100 text-gray-800'
+                          ? 'bg-gray-200 font-semibold'
                           : ''
                       } `}
                       onClick={() => handleMenuClick('admission-analytics')}
@@ -201,9 +232,9 @@ export function Sidebar() {
                   </div>
                   <div className="rounded-lg p-2 text-sm font-normal text-gray-800">
                     <Button
-                      className={`w-[174px] justify-start bg-white hover:bg-gray-100 hover:text-gray-800 ${
+                      className={`w-[174px] justify-start bg-white hover:bg-gray-200 ${
                         activeMenu == 'admission-configure'
-                          ? 'bg-gray-100 text-gray-800'
+                          ? 'bg-gray-200 font-semibold'
                           : ''
                       } `}
                       onClick={() => handleMenuClick('admission-configure')}
@@ -217,9 +248,9 @@ export function Sidebar() {
             <div className="mb-6 space-y-1 px-2">
               <Button
                 variant="secondary"
-                className={`w-full justify-start bg-white hover:bg-primary hover:text-white ${
+                className={`w-full justify-start bg-white text-sm font-normal text-gray-800 hover:bg-gray-200 ${
                   activeMenu == 'academics-department-student'
-                    ? 'bg-primary text-white'
+                    ? 'bg-gray-200 font-semibold'
                     : ''
                 } `}
                 onClick={() => handleMenuClick('academics-department-student')}
@@ -231,9 +262,9 @@ export function Sidebar() {
             <div className="mb-6 space-y-1 px-2">
               <Button
                 variant="secondary"
-                className={`w-full justify-start bg-white hover:bg-primary hover:text-white ${
+                className={`w-full justify-start bg-white text-sm font-normal text-gray-800 hover:bg-gray-200 ${
                   activeMenu == 'academics-regulation-student'
-                    ? 'bg-primary text-white'
+                    ? 'bg-gray-200 font-semibold'
                     : ''
                 } `}
                 onClick={() => handleMenuClick('academics-regulation-student')}
@@ -245,9 +276,9 @@ export function Sidebar() {
             <div className="mb-6 space-y-1 px-2">
               <Button
                 variant="secondary"
-                className={`w-full justify-start bg-white hover:bg-primary hover:text-white ${
+                className={`w-full justify-start bg-white text-sm font-normal text-gray-800 hover:bg-gray-200 ${
                   activeMenu == 'academics-course-student'
-                    ? 'bg-primary text-white'
+                    ? 'bg-gray-200 font-semibold'
                     : ''
                 } `}
                 onClick={() => handleMenuClick('academics-course-student')}
