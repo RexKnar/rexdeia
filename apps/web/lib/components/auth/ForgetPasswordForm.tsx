@@ -40,7 +40,7 @@ export function ForgetPasswordForm() {
       <div className="mt-4 flex flex-col sm:flex-row sm:gap-4">
         <Button
           type="button"
-          className="mt-3 h-20 w-full rounded-xl bg-transparent p-2 text-base text-gray-800 outline outline-gray-300 hover:text-white"
+          className="mt-3 h-20 w-full rounded-xl bg-transparent p-2  text-base text-gray-800 outline outline-gray-300 hover:text-white"
           onClick={handleEmailVerificationClick}
         >
           <div className="flex flex-col items-center  text-center">

@@ -19,7 +19,7 @@ export function ResetPasswordForm() {
       </label>
       <div className="relative">
         <Input
-          type="password"
+          type={showPassword ? 'text' : 'password'}
           className="mt-2 text-sm"
           placeholder="Enter your password"
         />
@@ -38,7 +38,7 @@ export function ResetPasswordForm() {
       </label>
       <div className="relative">
         <Input
-          type="password"
+          type={showPassword ? 'text' : 'password'}
           className="mt-2 text-sm"
           placeholder="Enter your password"
         />
