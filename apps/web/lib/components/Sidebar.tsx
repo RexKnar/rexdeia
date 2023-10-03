@@ -52,43 +52,72 @@ export function Sidebar() {
     return Object.keys(object).find((key) => object[key] === value);
   };
 
+  const handleAdmissionsClick = () => {
+    // If the sub-menu is already open, close it
+    if (arrowStates['admission-page']) {
+      setArrowStates((prevStates) => ({
+        ...prevStates,
+        'admission-page': false,
+      }));
+    } else {
+      // If the sub-menu is closed, open it and highlight the main menu
+      handleMenuClick('admission-page');
+      setArrowStates((prevStates) => ({
+        ...prevStates,
+        'admission-page': true,
+      }));
+    }
+  };
+
   const [activeMenu, setActiveMenu] = useState(
     getKeyByValue(menuItemPaths, currentURL),
   );
 
+  const [arrowStates, setArrowStates] = useState<Record<MenuItem, boolean>>({
+    'admission-dashboard': false,
+    students: false,
+    staffs: false,
+    academics: false,
+    'admission-page': false,
+    'admission-configure': false,
+    'admission-analytics': false,
+    'admission-addnew': false,
+    'academics-department-student': false,
+    'academics-regulation-student': false,
+    'academics-course-student': false,
+    'admission-add': false,
+  });
+
   const handleMenuClick = useCallback(
     (item: MenuItem) => {
+      if (activeMenu && activeMenu !== item) {
+        setArrowStates((prevStates) => ({
+          ...prevStates,
+          [activeMenu]: false,
+        }));
+      }
+
       const path = menuItemPaths[item];
       if (path) {
         router.push(path);
       }
       setActiveMenu(item);
+
+      setArrowStates((prevStates) => ({
+        ...prevStates,
+        [item]: !prevStates[item],
+      }));
     },
-    [router],
+    [router, activeMenu],
   );
 
-  const handleAdmissionsClick = () => {
-    handleMenuClick('admission-page');
-    toggleArrowDirection();
-  };
+  // const [isArrowDown, setIsArrowDown] = useState(false);
+  // const [showSubmenu, setShowSubmenu] = useState(false);
 
-  const handleStudentsClick = () => {
-    handleMenuClick('students');
-    toggleArrowDirection();
-  };
-
-  const handleStaffsClick = () => {
-    handleMenuClick('staffs');
-    toggleArrowDirection();
-  };
-
-  const [isArrowDown, setIsArrowDown] = useState(false);
-  const [showSubmenu, setShowSubmenu] = useState(false);
-
-  const toggleArrowDirection = () => {
-    setIsArrowDown(!isArrowDown);
-    setShowSubmenu(!showSubmenu);
-  };
+  // const toggleArrowDirection = () => {
+  //   setIsArrowDown(!isArrowDown);
+  //   setShowSubmenu(!showSubmenu);
+  // };
 
   return (
     <div className="w-72 border pb-12">
@@ -133,12 +162,12 @@ export function Sidebar() {
                 className={`w-full justify-start bg-white text-sm font-normal text-gray-800 hover:bg-gray-200  ${
                   activeMenu == 'students' ? ' bg-gray-50 font-semibold' : ''
                 } `}
-                onClick={() => handleStudentsClick()}
+                onClick={() => handleMenuClick('students')}
               >
                 <UserCircle2 size={16} className="mr-2" />
                 <div className="flex w-full items-center justify-between ">
                   Students
-                  {isArrowDown ? (
+                  {arrowStates['students'] ? (
                     <ChevronDown className="mr-2 h-4 w-4" />
                   ) : (
                     <ChevronRight className="mr-2 h-4 w-4" />
@@ -152,12 +181,12 @@ export function Sidebar() {
                 className={`w-full justify-start bg-white text-sm font-normal text-gray-800 hover:bg-gray-200 ${
                   activeMenu == 'staffs' ? 'bg-gray:200 font-semibold' : ''
                 } `}
-                onClick={() => handleStaffsClick()}
+                onClick={() => handleMenuClick('staffs')}
               >
                 <User2 size={16} className="mr-2" />
                 <div className="flex w-full items-center justify-between ">
                   Staff
-                  {isArrowDown ? (
+                  {arrowStates['staffs'] ? (
                     <ChevronDown className="mr-2 h-4 w-4" />
                   ) : (
                     <ChevronRight className="mr-2 h-4 w-4" />
@@ -176,7 +205,7 @@ export function Sidebar() {
                 <GraduationCap size={16} className="mr-2" />
                 <div className="flex w-full items-center justify-between ">
                   Academics
-                  {isArrowDown ? (
+                  {arrowStates['academics'] ? (
                     <ChevronDown className="mr-2 h-4 w-4" />
                   ) : (
                     <ChevronRight className="mr-2 h-4 w-4" />
@@ -188,7 +217,8 @@ export function Sidebar() {
               <Button
                 variant="secondary"
                 className={`w-full justify-start bg-white text-sm font-normal text-gray-800 hover:bg-gray-200 ${
-                  activeMenu == 'admission-page'
+                  activeMenu === 'admission-page' ||
+                  arrowStates['admission-page']
                     ? 'bg-gray-50 font-semibold'
                     : ''
                 } `}
@@ -197,14 +227,14 @@ export function Sidebar() {
                 <UserPlus2 size={18} className="mr-2" />
                 <div className="flex w-full items-center justify-between ">
                   Admissions
-                  {isArrowDown ? (
+                  {arrowStates['admission-page'] ? (
                     <ChevronDown className="mr-2 h-4 w-4" />
                   ) : (
                     <ChevronRight className="mr-2 h-4 w-4" />
                   )}
                 </div>
               </Button>
-              {showSubmenu && (
+              {arrowStates['admission-page'] && (
                 <div className="ml-4 border-l-2 px-2">
                   <div className="rounded-lg p-2 text-sm font-normal text-gray-800">
                     <Button
