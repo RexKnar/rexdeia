@@ -8,9 +8,9 @@ import { Button, Input } from 'ui';
 export function ForgetPasswordForm() {
   const [showEmailInput, setShowEmailInput] = useState(false);
   const [showNumberInput, setShowNumberInput] = useState(false);
-  const [accountText, setAccountText] = useState('Verify Your Account');
+  const [accountText, setAccountText] = useState('Recover Your Account');
   const [optionText, setOptionText] = useState(
-    'Select option to verify your account with',
+    'Select option to recover your account with',
   );
   const router = useRouter();
   const handleEmailVerificationClick = () => {
@@ -30,60 +30,54 @@ export function ForgetPasswordForm() {
     router.push('/otpVerify');
   };
   return (
-    <form onSubmit={handleSendLinkClick}>
-      <div className="mt-10 flex flex-col">
-        <span className="mb-4 text-2xl font-semibold">{accountText}</span>
-        <p className="text-sm font-normal text-gray-800">
+    <form onSubmit={handleSendLinkClick} className="mt-14">
+      <div className="mt-16 flex flex-col">
+        <span className="mt-4 text-2xl font-semibold">{accountText}</span>
+        <p className="mt-2 text-sm font-normal text-gray-800">
           {optionText} <span className="text-blue-600">Acadx</span>
         </p>
       </div>
-      <div className="flex flex-col sm:flex-row sm:gap-4">
+      <div className="mt-4 flex flex-col sm:flex-row sm:gap-4">
         <Button
           type="button"
-          className="mt-3 w-full bg-transparent p-2 text-base text-gray-800 outline outline-gray-300 hover:text-white"
+          className="mt-3 h-20 w-full rounded-xl bg-transparent p-2 text-base text-gray-800 outline outline-gray-300 hover:text-white"
           onClick={handleEmailVerificationClick}
         >
-          <div className="p flex flex-col items-center text-center">
+          <div className="flex flex-col items-center  text-center">
             <MailCheck size={18} className="" />
-            <p className="text-sm">Verify via email</p>
+            <p className="mt-2 text-sm">Recover via email</p>
           </div>
         </Button>
         <Button
           type="button"
-          className="mt-3 w-full  bg-transparent text-base text-gray-800 outline outline-gray-300 hover:text-white"
+          className="mt-3 h-20 w-full rounded-xl bg-transparent text-base text-gray-800 outline outline-gray-300 hover:text-white"
           onClick={handleNumberVerificationClick}
         >
           <div className="flex flex-col items-center text-center">
             <Smartphone size={18} className="" />
-            <p className="text-sm">Verify via phone</p>
+            <p className="mt-2 text-sm">Recover via phone</p>
           </div>
         </Button>
       </div>
       {showEmailInput && (
         <div className="relative">
-          <label className="mt-5 block text-sm font-medium  text-slate-500">
-            Email
-          </label>
           <Input
             type="email"
-            className="mt-2 text-sm"
+            className="mt-4 text-sm"
             placeholder="Enter your email"
           />
         </div>
       )}
       {showNumberInput && (
         <div className="relative">
-          <label className="mt-5 block text-sm font-medium text-slate-500 ">
-            Number
-          </label>
           <Input
-            type="number"
-            className="mt-2 text-sm"
+            type="text"
+            className="mt-4 text-sm"
             placeholder="Enter your number"
           />
         </div>
       )}
-      <Button type="submit" className="mt-10 w-full text-white">
+      <Button type="submit" className="mt-8 w-full text-white">
         {' '}
         Send link
       </Button>

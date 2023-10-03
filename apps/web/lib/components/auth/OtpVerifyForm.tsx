@@ -21,20 +21,20 @@ export function OtpVerifyForm() {
     }
   };
   return (
-    <form onSubmit={handleSendLinkClick}>
-      <div className="mt-10 flex flex-col">
-        <span className="mb-4 text-2xl font-semibold">Enter OTP</span>
-        <p className="text-sm font-normal text-gray-800">
-          We have sent you otp to your email address for verification{' '}
+    <form onSubmit={handleSendLinkClick} className="mt-16">
+      <div className="mt-14 flex flex-col">
+        <span className=" mt-2 text-2xl font-semibold">Enter OTP</span>
+        <p className="mt-2 text-sm font-normal text-gray-800">
+          We have sent you OTP to your email address for verification{' '}
         </p>
       </div>
-      <div className="mt-5 flex space-x-3">
+      <div className="mt-5 flex space-x-4">
         {inputRefs.map((inputRef, index) => {
           return (
             <Input
               key={index}
               type="text"
-              className="mb-2 mt-2 text-sm"
+              className="mt-4 h-12 rounded-lg text-sm"
               placeholder="0"
               ref={inputRef}
               onInput={(e) => handleInput(e, index)}
