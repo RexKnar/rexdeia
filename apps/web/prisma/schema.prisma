@@ -156,6 +156,7 @@ model AdmissionForm {
   yearOfPassing12th     String
   residentialAddress    String
   permanentAddress      String
+  order                 Order[]
   form                  Form?   @relation(fields: [formId], references: [id])
   formId                String? @db.ObjectId
 }
@@ -248,4 +249,16 @@ model Form {
   branchId       String?         @db.ObjectId
   EnquiryForm    EnquiryForm[]
   AdmissionForm  AdmissionForm[]
+}
+
+model Order {
+  id              String         @id @default(auto()) @map("_id") @db.ObjectId
+  orderId         String
+  receipt         String
+  isActive        Boolean
+  isPaid          Boolean
+  isDeleted       Boolean        @default(false)
+  deletedAt       DateTime?
+  admissionForm   AdmissionForm? @relation(fields: [admissionFormId], references: [id])
+  admissionFormId String?        @db.ObjectId
 }
