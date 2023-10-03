@@ -6,6 +6,7 @@ import { Button, Input } from 'ui';
 
 export function ResetPasswordForm() {
   const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   return (
     <form className="mt-16">
       <div className="mt-16 flex flex-col">
@@ -38,13 +39,13 @@ export function ResetPasswordForm() {
       </label>
       <div className="relative">
         <Input
-          type={showPassword ? 'text' : 'password'}
+          type={showConfirmPassword ? 'text' : 'password'}
           className="mt-2 text-sm"
           placeholder="Enter your password"
         />
         <div className="absolute inset-y-0 right-0 flex cursor-pointer items-center pr-2 ">
-          <div onClick={() => setShowPassword(!showPassword)}>
-            {showPassword ? (
+          <div onClick={() => setShowConfirmPassword(!showConfirmPassword)}>
+            {showConfirmPassword ? (
               <Eye size={20} strokeWidth={0.5} />
             ) : (
               <EyeOff size={20} strokeWidth={0.5} />
