@@ -1,15 +1,16 @@
 'use client';
+
 import { useRouter } from 'next/navigation';
 
 import { makeAPICall } from '../../api';
-import { DELETE_DEPARTMENT } from '../../endpoints';
+import { DELETE_COURSE } from '../../endpoints';
 
 export function CourseList({ courseList }) {
-  const rout = useRouter();
+  const router = useRouter();
 
-  async function DeleteCourseHandler(courseId) {
+  async function DeleteCourseHandler(courseId: string) {
     try {
-      await makeAPICall(DELETE_DEPARTMENT, { courseId });
+      await makeAPICall(DELETE_COURSE, { courseId });
       window.location.reload();
     } catch (error) {
       console.log(error);
@@ -22,6 +23,9 @@ export function CourseList({ courseList }) {
         <button
           className="text-primary-foreground mt-6 h-12 cursor-pointer rounded-md bg-primary px-5 text-white hover:bg-primary/90"
           type="button"
+          onClick={() => {
+            router.push(`/academics/course/new`);
+          }}
         >
           Add Course
         </button>
@@ -54,9 +58,7 @@ export function CourseList({ courseList }) {
               <button
                 className="text-primary-foreground cursor-pointer rounded-md bg-primary text-white hover:bg-primary/90"
                 onClick={() => {
-                  rout.push(
-                    `/admission/department/departmentForm?id=${item.id}`,
-                  );
+                  router.push(`/academics/course/${item.id}/edit`);
                 }}
               >
                 Edit

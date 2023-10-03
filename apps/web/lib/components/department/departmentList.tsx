@@ -1,4 +1,5 @@
 'use client';
+
 import { useRouter } from 'next/navigation';
 
 import { makeAPICall } from '../../api';
@@ -7,7 +8,7 @@ import { DELETE_DEPARTMENT } from '../../endpoints';
 export function DepartmentList({ departmentList }) {
   const router = useRouter();
 
-  async function DeleteDepartmentHandler(departmentId) {
+  async function DeleteDepartmentHandler(departmentId: string) {
     try {
       await makeAPICall(DELETE_DEPARTMENT, { departmentId });
       window.location.reload();
@@ -23,7 +24,7 @@ export function DepartmentList({ departmentList }) {
           className="text-primary-foreground mt-6 h-12 cursor-pointer rounded-md bg-primary px-5 text-white hover:bg-primary/90"
           type="button"
           onClick={() => {
-            router.push(`/academics/department/departmentForm`);
+            router.push(`/academics/department/new`);
           }}
         >
           Add Department
@@ -63,9 +64,7 @@ export function DepartmentList({ departmentList }) {
               <button
                 className="text-primary-foreground cursor-pointer rounded-md bg-primary text-white hover:bg-primary/90"
                 onClick={() => {
-                  router.push(
-                    `/academics/department/departmentForm?id=${item.id}`,
-                  );
+                  router.push(`/academics/department/${item.id}/edit`);
                 }}
               >
                 Edit

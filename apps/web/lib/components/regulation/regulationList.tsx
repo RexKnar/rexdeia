@@ -1,16 +1,16 @@
 'use client';
+
 import { useRouter } from 'next/navigation';
 
 import { makeAPICall } from '../../api';
-import { DELETE_DEPARTMENT } from '../../endpoints';
+import { DELETE_REGULATION } from '../../endpoints';
 
 export function RegulationList({ regulationList }) {
-  const rout = useRouter();
+  const router = useRouter();
 
-  async function DeleteRegulationHandler(regulationId) {
-    // TODO
+  async function DeleteCourseHandler(regulationId: string) {
     try {
-      await makeAPICall(DELETE_DEPARTMENT, { regulationId });
+      await makeAPICall(DELETE_REGULATION, { regulationId });
       window.location.reload();
     } catch (error) {
       console.log(error);
@@ -23,6 +23,9 @@ export function RegulationList({ regulationList }) {
         <button
           className="text-primary-foreground mt-6 h-12 cursor-pointer rounded-md bg-primary px-5 text-white hover:bg-primary/90"
           type="button"
+          onClick={() => {
+            router.push(`/academics/regulation/new`);
+          }}
         >
           Add Regulation
         </button>
@@ -53,9 +56,7 @@ export function RegulationList({ regulationList }) {
               <button
                 className="text-primary-foreground cursor-pointer rounded-md bg-primary text-white hover:bg-primary/90"
                 onClick={() => {
-                  rout.push(
-                    `/admission/department/departmentForm?id=${item.id}`,
-                  );
+                  router.push(`/academics/regulation/${item.id}/edit`);
                 }}
               >
                 Edit
@@ -63,7 +64,7 @@ export function RegulationList({ regulationList }) {
               <button
                 className="text-primary-foreground cursor-pointer rounded-md bg-primary text-white hover:bg-primary/90"
                 onClick={() => {
-                  DeleteRegulationHandler(item.id);
+                  DeleteCourseHandler(item.id);
                 }}
               >
                 Delete

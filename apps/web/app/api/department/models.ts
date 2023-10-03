@@ -1,8 +1,10 @@
 export type AddDepartmentModel = {
+  organizationId: string;
+  branchId: string;
   departmentName: string;
   noOfYears: string;
   departmentCode: string;
-  activeStatus: string;
+  isActive: boolean;
   description: string;
 };
 
@@ -11,6 +13,6 @@ export type EditDepartmentModel = {
   departmentName: string;
   noOfYears: string;
   departmentCode: string;
-  activeStatus: string;
+  isActive: boolean;
   description: string;
 };

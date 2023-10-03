@@ -199,7 +199,7 @@ model Department {
   departmentName String
   noOfYears      String
   departmentCode String
-  activeStatus   String
+  isActive       Boolean
   description    String
   course         Course[]
   isDeleted      Boolean       @default(false)
@@ -215,6 +215,7 @@ model Regulation {
   regulationName String
   announcedYear  String
   endYear        String
+  isActive       Boolean
   isDeleted      Boolean       @default(false)
   deletedAt      DateTime?
   organization   Organization? @relation(fields: [organizationId], references: [id])
@@ -226,7 +227,7 @@ model Regulation {
 model Course {
   id           String      @id @default(auto()) @map("_id") @db.ObjectId
   courseName   String
-  activeStatus String
+  isActive     Boolean
   description  String
   isDeleted    Boolean     @default(false)
   deletedAt    DateTime?
