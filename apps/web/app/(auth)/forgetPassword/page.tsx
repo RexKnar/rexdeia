@@ -16,7 +16,7 @@ export default async function Page() {
       ></section>
       <section className="flex h-full w-full translate-y-0 transform flex-col justify-between overflow-auto px-20 opacity-100 transition-all duration-500 ease-in-out md:w-1/2 ">
         <div className="flex justify-center">
-          <Image src={logo} className="pt-10 " alt={'logo'} width={100}></Image>
+          <Image src={logo} className="pt-10" alt={'logo'} width={100}></Image>
         </div>
         <ForgetPasswordForm />
         <p className=" mt-16 text-center text-sm font-semibold text-gray-800">

@@ -34,7 +34,7 @@ export function ForgetPasswordForm() {
       <div className="mt-16 flex flex-col">
         <span className="mt-4 text-2xl font-semibold">{accountText}</span>
         <p className="mt-2 text-sm font-normal text-gray-800">
-          {optionText} <span className="text-blue-600">Acadx</span>
+          {optionText} <span className="text-blue-600">acadx</span>
         </p>
       </div>
       <div className="mt-4 flex flex-col sm:flex-row sm:gap-4">
