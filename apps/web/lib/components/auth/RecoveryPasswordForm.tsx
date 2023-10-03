@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { Button, Input } from 'ui';
 
-export function ForgetPasswordForm() {
+export function RecoveryPasswordForm() {
   const [showEmailInput, setShowEmailInput] = useState(false);
   const [showNumberInput, setShowNumberInput] = useState(false);
   const [accountText, setAccountText] = useState('Recover Your Account');

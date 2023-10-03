@@ -111,7 +111,7 @@ export function SignInForm() {
         {fieldErrors.password?.message as string}
       </p>
       <label className="mt-2 block text-end text-sm font-semibold text-gray-800">
-        <a href="/forgetPassword">Forgot Password?</a>
+        <a href="/accountRecovery">Forgot Password?</a>
       </label>
       <Button
         type="submit"

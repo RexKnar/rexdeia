@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 
-import { ForgetPasswordForm } from '../../../lib/components/auth/ForgetPasswordForm';
+import { RecoveryPasswordForm } from '../../../lib/components/auth/RecoveryPasswordForm';
 import logo from '../../../public/assets/images/acadx-logo.png';
 
 export default async function Page() {
@@ -18,7 +18,7 @@ export default async function Page() {
         <div className="flex justify-center">
           <Image src={logo} className="pt-10" alt={'logo'} width={100}></Image>
         </div>
-        <ForgetPasswordForm />
+        <RecoveryPasswordForm />
         <p className=" mt-16 text-center text-sm font-semibold text-gray-800">
           Don&apos;t receive the link?
         </p>
