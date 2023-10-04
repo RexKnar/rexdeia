@@ -35,48 +35,48 @@ export default async function Page() {
           </div>
 
           <div>
-            <div className="mt-8 grid grid-cols-4 gap-3 sm:grid sm:grid-cols-1 md:grid md:grid-cols-2 lg:grid lg:grid-cols-4">
-              <div className="flex rounded-md bg-white p-3 shadow">
+            <div className="mt-8 grid grid-cols-1 gap-3 sm:flex-row md:grid md:grid-cols-2 lg:grid lg:grid-cols-3 xl:grid xl:grid-cols-4">
+              <div className="flex rounded-md border border-blue-100 bg-white p-3 shadow">
                 <div className="rounded-full bg-blue-50 p-3">
                   <FileInput className="text-blue-500" />
                 </div>
                 <div className="ml-4">
-                  <span className="text-sm text-gray-700">
+                  <span className="inter text-xs text-gray-700">
                     Admission Request
                   </span>
                   <h1 className="font-semibold">1.5K</h1>
                 </div>
               </div>
-              <div className="flex rounded-md bg-white p-3 shadow">
+              <div className="flex rounded-md border border-blue-100 bg-white p-3 shadow">
                 <div className="rounded-full bg-blue-50 p-3">
                   <Check className="text-blue-500" />
                 </div>
                 <div className="ml-4">
-                  <span className="text-sm text-gray-700">Short listed</span>
+                  <span className="text-xs text-gray-700">Short listed</span>
                   <h1 className="font-semibold">450</h1>
                 </div>
               </div>
-              <div className="flex rounded-md bg-white p-3 shadow">
+              <div className="flex rounded-md border border-blue-100 bg-white p-3 shadow">
                 <div className="rounded-full bg-blue-50 p-3">
                   <X className="text-blue-500" />
                 </div>
                 <div className="ml-4">
-                  <span className="text-sm text-gray-700">Rejected</span>
+                  <span className="text-xs text-gray-700">Rejected</span>
                   <h1 className="font-semibold">3.5</h1>
                 </div>
               </div>
-              <div className="flex rounded-md bg-white p-3 shadow">
+              <div className="flex rounded-md border border-blue-100 bg-white p-3 shadow">
                 <div className="rounded-full bg-blue-50 p-3">
                   <CircleDashed className="text-blue-500" />
                 </div>
                 <div className="ml-4">
-                  <span className="text-sm text-gray-700">In-progress</span>
+                  <span className="text-xs text-gray-700">In-progress</span>
                   <h1 className="font-semibold">3K</h1>
                 </div>
               </div>
             </div>
-            <div className="mt-3 gap-3 sm:grid sm:grid-cols-1 md:grid md:grid-cols-2">
-              <div className="rounded-md bg-white p-3 shadow">
+            <div className="mt-3 grid grid-cols-1 gap-3 md:grid md:grid-cols-2">
+              <div className="rounded-md border border-blue-100 bg-white p-3 shadow">
                 Generating random paragraphs can be an excellent way for writers
                 to get their creative flow going at the beginning of the day.
                 The writer has no idea what topic the random paragraph will be
@@ -90,7 +90,7 @@ export default async function Page() {
                 writer is forced to use creativity to incorporate the paragraph
                 into their writing
               </div>
-              <div className="rounded-md bg-white p-3 shadow">
+              <div className="rounded-md border border-blue-100 bg-white p-3 shadow">
                 Generating random paragraphs can be an excellent way for writers
                 to get their creative flow going at the beginning of the day.
                 The writer has no idea what topic the random paragraph will be
