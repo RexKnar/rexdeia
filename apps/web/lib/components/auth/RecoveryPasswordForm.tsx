@@ -6,24 +6,16 @@ import { useState } from 'react';
 import { Button, Input } from 'ui';
 
 export function RecoveryPasswordForm() {
-  const [showEmailInput, setShowEmailInput] = useState(false);
-  const [showNumberInput, setShowNumberInput] = useState(false);
-  const [accountText, setAccountText] = useState('Recover Your Account');
-  const [optionText, setOptionText] = useState(
-    'Select option to recover your account with',
-  );
+  const [isEmailInput, setIsEmailInput] = useState(true);
+  const [isNumberInput, setIsNumberInput] = useState(false);
   const router = useRouter();
   const handleEmailVerificationClick = () => {
-    setShowEmailInput(true);
-    setShowNumberInput(false);
-    setAccountText('Forgot Password');
-    setOptionText('Select option to reset your password');
+    setIsEmailInput(true);
+    setIsNumberInput(false);
   };
   const handleNumberVerificationClick = () => {
-    setShowNumberInput(true);
-    setShowEmailInput(false);
-    setAccountText('Forgot Password');
-    setOptionText('Select option to reset your password');
+    setIsNumberInput(true);
+    setIsEmailInput(false);
   };
   const handleSendLinkClick = (e) => {
     e.preventDefault();
@@ -32,15 +24,22 @@ export function RecoveryPasswordForm() {
   return (
     <form onSubmit={handleSendLinkClick} className="mt-14">
       <div className="mt-16 flex flex-col">
-        <span className="mt-4 text-2xl font-semibold">{accountText}</span>
+        <span className="mt-4 text-2xl font-semibold">
+          Recover Your Account
+        </span>
         <p className="mt-2 text-sm font-normal text-gray-800">
-          {optionText} <span className="text-blue-600">acadx</span>
+          Select option to recover your account with
+          <span className="text-blue-600">acadx</span>
         </p>
       </div>
       <div className="mt-4 flex flex-col sm:gap-4 lg:flex-row">
         <Button
           type="button"
-          className="mt-3 h-20 w-full rounded-xl bg-transparent p-2 text-base text-gray-800 outline outline-gray-300 hover:text-white"
+          className={`mt-3 h-20 w-full rounded-xl bg-transparent p-2 text-base text-gray-800 outline  hover:text-white  ${
+            isEmailInput
+              ? 'text-primary outline-primary-500'
+              : 'outline-gray-300'
+          }`}
           onClick={handleEmailVerificationClick}
         >
           <div className="flex flex-col items-center  text-center">
@@ -50,7 +49,11 @@ export function RecoveryPasswordForm() {
         </Button>
         <Button
           type="button"
-          className="mt-3 h-20 w-full rounded-xl bg-transparent text-base text-gray-800 outline outline-gray-300 hover:text-white"
+          className={`mt-3 h-20 w-full rounded-xl bg-transparent text-base text-gray-800 outline hover:text-white  ${
+            !isEmailInput
+              ? 'text-primary outline-primary-500'
+              : 'outline-gray-300'
+          }`}
           onClick={handleNumberVerificationClick}
         >
           <div className="flex flex-col items-center text-center">
@@ -59,7 +62,7 @@ export function RecoveryPasswordForm() {
           </div>
         </Button>
       </div>
-      {showEmailInput && (
+      {isEmailInput && (
         <div className="relative">
           <Input
             type="email"
@@ -68,7 +71,7 @@ export function RecoveryPasswordForm() {
           />
         </div>
       )}
-      {showNumberInput && (
+      {isNumberInput && (
         <div className="relative">
           <Input
             type="text"

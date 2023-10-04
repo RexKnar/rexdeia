@@ -14,7 +14,7 @@ export default async function Page() {
           opacity: 0.2,
         }}
       ></section>
-      <section className="flex h-full w-full translate-y-0 transform flex-col justify-between overflow-auto px-20 transition-all duration-500 ease-in-out md:w-auto ">
+      <section className="flex h-full translate-y-0 transform flex-col justify-between overflow-auto px-20 transition-all duration-500 ease-in-out sm:w-full md:w-4/5 lg:w-3/5 xl:w-2/5">
         <div className="flex justify-center">
           <Image src={logo} className="pt-10" alt={'logo'} width={100}></Image>
         </div>
