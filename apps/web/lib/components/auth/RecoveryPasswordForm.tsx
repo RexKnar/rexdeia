@@ -37,10 +37,10 @@ export function RecoveryPasswordForm() {
           {optionText} <span className="text-blue-600">acadx</span>
         </p>
       </div>
-      <div className="mt-4 flex flex-col sm:flex-row sm:gap-4">
+      <div className="mt-4 flex flex-col sm:gap-4 lg:flex-row">
         <Button
           type="button"
-          className="mt-3 h-20 w-full rounded-xl bg-transparent p-2  text-base text-gray-800 outline outline-gray-300 hover:text-white"
+          className="mt-3 h-20 w-full rounded-xl bg-transparent p-2 text-base text-gray-800 outline outline-gray-300 hover:text-white"
           onClick={handleEmailVerificationClick}
         >
           <div className="flex flex-col items-center  text-center">

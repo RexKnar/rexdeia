@@ -1,6 +1,7 @@
 'use client';
 import { AlertCircleIcon, Eye, EyeOff, Loader2, Mail } from 'lucide-react';
 import Image from 'next/image';
+import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { signIn } from 'next-auth/react';
 import { useState } from 'react';
@@ -111,7 +112,7 @@ export function SignInForm() {
         {fieldErrors.password?.message as string}
       </p>
       <label className="mt-2 block text-end text-sm font-semibold text-gray-800">
-        <a href="/accountRecovery">Forgot Password?</a>
+        <Link href="/account-recovery">Forgot Password?</Link>
       </label>
       <Button
         type="submit"
