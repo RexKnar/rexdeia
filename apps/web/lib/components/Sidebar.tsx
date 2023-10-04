@@ -93,9 +93,7 @@ export function Sidebar() {
                 <h2 className="text-sm font-normal text-gray-700">Admin</h2>
               </div>
             </div>
-            <div>
-              <ChevronDown className="mr-2  h-4 w-4" />
-            </div>
+            <ChevronDown className="mr-2  h-4 w-4" />
           </div>
           <div className="mb-8 w-full border">
             <hr />
@@ -120,7 +118,7 @@ export function Sidebar() {
               <Button
                 variant="secondary"
                 className={`w-full justify-start bg-white text-sm font-normal text-gray-800 hover:bg-gray-200  ${
-                  activeMenu == 'students' ? ' bg-gray-50 font-semibold' : ''
+                  activeMenu == 'students' ? 'bg-gray-50 font-semibold' : ''
                 } `}
                 onClick={() => handleMenuClick('students')}
               >
