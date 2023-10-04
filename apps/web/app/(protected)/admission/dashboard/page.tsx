@@ -1,6 +1,11 @@
-import { Check, CircleDashed, FileInput, X } from 'lucide-react';
+import { FileInput } from 'lucide-react';
+import Image from 'next/image';
 import { Button } from 'ui';
 
+import admissionrequest from '../../../../public/assets/images/admission-request.svg';
+import inprogress from '../../../../public/assets/images/in-progress.svg';
+import rejected from '../../../../public/assets/images/rejected.svg';
+import shortlisted from '../../../../public/assets/images/short-listed.svg';
 import { getAdmissionList } from '../../../api/admissionlist/service';
 import { AdmissionListModel, columns } from './columns';
 import { DataTable } from './data-table';
@@ -37,8 +42,13 @@ export default async function Page() {
           <div>
             <div className="mt-8 grid grid-cols-1 gap-3 sm:flex-row md:grid md:grid-cols-2 lg:grid lg:grid-cols-3 xl:grid xl:grid-cols-4">
               <div className="flex rounded-md border border-blue-100 bg-white p-3 shadow">
-                <div className="rounded-full bg-blue-50 p-3">
-                  <FileInput className="text-blue-500" />
+                <div className="rounded-full bg-blue-50">
+                  <Image
+                    src={admissionrequest}
+                    alt={'icon'}
+                    width={50}
+                    height={50}
+                  ></Image>
                 </div>
                 <div className="ml-4">
                   <span className="inter text-xs text-gray-700">
@@ -48,8 +58,13 @@ export default async function Page() {
                 </div>
               </div>
               <div className="flex rounded-md border border-blue-100 bg-white p-3 shadow">
-                <div className="rounded-full bg-blue-50 p-3">
-                  <Check className="text-blue-500" />
+                <div className="rounded-full bg-blue-50">
+                  <Image
+                    src={shortlisted}
+                    alt={'icon'}
+                    width={50}
+                    height={50}
+                  ></Image>
                 </div>
                 <div className="ml-4">
                   <span className="text-xs text-gray-700">Short listed</span>
@@ -57,8 +72,13 @@ export default async function Page() {
                 </div>
               </div>
               <div className="flex rounded-md border border-blue-100 bg-white p-3 shadow">
-                <div className="rounded-full bg-blue-50 p-3">
-                  <X className="text-blue-500" />
+                <div className="rounded-full bg-blue-50">
+                  <Image
+                    src={rejected}
+                    alt={'icon'}
+                    width={50}
+                    height={50}
+                  ></Image>
                 </div>
                 <div className="ml-4">
                   <span className="text-xs text-gray-700">Rejected</span>
@@ -66,8 +86,13 @@ export default async function Page() {
                 </div>
               </div>
               <div className="flex rounded-md border border-blue-100 bg-white p-3 shadow">
-                <div className="rounded-full bg-blue-50 p-3">
-                  <CircleDashed className="text-blue-500" />
+                <div className="rounded-full bg-blue-50">
+                  <Image
+                    src={inprogress}
+                    alt={'icon'}
+                    width={50}
+                    height={50}
+                  ></Image>
                 </div>
                 <div className="ml-4">
                   <span className="text-xs text-gray-700">In-progress</span>
