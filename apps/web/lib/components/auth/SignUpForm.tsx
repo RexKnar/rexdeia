@@ -35,7 +35,7 @@ export function SignUpForm() {
     setError,
   } = useForm();
 
-  async function signupHandler({ name, email, password, phoneNumber }) {
+  async function signUpHandler({ name, email, password, phoneNumber }) {
     try {
       const { createdBranchId, createdOrganizationId } =
         await makeAPICall<OnboardUserResponse>(REGISTER_USER, {
@@ -81,7 +81,7 @@ export function SignUpForm() {
   }
 
   return (
-    <form className="mt-5" onSubmit={handleSubmit(signupHandler)}>
+    <form className="mt-5" onSubmit={handleSubmit(signUpHandler)}>
       <div>
         <label className="sub-text inter block text-sm font-semibold">
           Full Name
