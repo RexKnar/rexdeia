@@ -2,10 +2,10 @@ import { FileInput } from 'lucide-react';
 import Image from 'next/image';
 import { Button } from 'ui';
 
-import admissionrequest from '../../../../public/assets/images/admission-request.svg';
-import inprogress from '../../../../public/assets/images/in-progress.svg';
-import rejected from '../../../../public/assets/images/rejected.svg';
-import shortlisted from '../../../../public/assets/images/short-listed.svg';
+import admissionRequestIcon from '../../../../public/assets/images/admission-request.svg';
+import inProgressIcon from '../../../../public/assets/images/in-progress.svg';
+import rejectedIcon from '../../../../public/assets/images/rejected.svg';
+import shortlistedIcon from '../../../../public/assets/images/short-listed.svg';
 import { getAdmissionList } from '../../../api/admissionlist/service';
 import { AdmissionListModel, columns } from './columns';
 import { DataTable } from './data-table';
@@ -20,18 +20,18 @@ export default async function Page() {
   const data = await getData();
   return (
     <>
-      <section className="h-screen w-full bg-gray-50 p-3">
+      <section className="w-full bg-gray-50 p-3">
         <div className="mx-6 mt-8">
           <div className="flex justify-between">
             <div>
-              <span className="text-xs font-medium text-gray-700">Acadx</span>{' '}
+              <span className="text-xs font-medium text-gray-700">Acadx</span>
               <span className="text-gray-700">/</span>
               <span className="text ml-2 text-sm font-semibold text-gray-700">
                 Dashboard
               </span>
               <h1 className="mt-2 font-semibold">Dashboard</h1>
             </div>
-            <div className="relative flex">
+            <div>
               <Button className="text-white">
                 <FileInput size={16} className="mr-2" />
                 Admission Form
@@ -40,11 +40,11 @@ export default async function Page() {
           </div>
 
           <div>
-            <div className="mt-8 grid grid-cols-1 gap-3 sm:flex-row md:grid md:grid-cols-2 lg:grid lg:grid-cols-3 xl:grid xl:grid-cols-4">
+            <div className="lg:grid-cols-3s mt-8 grid grid-cols-1 gap-3 sm:flex-row md:grid-cols-2 xl:grid-cols-4">
               <div className="flex rounded-md border border-blue-100 bg-white p-3 shadow">
                 <div className="rounded-full bg-blue-50">
                   <Image
-                    src={admissionrequest}
+                    src={admissionRequestIcon}
                     alt={'icon'}
                     width={50}
                     height={50}
@@ -60,21 +60,21 @@ export default async function Page() {
               <div className="flex rounded-md border border-blue-100 bg-white p-3 shadow">
                 <div className="rounded-full bg-blue-50">
                   <Image
-                    src={shortlisted}
+                    src={shortlistedIcon}
                     alt={'icon'}
                     width={50}
                     height={50}
                   ></Image>
                 </div>
                 <div className="ml-4">
-                  <span className="text-xs text-gray-700">Short listed</span>
+                  <span className="text-xs text-gray-700">Shortlisted</span>
                   <h1 className="font-semibold">450</h1>
                 </div>
               </div>
               <div className="flex rounded-md border border-blue-100 bg-white p-3 shadow">
                 <div className="rounded-full bg-blue-50">
                   <Image
-                    src={rejected}
+                    src={rejectedIcon}
                     alt={'icon'}
                     width={50}
                     height={50}
@@ -88,7 +88,7 @@ export default async function Page() {
               <div className="flex rounded-md border border-blue-100 bg-white p-3 shadow">
                 <div className="rounded-full bg-blue-50">
                   <Image
-                    src={inprogress}
+                    src={inProgressIcon}
                     alt={'icon'}
                     width={50}
                     height={50}
