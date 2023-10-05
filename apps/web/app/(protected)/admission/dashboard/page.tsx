@@ -51,7 +51,7 @@ export default async function Page() {
                   ></Image>
                 </div>
                 <div className="ml-4">
-                  <span className="inter text-xs text-gray-700">
+                  <span className="text-xs text-gray-700">
                     Admission Request
                   </span>
                   <h1 className="font-semibold">1.5K</h1>
