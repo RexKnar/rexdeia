@@ -257,8 +257,8 @@ model Payment {
   amount              String
   paymentDate         String
   paymentMethod       String                @default("Online")
-  isActive            Boolean
-  isPaid              Boolean
+  isActive            Boolean               @default(true)
+  isPaid              Boolean               @default(false)
   isDeleted           Boolean               @default(false)
   deletedAt           DateTime?
   PaymentAssociations PaymentAssociations[]
