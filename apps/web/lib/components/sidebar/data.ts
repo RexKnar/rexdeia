@@ -21,6 +21,26 @@ export const menuItems: SidebarMenuItem[] = [
     label: 'Students',
     icon: UserCircle2,
     path: '/students',
+    children: [
+      {
+        id: 'admission-addnew1',
+        label: 'Add new',
+        icon: null,
+        path: '/test1',
+      },
+      {
+        id: 'admission-analytics1',
+        label: 'Analytics',
+        icon: null,
+        path: '/test2',
+      },
+      {
+        id: 'admission-configure1',
+        label: 'Configure',
+        icon: null,
+        path: '/test3',
+      },
+    ],
   },
   {
     id: 'staffs',

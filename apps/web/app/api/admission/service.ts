@@ -3,7 +3,7 @@ import { AddAdmissionModel } from './models';
 
 export async function addAdmission(
   formId: string,
-  admission: AddAdmissionModel,
+  admission: AddAdmissionModel
 ) {
   return await db.admissionForm.create({
     data: {

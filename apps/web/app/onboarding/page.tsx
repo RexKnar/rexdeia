@@ -14,7 +14,7 @@ export default async function Page() {
   const selectedOrganizationId = session.organizationId;
 
   const branchesToSetup = session.user.createdBranches.filter(
-    (branch) => branch.id === selectedBranchId,
+    (branch) => branch.id === selectedBranchId
   );
 
   if (branchesToSetup?.length) {
