@@ -13,7 +13,7 @@ export async function AddPayment(payment: AddPaymentModel) {
 }
 
 export async function addPaymentAssociation(
-  paymentAssociation: addPaymentAssociationModel,
+  paymentAssociation: addPaymentAssociationModel
 ) {
   return await db.paymentAssociations.create({
     data: {
