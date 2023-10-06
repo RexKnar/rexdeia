@@ -6,7 +6,7 @@ import { UpdateBranchByIdModel } from '../../../../lib/domain';
 
 export async function updateBranchById(
   id: string,
-  branch: UpdateBranchByIdModel,
+  branch: UpdateBranchByIdModel
 ) {
   const session = await getServerSession(authOptions);
 

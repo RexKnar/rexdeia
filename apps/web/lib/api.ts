@@ -4,7 +4,7 @@ export async function makeAPICall<T>(
   apiName: string,
   payload: Record<string, unknown> = {},
   params: Record<string, string> = {},
-  substitutions: Record<string, string> = {},
+  substitutions: Record<string, string> = {}
 ): Promise<T> {
   let { endpoint, requestType } = endpointInfo[apiName];
 
@@ -13,9 +13,9 @@ export async function makeAPICall<T>(
     endpoint = endpoint.replace(`[${key}]`, substitution);
   });
 
-  const url = new URL(`${process.env['NEXT_PUBLIC_API_URL']}${endpoint}`);
+  const url = new URL(`${window.location.origin}${endpoint}`);
   Object.keys(params).forEach((key) =>
-    url.searchParams.append(key, params[key]),
+    url.searchParams.append(key, params[key])
   );
 
   const body = JSON.stringify(payload);

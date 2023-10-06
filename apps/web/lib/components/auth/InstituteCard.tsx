@@ -23,7 +23,7 @@ export function InstituteCard(props: InstituteCardProps) {
         <div
           className={cn(
             'absolute left-2 top-0 mt-2',
-            isSelected ? 'visible' : 'invisible',
+            isSelected ? 'visible' : 'invisible'
           )}
         >
           <CheckCircle />

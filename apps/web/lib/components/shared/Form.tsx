@@ -99,7 +99,7 @@ export function Form({ formConfig }) {
                                 <input
                                   {...register(
                                     field.name,
-                                    field.validationRules,
+                                    field.validationRules
                                   )}
                                   type={field.type}
                                   placeholder={field.placeholder}
@@ -121,7 +121,7 @@ export function Form({ formConfig }) {
                                 <textarea
                                   {...register(
                                     field.name,
-                                    field.validationRules,
+                                    field.validationRules
                                   )}
                                   placeholder={field.placeholder}
                                   className="ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring mt-1 flex h-10 w-full rounded-md border border-gray-300 bg-transparent px-3 py-2 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
@@ -147,7 +147,7 @@ export function Form({ formConfig }) {
                                       value={option.value}
                                       {...register(
                                         field.name,
-                                        field.validationRules,
+                                        field.validationRules
                                       )}
                                     />
                                     <span className="me-3">{option.label}</span>
@@ -170,7 +170,7 @@ export function Form({ formConfig }) {
                                 <select
                                   {...register(
                                     field.name,
-                                    field.validationRules,
+                                    field.validationRules
                                   )}
                                   placeholder={field.placeholder}
                                   className="ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring mt-1 flex h-10 w-full rounded-md border border-gray-300 bg-transparent px-3 py-2 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
