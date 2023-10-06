@@ -2,6 +2,7 @@
 
 import { MailCheck, Smartphone } from 'lucide-react';
 import Link from 'next/link';
+import { useSearchParams } from 'next/navigation';
 import { useState } from 'react';
 import { Button, Input } from 'ui';
 
@@ -9,9 +10,12 @@ import { OtpVerifyForm } from './OtpVerifyForm';
 import { ResetPasswordForm } from './ResetPasswordForm';
 
 export function RecoveryPasswordForm() {
-  const [isOtp, setIsOtp] = useState('recover');
+  const [isOtp, setIsOtp] = useState(false);
   const [isEmailInput, setIsEmailInput] = useState(true);
   const [isNumberInput, setIsNumberInput] = useState(false);
+  const searchParams = useSearchParams();
+  const isResetPassword = searchParams.get('token');
+
   const handleEmailVerificationClick = () => {
     setIsEmailInput(true);
     setIsNumberInput(false);
@@ -22,11 +26,11 @@ export function RecoveryPasswordForm() {
   };
   const handleSendLinkClick = (e) => {
     e.preventDefault();
-    setIsOtp('otp');
+    setIsOtp(true);
   };
   return (
     <>
-      {isOtp == 'recover' && (
+      {!isOtp && !isResetPassword && (
         <>
           <form onSubmit={handleSendLinkClick} className="mt-14">
             <div className="mt-16 flex flex-col">
@@ -86,7 +90,7 @@ export function RecoveryPasswordForm() {
                 />
               </div>
             )}
-            <Button type="submit" className="mt-6 w-full text-white">
+            <Button type="submit" className="mt-8 w-full text-white">
               {' '}
               Send link
             </Button>
@@ -105,8 +109,8 @@ export function RecoveryPasswordForm() {
           </footer>
         </>
       )}
-      {isOtp == 'otp' && <OtpVerifyForm setIsOtp={setIsOtp} />}
-      {isOtp == 'reset' && <ResetPasswordForm />}
+      {isOtp && !isResetPassword && <OtpVerifyForm />}
+      {!isOtp && isResetPassword && <ResetPasswordForm />}
     </>
   );
 }

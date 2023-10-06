@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { RefObject, useRef } from 'react';
 import { Button, Input } from 'ui';
 
-export function OtpVerifyForm({ setIsOtp }) {
+export function OtpVerifyForm() {
   const inputRefs: RefObject<HTMLInputElement>[] = [
     useRef(),
     useRef(),
@@ -20,7 +20,6 @@ export function OtpVerifyForm({ setIsOtp }) {
   };
   const handleSubmit = (e) => {
     e.preventDefault();
-    setIsOtp('reset');
   };
   return (
     <>
