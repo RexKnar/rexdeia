@@ -47,14 +47,14 @@ export function SetupForm({ branchId, organizationId }: SetupFormProps) {
         {},
         {
           organizationId,
-        },
+        }
       );
 
       const updateBranch = makeAPICall(
         UPDATE_BRANCH,
         { name: 'Default' },
         {},
-        { branchId },
+        { branchId }
       );
 
       await Promise.all([updateOrganization, updateBranch]);

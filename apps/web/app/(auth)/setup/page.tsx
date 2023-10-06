@@ -27,7 +27,7 @@ export default async function Page({
   const selectedOrganizationId = searchParams.organization as string;
 
   const branchesToSetup = session.user.createdBranches.filter(
-    (branch) => !branch.isActivated,
+    (branch) => !branch.isActivated
   );
 
   const [{ id: branchId, organizationId }] = branchesToSetup;

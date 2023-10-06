@@ -3,7 +3,7 @@ import { admissionForm, EnquiryForm } from './data';
 
 export async function onboardEntities(
   branchId: string,
-  organizationId: string,
+  organizationId: string
 ) {
   const createForm = async (type: string, json: Object) => {
     await db.form.deleteMany({

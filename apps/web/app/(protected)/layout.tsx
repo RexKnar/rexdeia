@@ -4,7 +4,7 @@ import { Inter, Roboto_Mono } from '@next/font/google';
 import { ReactNode, Suspense } from 'react';
 import { Toaster } from 'ui';
 
-import { Sidebar } from '../../lib/components/Sidebar';
+import { Sidebar } from '../../lib/components/sidebar/Sidebar';
 import Providers from '../../lib/Providers';
 
 const inter = Inter({
