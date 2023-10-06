@@ -34,8 +34,8 @@ export function RecoveryPasswordForm() {
                 Recover Your Account
               </span>
               <p className="mt-2 text-sm font-normal text-gray-800">
-                Select option to recover your account with
-                <span className="text-blue-600">acadx</span>
+                Select option to recover your account with{' '}
+                <span className="mr-2 text-blue-600">Acadx</span>
               </p>
             </div>
             <div className="mt-4 flex flex-col sm:gap-4 lg:flex-row">
@@ -72,7 +72,7 @@ export function RecoveryPasswordForm() {
               <div className="relative">
                 <Input
                   type="email"
-                  className="mt-4 text-sm"
+                  className="mt-6 text-sm"
                   placeholder="Enter your email"
                 />
               </div>
@@ -81,12 +81,12 @@ export function RecoveryPasswordForm() {
               <div className="relative">
                 <Input
                   type="text"
-                  className="mt-4 text-sm"
+                  className="mt-6 text-sm"
                   placeholder="Enter your number"
                 />
               </div>
             )}
-            <Button type="submit" className="mt-8 w-full text-white">
+            <Button type="submit" className="mt-6 w-full text-white">
               {' '}
               Send link
             </Button>
