@@ -3,7 +3,7 @@ import { OrganizationModel } from './models';
 
 export async function updateOrganizationById(
   id: string,
-  organization: OrganizationModel
+  organization: OrganizationModel,
 ) {
   return await db.organization.update({
     data: {

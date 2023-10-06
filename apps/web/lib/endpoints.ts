@@ -15,6 +15,7 @@ export const UPDATE_DEPARTMENT = `UPDATE_DEPARTMENT`;
 export const DELETE_DEPARTMENT = `DELETE_DEPARTMENT`;
 export const ONBOARD_ACCOUNT = `ONBOARD_ACCOUNT`;
 export const UPDATE_ORGANIZATION = `UPDATE_ORGANIZATION`;
+export const ADD_PAYMENT = `ADD_PAYMENT`;
 
 type EndpointDetails = Record<
   string,
@@ -81,5 +82,9 @@ export default <EndpointDetails>{
   [UPDATE_BRANCH]: {
     requestType: `PUT`,
     endpoint: `/api/branch/[branchId]`,
+  },
+  [ADD_PAYMENT]: {
+    requestType: `POST`,
+    endpoint: `/api/payment`,
   },
 };

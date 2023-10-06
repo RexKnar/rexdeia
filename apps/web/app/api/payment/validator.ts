@@ -4,11 +4,11 @@ import { AddPaymentModel } from './models';
 
 const schema = z.object({});
 
-export async function validateAddDepartment(AddPayment: AddPaymentModel) {
+export async function validateAddPayment(payment: AddPaymentModel) {
   try {
-    schema.parse(AddPayment);
+    schema.parse(payment);
   } catch (e) {
     return Promise.reject(e);
   }
-  return schema.parse(AddPayment);
+  return schema.parse(payment);
 }

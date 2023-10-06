@@ -1,20 +1,23 @@
 import { NextRequest, NextResponse } from 'next/server';
 import razorpay from 'razorpay';
 
+import { getOrganizationById } from '../organization/[id]/service';
 import { AddPayment, addPaymentAssociation } from './service';
+import { validateAddPayment } from './validator';
 
 const instance = new razorpay({
-  key_id: 'rzp_test_FgPdhSoHy5q9CO',
-  key_secret: 'xt6nQmfxv4bjKZdC0xEU14ei',
+  key_id: `${process.env['NEXT_RAZORPAY_KEY_ID']}`,
+  key_secret: `${process.env['NEXT_RAZORPAY_KEY_SECRET']}`,
 });
 
 export async function POST(request: NextRequest) {
   const payload = await request.json();
   try {
+    const organization = await getOrganizationById(payload.organizationId);
     const paymentResponse = await instance.orders.create({
       amount: payload.amount * 100,
       currency: 'INR',
-      receipt: `${payload.organization}-${new Date().getTime()}`,
+      receipt: `${organization.name}-${new Date().getTime()}`,
       first_payment_min_amount: 1000000,
     });
     const paymentData = {
@@ -23,6 +26,7 @@ export async function POST(request: NextRequest) {
       amount: JSON.stringify(paymentResponse.amount),
       paymentDate: JSON.stringify(paymentResponse.created_at),
     };
+    await validateAddPayment(payload);
     const createdPayment = await AddPayment(paymentData);
     const paymentAssociation = {
       associationType: payload.associationType,
