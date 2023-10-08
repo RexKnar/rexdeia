@@ -58,7 +58,7 @@ export const menuItems: SidebarMenuItem[] = [
     id: 'admission-page',
     label: 'Admissions',
     icon: UserPlus2,
-    path: '/admission/dashboard',
+    path: '',
     children: [
       {
         id: 'admission-addnew',
