@@ -22,8 +22,8 @@ export default async function Page() {
 
   return (
     <section className="w-full bg-gray-50 p-3">
-      <section className="mx-6 mt-8">
-        <section className="flex items-center justify-between">
+      <section>
+        <section className="mx-6 mt-8 flex items-center justify-between">
           <DashboardBreadcrumb />
 
           <Button className="text-white">
