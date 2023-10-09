@@ -249,3 +249,27 @@ model Form {
   EnquiryForm    EnquiryForm[]
   AdmissionForm  AdmissionForm[]
 }
+
+model Payment {
+  id                  String                @id @default(auto()) @map("_id") @db.ObjectId
+  transactionId       String
+  receipt             String
+  amount              String
+  paymentDate         String
+  paymentMethod       String                @default("Online")
+  isActive            Boolean               @default(true)
+  isPaid              Boolean               @default(false)
+  isDeleted           Boolean               @default(false)
+  deletedAt           DateTime?
+  PaymentAssociations PaymentAssociations[]
+}
+
+model PaymentAssociations {
+  id                  String    @id @default(auto()) @map("_id") @db.ObjectId
+  associationType     String
+  associationEntityId String
+  isDeleted           Boolean   @default(false)
+  deletedAt           DateTime?
+  Payment             Payment?  @relation(fields: [paymentId], references: [id])
+  paymentId           String?   @db.ObjectId
+}

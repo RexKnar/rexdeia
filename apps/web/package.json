@@ -27,6 +27,7 @@
     "next-auth": "4.23.2",
     "next-intl": "2.20.2",
     "postcss": "^8.4.29",
+    "razorpay": "^2.9.2",
     "react": "^18.2.0",
     "react-dom": "18.2.0",
     "react-hook-form": "7.47.0",
