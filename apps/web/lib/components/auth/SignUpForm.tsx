@@ -7,8 +7,8 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Button, Input } from 'ui';
 
-import googlelogo from '../../../public/assets/images/Google_logo.png';
-import microsoftlogo from '../../../public/assets/images/Microsoft_logo.png';
+import googleLogo from '../../../public/assets/images/Google_logo.png';
+import microsoftLogo from '../../../public/assets/images/Microsoft_logo.png';
 import { makeAPICall } from '../../api';
 import { REGISTER_USER } from '../../endpoints';
 
@@ -219,16 +219,16 @@ export function SignUpForm() {
       <div className="flex justify-center gap-4">
         <Button
           type="button"
-          className="mt-3 w-full  bg-transparent text-base text-gray-800 outline outline-gray-300 hover:text-white"
+          className="mt-3 w-full bg-transparent text-base text-gray-800 outline outline-gray-300 hover:text-white"
         >
-          <Image src={googlelogo} alt={'logo'} className="mr-1"></Image>
+          <Image src={googleLogo} alt={'logo'} className="mr-1"></Image>
           Google
         </Button>
         <Button
           type="button"
-          className="mt-3 w-full  bg-transparent text-base text-gray-800 outline outline-gray-300 hover:text-white"
+          className="mt-3 w-full bg-transparent text-base text-gray-800 outline outline-gray-300 hover:text-white"
         >
-          <Image src={microsoftlogo} alt={'logo'} className="mr-1"></Image>
+          <Image src={microsoftLogo} alt={'logo'} className="mr-1"></Image>
           Microsoft
         </Button>
       </div>
