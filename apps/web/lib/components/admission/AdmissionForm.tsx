@@ -1,7 +1,7 @@
 'use client';
 
 import { Loader2 } from 'lucide-react';
-import React, { useRef, useState } from 'react';
+import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import {
   AlertDialog,
@@ -32,9 +32,15 @@ export function AdmissionForm({ formConfig, formId }: AdmissionFormProps) {
     handleSubmit,
     formState: { errors, isSubmitting },
   } = useForm();
-  const [currentStep, setCurrentStep] = useState(0);
+
+  const shareableURL = window
+    ? `${window.location.origin}/forms/${formConfig.organizationId}`
+    : '';
+
   const totalSteps = formConfig.json.formSections.length;
+  const [currentStep, setCurrentStep] = useState(0);
   const [selectedSectionIndex, setSelectedSectionIndex] = useState(0);
+
   const nextStep = () => {
     if (currentStep < totalSteps - 1) {
       setCurrentStep(currentStep + 1);
@@ -69,31 +75,22 @@ export function AdmissionForm({ formConfig, formId }: AdmissionFormProps) {
       nextStep();
     }
   }
-  let domain = '';
-  if (typeof window !== 'undefined') {
-    domain = window.location.host;
-  }
-  const shareableURL = `${domain}/forms/${formConfig.organizationId}`;
-  const inputRef = useRef(null);
 
   const { toast } = useToast();
   const handleCopyClick = async () => {
-    if (inputRef.current) {
-      inputRef.current.select();
-      await copyToClipboard(shareableURL);
-
-      toast({
-        description: 'URL copied to clipboard',
-      });
-    }
+    await copyToClipboard(shareableURL);
+    toast({
+      description: 'URL copied to clipboard',
+    });
   };
+
   return (
     <>
       <form
         onSubmit={handleSubmit(addAdmissionHandler)}
-        className="mt-4 w-full p-5"
+        className="relative p-4"
       >
-        <div className="flex justify-end">
+        <section className="absolute -top-20 right-0">
           <AlertDialog>
             <AlertDialogTrigger asChild>
               <Button
@@ -114,7 +111,6 @@ export function AdmissionForm({ formConfig, formId }: AdmissionFormProps) {
                     className="mt-2"
                     value={shareableURL}
                     readOnly
-                    ref={inputRef}
                   />
                 </AlertDialogDescription>
               </AlertDialogHeader>
@@ -125,14 +121,7 @@ export function AdmissionForm({ formConfig, formId }: AdmissionFormProps) {
               </AlertDialogFooter>
             </AlertDialogContent>
           </AlertDialog>
-        </div>
-
-        <h1 className="mb-1 text-center text-2xl font-semibold text-primary">
-          {formConfig.json.title}
-        </h1>
-        <p className="mb-5 text-center text-black">
-          {formConfig.json.description}
-        </p>
+        </section>
 
         <div className="flex gap-4">
           <ul className="h-fit w-[215px] shrink-0 rounded-lg bg-white py-3">
@@ -152,6 +141,7 @@ export function AdmissionForm({ formConfig, formId }: AdmissionFormProps) {
               ))}
             </li>
           </ul>
+
           <div className="w-full rounded-lg bg-white p-2">
             {formConfig.json.formSections.map((section, index) => (
               <div
