@@ -32,7 +32,7 @@ export default async function Page() {
 
       <section className="flex h-full w-full flex-col justify-between overflow-x-hidden px-20 opacity-100 md:w-4/12">
         <Image src={logo} className="pt-10" alt={'logo'} width={100}></Image>
-        <Text variant="xl-semibold" className="mt-14 flex">
+        <Text variant="xl-semibold" className="mt-14">
           Create Your Account
         </Text>
         <Text variant="sm-regular" className="text-gray-800">
