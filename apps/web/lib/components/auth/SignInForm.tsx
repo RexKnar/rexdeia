@@ -116,12 +116,14 @@ export function SignInForm() {
       </label>
       <Button
         type="submit"
-        className="mt-6 w-full text-white"
+        className={`mt-6 w-full text-white ${
+          isSubmitting ? 'cursor-not-allowed opacity-50' : ''
+        }`}
         disabled={isSubmitting}
       >
         {isSubmitting ? (
-          <div className="flex h-screen items-center justify-center">
-            <Loader2 className="mr-2 h-2 w-6 animate-spin text-white" />
+          <div className="flex items-center justify-center">
+            <Loader2 className="mr-2 h-6 w-6 animate-spin text-white" />
           </div>
         ) : (
           `Sign in`
@@ -133,14 +135,14 @@ export function SignInForm() {
       <div className="flex flex-col sm:flex-row sm:gap-4">
         <Button
           type="button"
-          className="mt-3 w-full bg-transparent p-2 text-base text-gray-800 outline outline-gray-300 hover:text-white"
+          className="mt-3 w-full bg-transparent px-4 py-3 text-base text-gray-800 outline outline-gray-300 hover:text-white"
         >
           <Image src={googlelogo} alt={'logo'} className="mr-1"></Image>
           Google
         </Button>
         <Button
           type="button"
-          className="mt-3 w-full  bg-transparent text-base text-gray-800 outline outline-gray-300 hover:text-white "
+          className="mt-3 w-full bg-transparent px-4 py-3 text-base text-gray-800 outline outline-gray-300 hover:text-white "
         >
           <Image src={microsoftlogo} alt={'logo'} className="mr-1"></Image>
           Microsoft

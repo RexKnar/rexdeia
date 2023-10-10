@@ -5,6 +5,7 @@ import { getServerSession } from 'next-auth';
 
 import { authOptions } from '../../../lib/auth';
 import { SignInForm } from '../../../lib/components/auth/SignInForm';
+import { Footer } from '../../../lib/components/Footer';
 import logo from '../../../public/assets/images/acadx-logo.png';
 
 export const metadata = {
@@ -43,7 +44,7 @@ export default async function Page() {
         <SignInForm />
 
         <p className="mt-8 text-center text-sm font-semibold text-gray-800">
-          Don&apos;t have an account?
+          Didn&apos;t have an account?
         </p>
         <Link
           href="/signup"
@@ -51,9 +52,7 @@ export default async function Page() {
         >
           Signup
         </Link>
-        <footer className="mt-8 text-center text-sm font-normal text-gray-700">
-          &copy; acadx 2023
-        </footer>
+        <Footer />
       </section>
     </section>
   );

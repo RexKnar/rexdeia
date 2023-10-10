@@ -22,7 +22,7 @@ export default async function Page() {
   }
 
   return (
-    <section className="flex h-full flex-col sm:flex-row">
+    <section className="flex h-screen flex-col overflow-x-hidden sm:flex-row">
       <section
         className="hidden flex-grow bg-cover bg-center bg-no-repeat sm:flex sm:w-auto"
         style={{

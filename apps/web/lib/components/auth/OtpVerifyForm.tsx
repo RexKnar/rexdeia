@@ -4,6 +4,8 @@ import Link from 'next/link';
 import { RefObject, useRef } from 'react';
 import { Button, Input } from 'ui';
 
+import { Footer } from '../../../lib/components/Footer';
+
 export function OtpVerifyForm() {
   const inputRefs: RefObject<HTMLInputElement>[] = [
     useRef(),
@@ -51,18 +53,16 @@ export function OtpVerifyForm() {
         </Button>
       </form>
       <p className=" mt-16 text-center text-sm font-semibold text-gray-800">
-        Don&apos;t receive the OTP?
+        didn&apos;t receive the OTP?
       </p>
       <Link
         href="/signin"
-        className="mt-8 w-full rounded-md border-2 border-gray-300 bg-transparent p-2 text-center text-sm font-semibold text-primary hover:bg-primary hover:text-white"
+        className="mt-10 w-full rounded-md border-2 border-gray-300 bg-transparent p-2 text-center text-sm font-semibold text-primary hover:bg-primary hover:text-white"
       >
         Resend code
       </Link>
       <div className="mt-16">
-        <footer className="mt-16 text-center text-sm font-normal text-gray-700">
-          &copy; acadx 2023
-        </footer>
+        <Footer />
       </div>
     </>
   );
