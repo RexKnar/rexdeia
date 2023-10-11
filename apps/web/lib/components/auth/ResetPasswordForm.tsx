@@ -4,6 +4,8 @@ import { Eye, EyeOff } from 'lucide-react';
 import { useState } from 'react';
 import { Button, Input } from 'ui';
 
+import { Footer } from '../../../lib/components/Footer';
+
 export function ResetPasswordForm() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -56,14 +58,13 @@ export function ResetPasswordForm() {
             </div>
           </div>
         </div>
-        <Button type="submit" className="mt-14 w-full text-white">
-          {' '}
+        <Button type="submit" className="mt-16 w-full text-white">
           Update
         </Button>
       </form>
-      <footer className="mt-16 text-center text-sm font-normal text-gray-700">
-        <div className="mt-16">&copy; acadx 2023</div>
-      </footer>
+      <div className="mt-16">
+        <Footer />
+      </div>
     </>
   );
 }

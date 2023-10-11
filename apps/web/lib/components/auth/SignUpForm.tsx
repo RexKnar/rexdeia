@@ -44,7 +44,6 @@ export function SignUpForm() {
           password: password,
           phoneNumber: phoneNumber,
         });
-
       await signIn('credentials', {
         name: name,
         email: email,
@@ -141,10 +140,20 @@ export function SignUpForm() {
         <label className="sub-text inter block text-sm font-semibold">
           Phone Number
         </label>
-        <div className="relative">
+        <div className="relative flex items-center gap-2">
+          <select
+            className="mt-2 rounded-md border border-gray-300 py-2 pl-2 pr-6 outline-blue-300 "
+            name="countryCode"
+            {...register('countryCode')}
+          >
+            <option value="+91">+91</option>
+            <option value="+44">+44</option>
+            {/* Add more country codes as needed */}
+          </select>
           <Input
-            type="number"
+            inputMode="numeric"
             className="mt-2"
+            maxLength={10}
             name="phoneNumber"
             placeholder="Enter your phone number"
             {...register('phoneNumber', {
@@ -201,11 +210,13 @@ export function SignUpForm() {
       <div className="mt-6 w-full">
         <Button
           type="submit"
-          className="w-full text-white"
+          className={`mt-6 w-full px-4 py-3 text-white ${
+            isSubmitting ? 'cursor-not-allowed opacity-50' : ''
+          }`}
           disabled={isSubmitting}
         >
           {isSubmitting ? (
-            <div className="flex h-screen items-center justify-center">
+            <div className="flex items-center justify-center">
               <Loader2 className="mr-2 h-6 w-6 animate-spin text-white" />
             </div>
           ) : (
@@ -219,14 +230,14 @@ export function SignUpForm() {
       <div className="flex justify-center gap-4">
         <Button
           type="button"
-          className="mt-3 w-full bg-transparent text-base text-gray-800 outline outline-gray-300 hover:text-white"
+          className="mt-3 w-full bg-transparent px-4 py-3 text-base text-gray-800 outline outline-gray-300 hover:text-white"
         >
           <Image src={googleLogo} alt={'logo'} className="mr-1"></Image>
           Google
         </Button>
         <Button
           type="button"
-          className="mt-3 w-full bg-transparent text-base text-gray-800 outline outline-gray-300 hover:text-white"
+          className="mt-3 w-full bg-transparent px-4 py-3 text-base text-gray-800 outline outline-gray-300 hover:text-white"
         >
           <Image src={microsoftLogo} alt={'logo'} className="mr-1"></Image>
           Microsoft

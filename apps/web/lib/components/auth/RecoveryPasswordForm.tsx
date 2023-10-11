@@ -6,6 +6,7 @@ import { useSearchParams } from 'next/navigation';
 import { useState } from 'react';
 import { Button, Input } from 'ui';
 
+import { Footer } from '../../../lib/components/Footer';
 import { OtpVerifyForm } from './OtpVerifyForm';
 import { ResetPasswordForm } from './ResetPasswordForm';
 
@@ -39,7 +40,7 @@ export function RecoveryPasswordForm() {
               </span>
               <p className="mt-2 text-sm font-normal text-gray-800">
                 Select option to recover your account with{' '}
-                <span className="mr-2 text-blue-600">Acadx</span>
+                <span className="mr-2 text-blue-600">acadx</span>
               </p>
             </div>
             <div className="mt-4 flex flex-col sm:gap-4 lg:flex-row">
@@ -96,7 +97,7 @@ export function RecoveryPasswordForm() {
             </Button>
           </form>
           <p className=" mt-16 text-center text-sm font-semibold text-gray-800">
-            Don&apos;t receive the link?
+            Didn&apos;t receive the link?
           </p>
           <Link
             href="/signin"
@@ -104,9 +105,7 @@ export function RecoveryPasswordForm() {
           >
             Resend
           </Link>
-          <footer className="mt-16 text-center text-sm font-normal text-gray-700">
-            &copy; acadx 2023
-          </footer>
+          <Footer />
         </>
       )}
       {isOtp && !isResetPassword && <OtpVerifyForm />}
