@@ -1,9 +1,23 @@
 module.exports = {
   root: false,
-  extends: ['next', 'turbo', 'eslint:recommended'],
-  plugins: ['small-import', 'simple-import-sort', 'import', 'prettier'],
+  extends: [
+    'eslint:recommended',
+    'next',
+    'turbo',
+    'plugin:deprecation/recommended',
+  ],
+  plugins: [
+    '@typescript-eslint',
+    'small-import',
+    'simple-import-sort',
+    'import',
+    'prettier',
+  ],
   rules: {
+    // Base rules
+    'prefer-let/prefer-let': 0,
     'prettier/prettier': 'error',
+
     // Import related rules
     'simple-import-sort/imports': 'error',
     'simple-import-sort/exports': 'error',
@@ -14,8 +28,15 @@ module.exports = {
     'import/no-namespace': 'error',
 
     'small-import/no-full-import': 'error',
+
+    // TypeScript rules
+    '@typescript-eslint/no-unused-vars': [
+      'error',
+      { ignoreRestSiblings: true },
+    ],
   },
   parserOptions: {
+    project: './tsconfig.json',
     babelOptions: {
       presets: [require.resolve('next/babel')],
     },

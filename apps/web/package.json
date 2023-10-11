@@ -5,10 +5,10 @@
   "scripts": {
     "build": "next build",
     "dev": "next dev",
+    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "postinstall": "prisma generate",
     "lint": "next lint",
-    "start": "next start",
-    "format": "prettier --write \"**/*.{ts,tsx,md}\""
+    "start": "next start"
   },
   "dependencies": {
     "@next-auth/prisma-adapter": "^1.0.7",
@@ -42,10 +42,13 @@
     "@types/node": "20.6.2",
     "@types/react": "18.2.21",
     "@types/react-dom": "18.2.8",
+    "@typescript-eslint/eslint-plugin": "6.4.0",
+    "@typescript-eslint/parser": "6.4.0",
     "eslint-config-next": "^13.4.12",
     "eslint-config-prettier": "^8.8.0",
     "eslint-config-turbo": "^1.10.9",
     "eslint-import-resolver-typescript": "^3.6.0",
+    "eslint-plugin-deprecation": "^2.0.0",
     "eslint-plugin-import": "^2.28.1",
     "eslint-plugin-prettier": "^5.0.0",
     "eslint-plugin-react": "7.33.0",
