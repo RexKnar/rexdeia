@@ -31,15 +31,26 @@ export function AdmissionForm({ formConfig, formId }: AdmissionFormProps) {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
-  } = useForm();
+  } = useForm({
+    mode: 'onBlur',
+  });
+  const [errorList, setErrorList] = useState({});
+
+  console.log(errors);
+
   const [currentStep, setCurrentStep] = useState(0);
   const totalSteps = formConfig.json.formSections.length;
   const [selectedSectionIndex, setSelectedSectionIndex] = useState(0);
   const nextStep = () => {
+    var previous = [];
+    var current = [];
     if (currentStep < totalSteps - 1) {
       setCurrentStep(currentStep + 1);
       setSelectedSectionIndex(currentStep + 1);
     }
+    current.push(errors);
+    console.log(current);
+    setErrorList(current);
   };
 
   const prevStep = () => {
@@ -63,7 +74,6 @@ export function AdmissionForm({ formConfig, formId }: AdmissionFormProps) {
         );
       } catch (error) {
         console.log(error);
-        // TODO: Handle error
       }
     } else {
       nextStep();
@@ -88,72 +98,73 @@ export function AdmissionForm({ formConfig, formId }: AdmissionFormProps) {
     }
   };
   return (
-    <>
-      <form
-        onSubmit={handleSubmit(addAdmissionHandler)}
-        className="mt-4 w-full p-5"
-      >
-        <div className="flex justify-end">
-          <AlertDialog>
-            <AlertDialogTrigger asChild>
-              <Button
-                className="mt-6 cursor-pointer rounded-md bg-primary px-5 text-white hover:bg-primary/90"
-                variant="outline"
-              >
-                Share
-              </Button>
-            </AlertDialogTrigger>
-            <AlertDialogContent className="bg-white">
-              <AlertDialogHeader>
-                <AlertDialogTitle>
-                  Copy the URL to share the admission form
-                </AlertDialogTitle>
-                <AlertDialogDescription>
-                  <Input
-                    type="text"
-                    className="mt-2"
-                    value={shareableURL}
-                    readOnly
-                    ref={inputRef}
-                  />
-                </AlertDialogDescription>
-              </AlertDialogHeader>
-              <AlertDialogFooter>
-                <AlertDialogAction onClick={handleCopyClick}>
-                  Copy
-                </AlertDialogAction>
-              </AlertDialogFooter>
-            </AlertDialogContent>
-          </AlertDialog>
-        </div>
+    <form
+      onSubmit={handleSubmit(addAdmissionHandler)}
+      className="mt-4 w-full p-5"
+    >
+      <div className="flex justify-end">
+        <AlertDialog>
+          <AlertDialogTrigger asChild>
+            <Button
+              className="mt-6 cursor-pointer rounded-md bg-primary px-5 text-white hover:bg-primary/90"
+              variant="outline"
+            >
+              Share
+            </Button>
+          </AlertDialogTrigger>
+          <AlertDialogContent className="bg-white">
+            <AlertDialogHeader>
+              <AlertDialogTitle>
+                Copy the URL to share the admission form
+              </AlertDialogTitle>
+              <AlertDialogDescription>
+                <Input
+                  type="text"
+                  className="mt-2"
+                  value={shareableURL}
+                  readOnly
+                  ref={inputRef}
+                />
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogAction onClick={handleCopyClick}>
+                Copy
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
+      </div>
 
-        <h1 className="mb-1 text-center text-2xl font-semibold text-primary">
-          {formConfig.json.title}
-        </h1>
-        <p className="mb-5 text-center text-black">
-          {formConfig.json.description}
-        </p>
+      <h1 className="mb-1 text-center text-2xl font-semibold text-primary">
+        {formConfig.json.title}
+      </h1>
+      <p className="mb-5 text-center text-black">
+        {formConfig.json.description}
+      </p>
 
-        <div className="flex gap-4">
-          <ul className="h-fit w-[215px] shrink-0 rounded-lg bg-white py-3">
-            <li>
-              {formConfig.json.formSections.map((section, index) => (
-                <div key={section.sectionTitle} className="mt-3 px-4 py-1">
-                  <h2
-                    className={`inter px-2 text-sm font-semibold ${
-                      selectedSectionIndex === index
-                        ? 'border-l-2 border-primary text-primary'
-                        : 'text-gray-800'
-                    }`}
-                  >
-                    {section.sectionTitle}
-                  </h2>
-                </div>
-              ))}
-            </li>
-          </ul>
-          <div className="w-full rounded-lg bg-white p-2">
+      <div className="flex gap-4">
+        <ul className="h-fit w-[215px] shrink-0 rounded-lg bg-white py-3">
+          <li>
             {formConfig.json.formSections.map((section, index) => (
+              <div key={section.sectionTitle} className="mt-3 px-4 py-1">
+                <h2
+                  className={`inter px-2 text-sm font-semibold ${
+                    selectedSectionIndex === index
+                      ? 'border-l-2 border-primary text-primary'
+                      : 'text-gray-800'
+                  }`}
+                >
+                  {section.sectionTitle}
+                </h2>
+                <span>{errorList[index]?.error ? 'true' : 'false'}</span>
+              </div>
+            ))}
+          </li>
+        </ul>
+        <div className="w-full rounded-lg bg-white p-2">
+          {formConfig.json.formSections.map((section, index) => (
+            <>
               <div
                 key={section.sectionTitle}
                 className="mt-1 p-4"
@@ -280,49 +291,53 @@ export function AdmissionForm({ formConfig, formId }: AdmissionFormProps) {
                   </div>
                 </>
               </div>
-            ))}
-          </div>
+              <div
+                className="flex justify-end gap-4"
+                style={{
+                  display: currentStep === index ? 'block' : 'none',
+                }}
+              >
+                <button
+                  type="button"
+                  className="mt-6 h-12 cursor-pointer rounded-md bg-primary p-0 px-5  py-0  text-white hover:bg-primary/90"
+                  onClick={prevStep}
+                  disabled={currentStep === 0}
+                >
+                  Back
+                </button>
+                {currentStep === totalSteps - 1 ? (
+                  <button
+                    type="submit"
+                    className="mt-6 h-12 cursor-pointer rounded-md  bg-primary px-4 py-3 text-white hover:bg-primary/90"
+                  >
+                    {isSubmitting ? (
+                      <div className="flex h-screen items-center justify-center">
+                        <Loader2 className="mr-2 h-6 w-6 animate-spin text-white" />
+                      </div>
+                    ) : (
+                      'Submit'
+                    )}
+                  </button>
+                ) : (
+                  <button
+                    type="button"
+                    onClick={nextStep}
+                    className="mt-6 h-12 cursor-pointer rounded-md  bg-primary px-4 py-3 text-white hover:bg-primary/90"
+                  >
+                    {isSubmitting ? (
+                      <div className="flex h-screen items-center justify-center">
+                        <Loader2 className="mr-2 h-6 w-6 animate-spin text-white" />
+                      </div>
+                    ) : (
+                      'Save & Next'
+                    )}
+                  </button>
+                )}
+              </div>
+            </>
+          ))}
         </div>
-        <div className="flex justify-end gap-4">
-          <button
-            type="button"
-            className="mt-6 cursor-pointer rounded-md bg-primary p-0 px-5  py-0  text-white hover:bg-primary/90"
-            onClick={prevStep}
-            disabled={currentStep === 0}
-          >
-            Back
-          </button>
-
-          {currentStep === totalSteps - 1 ? (
-            <button
-              type="submit"
-              className="mt-6 h-12 cursor-pointer rounded-md  bg-primary px-4 py-3 text-white hover:bg-primary/90"
-            >
-              {isSubmitting ? (
-                <div className="flex h-screen items-center justify-center">
-                  <Loader2 className="mr-2 h-6 w-6 animate-spin text-white" />
-                </div>
-              ) : (
-                'Submit'
-              )}
-            </button>
-          ) : (
-            <button
-              type="button"
-              onClick={nextStep}
-              className="mt-6 h-12 cursor-pointer rounded-md  bg-primary px-4 py-3 text-white hover:bg-primary/90"
-            >
-              {isSubmitting ? (
-                <div className="flex h-screen items-center justify-center">
-                  <Loader2 className="mr-2 h-6 w-6 animate-spin text-white" />
-                </div>
-              ) : (
-                'Save & Next'
-              )}
-            </button>
-          )}
-        </div>
-      </form>
-    </>
+      </div>
+    </form>
   );
 }
