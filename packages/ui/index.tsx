@@ -20,3 +20,4 @@ export * from './components/ui/DropdownMenu';
 export * from './components/ui/NavigationMenu';
 
 export * from './hooks/useToast';
+export * from './components/ui/Flyout'
