@@ -2,7 +2,7 @@ import { FileInput } from 'lucide-react';
 import Image from 'next/image';
 import { Button } from 'ui';
 
-import { FlyoutModal } from '../../../../lib/components/flyout/flyoutModal';
+import { ShareFlyout } from '../../../../lib/components/admission/ShareFlyout';
 import admissionRequestIcon from '../../../../public/assets/images/admission-request.svg';
 import inProgressIcon from '../../../../public/assets/images/in-progress.svg';
 import rejectedIcon from '../../../../public/assets/images/rejected.svg';
@@ -121,7 +121,7 @@ export default async function Page() {
             </div>
           </div>
         </div>
-        <FlyoutModal></FlyoutModal>
+        <ShareFlyout></ShareFlyout>
         <h1 className="mt-96 text-center text-3xl font-semibold text-primary">
           Admission List
         </h1>

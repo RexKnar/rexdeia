@@ -3,15 +3,15 @@
 import { useState } from 'react';
 import { Button, Flyout } from 'ui';
 
-export function FlyoutModal() {
-  const [isModalOpen, setModalOpen] = useState(false);
+export function ShareFlyout() {
+  const [isModalOpen, setIsModalOpen] = useState(true);
 
   const openModal = () => {
-    setModalOpen(true);
+    setIsModalOpen(true);
   };
 
   const closeModal = () => {
-    setModalOpen(false);
+    setIsModalOpen(false);
   };
 
   return (
