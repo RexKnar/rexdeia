@@ -59,7 +59,6 @@ export function ResetPasswordForm() {
           </div>
         </div>
         <Button type="submit" className="mt-16 w-full text-white">
-          {' '}
           Update
         </Button>
       </form>

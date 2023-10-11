@@ -53,7 +53,7 @@ export function OtpVerifyForm() {
         </Button>
       </form>
       <p className=" mt-16 text-center text-sm font-semibold text-gray-800">
-        didn&apos;t receive the OTP?
+        Didn&apos;t receive the OTP?
       </p>
       <Link
         href="/signin"

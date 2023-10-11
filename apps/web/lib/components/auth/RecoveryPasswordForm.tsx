@@ -97,7 +97,7 @@ export function RecoveryPasswordForm() {
             </Button>
           </form>
           <p className=" mt-16 text-center text-sm font-semibold text-gray-800">
-            didn&apos;t receive the link?
+            Didn&apos;t receive the link?
           </p>
           <Link
             href="/signin"

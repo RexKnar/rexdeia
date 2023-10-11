@@ -116,9 +116,7 @@ export function SignInForm() {
       </label>
       <Button
         type="submit"
-        className={`mt-6 w-full text-white ${
-          isSubmitting ? 'cursor-not-allowed opacity-50' : ''
-        }`}
+        className="mt-6 w-full text-white"
         disabled={isSubmitting}
       >
         {isSubmitting ? (

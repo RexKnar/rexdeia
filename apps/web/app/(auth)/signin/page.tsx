@@ -29,22 +29,22 @@ export default async function Page() {
         }}
       ></section>
 
-      <section className="flex  h-screen w-full translate-y-0 transform flex-col justify-between overflow-x-hidden px-20 opacity-100 transition-all duration-500 ease-in-out md:w-4/12 ">
+      <section
+        className="flex  h-screen w-full translate-y-0 transform flex-col justify-between overflow-x-hidden px-20 opacity-100 transition-all
+       duration-500 ease-in-out md:w-4/12"
+      >
         <div>
           <Image src={logo} className="pt-10" alt={'logo'} width={100}></Image>
         </div>
         <div className="mt-12 flex">
           <span className="text-xl font-semibold">Welcome</span>
         </div>
-
         <p className="text-sm font-normal text-gray-800">
           Sign in to your account to get started.
         </p>
-
         <SignInForm />
-
         <p className="mt-8 text-center text-sm font-semibold text-gray-800">
-          Didn&apos;t have an account?
+          Don&apos;t have an account?
         </p>
         <Link
           href="/signup"
