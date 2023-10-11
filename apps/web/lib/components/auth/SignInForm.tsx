@@ -25,6 +25,7 @@ export function SignInForm() {
   } = useForm();
 
   const searchParams = useSearchParams();
+  console.log(searchParams);
   const error = searchParams.get('error');
 
   async function signInHandler({ email, password }) {
@@ -78,7 +79,7 @@ export function SignInForm() {
             : 'opacity-0 transition-opacity duration-300'
         }`}
       >
-        {fieldErrors.email?.message as string}
+        {fieldErrors.email?.message || errors[error]}
       </p>
       <label className="mt-4 block text-sm font-medium text-slate-500">
         Password

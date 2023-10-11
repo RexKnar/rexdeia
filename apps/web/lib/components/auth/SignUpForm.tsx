@@ -28,6 +28,7 @@ type OnboardUserResponse = {
 
 export function SignUpForm() {
   const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const {
     register,
     handleSubmit,
@@ -190,6 +191,39 @@ export function SignUpForm() {
           <div className="absolute inset-y-0 right-0 flex cursor-pointer items-center pr-2 ">
             <div onClick={() => setShowPassword(!showPassword)}>
               {showPassword ? (
+                <Eye size={20} strokeWidth={0.5} />
+              ) : (
+                <EyeOff size={20} strokeWidth={0.5} />
+              )}
+            </div>
+          </div>
+        </div>
+        <p
+          className={`h-2 p-1 text-sm text-red-600 ${
+            errors.password
+              ? 'opacity-100 transition-opacity duration-300'
+              : 'opacity-0 transition-opacity duration-300'
+          }`}
+        >
+          {errors.password?.message as string}
+        </p>
+      </div>
+      <div className="mt-4">
+        <label className="sub-text inter block text-sm font-semibold">
+          Confirm Password
+        </label>
+        <div className="relative">
+          <Input
+            type={showConfirmPassword ? 'text' : 'password'}
+            className="mt-2 text-sm"
+            placeholder="Enter your password"
+            {...register('confirmPassword', {
+              required: 'Password is needed to sign up',
+            })}
+          />
+          <div className="absolute inset-y-0 right-0 flex cursor-pointer items-center pr-2 ">
+            <div onClick={() => setShowConfirmPassword(!showConfirmPassword)}>
+              {showConfirmPassword ? (
                 <Eye size={20} strokeWidth={0.5} />
               ) : (
                 <EyeOff size={20} strokeWidth={0.5} />
