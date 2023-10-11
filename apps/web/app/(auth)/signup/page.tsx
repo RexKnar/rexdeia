@@ -29,11 +29,7 @@ export default async function Page() {
           backgroundImage: 'url(/assets/images/signin-banner.png)',
         }}
       ></section>
-      <section
-        className=" flex
- h-screen  translate-y-0 transform flex-col  overflow-x-hidden px-20 opacity-100 transition-all 
- duration-500 ease-in-out sm:w-2/3 md:w-1/2 md:justify-between lg:w-1/2 xl:w-1/3 xl:justify-between  2xl:justify-center"
-      >
+      <section className=" flex h-screen  translate-y-0 transform flex-col  overflow-x-hidden px-20 opacity-100 transition-all duration-500 ease-in-out sm:w-2/3 md:w-1/2 md:justify-between lg:w-1/2 xl:w-1/3 xl:justify-between  2xl:justify-center">
         <div className=" ">
           <Image src={logo} className="pt-10" alt={'logo'} width={100}></Image>
           <div className="mt-2">
@@ -43,9 +39,7 @@ export default async function Page() {
             <Text variant="sm-regular" className="text-gray-800">
               Join acadx and embark on a seamless academic experience.
             </Text>
-
             <SignUpForm />
-
             <Text
               variant="sm-semibold"
               className="mt-12 text-center text-gray-800"

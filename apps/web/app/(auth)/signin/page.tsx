@@ -29,19 +29,13 @@ export default async function Page() {
           backgroundImage: 'url(/assets/images/signin-banner.png)',
         }}
       ></section>
-
-      <section
-        className="flex
- h-screen  translate-y-0 transform flex-col  overflow-x-hidden px-20 opacity-100 transition-all 
- duration-500 ease-in-out sm:w-2/3 md:w-1/2 md:justify-between lg:w-1/2 xl:w-1/3 xl:justify-between  2xl:justify-center"
-      >
+      <section className="flex h-screen  translate-y-0 transform flex-col  overflow-x-hidden px-20 opacity-100 transition-all duration-500 ease-in-out sm:w-2/3 md:w-1/2 md:justify-between lg:w-1/2 xl:w-1/3 xl:justify-between  2xl:justify-center">
         <div>
           <Image src={logo} className="pt-10" alt={'logo'} width={100}></Image>
           <div className="mt-[6rem]">
             <Text variant="xl-semibold" className="">
               Welcome
             </Text>
-
             <Text variant="sm-regular" className="text-gray-800">
               Sign in to your account to get started.
             </Text>
@@ -59,7 +53,7 @@ export default async function Page() {
               Signup
             </Link>
           </div>
-          <div className="mt-16/">
+          <div className="pt-16">
             <Footer />
           </div>
         </div>
