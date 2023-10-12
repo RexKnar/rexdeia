@@ -149,7 +149,6 @@ export function SignUpForm() {
           >
             <option value="+91">+91</option>
             <option value="+44">+44</option>
-            {/* Add more country codes as needed */}
           </select>
           <Input
             inputMode="numeric"
@@ -218,7 +217,7 @@ export function SignUpForm() {
             className="mt-2 text-sm"
             placeholder="Enter your password"
             {...register('confirmPassword', {
-              required: 'Password is needed to sign up',
+              required: 'Password confirmation is required',
             })}
           />
           <div className="absolute inset-y-0 right-0 flex cursor-pointer items-center pr-2 ">
@@ -233,12 +232,12 @@ export function SignUpForm() {
         </div>
         <p
           className={`h-2 p-1 text-sm text-red-600 ${
-            errors.password
+            errors.confirmPassword
               ? 'opacity-100 transition-opacity duration-300'
               : 'opacity-0 transition-opacity duration-300'
           }`}
         >
-          {errors.password?.message as string}
+          {errors.confirmPassword?.message as string}
         </p>
       </div>
       <div className="mt-6 w-full">
@@ -259,7 +258,11 @@ export function SignUpForm() {
         </Button>
       </div>
       <label className="inter mt-8 block text-center text-sm font-semibold text-gray-800">
-        or continue with{' '}
+        <div className="flex items-center justify-center">
+          <div className="h-px flex-grow bg-gray-200"></div>
+          <span className="px-2 text-gray-800">or continue with</span>
+          <div className="h-px flex-grow bg-gray-200"></div>
+        </div>
       </label>
       <div className="flex justify-center gap-4">
         <Button
