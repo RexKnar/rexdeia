@@ -1,9 +1,19 @@
 'use client';
 
 import { useState } from 'react';
-import { Button, Flyout } from 'ui';
+import {
+  Button,
+  Flyout,
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from 'ui';
 
 export function ShareFlyout() {
+  const SHEET_SIDES = ['top', 'right', 'bottom', 'left'] as const;
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const openModal = () => {
@@ -35,6 +45,27 @@ export function ShareFlyout() {
       <Button className="mt-6 text-white" onClick={openModal}>
         Open Modal
       </Button>
+
+      <div className="grid grid-cols-2 gap-2">
+        {SHEET_SIDES.map((side) => (
+          <Sheet key={side}>
+            <SheetTrigger asChild>
+              <Button variant="outline">{side}</Button>
+            </SheetTrigger>
+            <SheetContent side={side} className="bg-white">
+              <SheetHeader>
+                <SheetTitle>Edit profile</SheetTitle>
+                <SheetDescription>
+                  Make changes to your profile here.
+                </SheetDescription>
+              </SheetHeader>
+              <div className="py-4">
+                <div className="py-4">Hello World!</div>
+              </div>
+            </SheetContent>
+          </Sheet>
+        ))}
+      </div>
     </>
   );
 }

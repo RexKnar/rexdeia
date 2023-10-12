@@ -21,3 +21,4 @@ export * from './components/ui/NavigationMenu';
 
 export * from './hooks/useToast';
 export * from './components/ui/Flyout';
+export * from './components/ui/FlyoutSheet';
