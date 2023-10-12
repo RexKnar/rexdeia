@@ -220,7 +220,8 @@ export function SignUpForm() {
             {...register('confirmPassword', {
               required: 'Password confirmation is required',
               validate: (value) =>
-                value === watch('password') || 'Password is not matching',
+                value === watch('password') ||
+                'Please make sure your passwords match',
             })}
           />
           <div className="absolute inset-y-0 right-0 flex cursor-pointer items-center pr-2 ">
