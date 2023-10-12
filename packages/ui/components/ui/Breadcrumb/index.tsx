@@ -17,7 +17,7 @@ export const Breadcrumb = forwardRef<HTMLElement, BreadcrumbProps>(
       separator = <ChevronRight className="h-4 w-4" />,
       ...props
     },
-    forwardedRef
+    forwardedRef,
   ) => {
     const validChildren = getValidChildren(children);
     const clones = validChildren.map((child, index) =>
@@ -25,7 +25,7 @@ export const Breadcrumb = forwardRef<HTMLElement, BreadcrumbProps>(
         addSeparator,
         separator,
         isLastChild: validChildren.length === index + 1,
-      })
+      }),
     );
 
     return (
@@ -38,5 +38,5 @@ export const Breadcrumb = forwardRef<HTMLElement, BreadcrumbProps>(
         <ol className="flex items-center">{clones}</ol>
       </nav>
     );
-  }
+  },
 );

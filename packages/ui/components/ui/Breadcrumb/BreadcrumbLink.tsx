@@ -20,7 +20,7 @@ export const BreadcrumbLink = forwardRef<
       aria-current={isCurrentPage ? 'page' : undefined}
       className={cn(
         'text-sm font-medium underline-offset-4 aria-[current]:opacity-60 [&:not([aria-current])]:hover:underline',
-        className
+        className,
       )}
       {...props}
     />

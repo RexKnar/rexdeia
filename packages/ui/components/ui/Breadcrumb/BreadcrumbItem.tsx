@@ -21,7 +21,7 @@ export const BreadcrumbItem = forwardRef<HTMLLIElement, BreadcrumbItemProps>(
       isCurrentPage,
       ...props
     },
-    forwardedRef
+    forwardedRef,
   ) => {
     const validChildren = getValidChildren(children);
 
@@ -51,5 +51,5 @@ export const BreadcrumbItem = forwardRef<HTMLLIElement, BreadcrumbItemProps>(
         )}
       </li>
     );
-  }
+  },
 );
