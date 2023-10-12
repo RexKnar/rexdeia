@@ -16,7 +16,7 @@ export function ShareFlyout() {
 
   return (
     <>
-      <Flyout isOpen={isModalOpen} onClose={closeModal} width="550px">
+      <Flyout isOpen={isModalOpen} onClose={closeModal} widthClass="w-2/6">
         <div className="text-center">
           <h2 className="border bg-slate-400 p-2 text-white">
             Testing HTML Content
