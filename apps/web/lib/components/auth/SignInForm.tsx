@@ -129,7 +129,11 @@ export function SignInForm() {
         )}
       </Button>
       <label className="mt-8 block text-center text-sm font-semibold text-gray-800">
-        or continue with{' '}
+        <div className="flex items-center justify-center">
+          <div className="h-px flex-grow bg-gray-200"></div>
+          <span className="px-2 text-gray-800">or continue with</span>
+          <div className="h-px flex-grow bg-gray-200"></div>
+        </div>
       </label>
       <div className="flex flex-col sm:flex-row sm:gap-4">
         <Button
