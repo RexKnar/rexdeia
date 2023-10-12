@@ -97,6 +97,7 @@ export function AdmissionForm({ formConfig, formId }: AdmissionFormProps) {
       console.log(error);
     }
   }
+
   let domain = '';
   if (typeof window !== 'undefined') {
     domain = window.location.host;
@@ -115,6 +116,7 @@ export function AdmissionForm({ formConfig, formId }: AdmissionFormProps) {
       });
     }
   };
+
   return (
     <form
       onSubmit={handleSubmit(addAdmissionHandler)}

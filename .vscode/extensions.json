@@ -10,7 +10,8 @@
     "Prisma.prisma",
     "Gruntfuggly.todo-tree",
     "wix.vscode-import-cost",
-    "NextNav.NextNav"
+    "NextNav.NextNav",
+    "heybourn.headwind"
   ],
   "unwantedRecommendations": []
 }

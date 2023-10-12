@@ -1,5 +1,4 @@
 import Image from 'next/image';
-import Link from 'next/link';
 
 import { RecoveryPasswordForm } from '../../../lib/components/auth/RecoveryPasswordForm';
 import logo from '../../../public/assets/images/acadx-logo.png';
@@ -19,18 +18,6 @@ export default async function Page() {
           <Image src={logo} className="pt-10" alt={'logo'} width={100}></Image>
         </div>
         <RecoveryPasswordForm />
-        <p className=" mt-16 text-center text-sm font-semibold text-gray-800">
-          Don&apos;t receive the link?
-        </p>
-        <Link
-          href="/signin"
-          className=" mt-6 w-full rounded-md border-2 border-gray-300 bg-transparent p-2 text-center text-sm font-semibold text-primary hover:bg-primary hover:text-white"
-        >
-          Resend
-        </Link>
-        <footer className="mt-16 text-center text-sm font-normal text-gray-700">
-          &copy; acadx 2023
-        </footer>
       </section>
       <section
         className="flex-grow bg-cover bg-left bg-no-repeat sm:flex sm:w-1/4"

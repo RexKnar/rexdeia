@@ -25,6 +25,7 @@ export function SignInForm() {
   } = useForm();
 
   const searchParams = useSearchParams();
+  console.log(searchParams);
   const error = searchParams.get('error');
 
   async function signInHandler({ email, password }) {
@@ -78,7 +79,7 @@ export function SignInForm() {
             : 'opacity-0 transition-opacity duration-300'
         }`}
       >
-        {fieldErrors.email?.message as string}
+        {fieldErrors.email?.message || errors[error]}
       </p>
       <label className="mt-4 block text-sm font-medium text-slate-500">
         Password
@@ -120,27 +121,31 @@ export function SignInForm() {
         disabled={isSubmitting}
       >
         {isSubmitting ? (
-          <div className="flex h-screen items-center justify-center">
-            <Loader2 className="mr-2 h-2 w-6 animate-spin text-white" />
+          <div className="flex items-center justify-center">
+            <Loader2 className="mr-2 h-6 w-6 animate-spin text-white" />
           </div>
         ) : (
           `Sign in`
         )}
       </Button>
       <label className="mt-8 block text-center text-sm font-semibold text-gray-800">
-        or continue with{' '}
+        <div className="flex items-center justify-center">
+          <div className="h-px flex-grow bg-gray-200"></div>
+          <span className="px-2 text-gray-800">or continue with</span>
+          <div className="h-px flex-grow bg-gray-200"></div>
+        </div>
       </label>
       <div className="flex flex-col sm:flex-row sm:gap-4">
         <Button
           type="button"
-          className="mt-3 w-full bg-transparent p-2 text-base text-gray-800 outline outline-gray-300 hover:text-white"
+          className="mt-3 w-full bg-transparent px-4 py-3 text-base text-gray-800 outline outline-gray-300 hover:text-white"
         >
           <Image src={googlelogo} alt={'logo'} className="mr-1"></Image>
           Google
         </Button>
         <Button
           type="button"
-          className="mt-3 w-full  bg-transparent text-base text-gray-800 outline outline-gray-300 hover:text-white "
+          className="mt-3 w-full bg-transparent px-4 py-3 text-base text-gray-800 outline outline-gray-300 hover:text-white "
         >
           <Image src={microsoftlogo} alt={'logo'} className="mr-1"></Image>
           Microsoft
