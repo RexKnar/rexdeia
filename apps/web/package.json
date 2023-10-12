@@ -21,7 +21,7 @@
     "bcrypt": "^5.1.0",
     "configs": "workspace:*",
     "fs": "0.0.1-security",
-    "lucide-react": "^0.285.0",
+    "lucide-react": "^0.286.0",
     "nanoid": "^5.0.0",
     "next": "^13.4.12",
     "next-auth": "4.23.2",
