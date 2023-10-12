@@ -32,6 +32,7 @@ export function SignUpForm() {
   const {
     register,
     handleSubmit,
+    watch,
     formState: { errors, isSubmitting },
     setError,
   } = useForm();
@@ -218,6 +219,8 @@ export function SignUpForm() {
             placeholder="Enter your password"
             {...register('confirmPassword', {
               required: 'Password confirmation is required',
+              validate: (value) =>
+                value === watch('password') || 'Password is not matching',
             })}
           />
           <div className="absolute inset-y-0 right-0 flex cursor-pointer items-center pr-2 ">
