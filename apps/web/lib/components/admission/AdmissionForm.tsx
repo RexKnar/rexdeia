@@ -1,6 +1,6 @@
 'use client';
 
-import { Loader2 } from 'lucide-react';
+import { Loader2, XCircle } from 'lucide-react';
 import React, { useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import {
@@ -35,22 +35,39 @@ export function AdmissionForm({ formConfig, formId }: AdmissionFormProps) {
     mode: 'onBlur',
   });
   const [errorList, setErrorList] = useState({});
-
-  console.log(errors);
-
+  const [fieldErrorList, setFieldErrorList] = useState({});
+  const [oldError, setOldError] = useState([]);
   const [currentStep, setCurrentStep] = useState(0);
   const totalSteps = formConfig.json.formSections.length;
   const [selectedSectionIndex, setSelectedSectionIndex] = useState(0);
-  const nextStep = () => {
-    var previous = [];
-    var current = [];
+
+  const nextStep = (sectionTitle: string, index: number) => {
+    setOldError(Object.keys(errors));
     if (currentStep < totalSteps - 1) {
       setCurrentStep(currentStep + 1);
       setSelectedSectionIndex(currentStep + 1);
     }
-    current.push(errors);
-    console.log(current);
-    setErrorList(current);
+    const updatedFieldErrorList = { ...fieldErrorList };
+    let currentError = Object.keys(errors);
+    if (currentStep > 0) {
+      let sectionBasedError = fieldErrorList[currentStep - 1]
+        ? currentError.filter(
+            (item: string) => !fieldErrorList[currentStep - 1].includes(item)
+          )
+        : [];
+      sectionBasedError = currentError.filter(
+        (item: string) => !oldError.includes(item)
+      );
+      updatedFieldErrorList[currentStep] = sectionBasedError;
+    } else {
+      updatedFieldErrorList[currentStep] = currentError;
+    }
+    setFieldErrorList(updatedFieldErrorList);
+    const hasErrors = updatedFieldErrorList[index].length > 0;
+    setErrorList((prevErrorList) => ({
+      ...prevErrorList,
+      [sectionTitle]: hasErrors,
+    }));
   };
 
   const prevStep = () => {
@@ -60,23 +77,24 @@ export function AdmissionForm({ formConfig, formId }: AdmissionFormProps) {
     }
   };
 
+  const addFormSidebar = (index: number) => {
+    setSelectedSectionIndex(index);
+    setCurrentStep(index);
+  };
+
   async function addAdmissionHandler(data: Record<string, unknown>) {
-    if (currentStep === totalSteps - 1) {
-      try {
-        await makeAPICall(
-          ADD_ADMISSION,
-          {
-            ...data,
-          },
-          {
-            formId,
-          }
-        );
-      } catch (error) {
-        console.log(error);
-      }
-    } else {
-      nextStep();
+    try {
+      await makeAPICall(
+        ADD_ADMISSION,
+        {
+          ...data,
+        },
+        {
+          formId,
+        }
+      );
+    } catch (error) {
+      console.log(error);
     }
   }
   let domain = '';
@@ -147,7 +165,11 @@ export function AdmissionForm({ formConfig, formId }: AdmissionFormProps) {
         <ul className="h-fit w-[215px] shrink-0 rounded-lg bg-white py-3">
           <li>
             {formConfig.json.formSections.map((section, index) => (
-              <div key={section.sectionTitle} className="mt-3 px-4 py-1">
+              <div
+                key={section.sectionTitle}
+                onClick={() => addFormSidebar(index)}
+                className="mt-3 cursor-pointer px-4 py-1"
+              >
                 <h2
                   className={`inter px-2 text-sm font-semibold ${
                     selectedSectionIndex === index
@@ -156,8 +178,8 @@ export function AdmissionForm({ formConfig, formId }: AdmissionFormProps) {
                   }`}
                 >
                   {section.sectionTitle}
+                  {errorList[section.sectionTitle] && <XCircle />}
                 </h2>
-                <span>{errorList[index]?.error ? 'true' : 'false'}</span>
               </div>
             ))}
           </li>
@@ -321,7 +343,7 @@ export function AdmissionForm({ formConfig, formId }: AdmissionFormProps) {
                 ) : (
                   <button
                     type="button"
-                    onClick={nextStep}
+                    onClick={() => nextStep(section.sectionTitle, index)}
                     className="mt-6 h-12 cursor-pointer rounded-md  bg-primary px-4 py-3 text-white hover:bg-primary/90"
                   >
                     {isSubmitting ? (
