@@ -46,7 +46,7 @@ export function RecoveryPasswordForm() {
             <div className="mt-4 flex flex-col sm:gap-4 lg:flex-row">
               <Button
                 type="button"
-                className={`mt-3 h-20 w-full rounded-xl bg-transparent p-2 text-base text-gray-800 outline  hover:text-white  ${
+                className={`mt-3 h-20 w-full rounded-xl bg-transparent p-2 text-base text-gray-800 outline  hover:text-white ${
                   isEmailInput
                     ? 'text-primary outline-primary-500'
                     : 'outline-gray-300'
@@ -96,7 +96,7 @@ export function RecoveryPasswordForm() {
               Send link
             </Button>
           </form>
-          <p className="mt-16 text-center text-sm font-semibold text-gray-800 ">
+          <p className="mt-16 text-center text-sm font-semibold text-gray-800">
             Didn&apos;t receive the link?
           </p>
           <Link

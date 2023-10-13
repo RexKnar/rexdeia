@@ -47,7 +47,7 @@ export function Onboarding({ branchId, organizationId }: OnboardingProps) {
     <>
       <div className="flex h-full flex-col sm:flex-row">
         <section
-          className="hidden flex-grow bg-left bg-no-repeat sm:flex sm:w-1/5"
+          className="flex-grow bg-left bg-no-repeat sm:flex sm:w-1/5"
           style={{
             backgroundImage: 'url(/assets/images/onborarding-side-banner.png)',
             backgroundSize: 'contain',
@@ -83,7 +83,7 @@ export function Onboarding({ branchId, organizationId }: OnboardingProps) {
               <div className="flex items-center">
                 <p>
                   <Check />
-                  Initialisation setup
+                  Initialization setup
                 </p>
               </div>
             </div>

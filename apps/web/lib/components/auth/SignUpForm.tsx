@@ -144,7 +144,7 @@ export function SignUpForm() {
         </label>
         <div className="relative flex items-center gap-2">
           <select
-            className="mt-2 rounded-md border border-gray-300 py-2 pl-2 pr-6 outline-blue-300 "
+            className="mt-2 rounded-md border border-gray-300 py-2 pl-2 pr-6 outline-blue-300"
             name="countryCode"
             {...register('countryCode')}
           >
@@ -188,7 +188,7 @@ export function SignUpForm() {
               required: 'Password is needed to sign up',
             })}
           />
-          <div className="absolute inset-y-0 right-0 flex cursor-pointer items-center pr-2 ">
+          <div className="absolute inset-y-0 right-0 flex cursor-pointer items-center pr-2">
             <div onClick={() => setShowPassword(!showPassword)}>
               {showPassword ? (
                 <Eye size={20} strokeWidth={0.5} />
@@ -224,7 +224,7 @@ export function SignUpForm() {
                 'Please make sure your passwords match',
             })}
           />
-          <div className="absolute inset-y-0 right-0 flex cursor-pointer items-center pr-2 ">
+          <div className="absolute inset-y-0 right-0 flex cursor-pointer items-center pr-2">
             <div onClick={() => setShowConfirmPassword(!showConfirmPassword)}>
               {showConfirmPassword ? (
                 <Eye size={20} strokeWidth={0.5} />

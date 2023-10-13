@@ -27,7 +27,7 @@ export function OtpVerifyForm() {
     <>
       <form onSubmit={handleSubmit} className="mt-16">
         <div className="mt-14 flex flex-col">
-          <span className="mt-4 text-2xl font-semibold ">Enter OTP</span>
+          <span className="mt-4 text-2xl font-semibold">Enter OTP</span>
           <p className="mt-2 text-sm font-normal text-gray-800">
             We have sent you OTP to your email address for verification{' '}
           </p>
@@ -52,7 +52,7 @@ export function OtpVerifyForm() {
           Next
         </Button>
       </form>
-      <p className="mt-16 text-center text-sm font-semibold text-gray-800 ">
+      <p className="mt-16 text-center text-sm font-semibold text-gray-800">
         Didn&apos;t receive the OTP?
       </p>
       <Link
