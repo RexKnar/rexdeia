@@ -271,14 +271,16 @@ export function SignUpForm() {
       <div className="flex justify-center gap-4">
         <Button
           type="button"
-          className="mt-3 w-full bg-transparent px-4 py-3 text-base text-gray-800 outline outline-gray-300 hover:text-white"
+          variant="ghost"
+          className="mt-3 w-full bg-transparent px-4 py-3 text-base text-gray-800 outline outline-gray-300 hover:outline-primary-800"
         >
           <Image src={googleLogo} alt={'logo'} className="mr-1"></Image>
           Google
         </Button>
         <Button
           type="button"
-          className="mt-3 w-full bg-transparent px-4 py-3 text-base text-gray-800 outline outline-gray-300 hover:text-white"
+          variant="ghost"
+          className="mt-3 w-full bg-transparent px-4 py-3 text-base text-gray-800 outline outline-gray-300 hover:outline-primary-800"
         >
           <Image src={microsoftLogo} alt={'logo'} className="mr-1"></Image>
           Microsoft
