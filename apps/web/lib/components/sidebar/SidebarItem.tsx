@@ -1,6 +1,6 @@
 'use client';
 
-import { ChevronDown, ChevronRight } from 'lucide-react';
+import { ChevronDown, ChevronUp } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useState } from 'react';
@@ -21,7 +21,7 @@ export function SidebarItem(menuItem: SidebarMenuItem) {
         }}
         className={cn(
           `flex w-full justify-between rounded-md bg-white p-2 text-sm font-normal text-gray-800 hover:bg-gray-200`,
-          currentPath === menuItem.path && `bg-gray-200 font-semibold`
+          currentPath === menuItem.path && `font-bold text-black`
         )}
       >
         <div className="flex">
@@ -30,13 +30,13 @@ export function SidebarItem(menuItem: SidebarMenuItem) {
         </div>
         {menuItem.children &&
           (isExpanded ? (
-            <ChevronDown className="mr-2 h-4 w-4" />
+            <ChevronUp className="mr-2 h-4 w-4" />
           ) : (
-            <ChevronRight className="mr-2 h-4 w-4" />
+            <ChevronDown className="mr-2 h-4 w-4" />
           ))}
       </Link>
       {menuItem.children && isExpanded && (
-        <div className={cn('ml-4 w-full overflow-hidden border-l-2 px-2')}>
+        <div className={cn('ml-2 w-full overflow-hidden border-l-2 px-2')}>
           {menuItem.children.map((child) => (
             <div
               key={child.id}
