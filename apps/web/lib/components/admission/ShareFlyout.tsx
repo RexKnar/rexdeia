@@ -20,7 +20,7 @@ export function ShareFlyout() {
             Open Modal
           </Button>
         </SheetTrigger>
-        <SheetContent side="right" widthSize="sm" className="bg-white">
+        <SheetContent side="right" widthSize="lg" className="bg-white">
           <div className="p-3">
             <div className="flex justify-between items-center">
               <div>

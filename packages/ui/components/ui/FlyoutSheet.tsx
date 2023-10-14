@@ -47,9 +47,9 @@ const sheetVariants = cva(
           'inset-y-0 right-0 h-full border-l-md rounded-l-md data-[state=closed]:slide-out-to-right data-[state=open]:slide-in-from-right',
       },
       widthSize: {
-        sm: 'w-[97%]',
+        sm: 'w-2/6',
         md: 'w-3/6',
-        lg: 'w-[75%]'
+        lg: 'w-[97%]'
       },
     },
     defaultVariants: {
@@ -73,17 +73,13 @@ const SheetContent = React.forwardRef<
     { side = 'right', widthSize = 'md', className, children, ...props },
     ref,
   ) => {
-    const widthClass =
-      widthSize === 'sm' ? 'sm:w-[50%] md:w-[75%] lg:w-[30%]' : 'w-3/6';
-      widthSize === 'md' ? 'sm:w-[50%] md:w-[75%] lg:w-[60%] ' : 'w-3/6';
-      widthSize === 'lg' ? 'sm:w-[50%] md:w-[75%] lg:w-[75%] ' : 'w-3/6'
 
     return (
       <SheetPortal>
         <SheetOverlay />
         <SheetPrimitive.Content
           ref={ref}
-          className={cn(sheetVariants({ side, widthSize }), widthClass, className)}
+          className={cn(sheetVariants({ side, widthSize }), className)}
           {...props}
         >
           {children}
