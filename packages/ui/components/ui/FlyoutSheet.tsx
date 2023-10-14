@@ -44,12 +44,12 @@ const sheetVariants = cva(
           'inset-x-0 bottom-0 border-t data-[state=closed]:slide-out-to-bottom data-[state=open]:slide-in-from-bottom',
         left: 'inset-y-0 left-0 h-full border-r data-[state=closed]:slide-out-to-left data-[state=open]:slide-in-from-left',
         right:
-          'inset-y-0 right-0 h-full border-l data-[state=closed]:slide-out-to-right data-[state=open]:slide-in-from-right',
+          'inset-y-0 right-0 h-full border-l-md rounded-l-md data-[state=closed]:slide-out-to-right data-[state=open]:slide-in-from-right',
       },
       widthSize: {
-        sm: 'w-2/6',
+        sm: 'w-[97%]',
         md: 'w-3/6',
-        lg: 'w-[97%]',
+        lg: 'w-[75%]'
       },
     },
     defaultVariants: {
@@ -72,23 +72,31 @@ const SheetContent = React.forwardRef<
   (
     { side = 'right', widthSize = 'md', className, children, ...props },
     ref,
-  ) => (
-    <SheetPortal>
-      <SheetOverlay />
-      <SheetPrimitive.Content
-        ref={ref}
-        className={cn(sheetVariants({ side, widthSize }), className)}
-        {...props}
-      >
-        {children}
-        <SheetPrimitive.Close className="">
-          <X className="absolute -left-7 top-1 flex items-center justify-center rounded-full bg-black p-[0.4em] text-white" />
-          <span className="sr-only">Close</span>
-        </SheetPrimitive.Close>
-      </SheetPrimitive.Content>
-    </SheetPortal>
-  ),
+  ) => {
+    const widthClass =
+      widthSize === 'sm' ? 'sm:w-[50%] md:w-[75%] lg:w-[30%]' : 'w-3/6';
+      widthSize === 'md' ? 'sm:w-[50%] md:w-[75%] lg:w-[60%] ' : 'w-3/6';
+      widthSize === 'lg' ? 'sm:w-[50%] md:w-[75%] lg:w-[75%] ' : 'w-3/6'
+
+    return (
+      <SheetPortal>
+        <SheetOverlay />
+        <SheetPrimitive.Content
+          ref={ref}
+          className={cn(sheetVariants({ side, widthSize }), widthClass, className)}
+          {...props}
+        >
+          {children}
+          <SheetPrimitive.Close>
+            <X className="absolute -left-7 top-1 flex items-center justify-center rounded-full bg-black p-[0.4em] text-white" />
+            <span className="sr-only">Close</span>
+          </SheetPrimitive.Close>
+        </SheetPrimitive.Content>
+      </SheetPortal>
+    );
+  }
 );
+
 
 SheetContent.displayName = SheetPrimitive.Content.displayName;
 

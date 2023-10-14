@@ -1,12 +1,10 @@
 'use client';
 
 import {
+  Text,
   Button,
   Sheet,
   SheetContent,
-  SheetDescription,
-  SheetHeader,
-  SheetTitle,
   SheetTrigger,
 } from 'ui';
 
@@ -23,17 +21,17 @@ export function ShareFlyout() {
           </Button>
         </SheetTrigger>
         <SheetContent side="right" widthSize="sm" className="bg-white">
-          <SheetHeader>
-            <SheetTitle>Edit profile</SheetTitle>
-            <SheetDescription>
-              Make changes to your profile here.
-            </SheetDescription>
-          </SheetHeader>
-          <div className="py-4">
-            <div className="py-4">Hello World!</div>
+          <div className="p-3">
+            <div className="flex justify-between items-center">
+              <div>
+                <img src="" alt="" className=""/>
+                <Text variant="sm-semibold" className="">Share</Text>
+              </div>
+              <div>Inactive</div>
+            </div>
           </div>
         </SheetContent>
-      </Sheet>
+        </Sheet>
     </>
   );
 }
