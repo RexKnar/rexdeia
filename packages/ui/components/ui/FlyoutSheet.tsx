@@ -49,7 +49,7 @@ const sheetVariants = cva(
       widthSize: {
         sm: 'w-2/6',
         md: 'w-3/6',
-        lg: 'w-[97%]'
+        lg: 'w-[97%]',
       },
     },
     defaultVariants: {
@@ -73,7 +73,6 @@ const SheetContent = React.forwardRef<
     { side = 'right', widthSize = 'md', className, children, ...props },
     ref,
   ) => {
-
     return (
       <SheetPortal>
         <SheetOverlay />
@@ -90,9 +89,8 @@ const SheetContent = React.forwardRef<
         </SheetPrimitive.Content>
       </SheetPortal>
     );
-  }
+  },
 );
-
 
 SheetContent.displayName = SheetPrimitive.Content.displayName;
 
