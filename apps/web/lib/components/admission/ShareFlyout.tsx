@@ -4,7 +4,7 @@ import { Text } from 'ui';
 import Image from 'next/image';
 
 import { useState } from 'react';
-import { CalendarIcon } from 'lucide-react';
+import { CalendarIcon, Files } from 'lucide-react';
 import shareIcon from '../../../public/assets/images/shareIcon.svg';
 
 import {
@@ -62,7 +62,7 @@ export function ShareFlyout() {
             <div className="border-b p-1"></div>
 
             <div>
-              <div>
+              <div className="relative">
                 <Text variant="xs-regular" className="text-gray-700">
                   URL
                 </Text>
@@ -71,6 +71,7 @@ export function ShareFlyout() {
                   className="mt-2 w-full items-center rounded-md border border-primary p-3 text-xs font-normal"
                   placeholder="https://www.figma.com/file/EdHp3URyXKDsPQzaAQVGDA"
                 />
+                <Files size={18} color="#6559fc" className="absolute right-3 transform -translate-y-7"/>
               </div>
             </div>
 
