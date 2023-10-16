@@ -7,7 +7,7 @@ import { SidebarItem } from './SidebarItem';
 
 export function Sidebar() {
   return (
-    <div className="position: fixed flex h-screen flex-col border">
+    <div className="flex h-screen flex-col border">
       <nav className="w-71 flex-1 overflow-y-auto pb-12">
         <section className="space-y-4 py-4">
           <div className="py-2">

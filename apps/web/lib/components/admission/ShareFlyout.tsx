@@ -1,6 +1,6 @@
 'use client';
 
-import { Text} from 'ui';
+import { Text } from 'ui';
 
 import shareIcon from '../../../public/assets/images/shareIcon.svg';
 import Image from 'next/image';
@@ -35,10 +35,11 @@ export function ShareFlyout() {
             Open Modal
           </Button>
         </SheetTrigger>
+
         <SheetContent side="right" widthSize="sm" className="bg-white">
-          <div className="grid grid-cols-1 gap-2 p-2">
+          <div className="grid grid-cols-1 gap-4 p-2">
             <div className="flex items-center justify-between">
-              <div className="flex items-center justify-center">
+              <div className="flex items-center">
                 <Image
                   src={shareIcon}
                   className="rounded-full bg-primary-100 p-2"
@@ -51,13 +52,8 @@ export function ShareFlyout() {
                 </Text>
               </div>
               <div>
-                <div className="relative mt-1 inline-flex cursor-pointer items-center">
-                  <input
-                    type="checkbox"
-                    value=""
-                    className="peer sr-only"
-                  ></input>
-                  <div className="peer h-5 w-9 rounded-full bg-gray-700 after:absolute after:left-[2px] after:top-[2px] after:h-4 after:w-4 after:rounded-full after:border after:border-gray-300 after:bg-white after:transition-all after:content-[''] peer-checked:bg-blue-600 peer-checked:after:translate-x-full peer-checked:after:border-white peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:border-gray-600 dark:bg-gray-700 dark:peer-focus:ring-blue-800"></div>
+                <div className="flex items-center justify-center">
+                  <Switch />
                   <Text variant="xs-semibold" className="ml-2">
                     Inactive
                   </Text>
@@ -65,40 +61,88 @@ export function ShareFlyout() {
               </div>
             </div>
 
-            <div className="mt-5">
+            <div className="border-b p-1"></div>
+
+            <div className="">
               <div>
                 <Text variant="xs-regular" className="text-gray-700">
                   URL
                 </Text>
                 <input
                   type="text"
-                  className="border-1 mt-2 w-full items-center rounded-md border border-primary p-3 text-xs font-normal"
+                  className="mt-2 w-full items-center rounded-md border border-primary p-3 text-xs font-normal"
                   placeholder="https://www.figma.com/file/EdHp3URyXKDsPQzaAQVGDA"
                 />
               </div>
             </div>
 
-            
-              <div className="grid grid-cols-1 md:grid-cols-2">
-                
-              </div>
-            
-
-
-              // Payment Accept Toggle
-              <div className="mt-5 grid grid-cols-1 relative cursor-pointer items-center">
-                <input
-                  type="checkbox"
-                  checked
-                ></input>
-                <Text variant="xs-semibold" className="ml-2">
-                  Accept payment for this form
+            <div className="flex justify-between mt-3">
+              <div>
+              <Popover>
+                <Text variant="xs-regular" className="text-gray-700 mb-1">
+                  Link Active From
                 </Text>
+                <PopoverTrigger asChild>
+                  <Button
+                    variant={'outline'}
+                    className={cn(
+                      'text-left font-normal',
+                      !date && 'text-muted-foreground'
+                    )}
+                  >
+                    02/10/2023
+                    <CalendarIcon className="mr-2 h-4 w-4" />
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-auto p-0" align="start">
+                  <Calendar
+                    mode="single"
+                    selected={date}
+                    onSelect={setDate}
+                    initialFocus
+                  />
+                </PopoverContent>
+              </Popover>
               </div>
-            
 
-            //Actual Amount & Discount Amount
-            <div className="mt-5 grid grid-cols-1 md:grid-cols-2 items-stretch">
+               <div>
+              <Popover>
+                <Text variant="xs-regular" className="text-gray-700 mb-1">
+                  Expires On
+                </Text>
+                <PopoverTrigger asChild>
+                  <Button
+                    variant={'outline'}
+                    className={cn(
+                      'font-normal',
+                      !date && 'text-muted-foreground'
+                    )}
+                  >
+                    02/10/2023
+                    <CalendarIcon className="mr-2 h-4 w-4" />
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-auto p-0" align="start">
+                  <Calendar
+                    mode="single"
+                    selected={date}
+                    onSelect={setDate}
+                    initialFocus
+                  />
+                </PopoverContent>
+              </Popover>
+              </div>
+
+            </div>
+
+            <div className="flex items-center mt-3">
+              <Switch />
+              <Text variant="xs-semibold" className="ml-2">
+                Accept payment for this form
+              </Text>
+            </div>
+
+            <div className="flex justify-between mt-3 gap-3">
               <div>
                 <Text variant="xs-regular" className="text-gray-700">
                   Actual Amount
@@ -121,7 +165,6 @@ export function ShareFlyout() {
               </div>
             </div>
 
-            //Save Button
             <div>
               <Button
                 size="lg"
@@ -131,46 +174,8 @@ export function ShareFlyout() {
                 Save
               </Button>
             </div>
-
-
           </div>
-          <SheetHeader>
-            <SheetTitle>Edit profile</SheetTitle>
-            <SheetDescription>
-              Make changes to your profile here.
-            </SheetDescription>
-          </SheetHeader>
         </SheetContent>
-
-        <div className="py-4">
-          <div className="flex items-center space-x-2">
-            <Switch id="test" />
-            <label htmlFor="test">Toggle Switch</label>
-          </div>
-
-          <Popover>
-            <PopoverTrigger asChild>
-              <Button
-                variant={'outline'}
-                className={cn(
-                  'w-[240px] justify-start text-left font-normal',
-                  !date && 'text-muted-foreground'
-                )}
-              >
-                <CalendarIcon className="mr-2 h-4 w-4" />
-                Pick a date
-              </Button>
-            </PopoverTrigger>
-            <PopoverContent className="w-auto p-0" align="start">
-              <Calendar
-                mode="single"
-                selected={date}
-                onSelect={setDate}
-                initialFocus
-              />
-            </PopoverContent>
-          </Popover>
-        </div>
       </Sheet>
     </>
   );
