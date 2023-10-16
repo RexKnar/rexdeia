@@ -1,12 +1,8 @@
 'use client';
 
-import { Text } from 'ui';
-import Image from 'next/image';
-
-import { useState } from 'react';
 import { CalendarIcon, Files } from 'lucide-react';
-import shareIcon from '../../../public/assets/images/shareIcon.svg';
-
+import Image from 'next/image';
+import { useState } from 'react';
 import {
   Button,
   Calendar,
@@ -17,7 +13,10 @@ import {
   SheetContent,
   SheetTrigger,
   Switch,
+  Text,
 } from 'ui';
+
+import shareIcon from '../../../public/assets/images/shareIcon.svg';
 
 export function ShareFlyout() {
   const [date, setDate] = useState<Date>();
@@ -71,7 +70,11 @@ export function ShareFlyout() {
                   className="mt-2 w-full items-center rounded-md border border-primary p-3 text-xs font-normal"
                   placeholder="https://www.figma.com/file/EdHp3URyXKDsPQzaAQVGDA"
                 />
-                <Files size={18} color="#6559fc" className="absolute right-3 transform -translate-y-7"/>
+                <Files
+                  size={18}
+                  color="#6559fc"
+                  className="absolute right-3 -translate-y-7 transform"
+                />
               </div>
             </div>
 
