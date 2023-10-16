@@ -60,54 +60,27 @@ export function ShareFlyout() {
               </div>
             </div>
 
-            <div className="mt-5">
-              <div className="flex justify-between">
-                <div date-rangepicker className="flex items-center gap-3">
-                  <div className="relative">
-                    <Text variant="xs-regular" className="text-gray-700">
-                      Link Active From
-                    </Text>
-                    <input
-                      name="start"
-                      type="text"
-                      className="mt-1  w-full rounded-lg border p-2 text-sm "
-                      placeholder="02/10/2023"
-                    ></input>
-                  </div>
-                  
-                  <div className="relative">
-                    <Text variant="xs-regular" className="text-gray-700">
-                      Expires On
-                    </Text>
-                    <input
-                      name="end"
-                      type="text"
-                      className="mt-1  w-full rounded-lg border p-2 text-sm"
-                      placeholder="02/10/2023"
-                    ></input>
-                  </div>
-                </div>
+            
+              <div className="grid grid-cols-1 md:grid-cols-2">
+                
               </div>
-            </div>
+            
 
-            <div className="mt-5">
-              <div className="relative inline-flex cursor-pointer items-center">
+
+              // Payment Accept Toggle
+              <div className="mt-5 grid grid-cols-1 relative cursor-pointer items-center">
                 <input
                   type="checkbox"
-                  value=""
-                  className="peer sr-only"
                   checked
-                  disabled
                 ></input>
-                <div className="peer h-6 w-11 rounded-full bg-gray-200 after:absolute after:left-[2px] after:top-0.5 after:h-5 after:w-5 after:rounded-full after:border after:border-gray-300 after:bg-white after:transition-all after:content-[''] peer-checked:bg-blue-600 peer-checked:after:translate-x-full peer-checked:after:border-white dark:border-gray-600 dark:bg-gray-700"></div>
-
                 <Text variant="xs-semibold" className="ml-2">
                   Accept payment for this form
                 </Text>
               </div>
-            </div>
+            
 
-            <div className="mt-5 flex justify-between gap-3">
+            //Actual Amount & Discount Amount
+            <div className="mt-5 grid grid-cols-1 md:grid-cols-2 items-stretch">
               <div>
                 <Text variant="xs-regular" className="text-gray-700">
                   Actual Amount
@@ -129,6 +102,8 @@ export function ShareFlyout() {
                 />
               </div>
             </div>
+
+            //Save Button
             <div>
               <Button
                 size="lg"
@@ -138,6 +113,8 @@ export function ShareFlyout() {
                 Save
               </Button>
             </div>
+
+
           </div>
         </SheetContent>
       </Sheet>
