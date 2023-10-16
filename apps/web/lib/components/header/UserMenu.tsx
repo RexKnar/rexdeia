@@ -1,9 +1,8 @@
 'use client';
 
-import { signOut, useSession } from 'next-auth/react';
+import { Building2 } from 'lucide-react';
 import {
   Avatar,
-  AvatarFallback,
   AvatarImage,
   DropdownMenu,
   DropdownMenuContent,
@@ -15,22 +14,11 @@ import {
 } from 'ui';
 
 export function UserMenu() {
-  const { data: session, status } = useSession();
-
-  if (status === 'loading' || status === 'unauthenticated') {
-    return (
-      <Avatar className="cursor-pointer">
-        <AvatarImage src="https://github.com/shadcn.png" />
-      </Avatar>
-    );
-  }
-
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Avatar className="cursor-pointer">
           <AvatarImage src="https://avatars.githubusercontent.com/u/124599?v=4" />
-          <AvatarFallback>{session.user.name[0]}</AvatarFallback>
         </Avatar>
       </DropdownMenuTrigger>
       <DropdownMenuContent
@@ -38,38 +26,32 @@ export function UserMenu() {
         align="end"
         sideOffset={15}
       >
-        <section className="flex flex-col items-center p-4">
-          <Avatar className="h-16 w-16 cursor-pointer">
-            <AvatarImage src="https://avatars.githubusercontent.com/u/124599?v=4" />
-            <AvatarFallback>{session.user.name[0]}</AvatarFallback>
-          </Avatar>
-          <div className="flex flex-col items-center">
-            <p className="line-clamp-1 text-base">{session.user.name}</p>
-            <p className="line-clamp-1 text-sm text-gray-600">
-              {session.user.email}
-            </p>
-          </div>
-        </section>
-        <DropdownMenuLabel>Account</DropdownMenuLabel>
+        <DropdownMenuLabel className="text-gray-700">
+          Select organization
+        </DropdownMenuLabel>
         <DropdownMenuGroup>
-          <DropdownMenuItem className="cursor-pointer hover:bg-primary hover:text-white">
-            Profile
+          <DropdownMenuItem className="cursor-pointer gap-2 hover:bg-primary hover:text-white">
+            <Building2 className="h-5 w-5 text-gray-700" />
+            <div> organisation one</div>
           </DropdownMenuItem>
-          <DropdownMenuItem className="cursor-pointer hover:bg-primary hover:text-white">
-            Settings
+          <DropdownMenuItem className="cursor-pointer gap-2 hover:bg-primary hover:text-white">
+            <Building2 className="h-5 w-5 text-gray-700" />
+            <div> organisation two</div>
+          </DropdownMenuItem>
+          <DropdownMenuItem className="cursor-pointer gap-2 hover:bg-primary hover:text-white">
+            <Building2 className="h-5 w-5 text-gray-700" />
+            <div> organisation three</div>
+          </DropdownMenuItem>
+          <DropdownMenuItem className="cursor-pointer gap-2 hover:bg-primary hover:text-white">
+            <Building2 className="h-5 w-5 text-gray-700" />
+            <div> organisation four</div>
+          </DropdownMenuItem>
+          <DropdownMenuItem className="cursor-pointer gap-2 hover:bg-primary hover:text-white">
+            <Building2 className="h-5 w-5 text-gray-700" />
+            <div> organisation five</div>
           </DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator className="bg-gray-100 text-gray-500" />
-        <DropdownMenuItem
-          className="cursor-pointer hover:bg-primary hover:text-white"
-          onClick={async () => {
-            await signOut({
-              callbackUrl: '/signin',
-            });
-          }}
-        >
-          Log out
-        </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   );

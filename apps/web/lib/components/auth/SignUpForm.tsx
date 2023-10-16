@@ -32,6 +32,7 @@ export function SignUpForm() {
   const {
     register,
     handleSubmit,
+    watch,
     formState: { errors, isSubmitting },
     setError,
   } = useForm();
@@ -143,7 +144,7 @@ export function SignUpForm() {
         </label>
         <div className="relative flex items-center gap-2">
           <select
-            className="mt-2 rounded-md border border-gray-300 py-2 pl-2 pr-6 outline-blue-300 "
+            className="mt-2 rounded-md border border-gray-300 py-2 pl-2 pr-6 outline-blue-300"
             name="countryCode"
             {...register('countryCode')}
           >
@@ -187,7 +188,7 @@ export function SignUpForm() {
               required: 'Password is needed to sign up',
             })}
           />
-          <div className="absolute inset-y-0 right-0 flex cursor-pointer items-center pr-2 ">
+          <div className="absolute inset-y-0 right-0 flex cursor-pointer items-center pr-2">
             <div onClick={() => setShowPassword(!showPassword)}>
               {showPassword ? (
                 <Eye size={20} strokeWidth={0.5} />
@@ -218,9 +219,12 @@ export function SignUpForm() {
             placeholder="Enter your password"
             {...register('confirmPassword', {
               required: 'Password confirmation is required',
+              validate: (value) =>
+                value === watch('password') ||
+                'Please make sure your passwords match',
             })}
           />
-          <div className="absolute inset-y-0 right-0 flex cursor-pointer items-center pr-2 ">
+          <div className="absolute inset-y-0 right-0 flex cursor-pointer items-center pr-2">
             <div onClick={() => setShowConfirmPassword(!showConfirmPassword)}>
               {showConfirmPassword ? (
                 <Eye size={20} strokeWidth={0.5} />
@@ -267,14 +271,16 @@ export function SignUpForm() {
       <div className="flex justify-center gap-4">
         <Button
           type="button"
-          className="mt-3 w-full bg-transparent px-4 py-3 text-base text-gray-800 outline outline-gray-300 hover:text-white"
+          variant="ghost"
+          className="mt-3 w-full bg-transparent px-4 py-3 text-base text-gray-800 outline outline-gray-300 hover:outline-primary-800"
         >
           <Image src={googleLogo} alt={'logo'} className="mr-1"></Image>
           Google
         </Button>
         <Button
           type="button"
-          className="mt-3 w-full bg-transparent px-4 py-3 text-base text-gray-800 outline outline-gray-300 hover:text-white"
+          variant="ghost"
+          className="mt-3 w-full bg-transparent px-4 py-3 text-base text-gray-800 outline outline-gray-300 hover:outline-primary-800"
         >
           <Image src={microsoftLogo} alt={'logo'} className="mr-1"></Image>
           Microsoft

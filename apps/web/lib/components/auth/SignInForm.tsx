@@ -52,7 +52,7 @@ export function SignInForm() {
           <AlertDescription>{errors[error]}</AlertDescription>
         </Alert>
       )}
-      <label className="mt-5 block text-sm font-medium text-slate-500 ">
+      <label className="mt-5 block text-sm font-medium text-slate-500">
         Email
       </label>
       <div className="relative">
@@ -93,7 +93,7 @@ export function SignInForm() {
             required: 'Your password is needed to sign in.',
           })}
         />
-        <div className="absolute inset-y-0 right-0 flex cursor-pointer items-center pr-2 ">
+        <div className="absolute inset-y-0 right-0 flex cursor-pointer items-center pr-2">
           <div onClick={() => setShowPassword(!showPassword)}>
             {showPassword ? (
               <Eye size={20} strokeWidth={0.5} />
@@ -138,14 +138,16 @@ export function SignInForm() {
       <div className="flex flex-col sm:flex-row sm:gap-4">
         <Button
           type="button"
-          className="mt-3 w-full bg-transparent px-4 py-3 text-base text-gray-800 outline outline-gray-300 hover:text-white"
+          variant="ghost"
+          className="mt-3 w-full bg-transparent px-4 py-3 text-base text-gray-800 outline outline-gray-300 hover:outline-primary-800"
         >
           <Image src={googlelogo} alt={'logo'} className="mr-1"></Image>
           Google
         </Button>
         <Button
           type="button"
-          className="mt-3 w-full bg-transparent px-4 py-3 text-base text-gray-800 outline outline-gray-300 hover:text-white "
+          variant="ghost"
+          className="mt-3 w-full bg-transparent px-4 py-3 text-base text-gray-800 outline outline-gray-300 hover:outline-primary-800"
         >
           <Image src={microsoftlogo} alt={'logo'} className="mr-1"></Image>
           Microsoft

@@ -29,7 +29,7 @@ export function ResetPasswordForm() {
             className="mt-4 text-sm"
             placeholder="Enter your password"
           />
-          <div className="absolute inset-y-0 right-0 flex cursor-pointer items-center pr-2 ">
+          <div className="absolute inset-y-0 right-0 flex cursor-pointer items-center pr-2">
             <div onClick={() => setShowPassword(!showPassword)}>
               {showPassword ? (
                 <Eye size={20} strokeWidth={0.5} />
@@ -48,7 +48,7 @@ export function ResetPasswordForm() {
             className="mt-4 text-sm"
             placeholder="Enter your password"
           />
-          <div className="absolute inset-y-0 right-0 flex cursor-pointer items-center pr-2 ">
+          <div className="absolute inset-y-0 right-0 flex cursor-pointer items-center pr-2">
             <div onClick={() => setShowConfirmPassword(!showConfirmPassword)}>
               {showConfirmPassword ? (
                 <Eye size={20} strokeWidth={0.5} />
