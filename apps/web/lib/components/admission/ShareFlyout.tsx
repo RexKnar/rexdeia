@@ -1,11 +1,12 @@
 'use client';
 
 import { Text } from 'ui';
-
-import shareIcon from '../../../public/assets/images/shareIcon.svg';
 import Image from 'next/image';
-import { CalendarIcon } from 'lucide-react';
+
 import { useState } from 'react';
+import { CalendarIcon } from 'lucide-react';
+import shareIcon from '../../../public/assets/images/shareIcon.svg';
+
 import {
   Button,
   Calendar,
@@ -14,13 +15,9 @@ import {
   PopoverTrigger,
   Sheet,
   SheetContent,
-  SheetDescription,
-  SheetHeader,
-  SheetTitle,
   SheetTrigger,
   Switch,
 } from 'ui';
-import { cn } from 'utils';
 
 export function ShareFlyout() {
   const [date, setDate] = useState<Date>();
@@ -37,7 +34,7 @@ export function ShareFlyout() {
         </SheetTrigger>
 
         <SheetContent side="right" widthSize="sm" className="bg-white">
-          <div className="grid grid-cols-1 gap-4 p-2">
+          <div className="grid gap-4 p-2">
             <div className="flex items-center justify-between">
               <div className="flex items-center">
                 <Image
@@ -47,6 +44,7 @@ export function ShareFlyout() {
                   width={35}
                   height={35}
                 ></Image>
+
                 <Text variant="sm-semibold" className="ml-1">
                   Share
                 </Text>
@@ -63,7 +61,7 @@ export function ShareFlyout() {
 
             <div className="border-b p-1"></div>
 
-            <div className="">
+            <div>
               <div>
                 <Text variant="xs-regular" className="text-gray-700">
                   URL
@@ -76,73 +74,72 @@ export function ShareFlyout() {
               </div>
             </div>
 
-            <div className="flex justify-between mt-3">
+            <div className="mt-3 grid justify-between gap-3 overflow-hidden sm:grid-cols-1 md:grid-cols-2">
               <div>
-              <Popover>
-                <Text variant="xs-regular" className="text-gray-700 mb-1">
-                  Link Active From
-                </Text>
-                <PopoverTrigger asChild>
-                  <Button
-                    variant={'outline'}
-                    className={cn(
-                      'text-left font-normal',
-                      !date && 'text-muted-foreground'
-                    )}
+                <Popover>
+                  <Text variant="xs-regular" className="mb-1 text-gray-700">
+                    Link Active From
+                  </Text>
+                  <PopoverTrigger
+                    asChild
+                    className="rounded-md border border-primary-200 p-1.5"
                   >
-                    02/10/2023
-                    <CalendarIcon className="mr-2 h-4 w-4" />
-                  </Button>
-                </PopoverTrigger>
-                <PopoverContent className="w-auto p-0" align="start">
-                  <Calendar
-                    mode="single"
-                    selected={date}
-                    onSelect={setDate}
-                    initialFocus
-                  />
-                </PopoverContent>
-              </Popover>
+                    <Text
+                      variant="sm-regular"
+                      className="flex justify-between text-gray-700"
+                    >
+                      02/10/2023
+                      <CalendarIcon className="mr-2 h-4 w-4 justify-end" />
+                    </Text>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-auto p-0" align="start">
+                    <Calendar
+                      mode="single"
+                      selected={date}
+                      onSelect={setDate}
+                      initialFocus
+                    />
+                  </PopoverContent>
+                </Popover>
               </div>
 
-               <div>
-              <Popover>
-                <Text variant="xs-regular" className="text-gray-700 mb-1">
-                  Expires On
-                </Text>
-                <PopoverTrigger asChild>
-                  <Button
-                    variant={'outline'}
-                    className={cn(
-                      'font-normal',
-                      !date && 'text-muted-foreground'
-                    )}
+              <div>
+                <Popover>
+                  <Text variant="xs-regular" className="mb-1 text-gray-700">
+                    Expires On
+                  </Text>
+                  <PopoverTrigger
+                    asChild
+                    className="w-50 rounded-md border border-primary-200 p-1.5"
                   >
-                    02/10/2023
-                    <CalendarIcon className="mr-2 h-4 w-4" />
-                  </Button>
-                </PopoverTrigger>
-                <PopoverContent className="w-auto p-0" align="start">
-                  <Calendar
-                    mode="single"
-                    selected={date}
-                    onSelect={setDate}
-                    initialFocus
-                  />
-                </PopoverContent>
-              </Popover>
+                    <Text
+                      variant="sm-regular"
+                      className="flex justify-between text-gray-700"
+                    >
+                      02/10/2023
+                      <CalendarIcon className="mr-2 h-4 w-4 justify-end" />
+                    </Text>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-auto p-0" align="start">
+                    <Calendar
+                      mode="single"
+                      selected={date}
+                      onSelect={setDate}
+                      initialFocus
+                    />
+                  </PopoverContent>
+                </Popover>
               </div>
-
             </div>
 
-            <div className="flex items-center mt-3">
+            <div className="mt-3 flex items-center">
               <Switch />
               <Text variant="xs-semibold" className="ml-2">
                 Accept payment for this form
               </Text>
             </div>
 
-            <div className="flex justify-between mt-3 gap-3">
+            <div className="mt-3 grid justify-between gap-3 sm:grid-cols-1 md:grid-cols-2">
               <div>
                 <Text variant="xs-regular" className="text-gray-700">
                   Actual Amount
@@ -150,7 +147,7 @@ export function ShareFlyout() {
                 <input
                   type="text"
                   placeholder="₹"
-                  className="mt-1 items-center rounded-md border border-primary-200 p-1"
+                  className="mt-1 w-full rounded-md border border-primary-200 p-1"
                 />
               </div>
               <div>
@@ -160,7 +157,7 @@ export function ShareFlyout() {
                 <input
                   type="text"
                   placeholder="₹"
-                  className="mt-1 items-center rounded-md border border-primary-200 p-1"
+                  className="mt-1 w-full rounded-md border border-primary-200 p-1"
                 />
               </div>
             </div>
