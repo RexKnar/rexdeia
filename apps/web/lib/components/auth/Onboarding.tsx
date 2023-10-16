@@ -47,14 +47,14 @@ export function Onboarding({ branchId, organizationId }: OnboardingProps) {
     <>
       <div className="flex h-full flex-col sm:flex-row">
         <section
-          className="hidden flex-grow  bg-left bg-no-repeat sm:flex sm:w-1/5"
+          className="flex-grow bg-left bg-no-repeat sm:flex sm:w-1/5"
           style={{
             backgroundImage: 'url(/assets/images/onborarding-side-banner.png)',
             backgroundSize: 'contain',
           }}
         ></section>
 
-        <section className="flex h-screen w-full translate-y-0 transform flex-col  p-8 opacity-100 transition-all duration-500 ease-in-out sm:w-4/5 md:w-4/5">
+        <section className="flex h-screen w-full translate-y-0 transform flex-col p-8 opacity-100 transition-all duration-500 ease-in-out sm:w-4/5 md:w-4/5">
           <div className="mt-3 flex justify-center">
             <Image src={logo} alt={'logo'} width={150}></Image>
           </div>
@@ -83,7 +83,7 @@ export function Onboarding({ branchId, organizationId }: OnboardingProps) {
               <div className="flex items-center">
                 <p>
                   <Check />
-                  Initialisation setup
+                  Initialization setup
                 </p>
               </div>
             </div>
