@@ -46,14 +46,14 @@ export function RecoveryPasswordForm() {
             <div className="mt-4 flex flex-col sm:gap-4 lg:flex-row">
               <Button
                 type="button"
-                className={`mt-3 h-20 w-full rounded-xl bg-transparent p-2 text-base text-gray-800 outline  hover:text-white  ${
+                className={`mt-3 h-20 w-full rounded-xl bg-transparent p-2 text-base text-gray-800 outline  hover:text-white ${
                   isEmailInput
                     ? 'text-primary outline-primary-500'
                     : 'outline-gray-300'
                 }`}
                 onClick={handleEmailVerificationClick}
               >
-                <div className="flex flex-col items-center  text-center">
+                <div className="flex flex-col items-center text-center">
                   <MailCheck size={18} className="" />
                   <p className="mt-2 text-sm">Recover via email</p>
                 </div>
@@ -96,12 +96,12 @@ export function RecoveryPasswordForm() {
               Send link
             </Button>
           </form>
-          <p className=" mt-16 text-center text-sm font-semibold text-gray-800">
+          <p className="mt-16 text-center text-sm font-semibold text-gray-800">
             Didn&apos;t receive the link?
           </p>
           <Link
             href="/signin"
-            className=" mt-6 w-full rounded-md border-2 border-gray-300 bg-transparent p-2 text-center text-sm font-semibold text-primary hover:bg-primary hover:text-white"
+            className="mt-6 w-full rounded-md border-2 border-gray-300 bg-transparent p-2 text-center text-sm font-semibold text-primary hover:bg-primary hover:text-white"
           >
             Resend
           </Link>
