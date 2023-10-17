@@ -6,6 +6,7 @@ import { useState } from 'react';
 import {
   Button,
   Calendar,
+  Input,
   Popover,
   PopoverContent,
   PopoverTrigger,
@@ -33,7 +34,7 @@ export function ShareFlyout() {
         </SheetTrigger>
 
         <SheetContent side="right" widthSize="sm" className="bg-white">
-          <div className="grid gap-4 p-2">
+          <section className="grid gap-4 p-2">
             <div className="flex items-center justify-between">
               <div className="flex items-center">
                 <Image
@@ -43,36 +44,29 @@ export function ShareFlyout() {
                   width={35}
                   height={35}
                 ></Image>
-
-                <Text variant="sm-semibold" className="ml-1">
-                  Share
-                </Text>
+                <label className="ml-1 text-sm font-semibold">Share</label>
               </div>
               <div>
                 <div className="flex items-center justify-center">
                   <Switch />
-                  <Text variant="xs-semibold" className="ml-2">
-                    Inactive
-                  </Text>
+                  <label className="ml-2 text-xs font-semibold">Inactive</label>
                 </div>
               </div>
             </div>
 
-            <div className="border-b p-1"></div>
+            <span className="border-b p-1"></span>
 
             <div>
               <div className="relative">
-                <Text variant="xs-regular" className="text-gray-700">
-                  URL
-                </Text>
-                <input
+                <label className="text-sm font-normal text-gray-700">URL</label>
+                <Input
                   type="text"
                   className="mt-2 w-full items-center rounded-md border border-primary p-3 text-xs font-normal"
                   placeholder="https://www.figma.com/file/EdHp3URyXKDsPQzaAQVGDA"
                 />
                 <Files
                   size={18}
-                  color="#6559fc"
+                  color="primary"
                   className="absolute right-3 -translate-y-7 transform"
                 />
               </div>
@@ -81,20 +75,17 @@ export function ShareFlyout() {
             <div className="mt-3 grid justify-between gap-3 overflow-hidden sm:grid-cols-1 md:grid-cols-2">
               <div>
                 <Popover>
-                  <Text variant="xs-regular" className="mb-1 text-gray-700">
+                  <label className="mb-1 text-xs font-normal text-gray-700">
                     Link Active From
-                  </Text>
+                  </label>
                   <PopoverTrigger
                     asChild
                     className="rounded-md border border-primary-200 p-1.5"
                   >
-                    <Text
-                      variant="sm-regular"
-                      className="flex justify-between text-gray-700"
-                    >
+                    <label className="flex justify-between text-sm font-normal text-gray-700">
                       02/10/2023
                       <CalendarIcon className="mr-2 h-4 w-4 justify-end" />
-                    </Text>
+                    </label>
                   </PopoverTrigger>
                   <PopoverContent className="w-auto p-0" align="start">
                     <Calendar
@@ -109,20 +100,17 @@ export function ShareFlyout() {
 
               <div>
                 <Popover>
-                  <Text variant="xs-regular" className="mb-1 text-gray-700">
+                  <label className="mb-1 text-xs font-normal text-gray-700">
                     Expires On
-                  </Text>
+                  </label>
                   <PopoverTrigger
                     asChild
                     className="w-50 rounded-md border border-primary-200 p-1.5"
                   >
-                    <Text
-                      variant="sm-regular"
-                      className="flex justify-between text-gray-700"
-                    >
+                    <label className="flex justify-between text-sm font-normal text-gray-700">
                       02/10/2023
                       <CalendarIcon className="mr-2 h-4 w-4 justify-end" />
-                    </Text>
+                    </label>
                   </PopoverTrigger>
                   <PopoverContent className="w-auto p-0" align="start">
                     <Calendar
@@ -138,27 +126,27 @@ export function ShareFlyout() {
 
             <div className="mt-3 flex items-center">
               <Switch />
-              <Text variant="xs-semibold" className="ml-2">
+              <label className="ml-2 text-xs font-semibold">
                 Accept payment for this form
-              </Text>
+              </label>
             </div>
 
             <div className="mt-3 grid justify-between gap-3 sm:grid-cols-1 md:grid-cols-2">
               <div>
-                <Text variant="xs-regular" className="text-gray-700">
+                <label className="text-xs font-normal text-gray-700">
                   Actual Amount
-                </Text>
-                <input
+                </label>
+                <Input
                   type="text"
                   placeholder="₹"
                   className="mt-1 w-full rounded-md border border-primary-200 p-1"
                 />
               </div>
               <div>
-                <Text variant="xs-regular" className="text-gray-700">
+                <label className="text-xs font-normal text-gray-700">
                   Discount Amount
-                </Text>
-                <input
+                </label>
+                <Input
                   type="text"
                   placeholder="₹"
                   className="mt-1 w-full rounded-md border border-primary-200 p-1"
@@ -170,12 +158,12 @@ export function ShareFlyout() {
               <Button
                 size="lg"
                 variant="default"
-                className="mx-auto mt-5 flex items-center justify-center px-16 py-4 text-white"
+                className="mx-auto mt-5 flex justify-center px-16 py-4 text-white"
               >
                 Save
               </Button>
             </div>
-          </div>
+          </section>
         </SheetContent>
       </Sheet>
     </>
