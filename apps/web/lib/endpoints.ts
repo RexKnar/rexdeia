@@ -32,7 +32,7 @@ export default <EndpointDetails>{
     endpoint: `/api/admission`,
   },
   [LIST_ADMISSION]: {
-    requestType: `GET`,
+    requestType: `POST`,
     endpoint: `/api/admissionlist`,
   },
   [ADD_ENQUIRY]: {

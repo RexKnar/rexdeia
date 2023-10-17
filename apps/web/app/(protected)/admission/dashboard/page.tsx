@@ -7,20 +7,13 @@ import admissionRequestIcon from '../../../../public/assets/images/admission-req
 import inProgressIcon from '../../../../public/assets/images/in-progress.svg';
 import rejectedIcon from '../../../../public/assets/images/rejected.svg';
 import shortlistedIcon from '../../../../public/assets/images/short-listed.svg';
-import { getAdmissionList } from '../../../api/admissionlist/service';
-import { AdmissionListModel, columns } from './columns';
+import { columns } from './columns';
 import { DashboardBreadcrumb } from './components/DashboardBreadcrumb';
 import { DataTable } from './data-table';
-
-async function getData(): Promise<AdmissionListModel[]> {
-  const admissionList = await getAdmissionList();
-  const data: AdmissionListModel[] = JSON.parse(JSON.stringify(admissionList));
-  return data.map((x, i) => ({ slNo: i + 1, ...x }));
-}
+import { db } from '../../../../lib/db';
 
 export default async function Page() {
-  const data = await getData();
-
+  const totalCount = await db.admissionForm.count();
   return (
     <section className="w-full bg-gray-50 p-3">
       <section>
@@ -126,7 +119,7 @@ export default async function Page() {
           Admission List
         </h1>
         <div className="mx-auto py-10">
-          <DataTable columns={columns} data={data} />
+          <DataTable columns={columns} data={[]} totalCount={totalCount} />
         </div>
       </section>
     </section>
