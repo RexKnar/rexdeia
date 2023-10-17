@@ -9,25 +9,25 @@ importers:
   .:
     devDependencies:
       '@turbo/gen':
-        specifier: ^1.10.13
+        specifier: 1.10.13
         version: 1.10.13(@types/node@20.6.2)(typescript@5.2.2)
       eslint:
-        specifier: ^8.49.0
+        specifier: 8.49.0
         version: 8.49.0
       eslint-config-custom:
         specifier: workspace:*
         version: link:packages/eslint-config-custom
       prettier:
-        specifier: ^3.0.3
+        specifier: 3.0.3
         version: 3.0.3
       prettier-plugin-packagejson:
-        specifier: ^2.4.5
+        specifier: 2.4.5
         version: 2.4.5(prettier@3.0.3)
       prettier-plugin-tailwindcss:
-        specifier: ^0.5.4
+        specifier: 0.5.4
         version: 0.5.4(prettier@3.0.3)
       turbo:
-        specifier: ^1.10.15
+        specifier: 1.10.15
         version: 1.10.15
 
   apps/docs:
