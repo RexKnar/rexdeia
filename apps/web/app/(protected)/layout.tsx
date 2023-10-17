@@ -30,10 +30,12 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       <Providers>
         <body>
           <main className="flex flex-row">
-            <Suspense fallback={<div>Loading...</div>}>
-              <Sidebar />
-            </Suspense>
-            {children}
+            <div className="lg:w-1/6">
+              <Suspense fallback={<div>Loading...</div>}>
+                <Sidebar />
+              </Suspense>
+            </div>
+            <div className="pl-2 lg:w-5/6">{children}</div>
           </main>
           <Toaster />
         </body>
