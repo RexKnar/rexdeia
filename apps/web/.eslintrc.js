@@ -36,7 +36,6 @@ module.exports = {
     ],
   },
   parserOptions: {
-    project: './tsconfig.json',
     babelOptions: {
       presets: [require.resolve('next/babel')],
     },
