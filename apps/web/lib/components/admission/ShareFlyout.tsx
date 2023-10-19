@@ -34,38 +34,51 @@ export function ShareFlyout() {
             Open Modal
           </Button>
         </SheetTrigger>
-        <SheetContent side="right" widthSize="sm" className="bg-white">
-          <section className="grid gap-2 p-2">
+        <section className="grid gap-2 p-2">
+          <SheetContent side="right" widthSize="sm" className="bg-white">
             <SheetHeader>
-              <div className="flex items-center justify-between">
+              <SheetTitle>
                 <div className="flex items-center justify-between">
-                  <Image
-                    src={shareIcon}
-                    className="rounded-full bg-primary-100 p-2"
-                    alt={'icon'}
-                    width={35}
-                    height={35}
-                  ></Image>
-                  <label className="ml-1 text-sm font-semibold">Share</label>
-                </div>
-                <div>
-                  <div className="flex items-center justify-center">
-                    <Switch />
-                    <label className="ml-2 text-xs font-semibold">
+                  <div className="flex items-center">
+                    <Image
+                      id="shareIcon"
+                      src={shareIcon}
+                      className="rounded-full bg-primary-100 p-2"
+                      alt={'icon'}
+                      width={35}
+                      height={35}
+                    ></Image>
+                    <label
+                      htmlFor="shareIcon"
+                      className="ml-2 text-xs font-semibold"
+                    >
+                      Share
+                    </label>
+                  </div>
+                  <div className="flex items-center">
+                    <Switch id="toggleSwitch" />
+                    <label
+                      htmlFor="toggleSwitch"
+                      className="ml-2 text-xs font-semibold"
+                    >
                       Inactive
                     </label>
                   </div>
                 </div>
-              </div>
+              </SheetTitle>
             </SheetHeader>
             <span className="border-b p-2"></span>
-            <SheetTitle>
+            <SheetDescription>
               <div>
                 <div className="relative">
-                  <label className="text-sm font-normal text-gray-700">
+                  <label
+                    htmlFor="url"
+                    className="text-sm font-normal text-gray-700"
+                  >
                     URL
                   </label>
                   <Input
+                    id="url"
                     type="text"
                     className="mt-1 w-full border border-primary p-3 text-xs font-normal"
                     placeholder="https://www.figma.com/file/EdHp3URyXKDsPQzaAQVGDA"
@@ -77,15 +90,12 @@ export function ShareFlyout() {
                   />
                 </div>
               </div>
-            </SheetTitle>
-            <SheetDescription className="mt-4 grid gap-7">
+            </SheetDescription>
+            <section className="mt-4 grid gap-7">
               <div className="grid justify-between gap-3 sm:grid-cols-1 md:grid-cols-2">
                 <div className="w-full">
                   <Popover>
-                    <label
-                      htmlFor=""
-                      className="mb-1 text-xs font-normal text-gray-700"
-                    >
+                    <label className="mb-1 text-xs font-normal text-gray-700">
                       Link Active From
                     </label>
                     <PopoverTrigger
@@ -133,8 +143,11 @@ export function ShareFlyout() {
                 </div>
               </div>
               <div className="flex items-center">
-                <Switch />
-                <label className="ml-2 text-xs font-semibold">
+                <Switch id="paymentAcceptToggle" />
+                <label
+                  htmlFor="paymentAcceptToggle"
+                  className="ml-2 text-xs font-semibold"
+                >
                   Accept payment for this form
                 </label>
               </div>
@@ -177,9 +190,9 @@ export function ShareFlyout() {
                   Save
                 </Button>
               </div>
-            </SheetDescription>
-          </section>
-        </SheetContent>
+            </section>
+          </SheetContent>
+        </section>
       </Sheet>
     </>
   );
