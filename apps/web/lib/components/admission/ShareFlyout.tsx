@@ -65,7 +65,7 @@ export function ShareFlyout() {
               </div>
             </SheetTitle>
           </SheetHeader>
-          <div className="my-5 border-t border-gray-300"></div>
+          <hr className="my-5 border-t border-gray-300"></hr>
           <section className="relative">
             <label htmlFor="url" className="text-sm font-normal text-gray-700">
               URL
@@ -172,15 +172,13 @@ export function ShareFlyout() {
                 />
               </div>
             </div>
-            <div>
-              <Button
-                size="lg"
-                variant="default"
-                className="mx-auto flex justify-center px-16 py-4 text-white"
-              >
-                Save
-              </Button>
-            </div>
+            <Button
+              size="lg"
+              variant="default"
+              className="mx-auto flex justify-center px-16 py-4 text-white"
+            >
+              Save
+            </Button>
           </section>
         </SheetContent>
       </Sheet>
