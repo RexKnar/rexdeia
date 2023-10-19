@@ -44,7 +44,7 @@ const sheetVariants = cva(
           'inset-x-0 bottom-0 border-t data-[state=closed]:slide-out-to-bottom data-[state=open]:slide-in-from-bottom',
         left: 'inset-y-0 left-0 h-full border-r data-[state=closed]:slide-out-to-left data-[state=open]:slide-in-from-left',
         right:
-          'inset-y-0 right-0 h-full border-l data-[state=closed]:slide-out-to-right data-[state=open]:slide-in-from-right',
+          'inset-y-0 right-0 h-full border-l-md rounded-l-md data-[state=closed]:slide-out-to-right data-[state=open]:slide-in-from-right',
       },
       widthSize: {
         sm: 'w-2/6',
@@ -72,22 +72,24 @@ const SheetContent = React.forwardRef<
   (
     { side = 'right', widthSize = 'md', className, children, ...props },
     ref,
-  ) => (
-    <SheetPortal>
-      <SheetOverlay />
-      <SheetPrimitive.Content
-        ref={ref}
-        className={cn(sheetVariants({ side, widthSize }), className)}
-        {...props}
-      >
-        {children}
-        <SheetPrimitive.Close className="">
-          <X className="absolute -left-7 top-1 flex items-center justify-center rounded-full bg-black p-[0.4em] text-white" />
-          <span className="sr-only">Close</span>
-        </SheetPrimitive.Close>
-      </SheetPrimitive.Content>
-    </SheetPortal>
-  ),
+  ) => {
+    return (
+      <SheetPortal>
+        <SheetOverlay />
+        <SheetPrimitive.Content
+          ref={ref}
+          className={cn(sheetVariants({ side, widthSize }), className)}
+          {...props}
+        >
+          {children}
+          <SheetPrimitive.Close>
+            <X className="absolute -left-7 top-1 flex items-center justify-center rounded-full bg-black p-[0.4em] text-white" />
+            <span className="sr-only">Close</span>
+          </SheetPrimitive.Close>
+        </SheetPrimitive.Content>
+      </SheetPortal>
+    );
+  },
 );
 
 SheetContent.displayName = SheetPrimitive.Content.displayName;
