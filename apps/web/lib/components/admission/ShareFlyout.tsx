@@ -34,7 +34,7 @@ export function ShareFlyout() {
             Open Modal
           </Button>
         </SheetTrigger>
-        <section className="grid gap-2 p-2">
+        <section className="p-2">
           <SheetContent side="right" widthSize="sm" className="bg-white">
             <SheetHeader>
               <SheetTitle>
@@ -68,29 +68,27 @@ export function ShareFlyout() {
               </SheetTitle>
             </SheetHeader>
             <span className="border-b p-2"></span>
-            <SheetDescription>
-              <div>
-                <div className="relative">
-                  <label
-                    htmlFor="url"
-                    className="text-sm font-normal text-gray-700"
-                  >
-                    URL
-                  </label>
-                  <Input
-                    id="url"
-                    type="text"
-                    className="mt-1 w-full border border-primary p-3 text-xs font-normal"
-                    placeholder="https://www.figma.com/file/EdHp3URyXKDsPQzaAQVGDA"
-                  />
-                  <Files
-                    size={18}
-                    color="primary"
-                    className="absolute right-3 -translate-y-7 transform"
-                  />
-                </div>
+            <div>
+              <div className="relative">
+                <label
+                  htmlFor="url"
+                  className="text-sm font-normal text-gray-700"
+                >
+                  URL
+                </label>
+                <Input
+                  id="url"
+                  type="text"
+                  className="mt-1 w-full border border-primary p-3 text-xs font-normal"
+                  placeholder="https://www.figma.com/file/EdHp3URyXKDsPQzaAQVGDA"
+                />
+                <Files
+                  size={18}
+                  color="primary"
+                  className="absolute right-3 -translate-y-7 transform"
+                />
               </div>
-            </SheetDescription>
+            </div>
             <section className="mt-4 grid gap-7">
               <div className="grid justify-between gap-3 sm:grid-cols-1 md:grid-cols-2">
                 <div className="w-full">
