@@ -1,8 +1,8 @@
 'use client';
 
-import { CalendarIcon, Files } from 'lucide-react';
 import Image from 'next/image';
 import { useState } from 'react';
+import { CalendarIcon, Files } from 'lucide-react';
 import {
   Button,
   Calendar,
@@ -12,7 +12,6 @@ import {
   PopoverTrigger,
   Sheet,
   SheetContent,
-  SheetDescription,
   SheetHeader,
   SheetTitle,
   SheetTrigger,
