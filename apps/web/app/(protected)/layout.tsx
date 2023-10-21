@@ -1,5 +1,4 @@
 import 'configs/tailwind/styles.css';
-
 import { Inter, Roboto_Mono } from '@next/font/google';
 import { ReactNode, Suspense } from 'react';
 import { Toaster } from 'ui';
@@ -35,7 +34,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
                 <Sidebar />
               </Suspense>
             </div>
-            <div className="pl-2 lg:w-5/6">{children}</div>
+            <div className="lg:w-5/6">{children}</div>
           </main>
           <Toaster />
         </body>

@@ -38,10 +38,7 @@ export function SidebarItem(menuItem: SidebarMenuItem) {
       {menuItem.children && isExpanded && (
         <div className={cn('ml-2 w-full overflow-hidden border-l-2 px-2')}>
           {menuItem.children.map((child) => (
-            <div
-              key={child.id}
-              className="w-full p-2 text-sm font-normal text-gray-800"
-            >
+            <div key={child.id} className="w-full p-2 text-sm font-normal">
               <Link
                 href={child.path}
                 className={cn(

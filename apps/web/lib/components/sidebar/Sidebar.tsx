@@ -8,24 +8,26 @@ import { SidebarItem } from './SidebarItem';
 export function Sidebar() {
   return (
     <div className="fixed flex h-screen flex-col border">
-      <nav className="flex-1 overflow-y-auto pb-12">
-        <section className="space-y-4 py-4">
-          <div className="py-2">
-            <SidebarHeader />
-            <div className="mb-8 w-full border">
+      <div className="mt-6 flex-none">
+        <SidebarHeader />
+      </div>
+      <nav className="flex-1 overflow-y-auto">
+        <div className="space-y-4 ">
+          <div className="py-4">
+            <div className="mb-2 border">
               <hr />
             </div>
             <div>
               {menuItems.map((item) => (
-                <div className="space-y-1 px-4 py-1" key={item.id}>
+                <div className="space-y-1 px-4 py-3" key={item.id}>
                   <SidebarItem {...item} />
                 </div>
               ))}
             </div>
           </div>
-        </section>
+        </div>
       </nav>
-      <div className="p-4">
+      <div className="flex-none p-2">
         <SidebarFooter />
       </div>
     </div>

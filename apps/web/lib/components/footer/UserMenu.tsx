@@ -12,7 +12,7 @@ export function UserMenu() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <MoreVertical className="mr-2 h-4 w-4 cursor-pointer" />
+        <MoreVertical className="h-5 w-5 cursor-pointer" />
       </DropdownMenuTrigger>
       <DropdownMenuContent
         className="w-56 bg-white"
