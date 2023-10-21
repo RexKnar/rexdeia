@@ -1,6 +1,6 @@
 import 'configs/tailwind/styles.css';
 import { Inter, Roboto_Mono } from '@next/font/google';
-import { ReactNode, Suspense } from 'react';
+import { ReactNode } from 'react';
 import { Toaster } from 'ui';
 
 import { Sidebar } from '../../lib/components/sidebar/Sidebar';
