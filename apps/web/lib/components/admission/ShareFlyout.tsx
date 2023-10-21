@@ -28,7 +28,7 @@ export function ShareFlyout() {
         <SheetTrigger asChild>
           <Button
             variant="outline"
-            className="mt-3 border-2 bg-blue-500 text-white"
+            className="text-white mt-3 border-2 bg-blue-500"
           >
             Open Modal
           </Button>
@@ -78,7 +78,7 @@ export function ShareFlyout() {
             />
             <Files
               size={18}
-              color="primary"
+              color="#6559FC"
               className="absolute right-3 -translate-y-7 transform"
             />
           </section>
@@ -98,7 +98,7 @@ export function ShareFlyout() {
                       <CalendarIcon className="mr-2 h-4 w-4 justify-end" />
                     </label>
                   </PopoverTrigger>
-                  <PopoverContent className="w-auto p-0" align="start">
+                  <PopoverContent className="bg-white w-auto p-0" align="start">
                     <Calendar
                       mode="single"
                       selected={date}
@@ -122,7 +122,7 @@ export function ShareFlyout() {
                       <CalendarIcon className="mr-2 h-4 w-4 justify-end" />
                     </label>
                   </PopoverTrigger>
-                  <PopoverContent className="w-auto p-0" align="start">
+                  <PopoverContent className="bg-white w-auto p-0" align="start">
                     <Calendar
                       mode="single"
                       selected={date}
@@ -175,7 +175,7 @@ export function ShareFlyout() {
             <Button
               size="lg"
               variant="default"
-              className="mx-auto flex justify-center px-16 py-4 text-white"
+              className="text-white mx-auto flex justify-center px-16 py-4"
             >
               Save
             </Button>
