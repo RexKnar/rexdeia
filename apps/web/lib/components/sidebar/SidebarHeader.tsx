@@ -1,15 +1,18 @@
-import { Settings } from 'lucide-react';
+import { ChevronRightSquare, Settings } from 'lucide-react';
 
 import { UserMenu } from '../header/UserMenu';
+import { Avatar, AvatarImage } from 'ui/components/ui/Avatar';
 
 export function SidebarHeader() {
   return (
-    <div className="mb-2 flex w-[292px] items-center justify-between gap-3 px-4 text-lg font-semibold tracking-tight">
-      <div className="flex w-[140px] text-left">
-        <UserMenu />
-        <div className="ml-2">
-          <h1 className="text-sm font-semibold">ABC College</h1>
-          <h2 className="text-sm font-normal text-gray-700">Admin</h2>
+    <div className="mb-5 flex items-center justify-between gap-3 px-4 text-lg font-semibold tracking-tight">
+      <div className="flex items-center gap-4 text-left">
+        <Avatar className="cursor-pointer">
+          <AvatarImage src="https://avatars.githubusercontent.com/u/124599?v=4" />
+        </Avatar>
+        <div>
+          <div className="text-sm font-semibold">ABC College</div>
+          <div className="text-sm font-normal text-gray-700">Admin</div>
         </div>
       </div>
       <div className="flex">

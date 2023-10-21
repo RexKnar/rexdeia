@@ -10,7 +10,7 @@ export const BreadcrumbSeparator = forwardRef<
   <span
     ref={forwardedRef}
     role="presentation"
-    className={cn('mx-2 opacity-50', className)}
+    className={cn('mx-2 opacity-20', className)}
     {...props}
   />
 ));
