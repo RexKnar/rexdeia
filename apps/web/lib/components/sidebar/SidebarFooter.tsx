@@ -4,8 +4,8 @@ import { UserMenu } from '../footer/UserMenu';
 
 export function SidebarFooter() {
   return (
-    <div className="mb-2 flex w-[292px] items-center justify-between gap-3 px-4 text-lg font-semibold tracking-tight">
-      <div className="flex text-left">
+    <div className="mb-2 flex items-center justify-between gap-3 px-4 text-lg font-semibold tracking-tight">
+      <div className="flex w-[140px] text-left">
         <Avatar className="cursor-pointer">
           <AvatarImage src="https://imgv3.fotor.com/images/gallery/Realistic-Male-Profile-Picture.jpg" />
         </Avatar>
@@ -14,7 +14,7 @@ export function SidebarFooter() {
           <h2 className="text-sm font-normal text-gray-700">Role</h2>
         </div>
       </div>
-      <div className="">
+      <div>
         <UserMenu />
       </div>
     </div>

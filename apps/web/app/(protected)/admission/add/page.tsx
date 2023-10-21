@@ -11,6 +11,7 @@ import { authOptions } from '../../../../lib/auth';
 import { AdmissionPage } from './components/AdmissionPage';
 import { AdmissionsBreadcrumb } from './components/AdmissionsBreadcrumb';
 import { EnquiryPage } from './components/EnquiryPage';
+import { PageTitle } from './components/pageTitle';
 
 export default async function Page() {
   const session = await getServerSession(authOptions);
@@ -20,16 +21,15 @@ export default async function Page() {
   }
 
   return (
-    <section className="w-full bg-gray-50 p-3">
-      <section className="mx-6 mt-8">
-        <AdmissionsBreadcrumb />
-      </section>
+    <section className="flex h-full w-full flex-col gap-[20px] bg-gray-50 px-[25px] py-[40px] sm:px-[50px]">
+      <AdmissionsBreadcrumb />
+      <PageTitle title="Configure" />
 
-      <Tabs defaultValue="admission" className="mt-8">
+      <Tabs defaultValue="admission" className="mt-4">
         <TabsList>
           <TabsTrigger
             value="admission"
-            className="ml-4 mr-2 text-base focus:border-b-4 focus:border-primary"
+            className="mr-2 text-base focus:border-b-4 focus:border-primary"
           >
             Admission form
           </TabsTrigger>
