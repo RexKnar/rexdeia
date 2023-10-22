@@ -1,7 +1,6 @@
 import 'configs/tailwind/styles.css';
-
 import { Inter, Roboto_Mono } from '@next/font/google';
-import { ReactNode, Suspense } from 'react';
+import { ReactNode } from 'react';
 import { Toaster } from 'ui';
 
 import { Sidebar } from '../../lib/components/sidebar/Sidebar';
@@ -42,12 +41,10 @@ export default function RootLayout({ children }: { children: ReactNode }) {
             {children}
           </main> */}
           <div className="flex h-screen overflow-hidden">
-            <aside className="flex-[2/6] relative hidden md:flex grow-0">
+            <aside className="relative hidden flex-[2/6] grow-0 md:flex">
               <Sidebar />
             </aside>
-            <main className="flex-1 overflow-auto">
-              {children}
-            </main>
+            <main className="flex-1 overflow-auto">{children}</main>
           </div>
           <Toaster />
         </body>

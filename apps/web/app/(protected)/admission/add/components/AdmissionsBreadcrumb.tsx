@@ -1,4 +1,3 @@
-import { HomeIcon } from 'lucide-react';
 import Link from 'next/link';
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink } from 'ui';
 
@@ -14,7 +13,7 @@ export function AdmissionsBreadcrumb() {
       </BreadcrumbItem>
       <BreadcrumbItem isCurrentPage>
         <BreadcrumbLink as={Link} href="/admission/add">
-          <div className='text-gray-900'>Admissions</div>
+          <div className="text-gray-900">Admissions</div>
         </BreadcrumbLink>
       </BreadcrumbItem>
     </Breadcrumb>

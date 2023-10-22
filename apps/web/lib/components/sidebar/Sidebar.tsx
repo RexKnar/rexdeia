@@ -7,16 +7,15 @@ import { SidebarItem } from './SidebarItem';
 
 export function Sidebar() {
   return (
-    <div className=" flex h-screen flex-col bg-white grow">
+    <div className="flex h-screen grow flex-col bg-white">
       <nav className="flex-1 overflow-y-auto pb-12">
         <section className="space-y-4 py-4">
           <div className="py-2">
             <SidebarHeader />
-            <div className="mb-8 w-full border">
-            </div>
+            <div className="mb-8 w-full border"></div>
             <div>
               {menuItems.map((item) => (
-                <div className="space-y-1 px-4 py-1" key={item.id}>
+                <div className="space-y-1 px-4 py-3" key={item.id}>
                   <SidebarItem {...item} />
                 </div>
               ))}
@@ -24,7 +23,7 @@ export function Sidebar() {
           </div>
         </section>
       </nav>
-      <div className="p-4">
+      <div className="flex-none p-2">
         <SidebarFooter />
       </div>
     </div>

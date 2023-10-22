@@ -21,11 +21,11 @@ export default async function Page() {
   }
 
   return (
-    <section className="flex flex-col gap-[20px] h-full w-full bg-gray-50 px-[25px] py-[40px] sm:px-[50px]">
+    <section className="flex h-full w-full flex-col gap-[20px] bg-gray-50 px-[25px] py-[40px] sm:px-[50px]">
       <AdmissionsBreadcrumb />
       <PageTitle title="Configure" />
 
-      <Tabs defaultValue="admission" className='mt-4'>
+      <Tabs defaultValue="admission" className="mt-4">
         <TabsList>
           <TabsTrigger
             value="admission"

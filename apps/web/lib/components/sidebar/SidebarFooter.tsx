@@ -14,7 +14,7 @@ export function SidebarFooter() {
           <h2 className="text-sm font-normal text-gray-700">Role</h2>
         </div>
       </div>
-      <div className="h-4 w-4 ">
+      <div>
         <UserMenu />
       </div>
     </div>

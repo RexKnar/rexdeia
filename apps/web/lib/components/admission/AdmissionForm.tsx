@@ -52,8 +52,8 @@ export function AdmissionForm({ formConfig, formId }: AdmissionFormProps) {
     if (currentStep > 0) {
       let sectionBasedError = fieldErrorList[currentStep - 1]
         ? currentError.filter(
-          (item: string) => !fieldErrorList[currentStep - 1].includes(item)
-        )
+            (item: string) => !fieldErrorList[currentStep - 1].includes(item)
+          )
         : [];
       sectionBasedError = currentError.filter(
         (item: string) => !oldError.includes(item)
@@ -120,9 +120,9 @@ export function AdmissionForm({ formConfig, formId }: AdmissionFormProps) {
   return (
     <form
       onSubmit={handleSubmit(addAdmissionHandler)}
-      className="mt-[20px] w-full relative"
+      className="relative mt-[20px] w-full"
     >
-      <div className="flex justify-end absolute right-0 top-[-80px]">
+      <div className="absolute right-0 top-[-80px] flex justify-end">
         <AlertDialog>
           <AlertDialogTrigger asChild>
             <Button
@@ -173,10 +173,11 @@ export function AdmissionForm({ formConfig, formId }: AdmissionFormProps) {
                 className="mt-3 cursor-pointer px-4 py-1"
               >
                 <h2
-                  className={`inter px-2 text-sm font-semibold ${selectedSectionIndex === index
-                    ? 'border-l-2 border-primary text-primary'
-                    : 'text-gray-800'
-                    }`}
+                  className={`inter px-2 text-sm font-semibold ${
+                    selectedSectionIndex === index
+                      ? 'border-l-2 border-primary text-primary'
+                      : 'text-gray-800'
+                  }`}
                 >
                   {section.sectionTitle}
                   {errorList[section.sectionTitle] && <XCircle />}
