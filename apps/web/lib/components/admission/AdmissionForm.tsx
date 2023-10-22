@@ -156,13 +156,6 @@ export function AdmissionForm({ formConfig, formId }: AdmissionFormProps) {
         </AlertDialog>
       </div>
 
-      {/* <h1 className="mb-1 text-center text-2xl font-semibold text-primary">
-        {formConfig.json.title}
-      </h1>
-      <p className="mb-5 text-center text-black">
-        {formConfig.json.description}
-      </p> */}
-
       <div className="flex gap-4">
         <ul className="h-fit w-[215px] shrink-0 rounded-lg bg-white py-3">
           <li>

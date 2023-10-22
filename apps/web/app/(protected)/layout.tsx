@@ -1,5 +1,5 @@
 import 'configs/tailwind/styles.css';
-import { Inter, Roboto_Mono } from "next/font/google";
+import { Inter, Roboto_Mono } from 'next/font/google';
 import { ReactNode } from 'react';
 import { Toaster } from 'ui';
 
@@ -28,18 +28,6 @@ export default function RootLayout({ children }: { children: ReactNode }) {
     <html lang="en" className={`${inter.variable} ${roboto_mono.variable}`}>
       <Providers>
         <body>
-          {/* <main className="flex flex-row">
-            <div className="lg:w-1/6">
-              <Suspense fallback={<div>Loading...</div>}>
-                <Sidebar />
-              </Suspense>
-            </div>
-            <div className="pl-2 lg:w-5/6">{children}</div>
-          </main> */}
-          {/* <main className="flex min-h-screen bg-zinc-100">
-            <Sidebar />
-            {children}
-          </main> */}
           <div className="flex h-screen overflow-hidden">
             <aside className="relative hidden flex-[2/6] grow-0 md:flex">
               <Sidebar />
