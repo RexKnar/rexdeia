@@ -31,7 +31,7 @@ export function AddAdmissionContainer({
         <TabsList>
           <TabsTrigger
             value="admission"
-            className="ml-4 mr-2 border text-base font-semibold shadow focus:border-b-4 focus:border-primary"
+            className="mr-2 border text-base font-semibold shadow focus:border-b-4 focus:border-primary"
           >
             Admission form
           </TabsTrigger>

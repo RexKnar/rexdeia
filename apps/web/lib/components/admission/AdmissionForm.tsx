@@ -52,8 +52,8 @@ export function AdmissionForm({ formConfig, formId }: AdmissionFormProps) {
     if (currentStep > 0) {
       let sectionBasedError = fieldErrorList[currentStep - 1]
         ? currentError.filter(
-            (item: string) => !fieldErrorList[currentStep - 1].includes(item)
-          )
+          (item: string) => !fieldErrorList[currentStep - 1].includes(item)
+        )
         : [];
       sectionBasedError = currentError.filter(
         (item: string) => !oldError.includes(item)
@@ -120,9 +120,9 @@ export function AdmissionForm({ formConfig, formId }: AdmissionFormProps) {
   return (
     <form
       onSubmit={handleSubmit(addAdmissionHandler)}
-      className="mt-4 w-full p-5"
+      className="mt-[20px] w-full relative"
     >
-      <div className="flex justify-end">
+      <div className="flex justify-end absolute right-0 top-[-80px]">
         <AlertDialog>
           <AlertDialogTrigger asChild>
             <Button
@@ -156,12 +156,12 @@ export function AdmissionForm({ formConfig, formId }: AdmissionFormProps) {
         </AlertDialog>
       </div>
 
-      <h1 className="mb-1 text-center text-2xl font-semibold text-primary">
+      {/* <h1 className="mb-1 text-center text-2xl font-semibold text-primary">
         {formConfig.json.title}
       </h1>
       <p className="mb-5 text-center text-black">
         {formConfig.json.description}
-      </p>
+      </p> */}
 
       <div className="flex gap-4">
         <ul className="h-fit w-[215px] shrink-0 rounded-lg bg-white py-3">
@@ -173,11 +173,10 @@ export function AdmissionForm({ formConfig, formId }: AdmissionFormProps) {
                 className="mt-3 cursor-pointer px-4 py-1"
               >
                 <h2
-                  className={`inter px-2 text-sm font-semibold ${
-                    selectedSectionIndex === index
-                      ? 'border-l-2 border-primary text-primary'
-                      : 'text-gray-800'
-                  }`}
+                  className={`inter px-2 text-sm font-semibold ${selectedSectionIndex === index
+                    ? 'border-l-2 border-primary text-primary'
+                    : 'text-gray-800'
+                    }`}
                 >
                   {section.sectionTitle}
                   {errorList[section.sectionTitle] && <XCircle />}

@@ -7,15 +7,14 @@ export function AdmissionsBreadcrumb() {
     <Breadcrumb separator="/">
       <BreadcrumbItem>
         <BreadcrumbLink as={Link} href="/">
-          <div className="flex items-center justify-center">
-            <HomeIcon size={16} className="mr-2" />
+          <div className="flex items-center justify-center text-gray-700">
             Home
           </div>
         </BreadcrumbLink>
       </BreadcrumbItem>
       <BreadcrumbItem isCurrentPage>
         <BreadcrumbLink as={Link} href="/admission/add">
-          Admissions
+          <div className='text-gray-900'>Admissions</div>
         </BreadcrumbLink>
       </BreadcrumbItem>
     </Breadcrumb>
