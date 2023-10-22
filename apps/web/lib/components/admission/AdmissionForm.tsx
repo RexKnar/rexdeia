@@ -50,15 +50,9 @@ export function AdmissionForm({ formConfig, formId }: AdmissionFormProps) {
     const updatedFieldErrorList = { ...fieldErrorList };
     let currentError = Object.keys(errors);
     if (currentStep > 0) {
-      let sectionBasedError = fieldErrorList[currentStep - 1]
-        ? currentError.filter(
-            (item: string) => !fieldErrorList[currentStep - 1].includes(item)
-          )
-        : [];
-      sectionBasedError = currentError.filter(
+      updatedFieldErrorList[currentStep] = currentError.filter(
         (item: string) => !oldError.includes(item)
       );
-      updatedFieldErrorList[currentStep] = sectionBasedError;
     } else {
       updatedFieldErrorList[currentStep] = currentError;
     }
