@@ -11,7 +11,7 @@ import { authOptions } from '../../../../lib/auth';
 import { AdmissionPage } from './components/AdmissionPage';
 import { AdmissionsBreadcrumb } from './components/AdmissionsBreadcrumb';
 import { EnquiryPage } from './components/EnquiryPage';
-import { PageTitle } from './components/pageTitle';
+import { PageTitle } from '../../../../lib/components/PageTitle';
 
 export default async function Page() {
   const session = await getServerSession(authOptions);
