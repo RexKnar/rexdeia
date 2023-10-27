@@ -1,5 +1,4 @@
 import { FileInput } from 'lucide-react';
-import Image from 'next/image';
 import { Button } from 'ui';
 
 import { ShareFlyout } from '../../../../lib/components/admission/ShareFlyout';
@@ -11,6 +10,8 @@ import { getAdmissionList } from '../../../api/admissionlist/service';
 import { AdmissionListModel, columns } from './columns';
 import { DashboardBreadcrumb } from './components/DashboardBreadcrumb';
 import { DataTable } from './data-table';
+import { DashboardCard } from './components/DashboardCard';
+import { formatNumberWithSuffix } from 'utils';
 
 async function getData(): Promise<AdmissionListModel[]> {
   const admissionList = await getAdmissionList();
@@ -20,6 +21,13 @@ async function getData(): Promise<AdmissionListModel[]> {
 
 export default async function Page() {
   const data = await getData();
+
+  const cardsStatistics = [
+    { count: 1500, title: 'Admission Request', icon: admissionRequestIcon },
+    { count: 450, title: 'Shortlisted', icon: shortlistedIcon },
+    { count: 3500, title: 'Rejected', icon: rejectedIcon },
+    { count: 300, title: 'In-progress', icon: inProgressIcon },
+  ];
 
   return (
     <section className="w-full bg-gray-50 p-3">
@@ -35,62 +43,14 @@ export default async function Page() {
 
         <div>
           <div className="lg:grid-cols-3s mt-8 grid grid-cols-1 gap-3 sm:flex-row md:grid-cols-2 xl:grid-cols-4">
-            <div className="flex rounded-md border border-blue-100 bg-white p-3 shadow">
-              <div className="rounded-full bg-blue-50">
-                <Image
-                  src={admissionRequestIcon}
-                  alt={'icon'}
-                  width={50}
-                  height={50}
-                ></Image>
-              </div>
-              <div className="ml-4">
-                <span className="text-xs text-gray-700">Admission Request</span>
-                <h1 className="font-semibold">1.5K</h1>
-              </div>
-            </div>
-            <div className="flex rounded-md border border-blue-100 bg-white p-3 shadow">
-              <div className="rounded-full bg-blue-50">
-                <Image
-                  src={shortlistedIcon}
-                  alt={'icon'}
-                  width={50}
-                  height={50}
-                ></Image>
-              </div>
-              <div className="ml-4">
-                <span className="text-xs text-gray-700">Shortlisted</span>
-                <h1 className="font-semibold">450</h1>
-              </div>
-            </div>
-            <div className="flex rounded-md border border-blue-100 bg-white p-3 shadow">
-              <div className="rounded-full bg-blue-50">
-                <Image
-                  src={rejectedIcon}
-                  alt={'icon'}
-                  width={50}
-                  height={50}
-                ></Image>
-              </div>
-              <div className="ml-4">
-                <span className="text-xs text-gray-700">Rejected</span>
-                <h1 className="font-semibold">3.5</h1>
-              </div>
-            </div>
-            <div className="flex rounded-md border border-blue-100 bg-white p-3 shadow">
-              <div className="rounded-full bg-blue-50">
-                <Image
-                  src={inProgressIcon}
-                  alt={'icon'}
-                  width={50}
-                  height={50}
-                ></Image>
-              </div>
-              <div className="ml-4">
-                <span className="text-xs text-gray-700">In-progress</span>
-                <h1 className="font-semibold">3K</h1>
-              </div>
-            </div>
+            {cardsStatistics.map((item, index) => (
+              <DashboardCard
+                key={index}
+                icon={item.icon}
+                title={item.title}
+                count={formatNumberWithSuffix(item.count)}
+              />
+            ))}
           </div>
           <div className="mt-3 grid grid-cols-1 gap-3 md:grid md:grid-cols-2">
             <div className="rounded-md border border-blue-100 bg-white p-3 shadow">

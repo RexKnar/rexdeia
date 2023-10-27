@@ -50,15 +50,9 @@ export function AdmissionForm({ formConfig, formId }: AdmissionFormProps) {
     const updatedFieldErrorList = { ...fieldErrorList };
     let currentError = Object.keys(errors);
     if (currentStep > 0) {
-      let sectionBasedError = fieldErrorList[currentStep - 1]
-        ? currentError.filter(
-            (item: string) => !fieldErrorList[currentStep - 1].includes(item)
-          )
-        : [];
-      sectionBasedError = currentError.filter(
+      updatedFieldErrorList[currentStep] = currentError.filter(
         (item: string) => !oldError.includes(item)
       );
-      updatedFieldErrorList[currentStep] = sectionBasedError;
     } else {
       updatedFieldErrorList[currentStep] = currentError;
     }
@@ -120,9 +114,9 @@ export function AdmissionForm({ formConfig, formId }: AdmissionFormProps) {
   return (
     <form
       onSubmit={handleSubmit(addAdmissionHandler)}
-      className="mt-4 w-full p-5"
+      className="relative mt-[20px] w-full"
     >
-      <div className="flex justify-end">
+      <div className="absolute right-0 top-[-80px] flex justify-end">
         <AlertDialog>
           <AlertDialogTrigger asChild>
             <Button
@@ -155,13 +149,6 @@ export function AdmissionForm({ formConfig, formId }: AdmissionFormProps) {
           </AlertDialogContent>
         </AlertDialog>
       </div>
-
-      <h1 className="mb-1 text-center text-2xl font-semibold text-primary">
-        {formConfig.json.title}
-      </h1>
-      <p className="mb-5 text-center text-black">
-        {formConfig.json.description}
-      </p>
 
       <div className="flex gap-4">
         <ul className="h-fit w-[215px] shrink-0 rounded-lg bg-white py-3">

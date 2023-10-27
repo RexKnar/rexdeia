@@ -21,11 +21,19 @@ export function SidebarItem(menuItem: SidebarMenuItem) {
         }}
         className={cn(
           `flex w-full justify-between rounded-md bg-white p-2 text-sm font-normal text-gray-800 hover:bg-gray-200`,
-          currentPath === menuItem.path && `font-bold text-black`
+          currentPath === menuItem.path && `font-semibold text-black`
         )}
       >
         <div className="flex">
-          {menuItem.icon && <menuItem.icon size={16} className="mr-2" />}
+          {menuItem.icon && (
+            <menuItem.icon
+              size={16}
+              className={cn(
+                `mr-2`,
+                currentPath === menuItem.path && `text-primary`
+              )}
+            />
+          )}
           {menuItem.label}
         </div>
         {menuItem.children &&
@@ -38,15 +46,13 @@ export function SidebarItem(menuItem: SidebarMenuItem) {
       {menuItem.children && isExpanded && (
         <div className={cn('ml-2 w-full overflow-hidden border-l-2 px-2')}>
           {menuItem.children.map((child) => (
-            <div
-              key={child.id}
-              className="w-full p-2 text-sm font-normal text-gray-800"
-            >
+            <div key={child.id} className="w-full p-2 text-sm font-normal">
               <Link
                 href={child.path}
                 className={cn(
-                  `flex w-full rounded-md bg-white p-2 hover:bg-gray-200`,
-                  currentPath === child.path && `bg-gray-200 font-semibold`
+                  `flex w-full rounded-md bg-white p-2 hover:bg-gray-100`,
+                  currentPath === child.path &&
+                    `bg-gray-100 font-semibold text-black `
                 )}
               >
                 {child.icon && <child.icon size={16} className="mr-2" />}
