@@ -1,7 +1,7 @@
 import 'configs/tailwind/styles.css';
 import '../public/assets/css/styles.css';
 
-import { Inter, Roboto_Mono } from "next/font/google";
+import { Inter, Roboto_Mono } from 'next/font/google';
 import type { ReactNode } from 'react';
 
 import Providers from '../lib/Providers';
