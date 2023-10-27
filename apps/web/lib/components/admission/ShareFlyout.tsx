@@ -152,7 +152,7 @@ export function ShareFlyout() {
                 </label>
                 <Input
                   id="actualAmount"
-                  type="number"
+                  type="numeric"
                   placeholder="₹"
                   className="mt-1 border border-primary-200 p-1"
                 />
@@ -166,7 +166,7 @@ export function ShareFlyout() {
                 </label>
                 <Input
                   id="discountAmount"
-                  type="number"
+                  type="numeric"
                   placeholder="₹"
                   className="mt-1 border border-primary-200 p-1"
                 />
