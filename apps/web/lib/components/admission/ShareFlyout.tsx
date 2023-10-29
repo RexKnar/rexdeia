@@ -48,7 +48,7 @@ export function ShareFlyout() {
                   ></Image>
                   <label
                     htmlFor="shareIcon"
-                    className="ml-2 text-xs font-semibold"
+                    className="ml-2 text-sm font-semibold"
                   >
                     Share
                   </label>
@@ -57,7 +57,7 @@ export function ShareFlyout() {
                   <Switch id="toggleSwitch" />
                   <label
                     htmlFor="toggleSwitch"
-                    className="ml-2 text-xs font-semibold"
+                    className="ml-2 text-sm font-semibold"
                   >
                     Inactive
                   </label>
