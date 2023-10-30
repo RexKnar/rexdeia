@@ -48,7 +48,7 @@ export function ShareFlyout() {
                   ></Image>
                   <label
                     htmlFor="shareIcon"
-                    className="ml-2 text-xs font-semibold"
+                    className="ml-2 text-sm font-semibold"
                   >
                     Share
                   </label>
@@ -57,7 +57,7 @@ export function ShareFlyout() {
                   <Switch id="toggleSwitch" />
                   <label
                     htmlFor="toggleSwitch"
-                    className="ml-2 text-xs font-semibold"
+                    className="ml-2 text-sm font-semibold"
                   >
                     Inactive
                   </label>
@@ -78,7 +78,7 @@ export function ShareFlyout() {
             />
             <Files
               size={18}
-              color="primary"
+              color="#6559FC"
               className="absolute right-3 -translate-y-7 transform"
             />
           </section>
@@ -98,7 +98,7 @@ export function ShareFlyout() {
                       <CalendarIcon className="mr-2 h-4 w-4 justify-end" />
                     </label>
                   </PopoverTrigger>
-                  <PopoverContent className="w-auto p-0" align="start">
+                  <PopoverContent className="w-auto bg-white p-0" align="start">
                     <Calendar
                       mode="single"
                       selected={date}
@@ -122,7 +122,7 @@ export function ShareFlyout() {
                       <CalendarIcon className="mr-2 h-4 w-4 justify-end" />
                     </label>
                   </PopoverTrigger>
-                  <PopoverContent className="w-auto p-0" align="start">
+                  <PopoverContent className="w-auto bg-white p-0" align="start">
                     <Calendar
                       mode="single"
                       selected={date}
@@ -152,7 +152,7 @@ export function ShareFlyout() {
                 </label>
                 <Input
                   id="actualAmount"
-                  type="text"
+                  type="numeric"
                   placeholder="₹"
                   className="mt-1 border border-primary-200 p-1"
                 />
@@ -166,7 +166,7 @@ export function ShareFlyout() {
                 </label>
                 <Input
                   id="discountAmount"
-                  type="text"
+                  type="numeric"
                   placeholder="₹"
                   className="mt-1 border border-primary-200 p-1"
                 />
