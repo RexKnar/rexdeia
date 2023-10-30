@@ -78,8 +78,7 @@ export function ShareFlyout() {
             />
             <Files
               size={18}
-              color="#6559FC"
-              className="absolute right-3 -translate-y-7 transform"
+              className="absolute right-3 -translate-y-7 transform text-primary"
             />
           </section>
           <section className="mt-4 grid gap-7">
