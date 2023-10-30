@@ -11,8 +11,8 @@ import {
   SortingState,
   useReactTable,
 } from '@tanstack/react-table';
-import React from 'react';
-import { Button, Input } from 'ui';
+import React, { useEffect, useState } from 'react';
+import { Input } from 'ui';
 import {
   Table,
   TableBody,
@@ -21,20 +21,55 @@ import {
   TableHeader,
   TableRow,
 } from 'ui/components/ui/Table';
+import { AdmissionTableFooter } from '../../../../lib/components/admission/admissionTableFooter';
+import { makeAPICall } from '../../../../lib/api';
+import { LIST_ADMISSION } from '../../../../lib/endpoints';
+import { useSearchParams } from 'next/navigation';
+import { AdmissionListModel } from './columns';
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
+  totalCount: number;
 }
 
 export function DataTable<TData, TValue>({
   columns,
   data,
+  totalCount,
 }: DataTableProps<TData, TValue>) {
+  const searchParams = useSearchParams();
+  const page = Number(searchParams.get('page') ?? '1');
+  const tablePaginationLimit = Number(
+    searchParams.get('tablePaginationLimit') ?? '5'
+  );
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
   );
+  const [currentList, setCurrentList] = useState([]);
+  const pageValue = (page - 1) * tablePaginationLimit;
+
+  useEffect(() => {
+    async function getData() {
+      try {
+        const admissionList = await makeAPICall(LIST_ADMISSION, {
+          pageValue,
+          tablePaginationLimit,
+        });
+        const data: AdmissionListModel[] = JSON.parse(
+          JSON.stringify(admissionList)
+        );
+        setCurrentList(data.map((x, i) => ({ slNo: i + 1, ...x })));
+      } catch (error) {
+        console.log(error);
+      }
+    }
+
+    getData();
+  }, [page, tablePaginationLimit, pageValue]);
+
+  data = currentList;
   const table = useReactTable({
     data,
     columns,
@@ -84,7 +119,6 @@ export function DataTable<TData, TValue>({
               </TableRow>
             ))}
           </TableHeader>
-
           <TableBody>
             {table.getRowModel().rows?.length ? (
               table.getRowModel().rows.map((row) => (
@@ -115,47 +149,7 @@ export function DataTable<TData, TValue>({
           </TableBody>
         </Table>
       </div>
-      <div className="flex items-center justify-between space-x-2 py-4">
-        <div className="text-muted-foreground flex text-sm">
-          <span className="flex items-center gap-1">
-            <div>Page</div>
-            <strong>
-              {table.getState().pagination.pageIndex + 1} of{' '}
-              {table.getPageCount()}
-            </strong>
-          </span>
-          <span className="flex items-center gap-1">
-            | Go to page:
-            <input
-              type="number"
-              defaultValue={table.getState().pagination.pageIndex + 1}
-              onChange={(e) => {
-                const page = e.target.value ? Number(e.target.value) - 1 : 0;
-                table.setPageIndex(page);
-              }}
-              className="w-16 rounded border p-1"
-            />
-          </span>
-        </div>
-        <div className="flex items-center justify-end space-x-2 py-4">
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => table.previousPage()}
-            disabled={!table.getCanPreviousPage()}
-          >
-            Previous
-          </Button>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => table.nextPage()}
-            disabled={!table.getCanNextPage()}
-          >
-            Next
-          </Button>
-        </div>
-      </div>
+      <AdmissionTableFooter totalCount={totalCount} />
     </div>
   );
 }

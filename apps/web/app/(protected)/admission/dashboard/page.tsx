@@ -6,10 +6,10 @@ import admissionRequestIcon from '../../../../public/assets/images/admission-req
 import inProgressIcon from '../../../../public/assets/images/in-progress.svg';
 import rejectedIcon from '../../../../public/assets/images/rejected.svg';
 import shortlistedIcon from '../../../../public/assets/images/short-listed.svg';
-import { getAdmissionList } from '../../../api/admissionlist/service';
-import { AdmissionListModel, columns } from './columns';
+import { columns } from './columns';
 import { DashboardBreadcrumb } from './components/DashboardBreadcrumb';
 import { DataTable } from './data-table';
+<<<<<<< HEAD
 import { DashboardCard } from './components/DashboardCard';
 import { formatNumberWithSuffix } from 'utils';
 
@@ -29,6 +29,12 @@ export default async function Page() {
     { count: 300, title: 'In-progress', icon: inProgressIcon },
   ];
 
+=======
+import { db } from '../../../../lib/db';
+
+export default async function Page() {
+  const totalCount = await db.admissionForm.count();
+>>>>>>> ce1f974e2bfd3442574653cf834ec1c6084d63c7
   return (
     <section className="w-full bg-gray-50 p-3">
       <section>
@@ -86,7 +92,7 @@ export default async function Page() {
           Admission List
         </h1>
         <div className="mx-auto py-10">
-          <DataTable columns={columns} data={data} />
+          <DataTable columns={columns} data={[]} totalCount={totalCount} />
         </div>
       </section>
     </section>

@@ -1,4 +1,5 @@
 'use client';
+
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
@@ -8,7 +9,7 @@ import { LIST_ENQUIRY } from '../../endpoints';
 export function EnquiryList() {
   const searchParams = useSearchParams();
   const page = searchParams.get('page') ?? '1';
-  const rout = useRouter();
+  const router = useRouter();
   const [enquiryList, setEnquiryList] = useState([]);
   useEffect(() => {
     (async function ListAdmissionHandler() {
@@ -54,7 +55,7 @@ export function EnquiryList() {
           type="submit"
           className="text-primary-foreground mt-6 h-6 cursor-pointer rounded-md bg-primary text-white hover:bg-primary/90"
           onClick={() => {
-            rout.push(`?page=${Number(page) - 1}`);
+            router.push(`?page=${Number(page) - 1}`);
           }}
         >
           privious
@@ -63,7 +64,7 @@ export function EnquiryList() {
           type="submit"
           className="text-primary-foreground mt-6 h-6 cursor-pointer rounded-md bg-primary text-white hover:bg-primary/90"
           onClick={() => {
-            rout.push(`?page=${Number(page) + 1}`);
+            router.push(`?page=${Number(page) + 1}`);
           }}
         >
           next
