@@ -22,7 +22,7 @@
     "fs": "0.0.1-security",
     "lucide-react": "^0.290.0",
     "nanoid": "^5.0.0",
-    "next": "^13.4.12",
+    "next": "^14.0.0",
     "next-auth": "4.23.2",
     "next-intl": "2.21.0",
     "postcss": "^8.4.29",
