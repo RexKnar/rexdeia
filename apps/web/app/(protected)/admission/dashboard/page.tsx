@@ -6,15 +6,16 @@ import admissionRequestIcon from '../../../../public/assets/images/admission-req
 import inProgressIcon from '../../../../public/assets/images/in-progress.svg';
 import rejectedIcon from '../../../../public/assets/images/rejected.svg';
 import shortlistedIcon from '../../../../public/assets/images/short-listed.svg';
-import { columns } from './columns';
+import { AdmissionListModel, columns } from './columns';
 import { DashboardBreadcrumb } from './components/DashboardBreadcrumb';
 import { DataTable } from './data-table';
-<<<<<<< HEAD
 import { DashboardCard } from './components/DashboardCard';
 import { formatNumberWithSuffix } from 'utils';
+import { getAdmissionList } from '../../../api/admissionlist/service';
+import { db } from '../../../../lib/db';
 
 async function getData(): Promise<AdmissionListModel[]> {
-  const admissionList = await getAdmissionList();
+  const admissionList = await getAdmissionList(1, 1);
   const data: AdmissionListModel[] = JSON.parse(JSON.stringify(admissionList));
   return data.map((x, i) => ({ slNo: i + 1, ...x }));
 }
@@ -28,13 +29,7 @@ export default async function Page() {
     { count: 3500, title: 'Rejected', icon: rejectedIcon },
     { count: 300, title: 'In-progress', icon: inProgressIcon },
   ];
-
-=======
-import { db } from '../../../../lib/db';
-
-export default async function Page() {
   const totalCount = await db.admissionForm.count();
->>>>>>> ce1f974e2bfd3442574653cf834ec1c6084d63c7
   return (
     <section className="w-full bg-gray-50 p-3">
       <section>

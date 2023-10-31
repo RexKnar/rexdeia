@@ -49,7 +49,7 @@ export function SignInForm() {
       {error && (
         <Alert className="mb-2">
           <AlertCircleIcon className="h-4 w-4" />
-          <AlertDescription>{errors[error]}</AlertDescription>
+          <AlertDescription>{errors.INVALID_PASSWORD}</AlertDescription>
         </Alert>
       )}
       <label className="mt-5 block text-sm font-medium text-slate-500">
