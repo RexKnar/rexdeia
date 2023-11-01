@@ -15,6 +15,7 @@ export const UPDATE_DEPARTMENT = `UPDATE_DEPARTMENT`;
 export const DELETE_DEPARTMENT = `DELETE_DEPARTMENT`;
 export const ONBOARD_ACCOUNT = `ONBOARD_ACCOUNT`;
 export const UPDATE_ORGANIZATION = `UPDATE_ORGANIZATION`;
+export const FETCH_ORGANIZATION_BY_ID = `FETCH_ORGANIZATION_BY_ID`;
 export const ADD_PAYMENT = `ADD_PAYMENT`;
 
 type EndpointDetails = Record<
@@ -74,6 +75,10 @@ export default <EndpointDetails>{
   [ONBOARD_ACCOUNT]: {
     requestType: `POST`,
     endpoint: `/api/onboarding/account`,
+  },
+  [FETCH_ORGANIZATION_BY_ID]: {
+    requestType: `GET`,
+    endpoint: `/api/organization/[organizationId]`,
   },
   [UPDATE_ORGANIZATION]: {
     requestType: `PUT`,
