@@ -17,6 +17,13 @@ const errorValue = {
   too_small: 'Password must contain at least 6 characters.',
 };
 
+const validatePhoneNumber = (phoneNumber) => {
+  if (phoneNumber.length < 10) {
+    return 'Invalid Phone Number';
+  }
+  return true;
+};
+
 type OnboardUserResponse = {
   name: string;
   email: string;
@@ -159,6 +166,7 @@ export function SignUpForm() {
             placeholder="Enter your phone number"
             {...register('phoneNumber', {
               required: 'Your phone number is needed to sign up',
+              validate: validatePhoneNumber,
             })}
           />
           <div className="absolute inset-y-0 right-0 flex cursor-pointer items-center pr-2">
