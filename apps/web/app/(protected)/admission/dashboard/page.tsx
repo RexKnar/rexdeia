@@ -30,6 +30,7 @@ export default async function Page() {
     { count: 3500, title: 'Rejected', icon: rejectedIcon },
     { count: 300, title: 'In-progress', icon: inProgressIcon },
   ];
+
   return (
     <section className="w-full bg-gray-50 p-3">
       <section>
