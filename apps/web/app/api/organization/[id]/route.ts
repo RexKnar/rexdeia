@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 
 import { authOptions } from '../../../../lib/auth';
-import { updateOrganizationById } from './service';
+import { getOrganizationById, updateOrganizationById } from './service';
 import { validateUpdateOrganizationDetails } from './validator';
 
 export async function PUT(request: Request, route: { params: { id: string } }) {
@@ -29,5 +29,28 @@ export async function PUT(request: Request, route: { params: { id: string } }) {
     return new NextResponse(JSON.stringify({ error: e.message }), {
       status: e.message === 'VALIDATION_ERROR' ? 400 : 500,
     });
+  }
+}
+
+export async function GET(request: Request, route: { params: { id: string } }) {
+  const session = await getServerSession(authOptions);
+  if (!session || session.organizationId !== route.params.id) {
+    return new NextResponse(JSON.stringify({ error: 'UNAUTHORIZED' }), {
+      status: 401,
+    });
+  }
+  const organization = await getOrganizationById(route.params.id);
+
+  if (organization) {
+    return new NextResponse(JSON.stringify(organization), {
+      status: 200,
+    });
+  } else {
+    return new NextResponse(
+      JSON.stringify(`Organization ${route.params.id} not Found`),
+      {
+        status: 404,
+      }
+    );
   }
 }

@@ -11,17 +11,18 @@ import { DashboardBreadcrumb } from './components/DashboardBreadcrumb';
 import { DataTable } from './data-table';
 import { DashboardCard } from './components/DashboardCard';
 import { formatNumberWithSuffix } from 'utils';
-import { getAdmissionList } from '../../../api/admissionlist/service';
 import { db } from '../../../../lib/db';
+import { getAdmissionList } from '../../../api/admissionlist/service';
 
 async function getData(): Promise<AdmissionListModel[]> {
-  const admissionList = await getAdmissionList(1, 1);
+  const admissionList = await getAdmissionList(0, 0);
   const data: AdmissionListModel[] = JSON.parse(JSON.stringify(admissionList));
   return data.map((x, i) => ({ slNo: i + 1, ...x }));
 }
 
 export default async function Page() {
   const data = await getData();
+  const totalCount = await db.admissionForm.count();
 
   const cardsStatistics = [
     { count: 1500, title: 'Admission Request', icon: admissionRequestIcon },
@@ -29,7 +30,6 @@ export default async function Page() {
     { count: 3500, title: 'Rejected', icon: rejectedIcon },
     { count: 300, title: 'In-progress', icon: inProgressIcon },
   ];
-  const totalCount = await db.admissionForm.count();
   return (
     <section className="w-full bg-gray-50 p-3">
       <section>
