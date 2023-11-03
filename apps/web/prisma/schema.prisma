@@ -248,6 +248,7 @@ model Form {
   branchId       String?         @db.ObjectId
   EnquiryForm    EnquiryForm[]
   AdmissionForm  AdmissionForm[]
+  Share          Share[]
 }
 
 model Payment {
@@ -272,4 +273,16 @@ model PaymentAssociations {
   deletedAt           DateTime?
   Payment             Payment?  @relation(fields: [paymentId], references: [id])
   paymentId           String?   @db.ObjectId
+}
+
+model Share {
+  id                  String      @id @default(auto()) @map("_id") @db.ObjectId
+  isActive            Boolean     @default(true)
+  acceptPayment       Boolean     @default(false)
+  actualAmount        Float?
+  discountAmount      Float?
+  activeFromDate      DateTime?
+  activeToDate        DateTime?
+  form                Form        @relation(fields: [formId], references: [id])
+  formId              String      @db.ObjectId
 }

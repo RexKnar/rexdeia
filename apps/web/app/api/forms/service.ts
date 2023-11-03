@@ -12,3 +12,11 @@ export async function getFormByCriteria(criteria: FormCriteriaModel) {
     },
   });
 }
+
+export async function getFormById(formId: string) {
+  return await db.form.findUnique({
+    where: {
+      id: formId,
+    },
+  });
+}
