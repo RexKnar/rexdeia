@@ -4,7 +4,6 @@ export const ADD_ENQUIRY = `ADD_ENQUIRY`;
 export const REGISTER_USER = `REGISTER_USER`;
 export const ADD_ADMISSION = `ADD_ADMISSION`;
 export const UPDATE_BRANCH = `UPDATE_BRANCH`;
-export const LIST_ADMISSION = `LIST_ADMISSION`;
 export const LIST_ENQUIRY = `LIST_ENQUIRY`;
 export const ADD_DEPARTMENT = `ADD_DEPARTMENT`;
 export const ADD_REGULATION = `ADD_REGULATION`;
@@ -17,6 +16,8 @@ export const ONBOARD_ACCOUNT = `ONBOARD_ACCOUNT`;
 export const UPDATE_ORGANIZATION = `UPDATE_ORGANIZATION`;
 export const FETCH_ORGANIZATION_BY_ID = `FETCH_ORGANIZATION_BY_ID`;
 export const ADD_PAYMENT = `ADD_PAYMENT`;
+export const GET_USER_DETAILS = `GET_USER_DETAILS`;
+export const GET_ADMISSIONS_LIST = `GET_ADMISSIONS_LIST`;
 
 type EndpointDetails = Record<
   string,
@@ -31,10 +32,6 @@ export default <EndpointDetails>{
   [ADD_ADMISSION]: {
     requestType: `POST`,
     endpoint: `/api/admission`,
-  },
-  [LIST_ADMISSION]: {
-    requestType: `POST`,
-    endpoint: `/api/admissionlist`,
   },
   [ADD_ENQUIRY]: {
     requestType: `POST`,
@@ -91,5 +88,13 @@ export default <EndpointDetails>{
   [ADD_PAYMENT]: {
     requestType: `POST`,
     endpoint: `/api/payment`,
+  },
+  [GET_USER_DETAILS]: {
+    requestType: `GET`,
+    endpoint: `/api/user`,
+  },
+  [GET_ADMISSIONS_LIST]: {
+    requestType: `GET`,
+    endpoint: `/api/admission`,
   },
 };

@@ -20,10 +20,10 @@ type AccountModal = {
 
 interface SessionModal {
   id: string;
-  sessionToken: string;
-  userId: string;
   expires: Date;
   user: UserModal;
+  userId: string;
+  sessionToken: string;
 }
 
 export type UserModal = {
@@ -41,3 +41,8 @@ export type UserModal = {
   CreatedOrganization: OrganizationModal[];
   userOrganizations: UserOrganizationModal[];
 };
+
+export type GetUserDetailsByIdModel = Pick<
+  UserModal,
+  'id' | 'name' | 'email' | 'image' | 'userOrganizations'
+>;

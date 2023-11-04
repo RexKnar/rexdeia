@@ -71,3 +71,10 @@ export async function addAdmission(
     },
   });
 }
+
+export async function getAdmissionsList(page: number, pageSize: number) {
+  return await db.admissionForm.findMany({
+    take: pageSize,
+    skip: (page - 1) * pageSize,
+  });
+}

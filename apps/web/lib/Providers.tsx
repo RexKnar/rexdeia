@@ -1,17 +1,35 @@
 'use client';
 
 import { SessionProvider } from 'next-auth/react';
-import { FC, ReactNode } from 'react';
+import { FC, ReactNode, useState } from 'react';
 import { ToastProvider } from 'ui';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 
 interface LayoutProps {
   children: ReactNode;
 }
 
 const Providers: FC<LayoutProps> = ({ children }) => {
+  const [queryClient] = useState(
+    () =>
+      new QueryClient({
+        defaultOptions: {
+          queries: {
+            staleTime: 5 * 1000,
+          },
+        },
+      })
+  );
+
   return (
     <SessionProvider>
-      <ToastProvider>{children}</ToastProvider>
+      <ToastProvider>
+        <QueryClientProvider client={queryClient}>
+          <ReactQueryDevtools initialIsOpen={false} />
+          {children}
+        </QueryClientProvider>
+      </ToastProvider>
     </SessionProvider>
   );
 };
