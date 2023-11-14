@@ -26,7 +26,7 @@ export const menuItems: SidebarMenuItem[] = [
         id: 'admission-addnew1',
         label: 'Add new',
         icon: null,
-        path: '/test1',
+        path: '/students/add',
       },
       {
         id: 'admission-analytics1',

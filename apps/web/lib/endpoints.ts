@@ -16,6 +16,7 @@ export const ONBOARD_ACCOUNT = `ONBOARD_ACCOUNT`;
 export const UPDATE_ORGANIZATION = `UPDATE_ORGANIZATION`;
 export const FETCH_ORGANIZATION_BY_ID = `FETCH_ORGANIZATION_BY_ID`;
 export const ADD_PAYMENT = `ADD_PAYMENT`;
+export const ADD_STUDENT = `ADD_STUDENT`;
 export const GET_USER_DETAILS = `GET_USER_DETAILS`;
 export const GET_ADMISSIONS_LIST = `GET_ADMISSIONS_LIST`;
 export const GET_ADMISSIONS_FORM_SHARE_DETAILS = `GET_ADMISSIONS_FORM_SHARE_DETAILS`;
@@ -91,6 +92,10 @@ export default <EndpointDetails>{
   [ADD_PAYMENT]: {
     requestType: `POST`,
     endpoint: `/api/payment`,
+  },
+  [ADD_STUDENT]: {
+    requestType: `POST`,
+    endpoint: `/api/student`,
   },
   [GET_USER_DETAILS]: {
     requestType: `GET`,

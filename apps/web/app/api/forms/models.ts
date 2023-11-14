@@ -44,12 +44,12 @@ export type FormModel = {
   id: string;
   isActive: boolean;
   organizationId: string;
-  type: 'Admission' | 'Enquiry';
+  type: 'Admission' | 'Enquiry' | 'AddStudent';
   json: CreateFormRequestPayload;
 };
 
 export type FormCriteriaModel = {
   branchId: string;
   organizationId: string;
-  type: 'Admission' | 'Enquiry';
+  type: 'Admission' | 'Enquiry' ;
 };
