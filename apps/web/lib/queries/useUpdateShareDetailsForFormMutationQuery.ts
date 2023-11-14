@@ -1,21 +1,22 @@
-import { CreateShareModal, ShareModal } from '../domain';
+import { ShareModal } from '../domain';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { makeAPICall } from '../api';
 import {
   GET_ADMISSIONS_FORM_SHARE_DETAILS,
-  SAVE_SHARE_FOR_FORM,
+  UPDATE_SHARE_FOR_FORM,
 } from '../endpoints';
+import { UpdateShareModal } from '../domain/shareModal';
 
-export function useSaveShareDetailsForFormMutationQuery() {
+export function useUpdateShareDetailsForFormMutationQuery(shareId: string) {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async (shareDetails: CreateShareModal) => {
+    mutationFn: async (shareDetails: UpdateShareModal) => {
       return await makeAPICall<ShareModal>(
-        SAVE_SHARE_FOR_FORM,
+        UPDATE_SHARE_FOR_FORM,
         shareDetails,
         {},
-        {}
+        { shareId: shareId }
       );
     },
     onSuccess: async (data) => {

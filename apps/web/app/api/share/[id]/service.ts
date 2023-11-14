@@ -5,6 +5,8 @@ export async function createShare(createShare: CreateShare) {
   return await db.share.create({
     data: {
       ...createShare,
+      activeToDate: new Date(createShare.activeToDate),
+      activeFromDate: new Date(createShare.activeFromDate),
     },
   });
 }

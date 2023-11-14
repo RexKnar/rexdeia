@@ -21,3 +21,13 @@ export type CreateShareModal = Pick<
   | 'activeFromDate'
   | 'discountAmount'
 >;
+
+export type UpdateShareModal = Pick<
+  ShareModal,
+  | 'formId'
+  | 'actualAmount'
+  | 'activeToDate'
+  | 'acceptPayment'
+  | 'activeFromDate'
+  | 'discountAmount'
+>;

@@ -19,7 +19,8 @@ export const ADD_PAYMENT = `ADD_PAYMENT`;
 export const GET_USER_DETAILS = `GET_USER_DETAILS`;
 export const GET_ADMISSIONS_LIST = `GET_ADMISSIONS_LIST`;
 export const GET_ADMISSIONS_FORM_SHARE_DETAILS = `GET_ADMISSIONS_FORM_SHARE_DETAILS`;
-export const SAVE_SHARE_FOR_FORM = `SAVE_SHARE_FOR_FORM`;
+export const CREATE_SHARE_FOR_FORM = `CREATE_SHARE_FOR_FORM`;
+export const UPDATE_SHARE_FOR_FORM = `UPDATE_SHARE_FOR_FORM`;
 
 type EndpointDetails = Record<
   string,
@@ -103,8 +104,12 @@ export default <EndpointDetails>{
     requestType: `GET`,
     endpoint: `/api/forms/[formId]/share`,
   },
-  [SAVE_SHARE_FOR_FORM]: {
+  [CREATE_SHARE_FOR_FORM]: {
     requestType: `POST`,
     endpoint: `/api/share`,
+  },
+  [UPDATE_SHARE_FOR_FORM]: {
+    requestType: `PUT`,
+    endpoint: `/api/share/[shareId]`,
   },
 };

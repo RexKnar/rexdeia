@@ -25,7 +25,7 @@ export async function POST(request: NextRequest) {
         message: e.message,
       }),
       {
-        status: 404,
+        status: 400,
       }
     );
   }

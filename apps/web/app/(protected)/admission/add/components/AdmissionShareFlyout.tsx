@@ -1,9 +1,11 @@
 'use client';
 
 import Image from 'next/image';
-import React, { useState } from 'react';
-import { CalendarIcon, Files, Share2 } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
+import { AlertCircleIcon, CalendarIcon, Files, Share2 } from 'lucide-react';
 import {
+  Alert,
+  AlertDescription,
   Button,
   Calendar,
   Input,
@@ -12,41 +14,77 @@ import {
   PopoverTrigger,
   Sheet,
   SheetContent,
+  SheetDescription,
   SheetHeader,
   SheetTitle,
   SheetTrigger,
   Switch,
+  Text,
+  useToast,
 } from 'ui';
 
 import shareIcon from '../../../../../public/assets/images/shareIcon.svg';
-import { useSaveShareDetailsForFormMutationQuery } from '../../../../../lib/queries/useSaveShareDetailsForFormMutationQuery';
+import { useCreateShareDetailsForFormMutationQuery } from '../../../../../lib/queries/useCreateShareDetailsForFormMutationQuery';
 import { useGetAdmissionFormShareDetailsQuery } from '../../../../../lib/queries/useGetAdmissionFormShareDetailsQuery';
+import { copyToClipboard } from 'utils';
+import { useUpdateShareDetailsForFormMutationQuery } from '../../../../../lib/queries/useUpdateShareDetailsForFormMutationQuery';
 
 type AdmissionShareFlyoutProps = {
   formId: string;
 };
 
 export function AdmissionShareFlyout({ formId }: AdmissionShareFlyoutProps) {
-  const { data: shareDetails } = useGetAdmissionFormShareDetailsQuery(formId);
-  const { mutateAsync, isPending } = useSaveShareDetailsForFormMutationQuery();
+  const { toast } = useToast();
 
-  const [activeFromDate, setActiveFromDate] = useState<Date>();
-  const [activeToDate, setActiveToDate] = useState<Date>();
+  const [shareDetailsId, setShareDetailsId] = useState<string>();
+
+  const [activeToDate, setActiveToDate] = useState(new Date());
+  const [activeFromDate, setActiveFromDate] = useState(new Date());
+
+  const [isLinkActive, setIsLinkActive] = useState(false);
   const [acceptPayment, setAcceptPayment] = useState(false);
+
   const [actualAmount, setActualAmount] = useState<number>();
   const [discountAmount, setDiscountAmount] = useState<number>();
-  const [isLinkActive, setIsLinkActive] = useState(false);
 
-  async function handleOnSaveButtonClick() {
-    await mutateAsync({
-      formId,
-      activeToDate,
-      actualAmount,
-      acceptPayment,
-      discountAmount,
-      activeFromDate,
-    });
-  }
+  const { data: shareDetailsList } =
+    useGetAdmissionFormShareDetailsQuery(formId);
+
+  const {
+    mutateAsync: mutateUpdateShareDetailsAsync,
+    isPending: isPendingUpdateShareDetails,
+    isError: isErrorUpdateShareDetails,
+  } = useUpdateShareDetailsForFormMutationQuery(shareDetailsId);
+
+  const {
+    mutateAsync: mutateCreateShareDetailsAsync,
+    isPending: isPendingCreateShareDetails,
+    isError: isErrorCreateShareDetails,
+  } = useCreateShareDetailsForFormMutationQuery();
+
+  useEffect(() => {
+    if (isErrorCreateShareDetails || isErrorUpdateShareDetails) {
+      toast({
+        title: 'Error',
+        variant: 'destructive',
+        description: 'Something went wrong. Please try again later.',
+      });
+    }
+  }, [isErrorCreateShareDetails, isErrorUpdateShareDetails]);
+
+  useEffect(() => {
+    if (shareDetailsList && shareDetailsList.length) {
+      const shareDetails = shareDetailsList[0];
+
+      setShareDetailsId(shareDetails.id);
+      setIsLinkActive(shareDetails.isActive);
+      setActualAmount(shareDetails.actualAmount);
+      setAcceptPayment(shareDetails.acceptPayment);
+      setDiscountAmount(shareDetails.discountAmount);
+      setActiveToDate(new Date(shareDetails.activeToDate));
+      setActiveFromDate(new Date(shareDetails.activeFromDate));
+    }
+  }, [shareDetailsList]);
 
   return (
     <Sheet>
@@ -92,24 +130,52 @@ export function AdmissionShareFlyout({ formId }: AdmissionShareFlyoutProps) {
                 </label>
               </div>
             </div>
+            <hr className="my-5 border-t border-gray-300"></hr>
           </SheetTitle>
+          <SheetDescription>
+            <Alert className="mb-2">
+              <AlertCircleIcon className="h-4 w-4" />
+              <AlertDescription>
+                <Text variant="sm-regular">
+                  Share your admission form with the public to streamline the
+                  application process.
+                </Text>
+                <br />
+                <Text variant="sm-regular">
+                  Just make sure you've toggled the <strong>Active</strong>{' '}
+                  switch on the top, if you want to make the form active for
+                  public. Further, you can customize the availability of the
+                  form by setting <strong>active from</strong> and{' '}
+                  <strong>expires on</strong> dates.
+                </Text>
+              </AlertDescription>
+            </Alert>
+          </SheetDescription>
         </SheetHeader>
-        <hr className="my-5 border-t border-gray-300"></hr>
-        {shareDetails && shareDetails.length && (
+        {shareDetailsList && shareDetailsList.length && (
           <section className="relative">
             <label htmlFor="url" className="text-sm font-normal text-gray-700">
               URL
             </label>
             <Input
               id="url"
-              disabled
               type="text"
-              className="mt-1 w-full border border-primary p-3 text-xs font-normal"
-              placeholder={shareDetails[0].id}
+              className="mt-1 w-full p-3 text-xs font-normal"
+              value={`https://www.acadx.io/forms/${shareDetailsList[0].id}`}
             />
             <Files
-              size={18}
-              className="absolute right-3 -translate-y-7 transform cursor-pointer text-primary"
+              size={28}
+              onClick={async () => {
+                await copyToClipboard(
+                  `https://www.acadx.io/forms/${shareDetailsList[0].id}`
+                );
+
+                toast({
+                  title: 'Success',
+                  description: 'Link copied to clipboard successfully.',
+                });
+              }}
+              className="absolute right-1 top-[34px] transform cursor-pointer rounded-lg p-1.5 text-primary hover:bg-gray-100"
             />
           </section>
         )}
@@ -125,7 +191,7 @@ export function AdmissionShareFlyout({ formId }: AdmissionShareFlyoutProps) {
                   className="rounded-md border border-primary-200 p-1.5"
                 >
                   <label className="flex justify-between text-sm font-normal text-gray-700">
-                    02/10/2023
+                    {activeFromDate.toDateString()}
                     <CalendarIcon className="mr-2 h-4 w-4 justify-end" />
                   </label>
                 </PopoverTrigger>
@@ -149,7 +215,7 @@ export function AdmissionShareFlyout({ formId }: AdmissionShareFlyoutProps) {
                   className="rounded-md border border-primary-200 p-1.5"
                 >
                   <label className="flex justify-between text-sm font-normal text-gray-700">
-                    02/10/2023
+                    {activeToDate.toDateString()}
                     <CalendarIcon className="mr-2 h-4 w-4 justify-end" />
                   </label>
                 </PopoverTrigger>
@@ -219,13 +285,43 @@ export function AdmissionShareFlyout({ formId }: AdmissionShareFlyoutProps) {
           <Button
             size="lg"
             variant="default"
-            disabled={isPending}
-            aria-disabled={isPending}
-            onClick={handleOnSaveButtonClick}
-            aria-label={isPending ? 'Saving...' : 'Save'}
+            disabled={
+              isPendingCreateShareDetails || isPendingUpdateShareDetails
+            }
+            aria-disabled={
+              isPendingCreateShareDetails || isPendingUpdateShareDetails
+            }
+            onClick={async () => {
+              if (shareDetailsId) {
+                await mutateUpdateShareDetailsAsync({
+                  formId,
+                  activeToDate,
+                  actualAmount,
+                  acceptPayment,
+                  discountAmount,
+                  activeFromDate,
+                });
+              } else {
+                await mutateCreateShareDetailsAsync({
+                  formId,
+                  activeToDate,
+                  actualAmount,
+                  acceptPayment,
+                  discountAmount,
+                  activeFromDate,
+                });
+              }
+            }}
+            aria-label={
+              isPendingCreateShareDetails || isPendingUpdateShareDetails
+                ? 'Saving...'
+                : 'Save'
+            }
             className="mx-auto flex justify-center px-16 py-4"
           >
-            {isPending ? 'Saving...' : 'Save'}
+            {isPendingCreateShareDetails || isPendingUpdateShareDetails
+              ? 'Saving...'
+              : 'Save'}
           </Button>
         </section>
       </SheetContent>

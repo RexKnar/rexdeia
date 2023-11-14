@@ -5,8 +5,8 @@ import { getFormById } from '../../forms/service';
 
 const createSchema = z.object({
   isActive: z.boolean().nullable().optional(),
-  activeFromDate: z.date().nullable().optional(),
-  activeToDate: z.date().nullable().optional(),
+  activeFromDate: z.string().nullable().optional(),
+  activeToDate: z.string().nullable().optional(),
   acceptPayment: z.boolean().nullable().optional(),
   actualAmount: z.number().nullable().optional(),
   discountAmount: z.number().nullable().optional(),
@@ -15,8 +15,8 @@ const createSchema = z.object({
 
 const updateSchema = z.object({
   isActive: z.boolean().nullable().optional(),
-  activeFromDate: z.date().nullable().optional(),
-  activeToDate: z.date().nullable().optional(),
+  activeFromDate: z.string().nullable().optional(),
+  activeToDate: z.string().nullable().optional(),
   acceptPayment: z.boolean().nullable().optional(),
   actualAmount: z.number().nullable().optional(),
   discountAmount: z.number().nullable().optional(),
