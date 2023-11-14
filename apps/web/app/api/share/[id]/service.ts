@@ -12,7 +12,7 @@ export async function createShare(createShare: CreateShare) {
 export async function updateShareById(id: string, updateShare: UpdateShare) {
   return await db.share.update({
     data: {
-      isActive: updateShare.isActive,
+      isActive: true,
       acceptPayment: updateShare.acceptPayment,
       actualAmount: updateShare.actualAmount,
       discountAmount: updateShare.discountAmount,
@@ -25,12 +25,11 @@ export async function updateShareById(id: string, updateShare: UpdateShare) {
   });
 }
 export async function getShareById(shareId: string) {
-  const share = await db.share.findUnique({
+  return await db.share.findUnique({
     where: {
       id: shareId,
     },
   });
-  return share;
 }
 
 export async function getShareByFormId(formId: string) {

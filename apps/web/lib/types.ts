@@ -19,3 +19,5 @@ export type Method =
   | 'LINK'
   | 'unlink'
   | 'UNLINK';
+
+export type NullableString = null | string;

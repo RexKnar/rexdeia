@@ -18,6 +18,8 @@ export const FETCH_ORGANIZATION_BY_ID = `FETCH_ORGANIZATION_BY_ID`;
 export const ADD_PAYMENT = `ADD_PAYMENT`;
 export const GET_USER_DETAILS = `GET_USER_DETAILS`;
 export const GET_ADMISSIONS_LIST = `GET_ADMISSIONS_LIST`;
+export const GET_ADMISSIONS_FORM_SHARE_DETAILS = `GET_ADMISSIONS_FORM_SHARE_DETAILS`;
+export const SAVE_SHARE_FOR_FORM = `SAVE_SHARE_FOR_FORM`;
 
 type EndpointDetails = Record<
   string,
@@ -96,5 +98,13 @@ export default <EndpointDetails>{
   [GET_ADMISSIONS_LIST]: {
     requestType: `GET`,
     endpoint: `/api/admission`,
+  },
+  [GET_ADMISSIONS_FORM_SHARE_DETAILS]: {
+    requestType: `GET`,
+    endpoint: `/api/forms/[formId]/share`,
+  },
+  [SAVE_SHARE_FOR_FORM]: {
+    requestType: `POST`,
+    endpoint: `/api/share`,
   },
 };

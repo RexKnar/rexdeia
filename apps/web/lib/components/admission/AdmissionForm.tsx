@@ -1,32 +1,20 @@
 'use client';
 
 import { Loader2, XCircle } from 'lucide-react';
-import React, { useRef, useState } from 'react';
+import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-  Button,
-  Input,
-} from 'ui';
-import { useToast } from 'ui/hooks/useToast';
-import { copyToClipboard } from 'utils';
 
 import { makeAPICall } from '../../api';
 import { ADD_ADMISSION } from '../../endpoints';
+import { AdmissionShareFlyout } from '../../../app/(protected)/admission/add/components/AdmissionShareFlyout';
+import { useGetAdmissionFormShareDetailsQuery } from '../../queries/useGetAdmissionFormShareDetailsQuery';
 
 type AdmissionFormProps = {
   formId: string;
   formConfig: Record<string, any>;
 };
 
-export function AdmissionForm({ formConfig, formId }: AdmissionFormProps) {
+export function AdmissionForm({ formId, formConfig }: AdmissionFormProps) {
   const {
     register,
     handleSubmit,
@@ -34,12 +22,15 @@ export function AdmissionForm({ formConfig, formId }: AdmissionFormProps) {
   } = useForm({
     mode: 'onBlur',
   });
+
   const [errorList, setErrorList] = useState({});
   const [fieldErrorList, setFieldErrorList] = useState({});
   const [oldError, setOldError] = useState([]);
   const [currentStep, setCurrentStep] = useState(0);
   const totalSteps = formConfig.json.formSections.length;
   const [selectedSectionIndex, setSelectedSectionIndex] = useState(0);
+
+  useGetAdmissionFormShareDetailsQuery(formId);
 
   const nextStep = (sectionTitle: string, index: number) => {
     setOldError(Object.keys(errors));
@@ -92,62 +83,13 @@ export function AdmissionForm({ formConfig, formId }: AdmissionFormProps) {
     }
   }
 
-  let domain = '';
-  if (typeof window !== 'undefined') {
-    domain = window.location.host;
-  }
-  const shareableURL = `${domain}/forms/${formConfig.organizationId}`;
-  const inputRef = useRef(null);
-
-  const { toast } = useToast();
-  const handleCopyClick = async () => {
-    if (inputRef.current) {
-      inputRef.current.select();
-      await copyToClipboard(shareableURL);
-
-      toast({
-        description: 'URL copied to clipboard',
-      });
-    }
-  };
-
   return (
     <form
       onSubmit={handleSubmit(addAdmissionHandler)}
       className="relative mt-[20px] w-full"
     >
-      <div className="absolute right-0 top-[-80px] flex justify-end">
-        <AlertDialog>
-          <AlertDialogTrigger asChild>
-            <Button
-              className="mt-6 cursor-pointer rounded-md bg-primary px-5 text-white hover:bg-primary/90"
-              variant="outline"
-            >
-              Share
-            </Button>
-          </AlertDialogTrigger>
-          <AlertDialogContent className="bg-white">
-            <AlertDialogHeader>
-              <AlertDialogTitle>
-                Copy the URL to share the admission form
-              </AlertDialogTitle>
-              <AlertDialogDescription>
-                <Input
-                  type="text"
-                  className="mt-2"
-                  value={shareableURL}
-                  readOnly
-                  ref={inputRef}
-                />
-              </AlertDialogDescription>
-            </AlertDialogHeader>
-            <AlertDialogFooter>
-              <AlertDialogAction onClick={handleCopyClick}>
-                Copy
-              </AlertDialogAction>
-            </AlertDialogFooter>
-          </AlertDialogContent>
-        </AlertDialog>
+      <div className="absolute right-0 top-[-60px] flex justify-end">
+        <AdmissionShareFlyout formId={formId} />
       </div>
 
       <div className="flex gap-4">

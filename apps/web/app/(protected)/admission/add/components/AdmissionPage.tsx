@@ -16,5 +16,5 @@ export async function AdmissionPage({
     organizationId: organizationId,
   });
 
-  return <AdmissionForm formConfig={admissionForm} formId={admissionForm.id} />;
+  return <AdmissionForm formId={admissionForm.id} formConfig={admissionForm} />;
 }

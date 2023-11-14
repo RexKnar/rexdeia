@@ -1,11 +1,11 @@
 export type CreateShare = {
-  isActive: boolean;
-  activeFromDate: string;
-  activeToDate: string;
-  acceptPayment: boolean;
-  actualAmount: number;
-  discountAmount: number;
   formId: string;
+  isActive: boolean;
+  actualAmount: number;
+  activeToDate: string;
+  activeFromDate: string;
+  acceptPayment: boolean;
+  discountAmount: number;
 };
 
 export type UpdateShare = {
