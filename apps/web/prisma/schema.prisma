@@ -277,15 +277,15 @@ model PaymentAssociations {
 }
 
 model Share {
-  id                  String      @id @default(auto()) @map("_id") @db.ObjectId
-  isActive            Boolean     @default(true)
-  acceptPayment       Boolean     @default(false)
-  actualAmount        Float?
-  discountAmount      Float?
-  activeFromDate      DateTime?
-  activeToDate        DateTime?
-  form                Form        @relation(fields: [formId], references: [id])
-  formId              String      @db.ObjectId
+  id             String    @id @default(auto()) @map("_id") @db.ObjectId
+  isActive       Boolean   @default(true)
+  acceptPayment  Boolean   @default(false)
+  actualAmount   Float?
+  discountAmount Float?
+  activeFromDate DateTime?
+  activeToDate   DateTime?
+  form           Form      @relation(fields: [formId], references: [id])
+  formId         String    @db.ObjectId
 }
 
 model studentForm {

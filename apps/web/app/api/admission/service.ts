@@ -1,5 +1,7 @@
 import { db } from '../../../lib/db';
 import { AddAdmissionModel } from './models';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '../../../lib/auth';
 
 export async function addAdmission(
   formId: string,
@@ -73,8 +75,32 @@ export async function addAdmission(
 }
 
 export async function getAdmissionsList(page: number, pageSize: number) {
-  return await db.admissionForm.findMany({
+  const session = await getServerSession(authOptions);
+
+  const total = await db.admissionForm.count();
+  const admissions = await db.admissionForm.findMany({
     take: pageSize,
     skip: (page - 1) * pageSize,
+    include: {
+      form: {
+        include: {
+          branch: true,
+          organization: true,
+        },
+      },
+    },
+    where: {
+      form: {
+        branchId: session.branchId,
+        organizationId: session.organizationId,
+      },
+    },
   });
+
+  return {
+    total,
+    page,
+    pageSize,
+    data: admissions,
+  };
 }

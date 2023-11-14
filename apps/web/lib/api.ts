@@ -3,7 +3,7 @@ import endpointInfo from './endpoints';
 export async function makeAPICall<T>(
   apiName: string,
   payload: Record<string, unknown> = {},
-  params: Record<string, string> = {},
+  params: Record<string, string | number> = {},
   substitutions: Record<string, string> = {}
 ): Promise<T> {
   let { endpoint, requestType } = endpointInfo[apiName];
@@ -15,7 +15,7 @@ export async function makeAPICall<T>(
 
   const url = new URL(`${window.location.origin}${endpoint}`);
   Object.keys(params).forEach((key) =>
-    url.searchParams.append(key, params[key])
+    url.searchParams.append(key, params[key].toString())
   );
 
   const body = JSON.stringify(payload);

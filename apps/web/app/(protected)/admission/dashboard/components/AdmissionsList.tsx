@@ -11,7 +11,7 @@ import {
   SortingState,
   useReactTable,
 } from '@tanstack/react-table';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button } from 'ui';
 import {
   Table,
@@ -22,22 +22,10 @@ import {
   TableRow,
 } from 'ui/components/ui/Table';
 import { cn } from 'utils';
-import { useGetAdmissionsListQuery } from '../../../../../lib/queries/useGetAdmissionsListQuery';
+import { makeAPICall } from '../../../../../lib/api';
+import { GET_ADMISSIONS_LIST } from '../../../../../lib/endpoints';
 
 const columns: ColumnDef<any>[] = [
-  {
-    accessorKey: 'slNo',
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-        >
-          #
-        </Button>
-      );
-    },
-  },
   {
     accessorKey: 'firstName',
     header: ({ column }) => {
@@ -93,17 +81,27 @@ const columns: ColumnDef<any>[] = [
 ];
 
 export function AdmissionsList() {
-  const [pageSize] = useState(10);
-  const [pageNumber] = useState(0);
+  const [pageNumber, setPageNumber] = useState(1);
+  const [admissionsList, setAdmissionsList] = useState<any[]>([]);
 
+  const [totalPages, setTotalPages] = useState(0);
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
 
-  const { data } = useGetAdmissionsListQuery(pageNumber, pageSize);
+  useEffect(() => {
+    makeAPICall<any>(
+      GET_ADMISSIONS_LIST,
+      {},
+      { page: pageNumber, pageSize: 10 }
+    ).then((res) => {
+      setAdmissionsList(res.data);
+      setTotalPages(Math.ceil(res.total / 10));
+    });
+  }, [pageNumber]);
 
   const table = useReactTable({
     columns,
-    data: data || [],
+    data: admissionsList || [],
     onSortingChange: setSorting,
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
@@ -181,37 +179,26 @@ export function AdmissionsList() {
           <span className="flex items-center gap-1">
             <div>Page</div>
             <strong>
-              {table.getState().pagination.pageIndex + 1} of{' '}
-              {table.getPageCount()}
+              {table.getState().pagination.pageIndex + 1} of {totalPages}
             </strong>
-          </span>
-          <span className="flex items-center gap-1">
-            | Go to page:
-            <input
-              type="number"
-              defaultValue={table.getState().pagination.pageIndex + 1}
-              onChange={(e) => {
-                const page = e.target.value ? Number(e.target.value) - 1 : 0;
-                table.setPageIndex(page);
-              }}
-              className="w-16 rounded border p-1"
-            />
           </span>
         </div>
         <div className="flex items-center justify-end space-x-2 py-4">
           <Button
-            variant="outline"
             size="sm"
-            onClick={() => table.previousPage()}
-            disabled={!table.getCanPreviousPage()}
+            variant="outline"
+            onClick={async () => {
+              setPageNumber((prev) => prev - 1);
+            }}
           >
             Previous
           </Button>
           <Button
-            variant="outline"
             size="sm"
-            onClick={() => table.nextPage()}
-            disabled={!table.getCanNextPage()}
+            variant="outline"
+            onClick={async () => {
+              setPageNumber((prev) => prev + 1);
+            }}
           >
             Next
           </Button>
