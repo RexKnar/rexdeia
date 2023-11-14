@@ -35,16 +35,18 @@ export function DepartmentList({ departmentList }) {
         Department List
       </h1>
       <table className="m-auto mt-5 table-auto border-collapse border border-slate-400 px-4">
-        <tr>
-          <th className="border border-slate-300 px-4">Sl.No</th>
-          <th className="border border-slate-300 px-4">Department Name</th>
-          <th className="border border-slate-300 px-4">Current HOD</th>
-          <th className="border border-slate-300 px-4">No of Faculty</th>
-          <th className="border border-slate-300 px-4">Code</th>
-          <th className="border border-slate-300 px-4">No of Students</th>
-          <th className="border border-slate-300 px-4">No of Years</th>
-          <th className="border border-slate-300 px-4">Action</th>
-        </tr>
+        <thead>
+          <tr>
+            <th className="border border-slate-300 px-4">Sl.No</th>
+            <th className="border border-slate-300 px-4">Department Name</th>
+            <th className="border border-slate-300 px-4">Current HOD</th>
+            <th className="border border-slate-300 px-4">No of Faculty</th>
+            <th className="border border-slate-300 px-4">Code</th>
+            <th className="border border-slate-300 px-4">No of Students</th>
+            <th className="border border-slate-300 px-4">No of Years</th>
+            <th className="border border-slate-300 px-4">Action</th>
+          </tr>
+        </thead>
         {departmentList.map((item, index) => (
           <tr key={index}>
             <td className="border border-slate-300 px-4">{index + 1}</td>

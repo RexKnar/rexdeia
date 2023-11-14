@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { RefObject, useRef } from 'react';
 import { Button, Input } from 'ui';
 
-import { Footer } from '../../../lib/components/Footer';
+import { Footer } from '../Footer';
 
 export function OtpVerifyForm() {
   const inputRefs: RefObject<HTMLInputElement>[] = [

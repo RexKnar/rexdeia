@@ -6,7 +6,7 @@ import { useSearchParams } from 'next/navigation';
 import { useState } from 'react';
 import { Button, Input } from 'ui';
 
-import { Footer } from '../../../lib/components/Footer';
+import { Footer } from '../Footer';
 import { OtpVerifyForm } from './OtpVerifyForm';
 import { ResetPasswordForm } from './ResetPasswordForm';
 

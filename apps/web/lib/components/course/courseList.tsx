@@ -8,7 +8,7 @@ import { DELETE_COURSE } from '../../endpoints';
 export function CourseList({ courseList }) {
   const router = useRouter();
 
-  async function DeleteCourseHandler(courseId: string) {
+  async function handleOnDeleteCourseClick(courseId: string) {
     try {
       await makeAPICall(DELETE_COURSE, { courseId });
       window.location.reload();
@@ -35,15 +35,17 @@ export function CourseList({ courseList }) {
         Course List
       </h1>
       <table className="m-auto mt-5 table-auto border-collapse border border-slate-400 px-4">
-        <tr>
-          <th className="border border-slate-300 px-4">Sl.No</th>
-          <th className="border border-slate-300 px-4">Course Name</th>
-          <th className="border border-slate-300 px-4">No of Years</th>
-          <th className="border border-slate-300 px-4">No of Sem</th>
-          <th className="border border-slate-300 px-4">Department</th>
-          <th className="border border-slate-300 px-4">Active Status</th>
-          <th className="border border-slate-300 px-4">Action</th>
-        </tr>
+        <thead>
+          <tr>
+            <th className="border border-slate-300 px-4">Sl.No</th>
+            <th className="border border-slate-300 px-4">Course Name</th>
+            <th className="border border-slate-300 px-4">No of Years</th>
+            <th className="border border-slate-300 px-4">No of Sem</th>
+            <th className="border border-slate-300 px-4">Department</th>
+            <th className="border border-slate-300 px-4">Active Status</th>
+            <th className="border border-slate-300 px-4">Action</th>
+          </tr>
+        </thead>
         {courseList.map((item, index) => (
           <tr key={index}>
             <td className="border border-slate-300 px-4">{index + 1}</td>
@@ -65,8 +67,8 @@ export function CourseList({ courseList }) {
               </button>
               <button
                 className="text-primary-foreground cursor-pointer rounded-md bg-primary text-white hover:bg-primary/90"
-                onClick={() => {
-                  DeleteCourseHandler(item.id);
+                onClick={async () => {
+                  await handleOnDeleteCourseClick(item.id);
                 }}
               >
                 Delete
