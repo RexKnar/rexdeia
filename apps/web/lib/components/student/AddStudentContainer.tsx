@@ -14,9 +14,7 @@ type AddStudentProps = {
   addStudentForm: Record<string, any>;
 };
 
-export function AddStudent({
-  addStudentForm,
-}: AddStudentProps) {
+export function AddStudent({ addStudentForm }: AddStudentProps) {
   return (
     <section className="w-full bg-gray-50 p-5">
       <div className="flex">
