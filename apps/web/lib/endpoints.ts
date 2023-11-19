@@ -22,6 +22,7 @@ export const GET_ADMISSIONS_LIST = `GET_ADMISSIONS_LIST`;
 export const GET_ADMISSIONS_FORM_SHARE_DETAILS = `GET_ADMISSIONS_FORM_SHARE_DETAILS`;
 export const CREATE_SHARE_FOR_FORM = `CREATE_SHARE_FOR_FORM`;
 export const UPDATE_SHARE_FOR_FORM = `UPDATE_SHARE_FOR_FORM`;
+export const GET_STUDENTS_LIST = `GET_STUDENTS_LIST`;
 
 type EndpointDetails = Record<
   string,
@@ -116,5 +117,9 @@ export default <EndpointDetails>{
   [UPDATE_SHARE_FOR_FORM]: {
     requestType: `PUT`,
     endpoint: `/api/share/[shareId]`,
+  },
+  [GET_STUDENTS_LIST]: {
+    requestType: `GET`,
+    endpoint: `/api/student`,
   },
 };

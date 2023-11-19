@@ -35,10 +35,16 @@ export const menuItems: SidebarMenuItem[] = [
         path: '/test2',
       },
       {
+        id: 'student-list',
+        label: 'Student List',
+        icon: null,
+        path: '/students/list',
+      },
+      {
         id: 'admission-configure1',
         label: 'Configure',
         icon: null,
-        path: '/test3',
+        path: '/test4',
       },
     ],
   },

@@ -248,7 +248,7 @@ model Form {
   branchId       String?         @db.ObjectId
   EnquiryForm    EnquiryForm[]
   AdmissionForm  AdmissionForm[]
-  Student        studentForm []
+  Student        studentForm[]
   Share          Share[]
 }
 

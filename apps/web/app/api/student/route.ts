@@ -1,7 +1,33 @@
 import { NextRequest, NextResponse } from 'next/server';
 
-import { addStudent } from './service';
+import { addStudent, getStudentsList } from './service';
 import { validateAddUser } from './validator';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '../../../lib/auth';
+
+export async function GET(request: NextRequest) {
+  const session = await getServerSession(authOptions);
+  if (!session) {
+    return new NextResponse(JSON.stringify({ error: 'UNAUTHORIZED' }), {
+      status: 401,
+    });
+  }
+
+  try {
+    const page = parseInt(request.nextUrl.searchParams.get('page')) || 1;
+    const pageSize =
+      parseInt(request.nextUrl.searchParams.get('pageSize')) || 10;
+
+    const paginatedStudentResult = await getStudentsList(page, pageSize);
+    return new NextResponse(JSON.stringify(paginatedStudentResult), {
+      status: 200,
+    });
+  } catch (e) {
+    return new NextResponse(e, {
+      status: 400,
+    });
+  }
+}
 
 export async function POST(request: NextRequest) {
   const payload = await request.json();

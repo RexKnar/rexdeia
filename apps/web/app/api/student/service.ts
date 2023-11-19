@@ -1,5 +1,7 @@
+import { getServerSession } from 'next-auth';
 import { db } from '../../../lib/db';
 import { AddStudentModel } from './models';
+import { authOptions } from '../../../lib/auth';
 
 export async function addStudent(formId: string, student: AddStudentModel) {
   return await db.studentForm.create({
@@ -67,4 +69,34 @@ export async function addStudent(formId: string, student: AddStudentModel) {
       },
     },
   });
+}
+
+export async function getStudentsList(page: number, pageSize: number) {
+  const session = await getServerSession(authOptions);
+  const total = await db.studentForm.count();
+  const studentsList = await db.studentForm.findMany({
+    take: pageSize,
+    skip: (page - 1) * pageSize,
+    include: {
+      form: {
+        include: {
+          branch: true,
+          organization: true,
+        },
+      },
+    },
+    where: {
+      form: {
+        branchId: session.branchId,
+        organizationId: session.organizationId,
+      },
+    },
+  });
+
+  return {
+    total,
+    page,
+    pageSize,
+    data: studentsList,
+  };
 }
