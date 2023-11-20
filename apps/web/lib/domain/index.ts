@@ -5,3 +5,4 @@ export type { OrganizationModal } from './organization';
 export type { UserModal } from './user';
 export type { UserOrganizationModal } from './userOrganization';
 export type { CreateShareModal, ShareModal } from './shareModal';
+export type { AddStudentModel, Student } from './student';

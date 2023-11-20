@@ -5,6 +5,30 @@ import { validateAddUser } from './validator';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '../../../lib/auth';
 
+export async function POST(request: NextRequest) {
+  const session = await getServerSession(authOptions);
+  if (!session) {
+    return new NextResponse(JSON.stringify({ error: 'UNAUTHORIZED' }), {
+      status: 401,
+    });
+  }
+
+  const payload = await request.json();
+
+  try {
+    await validateAddUser(payload);
+
+    const admission = await addStudent(payload);
+    return new NextResponse(JSON.stringify(admission), {
+      status: 201,
+    });
+  } catch (e) {
+    return new NextResponse(e, {
+      status: 400,
+    });
+  }
+}
+
 export async function GET(request: NextRequest) {
   const session = await getServerSession(authOptions);
   if (!session) {
@@ -21,24 +45,6 @@ export async function GET(request: NextRequest) {
     const paginatedStudentResult = await getStudentsList(page, pageSize);
     return new NextResponse(JSON.stringify(paginatedStudentResult), {
       status: 200,
-    });
-  } catch (e) {
-    return new NextResponse(e, {
-      status: 400,
-    });
-  }
-}
-
-export async function POST(request: NextRequest) {
-  const payload = await request.json();
-
-  try {
-    await validateAddUser(payload);
-    const formId = request.nextUrl.searchParams.get('formId');
-
-    const admission = await addStudent(formId, payload);
-    return new NextResponse(JSON.stringify(admission), {
-      status: 201,
     });
   } catch (e) {
     return new NextResponse(e, {

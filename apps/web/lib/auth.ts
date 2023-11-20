@@ -73,7 +73,7 @@ export const authOptions: NextAuthOptions = {
           email: token.email,
         },
         include: {
-          CreatedBranch: true,
+          createdBranches: true,
           userOrganizations: true,
         },
       });
@@ -101,7 +101,7 @@ export const authOptions: NextAuthOptions = {
         email: dbUser.email,
         image: dbUser.image,
         username: dbUser.username,
-        createdBranches: dbUser.CreatedBranch,
+        createdBranches: dbUser.createdBranches,
       };
     },
   },

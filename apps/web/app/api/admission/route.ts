@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 
 import { addAdmission, getAdmissionsList } from './service';
-import { validateAddUser } from './validator';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '../../../lib/auth';
 
@@ -40,10 +39,7 @@ export async function POST(request: NextRequest) {
   const payload = await request.json();
 
   try {
-    await validateAddUser(payload);
-    const formId = request.nextUrl.searchParams.get('formId');
-
-    const admission = await addAdmission(formId, payload);
+    const admission = await addAdmission(payload);
     return new NextResponse(JSON.stringify(admission), {
       status: 201,
     });

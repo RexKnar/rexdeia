@@ -2,8 +2,8 @@ import { AdmissionForm } from '../../../../../lib/components/admission/Admission
 import { getFormByCriteria } from '../../../../api/forms/service';
 
 type AdmissionPageProp = {
-  branchId: string;
-  organizationId: string;
+  readonly branchId: string;
+  readonly organizationId: string;
 };
 
 export async function AdmissionPage({

@@ -1,6 +1,5 @@
 import { z } from 'zod';
-
-import { AddStudentModel } from './models';
+import { AddStudentModel } from '../../../lib/domain';
 
 const schema = z.object({
   firstName: z.string(),
@@ -8,12 +7,12 @@ const schema = z.object({
   middleName: z.string(),
 });
 
-export async function validateAddUser(addStudent: AddStudentModel) {
+export async function validateAddUser(student: AddStudentModel) {
   try {
-    schema.parse(addStudent);
+    schema.parse(student);
   } catch (e) {
     return Promise.reject(e);
   }
 
-  return schema.parse(addStudent);
+  return schema.parse(student);
 }

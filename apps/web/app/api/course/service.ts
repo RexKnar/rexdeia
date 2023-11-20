@@ -1,13 +1,12 @@
 import { db } from '../../../lib/db';
 import { AddCourseModel } from './models';
 
-export async function getCourseList({ organizationId, branchId }) {
+export async function getCourseList({ branchId }) {
   return await db.course.findMany({
     where: { isDeleted: false },
     include: {
       department: {
         where: {
-          organizationId: organizationId,
           branchId: branchId,
         },
       },

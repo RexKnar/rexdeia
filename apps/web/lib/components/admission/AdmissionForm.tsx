@@ -8,6 +8,7 @@ import { makeAPICall } from '../../api';
 import { ADD_ADMISSION } from '../../endpoints';
 import { AdmissionShareFlyout } from '../../../app/(protected)/admission/add/components/AdmissionShareFlyout';
 import { useGetAdmissionFormShareDetailsQuery } from '../../queries/useGetAdmissionFormShareDetailsQuery';
+import { formatStudentPayload } from '../../utils/formatters';
 
 type AdmissionFormProps = {
   formId: string;
@@ -69,10 +70,11 @@ export function AdmissionForm({ formId, formConfig }: AdmissionFormProps) {
 
   async function addAdmissionHandler(data: Record<string, unknown>) {
     try {
+      const payload = formatStudentPayload(data);
       await makeAPICall(
         ADD_ADMISSION,
         {
-          ...data,
+          ...payload,
         },
         {
           formId,
@@ -252,7 +254,7 @@ export function AdmissionForm({ formId, formConfig }: AdmissionFormProps) {
               >
                 <button
                   type="button"
-                  className="mt-6 h-12 cursor-pointer rounded-md bg-primary p-0 px-5  py-0  text-white hover:bg-primary/90"
+                  className="mt-6 h-12 cursor-pointer rounded-md bg-primary p-0 px-5 py-0 text-white hover:bg-primary/90"
                   onClick={prevStep}
                   disabled={currentStep === 0}
                 >
@@ -261,7 +263,7 @@ export function AdmissionForm({ formId, formConfig }: AdmissionFormProps) {
                 {currentStep === totalSteps - 1 ? (
                   <button
                     type="submit"
-                    className="mt-6 h-12 cursor-pointer rounded-md  bg-primary px-4 py-3 text-white hover:bg-primary/90"
+                    className="mt-6 h-12 cursor-pointer rounded-md bg-primary px-4 py-3 text-white hover:bg-primary/90"
                   >
                     {isSubmitting ? (
                       <div className="flex h-screen items-center justify-center">
@@ -275,7 +277,7 @@ export function AdmissionForm({ formId, formConfig }: AdmissionFormProps) {
                   <button
                     type="button"
                     onClick={() => nextStep(section.sectionTitle, index)}
-                    className="mt-6 h-12 cursor-pointer rounded-md  bg-primary px-4 py-3 text-white hover:bg-primary/90"
+                    className="mt-6 h-12 cursor-pointer rounded-md bg-primary px-4 py-3 text-white hover:bg-primary/90"
                   >
                     {isSubmitting ? (
                       <div className="flex h-screen items-center justify-center">

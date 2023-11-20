@@ -2,8 +2,8 @@ import { AddStudentForm } from '../../../../lib/components/student/AddStudentFor
 import { getFormByCriteria } from '../../../api/forms/service';
 
 type AddStudentPageProps = {
-  branchId: string;
-  organizationId: string;
+  readonly branchId: string;
+  readonly organizationId: string;
 };
 
 export async function AddStudentPage({

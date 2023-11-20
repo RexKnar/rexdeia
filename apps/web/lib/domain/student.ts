@@ -1,0 +1,33 @@
+export type Student = {
+  id: string;
+  dob: string;
+  gender: string;
+  emailId: string;
+  lastName: string;
+  religion: string;
+  firstName: string;
+  phoneNumber: string;
+  fatherName: string;
+  bloodGroup: string;
+  middleName: string;
+  motherName: string;
+  nationality: string;
+  motherTongue: string;
+  guardianName: string;
+  maritalStatus: string;
+  fatherEmailId: string;
+  motherEmailId: string;
+  guardianEmailId: string;
+  motherOccupation: string;
+  aadharCardNumber: string;
+  fatherOccupation: string;
+  fatherPhoneNumber: string;
+  motherPhoneNumber: string;
+  guardiansOccupation: string;
+  guardianPhoneNumber: string;
+  status: 'Active' | 'Rejected' | 'Pending';
+
+  additionalAttributes: any;
+};
+
+export type AddStudentModel = Omit<Student, 'id'>;

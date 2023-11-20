@@ -13,7 +13,6 @@ export default async function Page() {
 
   const courses = await getCourseList({
     branchId: session.branchId,
-    organizationId: session.organizationId,
   });
 
   return (

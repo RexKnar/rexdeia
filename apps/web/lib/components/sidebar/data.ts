@@ -20,16 +20,16 @@ export const menuItems: SidebarMenuItem[] = [
     id: 'students',
     label: 'Students',
     icon: UserCircle2,
-    path: '/students',
+    path: '',
     children: [
       {
-        id: 'admission-addnew1',
+        id: 'students-add-new',
         label: 'Add new',
         icon: null,
         path: '/students/add',
       },
       {
-        id: 'admission-analytics1',
+        id: 'students-analytics',
         label: 'Analytics',
         icon: null,
         path: '/test2',
@@ -41,7 +41,7 @@ export const menuItems: SidebarMenuItem[] = [
         path: '/students/list',
       },
       {
-        id: 'admission-configure1',
+        id: 'admission-configure',
         label: 'Configure',
         icon: null,
         path: '/test4',

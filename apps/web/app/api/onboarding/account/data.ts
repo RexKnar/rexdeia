@@ -14,11 +14,12 @@ export const admissionForm = {
           name: 'firstName',
           value: '',
           visible: true,
+          isReadOnly: true,
           placeholder: 'Enter your first name',
           validationRules: {
             required: true,
             minLength: 1,
-            maxLength: 100,
+            maxLength: 999,
           },
         },
         {
@@ -28,11 +29,12 @@ export const admissionForm = {
           name: 'middleName',
           value: '',
           visible: true,
+          isReadOnly: true,
           placeholder: 'Enter your middle name',
           validationRules: {
             required: false,
             minLength: 1,
-            maxLength: 100,
+            maxLength: 999,
           },
         },
         {
@@ -42,11 +44,12 @@ export const admissionForm = {
           name: 'lastName',
           value: '',
           visible: true,
+          isReadOnly: true,
           placeholder: 'Enter your last name',
           validationRules: {
             required: true,
             minLength: 1,
-            maxLength: 100,
+            maxLength: 999,
           },
         },
         {
@@ -56,6 +59,7 @@ export const admissionForm = {
           name: 'dob',
           value: '',
           visible: true,
+          isReadOnly: true,
           placeholder: 'Select your DOB',
           validationRules: {
             required: true,
@@ -68,6 +72,7 @@ export const admissionForm = {
           name: 'phoneNumber',
           value: '',
           visible: true,
+          isReadOnly: true,
           placeholder: 'Enter your phone number',
           validationRules: {
             required: true,
@@ -92,6 +97,7 @@ export const admissionForm = {
           name: 'emailId',
           value: '',
           visible: true,
+          isReadOnly: true,
           placeholder: 'Enter your email',
           validationRules: {
             required: true,
@@ -105,6 +111,7 @@ export const admissionForm = {
           name: 'gender',
           value: '',
           visible: true,
+          isReadOnly: true,
           options: [
             {
               label: 'Male',
@@ -127,6 +134,7 @@ export const admissionForm = {
           name: 'aadharCardNumber',
           value: '',
           visible: true,
+          isReadOnly: true,
           placeholder: 'Enter your aadhar card number',
           validationRules: {
             required: true,
@@ -139,6 +147,7 @@ export const admissionForm = {
           name: 'motherTongue',
           value: '',
           visible: true,
+          isReadOnly: true,
           placeholder: 'Enter your mother tongue',
           validationRules: {
             required: true,
@@ -151,6 +160,7 @@ export const admissionForm = {
           name: 'bloodGroup',
           value: '',
           visible: true,
+          isReadOnly: true,
           placeholder: 'Enter your blood group',
           validationRules: {
             required: true,
@@ -163,6 +173,7 @@ export const admissionForm = {
           name: 'religion',
           value: '',
           visible: true,
+          isReadOnly: true,
           placeholder: 'Enter your religion',
           validationRules: {
             required: true,
@@ -226,6 +237,7 @@ export const admissionForm = {
           name: 'fatherName',
           value: '',
           visible: true,
+          isReadOnly: true,
           placeholder: 'Enter your father name',
           validationRules: {
             required: true,
@@ -238,6 +250,7 @@ export const admissionForm = {
           name: 'fatherOccupation',
           value: '',
           visible: true,
+          isReadOnly: true,
           placeholder: 'Enter your father occupation',
           validationRules: {
             required: true,
@@ -250,6 +263,7 @@ export const admissionForm = {
           name: 'motherName',
           value: '',
           visible: true,
+          isReadOnly: true,
           placeholder: 'Enter your mother name',
           validationRules: {
             required: true,
@@ -262,6 +276,7 @@ export const admissionForm = {
           name: 'motherOccupation',
           value: '',
           visible: true,
+          isReadOnly: true,
           placeholder: 'Enter your mother occupation',
           validationRules: {
             required: true,
@@ -589,6 +604,7 @@ export const admissionForm = {
           name: 'nationality',
           value: '',
           visible: true,
+          isReadOnly: true,
           placeholder: 'Enter nationality',
           validationRules: {
             required: true,
@@ -975,6 +991,30 @@ export const EnquiryForm = {
           },
         },
         {
+          id: '10-1',
+          type: 'text',
+          label: "Father's Phone Number",
+          name: 'fatherPhoneNumber',
+          value: '',
+          visible: true,
+          placeholder: 'Enter your father phone number',
+          validationRules: {
+            required: true,
+          },
+        },
+        {
+          id: '10-2',
+          type: 'text',
+          label: "Father's Email",
+          name: 'fatherEmailId',
+          value: '',
+          visible: true,
+          placeholder: 'Enter your father email',
+          validationRules: {
+            required: true,
+          },
+        },
+        {
           id: '11',
           type: 'text',
           label: "Mother's Name",
@@ -999,13 +1039,37 @@ export const EnquiryForm = {
           },
         },
         {
+          id: '10-1',
+          type: 'text',
+          label: "Mother's Phone Number",
+          name: 'motherPhoneNumber',
+          value: '',
+          visible: true,
+          placeholder: 'Enter your father phone number',
+          validationRules: {
+            required: true,
+          },
+        },
+        {
+          id: '10-2',
+          type: 'text',
+          label: "Mother's Email",
+          name: 'motherEmailId',
+          value: '',
+          visible: true,
+          placeholder: 'Enter your mother email',
+          validationRules: {
+            required: true,
+          },
+        },
+        {
           id: '13',
           type: 'text',
           label: "Guardian's Name",
           name: 'guardianName',
           value: '',
           visible: true,
-          placeholder: 'Enter your guardian name',
+          placeholder: 'Enter your mother name',
           validationRules: {
             required: true,
           },
@@ -1018,6 +1082,30 @@ export const EnquiryForm = {
           value: '',
           visible: true,
           placeholder: 'Enter your guardian occupation',
+          validationRules: {
+            required: true,
+          },
+        },
+        {
+          id: '14-1',
+          type: 'text',
+          label: "Guardian's Phone Number",
+          name: 'guardianPhoneNumber',
+          value: '',
+          visible: true,
+          placeholder: 'Enter your Guardian phone number',
+          validationRules: {
+            required: true,
+          },
+        },
+        {
+          id: '14-2',
+          type: 'text',
+          label: "Guardian's Email",
+          name: 'guardianEmailId',
+          value: '',
+          visible: true,
+          placeholder: 'Enter your Guardian email',
           validationRules: {
             required: true,
           },

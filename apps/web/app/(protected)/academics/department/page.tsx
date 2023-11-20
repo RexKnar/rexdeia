@@ -13,7 +13,6 @@ export default async function Page() {
   try {
     const apiResponse = await getDepartmentList({
       branchId: session.branchId,
-      organizationId: session.organizationId,
     });
     return (
       <div className="flex flex-col">

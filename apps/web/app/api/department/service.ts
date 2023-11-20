@@ -11,7 +11,6 @@ export async function addDepartment(department: AddDepartmentModel) {
       isActive: department.isActive,
       description: department.description,
       branchId: department.branchId,
-      organizationId: department.organizationId,
     },
   });
 }
@@ -43,11 +42,10 @@ export async function editDepartment(department: EditDepartmentModel) {
   });
 }
 
-export async function getDepartmentList({ organizationId, branchId }) {
+export async function getDepartmentList({ branchId }) {
   return await db.department.findMany({
     where: {
       isDeleted: false,
-      organizationId: organizationId,
       branchId: branchId,
     },
   });

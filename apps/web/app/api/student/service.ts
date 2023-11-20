@@ -1,95 +1,104 @@
-import { getServerSession } from 'next-auth';
 import { db } from '../../../lib/db';
-import { AddStudentModel } from './models';
+import { AddStudentModel } from '../../../lib/domain';
+import { getServerSession } from 'next-auth';
 import { authOptions } from '../../../lib/auth';
 
-export async function addStudent(formId: string, student: AddStudentModel) {
-  return await db.studentForm.create({
+export async function addStudent(student: AddStudentModel) {
+  const session = await getServerSession(authOptions);
+
+  let user = await db.user.findFirst({
+    where: {
+      email: student.emailId,
+    },
+  });
+
+  if (!user) {
+    user = await db.user.create({
+      data: {
+        password: '',
+        name: student.firstName,
+        email: student.emailId,
+        username: student.emailId,
+        phoneNumber: student.phoneNumber,
+      },
+    });
+  }
+
+  await db.userOrganization.create({
     data: {
-      ...student,
-      aadharCardNumber: student.aadharCardNumber,
-      admissionMode: student.admissionMode,
-      admissionType: student.admissionType,
-      annualIncome: student.annualIncome,
-      bloodGroup: student.bloodGroup,
-      caste: student.caste,
-      community: student.community,
-      dob: student.dob,
-      emailId: student.emailId,
-      fatherName: student.fatherName,
-      fatherOccupation: student.fatherOccupation,
-      firstLanguage: student.firstLanguage,
-      firstName: student.firstName,
-      guardiansOccupation: student.guardiansOccupation,
-      gender: student.gender,
-      guardianName: student.guardianName,
-      guardianPhoneNumber: student.guardianPhoneNumber,
-      lastName: student.lastName,
-      maritalStatus: student.maritalStatus,
-      mediumOfEducation10th: student.mediumOfEducation10th,
-      mediumOfEducation12th: student.mediumOfEducation12th,
-      middleName: student.middleName,
-      mobileNumber: student.mobileNumber,
-      motherName: student.motherName,
-      motherOccupation: student.motherOccupation,
-      motherTongue: student.motherTongue,
-      nationality: student.nationality,
-      noOfSiblings: student.noOfSiblings,
-      obtainedMark10th: student.obtainedMark10th,
-      obtainedMark12th: student.obtainedMark12th,
-      courseOption1: student.courseOption1,
-      courseOption2: student.courseOption2,
-      parentsSeparated: student.parentsSeparated,
-      permanentDistrict: student.permanentDistrict,
-      permanentPostalCode: student.permanentPostalCode,
-      permanentState: student.permanentState,
-      phoneNumber: student.phoneNumber,
-      relationshipType: student.relationshipType,
-      religion: student.religion,
-      residentialDistrict: student.residentialDistrict,
-      residentialPostalCode: student.residentialPostalCode,
-      residentialState: student.residentialState,
-      scholarship: student.scholarship,
-      schoolName10th: student.schoolName10th,
-      schoolName12th: student.schoolName12th,
-      siblingClass1: student.siblingClass1,
-      siblingClass2: student.siblingClass2,
-      siblingName1: student.siblingName1,
-      siblingName2: student.siblingName2,
-      siblingRelation1: student.siblingRelation1,
-      siblingRelation2: student.siblingRelation2,
-      yearOfPassing10th: student.yearOfPassing10th,
-      yearOfPassing12th: student.yearOfPassing12th,
-      residentialAddress: student.residentialAddress,
-      permanentAddress: student.permanentAddress,
-      form: {
+      user: {
         connect: {
-          id: formId,
+          id: user.id,
+        },
+      },
+      organization: {
+        connect: {
+          id: session.organizationId,
+        },
+      },
+      branch: {
+        connect: {
+          id: session.branchId,
         },
       },
     },
   });
+
+  const createdStudent = await db.student.create({
+    data: {
+      ...student,
+      status: 'Active',
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      organization: {
+        connect: {
+          id: session.organizationId,
+        },
+      },
+      branch: {
+        connect: {
+          id: session.branchId,
+        },
+      },
+      user: {
+        connect: {
+          id: user.id,
+        },
+      },
+    },
+  });
+
+  await db.admissionForm.create({
+    data: {
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      student: {
+        connect: {
+          id: createdStudent.id,
+        },
+      },
+      createdBy: {
+        connect: {
+          id: session.user.id,
+        },
+      },
+      status: 'DirectStudentEntry'
+    }
+  });
+
+  return createdStudent;
 }
 
 export async function getStudentsList(page: number, pageSize: number) {
   const session = await getServerSession(authOptions);
-  const total = await db.studentForm.count();
-  const studentsList = await db.studentForm.findMany({
+  const total = await db.student.count();
+  const studentsList = await db.student.findMany({
     take: pageSize,
     skip: (page - 1) * pageSize,
-    include: {
-      form: {
-        include: {
-          branch: true,
-          organization: true,
-        },
-      },
-    },
     where: {
-      form: {
-        branchId: session.branchId,
-        organizationId: session.organizationId,
-      },
+      status: 'Active',
+      branchId: session.branchId,
+      organizationId: session.organizationId,
     },
   });
 
