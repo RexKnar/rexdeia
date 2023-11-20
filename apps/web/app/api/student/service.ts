@@ -82,8 +82,8 @@ export async function addStudent(student: AddStudentModel) {
           id: session.user.id,
         },
       },
-      status: 'DirectStudentEntry'
-    }
+      status: 'DirectStudentEntry',
+    },
   });
 
   return createdStudent;

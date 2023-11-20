@@ -27,7 +27,7 @@ import { GET_ADMISSIONS_LIST } from '../../../../../lib/endpoints';
 
 const columns: ColumnDef<any>[] = [
   {
-    accessorKey: 'firstName',
+    accessorKey: 'student.firstName',
     header: ({ column }) => {
       return (
         <Button
@@ -40,7 +40,7 @@ const columns: ColumnDef<any>[] = [
     },
   },
   {
-    accessorKey: 'emailId',
+    accessorKey: 'student.emailId',
     header: ({ column }) => {
       return (
         <Button
@@ -53,7 +53,7 @@ const columns: ColumnDef<any>[] = [
     },
   },
   {
-    accessorKey: 'mobileNumber',
+    accessorKey: 'student.phoneNumber',
     header: ({ column }) => {
       return (
         <Button
@@ -66,7 +66,7 @@ const columns: ColumnDef<any>[] = [
     },
   },
   {
-    accessorKey: 'permanentAddress',
+    accessorKey: 'student.additionalAttributes.permanentAddress',
     header: ({ column }) => {
       return (
         <Button

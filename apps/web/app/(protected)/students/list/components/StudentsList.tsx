@@ -68,7 +68,7 @@ export function StudentsList() {
       },
     },
     {
-      accessorKey: 'mobileNumber',
+      accessorKey: 'additionalAttributes.mobileNumber',
       header: ({ column }) => {
         return (
           <Button
