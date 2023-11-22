@@ -1,4 +1,4 @@
-import { Student } from "../domain";
+import { Student } from '../domain';
 
 /**
  * Formats the input data to conform to the Student type.

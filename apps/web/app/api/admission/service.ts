@@ -3,9 +3,7 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from '../../../lib/auth';
 import { AddStudentModel } from '../../../lib/domain';
 
-export async function addAdmission(
-  student: AddStudentModel
-) {
+export async function addAdmission(student: AddStudentModel) {
   const session = await getServerSession(authOptions);
 
   let user = await db.user.findFirst({
@@ -84,8 +82,8 @@ export async function addAdmission(
           id: session.user.id,
         },
       },
-      status: 'Received'
-    }
+      status: 'Received',
+    },
   });
 
   return createdAdmission;
@@ -99,7 +97,7 @@ export async function getAdmissionsList(page: number, pageSize: number) {
     take: pageSize,
     skip: (page - 1) * pageSize,
     include: {
-      student: true
+      student: true,
     },
     where: {
       student: {
