@@ -3,7 +3,7 @@ import { getServerSession } from 'next-auth';
 
 import { authOptions } from '../../../../lib/auth';
 import { AddStudentPage } from '../components/AddStudentPage';
-import { AddStudentBreadcrumb } from '../components/AddStudentBreadCrumb';
+import { PathBreadcrumb } from '../../../../lib/components/PathBreadcrumb';
 
 export default async function Page() {
   const session = await getServerSession(authOptions);
@@ -14,7 +14,7 @@ export default async function Page() {
 
   return (
     <section className="flex h-full w-full flex-col gap-[20px] bg-gray-50 px-[25px] py-[40px] sm:px-[50px]">
-      <AddStudentBreadcrumb />
+      <PathBreadcrumb />
 
       <AddStudentPage
         branchId={session.branchId}
