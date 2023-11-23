@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 
 import { addEnquiry } from './service';
 import { validateAddEnquiry } from './validator';
+import { StatusCodes } from 'http-status-codes';
 
 export async function POST(request: NextRequest) {
   const payload = await request.json();
@@ -11,11 +12,11 @@ export async function POST(request: NextRequest) {
 
     const createdEnquiry = await addEnquiry(formId, payload);
     return new NextResponse(JSON.stringify(createdEnquiry), {
-      status: 201,
+      status: StatusCodes.CREATED,
     });
   } catch (e) {
     return new NextResponse(e, {
-      status: 400,
+      status: StatusCodes.BAD_REQUEST,
     });
   }
 }

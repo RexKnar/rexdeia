@@ -4,6 +4,7 @@ import razorpay from 'razorpay';
 import { getOrganizationById } from '../organization/[id]/service';
 import { AddPayment, addPaymentAssociation } from './service';
 import { validateAddPayment } from './validator';
+import { StatusCodes } from 'http-status-codes';
 
 const instance = new razorpay({
   key_id: `${process.env['NEXT_RAZORPAY_KEY_ID']}`,
@@ -36,11 +37,11 @@ export async function POST(request: NextRequest) {
     const createdPaymentAssociation =
       await addPaymentAssociation(paymentAssociation);
     return new NextResponse(JSON.stringify(createdPaymentAssociation), {
-      status: 201,
+      status: StatusCodes.CREATED,
     });
   } catch (e) {
     return new NextResponse(e, {
-      status: 400,
+      status: StatusCodes.BAD_REQUEST,
     });
   }
 }
