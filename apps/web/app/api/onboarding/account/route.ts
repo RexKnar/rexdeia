@@ -3,6 +3,7 @@ import { getServerSession } from 'next-auth';
 
 import { authOptions } from '../../../../lib/auth';
 import { onboardEntities } from './service';
+import { StatusCodes } from 'http-status-codes';
 
 export async function POST(request: Request) {
   const session = await getServerSession(authOptions);
@@ -13,7 +14,7 @@ export async function POST(request: Request) {
 
   if (!session || !branchId || !organizationId) {
     return new NextResponse(JSON.stringify({ error: 'UNAUTHORIZED' }), {
-      status: 401,
+      status: StatusCodes.UNAUTHORIZED,
     });
   }
 
@@ -21,12 +22,12 @@ export async function POST(request: Request) {
     await onboardEntities(branchId, organizationId);
 
     return new NextResponse(JSON.stringify({}), {
-      status: 201,
+      status: StatusCodes.CREATED,
     });
   } catch (e) {
     console.error(e);
     return new NextResponse(JSON.stringify({ error: e.message }), {
-      status: 500,
+      status: StatusCodes.INTERNAL_SERVER_ERROR,
     });
   }
 }

@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 
 import { addCourse, deletCourse } from './service';
 import { validateAddCourse } from './validator';
+import { StatusCodes } from 'http-status-codes';
 
 export async function POST(request: NextRequest) {
   const payload = await request.json();
@@ -9,11 +10,11 @@ export async function POST(request: NextRequest) {
     await validateAddCourse(payload);
     const createdCourse = await addCourse(payload);
     return new NextResponse(JSON.stringify(createdCourse), {
-      status: 201,
+      status: StatusCodes.CREATED,
     });
   } catch (e) {
     return new NextResponse(e, {
-      status: 400,
+      status: StatusCodes.BAD_REQUEST,
     });
   }
 }
@@ -23,11 +24,11 @@ export async function DELETE(request: NextRequest) {
   try {
     const deleteResponse = await deletCourse(payload.courseId);
     return new NextResponse(JSON.stringify(deleteResponse), {
-      status: 200,
+      status: StatusCodes.OK,
     });
   } catch (e) {
     return new NextResponse(e, {
-      status: 400,
+      status: StatusCodes.BAD_REQUEST,
     });
   }
 }

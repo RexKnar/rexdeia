@@ -4,12 +4,13 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from '../../../../lib/auth';
 import { updateBranchById } from './service';
 import { validateUpdateBranchDetails } from './validator';
+import { StatusCodes } from 'http-status-codes';
 
 export async function PUT(request: Request, { params: { id } }) {
   const session = await getServerSession(authOptions);
   if (!session) {
     return new NextResponse(JSON.stringify({ error: 'UNAUTHORIZED' }), {
-      status: 401,
+      status: StatusCodes.UNAUTHORIZED,
     });
   }
 
@@ -20,12 +21,15 @@ export async function PUT(request: Request, { params: { id } }) {
     const branch = await updateBranchById(id, payload);
 
     return new NextResponse(JSON.stringify(branch), {
-      status: 200,
+      status: StatusCodes.OK,
     });
   } catch (e) {
     console.error(e);
     return new NextResponse(JSON.stringify({ error: e.message }), {
-      status: e.message === 'VALIDATION_ERROR' ? 400 : 500,
+      status:
+        e.message === 'VALIDATION_ERROR'
+          ? StatusCodes.BAD_REQUEST
+          : StatusCodes.INTERNAL_SERVER_ERROR,
     });
   }
 }

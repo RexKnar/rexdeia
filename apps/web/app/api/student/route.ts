@@ -4,12 +4,13 @@ import { addStudent, getStudentsList } from './service';
 import { validateAddUser } from './validator';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '../../../lib/auth';
+import { StatusCodes } from 'http-status-codes';
 
 export async function POST(request: NextRequest) {
   const session = await getServerSession(authOptions);
   if (!session) {
     return new NextResponse(JSON.stringify({ error: 'UNAUTHORIZED' }), {
-      status: 401,
+      status: StatusCodes.UNAUTHORIZED,
     });
   }
 
@@ -20,11 +21,11 @@ export async function POST(request: NextRequest) {
 
     const admission = await addStudent(payload);
     return new NextResponse(JSON.stringify(admission), {
-      status: 201,
+      status: StatusCodes.CREATED,
     });
   } catch (e) {
     return new NextResponse(e, {
-      status: 400,
+      status: StatusCodes.BAD_REQUEST,
     });
   }
 }
@@ -33,7 +34,7 @@ export async function GET(request: NextRequest) {
   const session = await getServerSession(authOptions);
   if (!session) {
     return new NextResponse(JSON.stringify({ error: 'UNAUTHORIZED' }), {
-      status: 401,
+      status: StatusCodes.UNAUTHORIZED,
     });
   }
 
@@ -44,11 +45,11 @@ export async function GET(request: NextRequest) {
 
     const paginatedStudentResult = await getStudentsList(page, pageSize);
     return new NextResponse(JSON.stringify(paginatedStudentResult), {
-      status: 200,
+      status: StatusCodes.OK,
     });
   } catch (e) {
     return new NextResponse(e, {
-      status: 400,
+      status: StatusCodes.BAD_REQUEST,
     });
   }
 }

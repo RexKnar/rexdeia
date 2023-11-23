@@ -3,6 +3,7 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from '../../../../lib/auth';
 import { validateUpdateShare } from './validator';
 import { getShareById, updateShareById } from './service';
+import { StatusCodes } from 'http-status-codes';
 
 export async function GET(
   _request: Request,
@@ -11,7 +12,7 @@ export async function GET(
   const session = await getServerSession(authOptions);
   if (!session) {
     return new NextResponse(JSON.stringify({ error: 'UNAUTHORIZED' }), {
-      status: 401,
+      status: StatusCodes.UNAUTHORIZED,
     });
   }
   try {
@@ -19,7 +20,7 @@ export async function GET(
 
     if (share) {
       return new NextResponse(JSON.stringify(share), {
-        status: 200,
+        status: StatusCodes.OK,
       });
     } else {
       return new NextResponse(
@@ -27,7 +28,7 @@ export async function GET(
           message: 'SHARE_NOT_FOUND',
         }),
         {
-          status: 404,
+          status: StatusCodes.NOT_FOUND,
         }
       );
     }
@@ -37,7 +38,7 @@ export async function GET(
         message: e.message,
       }),
       {
-        status: 400,
+        status: StatusCodes.BAD_REQUEST,
       }
     );
   }
