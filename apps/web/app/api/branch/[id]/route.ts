@@ -5,7 +5,7 @@ import { authOptions } from '../../../../lib/auth';
 import { updateBranchById } from './service';
 import { validateUpdateBranchDetails } from './validator';
 
-export async function PUT(request: Request, route: { params: { id: string } }) {
+export async function PUT(request: Request, { params: { id } }) {
   const session = await getServerSession(authOptions);
   if (!session) {
     return new NextResponse(JSON.stringify({ error: 'UNAUTHORIZED' }), {
@@ -15,11 +15,9 @@ export async function PUT(request: Request, route: { params: { id: string } }) {
 
   try {
     const payload = await request.json();
-    const branchId = route.params.id;
-
     await validateUpdateBranchDetails(payload);
 
-    const branch = await updateBranchById(branchId, payload);
+    const branch = await updateBranchById(id, payload);
 
     return new NextResponse(JSON.stringify(branch), {
       status: 200,

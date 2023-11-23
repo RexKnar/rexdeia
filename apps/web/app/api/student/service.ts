@@ -3,6 +3,21 @@ import { AddStudentModel } from '../../../lib/domain';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '../../../lib/auth';
 
+export async function getStudentById(id: string) {
+  const session = await getServerSession(authOptions);
+  return await db.student.findFirst({
+    where: {
+      id,
+      branchId: session.branchId,
+      organizationId: session.organizationId,
+    },
+    select: {
+      createdAt: false,
+      updatedAt: false,
+    },
+  });
+}
+
 export async function addStudent(student: AddStudentModel) {
   const session = await getServerSession(authOptions);
 
