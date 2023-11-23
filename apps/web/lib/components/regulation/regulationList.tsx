@@ -1,9 +1,9 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-
 import { makeAPICall } from '../../api';
 import { DELETE_REGULATION } from '../../endpoints';
+import { RegulationShareFlyout } from '../../../app/(protected)/academics/regulation/components/RegulationShareFlyout';
 
 export function RegulationList({ regulationList }) {
   const router = useRouter();
@@ -18,19 +18,12 @@ export function RegulationList({ regulationList }) {
   }
 
   return (
-    <section className="w-full">
-      <div className="flex justify-end">
-        <button
-          className="text-primary-foreground mt-6 h-12 cursor-pointer rounded-md bg-primary px-5 text-white hover:bg-primary/90"
-          type="button"
-          onClick={() => {
-            router.push(`/academics/regulation/new`);
-          }}
-        >
-          Add Regulation
-        </button>
+    <section className="bg-gray-50 p-3">
+      <div className="mx-7  flex justify-end">
+        <div>
+          <RegulationShareFlyout></RegulationShareFlyout>
+        </div>
       </div>
-
       <h1 className="mt-3 text-center text-3xl font-semibold text-primary">
         Regulation List
       </h1>
@@ -39,7 +32,6 @@ export function RegulationList({ regulationList }) {
           <th className="border border-slate-300 px-4">Sl.No</th>
           <th className="border border-slate-300 px-4">Regulation Name</th>
           <th className="border border-slate-300 px-4">Announced Year</th>
-          <th className="border border-slate-300 px-4">End Year</th>
           <th className="border border-slate-300 px-4">Action</th>
         </tr>
         {regulationList.map((item, index) => (
@@ -51,7 +43,6 @@ export function RegulationList({ regulationList }) {
             <td className="border border-slate-300 px-4">
               {item.announcedYear}
             </td>
-            <td className="border border-slate-300 px-4">{item.endYear}</td>
             <td className="border border-slate-300 px-4">
               <button
                 className="text-primary-foreground cursor-pointer rounded-md bg-primary text-white hover:bg-primary/90"

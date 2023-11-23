@@ -1,10 +1,10 @@
 import { z } from 'zod';
 
-import { AddRegulationModel } from './models';
+import { RegulationModel } from '../../../lib/domain/regulation';
 
 const schema = z.object({});
 
-export async function validateAddRegulation(addRegulation: AddRegulationModel) {
+export async function validateAddRegulation(addRegulation: RegulationModel) {
   try {
     schema.parse(addRegulation);
   } catch (e) {

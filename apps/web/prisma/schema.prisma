@@ -166,7 +166,7 @@ model Regulation {
   id             String    @id @default(auto()) @map("_id") @db.ObjectId
   regulationName String
   announcedYear  String
-  endYear        String
+  endYear        String?
   isActive       Boolean
   isDeleted      Boolean   @default(false)
   deletedAt      DateTime?

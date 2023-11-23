@@ -1,5 +1,7 @@
+import { getServerSession } from 'next-auth';
 import { db } from '../../../lib/db';
-import { AddRegulationModel } from './models';
+import { RegulationModel } from '../../../lib/domain/regulation';
+import { authOptions } from '../../../lib/auth';
 
 export async function getRegulationList({ branchId }) {
   return await db.regulation.findMany({
@@ -10,13 +12,18 @@ export async function getRegulationList({ branchId }) {
   });
 }
 
-export async function addRegulation(regulation: AddRegulationModel) {
+export async function addRegulation(regulation: RegulationModel) {
+  const session = await getServerSession(authOptions);
   return await db.regulation.create({
     data: {
       ...regulation,
       endYear: regulation.endYear,
       isActive: regulation.isActive,
-      branchId: regulation.branchId,
+      branch: {
+        connect: {
+          id: session.branchId,
+        },
+      },
       announcedYear: regulation.announcedYear,
       regulationName: regulation.regulationName,
     },
