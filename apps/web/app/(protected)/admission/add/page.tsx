@@ -9,9 +9,9 @@ import {
 
 import { authOptions } from '../../../../lib/auth';
 import { AdmissionPage } from './components/AdmissionPage';
+import { AdmissionsBreadcrumb } from './components/AdmissionsBreadcrumb';
 import { EnquiryPage } from './components/EnquiryPage';
 import { PageHeader } from '../../../../lib/components/PageHeader';
-import { PathBreadcrumb } from '../../../../lib/components/PathBreadcrumb';
 
 export default async function Page() {
   const session = await getServerSession(authOptions);
@@ -22,7 +22,7 @@ export default async function Page() {
 
   return (
     <section className="flex h-full w-full flex-col gap-[20px] bg-gray-50 px-[25px] py-[40px] sm:px-[50px]">
-      <PathBreadcrumb />
+      <AdmissionsBreadcrumb />
       <PageHeader title="Configure" />
 
       <Tabs defaultValue="admission" className="mt-4">
