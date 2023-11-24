@@ -7,7 +7,7 @@ type PageHeaderProps = {
 
 export function PageHeader({ title, className }: PageHeaderProps) {
   return (
-    <div className={cn('text-xl font-medium text-black', className)}>
+    <div className={cn('mt-2 text-xl font-semibold text-black', className)}>
       <h1>{title}</h1>
     </div>
   );

@@ -1,3 +1,5 @@
+'use client';
+
 import { PlusCircle } from 'lucide-react';
 import { useForm, useWatch } from 'react-hook-form';
 import {

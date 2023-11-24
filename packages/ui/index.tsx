@@ -18,6 +18,8 @@ export * from './components/ui/AlertDialog';
 export * from './components/ui/Avatar';
 export * from './components/ui/DropdownMenu';
 export * from './components/ui/NavigationMenu';
+export * from './components/ui/MenuBar';
+export * from './components/ui/Select';
 
 export * from './hooks/useToast';
 export * from './components/ui/FlyoutSheet';

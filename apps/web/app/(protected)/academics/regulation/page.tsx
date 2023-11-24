@@ -2,28 +2,36 @@ import { redirect } from 'next/navigation';
 import { getServerSession } from 'next-auth';
 
 import { authOptions } from '../../../../lib/auth';
-import { RegulationList } from '../../../../lib/components/regulation/regulationList';
-import { getRegulationList } from '../../../api/regulation/service';
 import { PageHeader } from '../../../../lib/components/PageHeader';
+import { RegulationListTable } from './components/RegulationListTable';
 import { PathBreadcrumb } from '../../../../lib/components/PathBreadcrumb';
+import { RegulationShareFlyout } from './components/RegulationShareFlyout';
+import { RegulationFilterOptions } from './components/RegulationFilterOptions';
 
 export default async function Page() {
   const session = await getServerSession(authOptions);
   if (!session.branchId || !session.organizationId) {
     return redirect('/signin?callbackUrl=/academics/regulation');
   }
-  try {
-    const apiResponse = await getRegulationList({
-      branchId: session.branchId,
-    });
-    return (
-      <section className="flex h-full w-full flex-col gap-[20px] bg-gray-50 px-[25px] py-[40px] sm:px-[50px]">
-        <PathBreadcrumb />
-        <PageHeader title="Regulation Management" />
-        <RegulationList regulationList={apiResponse} />
-      </section>
-    );
-  } catch (error) {
-    console.log(error);
-  }
+
+  return (
+    <section className="h-full w-full bg-gray-50 px-7 py-12">
+      <div className="flex justify-between">
+        <div>
+          <PathBreadcrumb />
+          <PageHeader title="Regulation Management" />
+        </div>
+        <div>
+          <RegulationShareFlyout></RegulationShareFlyout>
+        </div>
+      </div>
+
+      <div>
+        <div className="mt-4 rounded-md bg-white p-3">
+          <RegulationFilterOptions></RegulationFilterOptions>
+          <RegulationListTable></RegulationListTable>
+        </div>
+      </div>
+    </section>
+  );
 }
