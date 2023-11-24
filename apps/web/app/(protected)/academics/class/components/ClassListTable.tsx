@@ -1,12 +1,12 @@
 'use client';
 
-import { AddClassFlyout } from './ClassFlyout';
+import { ClassFlyout } from './ClassFlyout';
 
 export function ClassList() {
   return (
-    <section className="bg-gray-50 p-3">
-      <div className="mx-7  flex justify-end">
-        <AddClassFlyout />
+    <section className="p-3 bg-gray-50">
+      <div className="flex justify-end mx-7">
+        <ClassFlyout />
       </div>
     </section>
   );
