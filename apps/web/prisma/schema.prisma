@@ -84,6 +84,7 @@ model Branch {
   Batch          Batch[]
   Student        Student[]
   class          Class[]
+  staff          Staff[]
 }
 
 model Organization {
@@ -101,6 +102,7 @@ model Organization {
   createdBy   User               @relation(fields: [createdById], references: [id])
   createdById String             @db.ObjectId
   Student     Student[]
+  staff       Staff[]
 }
 
 model UserOrganization {
@@ -290,7 +292,7 @@ model Student {
 }
 
 model Staff {
-  id               String    @id @default(auto()) @map("_id") @db.ObjectId
+  id               String        @id @default(auto()) @map("_id") @db.ObjectId
   type             StaffType
   aadharCardNumber String
   annualIncome     String
@@ -298,10 +300,17 @@ model Staff {
   dob              String
   address          String
   dateOfJoining    String
-  userId           String    @unique @db.ObjectId
-  user             User      @relation(fields: [userId], references: [id])
-  Section          Section[] @relation(fields: [sectionId], references: [id])
-  sectionId        String[]  @db.ObjectId
+  status           StaffStatus
+  userId           String        @unique @db.ObjectId
+  user             User          @relation(fields: [userId], references: [id])
+  Section          Section[]     @relation(fields: [sectionId], references: [id])
+  sectionId        String[]      @db.ObjectId
+  createdAt        DateTime?     @default(now())
+  updatedAt        DateTime?     @default(now())
+  Organization     Organization? @relation(fields: [organizationId], references: [id])
+  organizationId   String?       @db.ObjectId
+  Branch           Branch?       @relation(fields: [branchId], references: [id])
+  branchId         String?       @db.ObjectId
 }
 
 model Batch {
@@ -378,6 +387,14 @@ enum StudentStatus {
   Pending
   Rejected
   Active
+}
+
+enum StaffStatus {
+  Active
+  InActive
+  Resigned
+  Suspended
+  Fired
 }
 
 enum AdmissionStatus {
