@@ -1,0 +1,33 @@
+name: Code Linting
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  code_lint:
+    name: Code Lint
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: checkout repository
+        uses: actions/checkout@v4
+
+      - name: setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: latest
+
+      - name: setup node
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+          cache: 'pnpm'
+
+      - name: install dependencies
+        run: pnpm install
+
+      - name: ci checks
+        run: pnpm run lint
