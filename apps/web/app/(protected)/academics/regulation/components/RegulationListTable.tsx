@@ -1,4 +1,16 @@
-import { ChevronDown } from 'lucide-react';
+'use client';
+
+import {
+  ColumnDef,
+  flexRender,
+  getCoreRowModel,
+  getFilteredRowModel,
+  getPaginationRowModel,
+  getSortedRowModel,
+  useReactTable,
+} from '@tanstack/react-table';
+import { ChevronDown, GripVertical } from 'lucide-react';
+import { Button } from 'ui';
 import {
   Table,
   TableBody,
@@ -7,36 +19,130 @@ import {
   TableHeader,
   TableRow,
 } from 'ui/components/ui/Table';
+import { cn } from 'utils';
+
+import { useGetRegulationListQuery } from '../../../../../lib/queries/useGetRegulationListQuery';
 
 export function RegulationListTable() {
+  const columns: ColumnDef<any>[] = [
+    {
+      accessorKey: 'regulationName',
+      header: ({ column }) => {
+        return (
+          <Button
+            variant="ghost"
+            onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+          >
+            Regulation Name
+          </Button>
+        );
+      },
+    },
+    {
+      accessorKey: 'announcedYear',
+      header: ({ column }) => {
+        return (
+          <Button
+            variant="ghost"
+            onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+          >
+            Announced Year
+          </Button>
+        );
+      },
+    },
+    {
+      accessorKey: 'isActive',
+      header: ({ column }) => {
+        return (
+          <Button
+            variant="ghost"
+            onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+          >
+            Active Status
+          </Button>
+        );
+      },
+    },
+  ];
+
+  const { data: regulationList } = useGetRegulationListQuery();
+  const table = useReactTable({
+    columns,
+    data: regulationList || [],
+    getCoreRowModel: getCoreRowModel(),
+    getSortedRowModel: getSortedRowModel(),
+    getFilteredRowModel: getFilteredRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
+  });
+
   return (
     <section>
-      <div className="mt-7">
+      <div className="rounded-md border">
         <Table>
           <TableHeader>
-            <TableRow>
-              <TableHead>S.No</TableHead>
-              <TableHead>Regulation Name</TableHead>
-              <TableHead>Announced Year</TableHead>
-              <TableHead>End Year</TableHead>
-              <TableHead>Action</TableHead>
-            </TableRow>
+            {table.getHeaderGroups().map((headerGroup) => (
+              <TableRow
+                key={headerGroup.id}
+                className="cursor-pointer text-lg "
+              >
+                <TableHead className="cursor-pointer font-bold">S.no</TableHead>
+                {headerGroup.headers.map((header) => {
+                  return (
+                    <TableHead key={header.id}>
+                      {header.isPlaceholder
+                        ? null
+                        : flexRender(
+                            header.column.columnDef.header,
+                            header.getContext()
+                          )}
+                    </TableHead>
+                  );
+                })}
+                <TableHead className="cursor-pointer font-bold">
+                  Actions
+                </TableHead>
+              </TableRow>
+            ))}
           </TableHeader>
+
           <TableBody>
-            <TableRow>
-              <TableCell>1</TableCell>
-              <TableCell>Example Regulation</TableCell>
-              <TableCell>2021</TableCell>
-              <TableCell>2041</TableCell>
-              <TableCell>...</TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell>2</TableCell>
-              <TableCell>Regulation Two</TableCell>
-              <TableCell>2023</TableCell>
-              <TableCell>2044</TableCell>
-              <TableCell>...</TableCell>
-            </TableRow>
+            {table.getRowModel().rows?.length ? (
+              table.getRowModel().rows.map((row, index) => (
+                <TableRow
+                  key={row.id}
+                  data-state={row.getIsSelected() && 'selected'}
+                  className={cn(
+                    'cursor-pointer',
+                    index % 2 !== 0 && 'bg-white-200 cursor-pointer'
+                  )}
+                >
+                  <TableCell>{index + 1}</TableCell>
+                  {row.getVisibleCells().map((cell) => (
+                    <TableCell key={cell.id}>
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext()
+                      )}
+                    </TableCell>
+                  ))}
+                  <TableCell>
+                    <Button variant="destructive" className="mr-1 ">
+                      <GripVertical size={16} className="mr-2 text-black" />
+                    </Button>
+                  </TableCell>
+                </TableRow>
+              ))
+            ) : (
+              <TableRow>
+                <TableCell
+                  colSpan={columns.length}
+                  className="h-24 text-center"
+                >
+                  No Regulation Found
+                </TableCell>
+              </TableRow>
+            )}
           </TableBody>
         </Table>
       </div>
