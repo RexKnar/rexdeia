@@ -45,6 +45,7 @@ model User {
   username      String?   @unique
   password      String
   phoneNumber   String
+  role          UserRole  @default(User)
 
   image                 String?
   staff                 Staff?
@@ -55,6 +56,14 @@ model User {
   createdBranches       Branch[]
   createdOrganizations  Organization[]
   createdAdmissionForms AdmissionForm[]
+}
+
+enum UserRole {
+  Admin
+  TeachingStaff
+  NonTeachingStaff
+  Student
+  User
 }
 
 model Branch {
@@ -353,16 +362,16 @@ model Test {
 }
 
 enum StaffType {
-  TEACHING
-  NON_TEACHING
-  PRINCIPAL
-  CORRESPONDENT
+  Teaching
+  NonTeaching
+  Principal
+  Correspondent
 }
 
 enum TestType {
-  UNIT_TEST
-  TERM_TEST
-  CLASS_TEST
+  UnitTest
+  TermTest
+  ClassTest
 }
 
 enum StudentStatus {

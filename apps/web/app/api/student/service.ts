@@ -2,6 +2,7 @@ import { db } from '../../../lib/db';
 import { AddStudentModel } from '../../../lib/domain';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '../../../lib/auth';
+import { UserRole } from '@prisma/client';
 
 export async function getStudentById(id: string) {
   const session = await getServerSession(authOptions);
@@ -35,6 +36,7 @@ export async function addStudent(student: AddStudentModel) {
         email: student.emailId,
         username: student.emailId,
         phoneNumber: student.phoneNumber,
+        role: UserRole.Student,
       },
     });
   }
@@ -106,7 +108,6 @@ export async function addStudent(student: AddStudentModel) {
 
 export async function getStudentsList(page: number, pageSize: number) {
   const session = await getServerSession(authOptions);
-  const total = await db.student.count();
   const studentsList = await db.student.findMany({
     take: pageSize,
     skip: (page - 1) * pageSize,
@@ -116,7 +117,7 @@ export async function getStudentsList(page: number, pageSize: number) {
       organizationId: session.organizationId,
     },
   });
-
+  const total = studentsList.length;
   return {
     total,
     page,

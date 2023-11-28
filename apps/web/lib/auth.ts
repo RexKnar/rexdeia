@@ -54,6 +54,7 @@ export const authOptions: NextAuthOptions = {
         session.user.email = token.email;
         session.user.image = token.picture;
         session.user.username = token.username;
+        session.user.role = token.role;
         session.branchId = token.branchId as string;
         session.organizationId = token.organizationId as string;
         session.user.createdBranches = token.createdBranches as any[];
@@ -101,6 +102,7 @@ export const authOptions: NextAuthOptions = {
         email: dbUser.email,
         image: dbUser.image,
         username: dbUser.username,
+        role: dbUser.role,
         createdBranches: dbUser.createdBranches,
       };
     },
