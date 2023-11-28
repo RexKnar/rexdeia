@@ -24,6 +24,7 @@ export const CREATE_SHARE_FOR_FORM = `CREATE_SHARE_FOR_FORM`;
 export const UPDATE_SHARE_FOR_FORM = `UPDATE_SHARE_FOR_FORM`;
 export const GET_STUDENTS_LIST = `GET_STUDENTS_LIST`;
 export const ADD_CLASS = `ADD_CLASS`;
+export const GET_CLASS = `GET_CLASS`;
 
 type EndpointDetails = Record<
   string,
@@ -125,6 +126,10 @@ export default <EndpointDetails>{
   },
   [ADD_CLASS]: {
     requestType: `POST`,
+    endpoint: `/api/class`,
+  },
+  [GET_CLASS]: {
+    requestType: `GET`,
     endpoint: `/api/class`,
   },
 };
