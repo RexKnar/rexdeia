@@ -1,11 +1,11 @@
 import { ChevronDown } from 'lucide-react';
 import {
   Table,
-  TableHeader,
-  TableRow,
-  TableHead,
   TableBody,
   TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
 } from 'ui/components/ui/Table';
 
 export function RegulationListTable() {

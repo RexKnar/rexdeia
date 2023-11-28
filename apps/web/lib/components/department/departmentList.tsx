@@ -13,7 +13,7 @@ export function DepartmentList({ departmentList }) {
       await makeAPICall(DELETE_DEPARTMENT, { departmentId });
       window.location.reload();
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   }
 

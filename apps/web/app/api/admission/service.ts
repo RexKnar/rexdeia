@@ -1,6 +1,7 @@
-import { db } from '../../../lib/db';
 import { getServerSession } from 'next-auth';
+
 import { authOptions } from '../../../lib/auth';
+import { db } from '../../../lib/db';
 import { AddStudentModel } from '../../../lib/domain';
 
 export async function addAdmission(student: AddStudentModel) {

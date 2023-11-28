@@ -24,7 +24,7 @@ export function RegulationForm({ branchId, organizationId }) {
       });
       router.push('/academics/regulation');
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   }
 

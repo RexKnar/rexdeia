@@ -23,7 +23,7 @@ export function DepartmentForm({ branchId, organizationId }) {
       });
       router.push('/academics/department');
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   }
 

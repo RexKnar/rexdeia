@@ -3,10 +3,10 @@ import { getServerSession } from 'next-auth';
 
 import { authOptions } from '../../../../lib/auth';
 import { PageHeader } from '../../../../lib/components/PageHeader';
-import { RegulationListTable } from './components/RegulationListTable';
 import { PathBreadcrumb } from '../../../../lib/components/PathBreadcrumb';
-import { RegulationShareFlyout } from './components/RegulationShareFlyout';
 import { RegulationFilterOptions } from './components/RegulationFilterOptions';
+import { RegulationListTable } from './components/RegulationListTable';
+import { RegulationShareFlyout } from './components/RegulationShareFlyout';
 
 export default async function Page() {
   const session = await getServerSession(authOptions);

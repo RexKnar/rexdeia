@@ -1,8 +1,8 @@
 'use client';
 
+import { AlertCircleIcon, CalendarIcon, Files, Share2 } from 'lucide-react';
 import Image from 'next/image';
 import React, { useEffect, useState } from 'react';
-import { AlertCircleIcon, CalendarIcon, Files, Share2 } from 'lucide-react';
 import {
   Alert,
   AlertDescription,
@@ -22,12 +22,12 @@ import {
   Text,
   useToast,
 } from 'ui';
+import { copyToClipboard } from 'utils';
 
-import shareIcon from '../../../../../public/assets/images/shareIcon.svg';
 import { useCreateShareDetailsForFormMutationQuery } from '../../../../../lib/queries/useCreateShareDetailsForFormMutationQuery';
 import { useGetAdmissionFormShareDetailsQuery } from '../../../../../lib/queries/useGetAdmissionFormShareDetailsQuery';
-import { copyToClipboard } from 'utils';
 import { useUpdateShareDetailsForFormMutationQuery } from '../../../../../lib/queries/useUpdateShareDetailsForFormMutationQuery';
+import shareIcon from '../../../../../public/assets/images/shareIcon.svg';
 
 type AdmissionShareFlyoutProps = {
   formId: string;
@@ -142,7 +142,7 @@ export function AdmissionShareFlyout({ formId }: AdmissionShareFlyoutProps) {
                 </Text>
                 <br />
                 <Text variant="sm-regular">
-                  Just make sure you've toggled the <strong>Active</strong>{' '}
+                  Just make sure you have toggled the <strong>Active</strong>{' '}
                   switch on the top, if you want to make the form active for
                   public. Further, you can customize the availability of the
                   form by setting <strong>active from</strong> and{' '}

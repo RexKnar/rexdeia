@@ -1,6 +1,6 @@
-import { StudentsList } from './components/StudentsList';
 import { PageHeader } from '../../../../lib/components/PageHeader';
 import { PathBreadcrumb } from '../../../../lib/components/PathBreadcrumb';
+import { StudentsList } from './components/StudentsList';
 
 export default async function Page() {
   return (

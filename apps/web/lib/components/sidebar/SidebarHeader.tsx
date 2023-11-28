@@ -2,8 +2,8 @@
 
 import { ChevronDown, Settings } from 'lucide-react';
 
-import { UserMenu } from '../header/UserMenu';
 import { useGetUserDetailsQuery } from '../../queries/useGetUserDetailsQuery';
+import { UserMenu } from '../header/UserMenu';
 
 export function SidebarHeader() {
   const { data, isLoading } = useGetUserDetailsQuery();

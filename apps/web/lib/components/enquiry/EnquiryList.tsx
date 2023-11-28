@@ -17,7 +17,7 @@ export function EnquiryList() {
         const pageValue = (Number(page) - 1) * 10;
         setEnquiryList(await makeAPICall(LIST_ENQUIRY, { pageValue }));
       } catch (error) {
-        console.log(error);
+        console.error(error);
       }
     })();
   }, [page]);

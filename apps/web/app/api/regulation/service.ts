@@ -1,7 +1,8 @@
 import { getServerSession } from 'next-auth';
+
+import { authOptions } from '../../../lib/auth';
 import { db } from '../../../lib/db';
 import { RegulationModel } from '../../../lib/domain/regulation';
-import { authOptions } from '../../../lib/auth';
 
 export async function getRegulationList({ branchId }) {
   return await db.regulation.findMany({

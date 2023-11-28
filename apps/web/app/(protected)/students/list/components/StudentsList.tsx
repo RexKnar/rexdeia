@@ -1,8 +1,19 @@
 'use client';
 
+import {
+  ColumnDef,
+  ColumnFiltersState,
+  flexRender,
+  getCoreRowModel,
+  getFilteredRowModel,
+  getPaginationRowModel,
+  getSortedRowModel,
+  SortingState,
+  useReactTable,
+} from '@tanstack/react-table';
 import { GripVertical } from 'lucide-react';
-import { Button } from 'ui';
 import React, { useEffect, useState } from 'react';
+import { Button } from 'ui';
 import {
   Table,
   TableBody,
@@ -12,17 +23,7 @@ import {
   TableRow,
 } from 'ui/components/ui/Table';
 import { cn } from 'utils';
-import {
-  ColumnDef,
-  ColumnFiltersState,
-  SortingState,
-  flexRender,
-  getCoreRowModel,
-  getFilteredRowModel,
-  getPaginationRowModel,
-  getSortedRowModel,
-  useReactTable,
-} from '@tanstack/react-table';
+
 import { makeAPICall } from '../../../../../lib/api';
 import { GET_STUDENTS_LIST } from '../../../../../lib/endpoints';
 

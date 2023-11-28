@@ -1,10 +1,10 @@
+import { StatusCodes } from 'http-status-codes';
 import { NextRequest, NextResponse } from 'next/server';
 import razorpay from 'razorpay';
 
 import { getOrganizationById } from '../organization/[id]/service';
 import { AddPayment, addPaymentAssociation } from './service';
 import { validateAddPayment } from './validator';
-import { StatusCodes } from 'http-status-codes';
 
 const instance = new razorpay({
   key_id: `${process.env['NEXT_RAZORPAY_KEY_ID']}`,

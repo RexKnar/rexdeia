@@ -22,7 +22,7 @@ export function CourseForm() {
       });
       router.push('/academics/course');
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   }
 

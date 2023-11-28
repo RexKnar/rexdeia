@@ -2,8 +2,8 @@
 
 import { Avatar, AvatarImage } from 'ui';
 
-import { UserMenu } from '../footer/UserMenu';
 import { useGetUserDetailsQuery } from '../../queries/useGetUserDetailsQuery';
+import { UserMenu } from '../footer/UserMenu';
 
 export function SidebarFooter() {
   const { data, isLoading } = useGetUserDetailsQuery();

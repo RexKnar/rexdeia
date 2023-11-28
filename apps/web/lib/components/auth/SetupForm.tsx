@@ -61,7 +61,7 @@ export function SetupForm({ branchId, organizationId }: SetupFormProps) {
 
       router.push(`/onboarding`);
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   }
 

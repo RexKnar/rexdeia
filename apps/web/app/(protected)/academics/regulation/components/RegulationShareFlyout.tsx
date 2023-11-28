@@ -3,18 +3,19 @@
 import { PlusCircle } from 'lucide-react';
 import { useForm, useWatch } from 'react-hook-form';
 import {
+  Button,
+  Input,
   Sheet,
-  SheetTrigger,
   SheetContent,
   SheetHeader,
   SheetTitle,
-  Button,
+  SheetTrigger,
   Switch,
-  Input,
   Text,
 } from 'ui';
-import { useCreateRegulationsForFormMutationQuery } from '../../../../../lib/queries/useCreateRegulationsForFormMutationQuery';
+
 import { CreateRegulationModel } from '../../../../../lib/domain/regulation';
+import { useCreateRegulationsForFormMutationQuery } from '../../../../../lib/queries/useCreateRegulationsForFormMutationQuery';
 
 function RegulationShareFlyout() {
   const {
@@ -36,7 +37,7 @@ function RegulationShareFlyout() {
     try {
       await mutateCreateRegulationsAsync(payload);
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   }
 

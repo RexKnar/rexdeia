@@ -1,11 +1,6 @@
 module.exports = {
   root: false,
-  extends: [
-    'eslint:recommended',
-    'next',
-    'turbo',
-    'plugin:deprecation/recommended',
-  ],
+  extends: ['eslint:recommended', 'next', 'turbo'],
   plugins: [
     '@typescript-eslint',
     'small-import',
@@ -17,6 +12,11 @@ module.exports = {
     // Base rules
     'prefer-let/prefer-let': 0,
     'prettier/prettier': 'error',
+
+    // Console rules
+    'no-alert': 'error',
+    'no-debugger': 'error',
+    'no-console': ['error', { allow: ['warn', 'error'] }],
 
     // Import related rules
     'simple-import-sort/imports': 'error',

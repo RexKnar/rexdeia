@@ -37,8 +37,7 @@ export function Form({ formConfig }) {
         ...data,
       });
     } catch (error1) {
-      console.log(error1);
-      // TODO: Handle error
+      console.error(error1);
     }
   }
   return (
@@ -204,7 +203,7 @@ export function Form({ formConfig }) {
         <div className="flex justify-end gap-4">
           <button
             type="button"
-            className="text-primary-foreground mt-6 h-12 cursor-pointer rounded-md  bg-primary px-4 py-3 text-white hover:bg-primary/90"
+            className="text-primary-foreground mt-6 h-12 cursor-pointer rounded-md bg-primary px-4 py-3 text-white hover:bg-primary/90"
             onClick={prevStep}
             disabled={currentStep === 0}
           >
@@ -214,7 +213,7 @@ export function Form({ formConfig }) {
           {currentStep === totalSteps - 1 ? (
             <button
               type="submit"
-              className="text-primary-foreground mt-6 h-12 cursor-pointer rounded-md  bg-primary px-4 py-3 text-white hover:bg-primary/90"
+              className="text-primary-foreground mt-6 h-12 cursor-pointer rounded-md bg-primary px-4 py-3 text-white hover:bg-primary/90"
             >
               {isSubmitting ? (
                 <div className="flex h-screen items-center justify-center">
@@ -228,7 +227,7 @@ export function Form({ formConfig }) {
             <button
               type="button"
               onClick={nextStep}
-              className="text-primary-foreground mt-6 h-12 cursor-pointer rounded-md  bg-primary px-4 py-3 text-white hover:bg-primary/90"
+              className="text-primary-foreground mt-6 h-12 cursor-pointer rounded-md bg-primary px-4 py-3 text-white hover:bg-primary/90"
             >
               {isSubmitting ? (
                 <div className="flex h-screen items-center justify-center">

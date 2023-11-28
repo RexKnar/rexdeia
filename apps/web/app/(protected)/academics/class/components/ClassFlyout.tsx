@@ -1,16 +1,17 @@
 import { PlusCircle } from 'lucide-react';
 import { useForm, useWatch } from 'react-hook-form';
 import {
+  Button,
+  Input,
   Sheet,
-  SheetTrigger,
   SheetContent,
   SheetHeader,
   SheetTitle,
-  Button,
+  SheetTrigger,
   Switch,
-  Input,
   Text,
 } from 'ui';
+
 import { useCreateClassForFormMutationQuery } from '../../../../../lib/queries/useCreateClassForFormMutationQuery';
 
 export function ClassFlyout() {
@@ -33,7 +34,7 @@ export function ClassFlyout() {
     try {
       await mutateCreateClassAsync(payload);
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   }
 

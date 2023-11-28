@@ -20,6 +20,6 @@ export default async function Page() {
       </div>
     );
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 }

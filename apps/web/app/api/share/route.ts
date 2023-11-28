@@ -1,9 +1,10 @@
+import { StatusCodes } from 'http-status-codes';
 import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
+
 import { authOptions } from '../../../lib/auth';
-import { validateCreateShare } from './[id]/validator';
 import { createShare } from './[id]/service';
-import { StatusCodes } from 'http-status-codes';
+import { validateCreateShare } from './[id]/validator';
 
 export async function POST(request: NextRequest) {
   const payload = await request.json();

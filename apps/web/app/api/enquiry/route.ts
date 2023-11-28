@@ -1,8 +1,8 @@
+import { StatusCodes } from 'http-status-codes';
 import { NextRequest, NextResponse } from 'next/server';
 
 import { addEnquiry } from './service';
 import { validateAddEnquiry } from './validator';
-import { StatusCodes } from 'http-status-codes';
 
 export async function POST(request: NextRequest) {
   const payload = await request.json();

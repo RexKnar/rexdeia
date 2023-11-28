@@ -2,8 +2,8 @@ import { redirect } from 'next/navigation';
 import { getServerSession } from 'next-auth';
 
 import { authOptions } from '../../../../lib/auth';
-import { AddStudentPage } from '../components/AddStudentPage';
 import { PathBreadcrumb } from '../../../../lib/components/PathBreadcrumb';
+import { AddStudentPage } from '../components/AddStudentPage';
 
 export default async function Page() {
   const session = await getServerSession(authOptions);

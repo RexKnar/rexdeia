@@ -1,8 +1,9 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { addClass, getClassList } from './service';
 import { StatusCodes } from 'http-status-codes';
+import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
+
 import { authOptions } from '../../../lib/auth';
+import { addClass, getClassList } from './service';
 
 export async function GET() {
   const session = await getServerSession(authOptions);

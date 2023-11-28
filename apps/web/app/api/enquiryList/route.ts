@@ -1,7 +1,7 @@
+import { StatusCodes } from 'http-status-codes';
 import { NextRequest, NextResponse } from 'next/server';
 
 import { getEnquiryList } from './service';
-import { StatusCodes } from 'http-status-codes';
 
 export async function POST(request: NextRequest) {
   const payload = await request.json();
@@ -11,7 +11,6 @@ export async function POST(request: NextRequest) {
       status: StatusCodes.OK,
     });
   } catch (e) {
-    console.log('error');
     return new NextResponse(e, {
       status: StatusCodes.BAD_REQUEST,
     });

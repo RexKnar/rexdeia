@@ -8,10 +8,10 @@ import {
 } from 'ui/components/ui/Tabs';
 
 import { authOptions } from '../../../../lib/auth';
-import { AdmissionPage } from './components/AdmissionPage';
-import { EnquiryPage } from './components/EnquiryPage';
 import { PageHeader } from '../../../../lib/components/PageHeader';
 import { PathBreadcrumb } from '../../../../lib/components/PathBreadcrumb';
+import { AdmissionPage } from './components/AdmissionPage';
+import { EnquiryPage } from './components/EnquiryPage';
 
 export default async function Page() {
   const session = await getServerSession(authOptions);

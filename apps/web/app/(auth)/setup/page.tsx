@@ -46,7 +46,7 @@ export default async function Page({
           }}
         ></section>
 
-        <section className="flex h-full w-full translate-y-0 transform flex-col  p-8 opacity-100 transition-all duration-500 ease-in-out sm:w-3/4 md:w-3/4">
+        <section className="flex h-full w-full translate-y-0 transform flex-col p-8 opacity-100 transition-all duration-500 ease-in-out sm:w-3/4 md:w-3/4">
           <div className="mt-3 flex justify-center">
             <Image src={logo} alt={'logo'} width={150}></Image>
           </div>

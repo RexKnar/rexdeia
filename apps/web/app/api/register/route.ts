@@ -1,8 +1,8 @@
+import { StatusCodes } from 'http-status-codes';
 import { NextRequest, NextResponse } from 'next/server';
 
 import { onBoardUserAndOrganization } from './service';
 import { validateAddUser } from './validator';
-import { StatusCodes } from 'http-status-codes';
 
 export async function POST(request: NextRequest) {
   const payload = await request.json();

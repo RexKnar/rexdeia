@@ -1,9 +1,9 @@
+import { StatusCodes } from 'http-status-codes';
 import { NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 
 import { authOptions } from '../../../../lib/auth';
 import { getOrganisationsByUserId } from './service';
-import { StatusCodes } from 'http-status-codes';
 
 export async function GET() {
   const session = await getServerSession(authOptions);

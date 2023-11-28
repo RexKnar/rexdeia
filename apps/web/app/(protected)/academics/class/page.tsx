@@ -1,8 +1,9 @@
+import { redirect } from 'next/navigation';
+import { getServerSession } from 'next-auth';
+
+import { authOptions } from '../../../../lib/auth';
 import { PageHeader } from '../../../../lib/components/PageHeader';
 import { PathBreadcrumb } from '../../../../lib/components/PathBreadcrumb';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '../../../../lib/auth';
-import { redirect } from 'next/navigation';
 import { ClassList } from './components/ClassListTable';
 
 export default async function Page() {
@@ -13,11 +14,11 @@ export default async function Page() {
   }
 
   return (
-    <section className="w-full p-3 bg-gray-50">
+    <section className="w-full bg-gray-50 p-3">
       <div className="mx-6 mt-8">
         <PathBreadcrumb />
       </div>
-      <div className="p-6 mx-auto my-5 bg-white rounded-md">
+      <div className="mx-auto my-5 rounded-md bg-white p-6">
         <PageHeader title="Students List" className="mb-3" />
         <ClassList />
       </div>

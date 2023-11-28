@@ -25,7 +25,6 @@ export function SignInForm() {
   } = useForm();
 
   const searchParams = useSearchParams();
-  console.log(searchParams);
   const error = searchParams.get('error');
 
   async function signInHandler({ email, password }) {
@@ -36,7 +35,7 @@ export function SignInForm() {
         callbackUrl: '/workspace',
       });
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   }
 

@@ -4,9 +4,9 @@ import { Loader2, XCircle } from 'lucide-react';
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 
+import { AdmissionShareFlyout } from '../../../app/(protected)/admission/add/components/AdmissionShareFlyout';
 import { makeAPICall } from '../../api';
 import { ADD_ADMISSION } from '../../endpoints';
-import { AdmissionShareFlyout } from '../../../app/(protected)/admission/add/components/AdmissionShareFlyout';
 import { useGetAdmissionFormShareDetailsQuery } from '../../queries/useGetAdmissionFormShareDetailsQuery';
 import { formatStudentPayload } from '../../utils/formatters';
 
@@ -81,7 +81,7 @@ export function AdmissionForm({ formId, formConfig }: AdmissionFormProps) {
         }
       );
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   }
 

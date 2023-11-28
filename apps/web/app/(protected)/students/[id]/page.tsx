@@ -1,13 +1,14 @@
+import { PencilLine, Search } from 'lucide-react';
+import { Avatar, AvatarImage, Button, Input, Text } from 'ui';
 import {
   Tabs,
   TabsContent,
   TabsList,
   TabsTrigger,
 } from 'ui/components/ui/Tabs';
+
 import { PageHeader } from '../../../../lib/components/PageHeader';
 import { StudentDetail } from './components/StudentDetail';
-import { Avatar, AvatarImage, Button, Input, Text } from 'ui';
-import { Search, PencilLine } from 'lucide-react';
 
 export default async function Page() {
   return (

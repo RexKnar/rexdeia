@@ -1,4 +1,5 @@
 import { z } from 'zod';
+
 import { AddStudentModel } from '../../../lib/domain';
 
 const schema = z.object({

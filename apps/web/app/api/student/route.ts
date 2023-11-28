@@ -1,10 +1,10 @@
+import { StatusCodes } from 'http-status-codes';
 import { NextRequest, NextResponse } from 'next/server';
+import { getServerSession } from 'next-auth';
 
+import { authOptions } from '../../../lib/auth';
 import { addStudent, getStudentsList } from './service';
 import { validateAddUser } from './validator';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '../../../lib/auth';
-import { StatusCodes } from 'http-status-codes';
 
 export async function POST(request: NextRequest) {
   const session = await getServerSession(authOptions);

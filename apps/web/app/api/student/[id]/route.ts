@@ -1,6 +1,7 @@
-import { NextRequest } from 'next/server';
-import { getStudentById } from '../service';
 import { StatusCodes } from 'http-status-codes';
+import { NextRequest } from 'next/server';
+
+import { getStudentById } from '../service';
 
 export async function GET(_: NextRequest, { params: { id } }) {
   try {

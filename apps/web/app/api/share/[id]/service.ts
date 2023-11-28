@@ -1,5 +1,5 @@
-import { CreateShare, UpdateShare } from './models';
 import { db } from '../../../../lib/db';
+import { CreateShare, UpdateShare } from './models';
 
 export async function createShare(createShare: CreateShare) {
   return await db.share.create({

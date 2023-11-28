@@ -22,6 +22,7 @@ import {
   TableRow,
 } from 'ui/components/ui/Table';
 import { cn } from 'utils';
+
 import { makeAPICall } from '../../../../../lib/api';
 import { GET_ADMISSIONS_LIST } from '../../../../../lib/endpoints';
 

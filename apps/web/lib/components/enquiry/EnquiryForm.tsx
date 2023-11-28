@@ -17,12 +17,12 @@ export function EnquiryForm({ formConfig }) {
         ...data,
       });
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   }
   const handleShare = () => {
     const shareableURL = `localhost:3000/forms/enquiryForm/${formConfig.organizationId}`;
-    alert(shareableURL);
+    console.warn(shareableURL);
   };
 
   return (

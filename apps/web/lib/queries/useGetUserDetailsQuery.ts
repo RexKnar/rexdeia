@@ -1,7 +1,8 @@
 import { useQuery, UseQueryOptions } from '@tanstack/react-query';
-import { GET_USER_DETAILS } from '../endpoints';
+
 import { makeAPICall } from '../api';
 import { GetUserDetailsByIdModel } from '../domain/user';
+import { GET_USER_DETAILS } from '../endpoints';
 
 export function useGetUserDetailsQuery(
   options?: UseQueryOptions<GetUserDetailsByIdModel>

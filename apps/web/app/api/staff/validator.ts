@@ -1,4 +1,5 @@
 import { z } from 'zod';
+
 import { AddStaffModel, UpdateStaffModel } from '../../../lib/domain/staff';
 
 const schema = z.object({

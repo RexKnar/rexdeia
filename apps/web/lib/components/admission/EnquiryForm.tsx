@@ -30,7 +30,7 @@ export function EnquiryForm({ formConfig, formId }: EnquiryFormProps) {
         }
       );
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   }
 

@@ -3,9 +3,10 @@
 import { Loader2, XCircle } from 'lucide-react';
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
+
 import { makeAPICall } from '../../api';
-import { ADD_STUDENT } from '../../endpoints';
 import { AddStudentModel } from '../../domain';
+import { ADD_STUDENT } from '../../endpoints';
 import { formatStudentPayload } from '../../utils/formatters';
 
 type AddStudentFormProps = {
@@ -77,7 +78,7 @@ export function AddStudentForm({ formConfig, formId }: AddStudentFormProps) {
         }
       );
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   }
 

@@ -1,15 +1,15 @@
 import { FileInput } from 'lucide-react';
 import { Button } from 'ui';
+import { formatNumberWithSuffix } from 'utils';
 
+import { PageHeader } from '../../../../lib/components/PageHeader';
 import admissionRequestIcon from '../../../../public/assets/images/admission-request.svg';
 import inProgressIcon from '../../../../public/assets/images/in-progress.svg';
 import rejectedIcon from '../../../../public/assets/images/rejected.svg';
 import shortlistedIcon from '../../../../public/assets/images/short-listed.svg';
-import { DashboardBreadcrumb } from './components/DashboardBreadcrumb';
 import { AdmissionsList } from './components/AdmissionsList';
+import { DashboardBreadcrumb } from './components/DashboardBreadcrumb';
 import { DashboardCard } from './components/DashboardCard';
-import { formatNumberWithSuffix } from 'utils';
-import { PageHeader } from '../../../../lib/components/PageHeader';
 
 export default async function Page() {
   const statisticsCardList = [

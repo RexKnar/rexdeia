@@ -1,10 +1,10 @@
+import { StatusCodes } from 'http-status-codes';
 import { NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 
 import { authOptions } from '../../../../lib/auth';
 import { updateBranchById } from './service';
 import { validateUpdateBranchDetails } from './validator';
-import { StatusCodes } from 'http-status-codes';
 
 export async function PUT(request: Request, { params: { id } }) {
   const session = await getServerSession(authOptions);

@@ -1,8 +1,9 @@
+import { UserRole } from '@prisma/client';
+import { getServerSession } from 'next-auth';
+
+import { authOptions } from '../../../lib/auth';
 import { db } from '../../../lib/db';
 import { AddStudentModel } from '../../../lib/domain';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '../../../lib/auth';
-import { UserRole } from '@prisma/client';
 
 export async function getStudentById(id: string) {
   const session = await getServerSession(authOptions);
