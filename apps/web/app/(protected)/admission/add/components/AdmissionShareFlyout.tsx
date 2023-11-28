@@ -70,7 +70,7 @@ export function AdmissionShareFlyout({ formId }: AdmissionShareFlyoutProps) {
         description: 'Something went wrong. Please try again later.',
       });
     }
-  }, [isErrorCreateShareDetails, isErrorUpdateShareDetails]);
+  }, [isErrorCreateShareDetails, isErrorUpdateShareDetails, toast]);
 
   useEffect(() => {
     if (shareDetailsList && shareDetailsList.length) {
