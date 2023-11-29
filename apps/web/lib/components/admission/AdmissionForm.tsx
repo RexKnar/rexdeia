@@ -3,7 +3,9 @@
 import { Loader2, XCircle } from 'lucide-react';
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { Button } from 'ui';
 
+import { AdmissionPreviewFlyout } from '../../../app/(protected)/admission/add/components/AdmissionPreviewFlyout';
 import { AdmissionShareFlyout } from '../../../app/(protected)/admission/add/components/AdmissionShareFlyout';
 import { makeAPICall } from '../../api';
 import { ADD_ADMISSION } from '../../endpoints';
@@ -241,32 +243,21 @@ export function AdmissionForm({ formId, formConfig }: AdmissionFormProps) {
                   display: currentStep === index ? 'block' : 'none',
                 }}
               >
-                <button
+                <Button
                   type="button"
-                  className="mt-6 h-12 cursor-pointer rounded-md bg-primary p-0 px-5 py-0 text-white hover:bg-primary/90"
                   onClick={prevStep}
                   disabled={currentStep === 0}
+                  className="mr-2"
                 >
                   Back
-                </button>
+                </Button>
+
                 {currentStep === totalSteps - 1 ? (
-                  <button
-                    type="submit"
-                    className="mt-6 h-12 cursor-pointer rounded-md bg-primary px-4 py-3 text-white hover:bg-primary/90"
-                  >
-                    {isSubmitting ? (
-                      <div className="flex h-screen items-center justify-center">
-                        <Loader2 className="mr-2 h-6 w-6 animate-spin text-white" />
-                      </div>
-                    ) : (
-                      'Submit'
-                    )}
-                  </button>
+                  <AdmissionPreviewFlyout />
                 ) : (
-                  <button
+                  <Button
                     type="button"
                     onClick={() => nextStep(section.sectionTitle, index)}
-                    className="mt-6 h-12 cursor-pointer rounded-md bg-primary px-4 py-3 text-white hover:bg-primary/90"
                   >
                     {isSubmitting ? (
                       <div className="flex h-screen items-center justify-center">
@@ -275,7 +266,7 @@ export function AdmissionForm({ formId, formConfig }: AdmissionFormProps) {
                     ) : (
                       'Save & Next'
                     )}
-                  </button>
+                  </Button>
                 )}
               </div>
             </>
