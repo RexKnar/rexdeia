@@ -16,8 +16,19 @@ export function useCreateRegulationsForFormMutationQuery() {
       );
     },
     onSuccess: async () => {
-      await queryClient.refetchQueries({
-        queryKey: [GET_REGULATION_LIST],
+      const queryCache = queryClient.getQueryCache();
+      const keysToInvalidate = [GET_REGULATION_LIST];
+
+      queryCache.getAll().forEach((query) => {
+        const queryKey = query.queryKey;
+        if (
+          Array.isArray(queryKey) &&
+          keysToInvalidate.includes(queryKey[0] as string)
+        ) {
+          queryClient.invalidateQueries({
+            queryKey: queryKey,
+          });
+        }
       });
     },
   });

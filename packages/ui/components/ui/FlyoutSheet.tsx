@@ -63,6 +63,7 @@ interface SheetContentProps
   extends React.ComponentPropsWithoutRef<typeof SheetPrimitive.Content>,
     VariantProps<typeof sheetVariants> {
   widthSize?: 'sm' | 'md' | 'lg';
+  onCloseClick?: () => void;
 }
 
 const SheetContent = React.forwardRef<
@@ -70,7 +71,14 @@ const SheetContent = React.forwardRef<
   SheetContentProps
 >(
   (
-    { side = 'right', widthSize = 'md', className, children, ...props },
+    {
+      side = 'right',
+      widthSize = 'md',
+      className,
+      children,
+      onCloseClick,
+      ...props
+    },
     ref,
   ) => {
     return (
@@ -82,7 +90,11 @@ const SheetContent = React.forwardRef<
           {...props}
         >
           {children}
-          <SheetPrimitive.Close>
+          <SheetPrimitive.Close
+            onClick={() => {
+              onCloseClick?.();
+            }}
+          >
             <X className="absolute -left-7 top-1 flex items-center justify-center rounded-full bg-black p-[0.4em] text-white" />
             <span className="sr-only">Close</span>
           </SheetPrimitive.Close>

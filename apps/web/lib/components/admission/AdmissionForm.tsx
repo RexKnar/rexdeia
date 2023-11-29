@@ -127,124 +127,113 @@ export function AdmissionForm({ formId, formConfig }: AdmissionFormProps) {
                   display: currentStep === index ? 'block' : 'none',
                 }}
               >
-                <>
-                  <h1 className="mb-5 text-sm font-semibold">
-                    {section.sectionTitle}
-                  </h1>
-                  <div className="grid grid-cols-1 flex-wrap justify-between gap-4 md:grid md:grid-cols-1 lg:grid lg:grid-cols-3 ">
-                    {section.sectionFields.map((field) => {
-                      if (field.visible) {
-                        switch (field.type) {
-                          case 'text':
-                          case 'email':
-                          case 'date':
-                            return (
-                              <div key={field.id} className="w-full">
-                                <label className="mt-1 block text-sm text-gray-700">
-                                  {field.label}
-                                </label>
-                                <input
-                                  {...register(
-                                    field.name,
-                                    field.validationRules
-                                  )}
-                                  type={field.type}
-                                  placeholder={field.placeholder}
-                                  className="ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring mt-1 flex h-9 w-full rounded-md border border-gray-300 bg-transparent px-3 py-1 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-                                />
-                                {errors[field.name] && (
-                                  <p className="h-2 p-1 text-sm text-red-600">
-                                    {field.label} is required
-                                  </p>
-                                )}
-                              </div>
-                            );
-                          case 'textarea':
-                            return (
-                              <div key={field.id} className="w-full">
-                                <label className="block text-gray-700">
-                                  {field.label}
-                                </label>
-                                <textarea
-                                  {...register(
-                                    field.name,
-                                    field.validationRules
-                                  )}
-                                  placeholder={field.placeholder}
-                                  className="ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring mt-1 flex h-10 w-full rounded-md border border-gray-300 bg-transparent px-3 py-2 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-                                ></textarea>
-                                {errors[field.name] && (
-                                  <p className="h-2 p-1 text-sm text-red-600">
-                                    {field.label} is required
-                                  </p>
-                                )}
-                              </div>
-                            );
-                          case 'radio':
-                            return (
-                              <div key={field.id}>
-                                <label className="mb-2 mt-1 block text-sm text-gray-700">
-                                  {field.label}
-                                </label>
-                                {field.options.map((option) => (
-                                  <React.Fragment key={option.value}>
-                                    <input
-                                      className="mr-2"
-                                      type={field.type}
-                                      name={field.name}
-                                      value={option.value}
-                                      {...register(
-                                        field.name,
-                                        field.validationRules
-                                      )}
-                                    />
-                                    <span className="me-3">{option.label}</span>
-                                  </React.Fragment>
-                                ))}
+                <h1 className="mb-5 text-sm font-semibold">
+                  {section.sectionTitle}
+                </h1>
+                <div className="grid grid-cols-1 flex-wrap justify-between gap-4 md:grid md:grid-cols-1 lg:grid lg:grid-cols-3 ">
+                  {section.sectionFields.map((field) => {
+                    if (field.visible) {
+                      switch (field.type) {
+                        case 'text':
+                        case 'email':
+                        case 'date':
+                          return (
+                            <div key={field.id} className="w-full">
+                              <label className="mt-1 block text-sm text-gray-700">
+                                {field.label}
+                              </label>
+                              <input
+                                {...register(field.name, field.validationRules)}
+                                type={field.type}
+                                placeholder={field.placeholder}
+                                className="ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring mt-1 flex h-9 w-full rounded-md border border-gray-300 bg-transparent px-3 py-1 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                              />
+                              {errors[field.name] && (
+                                <p className="h-2 p-1 text-sm text-red-600">
+                                  {field.label} is required
+                                </p>
+                              )}
+                            </div>
+                          );
+                        case 'textarea':
+                          return (
+                            <div key={field.id} className="w-full">
+                              <label className="block text-gray-700">
+                                {field.label}
+                              </label>
+                              <textarea
+                                {...register(field.name, field.validationRules)}
+                                placeholder={field.placeholder}
+                                className="ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring mt-1 flex h-10 w-full rounded-md border border-gray-300 bg-transparent px-3 py-2 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                              ></textarea>
+                              {errors[field.name] && (
+                                <p className="h-2 p-1 text-sm text-red-600">
+                                  {field.label} is required
+                                </p>
+                              )}
+                            </div>
+                          );
+                        case 'radio':
+                          return (
+                            <div key={field.id}>
+                              <label className="mb-2 mt-1 block text-sm text-gray-700">
+                                {field.label}
+                              </label>
+                              {field.options.map((option) => (
+                                <React.Fragment key={option.value}>
+                                  <input
+                                    className="mr-2"
+                                    type={field.type}
+                                    name={field.name}
+                                    value={option.value}
+                                    {...register(
+                                      field.name,
+                                      field.validationRules
+                                    )}
+                                  />
+                                  <span className="me-3">{option.label}</span>
+                                </React.Fragment>
+                              ))}
 
-                                {errors[field.name] && (
-                                  <p className="h-2 p-1 text-sm text-red-600">
-                                    {field.label} is required
-                                  </p>
-                                )}
-                              </div>
-                            );
-                          case 'dropdown':
-                            return (
-                              <div key={field.id}>
-                                <label className="mb-2 mt-1 block text-sm text-gray-700">
-                                  {field.label}
-                                </label>
-                                <select
-                                  {...register(
-                                    field.name,
-                                    field.validationRules
-                                  )}
-                                  placeholder={field.placeholder}
-                                  className="ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring mt-1 flex h-10 w-full rounded-md border border-gray-300 bg-transparent px-3 py-2 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-                                >
-                                  {field.options.map((option, index) => (
-                                    <option key={index} value={option.value}>
-                                      {option.label}
-                                    </option>
-                                  ))}
-                                </select>
-                                {errors[field.name] && (
-                                  <p className="h-2 p-1 text-sm text-red-600">
-                                    {field.label} is required
-                                  </p>
-                                )}
-                              </div>
-                            );
-                          default:
-                            return null;
-                        }
-                      } else {
-                        return null;
+                              {errors[field.name] && (
+                                <p className="h-2 p-1 text-sm text-red-600">
+                                  {field.label} is required
+                                </p>
+                              )}
+                            </div>
+                          );
+                        case 'dropdown':
+                          return (
+                            <div key={field.id}>
+                              <label className="mb-2 mt-1 block text-sm text-gray-700">
+                                {field.label}
+                              </label>
+                              <select
+                                {...register(field.name, field.validationRules)}
+                                placeholder={field.placeholder}
+                                className="ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring mt-1 flex h-10 w-full rounded-md border border-gray-300 bg-transparent px-3 py-2 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                              >
+                                {field.options.map((option, index) => (
+                                  <option key={index} value={option.value}>
+                                    {option.label}
+                                  </option>
+                                ))}
+                              </select>
+                              {errors[field.name] && (
+                                <p className="h-2 p-1 text-sm text-red-600">
+                                  {field.label} is required
+                                </p>
+                              )}
+                            </div>
+                          );
+                        default:
+                          return null;
                       }
-                    })}
-                  </div>
-                </>
+                    } else {
+                      return null;
+                    }
+                  })}
+                </div>
               </div>
               <div
                 className="flex justify-end gap-4"

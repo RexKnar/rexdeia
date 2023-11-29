@@ -1,5 +1,6 @@
 module.exports = {
   root: false,
+  // extends: ['eslint:recommended', 'next', 'turbo', 'plugin:react/recommended'],
   extends: ['eslint:recommended', 'next', 'turbo'],
   plugins: [
     '@typescript-eslint',
@@ -7,6 +8,7 @@ module.exports = {
     'simple-import-sort',
     'import',
     'prettier',
+    'react',
   ],
   rules: {
     // Base rules
@@ -34,6 +36,9 @@ module.exports = {
       'error',
       { ignoreRestSiblings: true },
     ],
+
+    // React rules
+    'react/jsx-no-useless-fragment': 'error',
   },
   parserOptions: {
     babelOptions: {

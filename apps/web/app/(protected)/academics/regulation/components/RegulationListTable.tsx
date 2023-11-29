@@ -10,6 +10,8 @@ import {
   useReactTable,
 } from '@tanstack/react-table';
 import { ChevronDown, GripVertical } from 'lucide-react';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { useCallback } from 'react';
 import { Button } from 'ui';
 import {
   Table,
@@ -23,61 +25,90 @@ import { cn } from 'utils';
 
 import { useGetRegulationListQuery } from '../../../../../lib/queries/useGetRegulationListQuery';
 
-export function RegulationListTable() {
-  const columns: ColumnDef<any>[] = [
-    {
-      accessorKey: 'regulationName',
-      header: ({ column }) => {
-        return (
-          <Button
-            variant="ghost"
-            onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-          >
-            Regulation Name
-          </Button>
-        );
-      },
+const columns: ColumnDef<any>[] = [
+  {
+    accessorKey: 'regulationName',
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+        >
+          Regulation Name
+        </Button>
+      );
     },
-    {
-      accessorKey: 'announcedYear',
-      header: ({ column }) => {
-        return (
-          <Button
-            variant="ghost"
-            onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-          >
-            Announced Year
-          </Button>
-        );
-      },
+  },
+  {
+    accessorKey: 'announcedYear',
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+        >
+          Announced Year
+        </Button>
+      );
     },
-    {
-      accessorKey: 'isActive',
-      header: ({ column }) => {
-        return (
-          <Button
-            variant="ghost"
-            onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-          >
-            Active Status
-          </Button>
-        );
-      },
+  },
+  {
+    accessorKey: 'isActive',
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+        >
+          Active Status
+        </Button>
+      );
     },
-  ];
+  },
+];
 
-  const { data: regulationList } = useGetRegulationListQuery();
+export function RegulationListTable() {
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+
+  const page = searchParams.get('page');
+
+  const { data: regulationListResponse, isLoading } = useGetRegulationListQuery(
+    {
+      limit: 10,
+      page: page ? parseInt(page) : 1,
+    }
+  );
+
+  const handleOnNextPageClick = useCallback(() => {
+    const currentPage = parseInt(page) || 1;
+    const params = new URLSearchParams(searchParams);
+    params.set('page', (currentPage + 1).toString());
+
+    router.push(pathname + '?' + params.toString());
+  }, [page, pathname, router, searchParams]);
+
+  const handleOnPreviousPageClick = useCallback(() => {
+    const currentPage = parseInt(page) || 1;
+    const nextPage = currentPage - 1 || 1;
+    const params = new URLSearchParams(searchParams);
+    params.set('page', nextPage.toString());
+
+    router.push(pathname + '?' + params.toString());
+  }, [page, pathname, router, searchParams]);
+
   const table = useReactTable({
     columns,
-    data: regulationList || [],
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
+    data: regulationListResponse?.data || [],
     getFilteredRowModel: getFilteredRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
   });
 
   return (
-    <section>
+    <section className="mt-3">
       <div className="rounded-md border">
         <Table>
           <TableHeader>
@@ -114,7 +145,7 @@ export function RegulationListTable() {
                   data-state={row.getIsSelected() && 'selected'}
                   className={cn(
                     'cursor-pointer',
-                    index % 2 !== 0 && 'bg-white-200 cursor-pointer'
+                    index % 2 !== 0 && 'cursor-pointer'
                   )}
                 >
                   <TableCell>{index + 1}</TableCell>
@@ -135,11 +166,8 @@ export function RegulationListTable() {
               ))
             ) : (
               <TableRow>
-                <TableCell
-                  colSpan={columns.length}
-                  className="h-24 text-center"
-                >
-                  No Regulation Found
+                <TableCell colSpan={5} className="h-24 text-center">
+                  {isLoading ? 'Loading...' : 'No Regulation Found'}
                 </TableCell>
               </TableRow>
             )}
@@ -157,21 +185,20 @@ export function RegulationListTable() {
             </div>
           </div>
           <div className="flex">
-            <div className="px-3 py-1 text-sm font-normal text-gray-700">
-              First
-            </div>
-            <div className="px-3 py-1 text-sm font-normal text-gray-700">1</div>
-            <div className="bg-gray-200 px-3 py-1 text-sm font-normal text-primary-800">
-              2
-            </div>
-            <div className="px-3 py-1 text-sm font-normal text-gray-700">
-              ...
-            </div>
-            <div className="px-3 py-1 text-sm font-normal text-gray-700">7</div>
-            <div className="px-3 py-1 text-sm font-normal text-gray-700">8</div>
-            <div className="px-3 py-1 text-sm font-normal text-gray-700">
-              Last
-            </div>
+            <Button
+              variant="ghost"
+              onClick={handleOnPreviousPageClick}
+              className="px-3 py-1 text-sm font-normal text-gray-700"
+            >
+              Previous
+            </Button>
+            <Button
+              variant="ghost"
+              onClick={handleOnNextPageClick}
+              className="px-3 py-1 text-sm font-normal text-gray-700"
+            >
+              Next
+            </Button>
           </div>
         </div>
       </div>

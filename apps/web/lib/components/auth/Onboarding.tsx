@@ -44,52 +44,50 @@ export function Onboarding({ branchId, organizationId }: OnboardingProps) {
   }
 
   return (
-    <>
-      <div className="flex h-full flex-col sm:flex-row">
-        <section
-          className="flex-grow bg-left bg-no-repeat sm:flex sm:w-1/5"
-          style={{
-            backgroundImage: 'url(/assets/images/onborarding-side-banner.png)',
-            backgroundSize: 'contain',
-          }}
-        ></section>
+    <div className="flex h-full flex-col sm:flex-row">
+      <section
+        className="flex-grow bg-left bg-no-repeat sm:flex sm:w-1/5"
+        style={{
+          backgroundImage: 'url(/assets/images/onborarding-side-banner.png)',
+          backgroundSize: 'contain',
+        }}
+      ></section>
 
-        <section className="flex h-screen w-full translate-y-0 transform flex-col p-8 opacity-100 transition-all duration-500 ease-in-out sm:w-4/5 md:w-4/5">
-          <div className="mt-3 flex justify-center">
-            <Image src={logo} alt={'logo'} width={150}></Image>
-          </div>
-          <div className="mt-36 flex justify-center">
-            <Image
-              className="flying-plane"
-              src={loadingPlane}
-              alt={'logo'}
-              width={400}
-            ></Image>
-          </div>
-          <div className="mt-1 justify-center">
-            <div className="mt-2 flex justify-center text-sm font-semibold">
-              <div className="flex items-center">
-                <p className="mr-5">
-                  <Check />
-                  Domain created
-                </p>
-              </div>
-              <div className="flex items-center">
-                <p className="mr-5">
-                  <Check />
-                  Configuration done
-                </p>
-              </div>
-              <div className="flex items-center">
-                <p>
-                  <Check />
-                  Initialization setup
-                </p>
-              </div>
+      <section className="flex h-screen w-full translate-y-0 transform flex-col p-8 opacity-100 transition-all duration-500 ease-in-out sm:w-4/5 md:w-4/5">
+        <div className="mt-3 flex justify-center">
+          <Image src={logo} alt={'logo'} width={150}></Image>
+        </div>
+        <div className="mt-36 flex justify-center">
+          <Image
+            className="flying-plane"
+            src={loadingPlane}
+            alt={'logo'}
+            width={400}
+          ></Image>
+        </div>
+        <div className="mt-1 justify-center">
+          <div className="mt-2 flex justify-center text-sm font-semibold">
+            <div className="flex items-center">
+              <p className="mr-5">
+                <Check />
+                Domain created
+              </p>
+            </div>
+            <div className="flex items-center">
+              <p className="mr-5">
+                <Check />
+                Configuration done
+              </p>
+            </div>
+            <div className="flex items-center">
+              <p>
+                <Check />
+                Initialization setup
+              </p>
             </div>
           </div>
-        </section>
-      </div>
-    </>
+        </div>
+      </section>
+    </div>
   );
 }

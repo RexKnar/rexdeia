@@ -6,15 +6,21 @@ import { authOptions } from '../../../lib/auth';
 import { addRegulation, deleteRegulation, getRegulationList } from './service';
 import { validateAddRegulation } from './validator';
 
-export async function GET() {
+export async function GET(request: NextRequest) {
   const session = await getServerSession(authOptions);
+
   if (!session) {
     return new NextResponse(JSON.stringify({ error: 'UNAUTHORIZED' }), {
       status: StatusCodes.UNAUTHORIZED,
     });
   }
+
   try {
-    const classListResponse = await getRegulationList();
+    const page = parseInt(request.nextUrl.searchParams.get('page')) || 1;
+    const limit = parseInt(request.nextUrl.searchParams.get('limit')) || 10;
+
+    const classListResponse = await getRegulationList(page, limit);
+
     return new NextResponse(JSON.stringify(classListResponse), {
       status: StatusCodes.OK,
     });
@@ -24,6 +30,7 @@ export async function GET() {
     });
   }
 }
+
 export async function POST(request: NextRequest) {
   const payload = await request.json();
   try {
