@@ -103,8 +103,8 @@ importers:
         specifier: ^2.3.0
         version: 2.3.0
       lucide-react:
-        specifier: ^0.293.0
-        version: 0.293.0(react@18.2.0)
+        specifier: ^0.294.0
+        version: 0.294.0(react@18.2.0)
       nanoid:
         specifier: ^5.0.0
         version: 5.0.1
@@ -304,8 +304,8 @@ importers:
         specifier: ^2.30.0
         version: 2.30.0
       lucide-react:
-        specifier: ^0.293.0
-        version: 0.293.0(react@18.2.0)
+        specifier: ^0.294.0
+        version: 0.294.0(react@18.2.0)
       postcss:
         specifier: ^8.4.29
         version: 8.4.29
@@ -5355,8 +5355,8 @@ packages:
     engines: {node: '>=12'}
     dev: true
 
-  /lucide-react@0.293.0(react@18.2.0):
-    resolution: {integrity: sha512-g3AN0EYITCpAjNgLHrKrFWvIJzZy0Y9OPBaonyKw1cM+nZE6piOM+TiuQdYfha7oa76TMiDaWXQHE44CEqsrzw==}
+  /lucide-react@0.294.0(react@18.2.0):
+    resolution: {integrity: sha512-V7o0/VECSGbLHn3/1O67FUgBwWB+hmzshrgDVRJQhMh8uj5D3HBuIvhuAmQTtlupILSplwIZg5FTc4tTKMA2SA==}
     peerDependencies:
       react: ^16.5.1 || ^17.0.0 || ^18.0.0
     dependencies:
