@@ -61,7 +61,12 @@ export function AdmissionPreviewFlyout() {
       <SheetTrigger onClick={() => setIsOpen(true)} asChild>
         <Button>Preview & Submit</Button>
       </SheetTrigger>
-      <SheetContent side="right" widthSize="lg" className="bg-gray-50 p-10">
+      <SheetContent
+        side="right"
+        widthSize="lg"
+        className="bg-gray-50 p-10"
+        onCloseClick={() => setIsOpen(false)}
+      >
         <SheetHeader>
           <SheetTitle className="flex items-center pb-6">
             <FileText size={18} className="text-primary" />
