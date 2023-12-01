@@ -5,22 +5,44 @@ import { authOptions } from '../../../lib/auth';
 import { db } from '../../../lib/db';
 import { AddStudentModel } from '../../../lib/domain';
 
-export async function getStudentById(id: string) {
+export async function getStudentById(id: string, format: string) {
   const session = await getServerSession(authOptions);
-  return await db.student.findFirst({
+
+  const student = await db.student.findFirst({
     where: {
       id,
       branchId: session.branchId,
       organizationId: session.organizationId,
     },
-    select: {
-      createdAt: false,
-      updatedAt: false,
-    },
   });
+
+  if (format === 'form') {
+    const studentDefaultPropsMap = new Map(Object.entries(student));
+    const additionalPropsMap = new Map(
+      Object.entries(student.additionalAttributes)
+    );
+
+    const form = await db.form.findFirst({
+      where: {
+        id: student.formId,
+      },
+    });
+
+    // @ts-ignore
+    form.json.formSections.forEach((section) => {
+      section.sectionFields.forEach((field) => {
+        field.value =
+          studentDefaultPropsMap.get(field.name) == undefined
+            ? additionalPropsMap.get(field.name)
+            : studentDefaultPropsMap.get(field.name);
+      });
+    });
+    return form.json;
+  }
+  return student;
 }
 
-export async function addStudent(student: AddStudentModel) {
+export async function addStudent(student: AddStudentModel, formId: string) {
   const session = await getServerSession(authOptions);
 
   let user = await db.user.findFirst({
@@ -83,6 +105,11 @@ export async function addStudent(student: AddStudentModel) {
           id: user.id,
         },
       },
+      form: {
+        connect: {
+          id: formId,
+        },
+      },
     },
   });
 
@@ -93,6 +120,11 @@ export async function addStudent(student: AddStudentModel) {
       student: {
         connect: {
           id: createdStudent.id,
+        },
+      },
+      form: {
+        connect: {
+          id: formId,
         },
       },
       createdBy: {

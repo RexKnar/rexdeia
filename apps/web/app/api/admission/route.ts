@@ -38,9 +38,10 @@ export async function POST(request: NextRequest) {
   }
 
   const payload = await request.json();
+  const formId = request.nextUrl.searchParams.get('formId');
 
   try {
-    const admission = await addAdmission(payload);
+    const admission = await addAdmission(payload, formId);
     return new NextResponse(JSON.stringify(admission), {
       status: StatusCodes.CREATED,
     });

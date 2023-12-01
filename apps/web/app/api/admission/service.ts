@@ -4,7 +4,7 @@ import { authOptions } from '../../../lib/auth';
 import { db } from '../../../lib/db';
 import { AddStudentModel } from '../../../lib/domain';
 
-export async function addAdmission(student: AddStudentModel) {
+export async function addAdmission(student: AddStudentModel, formId: string) {
   const session = await getServerSession(authOptions);
 
   let user = await db.user.findFirst({
@@ -66,6 +66,11 @@ export async function addAdmission(student: AddStudentModel) {
           id: user.id,
         },
       },
+      form: {
+        connect: {
+          id: formId,
+        },
+      },
     },
   });
 
@@ -81,6 +86,11 @@ export async function addAdmission(student: AddStudentModel) {
       createdBy: {
         connect: {
           id: session.user.id,
+        },
+      },
+      form: {
+        connect: {
+          id: formId,
         },
       },
       status: 'Received',
