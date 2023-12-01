@@ -16,6 +16,10 @@ export async function getStudentById(id: string, format: string) {
     },
   });
 
+  if (!student) {
+    return null;
+  }
+
   if (format === 'form') {
     const studentDefaultPropsMap = new Map(Object.entries(student));
     const additionalPropsMap = new Map(
