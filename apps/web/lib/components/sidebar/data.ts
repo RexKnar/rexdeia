@@ -1,6 +1,5 @@
 import {
   GraduationCap,
-  HelpCircle,
   LayoutDashboard,
   User2,
   UserCircle2,
@@ -58,7 +57,33 @@ export const menuItems: SidebarMenuItem[] = [
     id: 'academics',
     label: 'Academics',
     icon: GraduationCap,
-    path: '/academics',
+    path: '',
+    children: [
+      {
+        id: 'academics-class-student',
+        label: 'Class',
+        icon: null,
+        path: '/academics/class',
+      },
+      {
+        id: 'academics-course-student',
+        label: 'Course',
+        icon: null,
+        path: '/academics/course',
+      },
+      {
+        id: 'academics-department-student',
+        label: 'Department',
+        icon: null,
+        path: '/academics/department',
+      },
+      {
+        id: 'academics-regulation-student',
+        label: 'Regulation',
+        icon: null,
+        path: '/academics/regulation',
+      },
+    ],
   },
   {
     id: 'admission-page',
@@ -85,23 +110,5 @@ export const menuItems: SidebarMenuItem[] = [
         path: '/admission/configure',
       },
     ],
-  },
-  {
-    id: 'academics-department-student',
-    label: 'Department',
-    icon: HelpCircle,
-    path: '/academics/department',
-  },
-  {
-    id: 'academics-regulation-student',
-    label: 'Regulation',
-    icon: HelpCircle,
-    path: '/academics/regulation',
-  },
-  {
-    id: 'academics-course-student',
-    label: 'Course',
-    icon: HelpCircle,
-    path: '/academics/course',
   },
 ];

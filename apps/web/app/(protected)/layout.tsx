@@ -30,7 +30,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       <Providers>
         <body>
           <div className="flex h-screen overflow-hidden">
-            <aside className="relative hidden flex-[2/6] grow-0 md:flex">
+            <aside className="relative hidden grow-0 border-r shadow-md md:flex md:w-64">
               <Sidebar />
             </aside>
             <main className="flex-1 overflow-auto">{children}</main>

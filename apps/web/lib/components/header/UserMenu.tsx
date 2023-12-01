@@ -1,6 +1,6 @@
 'use client';
 
-import { Building2, Plus } from 'lucide-react';
+import { Plus } from 'lucide-react';
 import {
   Avatar,
   AvatarImage,
@@ -8,7 +8,6 @@ import {
   DropdownMenuContent,
   DropdownMenuGroup,
   DropdownMenuItem,
-  DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from 'ui';
@@ -26,24 +25,7 @@ export function UserMenu() {
         align="end"
         sideOffset={15}
       >
-        <DropdownMenuLabel className="text-sm font-semibold leading-relaxed text-gray-700">
-          Select organisation
-        </DropdownMenuLabel>
         <DropdownMenuGroup className="w-screen">
-          <DropdownMenuItem className="flex items-center space-x-2 p-4 text-sm hover:bg-gray-200">
-            <Building2 className="h-5 w-5 text-green-700" />
-            <div> organisation</div>
-          </DropdownMenuItem>
-          <DropdownMenuSeparator className="bg-gray-100 text-gray-500" />
-          <DropdownMenuItem className="flex items-center space-x-2 p-4 text-sm hover:bg-gray-200">
-            <Building2 className="h-5 w-5 text-green-700" />
-            <div> organisation</div>
-          </DropdownMenuItem>
-          <DropdownMenuSeparator className="bg-gray-100 text-gray-500" />
-          <DropdownMenuItem className="flex items-center space-x-2 p-4 text-sm hover:bg-gray-200">
-            <Building2 className="h-5 w-5 text-green-700" />
-            <div> organisation</div>
-          </DropdownMenuItem>
           <DropdownMenuSeparator className="bg-gray-100 text-gray-500" />
           <DropdownMenuItem className="flex cursor-pointer items-center space-x-2 p-4 text-sm">
             <Plus className="h-5 w-5 rounded bg-primary-200 text-primary" />
