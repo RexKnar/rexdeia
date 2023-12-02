@@ -5,6 +5,7 @@ import { ReactNode } from 'react';
 import { Toaster } from 'ui';
 
 import { Sidebar } from '../../lib/components/sidebar/Sidebar';
+import { ZohoSalesIQ } from '../../lib/components/ZohoSalesIQ';
 import Providers from '../../lib/Providers';
 
 const inter = Inter({
@@ -36,6 +37,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
             <main className="flex-1 overflow-auto">{children}</main>
           </div>
           <Toaster />
+          <ZohoSalesIQ />
         </body>
       </Providers>
     </html>
