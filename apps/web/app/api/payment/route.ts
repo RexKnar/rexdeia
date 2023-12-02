@@ -1,3 +1,4 @@
+import { captureException } from '@sentry/nextjs';
 import { StatusCodes } from 'http-status-codes';
 import { NextRequest, NextResponse } from 'next/server';
 import razorpay from 'razorpay';
@@ -40,6 +41,7 @@ export async function POST(request: NextRequest) {
       status: StatusCodes.CREATED,
     });
   } catch (e) {
+    captureException(e);
     return new NextResponse(e, {
       status: StatusCodes.BAD_REQUEST,
     });

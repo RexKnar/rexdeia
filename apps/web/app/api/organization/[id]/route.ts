@@ -1,3 +1,4 @@
+import { captureException } from '@sentry/nextjs';
 import { StatusCodes } from 'http-status-codes';
 import { NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
@@ -26,7 +27,7 @@ export async function PUT(request: Request, route: { params: { id: string } }) {
       status: StatusCodes.OK,
     });
   } catch (e) {
-    console.error(e);
+    captureException(e);
     return new NextResponse(JSON.stringify({ error: e.message }), {
       status:
         e.message === 'VALIDATION_ERROR'

@@ -1,3 +1,4 @@
+import { captureException } from '@sentry/nextjs';
 import { StatusCodes } from 'http-status-codes';
 import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
@@ -25,6 +26,7 @@ export async function GET(request: NextRequest) {
       status: StatusCodes.OK,
     });
   } catch (e) {
+    captureException(e);
     return new NextResponse(e, {
       status: StatusCodes.BAD_REQUEST,
     });
@@ -39,6 +41,7 @@ export async function POST(request: NextRequest) {
       status: StatusCodes.CREATED,
     });
   } catch (e) {
+    captureException(e);
     return new NextResponse(e, {
       status: StatusCodes.BAD_REQUEST,
     });
@@ -53,6 +56,7 @@ export async function DELETE(request: NextRequest) {
       status: StatusCodes.OK,
     });
   } catch (e) {
+    captureException(e);
     return new NextResponse(e, {
       status: StatusCodes.BAD_REQUEST,
     });

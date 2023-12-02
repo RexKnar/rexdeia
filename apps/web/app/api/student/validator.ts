@@ -1,3 +1,4 @@
+import { captureException } from '@sentry/nextjs';
 import { z } from 'zod';
 
 import { AddStudentModel } from '../../../lib/domain';
@@ -12,6 +13,7 @@ export async function validateAddUser(student: AddStudentModel) {
   try {
     schema.parse(student);
   } catch (e) {
+    captureException(e);
     return Promise.reject(e);
   }
 

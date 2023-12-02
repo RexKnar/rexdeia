@@ -1,3 +1,4 @@
+import { captureException } from '@sentry/nextjs';
 import { StatusCodes } from 'http-status-codes';
 import { NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
@@ -32,6 +33,7 @@ export async function GET(
       );
     }
   } catch (e) {
+    captureException(e);
     return new NextResponse(
       JSON.stringify({
         message: e.message,
