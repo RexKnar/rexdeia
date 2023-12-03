@@ -7,6 +7,34 @@ import { authOptions } from '../../../../lib/auth';
 import { getOrganizationById, updateOrganizationById } from './service';
 import { validateUpdateOrganizationDetails } from './validator';
 
+/**
+ * @swagger
+ * /api/organization/{id}:
+ *     put:
+ *       summary: Update organization details
+ *       description: Updates details of an organization identified by the provided ID.
+ *       parameters:
+ *         - name: id
+ *           in: path
+ *           required: true
+ *           description: Unique identifier of the organization.
+ *           schema:
+ *             type: string
+ *       requestBody:
+ *         required: true
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *       responses:
+ *          content:
+ *             application/json:
+ *               schema:
+ *                 type: object
+ *                 properties:
+ *                   message:
+ *                     type: string
+ */
 export async function PUT(request: Request, route: { params: { id: string } }) {
   const session = await getServerSession(authOptions);
   if (!session) {
@@ -37,6 +65,45 @@ export async function PUT(request: Request, route: { params: { id: string } }) {
   }
 }
 
+/**
+ * @swagger
+ * /api/organization/{id}:
+ *     get:
+ *       summary: Retrieve organization details
+ *       description: Retrieves the details of an organization identified by the provided ID.
+ *       parameters:
+ *         - name: id
+ *           in: path
+ *           required: true
+ *           description: Unique identifier of the organization.
+ *           schema:
+ *             type: string
+ *       responses:
+ *         '200':
+ *           description: Organization details retrieved successfully.
+ *           content:
+ *             application/json:
+ *               schema:
+ *                 # Define the schema of the organization object here
+ *         '401':
+ *           description: Unauthorized access. Missing or invalid session credentials.
+ *           content:
+ *             application/json:
+ *               schema:
+ *                 type: object
+ *                 properties:
+ *                   error:
+ *                     type: string
+ *         '404':
+ *           description: Organization not found.
+ *           content:
+ *             application/json:
+ *               schema:
+ *                 type: object
+ *                 properties:
+ *                   message:
+ *                     type: string
+ */
 export async function GET(request: Request, route: { params: { id: string } }) {
   const session = await getServerSession(authOptions);
   if (!session || session.organizationId !== route.params.id) {
