@@ -162,3 +162,22 @@ export async function getStudentsList(page: number, pageSize: number) {
     data: studentsList,
   };
 }
+
+export async function getRecentlyAddedStudentsList({
+  count,
+}: {
+  count: number;
+}) {
+  const session = await getServerSession(authOptions);
+  return await db.student.findMany({
+    take: count,
+    where: {
+      status: 'Active',
+      branchId: session.branchId,
+      organizationId: session.organizationId,
+    },
+    orderBy: {
+      createdAt: 'desc',
+    },
+  });
+}

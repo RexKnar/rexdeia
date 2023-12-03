@@ -1,5 +1,5 @@
-import { AddStudentForm } from '../../../../lib/components/student/AddStudentForm';
-import { getFormByCriteria } from '../../../api/forms/service';
+import { AddStudentForm } from '../../../../../lib/components/student/AddStudentForm';
+import { getFormByCriteria } from '../../../../api/forms/service';
 
 type AddStudentPageProps = {
   readonly branchId: string;
