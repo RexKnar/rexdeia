@@ -23,6 +23,6 @@
   "packageManager": "pnpm@8.11.0",
   "name": "acadx",
   "volta": {
-    "node": "18.19.0"
+    "node": "20.10.0"
   }
 }
