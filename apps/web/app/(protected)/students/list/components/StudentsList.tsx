@@ -11,9 +11,9 @@ import {
   SortingState,
   useReactTable,
 } from '@tanstack/react-table';
-import { GripVertical } from 'lucide-react';
+import { CreditCardIcon, Gem, GripVertical, HeartPulse } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
-import { Button } from 'ui';
+import { Avatar, AvatarFallback, AvatarImage, Button } from 'ui';
 import {
   Table,
   TableBody,
@@ -22,7 +22,7 @@ import {
   TableHeader,
   TableRow,
 } from 'ui/components/ui/Table';
-import { cn } from 'utils';
+import { cn, titilize } from 'utils';
 
 import { makeAPICall } from '../../../../../lib/api';
 import { GET_STUDENTS_LIST } from '../../../../../lib/endpoints';
@@ -35,10 +35,51 @@ export function StudentsList() {
         return (
           <Button
             variant="ghost"
+            className="px-0"
             onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
           >
-            Student Name
+            Student
           </Button>
+        );
+      },
+      cell: ({ row }) => {
+        return (
+          <div className="flex items-start">
+            <div className="p-2">
+              <Avatar className="h-8 w-8 cursor-pointer">
+                <AvatarImage src="https://png.pngtree.com/thumb_back/fh260/background/20230612/pngtree-man-wearing-glasses-is-wearing-colorful-background-image_2905240.jpg" />
+                <AvatarFallback className="bg-red-300">
+                  {row.original.firstName.charAt(0).toUpperCase()}
+                </AvatarFallback>
+              </Avatar>
+            </div>
+            <div className="flex flex-col">
+              <p className="text-primary">
+                {row.original.firstName} {row.original.middleName}{' '}
+                {row.original.lastName}
+              </p>
+              <div className="flex items-center">
+                <CreditCardIcon size={16} className="mr-1 text-green-800" />
+                <p className="text-sm text-gray-900">
+                  {titilize(row.original.aadharCardNumber)}
+                </p>
+              </div>
+              <div className="flex gap-2">
+                <div className="flex items-center">
+                  <Gem size={12} className="mr-1 text-amber-700" />
+                  <p className="text-sm text-gray-900">
+                    {titilize(row.original.gender)}
+                  </p>
+                </div>
+                <div className="flex items-center">
+                  <HeartPulse className="mr-1 text-red-600" size={12} />
+                  <p className="text-sm text-gray-800">
+                    {row.original.bloodGroup}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
         );
       },
     },
@@ -48,6 +89,7 @@ export function StudentsList() {
         return (
           <Button
             variant="ghost"
+            className="px-0"
             onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
           >
             Email ID
@@ -61,6 +103,7 @@ export function StudentsList() {
         return (
           <Button
             variant="ghost"
+            className="px-0"
             onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
           >
             Roll No
@@ -74,6 +117,7 @@ export function StudentsList() {
         return (
           <Button
             variant="ghost"
+            className="px-0"
             onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
           >
             Mobile Number
@@ -87,6 +131,7 @@ export function StudentsList() {
         return (
           <Button
             variant="ghost"
+            className="px-0"
             onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
           >
             Class
@@ -114,6 +159,10 @@ export function StudentsList() {
     });
   }, [pageNumber]);
 
+  useEffect(() => {
+    console.log(studentsList);
+  }, [studentsList]);
+
   const table = useReactTable({
     columns,
     data: studentsList || [],
@@ -135,10 +184,7 @@ export function StudentsList() {
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
-              <TableRow key={headerGroup.id} className="cursor-pointer text-lg">
-                <TableHead className="cursor-pointer text-center ">
-                  S.no
-                </TableHead>
+              <TableRow key={headerGroup.id} className="cursor-pointer">
                 {headerGroup.headers.map((header) => {
                   return (
                     <TableHead key={header.id}>
@@ -151,7 +197,7 @@ export function StudentsList() {
                     </TableHead>
                   );
                 })}
-                <TableCell className="cursor-pointer text-center text-lg ">
+                <TableCell className="cursor-pointer text-center text-lg">
                   Actions
                 </TableCell>
               </TableRow>
@@ -164,12 +210,8 @@ export function StudentsList() {
                 <TableRow
                   key={row.id}
                   data-state={row.getIsSelected() && 'selected'}
-                  className={cn(
-                    'cursor-pointer',
-                    index % 2 !== 0 && 'cursor-pointer bg-gray-200'
-                  )}
+                  className={cn('cursor-pointer')}
                 >
-                  <TableCell>{index + 1}</TableCell>
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id}>
                       {flexRender(

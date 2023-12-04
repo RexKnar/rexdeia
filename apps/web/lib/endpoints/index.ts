@@ -1,4 +1,4 @@
-import { Method } from './types';
+import { EndpointDetails } from './types';
 
 export const ADD_ENQUIRY = `ADD_ENQUIRY`;
 export const REGISTER_USER = `REGISTER_USER`;
@@ -26,11 +26,6 @@ export const GET_STUDENTS_LIST = `GET_STUDENTS_LIST`;
 export const ADD_CLASS = `ADD_CLASS`;
 export const GET_CLASS = `GET_CLASS`;
 export const GET_REGULATION_LIST = `GET_REGULATION_LIST`;
-
-type EndpointDetails = Record<
-  string,
-  { requestType: Method; endpoint: string }
->;
 
 export default <EndpointDetails>{
   [REGISTER_USER]: {
