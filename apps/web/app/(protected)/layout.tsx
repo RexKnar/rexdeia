@@ -36,7 +36,9 @@ export default function RootLayout({ children }: { children: ReactNode }) {
             <aside className="relative hidden grow-0 border-r shadow-md md:flex md:w-64">
               <Sidebar />
             </aside>
-            <main className="flex-1 overflow-auto">{children}</main>
+            <main className="h-full w-full flex-1 overflow-auto bg-gray-50 px-8 py-10">
+              {children}
+            </main>
           </div>
           <Toaster />
           <ZohoSalesIQ />
