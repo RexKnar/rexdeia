@@ -17,13 +17,6 @@ const errorValue = {
   too_small: 'Password must contain at least 6 characters.',
 };
 
-const validatePhoneNumber = (phoneNumber) => {
-  if (phoneNumber.length < 10) {
-    return 'Invalid Phone Number';
-  }
-  return true;
-};
-
 type OnboardUserResponse = {
   name: string;
   email: string;
@@ -42,7 +35,9 @@ export function SignUpForm() {
     watch,
     formState: { errors, isSubmitting },
     setError,
-  } = useForm();
+  } = useForm({
+    mode: 'onBlur',
+  });
 
   async function signUpHandler({ name, email, password, phoneNumber }) {
     try {
@@ -87,11 +82,10 @@ export function SignUpForm() {
       }
     }
   }
-
   return (
     <form className="mt-5" onSubmit={handleSubmit(signUpHandler)}>
       <div>
-        <label className="sub-text inter block text-sm font-semibold">
+        <label className="block text-sm font-semibold text-gray-700">
           Full Name
         </label>
         <div className="relative">
@@ -118,7 +112,7 @@ export function SignUpForm() {
         </p>
       </div>
       <div className="mt-4">
-        <label className="sub-text inter block text-sm font-semibold">
+        <label className="block text-sm font-semibold text-gray-700">
           Email Address
         </label>
         <div className="relative">
@@ -146,7 +140,7 @@ export function SignUpForm() {
         </p>
       </div>
       <div className="mt-4">
-        <label className="sub-text inter block text-sm font-semibold">
+        <label className="block text-sm font-semibold text-gray-700">
           Phone Number
         </label>
         <div className="relative flex items-center gap-2">
@@ -159,17 +153,17 @@ export function SignUpForm() {
             <option value="+44">+44</option>
           </select>
           <Input
-            inputMode="numeric"
+            type="number"
+            id="phoneNumber"
             className="mt-2"
-            maxLength={10}
-            name="phoneNumber"
             placeholder="Enter your phone number"
             {...register('phoneNumber', {
               required: 'Your phone number is needed to sign up',
-              validate: validatePhoneNumber,
+              validate: (value) =>
+                value.length === 10 || 'Phone number must be 10 digits long',
             })}
           />
-          <div className="absolute inset-y-0 right-0 flex cursor-pointer items-center pr-2">
+          <div className="absolute inset-y-0 right-0 mt-2 flex cursor-pointer items-center pr-2">
             <PhoneCall size={18} strokeWidth={0.5} />
           </div>
         </div>
@@ -184,7 +178,7 @@ export function SignUpForm() {
         </p>
       </div>
       <div className="mt-4">
-        <label className="sub-text inter block text-sm font-semibold">
+        <label className="block text-sm font-semibold text-gray-700">
           Password
         </label>
         <div className="relative">
@@ -217,7 +211,7 @@ export function SignUpForm() {
         </p>
       </div>
       <div className="mt-4">
-        <label className="sub-text inter block text-sm font-semibold">
+        <label className="block text-sm font-semibold text-gray-700">
           Confirm Password
         </label>
         <div className="relative">
