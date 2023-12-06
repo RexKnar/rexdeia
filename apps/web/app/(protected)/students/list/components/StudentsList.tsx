@@ -21,6 +21,7 @@ import {
   Trash2Icon,
 } from 'lucide-react';
 import React, { useState } from 'react';
+import { Else, If, Then } from 'react-if';
 import {
   Avatar,
   AvatarFallback,
@@ -33,6 +34,7 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
+  Spinner,
 } from 'ui';
 import {
   Table,
@@ -229,10 +231,11 @@ export function StudentsList() {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
 
-  const { data: getStudentListResponse } = useGetStudentListQuery({
-    page,
-    pageSize,
-  });
+  const { data: getStudentListResponse, isLoading: isStudentListLoading } =
+    useGetStudentListQuery({
+      page,
+      pageSize,
+    });
 
   const table = useReactTable({
     columns,
@@ -252,61 +255,72 @@ export function StudentsList() {
   return (
     <section>
       <div className="rounded-md border">
-        <Table>
-          <TableHeader>
-            {table.getHeaderGroups().map((headerGroup) => (
-              <TableRow key={headerGroup.id} className="cursor-pointer">
-                {headerGroup.headers.map((header) => {
-                  return (
-                    <TableHead key={header.id}>
-                      {header.isPlaceholder
-                        ? null
-                        : flexRender(
-                            header.column.columnDef.header,
-                            header.getContext()
-                          )}
-                    </TableHead>
-                  );
-                })}
-              </TableRow>
-            ))}
-          </TableHeader>
+        <If condition={isStudentListLoading}>
+          <Then>
+            <section className="flex h-96 w-full flex-col items-center justify-center gap-4">
+              <Spinner />
+              <p>Fetching Student&apos;s list</p>
+            </section>
+          </Then>
+          <Else>
+            <Table>
+              <TableHeader>
+                {table.getHeaderGroups().map((headerGroup) => (
+                  <TableRow key={headerGroup.id} className="cursor-pointer">
+                    {headerGroup.headers.map((header) => {
+                      return (
+                        <TableHead key={header.id}>
+                          {header.isPlaceholder
+                            ? null
+                            : flexRender(
+                                header.column.columnDef.header,
+                                header.getContext()
+                              )}
+                        </TableHead>
+                      );
+                    })}
+                  </TableRow>
+                ))}
+              </TableHeader>
 
-          <TableBody>
-            {table.getRowModel().rows?.length ? (
-              table.getRowModel().rows.map((row) => (
-                <TableRow
-                  key={row.id}
-                  data-state={row.getIsSelected() && 'selected'}
-                  className={cn('cursor-pointer')}
-                >
-                  {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id}>
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext()
-                      )}
+              <TableBody>
+                {table.getRowModel().rows?.length ? (
+                  table.getRowModel().rows.map((row) => (
+                    <TableRow
+                      key={row.id}
+                      data-state={row.getIsSelected() && 'selected'}
+                      className={cn('cursor-pointer')}
+                    >
+                      {row.getVisibleCells().map((cell) => (
+                        <TableCell key={cell.id}>
+                          {flexRender(
+                            cell.column.columnDef.cell,
+                            cell.getContext()
+                          )}
+                        </TableCell>
+                      ))}
+                    </TableRow>
+                  ))
+                ) : (
+                  <TableRow>
+                    <TableCell
+                      colSpan={columns.length}
+                      className="h-24 text-center"
+                    >
+                      No Admissions Found
                     </TableCell>
-                  ))}
-                </TableRow>
-              ))
-            ) : (
-              <TableRow>
-                <TableCell
-                  colSpan={columns.length}
-                  className="h-24 text-center"
-                >
-                  No Admissions Found
-                </TableCell>
-              </TableRow>
-            )}
-          </TableBody>
-        </Table>
+                  </TableRow>
+                )}
+              </TableBody>
+            </Table>
+          </Else>
+        </If>
       </div>
 
       <section className="mt-5 flex justify-between">
         <section>
           <Select
+            disabled={isStudentListLoading}
             onValueChange={(value) => {
               setPageSize(parseInt(value));
             }}

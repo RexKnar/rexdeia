@@ -144,6 +144,9 @@ importers:
       react-hook-form:
         specifier: 7.48.2
         version: 7.48.2(react@18.2.0)
+      react-if:
+        specifier: ^4.1.5
+        version: 4.1.5(react@18.2.0)
       server-only:
         specifier: ^0.0.1
         version: 0.0.1
@@ -7712,6 +7715,15 @@ packages:
     engines: {node: '>=12.22.0'}
     peerDependencies:
       react: ^16.8.0 || ^17 || ^18
+    dependencies:
+      react: 18.2.0
+    dev: false
+
+  /react-if@4.1.5(react@18.2.0):
+    resolution: {integrity: sha512-Uk+Ub2gC83PAakuU4+7iLdTEP4LPi2ihNEPCtz/vr8SLGbzkMApbpYbkDZ5z9zYXurd0gg+EK/bpOLFFC1r1eQ==}
+    engines: {node: '>=12'}
+    peerDependencies:
+      react: ^16.x || ^17.x || ^18.x
     dependencies:
       react: 18.2.0
     dev: false
