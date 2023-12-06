@@ -13,7 +13,7 @@ export default async function Page() {
   }
 
   return (
-    <section className="flex h-full w-full flex-col gap-[20px] bg-gray-50 px-[25px] py-[40px] sm:px-[50px]">
+    <section>
       <PathBreadcrumb />
 
       <AddStudentPage
