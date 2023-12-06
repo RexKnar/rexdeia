@@ -145,16 +145,26 @@ export async function addStudent(student: AddStudentModel, formId: string) {
 
 export async function getStudentsList(page: number, pageSize: number) {
   const session = await getServerSession(authOptions);
-  const studentsList = await db.student.findMany({
-    take: pageSize,
-    skip: (page - 1) * pageSize,
-    where: {
-      status: 'Active',
-      branchId: session.branchId,
-      organizationId: session.organizationId,
-    },
-  });
-  const total = studentsList.length;
+
+  const [total, studentsList] = await Promise.all([
+    db.student.count({
+      where: {
+        status: 'Active',
+        branchId: session.branchId,
+        organizationId: session.organizationId,
+      },
+    }),
+    db.student.findMany({
+      take: pageSize,
+      skip: (page - 1) * pageSize,
+      where: {
+        status: 'Active',
+        branchId: session.branchId,
+        organizationId: session.organizationId,
+      },
+    }),
+  ]);
+
   return {
     total,
     page,

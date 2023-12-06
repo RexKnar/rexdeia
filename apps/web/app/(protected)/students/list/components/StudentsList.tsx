@@ -20,8 +20,20 @@ import {
   PhoneCallIcon,
   Trash2Icon,
 } from 'lucide-react';
-import React, { useEffect, useState } from 'react';
-import { Avatar, AvatarFallback, AvatarImage, Button } from 'ui';
+import React, { useState } from 'react';
+import {
+  Avatar,
+  AvatarFallback,
+  AvatarImage,
+  Button,
+  Pagination,
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from 'ui';
 import {
   Table,
   TableBody,
@@ -32,9 +44,8 @@ import {
 } from 'ui/components/ui/Table';
 import { cn, titilize } from 'utils';
 
-import { makeAPICall } from '../../../../../lib/api';
 import { Student } from '../../../../../lib/domain';
-import { GET_STUDENTS_LIST } from '../../../../../lib/endpoints';
+import { useGetStudentListQuery } from '../../../../../lib/queries/useGetStudentListQuery';
 
 export function StudentsList() {
   const columns: ColumnDef<Student>[] = [
@@ -212,27 +223,20 @@ export function StudentsList() {
     },
   ];
 
-  const [pageNumber] = useState(1);
-  const [studentsList, setStudentsList] = useState<any[]>([]);
+  const [pageSize, setPageSize] = useState(10);
+  const [page, setPage] = useState(1);
 
-  const [, setTotalPages] = useState(0);
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
 
-  useEffect(() => {
-    makeAPICall<any>(
-      GET_STUDENTS_LIST,
-      {},
-      { page: pageNumber, pageSize: 10 }
-    ).then((res) => {
-      setStudentsList(res.data);
-      setTotalPages(Math.ceil(res.total / 10));
-    });
-  }, [pageNumber]);
+  const { data: getStudentListResponse } = useGetStudentListQuery({
+    page,
+    pageSize,
+  });
 
   const table = useReactTable({
     columns,
-    data: studentsList || [],
+    data: getStudentListResponse?.data || [],
     onSortingChange: setSorting,
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
@@ -299,6 +303,36 @@ export function StudentsList() {
           </TableBody>
         </Table>
       </div>
+
+      <section className="mt-5 flex justify-between">
+        <section>
+          <Select
+            onValueChange={(value) => {
+              setPageSize(parseInt(value));
+            }}
+          >
+            <SelectTrigger>
+              <SelectValue placeholder="Page Size: " />
+              <div className="ml-1">10</div>
+            </SelectTrigger>
+            <SelectContent>
+              <SelectGroup>
+                <SelectItem value={'10'}>10</SelectItem>
+                <SelectItem value={'25'}>25</SelectItem>
+                <SelectItem value={'50'}>50</SelectItem>
+                <SelectItem value={'100'}>100</SelectItem>
+              </SelectGroup>
+            </SelectContent>
+          </Select>
+        </section>
+        <Pagination
+          pageSize={getStudentListResponse?.pageSize || 0}
+          totalRecords={getStudentListResponse?.total || 0}
+          onPageChange={(page) => {
+            setPage(page);
+          }}
+        />
+      </section>
     </section>
   );
 }
