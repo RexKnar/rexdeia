@@ -15,7 +15,7 @@ export default async function Page() {
   });
 
   return (
-    <section>
+    <section className="flex flex-col gap-4">
       <PathBreadcrumb />
       <StudentDashboardBanner />
       <section className="flex flex-col gap-3 rounded-md bg-white p-10 shadow-sm">
