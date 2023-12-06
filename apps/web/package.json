@@ -29,7 +29,7 @@
     "nanoid": "^5.0.0",
     "next": "^14.0.0",
     "next-auth": "4.24.5",
-    "next-intl": "3.2.1",
+    "next-intl": "3.2.4",
     "next-swagger-doc": "^0.4.0",
     "nextjs-toploader": "^1.6.4",
     "postcss": "^8.4.29",
