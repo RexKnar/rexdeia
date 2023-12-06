@@ -29,7 +29,7 @@
     "nanoid": "^5.0.0",
     "next": "^14.0.0",
     "next-auth": "4.24.5",
-    "next-intl": "3.2.1",
+    "next-intl": "3.2.4",
     "next-swagger-doc": "^0.4.0",
     "nextjs-toploader": "^1.6.4",
     "postcss": "^8.4.29",
@@ -39,7 +39,7 @@
     "react-hook-form": "7.48.2",
     "server-only": "^0.0.1",
     "swagger-ui-react": "^5.10.3",
-    "tailwindcss": "3.3.3",
+    "tailwindcss": "3.3.6",
     "ui": "workspace:*",
     "utils": "workspace:*",
     "zod": "^3.22.2"
