@@ -55,7 +55,7 @@ export function Pagination({
           className={cn('mr-2', currentPage === i && 'font-bold')}
         >
           {i}
-        </Button>
+        </Button>,
       );
     }
 
