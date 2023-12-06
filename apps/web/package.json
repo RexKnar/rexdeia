@@ -29,7 +29,7 @@
     "nanoid": "^5.0.0",
     "next": "^14.0.0",
     "next-auth": "4.24.5",
-    "next-intl": "3.2.4",
+    "next-intl": "3.2.5",
     "next-swagger-doc": "^0.4.0",
     "nextjs-toploader": "^1.6.4",
     "postcss": "^8.4.29",
@@ -67,6 +67,6 @@
     "prettier-plugin-tailwindcss": "^0.5.4",
     "prisma": "5.6.0",
     "tsconfig": "workspace:*",
-    "typescript": "5.3.2"
+    "typescript": "5.3.3"
   }
 }
