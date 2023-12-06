@@ -1,5 +1,3 @@
-# Pull Request Template
-
 ## Overview
 
 Briefly describe what this PR does, and why it's needed.
