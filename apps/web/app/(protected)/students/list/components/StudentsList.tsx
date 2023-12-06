@@ -11,7 +11,15 @@ import {
   SortingState,
   useReactTable,
 } from '@tanstack/react-table';
-import { CreditCardIcon, Gem, GripVertical, HeartPulse } from 'lucide-react';
+import {
+  CreditCardIcon,
+  Edit2Icon,
+  Gem,
+  HeartPulse,
+  MailPlusIcon,
+  PhoneCallIcon,
+  Trash2Icon,
+} from 'lucide-react';
 import React, { useEffect, useState } from 'react';
 import { Avatar, AvatarFallback, AvatarImage, Button } from 'ui';
 import {
@@ -25,17 +33,18 @@ import {
 import { cn, titilize } from 'utils';
 
 import { makeAPICall } from '../../../../../lib/api';
+import { Student } from '../../../../../lib/domain';
 import { GET_STUDENTS_LIST } from '../../../../../lib/endpoints';
 
 export function StudentsList() {
-  const columns: ColumnDef<any>[] = [
+  const columns: ColumnDef<Student>[] = [
     {
       accessorKey: 'firstName',
       header: ({ column }) => {
         return (
           <Button
             variant="ghost"
-            className="px-0"
+            className="ml-3 px-0"
             onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
           >
             Student
@@ -78,6 +87,20 @@ export function StudentsList() {
                   </p>
                 </div>
               </div>
+              <div className="mt-3">
+                <div className="flex items-center">
+                  <MailPlusIcon className="mr-1 text-cyan-500" size={12} />
+                  <p className="text-sm text-gray-800">
+                    {row.original.emailId}
+                  </p>
+                </div>
+                <div className="flex items-center">
+                  <PhoneCallIcon className="mr-1 text-red-600" size={12} />
+                  <p className="text-sm text-gray-800">
+                    {row.original.phoneNumber}
+                  </p>
+                </div>
+              </div>
             </div>
           </div>
         );
@@ -92,13 +115,31 @@ export function StudentsList() {
             className="px-0"
             onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
           >
-            Email ID
+            Permanent Address
           </Button>
+        );
+      },
+      cell: ({ row }) => {
+        return (
+          <div>
+            <p className="text-sm text-gray-800">
+              {row.original.additionalAttributes.permanentAddress}
+            </p>
+            <p className="text-sm text-gray-800">
+              {row.original.additionalAttributes.permanentDistrict}
+            </p>
+            <p className="text-sm text-gray-800">
+              {row.original.additionalAttributes.permanentState}
+            </p>
+            <p className="text-sm text-gray-800">
+              {row.original.additionalAttributes.permanentPostalCode}
+            </p>
+          </div>
         );
       },
     },
     {
-      accessorKey: 'rollNumber',
+      accessorKey: 'emailId',
       header: ({ column }) => {
         return (
           <Button
@@ -106,22 +147,26 @@ export function StudentsList() {
             className="px-0"
             onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
           >
-            Roll No
+            Residential Address
           </Button>
         );
       },
-    },
-    {
-      accessorKey: 'additionalAttributes.mobileNumber',
-      header: ({ column }) => {
+      cell: ({ row }) => {
         return (
-          <Button
-            variant="ghost"
-            className="px-0"
-            onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-          >
-            Mobile Number
-          </Button>
+          <div>
+            <p className="text-sm text-gray-800">
+              {row.original.additionalAttributes.residentialAddress}
+            </p>
+            <p className="text-sm text-gray-800">
+              {row.original.additionalAttributes.residentialDistrict}
+            </p>
+            <p className="text-sm text-gray-800">
+              {row.original.additionalAttributes.residentialState}
+            </p>
+            <p className="text-sm text-gray-800">
+              {row.original.additionalAttributes.residentialPostalCode}
+            </p>
+          </div>
         );
       },
     },
@@ -138,13 +183,39 @@ export function StudentsList() {
           </Button>
         );
       },
+      cell: () => <p className="text-sm text-gray-800">N/A</p>,
+    },
+    {
+      accessorKey: 'actions',
+      header: ({ column }) => {
+        return (
+          <Button
+            variant="ghost"
+            className="px-0"
+            onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+          ></Button>
+        );
+      },
+      cell: () => {
+        return (
+          <div className="flex">
+            <Button variant="ghost" className="p-1">
+              <Trash2Icon size={16} className="mr-2 text-red-500" />
+            </Button>
+
+            <Button variant="ghost" className="p-1">
+              <Edit2Icon size={16} className="mr-2 text-blue-600" />
+            </Button>
+          </div>
+        );
+      },
     },
   ];
 
-  const [pageNumber, setPageNumber] = useState(1);
+  const [pageNumber] = useState(1);
   const [studentsList, setStudentsList] = useState<any[]>([]);
 
-  const [totalPages, setTotalPages] = useState(0);
+  const [, setTotalPages] = useState(0);
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
 
@@ -158,10 +229,6 @@ export function StudentsList() {
       setTotalPages(Math.ceil(res.total / 10));
     });
   }, [pageNumber]);
-
-  useEffect(() => {
-    console.log(studentsList);
-  }, [studentsList]);
 
   const table = useReactTable({
     columns,
@@ -197,16 +264,13 @@ export function StudentsList() {
                     </TableHead>
                   );
                 })}
-                <TableCell className="cursor-pointer text-center text-lg">
-                  Actions
-                </TableCell>
               </TableRow>
             ))}
           </TableHeader>
 
           <TableBody>
             {table.getRowModel().rows?.length ? (
-              table.getRowModel().rows.map((row, index) => (
+              table.getRowModel().rows.map((row) => (
                 <TableRow
                   key={row.id}
                   data-state={row.getIsSelected() && 'selected'}
@@ -220,11 +284,6 @@ export function StudentsList() {
                       )}
                     </TableCell>
                   ))}
-                  <TableCell className="flex items-center justify-center">
-                    <Button variant="destructive" className="mr-1 ">
-                      <GripVertical size={16} className="mr-2 text-black" />
-                    </Button>
-                  </TableCell>
                 </TableRow>
               ))
             ) : (
@@ -239,36 +298,6 @@ export function StudentsList() {
             )}
           </TableBody>
         </Table>
-      </div>
-      <div className="flex items-center justify-between space-x-2 py-4">
-        <div className="text-muted-foreground flex text-sm">
-          <span className="flex items-center gap-1">
-            <div>Page</div>
-            <strong>
-              {table.getState().pagination.pageIndex + 1} of {totalPages}
-            </strong>
-          </span>
-        </div>
-        <div className="flex items-center justify-end space-x-2 py-4">
-          <Button
-            size="sm"
-            variant="outline"
-            onClick={async () => {
-              setPageNumber((prev) => prev - 1);
-            }}
-          >
-            Previous
-          </Button>
-          <Button
-            size="sm"
-            variant="outline"
-            onClick={async () => {
-              setPageNumber((prev) => prev + 1);
-            }}
-          >
-            Next
-          </Button>
-        </div>
       </div>
     </section>
   );
