@@ -1,3 +1,4 @@
+import { Slot } from '@radix-ui/react-slot';
 import { cva, type VariantProps } from 'class-variance-authority';
 import Link from 'next/link';
 import React, { ReactNode } from 'react';
@@ -39,7 +40,7 @@ export function LinkButton({
 }: Readonly<LinkButtonProps>) {
   return (
     <Link href={url} className={className}>
-      <div className={cn(linkButtonVariants({ variant }))}>{children}</div>
+      <Slot className={cn(linkButtonVariants({ variant }))}>{children}</Slot>
     </Link>
   );
 }
