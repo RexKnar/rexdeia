@@ -14,7 +14,8 @@ const linkButtonVariants = cva(
   {
     variants: {
       variant: {
-        default:
+        default: 'text-primary-foreground text-black',
+        primary:
           'bg-primary text-primary-foreground hover:bg-primary/90 text-white',
       },
       size: {
@@ -38,9 +39,7 @@ export function LinkButton({
 }: Readonly<LinkButtonProps>) {
   return (
     <Link href={url} className={className}>
-      <div className={cn(linkButtonVariants({ variant, className }))}>
-        {children}
-      </div>
+      <div className={cn(linkButtonVariants({ variant }))}>{children}</div>
     </Link>
   );
 }
