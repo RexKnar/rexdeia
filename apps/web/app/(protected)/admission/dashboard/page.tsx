@@ -1,7 +1,7 @@
-import { FileInput } from 'lucide-react';
-import { Button } from 'ui';
+import { FileText } from 'lucide-react';
 import { formatNumberWithSuffix } from 'utils';
 
+import { LinkButton } from '../../../../lib/components/LinkButton';
 import { PageHeader } from '../../../../lib/components/PageHeader';
 import { PathBreadcrumb } from '../../../../lib/components/PathBreadcrumb';
 import admissionRequestIcon from '../../../../public/assets/images/admission-request.svg';
@@ -27,10 +27,10 @@ export default async function Page() {
         </div>
 
         <div>
-          <Button className="text-white">
-            <FileInput size={16} className="mr-2" />
+          <LinkButton url="/admission/add">
+            <FileText size={16} className="mr-2" />
             Admission Form
-          </Button>
+          </LinkButton>
         </div>
       </div>
 
