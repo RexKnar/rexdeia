@@ -1,4 +1,4 @@
-import { BookText } from 'lucide-react';
+import { FileText } from 'lucide-react';
 import { formatNumberWithSuffix } from 'utils';
 
 import { LinkButton } from '../../../../lib/components/LinkButton';
@@ -28,7 +28,7 @@ export default async function Page() {
 
         <div>
           <LinkButton url="/admission/add">
-            <BookText size={16} className="mr-2" />
+            <FileText size={16} className="mr-2" />
             Admission Form
           </LinkButton>
         </div>
