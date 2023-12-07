@@ -31,3 +31,10 @@ export type Student = {
 };
 
 export type AddStudentModel = Omit<Student, 'id'>;
+
+export type GetStudentListModel = {
+  page: number;
+  total: number;
+  data: Student[];
+  pageSize: number;
+};

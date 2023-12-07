@@ -36,7 +36,7 @@ export const menuItems: SidebarMenuItem[] = [
       {
         icon: null,
         id: 'student-list',
-        label: 'Student List',
+        label: 'Students List',
         path: '/students/list',
       },
     ],
