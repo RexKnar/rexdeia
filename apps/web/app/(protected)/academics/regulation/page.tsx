@@ -26,11 +26,9 @@ export default async function Page() {
         </div>
       </div>
 
-      <div>
-        <div className="mt-4 rounded-md bg-white p-3">
-          <RegulationFilterOptions></RegulationFilterOptions>
-          <RegulationListTable></RegulationListTable>
-        </div>
+      <div className="mt-4 rounded-md bg-white p-3">
+        <RegulationFilterOptions></RegulationFilterOptions>
+        <RegulationListTable></RegulationListTable>
       </div>
     </section>
   );
