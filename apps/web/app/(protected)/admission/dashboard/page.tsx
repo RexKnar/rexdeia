@@ -27,7 +27,7 @@ export default async function Page() {
         </div>
 
         <div>
-          <LinkButton url="/admission/add">
+          <LinkButton variant="primary" url="/admission/add">
             <FileText size={16} className="mr-2" />
             Admission Form
           </LinkButton>
