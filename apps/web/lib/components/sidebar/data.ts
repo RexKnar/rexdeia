@@ -1,4 +1,5 @@
 import {
+  FileText,
   GraduationCap,
   LayoutDashboard,
   User2,
@@ -10,10 +11,10 @@ import { SidebarMenuItem } from './types';
 
 export const menuItems: SidebarMenuItem[] = [
   {
-    id: 'admission-dashboard',
+    id: 'dashboard',
     label: 'Dashboard',
     icon: LayoutDashboard,
-    path: '/admission/dashboard',
+    path: '/dashboard',
   },
   {
     id: 'students',
@@ -86,6 +87,12 @@ export const menuItems: SidebarMenuItem[] = [
     path: '',
     children: [
       {
+        id: 'admission-dashboard',
+        label: 'Dashboard',
+        icon: null,
+        path: '/admission/dashboard',
+      },
+      {
         id: 'admission-addnew',
         label: 'Add new',
         icon: null,
@@ -102,6 +109,20 @@ export const menuItems: SidebarMenuItem[] = [
         label: 'Configure',
         icon: null,
         path: '/admission/configure',
+      },
+    ],
+  },
+  {
+    id: 'enquiry-page',
+    label: 'Enquiry',
+    icon: FileText,
+    path: '',
+    children: [
+      {
+        id: 'enquiry-addnew',
+        label: 'Add New',
+        icon: null,
+        path: '/enquiry/add',
       },
     ],
   },
