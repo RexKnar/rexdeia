@@ -5,7 +5,6 @@ import { cn } from 'utils';
 
 type LinkButtonProps = {
   url: string;
-  className?: string;
   children: ReactNode;
 } & VariantProps<typeof linkButtonVariants>;
 
@@ -14,8 +13,8 @@ const linkButtonVariants = cva(
   {
     variants: {
       variant: {
-        default:
-          'bg-primary text-primary-foreground hover:bg-primary/90 text-white',
+        default: 'text-primary-foreground',
+        primary: 'bg-primary hover:bg-primary/90 text-white',
       },
       size: {
         default: 'h-10 py-2 px-4',
@@ -32,15 +31,12 @@ const linkButtonVariants = cva(
 
 export function LinkButton({
   url,
-  children,
-  className,
   variant,
+  children,
 }: Readonly<LinkButtonProps>) {
   return (
-    <Link href={url} className={className}>
-      <div className={cn(linkButtonVariants({ variant, className }))}>
-        {children}
-      </div>
+    <Link href={url} className={cn(linkButtonVariants({ variant }))}>
+      {children}
     </Link>
   );
 }
