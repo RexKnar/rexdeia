@@ -1,6 +1,13 @@
+'use client';
+import { useParams } from 'next/navigation';
 import { Text } from 'ui';
 
+import { useGetStudentDetailsByIdQuery } from '../../../../../lib/queries/useGetStudentDetailsByIdQuery';
+
 export function StudentDetail() {
+  const { id } = useParams();
+  const { data: classList } = useGetStudentDetailsByIdQuery(id.toString());
+
   return (
     <div className="flex gap-4">
       <div className="h-full w-1/6 shrink-0 rounded-lg bg-white p-4">

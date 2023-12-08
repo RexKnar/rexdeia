@@ -26,6 +26,7 @@ export const GET_STUDENTS_LIST = `GET_STUDENTS_LIST`;
 export const ADD_CLASS = `ADD_CLASS`;
 export const GET_CLASS = `GET_CLASS`;
 export const GET_REGULATION_LIST = `GET_REGULATION_LIST`;
+export const GET_STUDENTDETAILS_BY_ID = `GET_STUDENTDETAILS_BY_ID`;
 
 type EndpointDetails = Record<
   string,
@@ -136,5 +137,9 @@ export default <EndpointDetails>{
   [GET_REGULATION_LIST]: {
     requestType: `GET`,
     endpoint: `/api/regulation`,
+  },
+  [GET_STUDENTDETAILS_BY_ID]: {
+    requestType: `GET`,
+    endpoint: `/api/student/[studentId]`,
   },
 };
