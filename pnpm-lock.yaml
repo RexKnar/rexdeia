@@ -10,7 +10,7 @@ importers:
     devDependencies:
       '@turbo/gen':
         specifier: 1.11.0
-        version: 1.11.0(@types/node@20.10.2)(typescript@5.3.3)
+        version: 1.11.0(@types/node@20.10.4)(typescript@5.3.3)
       eslint:
         specifier: 8.55.0
         version: 8.55.0
@@ -176,8 +176,8 @@ importers:
         specifier: ^14.0.0
         version: 14.0.3
       '@types/node':
-        specifier: 20.10.2
-        version: 20.10.2
+        specifier: 20.10.4
+        version: 20.10.4
       '@types/react':
         specifier: 18.2.21
         version: 18.2.21
@@ -2753,7 +2753,7 @@ packages:
     resolution: {integrity: sha512-vxhUy4J8lyeyinH7Azl1pdd43GJhZH/tP2weN8TntQblOY+A0XbT8DJk1/oCPuOOyg/Ja757rG0CgHcWC8OfMA==}
     dev: true
 
-  /@turbo/gen@1.11.0(@types/node@20.10.2)(typescript@5.3.3):
+  /@turbo/gen@1.11.0(@types/node@20.10.4)(typescript@5.3.3):
     resolution: {integrity: sha512-A1lCsfH73afPcr2PN4cWR4ziHKwF9fM78Z5Sw/SSfoQip22C3S4iohRdnSdPtjCObItWHp839qKJECwRBtod+A==}
     hasBin: true
     dependencies:
@@ -2765,7 +2765,7 @@ packages:
       minimatch: 9.0.3
       node-plop: 0.26.3
       proxy-agent: 6.3.1
-      ts-node: 10.9.1(@types/node@20.10.2)(typescript@5.3.3)
+      ts-node: 10.9.1(@types/node@20.10.4)(typescript@5.3.3)
       update-check: 1.5.4
       validate-npm-package-name: 5.0.0
     transitivePeerDependencies:
@@ -2810,7 +2810,7 @@ packages:
     resolution: {integrity: sha512-ZUxbzKl0IfJILTS6t7ip5fQQM/J3TJYubDm3nMbgubNNYS62eXeUpoLUC8/7fJNiFYHTrGPQn7hspDUzIHX3UA==}
     dependencies:
       '@types/minimatch': 5.1.2
-      '@types/node': 20.10.2
+      '@types/node': 20.10.4
     dev: true
 
   /@types/hast@2.3.8:
@@ -2843,8 +2843,8 @@ packages:
     resolution: {integrity: sha512-K0VQKziLUWkVKiRVrx4a40iPaxTUefQmjtkQofBkYRcoaaL/8rhwDWww9qWbrgicNOgnpIsMxyNIUM4+n6dUIA==}
     dev: true
 
-  /@types/node@20.10.2:
-    resolution: {integrity: sha512-37MXfxkb0vuIlRKHNxwCkb60PNBpR94u4efQuN4JgIAm66zfCDXGSAFCef9XUWFovX2R1ok6Z7MHhtdVXXkkIw==}
+  /@types/node@20.10.4:
+    resolution: {integrity: sha512-D08YG6rr8X90YB56tSIuBaddy/UXAA9RKJoFvrsnogAum/0pmjkgi4+2nx96A330FmioegBWmEYQ+syqCFaveg==}
     dependencies:
       undici-types: 5.26.5
 
@@ -2893,7 +2893,7 @@ packages:
     resolution: {integrity: sha512-4mi2hYsvPAhe8RXjk5DKB09sAUzbK68T2XjORehHdWyxFoX2zUnfi1VQ5wU4Md28H/5+uB4DkxY9BS4B87N/0A==}
     dependencies:
       '@types/caseless': 0.12.3
-      '@types/node': 20.10.2
+      '@types/node': 20.10.4
       '@types/tough-cookie': 4.0.3
       form-data: 2.5.1
     dev: false
@@ -2912,7 +2912,7 @@ packages:
   /@types/through@0.0.33:
     resolution: {integrity: sha512-HsJ+z3QuETzP3cswwtzt2vEIiHBk/dCcHGhbmG5X3ecnwFD/lPrMpliGXxSCg03L9AhrdwA4Oz/qfspkDW+xGQ==}
     dependencies:
-      '@types/node': 20.10.2
+      '@types/node': 20.10.4
     dev: true
 
   /@types/tinycolor2@1.4.6:
@@ -8941,7 +8941,7 @@ packages:
     resolution: {integrity: sha512-Y/arvbn+rrz3JCKl9C4kVNfTfSm2/mEp5FSz5EsZSANGPSlQrpRI5M4PKF+mJnE52jOO90PnPSc3Ur3bTQw0gA==}
     dev: false
 
-  /ts-node@10.9.1(@types/node@20.10.2)(typescript@5.3.3):
+  /ts-node@10.9.1(@types/node@20.10.4)(typescript@5.3.3):
     resolution: {integrity: sha512-NtVysVPkxxrwFGUUxGYhfux8k78pQB3JqYBXlLRZgdGUqTO5wU/UyHop5p70iEbGhB7q5KmiZiU0Y3KlJrScEw==}
     hasBin: true
     peerDependencies:
@@ -8960,7 +8960,7 @@ packages:
       '@tsconfig/node12': 1.0.11
       '@tsconfig/node14': 1.0.3
       '@tsconfig/node16': 1.0.4
-      '@types/node': 20.10.2
+      '@types/node': 20.10.4
       acorn: 8.11.2
       acorn-walk: 8.3.0
       arg: 4.1.3
