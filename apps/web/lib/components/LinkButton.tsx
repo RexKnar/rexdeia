@@ -13,9 +13,8 @@ const linkButtonVariants = cva(
   {
     variants: {
       variant: {
-        default: 'text-primary-foreground text-black',
-        primary:
-          'bg-primary text-primary-foreground hover:bg-primary/90 text-white',
+        default: 'text-primary-foreground',
+        primary: 'bg-primary hover:bg-primary/90 text-white',
       },
       size: {
         default: 'h-10 py-2 px-4',
