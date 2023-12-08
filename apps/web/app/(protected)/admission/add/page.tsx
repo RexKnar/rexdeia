@@ -23,7 +23,7 @@ export default async function Page() {
   return (
     <section>
       <PathBreadcrumb />
-      <PageHeader title="Configure" />
+      <PageHeader title="Add New Admission" />
 
       <Tabs defaultValue="admission" className="mt-4">
         <TabsList>
