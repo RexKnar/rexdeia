@@ -1,3 +1,4 @@
+import { captureException } from '@sentry/nextjs';
 import { z } from 'zod';
 
 const schema = z.object({
@@ -8,6 +9,7 @@ export async function validateUpdateBranchDetails(payload: unknown) {
   try {
     schema.parse(payload);
   } catch (e) {
+    captureException(e);
     throw new Error('VALIDATION_ERROR');
   }
 }

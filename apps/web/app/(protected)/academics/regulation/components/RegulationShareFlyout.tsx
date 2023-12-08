@@ -125,7 +125,7 @@ function RegulationShareFlyout() {
                   {...register('regulationName', {
                     required: 'Regulation Name is Required',
                   })}
-                  className="border-primary-200 p-1"
+                  className="mt-2"
                   id="regulationName"
                 />
                 <p
@@ -138,7 +138,7 @@ function RegulationShareFlyout() {
                   {fieldErrors.regulationName?.message as string}
                 </p>
               </div>
-              <div>
+              <div className="mt-4">
                 <label
                   htmlFor="announcedYear"
                   className="text-sm font-semibold text-gray-700"
@@ -150,7 +150,7 @@ function RegulationShareFlyout() {
                   {...register('announcedYear', {
                     required: 'announcedYear is Required',
                   })}
-                  className="border-primary-200 p-1"
+                  className="mt-2"
                   id="announcedYear"
                 />
                 <p

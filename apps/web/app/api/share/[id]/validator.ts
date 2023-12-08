@@ -1,3 +1,4 @@
+import { captureException } from '@sentry/nextjs';
 import { z } from 'zod';
 
 import { getFormById } from '../../forms/service';
@@ -39,6 +40,7 @@ export async function validateCreateShare(createShare: CreateShare) {
 
     createSchema.parse(createShare);
   } catch (e) {
+    captureException(e);
     throw new Error(e.message);
   }
   return createSchema.parse(createShare);
@@ -55,6 +57,7 @@ export async function validateUpdateShare(
     }
     updateSchema.parse(updateShare);
   } catch (e) {
+    captureException(e);
     throw new Error(e.message);
   }
   return updateSchema.parse(updateShare);

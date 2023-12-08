@@ -16,6 +16,10 @@ export async function getStudentById(id: string, format: string) {
     },
   });
 
+  if (!student) {
+    return null;
+  }
+
   if (format === 'form') {
     const studentDefaultPropsMap = new Map(Object.entries(student));
     const additionalPropsMap = new Map(
@@ -141,20 +145,49 @@ export async function addStudent(student: AddStudentModel, formId: string) {
 
 export async function getStudentsList(page: number, pageSize: number) {
   const session = await getServerSession(authOptions);
-  const studentsList = await db.student.findMany({
-    take: pageSize,
-    skip: (page - 1) * pageSize,
-    where: {
-      status: 'Active',
-      branchId: session.branchId,
-      organizationId: session.organizationId,
-    },
-  });
-  const total = studentsList.length;
+
+  const [total, studentsList] = await Promise.all([
+    db.student.count({
+      where: {
+        status: 'Active',
+        branchId: session.branchId,
+        organizationId: session.organizationId,
+      },
+    }),
+    db.student.findMany({
+      take: pageSize,
+      skip: (page - 1) * pageSize,
+      where: {
+        status: 'Active',
+        branchId: session.branchId,
+        organizationId: session.organizationId,
+      },
+    }),
+  ]);
+
   return {
     total,
     page,
     pageSize,
     data: studentsList,
   };
+}
+
+export async function getRecentlyAddedStudentsList({
+  count,
+}: {
+  count: number;
+}) {
+  const session = await getServerSession(authOptions);
+  return await db.student.findMany({
+    take: count,
+    where: {
+      status: 'Active',
+      branchId: session.branchId,
+      organizationId: session.organizationId,
+    },
+    orderBy: {
+      createdAt: 'desc',
+    },
+  });
 }

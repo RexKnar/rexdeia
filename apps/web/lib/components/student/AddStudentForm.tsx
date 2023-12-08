@@ -3,6 +3,7 @@
 import { Loader2, XCircle } from 'lucide-react';
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { Button } from 'ui';
 
 import { makeAPICall } from '../../api';
 import { AddStudentModel } from '../../domain';
@@ -234,19 +235,16 @@ export function AddStudentForm({ formConfig, formId }: AddStudentFormProps) {
                   display: currentStep === index ? 'block' : 'none',
                 }}
               >
-                <button
+                <Button
                   type="button"
-                  className="mt-6 h-12 cursor-pointer rounded-md bg-primary p-0 px-5 py-0 text-white hover:bg-primary/90"
+                  className="mr-2"
                   onClick={prevStep}
                   disabled={currentStep === 0}
                 >
                   Back
-                </button>
+                </Button>
                 {currentStep === totalSteps - 1 ? (
-                  <button
-                    type="submit"
-                    className="mt-6 h-12 cursor-pointer rounded-md bg-primary px-4 py-3 text-white hover:bg-primary/90"
-                  >
+                  <Button type="submit" className="">
                     {isSubmitting ? (
                       <div className="flex h-screen items-center justify-center">
                         <Loader2 className="mr-2 h-6 w-6 animate-spin text-white" />
@@ -254,12 +252,11 @@ export function AddStudentForm({ formConfig, formId }: AddStudentFormProps) {
                     ) : (
                       'Submit'
                     )}
-                  </button>
+                  </Button>
                 ) : (
-                  <button
+                  <Button
                     type="button"
                     onClick={() => nextStep(section.sectionTitle, index)}
-                    className="mt-6 h-12 cursor-pointer rounded-md bg-primary px-4 py-3 text-white hover:bg-primary/90"
                   >
                     {isSubmitting ? (
                       <div className="flex h-screen items-center justify-center">
@@ -268,7 +265,7 @@ export function AddStudentForm({ formConfig, formId }: AddStudentFormProps) {
                     ) : (
                       'Save & Next'
                     )}
-                  </button>
+                  </Button>
                 )}
               </div>
             </>

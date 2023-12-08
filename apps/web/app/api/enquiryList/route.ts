@@ -1,3 +1,4 @@
+import { captureException } from '@sentry/nextjs';
 import { StatusCodes } from 'http-status-codes';
 import { NextRequest, NextResponse } from 'next/server';
 
@@ -11,6 +12,7 @@ export async function POST(request: NextRequest) {
       status: StatusCodes.OK,
     });
   } catch (e) {
+    captureException(e);
     return new NextResponse(e, {
       status: StatusCodes.BAD_REQUEST,
     });

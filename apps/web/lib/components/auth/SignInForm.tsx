@@ -53,7 +53,7 @@ export function SignInForm() {
           </AlertDescription>
         </Alert>
       )}
-      <label className="mt-5 block text-sm font-medium text-slate-500">
+      <label className="mt-5 block text-sm font-semibold text-gray-700">
         Email
       </label>
       <div className="relative">
@@ -82,7 +82,7 @@ export function SignInForm() {
       >
         {fieldErrors.email?.message || errors[error]}
       </p>
-      <label className="mt-4 block text-sm font-medium text-slate-500">
+      <label className="mt-4 block text-sm font-semibold text-gray-700">
         Password
       </label>
       <div className="relative">

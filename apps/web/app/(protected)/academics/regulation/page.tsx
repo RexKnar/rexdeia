@@ -15,7 +15,7 @@ export default async function Page() {
   }
 
   return (
-    <section className="h-full w-full bg-gray-50 px-7 py-12">
+    <section>
       <div className="flex justify-between">
         <div>
           <PathBreadcrumb />

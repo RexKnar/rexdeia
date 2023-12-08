@@ -1,3 +1,4 @@
+import { captureException } from '@sentry/nextjs';
 import { StatusCodes } from 'http-status-codes';
 import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
@@ -28,6 +29,7 @@ export async function GET(request: NextRequest, { params: { id } }) {
       });
     }
   } catch (e) {
+    captureException(e);
     return new Response(JSON.stringify({ error: e.message }), {
       status: StatusCodes.INTERNAL_SERVER_ERROR,
     });

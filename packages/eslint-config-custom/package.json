@@ -5,7 +5,7 @@
   "license": "MIT",
   "dependencies": {
     "eslint-config-next": "^13.4.12",
-    "eslint-config-prettier": "^8.8.0",
+    "eslint-config-prettier": "^9.0.0",
     "eslint-config-turbo": "^1.10.9",
     "eslint-import-resolver-typescript": "^3.6.0",
     "eslint-plugin-import": "^2.28.1",
@@ -17,6 +17,6 @@
     "access": "public"
   },
   "peerDependencies": {
-    "eslint": "8.54.0"
+    "eslint": "8.55.0"
   }
 }

@@ -1,6 +1,8 @@
 import { Inter, Roboto_Mono } from 'next/font/google';
 import { ReactNode } from 'react';
 
+import { ZohoSalesIQ } from '../../lib/components/ZohoSalesIQ';
+
 const inter = Inter({
   subsets: ['latin'],
   display: 'swap',
@@ -18,6 +20,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
     <html lang="en" className={`${inter.variable} ${roboto_mono.variable}`}>
       <body>
         <main>{children}</main>
+        <ZohoSalesIQ />
       </body>
     </html>
   );

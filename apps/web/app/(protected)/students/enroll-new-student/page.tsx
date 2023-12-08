@@ -3,7 +3,7 @@ import { getServerSession } from 'next-auth';
 
 import { authOptions } from '../../../../lib/auth';
 import { PathBreadcrumb } from '../../../../lib/components/PathBreadcrumb';
-import { AddStudentPage } from '../components/AddStudentPage';
+import { AddStudentPage } from './components/AddStudentPage';
 
 export default async function Page() {
   const session = await getServerSession(authOptions);
@@ -13,7 +13,7 @@ export default async function Page() {
   }
 
   return (
-    <section className="flex h-full w-full flex-col gap-[20px] bg-gray-50 px-[25px] py-[40px] sm:px-[50px]">
+    <section>
       <PathBreadcrumb />
 
       <AddStudentPage
