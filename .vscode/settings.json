@@ -1,15 +1,5 @@
 {
-  "cSpell.words": [
-    "acadx",
-    "Capeo",
-    "nextjs",
-    "signin",
-    "Sobin",
-    "STUDENTDETAIL",
-    "STUDENTDETAILS",
-    "STUDENTDTAIL",
-    "tanstack"
-  ],
+  "cSpell.words": ["acadx", "nextjs", "tanstack"],
   "editor.tabSize": 2,
   "editor.formatOnSave": true,
   "editor.formatOnPaste": true,
