@@ -116,7 +116,7 @@ export function RegulationListTable() {
   });
 
   return (
-    <section className="pt-6">
+    <section>
       <div className="rounded-md ">
         <Table>
           <TableHeader>
