@@ -4,7 +4,6 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from '../../../../lib/auth';
 import { PageHeader } from '../../../../lib/components/PageHeader';
 import { PathBreadcrumb } from '../../../../lib/components/PathBreadcrumb';
-import { RegulationFilterOptions } from './components/RegulationFilterOptions';
 import { RegulationListTable } from './components/RegulationListTable';
 import { RegulationShareFlyout } from './components/RegulationShareFlyout';
 
@@ -27,7 +26,6 @@ export default async function Page() {
       </div>
 
       <div className="mt-4 rounded-md bg-white p-3">
-        <RegulationFilterOptions></RegulationFilterOptions>
         <RegulationListTable></RegulationListTable>
       </div>
     </section>
