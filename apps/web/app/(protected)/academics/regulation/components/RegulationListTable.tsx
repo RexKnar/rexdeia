@@ -31,7 +31,7 @@ const columns: ColumnDef<any>[] = [
     header: ({ column }) => {
       return (
         <Button
-          className="font-semibold"
+          className="text-lg font-semibold"
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
         >
@@ -45,7 +45,7 @@ const columns: ColumnDef<any>[] = [
     header: ({ column }) => {
       return (
         <Button
-          className="font-semibold"
+          className="text-lg font-semibold"
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
         >
@@ -56,7 +56,7 @@ const columns: ColumnDef<any>[] = [
     cell: ({ row }) => {
       var responseDate: string = row.getValue('announcedYear');
       var date = new Date(responseDate);
-      return <div className="font-medium">{date.toDateString()}</div>;
+      return <div>{date.toDateString()}</div>;
     },
   },
   {
@@ -64,7 +64,7 @@ const columns: ColumnDef<any>[] = [
     header: ({ column }) => {
       return (
         <Button
-          className="font-semibold"
+          className="text-lg font-semibold"
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
         >
@@ -125,15 +125,12 @@ export function RegulationListTable() {
                 key={headerGroup.id}
                 className="cursor-pointer hover:bg-white"
               >
-                <TableHead className="ms-2 cursor-pointer text-center font-semibold">
+                <TableHead className="ms-2 cursor-pointer ps-6 text-lg font-semibold">
                   S.no
                 </TableHead>
                 {headerGroup.headers.map((header) => {
                   return (
-                    <TableHead
-                      className="text-lg font-semibold"
-                      key={header.id}
-                    >
+                    <TableHead key={header.id}>
                       {header.isPlaceholder
                         ? null
                         : flexRender(
@@ -143,7 +140,7 @@ export function RegulationListTable() {
                     </TableHead>
                   );
                 })}
-                <TableHead className="ms-1 cursor-pointer ps-6 font-semibold">
+                <TableHead className="ms-1 cursor-pointer ps-6 text-lg">
                   Actions
                 </TableHead>
               </TableRow>
