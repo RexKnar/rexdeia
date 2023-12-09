@@ -53,6 +53,11 @@ const columns: ColumnDef<any>[] = [
         </Button>
       );
     },
+    cell: ({ row }) => {
+      var responseDate: string = row.getValue('announcedYear');
+      var date = new Date(responseDate);
+      return <div className="font-medium">{date.toDateString()}</div>;
+    },
   },
   {
     accessorKey: 'isActive',
@@ -165,7 +170,7 @@ export function RegulationListTable() {
                       )}
                     </TableCell>
                   ))}
-                  <TableCell>
+                  <TableCell className="w-52">
                     <Button variant="destructive">
                       <Eye
                         size={16}
