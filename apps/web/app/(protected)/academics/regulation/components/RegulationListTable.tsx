@@ -54,8 +54,8 @@ const columns: ColumnDef<any>[] = [
       );
     },
     cell: ({ row }) => {
-      var responseDate: string = row.getValue('announcedYear');
-      var date = new Date(responseDate);
+      let responseDate: string = row.getValue('announcedYear');
+      let date = new Date(responseDate);
       return <div>{date.toDateString()}</div>;
     },
   },
