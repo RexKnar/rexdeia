@@ -20,7 +20,7 @@
     "node": ">=18.17.1",
     "pnpm": ">=8.7.1"
   },
-  "packageManager": "pnpm@8.11.0",
+  "packageManager": "pnpm@8.12.0",
   "name": "acadx",
   "volta": {
     "node": "20.10.0"
