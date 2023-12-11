@@ -59,7 +59,7 @@ export function SidebarItem(menuItem: SidebarMenuItem) {
               <menuItem.icon
                 size={16}
                 className={cn(
-                  `mr-2 hover:text-white`,
+                  `mr-2`,
                   (currentPath === menuItem.path ||
                     (menuItem.children &&
                       menuItem.children.some(
