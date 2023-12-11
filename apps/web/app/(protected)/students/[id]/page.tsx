@@ -63,7 +63,7 @@ export default async function Page() {
             Documents
           </TabsTrigger>
         </TabsList>
-        <TabsContent className="w-full" value="prfole">
+        <TabsContent className="w-full" value="profile">
           <StudentDetail />
         </TabsContent>
         <TabsContent value="document">
