@@ -9,7 +9,7 @@ import {
   getSortedRowModel,
   useReactTable,
 } from '@tanstack/react-table';
-import { ChevronDown, GripVertical } from 'lucide-react';
+import { ChevronDown, Eye, Pencil, Trash2 } from 'lucide-react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useCallback } from 'react';
 import { Button } from 'ui';
@@ -31,6 +31,7 @@ const columns: ColumnDef<any>[] = [
     header: ({ column }) => {
       return (
         <Button
+          className="text-lg font-semibold"
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
         >
@@ -44,6 +45,7 @@ const columns: ColumnDef<any>[] = [
     header: ({ column }) => {
       return (
         <Button
+          className="text-lg font-semibold"
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
         >
@@ -51,16 +53,22 @@ const columns: ColumnDef<any>[] = [
         </Button>
       );
     },
+    cell: ({ row }) => {
+      let responseDate: string = row.getValue('announcedYear');
+      let date = new Date(responseDate);
+      return <div>{date.toDateString()}</div>;
+    },
   },
   {
     accessorKey: 'isActive',
     header: ({ column }) => {
       return (
         <Button
+          className="text-lg font-semibold"
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
         >
-          Active Status
+          Status
         </Button>
       );
     },
@@ -100,24 +108,26 @@ export function RegulationListTable() {
 
   const table = useReactTable({
     columns,
+    data: regulationListResponse?.data || [],
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
-    data: regulationListResponse?.data || [],
     getFilteredRowModel: getFilteredRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
   });
 
   return (
-    <section className="mt-3">
-      <div className="rounded-md border">
+    <section>
+      <div className="rounded-md ">
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow
                 key={headerGroup.id}
-                className="cursor-pointer text-lg "
+                className="cursor-pointer hover:bg-white"
               >
-                <TableHead className="cursor-pointer font-bold">S.no</TableHead>
+                <TableHead className="ms-2 cursor-pointer ps-6 text-lg font-semibold">
+                  S.no
+                </TableHead>
                 {headerGroup.headers.map((header) => {
                   return (
                     <TableHead key={header.id}>
@@ -130,7 +140,7 @@ export function RegulationListTable() {
                     </TableHead>
                   );
                 })}
-                <TableHead className="cursor-pointer font-bold">
+                <TableHead className="ms-1 cursor-pointer ps-6 text-lg">
                   Actions
                 </TableHead>
               </TableRow>
@@ -148,18 +158,33 @@ export function RegulationListTable() {
                     index % 2 !== 0 && 'cursor-pointer'
                   )}
                 >
-                  <TableCell>{index + 1}</TableCell>
+                  <TableCell className="ps-6">{index + 1}</TableCell>
                   {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id}>
+                    <TableCell key={cell.id} className="px-6">
                       {flexRender(
                         cell.column.columnDef.cell,
                         cell.getContext()
                       )}
                     </TableCell>
                   ))}
-                  <TableCell>
+                  <TableCell className="w-52">
+                    <Button variant="destructive">
+                      <Eye
+                        size={16}
+                        className="mr-2 text-center text-primary"
+                      />
+                    </Button>
                     <Button variant="destructive" className="mr-1 ">
-                      <GripVertical size={16} className="mr-2 text-black" />
+                      <Pencil
+                        size={16}
+                        className="mr-2 text-center text-black"
+                      />
+                    </Button>
+                    <Button variant="destructive" className="mr-1 ">
+                      <Trash2
+                        size={16}
+                        className="mr-2	 text-center text-red-600"
+                      />
                     </Button>
                   </TableCell>
                 </TableRow>
