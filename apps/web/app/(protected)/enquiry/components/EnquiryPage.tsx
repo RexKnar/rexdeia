@@ -1,5 +1,5 @@
-import { EnquiryForm } from '../../../../../lib/components/admission/EnquiryForm';
-import { getFormByCriteria } from '../../../../api/forms/service';
+import { EnquiryForm } from '../../../../lib/components/admission/EnquiryForm';
+import { getFormByCriteria } from '../../../api/forms/service';
 
 type EnquiryPageProp = {
   branchId: string;
