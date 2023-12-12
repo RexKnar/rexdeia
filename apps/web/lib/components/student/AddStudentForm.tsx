@@ -3,7 +3,7 @@
 import { Loader2, XCircle } from 'lucide-react';
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { Button } from 'ui';
+import { Button, Input } from 'ui';
 
 import { makeAPICall } from '../../api';
 import { AddStudentModel } from '../../domain';
@@ -136,11 +136,11 @@ export function AddStudentForm({ formConfig, formId }: AddStudentFormProps) {
                               <label className="mt-1 block text-sm text-gray-700">
                                 {field.label}
                               </label>
-                              <input
+                              <Input
                                 {...register(field.name, field.validationRules)}
                                 type={field.type}
                                 placeholder={field.placeholder}
-                                className="ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring mt-1 flex h-9 w-full rounded-md border border-gray-300 bg-transparent px-3 py-1 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                                className="mt-1"
                               />
                               {errors[field.name] && (
                                 <p className="h-2 p-1 text-sm text-red-600">

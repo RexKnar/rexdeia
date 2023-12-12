@@ -8,7 +8,7 @@ type DashboardCardProps = {
 
 export function DashboardCard({ icon: src, title, count }: DashboardCardProps) {
   return (
-    <div className="flex rounded-md border border-blue-100 bg-white p-3 shadow">
+    <div className="flex rounded-md border border-blue-100 bg-white p-3">
       <div className="rounded-full bg-blue-50">
         <Image src={src} width={50} height={50} alt="icon" />
       </div>
