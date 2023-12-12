@@ -46,10 +46,20 @@ import {
 } from 'ui/components/ui/Table';
 import { cn, titilize } from 'utils';
 
+import { DeleteConfirmationModal } from '../../../../../lib/components/modals/DeleteConfirmationModal';
 import { Student } from '../../../../../lib/domain';
 import { useGetStudentListQuery } from '../../../../../lib/queries/useGetStudentListQuery';
 
 export function StudentsList() {
+  const [showDeleteConfirmationModal, setShowDeleteConfirmationModal] =
+    useState(false);
+  const [selectedStudent, setSelectedStudent] = useState<Student | null>(null);
+
+  const handleDeleteStudentClick = (student: Student) => () => {
+    setSelectedStudent(student);
+    setShowDeleteConfirmationModal(true);
+  };
+
   const columns: ColumnDef<Student>[] = [
     {
       accessorKey: 'firstName',
@@ -209,10 +219,14 @@ export function StudentsList() {
           ></Button>
         );
       },
-      cell: () => {
+      cell: ({ row }) => {
         return (
           <div className="flex">
-            <Button variant="ghost" className="p-1">
+            <Button
+              variant="ghost"
+              className="p-1"
+              onClick={handleDeleteStudentClick(row.original)}
+            >
               <Trash2Icon size={16} className="mr-2 text-red-500" />
             </Button>
 
@@ -254,6 +268,16 @@ export function StudentsList() {
 
   return (
     <section>
+      <DeleteConfirmationModal
+        description={`Are you sure you want to delete ${selectedStudent?.firstName} ${selectedStudent?.lastName} ?`}
+        open={showDeleteConfirmationModal}
+        onDeleteClick={() => {
+          setShowDeleteConfirmationModal(false);
+        }}
+        onCancelClick={() => {
+          setShowDeleteConfirmationModal(false);
+        }}
+      />
       <div className="rounded-md border">
         <If condition={isStudentListLoading}>
           <Then>
