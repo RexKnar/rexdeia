@@ -1,29 +1,20 @@
-'use client';
+import Image from 'next/image';
+import { Text } from 'ui';
 
-import { Avatar, AvatarImage } from 'ui';
-
-import { useGetUserDetailsQuery } from '../../queries/useGetUserDetailsQuery';
-import { UserMenu } from '../footer/UserMenu';
+import logo from '../../../public/assets/images/acadx-logo.png';
 
 export function SidebarFooter() {
-  const { data, isLoading } = useGetUserDetailsQuery();
-
   return (
-    <div className="mb-2 flex items-center justify-between gap-3 px-4 text-lg font-semibold tracking-tight">
-      <div className="flex w-[140px] text-left">
-        <Avatar className="cursor-pointer">
-          <AvatarImage src="https://imgv3.fotor.com/images/gallery/Realistic-Male-Profile-Picture.jpg" />
-        </Avatar>
-        <div className="ml-2">
-          <h1 className="line-clamp-1 text-sm font-semibold">
-            {isLoading ? 'Loading...' : data.name}
-          </h1>
-          <div className="text-sm font-normal text-gray-700">Admin</div>
-        </div>
-      </div>
-      <div>
-        <UserMenu />
-      </div>
-    </div>
+    <footer className="flex flex-col  items-center align-middle">
+      <Image
+        src={logo}
+        alt="acadx Logo"
+        aria-label="acadx Logo"
+        className="pointer-events-none w-24"
+      />
+      <Text variant="sm-regular" className="mt-2 text-gray-700">
+        acadx v1.2, 2023
+      </Text>
+    </footer>
   );
 }
