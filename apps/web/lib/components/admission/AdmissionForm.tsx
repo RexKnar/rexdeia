@@ -3,7 +3,7 @@
 import { Loader2, XCircle } from 'lucide-react';
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { Button, Input } from 'ui';
+import { Button, Input, RadioGroup, RadioGroupItem } from 'ui';
 
 import { AdmissionPreviewFlyout } from '../../../app/(protected)/admission/add/components/AdmissionPreviewFlyout';
 import { AdmissionShareFlyout } from '../../../app/(protected)/admission/add/components/AdmissionShareFlyout';
@@ -177,32 +177,33 @@ export function AdmissionForm({ formId, formConfig }: AdmissionFormProps) {
                           );
                         case 'radio':
                           return (
-                            <div key={field.id}>
-                              <label className="mb-2 mt-1 block text-sm text-gray-700">
-                                {field.label}
-                              </label>
-                              {field.options.map((option) => (
-                                <React.Fragment key={option.value}>
-                                  <input
-                                    className="mr-2"
-                                    type={field.type}
-                                    name={field.name}
-                                    value={option.value}
-                                    {...register(
-                                      field.name,
-                                      field.validationRules
-                                    )}
-                                  />
-                                  <span className="me-3">{option.label}</span>
-                                </React.Fragment>
-                              ))}
+                            <RadioGroup>
+                              <div key={field.id}>
+                                <label className="mb-2 mt-1 block text-sm text-gray-700">
+                                  {field.label}
+                                </label>
+                                {field.options.map((option) => (
+                                  <React.Fragment key={option.value}>
+                                    <RadioGroupItem
+                                      className="mr-2"
+                                      name={field.name}
+                                      value={option.value}
+                                      {...register(
+                                        field.name,
+                                        field.validationRules
+                                      )}
+                                    />
+                                    <span className="me-3">{option.label}</span>
+                                  </React.Fragment>
+                                ))}
 
-                              {errors[field.name] && (
-                                <p className="h-2 p-1 text-sm text-red-600">
-                                  {field.label} is required
-                                </p>
-                              )}
-                            </div>
+                                {errors[field.name] && (
+                                  <p className="h-2 p-1 text-sm text-red-600">
+                                    {field.label} is required
+                                  </p>
+                                )}
+                              </div>
+                            </RadioGroup>
                           );
                         case 'dropdown':
                           return (

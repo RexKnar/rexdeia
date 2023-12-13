@@ -31,3 +31,4 @@ export * from './components/ui/Spinner';
 export * from './components/ui/Pagination';
 
 export * from './colors';
+export * from './components/ui/RadioGroup';
