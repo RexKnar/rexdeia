@@ -183,7 +183,7 @@ export function RegulationListTable() {
                     <Button variant="destructive" className="mr-1 ">
                       <Trash2
                         size={16}
-                        className="mr-2	 text-center text-red-600"
+                        className="mr-2 text-center text-red-600"
                       />
                     </Button>
                   </TableCell>

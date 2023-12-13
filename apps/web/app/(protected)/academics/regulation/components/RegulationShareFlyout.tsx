@@ -1,11 +1,16 @@
 'use client';
 
-import { Loader2, PlusCircle } from 'lucide-react';
-import { useState } from 'react';
+import format from 'date-fns/format';
+import { CalendarIcon, Loader2, PlusCircle } from 'lucide-react';
+import { useEffect, useState } from 'react';
 import { useForm, useWatch } from 'react-hook-form';
 import {
   Button,
+  Calendar,
   Input,
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
   Sheet,
   SheetContent,
   SheetHeader,
@@ -14,13 +19,13 @@ import {
   Switch,
   Text,
 } from 'ui';
+import { cn } from 'utils';
 
 import { CreateRegulationModel } from '../../../../../lib/domain/regulation';
 import { useCreateRegulationsForFormMutationQuery } from '../../../../../lib/queries/useCreateRegulationsForFormMutationQuery';
 
 function RegulationShareFlyout() {
   const [isOpen, setIsOpen] = useState(false);
-
   const {
     register,
     handleSubmit,
@@ -29,19 +34,18 @@ function RegulationShareFlyout() {
     reset,
     formState: { errors: fieldErrors },
   } = useForm();
-
   const isLinkActive = useWatch({ name: 'isActive', control });
-
   const {
     isPending: isPendingCreateRegulations,
     mutateAsync: mutateCreateRegulationsAsync,
   } = useCreateRegulationsForFormMutationQuery();
 
+  const [selectedDate, setSelectedDate] = useState(new Date());
+  const [isCalendarOpen, setIsCalendarOpen] = useState(false);
   async function addRegulation(payload: CreateRegulationModel) {
     try {
       const requestPayload = {
         ...payload,
-        isActive: isLinkActive === 'true',
       };
       await mutateCreateRegulationsAsync(requestPayload);
     } catch (error) {
@@ -51,6 +55,10 @@ function RegulationShareFlyout() {
       setIsOpen(false);
     }
   }
+
+  useEffect(() => {
+    setValue('announcedYear', selectedDate);
+  }, [selectedDate]);
 
   return (
     <section>
@@ -83,11 +91,9 @@ function RegulationShareFlyout() {
                   </div>
                   <div className="flex items-center">
                     <Switch
-                      {...register('isActive', {
-                        required: 'Active Status is Required',
-                      })}
+                      {...register('isActive')}
                       id="isActive"
-                      value={isLinkActive ? 'true' : 'false'}
+                      value={isLinkActive ? '1' : '0'}
                       onCheckedChange={() => {
                         setValue('isActive', !isLinkActive);
                       }}
@@ -98,15 +104,6 @@ function RegulationShareFlyout() {
                     >
                       {isLinkActive ? 'Active' : 'Inactive'}
                     </label>
-                    <p
-                      className={`h-2 p-1 text-sm text-red-600 ${
-                        fieldErrors.isActive
-                          ? 'opacity-100 transition-opacity duration-300'
-                          : 'opacity-0 transition-opacity duration-300'
-                      }`}
-                    >
-                      {fieldErrors.isActive?.message as string}
-                    </p>
                   </div>
                 </div>
               </SheetTitle>
@@ -129,7 +126,7 @@ function RegulationShareFlyout() {
                   id="regulationName"
                 />
                 <p
-                  className={`h-2 p-1 text-center text-sm text-red-600 ${
+                  className={`h-2 p-1 text-sm text-red-600 ${
                     fieldErrors.regulationName
                       ? 'opacity-100 transition-opacity duration-300'
                       : 'opacity-0 transition-opacity duration-300'
@@ -145,16 +142,48 @@ function RegulationShareFlyout() {
                 >
                   Start Year
                 </label>
-                <Input
-                  type="date"
-                  {...register('announcedYear', {
-                    required: 'announcedYear is Required',
-                  })}
-                  className="mt-2"
-                  id="announcedYear"
-                />
+                <Popover open={isCalendarOpen} onOpenChange={setIsCalendarOpen}>
+                  <PopoverTrigger
+                    asChild
+                    className="rounded-md border border-primary-200 p-3"
+                  >
+                    <Button
+                      variant={'outline'}
+                      className={cn(
+                        'w-full justify-start justify-between text-left font-normal',
+                        !selectedDate && 'text-muted-foreground flex '
+                      )}
+                    >
+                      <span>
+                        {selectedDate ? (
+                          format(selectedDate, 'PPP')
+                        ) : (
+                          <>Pick a date</>
+                        )}
+                      </span>
+                      <label className="flex justify-end text-sm font-normal text-gray-700">
+                        <CalendarIcon className="mr-2 flex h-4 w-4 justify-end text-primary-500" />
+                      </label>
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="z-index-99 w-auto bg-white p-0">
+                    <Calendar
+                      {...register('announcedYear', {
+                        required: 'announcedYear is Required',
+                      })}
+                      mode="single"
+                      selected={selectedDate}
+                      onSelect={(currentDate) => {
+                        setSelectedDate(currentDate);
+                        setIsCalendarOpen(false);
+                      }}
+                      id="announcedYear"
+                      initialFocus
+                    />
+                  </PopoverContent>
+                </Popover>
                 <p
-                  className={`h-2 p-1 text-center text-sm text-red-600 ${
+                  className={`h-2 p-1 text-sm text-red-600 ${
                     fieldErrors.announcedYear
                       ? 'opacity-100 transition-opacity duration-300'
                       : 'opacity-0 transition-opacity duration-300'
