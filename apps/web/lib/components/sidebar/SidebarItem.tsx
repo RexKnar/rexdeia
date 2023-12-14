@@ -89,7 +89,7 @@ export function SidebarItem(menuItem: SidebarMenuItem) {
         <motion.div
           initial="collapsed"
           variants={variants}
-          className="ml-2 w-full overflow-hidden px-2"
+          className="ml-6 overflow-hidden border-l-2"
           animate={isExpanded ? 'expanded' : 'collapsed'}
         >
           {menuItem.children.map((child) => (
@@ -109,7 +109,7 @@ export function SidebarItem(menuItem: SidebarMenuItem) {
                 key={child.id}
                 href={child.path}
                 className={cn(
-                  `flex w-full rounded-md px-4 py-3 text-sm font-normal text-gray-800 hover:text-gray-800`,
+                  `flex w-full rounded-md px-3  py-3 text-sm font-normal text-gray-800 hover:text-gray-800`,
                   currentPath === child.path &&
                     `bg-gray-100 font-semibold text-black`
                 )}
