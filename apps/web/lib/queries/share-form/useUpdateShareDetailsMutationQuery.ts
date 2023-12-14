@@ -1,14 +1,14 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
-import { makeAPICall } from '../api';
-import { ShareModal } from '../domain';
-import { UpdateShareModal } from '../domain/shareModal';
+import { makeAPICall } from '../../api';
+import { ShareModal } from '../../domain';
+import { UpdateShareModal } from '../../domain/shareModal';
 import {
   GET_ADMISSIONS_FORM_SHARE_DETAILS,
   UPDATE_SHARE_FOR_FORM,
-} from '../endpoints';
+} from '../../endpoints';
 
-export function useUpdateShareDetailsForFormMutationQuery(shareId: string) {
+export function useUpdateShareDetailsMutationQuery(shareId: string) {
   const queryClient = useQueryClient();
 
   return useMutation({

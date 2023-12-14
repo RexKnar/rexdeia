@@ -12,7 +12,7 @@ import {
   Text,
 } from 'ui';
 
-import { useCreateClassForFormMutationQuery } from '../../../../../lib/queries/useCreateClassForFormMutationQuery';
+import { useCreateClassMutationQuery } from '../../../../../lib/queries/class/useCreateClassMutationQuery';
 
 export function ClassFlyout() {
   const {
@@ -28,7 +28,7 @@ export function ClassFlyout() {
     mutateAsync: mutateCreateClassAsync,
     isPending: isPendingCreateClass,
     isError: isErrorCreateClass,
-  } = useCreateClassForFormMutationQuery();
+  } = useCreateClassMutationQuery();
 
   async function addClass(payload) {
     try {
