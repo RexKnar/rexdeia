@@ -10,7 +10,7 @@ import { SidebarItem } from './SidebarItem';
 export function Sidebar() {
   return (
     <AnimatePresence>
-      <div className="flex h-screen grow flex-col bg-white">
+      <div className="fixed left-0 top-0 flex h-screen w-72 grow flex-col bg-white">
         <nav className="flex-1 overflow-y-auto">
           <section className="h-full space-y-4 py-4">
             <div className="py-2">

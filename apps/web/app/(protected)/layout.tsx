@@ -32,8 +32,8 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       <Providers>
         <body className="bg-gray-50">
           <NextTopLoader color={primaryColor} showSpinner={false} />
-          <div className="flex overflow-hidden">
-            <aside className="relative hidden grow-0 border-r md:flex md:w-64">
+          <div className="relative flex overflow-hidden">
+            <aside className="hidden grow-0 border-r md:flex md:w-64 lg:flex lg:w-72">
               <Sidebar />
             </aside>
             <main className="container mx-auto h-full w-full flex-1 overflow-auto bg-gray-50 px-8 py-10">
