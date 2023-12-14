@@ -24,9 +24,9 @@ import {
 } from 'ui';
 import { copyToClipboard } from 'utils';
 
-import { useCreateShareDetailsForFormMutationQuery } from '../../../../../lib/queries/useCreateShareDetailsForFormMutationQuery';
+import { useCreateShareDetailsMutationQuery } from '../../../../../lib/queries/share-form/useCreateShareDetailsMutationQuery';
 import { useGetAdmissionFormShareDetailsQuery } from '../../../../../lib/queries/useGetAdmissionFormShareDetailsQuery';
-import { useUpdateShareDetailsForFormMutationQuery } from '../../../../../lib/queries/useUpdateShareDetailsForFormMutationQuery';
+import { useUpdateShareDetailsMutationQuery } from '../../../../../lib/queries/share-form/useUpdateShareDetailsMutationQuery';
 import shareIcon from '../../../../../public/assets/images/shareIcon.svg';
 
 type AdmissionShareFlyoutProps = {
@@ -54,13 +54,13 @@ export function AdmissionShareFlyout({ formId }: AdmissionShareFlyoutProps) {
     mutateAsync: mutateUpdateShareDetailsAsync,
     isPending: isPendingUpdateShareDetails,
     isError: isErrorUpdateShareDetails,
-  } = useUpdateShareDetailsForFormMutationQuery(shareDetailsId);
+  } = useUpdateShareDetailsMutationQuery(shareDetailsId);
 
   const {
     mutateAsync: mutateCreateShareDetailsAsync,
     isPending: isPendingCreateShareDetails,
     isError: isErrorCreateShareDetails,
-  } = useCreateShareDetailsForFormMutationQuery();
+  } = useCreateShareDetailsMutationQuery();
 
   useEffect(() => {
     if (isErrorCreateShareDetails || isErrorUpdateShareDetails) {

@@ -11,7 +11,7 @@ import {
 } from '@tanstack/react-table';
 import { ChevronDown, Eye, Pencil, Trash2 } from 'lucide-react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import { useCallback } from 'react';
+import React, { useCallback, useState } from 'react';
 import { Button } from 'ui';
 import {
   Table,
@@ -23,7 +23,10 @@ import {
 } from 'ui/components/ui/Table';
 import { cn } from 'utils';
 
-import { useGetRegulationListQuery } from '../../../../../lib/queries/useGetRegulationListQuery';
+import { useGetRegulationListQuery } from '../../../../../lib/queries/regulations/useGetRegulationListQuery';
+import { useDeleteRegulationMutationQuery } from '../../../../../lib/queries/regulations/useDeleteRegulationMutationQuery';
+import { DeleteConfirmationModal } from '../../../../../lib/components/modals/DeleteConfirmationModal';
+import { RegulationModel } from '../../../../../lib/domain/regulation';
 
 const columns: ColumnDef<any>[] = [
   {
@@ -80,7 +83,17 @@ export function RegulationListTable() {
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
+  const [showDeleteConfirmationModal, setShowDeleteConfirmationModal] =
+    useState(false);
+  const [selectedRegulation, setSelectedRegulation] =
+    useState<RegulationModel | null>(null);
+
   const page = searchParams.get('page');
+
+  const {
+    isPending: isPendingDeleteMutation,
+    mutateAsync: deleteRegulationMutateAsync,
+  } = useDeleteRegulationMutationQuery(parseInt(page) || 1);
 
   const { data: regulationListResponse, isLoading } = useGetRegulationListQuery(
     {
@@ -117,6 +130,20 @@ export function RegulationListTable() {
 
   return (
     <section>
+      <DeleteConfirmationModal
+        isActionPending={isPendingDeleteMutation}
+        description={`Are you sure you want to delete "${selectedRegulation?.regulationName}"`}
+        open={showDeleteConfirmationModal}
+        onDeleteClick={async () => {
+          if (selectedRegulation) {
+            await deleteRegulationMutateAsync(selectedRegulation.id);
+            setShowDeleteConfirmationModal(false);
+          }
+        }}
+        onCancelClick={() => {
+          setShowDeleteConfirmationModal(false);
+        }}
+      />
       <div className="rounded-md ">
         <Table>
           <TableHeader>
@@ -180,7 +207,14 @@ export function RegulationListTable() {
                         className="mr-2 text-center text-black"
                       />
                     </Button>
-                    <Button variant="destructive" className="mr-1 ">
+                    <Button
+                      variant="destructive"
+                      className="mr-1"
+                      onClick={() => {
+                        setSelectedRegulation(row.original);
+                        setShowDeleteConfirmationModal(true);
+                      }}
+                    >
                       <Trash2
                         size={16}
                         className="mr-2 text-center text-red-600"

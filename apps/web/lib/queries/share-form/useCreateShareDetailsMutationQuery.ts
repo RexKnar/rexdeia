@@ -1,13 +1,13 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
-import { makeAPICall } from '../api';
-import { CreateShareModal, ShareModal } from '../domain';
+import { makeAPICall } from '../../api';
+import { CreateShareModal, ShareModal } from '../../domain';
 import {
   CREATE_SHARE_FOR_FORM,
   GET_ADMISSIONS_FORM_SHARE_DETAILS,
-} from '../endpoints';
+} from '../../endpoints';
 
-export function useCreateShareDetailsForFormMutationQuery() {
+export function useCreateShareDetailsMutationQuery() {
   const queryClient = useQueryClient();
 
   return useMutation({

@@ -1,10 +1,10 @@
 import type { UseQueryOptions, UseQueryResult } from '@tanstack/react-query';
 import { useQuery } from '@tanstack/react-query';
 
-import { makeAPICall } from '../api';
-import { PaginatedResponse } from '../domain';
-import { RegulationModel } from '../domain/regulation';
-import { GET_REGULATION_LIST } from '../endpoints';
+import { makeAPICall } from '../../api';
+import { PaginatedResponse } from '../../domain';
+import { RegulationModel } from '../../domain/regulation';
+import { GET_REGULATION_LIST } from '../../endpoints';
 
 function getRegulationList(
   { page, limit }: { page: number; limit: number },

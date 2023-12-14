@@ -1,8 +1,9 @@
 export type RegulationModel = {
-  regulationName: string;
-  announcedYear: string;
+  id: string;
   endYear: string;
   isActive: boolean;
+  announcedYear: string;
+  regulationName: string;
 };
 
 export type CreateRegulationModel = Pick<

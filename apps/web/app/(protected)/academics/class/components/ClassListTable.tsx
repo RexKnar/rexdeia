@@ -21,7 +21,7 @@ import {
 } from 'ui/components/ui/Table';
 import { cn } from 'utils';
 
-import { useGetClassListQuery } from '../../../../../lib/queries/useGetClassListQuery';
+import { useGetClassListQuery } from '../../../../../lib/queries/class/useGetClassListQuery';
 import { ClassFlyout } from './ClassFlyout';
 
 export function ClassList() {

@@ -22,7 +22,8 @@ import {
 import { cn } from 'utils';
 
 import { CreateRegulationModel } from '../../../../../lib/domain/regulation';
-import { useCreateRegulationsForFormMutationQuery } from '../../../../../lib/queries/useCreateRegulationsForFormMutationQuery';
+import { useCreateRegulationsMutationQuery } from '../../../../../lib/queries/regulations/useCreateRegulationsMutationQuery';
+import { useSearchParams } from 'next/navigation';
 
 function RegulationShareFlyout() {
   const [isOpen, setIsOpen] = useState(false);
@@ -35,10 +36,13 @@ function RegulationShareFlyout() {
     formState: { errors: fieldErrors },
   } = useForm();
   const isLinkActive = useWatch({ name: 'isActive', control });
+
+  const searchParams = useSearchParams();
+  const page = searchParams.get('page');
   const {
     isPending: isPendingCreateRegulations,
     mutateAsync: mutateCreateRegulationsAsync,
-  } = useCreateRegulationsForFormMutationQuery();
+  } = useCreateRegulationsMutationQuery(page ? parseInt(page) : 1);
 
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);

@@ -9,6 +9,7 @@ export async function getRegulationList(page: number, limit: number) {
   const [regulationsList, totalRegulations] = await Promise.all([
     db.regulation.findMany({
       where: {
+        isDeleted: false,
         branchId: session.branchId,
       },
     }),
@@ -29,11 +30,11 @@ export async function getRegulationList(page: number, limit: number) {
 
 export async function addRegulation(regulation: RegulationModel) {
   const session = await getServerSession(authOptions);
-  return await db.regulation.create({
+  return db.regulation.create({
     data: {
       ...regulation,
+      isActive: true,
       endYear: regulation.endYear,
-      isActive: regulation.isActive,
       branch: {
         connect: {
           id: session.branchId,
@@ -46,7 +47,7 @@ export async function addRegulation(regulation: RegulationModel) {
 }
 
 export async function deleteRegulation(regulationId: string) {
-  return await db.regulation.update({
+  return db.regulation.update({
     where: {
       id: regulationId,
     },
