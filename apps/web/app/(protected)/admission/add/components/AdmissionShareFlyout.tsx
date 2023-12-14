@@ -25,8 +25,8 @@ import {
 import { copyToClipboard } from 'utils';
 
 import { useCreateShareDetailsMutationQuery } from '../../../../../lib/queries/share-form/useCreateShareDetailsMutationQuery';
-import { useGetAdmissionFormShareDetailsQuery } from '../../../../../lib/queries/useGetAdmissionFormShareDetailsQuery';
 import { useUpdateShareDetailsMutationQuery } from '../../../../../lib/queries/share-form/useUpdateShareDetailsMutationQuery';
+import { useGetAdmissionFormShareDetailsQuery } from '../../../../../lib/queries/useGetAdmissionFormShareDetailsQuery';
 import shareIcon from '../../../../../public/assets/images/shareIcon.svg';
 
 type AdmissionShareFlyoutProps = {

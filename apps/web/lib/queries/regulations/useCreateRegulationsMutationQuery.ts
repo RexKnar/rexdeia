@@ -1,12 +1,12 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import { makeAPICall } from '../../api';
+import { PaginatedResponse } from '../../domain';
 import {
   CreateRegulationModel,
   RegulationModel,
 } from '../../domain/regulation';
 import { ADD_REGULATION, GET_REGULATION_LIST } from '../../endpoints';
-import { PaginatedResponse } from '../../domain';
 
 export function useCreateRegulationsMutationQuery(page: number) {
   const queryClient = useQueryClient();
@@ -31,7 +31,6 @@ export function useCreateRegulationsMutationQuery(page: number) {
       queryClient.setQueryData(
         [GET_REGULATION_LIST, page],
         (old: PaginatedResponse<RegulationModel>) => {
-          debugger;
           return {
             ...old,
             data: [...old.data, shareDetails],

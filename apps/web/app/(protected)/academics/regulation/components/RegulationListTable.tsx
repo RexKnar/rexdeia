@@ -23,10 +23,10 @@ import {
 } from 'ui/components/ui/Table';
 import { cn } from 'utils';
 
-import { useGetRegulationListQuery } from '../../../../../lib/queries/regulations/useGetRegulationListQuery';
-import { useDeleteRegulationMutationQuery } from '../../../../../lib/queries/regulations/useDeleteRegulationMutationQuery';
 import { DeleteConfirmationModal } from '../../../../../lib/components/modals/DeleteConfirmationModal';
 import { RegulationModel } from '../../../../../lib/domain/regulation';
+import { useDeleteRegulationMutationQuery } from '../../../../../lib/queries/regulations/useDeleteRegulationMutationQuery';
+import { useGetRegulationListQuery } from '../../../../../lib/queries/regulations/useGetRegulationListQuery';
 
 const columns: ColumnDef<any>[] = [
   {

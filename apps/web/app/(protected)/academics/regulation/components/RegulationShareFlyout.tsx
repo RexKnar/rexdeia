@@ -2,6 +2,7 @@
 
 import format from 'date-fns/format';
 import { CalendarIcon, Loader2, PlusCircle } from 'lucide-react';
+import { useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { useForm, useWatch } from 'react-hook-form';
 import {
@@ -23,7 +24,6 @@ import { cn } from 'utils';
 
 import { CreateRegulationModel } from '../../../../../lib/domain/regulation';
 import { useCreateRegulationsMutationQuery } from '../../../../../lib/queries/regulations/useCreateRegulationsMutationQuery';
-import { useSearchParams } from 'next/navigation';
 
 function RegulationShareFlyout() {
   const [isOpen, setIsOpen] = useState(false);

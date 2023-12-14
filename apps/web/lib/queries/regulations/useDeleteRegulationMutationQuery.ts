@@ -1,8 +1,9 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+
 import { makeAPICall } from '../../api';
-import { DELETE_REGULATION, GET_REGULATION_LIST } from '../../endpoints';
 import { PaginatedResponse } from '../../domain';
 import { RegulationModel } from '../../domain/regulation';
+import { DELETE_REGULATION, GET_REGULATION_LIST } from '../../endpoints';
 
 export function useDeleteRegulationMutationQuery(page: number) {
   const queryClient = useQueryClient();
@@ -29,7 +30,6 @@ export function useDeleteRegulationMutationQuery(page: number) {
       queryClient.setQueryData(
         [GET_REGULATION_LIST, page],
         (old: PaginatedResponse<RegulationModel>) => {
-          debugger;
           return {
             ...old,
             data: old.data.filter(
