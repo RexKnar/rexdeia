@@ -51,7 +51,7 @@ function RegulationShareFlyout() {
       const requestPayload = {
         ...payload,
       };
-      await mutateCreateRegulationsAsync(requestPayload);
+      mutateCreateRegulationsAsync(requestPayload);
     } catch (error) {
       console.error(error);
     } finally {

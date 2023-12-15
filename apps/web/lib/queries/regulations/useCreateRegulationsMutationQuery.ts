@@ -33,7 +33,10 @@ export function useCreateRegulationsMutationQuery(page: number) {
         (old: PaginatedResponse<RegulationModel>) => {
           return {
             ...old,
-            data: [...old.data, shareDetails],
+            data: [
+              ...old.data,
+              { ...shareDetails, isNewlyAdded: true, status: true },
+            ],
           };
         }
       );

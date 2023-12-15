@@ -29,12 +29,19 @@ export function useDeleteRegulationMutationQuery(page: number) {
 
       queryClient.setQueryData(
         [GET_REGULATION_LIST, page],
-        (old: PaginatedResponse<RegulationModel>) => {
+        (currentPaginatedRegulations: PaginatedResponse<RegulationModel>) => {
           return {
-            ...old,
-            data: old.data.filter(
-              (regulation) => regulation.id !== regulationId
-            ),
+            ...currentPaginatedRegulations,
+            data: currentPaginatedRegulations.data.map((regulation) => {
+              if (regulation.id !== regulationId) {
+                return regulation;
+              } else {
+                return {
+                  ...regulation,
+                  isDeleting: true,
+                };
+              }
+            }),
           };
         }
       );

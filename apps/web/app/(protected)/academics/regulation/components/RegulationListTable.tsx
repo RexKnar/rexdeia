@@ -9,10 +9,10 @@ import {
   getSortedRowModel,
   useReactTable,
 } from '@tanstack/react-table';
-import { ChevronDown, Eye, Pencil, Trash2 } from 'lucide-react';
+import { ChevronDown, Eye, Loader2, Pencil, Trash2 } from 'lucide-react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import React, { useCallback, useState } from 'react';
-import { Button } from 'ui';
+import React, { useCallback, useEffect, useState } from 'react';
+import { Button, useToast } from 'ui';
 import {
   Table,
   TableBody,
@@ -75,12 +75,16 @@ const columns: ColumnDef<any>[] = [
         </Button>
       );
     },
+    cell: ({ row }) => {
+      return <div>{row.original.isActive ? 'true' : 'false'}</div>;
+    },
   },
 ];
 
 export function RegulationListTable() {
-  const router = useRouter();
+  const { toast } = useToast();
   const pathname = usePathname();
+  const router = useRouter();
   const searchParams = useSearchParams();
 
   const [showDeleteConfirmationModal, setShowDeleteConfirmationModal] =
@@ -91,8 +95,8 @@ export function RegulationListTable() {
   const page = searchParams.get('page');
 
   const {
-    isPending: isPendingDeleteMutation,
     mutateAsync: deleteRegulationMutateAsync,
+    isSuccess: isDeleteRegulationSuccess,
   } = useDeleteRegulationMutationQuery(parseInt(page) || 1);
 
   const { data: regulationListResponse, isLoading } = useGetRegulationListQuery(
@@ -101,6 +105,16 @@ export function RegulationListTable() {
       page: page ? parseInt(page) : 1,
     }
   );
+
+  useEffect(() => {
+    if (isDeleteRegulationSuccess) {
+      toast({
+        title: 'Success',
+        variant: 'destructive',
+        description: 'Regulation deleted successfully',
+      });
+    }
+  }, [isDeleteRegulationSuccess]);
 
   const handleOnNextPageClick = useCallback(() => {
     const currentPage = parseInt(page) || 1;
@@ -131,13 +145,12 @@ export function RegulationListTable() {
   return (
     <section>
       <DeleteConfirmationModal
-        isActionPending={isPendingDeleteMutation}
-        description={`Are you sure you want to delete "${selectedRegulation?.regulationName}"`}
         open={showDeleteConfirmationModal}
+        description={`Are you sure you want to delete "${selectedRegulation?.regulationName}"`}
         onDeleteClick={async () => {
           if (selectedRegulation) {
-            await deleteRegulationMutateAsync(selectedRegulation.id);
             setShowDeleteConfirmationModal(false);
+            await deleteRegulationMutateAsync(selectedRegulation.id);
           }
         }}
         onCancelClick={() => {
@@ -195,13 +208,20 @@ export function RegulationListTable() {
                     </TableCell>
                   ))}
                   <TableCell className="w-52">
-                    <Button variant="destructive">
+                    <Button
+                      variant="destructive"
+                      disabled={row.original.isNewlyAdded}
+                    >
                       <Eye
                         size={16}
                         className="mr-2 text-center text-primary"
                       />
                     </Button>
-                    <Button variant="destructive" className="mr-1 ">
+                    <Button
+                      variant="destructive"
+                      className="mr-1"
+                      disabled={row.original.isNewlyAdded}
+                    >
                       <Pencil
                         size={16}
                         className="mr-2 text-center text-black"
@@ -214,11 +234,16 @@ export function RegulationListTable() {
                         setSelectedRegulation(row.original);
                         setShowDeleteConfirmationModal(true);
                       }}
+                      disabled={row.original.isNewlyAdded}
                     >
-                      <Trash2
-                        size={16}
-                        className="mr-2 text-center text-red-600"
-                      />
+                      {row.original.isDeleting ? (
+                        <Loader2 className="mr-2 h-6 w-6 animate-spin text-red-600" />
+                      ) : (
+                        <Trash2
+                          size={16}
+                          className="mr-2 text-center text-red-600"
+                        />
+                      )}
                     </Button>
                   </TableCell>
                 </TableRow>
