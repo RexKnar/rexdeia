@@ -223,15 +223,15 @@ export function StudentsList() {
         return (
           <div className="flex">
             <Button
-              variant="ghost"
+              variant="mild"
               className="p-1"
               onClick={handleDeleteStudentClick(row.original)}
             >
-              <Trash2Icon size={16} className="mr-2 text-red-500" />
+              <Trash2Icon size={24} className="mr-2 pl-2 text-red-500" />
             </Button>
 
-            <Button variant="ghost" className="p-1">
-              <Edit2Icon size={16} className="mr-2 text-blue-600" />
+            <Button variant="mild" className="ml-2 p-1">
+              <Edit2Icon size={24} className="mr-2 pl-2 text-blue-600" />
             </Button>
           </div>
         );
