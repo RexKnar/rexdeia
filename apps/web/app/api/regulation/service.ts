@@ -8,6 +8,8 @@ export async function getRegulationList(page: number, limit: number) {
   const session = await getServerSession(authOptions);
   const [regulationsList, totalRegulations] = await Promise.all([
     db.regulation.findMany({
+      take: limit,
+      skip: (page - 1) * limit,
       where: {
         isDeleted: false,
         branchId: session.branchId,
@@ -15,6 +17,7 @@ export async function getRegulationList(page: number, limit: number) {
     }),
     db.regulation.count({
       where: {
+        isDeleted: false,
         branchId: session.branchId,
       },
     }),

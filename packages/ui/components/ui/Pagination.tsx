@@ -50,9 +50,9 @@ export function Pagination({
       pageNumbers.push(
         <Button
           key={i}
-          variant="outline"
+          variant="ghost"
           onClick={() => handleClick(i)}
-          className={cn('mr-2', currentPage === i && 'font-bold')}
+          className={cn('mr-2', currentPage === i && 'font-bold text-primary')}
         >
           {i}
         </Button>,
@@ -66,7 +66,7 @@ export function Pagination({
     <div>
       <Button
         className="mr-2"
-        variant="outline"
+        variant="ghost"
         disabled={currentPage === 1}
         onClick={() => handleClick(currentPage - 1)}
       >
@@ -74,7 +74,7 @@ export function Pagination({
       </Button>
       {renderPageNumbers()}
       <Button
-        variant="outline"
+        variant="ghost"
         onClick={() => handleClick(currentPage + 1)}
         disabled={currentPage === totalPages}
       >

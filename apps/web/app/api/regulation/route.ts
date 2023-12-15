@@ -20,9 +20,9 @@ export async function GET(request: NextRequest) {
     const page = parseInt(request.nextUrl.searchParams.get('page')) || 1;
     const limit = parseInt(request.nextUrl.searchParams.get('limit')) || 10;
 
-    const classListResponse = await getRegulationList(page, limit);
+    const regulations = await getRegulationList(page, limit);
 
-    return new NextResponse(JSON.stringify(classListResponse), {
+    return new NextResponse(JSON.stringify(regulations), {
       status: StatusCodes.OK,
     });
   } catch (e) {

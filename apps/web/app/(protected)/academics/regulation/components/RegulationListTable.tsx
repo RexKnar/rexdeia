@@ -9,10 +9,21 @@ import {
   getSortedRowModel,
   useReactTable,
 } from '@tanstack/react-table';
-import { ChevronDown, Eye, Loader2, Pencil, Trash2 } from 'lucide-react';
+import { Eye, Loader2, Pencil, Trash2 } from 'lucide-react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import React, { useCallback, useEffect, useState } from 'react';
-import { Button, useToast } from 'ui';
+import React, { useEffect, useState } from 'react';
+import { When } from 'react-if';
+import {
+  Button,
+  Pagination,
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+  useToast,
+} from 'ui';
 import {
   Table,
   TableBody,
@@ -93,18 +104,18 @@ export function RegulationListTable() {
     useState<RegulationModel | null>(null);
 
   const page = searchParams.get('page');
+  const limit = searchParams.get('limit');
 
   const {
     mutateAsync: deleteRegulationMutateAsync,
     isSuccess: isDeleteRegulationSuccess,
   } = useDeleteRegulationMutationQuery(parseInt(page) || 1);
 
-  const { data: regulationListResponse, isLoading } = useGetRegulationListQuery(
-    {
-      limit: 10,
+  const { data: regulationListResponse, isLoading: isRegulationListLoading } =
+    useGetRegulationListQuery({
       page: page ? parseInt(page) : 1,
-    }
-  );
+      limit: limit ? parseInt(limit) : 10,
+    });
 
   useEffect(() => {
     if (isDeleteRegulationSuccess) {
@@ -115,23 +126,6 @@ export function RegulationListTable() {
       });
     }
   }, [isDeleteRegulationSuccess]);
-
-  const handleOnNextPageClick = useCallback(() => {
-    const currentPage = parseInt(page) || 1;
-    const params = new URLSearchParams(searchParams);
-    params.set('page', (currentPage + 1).toString());
-
-    router.push(pathname + '?' + params.toString());
-  }, [page, pathname, router, searchParams]);
-
-  const handleOnPreviousPageClick = useCallback(() => {
-    const currentPage = parseInt(page) || 1;
-    const nextPage = currentPage - 1 || 1;
-    const params = new URLSearchParams(searchParams);
-    params.set('page', nextPage.toString());
-
-    router.push(pathname + '?' + params.toString());
-  }, [page, pathname, router, searchParams]);
 
   const table = useReactTable({
     columns,
@@ -251,7 +245,9 @@ export function RegulationListTable() {
             ) : (
               <TableRow>
                 <TableCell colSpan={5} className="h-24 text-center">
-                  {isLoading ? 'Loading...' : 'No Regulation Found'}
+                  {isRegulationListLoading
+                    ? 'Loading...'
+                    : 'No Regulation Found'}
                 </TableCell>
               </TableRow>
             )}
@@ -259,33 +255,53 @@ export function RegulationListTable() {
         </Table>
       </div>
 
-      <div>
-        <div className="mt-7 flex justify-between">
-          <div className="flex items-center text-sm font-normal text-gray-700">
-            Entries per page
-            <div className="flex items-center border">
-              <span className="px-2 py-1 text-black ">10</span>
-              <ChevronDown size={14} className="mr-1" />
+      <When
+        condition={
+          regulationListResponse?.data?.length && !isRegulationListLoading
+        }
+      >
+        <section className="mt-5 flex justify-between">
+          <div className="justify-left flex w-2/6">
+            <label className="w-1/3 py-2 text-center text-sm text-gray-700">
+              Entries per page
+            </label>
+            <div className="w-1/3">
+              <Select
+                value={limit || '10'}
+                disabled={isRegulationListLoading}
+                onValueChange={(value) => {
+                  const params = new URLSearchParams(searchParams);
+                  params.set('limit', value.toString());
+
+                  router.push(pathname + '?' + params.toString());
+                }}
+              >
+                <SelectTrigger className="w-auto ">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectGroup>
+                    <SelectItem value={'10'}>10</SelectItem>
+                    <SelectItem value={'25'}>25</SelectItem>
+                    <SelectItem value={'50'}>50</SelectItem>
+                    <SelectItem value={'100'}>100</SelectItem>
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
             </div>
           </div>
-          <div className="flex">
-            <Button
-              variant="ghost"
-              onClick={handleOnPreviousPageClick}
-              className="px-3 py-1 text-sm font-normal text-gray-700"
-            >
-              Previous
-            </Button>
-            <Button
-              variant="ghost"
-              onClick={handleOnNextPageClick}
-              className="px-3 py-1 text-sm font-normal text-gray-700"
-            >
-              Next
-            </Button>
-          </div>
-        </div>
-      </div>
+          <Pagination
+            pageSize={regulationListResponse?.limit || 0}
+            totalRecords={regulationListResponse?.total || 0}
+            onPageChange={(value) => {
+              const params = new URLSearchParams(searchParams);
+              params.set('page', value.toString());
+
+              router.push(pathname + '?' + params.toString());
+            }}
+          />
+        </section>
+      </When>
     </section>
   );
 }

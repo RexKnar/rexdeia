@@ -12,7 +12,7 @@ function getRegulationList(
 ): UseQueryOptions<PaginatedResponse<RegulationModel>> {
   return {
     ...options,
-    queryKey: [GET_REGULATION_LIST, page],
+    queryKey: [GET_REGULATION_LIST, page, limit],
     queryFn: async () => {
       return await makeAPICall<PaginatedResponse<RegulationModel>>(
         GET_REGULATION_LIST,

@@ -1,7 +1,13 @@
 {
   "$schema": "https://turbo.build/schema.json",
   "globalDependencies": ["**/.env.*local"],
-  "globalEnv": ["NEXT_RAZORPAY_KEY_ID", "NEXT_RAZORPAY_KEY_SECRET", "NODE_ENV", "NEXT_SITE_NAME", "NEXT_PUBLIC_ZOHO_SALESIQ_WIDGET_CODE"],
+  "globalEnv": [
+    "NEXT_RAZORPAY_KEY_ID",
+    "NEXT_RAZORPAY_KEY_SECRET",
+    "NODE_ENV",
+    "NEXT_SITE_NAME",
+    "NEXT_PUBLIC_ZOHO_SALESIQ_WIDGET_CODE"
+  ],
   "pipeline": {
     "build": {
       "dependsOn": ["^build"],
