@@ -7,13 +7,13 @@ import {
   TabsTrigger,
 } from 'ui/components/ui/Tabs';
 
-import { PageHeader } from '../../../../lib/components/PageHeader';
+import { PageTitle } from '../../../../lib/components/PageTitle';
 import { StudentDetail } from './components/StudentDetail';
 
 export default async function Page() {
   return (
     <section className="w-full bg-gray-50 p-3">
-      <PageHeader title="Student Profile" className="mb-3" />
+      <PageTitle title="Student Profile" className="mb-3" />
 
       <div className="space-between mx-auto my-5 flex justify-between rounded-md bg-white p-6">
         <div className="flex">

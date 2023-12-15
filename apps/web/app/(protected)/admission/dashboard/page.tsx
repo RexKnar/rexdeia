@@ -2,8 +2,7 @@ import { FileText } from 'lucide-react';
 import { formatNumberWithSuffix } from 'utils';
 
 import { LinkButton } from '../../../../lib/components/LinkButton';
-import { PageHeader } from '../../../../lib/components/PageHeader';
-import { PathBreadcrumb } from '../../../../lib/components/PathBreadcrumb';
+import { PageTitle } from '../../../../lib/components/PageTitle';
 import admissionRequestIcon from '../../../../public/assets/images/admission-request.svg';
 import inProgressIcon from '../../../../public/assets/images/in-progress.svg';
 import rejectedIcon from '../../../../public/assets/images/rejected.svg';
@@ -21,17 +20,11 @@ export default async function Page() {
 
   return (
     <section>
-      <div className="flex items-center justify-between">
-        <div>
-          <PathBreadcrumb />
-        </div>
-
-        <div>
-          <LinkButton variant="primary" url="/admission/add">
-            <FileText size={16} className="mr-2" />
-            Admission Form
-          </LinkButton>
-        </div>
+      <div className="mt-3 flex items-center justify-end">
+        <LinkButton variant="primary" url="/admission/add">
+          <FileText size={16} className="mr-2" />
+          Admission Form
+        </LinkButton>
       </div>
 
       <div className="lg:grid-cols-3s mt-8 grid grid-cols-1 gap-3 sm:flex-row md:grid-cols-2 xl:grid-cols-4">
@@ -46,7 +39,7 @@ export default async function Page() {
       </div>
 
       <div className="mx-auto my-5 rounded-md bg-white p-6">
-        <PageHeader title="Admission List" className="mb-3" />
+        <PageTitle title="Admission List" className="mb-3" />
         <AdmissionsList />
       </div>
     </section>

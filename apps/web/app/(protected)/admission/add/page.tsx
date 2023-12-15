@@ -2,8 +2,7 @@ import { redirect } from 'next/navigation';
 import { getServerSession } from 'next-auth';
 
 import { authOptions } from '../../../../lib/auth';
-import { PageHeader } from '../../../../lib/components/PageHeader';
-import { PathBreadcrumb } from '../../../../lib/components/PathBreadcrumb';
+import { PageTitle } from '../../../../lib/components/PageTitle';
 import { AdmissionPage } from './components/AdmissionPage';
 
 export default async function Page() {
@@ -15,8 +14,7 @@ export default async function Page() {
 
   return (
     <section>
-      <PathBreadcrumb />
-      <PageHeader title="Add New Admission" />
+      <PageTitle title="Add New Admission" />
 
       <AdmissionPage
         branchId={session.branchId}

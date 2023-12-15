@@ -1,4 +1,4 @@
-import { PageHeader } from '../../../../lib/components/PageHeader';
+import { PageTitle } from '../../../../lib/components/PageTitle';
 import { PathBreadcrumb } from '../../../../lib/components/PathBreadcrumb';
 import { StudentsList } from './components/StudentsList';
 
@@ -8,7 +8,7 @@ export default async function Page() {
       <PathBreadcrumb />
 
       <div className="mx-auto my-5 rounded-md bg-white p-6">
-        <PageHeader title="Students List" className="mb-3" />
+        <PageTitle title="Students List" className="mb-3" />
         <StudentsList />
       </div>
     </section>

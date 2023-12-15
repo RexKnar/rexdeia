@@ -3,7 +3,6 @@
 import { AnimatePresence } from 'framer-motion';
 
 import { menuItems } from './data';
-import { SidebarFooter } from './SidebarFooter';
 import { SidebarHeader } from './SidebarHeader';
 import { SidebarItem } from './SidebarItem';
 
@@ -26,9 +25,6 @@ export function Sidebar() {
             </div>
           </section>
         </nav>
-        <div className="flex-none p-2">
-          <SidebarFooter />
-        </div>
       </div>
     </AnimatePresence>
   );

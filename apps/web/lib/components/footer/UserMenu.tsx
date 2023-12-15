@@ -1,18 +1,32 @@
-import { MoreVertical } from 'lucide-react';
+import { ChevronDown } from 'lucide-react';
 import { signOut } from 'next-auth/react';
 import {
+  Avatar,
+  AvatarImage,
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
+  Text,
 } from 'ui';
 
+import { useGetUserDetailsQuery } from '../../queries/useGetUserDetailsQuery';
+
 export function UserMenu() {
+  const { data, isLoading } = useGetUserDetailsQuery();
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <MoreVertical className="h-5 w-5 cursor-pointer" />
+      <DropdownMenuTrigger>
+        <div className="ml-2 flex items-center gap-2">
+          <Avatar className="h-9 w-9">
+            <AvatarImage src="https://imgv3.fotor.com/images/gallery/Realistic-Male-Profile-Picture.jpg" />
+          </Avatar>
+          <Text variant="sm-medium">
+            Hi, {isLoading ? 'Loading...' : data.name}
+          </Text>
+          <ChevronDown className="h-5 w-5 cursor-pointer" />
+        </div>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="bg-white" align="end" sideOffset={15}>
         <DropdownMenuItem className="flex cursor-pointer items-center">
