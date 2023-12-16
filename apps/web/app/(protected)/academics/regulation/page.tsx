@@ -3,7 +3,6 @@ import { getServerSession } from 'next-auth';
 
 import { authOptions } from '../../../../lib/auth';
 import { PageTitle } from '../../../../lib/components/PageTitle';
-import { PathBreadcrumb } from '../../../../lib/components/PathBreadcrumb';
 import { RegulationListTable } from './components/RegulationListTable';
 import { RegulationShareFlyout } from './components/RegulationShareFlyout';
 
@@ -16,13 +15,8 @@ export default async function Page() {
   return (
     <section>
       <div className="flex justify-between">
-        <div>
-          <PathBreadcrumb />
-          <PageTitle title="Regulation Management" />
-        </div>
-        <div>
-          <RegulationShareFlyout></RegulationShareFlyout>
-        </div>
+        <PageTitle title="Regulation Management" />
+        <RegulationShareFlyout />
       </div>
 
       <div className="mt-4 rounded-md bg-white p-3">

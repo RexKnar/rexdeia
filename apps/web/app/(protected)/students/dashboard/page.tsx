@@ -2,7 +2,6 @@ import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
 
-import { PathBreadcrumb } from '../../../../lib/components/PathBreadcrumb';
 import noStudentData from '../../../../public/assets/images/no-student-data.svg';
 import { getRecentlyAddedStudentsList } from '../../../api/student/service';
 import { RecentEnrolledStudents } from './components/RecentEnrolledStudents';
@@ -15,8 +14,7 @@ export default async function Page() {
   });
 
   return (
-    <section className="flex flex-col gap-4">
-      <PathBreadcrumb />
+    <section className="flex flex-col gap-4 py-4">
       <StudentDashboardBanner />
       <section className="flex flex-col gap-3 rounded-md bg-white p-10 shadow-sm">
         <section>

@@ -17,7 +17,7 @@ export function SidebarHeader() {
   const { data, isLoading } = useGetUserDetailsQuery();
 
   return (
-    <div className="mb-5 flex items-center justify-between gap-3 px-4 text-lg font-semibold tracking-tight">
+    <div className="fixed flex h-[64px] w-full items-center justify-between border border-b-gray-200 border-r-transparent bg-white px-4 text-lg font-semibold">
       <div className="flex items-center gap-4 text-left">
         <UserMenu />
         <DropdownMenu>

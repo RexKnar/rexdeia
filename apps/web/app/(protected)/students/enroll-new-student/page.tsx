@@ -3,7 +3,6 @@ import { getServerSession } from 'next-auth';
 
 import { authOptions } from '../../../../lib/auth';
 import { PageTitle } from '../../../../lib/components/PageTitle';
-import { PathBreadcrumb } from '../../../../lib/components/PathBreadcrumb';
 import { AddStudentPage } from './components/AddStudentPage';
 
 export default async function Page() {
@@ -15,9 +14,7 @@ export default async function Page() {
 
   return (
     <section>
-      <PathBreadcrumb />
       <PageTitle title="Enroll New Student" />
-
       <AddStudentPage
         branchId={session.branchId}
         organizationId={session.organizationId}

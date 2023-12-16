@@ -3,7 +3,6 @@ import { getServerSession } from 'next-auth';
 
 import { authOptions } from '../../../../lib/auth';
 import { PageTitle } from '../../../../lib/components/PageTitle';
-import { PathBreadcrumb } from '../../../../lib/components/PathBreadcrumb';
 import { ClassList } from './components/ClassListTable';
 
 export default async function Page() {
@@ -14,13 +13,9 @@ export default async function Page() {
   }
 
   return (
-    <section>
-      <PathBreadcrumb />
-
-      <div className="mx-auto my-5 rounded-md bg-white p-6">
-        <PageTitle title="Students List" className="mb-3" />
-        <ClassList />
-      </div>
+    <section className="mx-auto my-5 rounded-md bg-white p-6">
+      <PageTitle title="Students List" className="mb-3" />
+      <ClassList />
     </section>
   );
 }

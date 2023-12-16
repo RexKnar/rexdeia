@@ -5,6 +5,8 @@ import { ChevronUp } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useState } from 'react';
+import { Else, If, Then } from 'react-if';
+import { Button } from 'ui';
 import { cn } from 'utils';
 
 import { SidebarMenuItem } from './types';
@@ -39,51 +41,102 @@ export function SidebarItem(menuItem: SidebarMenuItem) {
         }}
         transition={{ scale: { type: 'spring' }, delay: 0.1 }}
       >
-        <Link
-          href={menuItem.path}
-          onClick={() => {
-            setIsExpanded(!isExpanded);
-          }}
-          className={cn(
-            `flex w-full items-center justify-between rounded-md p-2 text-sm font-normal text-gray-800 hover:text-gray-800`,
-            (currentPath === menuItem.path ||
-              (menuItem.children &&
-                menuItem.children.some(
-                  (child) => currentPath === child.path
-                ))) &&
-              'bg-gray-100 font-semibold text-black'
-          )}
-        >
-          <div className="flex items-center px-3 py-1">
-            {menuItem.icon && (
-              <menuItem.icon
-                size={16}
-                className={cn(
-                  `mr-2`,
-                  (currentPath === menuItem.path ||
-                    (menuItem.children &&
-                      menuItem.children.some(
-                        (child) => currentPath === child.path
-                      ))) &&
-                    `text-primary`
-                )}
-              />
-            )}
-            <div>{menuItem.label}</div>
-          </div>
-          {menuItem.children && (
-            <motion.div
-              animate={isExpanded ? 'opened' : 'closed'}
-              variants={{
-                opened: { rotate: 0 },
-                closed: { rotate: -180 },
+        <If condition={menuItem.path}>
+          <Then>
+            <Link
+              href={menuItem.path}
+              onClick={() => {
+                setIsExpanded(!isExpanded);
               }}
-              transition={{ duration: 0.3 }}
+              className={cn(
+                `flex w-full items-center justify-between rounded-md p-2 text-sm font-normal text-gray-800 hover:text-gray-800`,
+                (currentPath === menuItem.path ||
+                  (menuItem.children &&
+                    menuItem.children.some(
+                      (child) => currentPath === child.path
+                    ))) &&
+                  'bg-gray-100 font-semibold text-black'
+              )}
             >
-              <ChevronUp className="h-4 w-4" />
-            </motion.div>
-          )}
-        </Link>
+              <div className="flex items-center px-3 py-1">
+                {menuItem.icon && (
+                  <menuItem.icon
+                    size={16}
+                    className={cn(
+                      `mr-2`,
+                      (currentPath === menuItem.path ||
+                        (menuItem.children &&
+                          menuItem.children.some(
+                            (child) => currentPath === child.path
+                          ))) &&
+                        `text-primary`
+                    )}
+                  />
+                )}
+                <div>{menuItem.label}</div>
+              </div>
+              {menuItem.children && (
+                <motion.div
+                  animate={isExpanded ? 'opened' : 'closed'}
+                  variants={{
+                    opened: { rotate: 0 },
+                    closed: { rotate: -180 },
+                  }}
+                  transition={{ duration: 0.3 }}
+                >
+                  <ChevronUp className="h-4 w-4" />
+                </motion.div>
+              )}
+            </Link>
+          </Then>
+          <Else>
+            <Button
+              variant="ghost"
+              onClick={() => {
+                setIsExpanded(!isExpanded);
+              }}
+              className={cn(
+                `flex w-full items-center justify-between rounded-md p-2 text-sm font-normal text-gray-800 hover:text-gray-800`,
+                (currentPath === menuItem.path ||
+                  (menuItem.children &&
+                    menuItem.children.some(
+                      (child) => currentPath === child.path
+                    ))) &&
+                  'bg-gray-100 font-semibold text-black'
+              )}
+            >
+              <div className="flex items-center px-3 py-1">
+                {menuItem.icon && (
+                  <menuItem.icon
+                    size={16}
+                    className={cn(
+                      `mr-2`,
+                      (currentPath === menuItem.path ||
+                        (menuItem.children &&
+                          menuItem.children.some(
+                            (child) => currentPath === child.path
+                          ))) &&
+                        `text-primary`
+                    )}
+                  />
+                )}
+                <div>{menuItem.label}</div>
+              </div>
+              {menuItem.children && (
+                <motion.div
+                  animate={isExpanded ? 'opened' : 'closed'}
+                  variants={{
+                    opened: { rotate: 0 },
+                    closed: { rotate: -180 },
+                  }}
+                  transition={{ duration: 0.3 }}
+                >
+                  <ChevronUp className="h-4 w-4" />
+                </motion.div>
+              )}
+            </Button>
+          </Else>
+        </If>
       </motion.div>
       {menuItem.children && (
         <motion.div

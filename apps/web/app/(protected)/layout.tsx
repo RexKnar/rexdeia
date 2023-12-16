@@ -31,17 +31,15 @@ export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="en" className={`${inter.variable} ${roboto_mono.variable}`}>
       <Providers>
-        <body className="bg-gray-50">
+        <body className="h-screen bg-gray-50">
           <NextTopLoader color={primaryColor} showSpinner={false} />
-          <div className="relative flex overflow-hidden">
-            <aside className="hidden grow-0 border-r md:flex md:w-64 lg:flex lg:w-72">
-              <Sidebar />
-            </aside>
-            <main className="h-full w-full overflow-auto">
+          <section className="flex">
+            <Sidebar />
+            <main className="ml-72 h-full flex-1">
               <PageHeader />
               <section className="container mx-auto">{children}</section>
             </main>
-          </div>
+          </section>
           <Toaster />
           <ZohoSalesIQ />
         </body>
