@@ -1,10 +1,12 @@
 import { redirect } from 'next/navigation';
 import { getServerSession } from 'next-auth';
+import React from 'react';
 
 import { authOptions } from '../../../../lib/auth';
 import { PageTitle } from '../../../../lib/components/PageTitle';
 import { RegulationListTable } from './components/RegulationListTable';
 import { RegulationShareFlyout } from './components/RegulationShareFlyout';
+import { RegulationsOverviewContainer } from './components/RegulationsOverviewContainer';
 
 export default async function Page() {
   const session = await getServerSession(authOptions);
@@ -13,15 +15,25 @@ export default async function Page() {
   }
 
   return (
-    <section>
-      <div className="flex justify-between">
-        <PageTitle title="Regulation Management" />
-        <RegulationShareFlyout />
-      </div>
+    <section className="flex flex-col gap-6">
+      <section className="space-y-2 rounded-md bg-white p-4">
+        <section>
+          <p className="text-xl font-semibold text-gray-800">Overview</p>
+          <p className="text-gray-700">
+            This section provides a comprehensive overview of regulations for
+            your current workspace.
+          </p>
+          <RegulationsOverviewContainer />
+        </section>
+      </section>
+      <section className="space-y-2 rounded-md bg-white p-4">
+        <section className="flex justify-between px-2">
+          <PageTitle title="Regulations" />
+          <RegulationShareFlyout />
+        </section>
 
-      <div className="mt-4 rounded-md bg-white p-3">
-        <RegulationListTable></RegulationListTable>
-      </div>
+        <RegulationListTable />
+      </section>
     </section>
   );
 }

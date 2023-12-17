@@ -12,7 +12,7 @@ type StudentWidgetProps = {
   readonly className?: string;
 };
 
-export function StudentWidget({
+export function DashboardWidget({
   value,
   label,
   className,
@@ -31,7 +31,11 @@ export function StudentWidget({
   }, []);
 
   return (
-    <section className="flex w-96 cursor-pointer flex-col gap-4 rounded-md border-[1.5px] bg-white p-4 shadow-sm hover:border-gray-700">
+    <section
+      className={cn(
+        'flex w-96 cursor-pointer flex-col gap-4 rounded-md border-[1.5px] bg-white p-4 shadow-sm hover:border-gray-700'
+      )}
+    >
       <div className="text-sm font-normal text-gray-700">
         {label.toUpperCase()}
       </div>

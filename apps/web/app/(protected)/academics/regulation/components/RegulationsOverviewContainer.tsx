@@ -1,11 +1,6 @@
 'use client';
 
-import {
-  LucideBellMinus,
-  LucideFileWarning,
-  LucidePartyPopper,
-  UserCircle2,
-} from 'lucide-react';
+import { Brain, Wheat, WheatOff } from 'lucide-react';
 import React from 'react';
 
 import { DashboardWidget } from '../../../../../lib/components/DashboardWidget';
@@ -13,31 +8,25 @@ import { DashboardWidget } from '../../../../../lib/components/DashboardWidget';
 const widgetList = [
   {
     value: 150,
-    label: 'Total Students',
-    icon: UserCircle2,
+    label: 'Active Regulations',
+    icon: Wheat,
     className: 'bg-green-100 text-green-800',
   },
   {
     value: 200,
-    label: 'Students Enrolled today',
-    icon: LucidePartyPopper,
-    className: 'bg-yellow-100 text-yellow-800',
+    label: 'Inactive Regulations',
+    icon: WheatOff,
+    className: 'bg-red-100 text-red-800',
   },
   {
     value: 3000,
-    label: 'Students on leave',
-    icon: LucideFileWarning,
+    label: 'Total Regulations',
+    icon: Brain,
     className: 'bg-blue-100 text-blue-800',
-  },
-  {
-    value: 0,
-    label: 'Students with due fees',
-    icon: LucideBellMinus,
-    className: 'bg-red-100 text-red-800',
   },
 ];
 
-export function StudentsWidgetContainer() {
+export function RegulationsOverviewContainer() {
   return (
     <section className="mt-4 flex w-full gap-3 overflow-scroll">
       {widgetList.map((widget) => (
