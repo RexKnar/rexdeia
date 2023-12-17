@@ -37,7 +37,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
             <Sidebar />
             <main className="ml-72 h-full flex-1">
               <PageHeader />
-              <section className="container mx-auto">{children}</section>
+              <section className="container mx-auto py-6">{children}</section>
             </main>
           </section>
           <Toaster />

@@ -5,7 +5,7 @@ import { PaginatedResponse } from '../../domain';
 import { RegulationModel } from '../../domain/regulation';
 import { DELETE_REGULATION, GET_REGULATION_LIST } from '../../endpoints';
 
-export function useDeleteRegulationMutationQuery(page: number) {
+export function useDeleteRegulationMutationQuery(page: number, limit: number) {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: async (regulationId) => {
@@ -20,15 +20,15 @@ export function useDeleteRegulationMutationQuery(page: number) {
     },
     onMutate: async (regulationId: string) => {
       await queryClient.cancelQueries({
-        queryKey: [GET_REGULATION_LIST],
+        queryKey: [GET_REGULATION_LIST, page, limit],
       });
 
       const previousRegulations = queryClient.getQueryData<
         PaginatedResponse<RegulationModel>
-      >([GET_REGULATION_LIST, page]);
+      >([GET_REGULATION_LIST, page, limit]);
 
       queryClient.setQueryData(
-        [GET_REGULATION_LIST, page],
+        [GET_REGULATION_LIST, page, limit],
         (currentPaginatedRegulations: PaginatedResponse<RegulationModel>) => {
           return {
             ...currentPaginatedRegulations,
@@ -50,13 +50,13 @@ export function useDeleteRegulationMutationQuery(page: number) {
     },
     onError: (error, _, context) => {
       queryClient.setQueryData(
-        [GET_REGULATION_LIST],
+        [GET_REGULATION_LIST, page, limit],
         context.previousRegulations
       );
     },
     onSuccess: async () => {
       await queryClient.refetchQueries({
-        queryKey: [GET_REGULATION_LIST],
+        queryKey: [GET_REGULATION_LIST, page, limit],
       });
     },
   });

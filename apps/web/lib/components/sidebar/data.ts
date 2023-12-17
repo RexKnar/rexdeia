@@ -74,7 +74,7 @@ export const menuItems: SidebarMenuItem[] = [
       },
       {
         id: 'academics-regulation-student',
-        label: 'Regulation',
+        label: 'Regulations',
         icon: null,
         path: '/academics/regulation',
       },

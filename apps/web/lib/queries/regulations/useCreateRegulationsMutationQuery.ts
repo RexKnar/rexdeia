@@ -8,7 +8,7 @@ import {
 } from '../../domain/regulation';
 import { ADD_REGULATION, GET_REGULATION_LIST } from '../../endpoints';
 
-export function useCreateRegulationsMutationQuery(page: number) {
+export function useCreateRegulationsMutationQuery(page: number, limit: number) {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: async (shareDetails: CreateRegulationModel) => {
@@ -21,20 +21,20 @@ export function useCreateRegulationsMutationQuery(page: number) {
     },
     onMutate: async (shareDetails: CreateRegulationModel) => {
       await queryClient.cancelQueries({
-        queryKey: [GET_REGULATION_LIST],
+        queryKey: [GET_REGULATION_LIST, page, limit],
       });
 
       const previousRegulations = queryClient.getQueryData<
         PaginatedResponse<RegulationModel>
-      >([GET_REGULATION_LIST, page]);
+      >([GET_REGULATION_LIST, page, limit]);
 
       queryClient.setQueryData(
-        [GET_REGULATION_LIST, page],
-        (old: PaginatedResponse<RegulationModel>) => {
+        [GET_REGULATION_LIST, page, limit],
+        (existingRegulations: PaginatedResponse<RegulationModel>) => {
           return {
-            ...old,
+            ...existingRegulations,
             data: [
-              ...old.data,
+              ...existingRegulations.data,
               { ...shareDetails, isNewlyAdded: true, status: true },
             ],
           };
@@ -51,7 +51,7 @@ export function useCreateRegulationsMutationQuery(page: number) {
     },
     onSuccess: async () => {
       await queryClient.refetchQueries({
-        queryKey: [GET_REGULATION_LIST],
+        queryKey: [GET_REGULATION_LIST, page, limit],
       });
     },
   });

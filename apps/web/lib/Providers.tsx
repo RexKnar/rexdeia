@@ -4,7 +4,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { SessionProvider } from 'next-auth/react';
 import { FC, ReactNode, useState } from 'react';
-import { ToastProvider } from 'ui';
+import { ToastProvider, TooltipProvider } from 'ui';
 
 interface LayoutProps {
   children: ReactNode;
@@ -24,12 +24,14 @@ const Providers: FC<LayoutProps> = ({ children }) => {
 
   return (
     <SessionProvider>
-      <ToastProvider>
-        <QueryClientProvider client={queryClient}>
-          <ReactQueryDevtools initialIsOpen={false} />
-          {children}
-        </QueryClientProvider>
-      </ToastProvider>
+      <TooltipProvider delayDuration={10}>
+        <ToastProvider>
+          <QueryClientProvider client={queryClient}>
+            <ReactQueryDevtools initialIsOpen={false} />
+            {children}
+          </QueryClientProvider>
+        </ToastProvider>
+      </TooltipProvider>
     </SessionProvider>
   );
 };

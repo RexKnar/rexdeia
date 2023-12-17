@@ -39,10 +39,15 @@ function RegulationShareFlyout() {
 
   const searchParams = useSearchParams();
   const page = searchParams.get('page');
+  const limit = searchParams.get('limit');
+
   const {
     isPending: isPendingCreateRegulations,
     mutateAsync: mutateCreateRegulationsAsync,
-  } = useCreateRegulationsMutationQuery(page ? parseInt(page) : 1);
+  } = useCreateRegulationsMutationQuery(
+    page ? parseInt(page) : 1,
+    limit ? parseInt(limit) : 10
+  );
 
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
