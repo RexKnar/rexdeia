@@ -3,8 +3,8 @@
 import format from 'date-fns/format';
 import { CalendarIcon, Loader2, PlusCircle } from 'lucide-react';
 import { useSearchParams } from 'next/navigation';
-import { useEffect, useState } from 'react';
-import { useForm, useWatch } from 'react-hook-form';
+import { useState } from 'react';
+import { useForm } from 'react-hook-form';
 import {
   Button,
   Calendar,
@@ -27,15 +27,21 @@ import { useCreateRegulationsMutationQuery } from '../../../../../lib/queries/re
 
 function RegulationShareFlyout() {
   const [isOpen, setIsOpen] = useState(false);
+
   const {
     register,
     handleSubmit,
     setValue,
-    control,
     reset,
+    watch,
     formState: { errors: fieldErrors },
-  } = useForm();
-  const isLinkActive = useWatch({ name: 'isActive', control });
+  } = useForm({
+    defaultValues: {
+      isActive: false,
+      announcedYear: null,
+      regulationName: null,
+    },
+  });
 
   const searchParams = useSearchParams();
   const page = searchParams.get('page');
@@ -49,8 +55,8 @@ function RegulationShareFlyout() {
     limit ? parseInt(limit) : 10
   );
 
-  const [selectedDate, setSelectedDate] = useState(new Date());
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
+
   async function addRegulation(payload: CreateRegulationModel) {
     try {
       const requestPayload = {
@@ -60,14 +66,12 @@ function RegulationShareFlyout() {
     } catch (error) {
       console.error(error);
     } finally {
+      setValue('isActive', false);
+      setValue('announcedYear', new Date());
       reset();
       setIsOpen(false);
     }
   }
-
-  useEffect(() => {
-    setValue('announcedYear', selectedDate);
-  }, [selectedDate]);
 
   return (
     <section>
@@ -100,18 +104,17 @@ function RegulationShareFlyout() {
                   </div>
                   <div className="flex items-center">
                     <Switch
-                      {...register('isActive')}
                       id="isActive"
-                      value={isLinkActive ? '1' : '0'}
-                      onCheckedChange={() => {
-                        setValue('isActive', !isLinkActive);
+                      {...register('isActive')}
+                      onCheckedChange={(value) => {
+                        setValue('isActive', value);
                       }}
                     />
                     <label
                       htmlFor="isActive"
                       className="ml-2 text-sm font-semibold"
                     >
-                      {isLinkActive ? 'Active' : 'Inactive'}
+                      {watch('isActive') ? 'Active' : 'Inactive'}
                     </label>
                   </div>
                 </div>
@@ -160,12 +163,12 @@ function RegulationShareFlyout() {
                       variant={'outline'}
                       className={cn(
                         'w-full justify-start justify-between text-left font-normal',
-                        !selectedDate && 'text-muted-foreground flex '
+                        !watch('announcedYear') && 'text-muted-foreground flex'
                       )}
                     >
                       <span>
-                        {selectedDate ? (
-                          format(selectedDate, 'PPP')
+                        {watch('announcedYear') ? (
+                          format(watch('announcedYear'), 'PPP')
                         ) : (
                           <>Pick a date</>
                         )}
@@ -181,13 +184,12 @@ function RegulationShareFlyout() {
                         required: 'announcedYear is Required',
                       })}
                       mode="single"
-                      selected={selectedDate}
-                      onSelect={(currentDate) => {
-                        setSelectedDate(currentDate);
+                      selected={watch('announcedYear')}
+                      onSelect={(selectedDate) => {
+                        setValue('announcedYear', selectedDate);
                         setIsCalendarOpen(false);
                       }}
                       id="announcedYear"
-                      initialFocus
                     />
                   </PopoverContent>
                 </Popover>
