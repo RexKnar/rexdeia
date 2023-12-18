@@ -1,6 +1,6 @@
 'use client';
 
-import { ChevronRight } from 'lucide-react';
+import { Slash } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink } from 'ui';
@@ -16,7 +16,7 @@ export function PathBreadcrumb() {
 
   return (
     <Breadcrumb
-      separator={<ChevronRight className="text-gray-900" size={16} />}
+      separator={<Slash className="rotate-[-30deg] text-gray-900" size={12} />}
     >
       {pathSegments.map((segment, index) => {
         const key = segment + index;
@@ -29,7 +29,7 @@ export function PathBreadcrumb() {
               <div
                 className={
                   isCurrentPage
-                    ? 'text-gray-900'
+                    ? 'text-primary'
                     : 'flex items-center justify-center text-gray-700'
                 }
               >
