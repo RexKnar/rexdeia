@@ -88,9 +88,14 @@ export async function addStudent(student: AddStudentModel, formId: string) {
     },
   });
 
+  const studentWithoutBatchId: Omit<AddStudentModel, 'batchId'> = {
+    ...student,
+  };
+  delete studentWithoutBatchId['batchId'];
+
   const createdStudent = await db.student.create({
     data: {
-      ...student,
+      ...studentWithoutBatchId,
       status: 'Active',
       createdAt: new Date(),
       updatedAt: new Date(),
@@ -112,6 +117,11 @@ export async function addStudent(student: AddStudentModel, formId: string) {
       form: {
         connect: {
           id: formId,
+        },
+      },
+      batch: {
+        connect: {
+          id: student.batchId,
         },
       },
     },
@@ -173,6 +183,42 @@ export async function getStudentsList(page: number, pageSize: number) {
   };
 }
 
+export async function getAllStudentsByBatchId(
+  page: number,
+  pageSize: number,
+  batchId: string
+) {
+  const session = await getServerSession(authOptions);
+
+  const [total, studentsList] = await Promise.all([
+    db.student.count({
+      where: {
+        status: 'Active',
+        branchId: session.branchId,
+        organizationId: session.organizationId,
+        batchId: batchId,
+      },
+    }),
+    db.student.findMany({
+      take: pageSize,
+      skip: (page - 1) * pageSize,
+      where: {
+        status: 'Active',
+        branchId: session.branchId,
+        organizationId: session.organizationId,
+        batchId: batchId,
+      },
+    }),
+  ]);
+
+  return {
+    total,
+    page,
+    pageSize,
+    data: studentsList,
+  };
+}
+
 export async function getRecentlyAddedStudentsList({
   count,
 }: {
@@ -188,6 +234,18 @@ export async function getRecentlyAddedStudentsList({
     },
     orderBy: {
       createdAt: 'desc',
+    },
+  });
+}
+
+export async function getAllStudentsBySectionId(sectionId: string) {
+  const session = await getServerSession(authOptions);
+  return await db.student.findMany({
+    where: {
+      branchId: session.branchId,
+      organizationId: session.organizationId,
+      sectionId: sectionId,
+      status: 'Active',
     },
   });
 }

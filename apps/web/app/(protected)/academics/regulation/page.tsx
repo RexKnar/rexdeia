@@ -3,10 +3,10 @@ import { getServerSession } from 'next-auth';
 import React from 'react';
 
 import { authOptions } from '../../../../lib/auth';
-import { PageTitle } from '../../../../lib/components/PageTitle';
 import { RegulationListTable } from './components/RegulationListTable';
 import { RegulationShareFlyout } from './components/RegulationShareFlyout';
 import { RegulationsOverviewContainer } from './components/RegulationsOverviewContainer';
+import { RegulationsPageHeader } from './components/RegulationsPageHeader';
 
 export default async function Page() {
   const session = await getServerSession(authOptions);
@@ -24,14 +24,11 @@ export default async function Page() {
         </p>
         <RegulationsOverviewContainer />
       </section>
+      <RegulationsPageHeader />
       <section className="space-y-2 rounded-md bg-white p-4">
-        <section className="flex justify-between px-2">
-          <PageTitle title="Regulations" />
-          <RegulationShareFlyout />
-        </section>
-
         <RegulationListTable />
       </section>
+      <RegulationShareFlyout />
     </section>
   );
 }

@@ -2,7 +2,7 @@
 
 import format from 'date-fns/format';
 import { CalendarIcon, Loader2, PlusCircle } from 'lucide-react';
-import { useSearchParams } from 'next/navigation';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import {
@@ -16,7 +16,6 @@ import {
   SheetContent,
   SheetHeader,
   SheetTitle,
-  SheetTrigger,
   Switch,
   Text,
 } from 'ui';
@@ -25,12 +24,7 @@ import { cn } from 'utils';
 import { CreateRegulationModel } from '../../../../../lib/domain/regulation';
 import { useCreateRegulationsMutationQuery } from '../../../../../lib/queries/regulations/useCreateRegulationsMutationQuery';
 
-type regulationFlyoutProps = {
-  open: boolean;
-};
-function RegulationShareFlyout({ open }: regulationFlyoutProps) {
-  const [isOpen, setIsOpen] = useState(open);
-
+function RegulationShareFlyout() {
   const {
     register,
     handleSubmit,
@@ -46,19 +40,29 @@ function RegulationShareFlyout({ open }: regulationFlyoutProps) {
     },
   });
 
+  const pathname = usePathname();
+  const router = useRouter();
   const searchParams = useSearchParams();
-  const page = searchParams.get('page');
-  const limit = searchParams.get('limit');
+
+  const page = parseInt(searchParams.get('page')) || 1;
+  const limit = parseInt(searchParams.get('limit')) || 10;
+  const isOpen = searchParams.get('isFlyoutOpen') === 'true';
+  const regulationId = searchParams.get('regulationId');
 
   const {
     isPending: isPendingCreateRegulations,
     mutateAsync: mutateCreateRegulationsAsync,
-  } = useCreateRegulationsMutationQuery(
-    page ? parseInt(page) : 1,
-    limit ? parseInt(limit) : 10
-  );
+  } = useCreateRegulationsMutationQuery(page, limit);
 
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
+
+  const closeFlyout = () => {
+    const params = new URLSearchParams(searchParams);
+    params.delete('isFlyoutOpen');
+    params.delete('regulationId');
+
+    router.push(pathname + '?' + params.toString());
+  };
 
   async function addRegulation(payload: CreateRegulationModel) {
     try {
@@ -72,28 +76,18 @@ function RegulationShareFlyout({ open }: regulationFlyoutProps) {
       setValue('isActive', false);
       setValue('announcedYear', new Date());
       reset();
-      setIsOpen(false);
+      closeFlyout();
     }
   }
 
   return (
     <section>
       <Sheet open={isOpen}>
-        <SheetTrigger asChild>
-          {/* <Button
-            variant="default"
-            onClick={() => {
-              setIsOpen(true);
-            }}
-          >
-            Add Regulation
-          </Button> */}
-        </SheetTrigger>
         <SheetContent
           side="right"
           widthSize="sm"
           className="bg-white p-10"
-          onCloseClick={() => setIsOpen(false)}
+          onCloseClick={() => closeFlyout()}
         >
           <form onSubmit={handleSubmit(addRegulation)}>
             <SheetHeader>
@@ -102,7 +96,7 @@ function RegulationShareFlyout({ open }: regulationFlyoutProps) {
                   <div className="flex items-center">
                     <PlusCircle size={20} strokeWidth={1.5} />
                     <Text variant="lg-semibold" className="ml-2">
-                      Add Regulation
+                      {regulationId ? 'Update Regulation' : 'Add Regulation'}
                     </Text>
                   </div>
                   <div className="flex items-center">
@@ -184,7 +178,7 @@ function RegulationShareFlyout({ open }: regulationFlyoutProps) {
                   <PopoverContent className="z-index-99 w-auto bg-white p-0">
                     <Calendar
                       {...register('announcedYear', {
-                        required: 'announcedYear is Required',
+                        required: 'Start Year is Required',
                       })}
                       mode="single"
                       selected={watch('announcedYear')}
@@ -221,7 +215,7 @@ function RegulationShareFlyout({ open }: regulationFlyoutProps) {
                       Saving
                     </div>
                   ) : (
-                    `Save`
+                    `${regulationId ? 'Update' : 'Save'}`
                   )}
                 </Button>
               </div>
