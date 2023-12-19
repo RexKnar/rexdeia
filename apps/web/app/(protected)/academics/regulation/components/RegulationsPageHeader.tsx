@@ -1,9 +1,10 @@
 'use client';
 
-import { PageTitle } from '../../../../../lib/components/PageTitle';
-import { Button } from 'ui';
-import React from 'react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import React from 'react';
+import { Button } from 'ui';
+
+import { PageTitle } from '../../../../../lib/components/PageTitle';
 
 export function RegulationsPageHeader() {
   const pathname = usePathname();
