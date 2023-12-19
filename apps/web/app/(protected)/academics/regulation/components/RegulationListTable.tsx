@@ -106,22 +106,19 @@ export function RegulationListTable() {
   const [selectedRegulation, setSelectedRegulation] =
     useState<RegulationModel | null>(null);
 
-  const page = searchParams.get('page');
-  const limit = searchParams.get('limit');
+  const page = parseInt(searchParams.get('page')) || 1;
+  const limit = parseInt(searchParams.get('limit')) || 10;
 
   const {
     isError: isDeleteRegulationError,
     isSuccess: isDeleteRegulationSuccess,
     mutateAsync: deleteRegulationMutateAsync,
-  } = useDeleteRegulationMutationQuery(
-    parseInt(page) || 1,
-    parseInt(limit) || 10
-  );
+  } = useDeleteRegulationMutationQuery(page, limit);
 
   const { data: regulationListResponse, isLoading: isRegulationListLoading } =
     useGetRegulationListQuery({
-      page: page ? parseInt(page) : 1,
-      limit: limit ? parseInt(limit) : 10,
+      page,
+      limit,
     });
 
   useEffect(() => {
@@ -145,12 +142,15 @@ export function RegulationListTable() {
     }
   }, [isDeleteRegulationSuccess]);
 
-  const handleOnPageChange = useCallback((page: number) => {
-    const params = new URLSearchParams(searchParams);
-    params.set('page', page.toString());
+  const handleOnPageChange = useCallback(
+    (page: number) => {
+      const params = new URLSearchParams(searchParams);
+      params.set('page', page.toString());
 
-    router.push(pathname + '?' + params.toString());
-  }, []);
+      router.push(pathname + '?' + params.toString());
+    },
+    [searchParams]
+  );
 
   const table = useReactTable({
     columns,
@@ -304,7 +304,7 @@ export function RegulationListTable() {
             </label>
             <div className="w-1/3">
               <Select
-                value={limit || '10'}
+                value={limit.toString()}
                 disabled={isRegulationListLoading}
                 onValueChange={(value) => {
                   const params = new URLSearchParams(searchParams);
@@ -328,9 +328,9 @@ export function RegulationListTable() {
             </div>
           </div>
           <Pagination
+            onPageChange={handleOnPageChange}
             pageSize={regulationListResponse?.limit || 0}
             totalRecords={regulationListResponse?.total || 0}
-            onPageChange={handleOnPageChange}
           />
         </section>
         <DeleteConfirmationModal

@@ -2,7 +2,7 @@
 
 import format from 'date-fns/format';
 import { CalendarIcon, Loader2, PlusCircle } from 'lucide-react';
-import { useSearchParams } from 'next/navigation';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import {
@@ -16,7 +16,6 @@ import {
   SheetContent,
   SheetHeader,
   SheetTitle,
-  SheetTrigger,
   Switch,
   Text,
 } from 'ui';
@@ -26,8 +25,6 @@ import { CreateRegulationModel } from '../../../../../lib/domain/regulation';
 import { useCreateRegulationsMutationQuery } from '../../../../../lib/queries/regulations/useCreateRegulationsMutationQuery';
 
 function RegulationShareFlyout() {
-  const [isOpen, setIsOpen] = useState(false);
-
   const {
     register,
     handleSubmit,
@@ -43,19 +40,27 @@ function RegulationShareFlyout() {
     },
   });
 
+  const pathname = usePathname();
+  const router = useRouter();
   const searchParams = useSearchParams();
-  const page = searchParams.get('page');
-  const limit = searchParams.get('limit');
+
+  const page = parseInt(searchParams.get('page')) || 1;
+  const limit = parseInt(searchParams.get('limit')) || 10;
+  const isOpen = searchParams.get('isFlyoutOpen') === 'true';
 
   const {
     isPending: isPendingCreateRegulations,
     mutateAsync: mutateCreateRegulationsAsync,
-  } = useCreateRegulationsMutationQuery(
-    page ? parseInt(page) : 1,
-    limit ? parseInt(limit) : 10
-  );
+  } = useCreateRegulationsMutationQuery(page, limit);
 
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
+
+  const closeFlyout = () => {
+    const params = new URLSearchParams(searchParams);
+    params.delete('isFlyoutOpen');
+
+    router.push(pathname + '?' + params.toString());
+  };
 
   async function addRegulation(payload: CreateRegulationModel) {
     try {
@@ -69,28 +74,18 @@ function RegulationShareFlyout() {
       setValue('isActive', false);
       setValue('announcedYear', new Date());
       reset();
-      setIsOpen(false);
+      closeFlyout();
     }
   }
 
   return (
     <section>
       <Sheet open={isOpen}>
-        <SheetTrigger asChild>
-          <Button
-            variant="default"
-            onClick={() => {
-              setIsOpen(true);
-            }}
-          >
-            Add Regulation
-          </Button>
-        </SheetTrigger>
         <SheetContent
           side="right"
           widthSize="sm"
           className="bg-white p-10"
-          onCloseClick={() => setIsOpen(false)}
+          onCloseClick={() => closeFlyout()}
         >
           <form onSubmit={handleSubmit(addRegulation)}>
             <SheetHeader>
