@@ -45,9 +45,14 @@ export async function addAdmission(student: AddStudentModel, formId: string) {
     },
   });
 
+  const studentWithoutBatchId: Omit<AddStudentModel, 'batchId'> = {
+    ...student,
+  };
+  delete studentWithoutBatchId['batchId'];
+
   const createdStudent = await db.student.create({
     data: {
-      ...student,
+      ...studentWithoutBatchId,
       status: 'Pending',
       createdAt: new Date(),
       updatedAt: new Date(),
@@ -69,6 +74,11 @@ export async function addAdmission(student: AddStudentModel, formId: string) {
       form: {
         connect: {
           id: formId,
+        },
+      },
+      batch: {
+        connect: {
+          id: student.batchId,
         },
       },
     },

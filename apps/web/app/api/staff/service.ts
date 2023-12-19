@@ -140,3 +140,16 @@ export async function getStaffList(page: number, pageSize: number) {
     data: staffList,
   };
 }
+
+export async function getAllStaffsBySectionId(sectionId: string) {
+  const session = await getServerSession(authOptions);
+  return await db.staff.findMany({
+    where: {
+      branchId: session.branchId,
+      organizationId: session.organizationId,
+      sectionId: {
+        has: sectionId,
+      },
+    },
+  });
+}

@@ -2,13 +2,25 @@ import { getServerSession } from 'next-auth';
 
 import { authOptions } from '../../../lib/auth';
 import { db } from '../../../lib/db';
-import { CreateClassModel } from '../../../lib/domain/class';
+import { CreateClassModel, UpdateClassModel } from '../../../lib/domain/class';
 
 export async function getClassList() {
   const session = await getServerSession(authOptions);
   return await db.class.findMany({
     where: {
       branchId: session.branchId,
+      isActive: true,
+    },
+  });
+}
+
+export async function getAllClassesByBatchId(batchId: string) {
+  const session = await getServerSession(authOptions);
+  return await db.class.findMany({
+    where: {
+      branchId: session.branchId,
+      batchId: batchId,
+      isActive: true,
     },
   });
 }
@@ -17,14 +29,65 @@ export async function addClass(classPayload: CreateClassModel) {
   const session = await getServerSession(authOptions);
   return await db.class.create({
     data: {
-      ...classPayload,
       name: classPayload.name,
+      description: classPayload.description,
       isActive: classPayload.isActive,
       branch: {
         connect: {
           id: session.branchId,
         },
       },
+      batch: {
+        connect: {
+          id: classPayload.batchId,
+        },
+      },
+      regulation: {
+        connect: {
+          id: classPayload.regulationId,
+        },
+      },
+    },
+  });
+}
+
+export async function deleteClassById(id: string) {
+  const session = await getServerSession(authOptions);
+  return await db.class.update({
+    where: {
+      id: id,
+      branchId: session.branchId,
+    },
+    data: {
+      isActive: false,
+      updatedAt: new Date(),
+    },
+  });
+}
+
+export async function getClassById(id: string) {
+  const session = await getServerSession(authOptions);
+  return await db.class.findFirst({
+    where: {
+      id: id,
+      branchId: session.branchId,
+      isActive: true,
+    },
+  });
+}
+
+export async function updateClassById(
+  id: string,
+  updateClass: UpdateClassModel
+) {
+  const session = await getServerSession(authOptions);
+  return await db.class.update({
+    where: {
+      id: id,
+      branchId: session.branchId,
+    },
+    data: {
+      ...updateClass,
     },
   });
 }

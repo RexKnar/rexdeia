@@ -2,6 +2,7 @@ export type Student = {
   id: string;
   dob: string;
   gender: string;
+  batchId: string;
   emailId: string;
   lastName: string;
   religion: string;
