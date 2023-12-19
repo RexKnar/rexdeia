@@ -40,6 +40,7 @@ import { DeleteConfirmationModal } from '../../../../../lib/components/modals/De
 import { RegulationModel } from '../../../../../lib/domain/regulation';
 import { useDeleteRegulationMutationQuery } from '../../../../../lib/queries/regulations/useDeleteRegulationMutationQuery';
 import { useGetRegulationListQuery } from '../../../../../lib/queries/regulations/useGetRegulationListQuery';
+import { RegulationShareFlyout } from './RegulationShareFlyout';
 
 const columns: ColumnDef<RegulationModel>[] = [
   {
@@ -100,6 +101,8 @@ export function RegulationListTable() {
   const pathname = usePathname();
   const router = useRouter();
   const searchParams = useSearchParams();
+
+  const [isEditFlyoutOpen, setIsEditFlyoutOpen] = useState(false);
 
   const [showDeleteConfirmationModal, setShowDeleteConfirmationModal] =
     useState(false);
@@ -232,9 +235,12 @@ export function RegulationListTable() {
                     <Tooltip>
                       <TooltipTrigger asChild>
                         <Button
+                          onClick={() => {
+                            setIsEditFlyoutOpen(true);
+                          }}
                           className="mr-2 h-auto p-0"
                           variant="destructive"
-                          disabled={row.original.isNewlyAdded}
+                          // disabled={row.original.isNewlyAdded}
                         >
                           <Pencil
                             size={16}
@@ -347,6 +353,7 @@ export function RegulationListTable() {
           }}
         />
       </When>
+      <RegulationShareFlyout open={isEditFlyoutOpen} />
     </section>
   );
 }

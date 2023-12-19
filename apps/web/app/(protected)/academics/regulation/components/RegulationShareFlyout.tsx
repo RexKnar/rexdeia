@@ -25,8 +25,11 @@ import { cn } from 'utils';
 import { CreateRegulationModel } from '../../../../../lib/domain/regulation';
 import { useCreateRegulationsMutationQuery } from '../../../../../lib/queries/regulations/useCreateRegulationsMutationQuery';
 
-function RegulationShareFlyout() {
-  const [isOpen, setIsOpen] = useState(false);
+type regulationFlyoutProps = {
+  open: boolean;
+};
+function RegulationShareFlyout({ open }: regulationFlyoutProps) {
+  const [isOpen, setIsOpen] = useState(open);
 
   const {
     register,
@@ -77,14 +80,14 @@ function RegulationShareFlyout() {
     <section>
       <Sheet open={isOpen}>
         <SheetTrigger asChild>
-          <Button
+          {/* <Button
             variant="default"
             onClick={() => {
               setIsOpen(true);
             }}
           >
             Add Regulation
-          </Button>
+          </Button> */}
         </SheetTrigger>
         <SheetContent
           side="right"
