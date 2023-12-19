@@ -232,6 +232,12 @@ export function RegulationListTable() {
                     <Tooltip>
                       <TooltipTrigger asChild>
                         <Button
+                          onClick={() => {
+                            const params = new URLSearchParams(searchParams);
+                            params.set('isFlyoutOpen', 'true');
+                            params.set('regulationId', row.original.id);
+                            router.push(pathname + '?' + params.toString());
+                          }}
                           className="mr-2 h-auto p-0"
                           variant="destructive"
                           disabled={row.original.isNewlyAdded}

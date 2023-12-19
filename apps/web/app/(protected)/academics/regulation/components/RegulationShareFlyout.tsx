@@ -47,6 +47,7 @@ function RegulationShareFlyout() {
   const page = parseInt(searchParams.get('page')) || 1;
   const limit = parseInt(searchParams.get('limit')) || 10;
   const isOpen = searchParams.get('isFlyoutOpen') === 'true';
+  const regulationId = searchParams.get('regulationId');
 
   const {
     isPending: isPendingCreateRegulations,
@@ -58,6 +59,7 @@ function RegulationShareFlyout() {
   const closeFlyout = () => {
     const params = new URLSearchParams(searchParams);
     params.delete('isFlyoutOpen');
+    params.delete('regulationId');
 
     router.push(pathname + '?' + params.toString());
   };
@@ -94,7 +96,7 @@ function RegulationShareFlyout() {
                   <div className="flex items-center">
                     <PlusCircle size={20} strokeWidth={1.5} />
                     <Text variant="lg-semibold" className="ml-2">
-                      Add Regulation
+                      {regulationId ? 'Update Regulation' : 'Add Regulation'}
                     </Text>
                   </div>
                   <div className="flex items-center">
@@ -176,7 +178,7 @@ function RegulationShareFlyout() {
                   <PopoverContent className="z-index-99 w-auto bg-white p-0">
                     <Calendar
                       {...register('announcedYear', {
-                        required: 'announcedYear is Required',
+                        required: 'Start Year is Required',
                       })}
                       mode="single"
                       selected={watch('announcedYear')}
@@ -213,7 +215,7 @@ function RegulationShareFlyout() {
                       Saving
                     </div>
                   ) : (
-                    `Save`
+                    `${regulationId ? 'Update' : 'Save'}`
                   )}
                 </Button>
               </div>
