@@ -2,6 +2,8 @@ export * from './Header';
 
 export * from './components/ui/Text';
 
+export * from './components/ui/Tabs';
+
 export * from './components/ui/Breadcrumb';
 export * from './components/ui/Breadcrumb/BreadcrumbItem';
 export * from './components/ui/Breadcrumb/BreadcrumbLink';
