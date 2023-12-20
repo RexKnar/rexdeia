@@ -1,9 +1,10 @@
 'use client';
 
-import { BellDot, Search } from 'lucide-react';
+import { Search } from 'lucide-react';
 import { Input } from 'ui';
 
 import { UserMenu } from './footer/UserMenu';
+import { NotificationPopover } from './notification/NotificationPopover';
 import { PathBreadcrumb } from './PathBreadcrumb';
 
 export function PageHeader() {
@@ -17,11 +18,11 @@ export function PageHeader() {
             <Input
               type="search"
               placeholder="Search"
-              className="h-8 bg-gray-50 placeholder:text-gray-800 md:w-80"
+              className="h-8 w-auto bg-gray-50 placeholder:text-gray-800 md:w-80"
             />
             <Search className="absolute right-3 text-gray-600" size={16} />
           </div>
-          <BellDot size={20} className="text-gray-700" />
+          <NotificationPopover />
           <UserMenu />
         </div>
       </section>

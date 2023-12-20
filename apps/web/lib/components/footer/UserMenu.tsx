@@ -17,16 +17,14 @@ export function UserMenu() {
   const { data, isLoading } = useGetUserDetailsQuery();
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger>
-        <div className="ml-2 flex items-center gap-2">
-          <Avatar className="h-9 w-9">
-            <AvatarImage src="https://imgv3.fotor.com/images/gallery/Realistic-Male-Profile-Picture.jpg" />
-          </Avatar>
-          <Text variant="sm-medium">
-            Hi, {isLoading ? 'Loading...' : data.name}
-          </Text>
-          <ChevronDown className="h-5 w-5 cursor-pointer" />
-        </div>
+      <DropdownMenuTrigger className="flex items-center gap-2 outline-none">
+        <Avatar className="h-9 w-9">
+          <AvatarImage src="https://imgv3.fotor.com/images/gallery/Realistic-Male-Profile-Picture.jpg" />
+        </Avatar>
+        <Text variant="sm-medium">
+          Hi, {isLoading ? 'Loading...' : data.name}
+        </Text>
+        <ChevronDown className="h-5 w-5 cursor-pointer" />
       </DropdownMenuTrigger>
       <DropdownMenuContent className="bg-white" align="end" sideOffset={15}>
         <DropdownMenuItem className="flex cursor-pointer items-center">
