@@ -26,6 +26,8 @@ export const GET_STUDENTS_LIST = `GET_STUDENTS_LIST`;
 export const ADD_CLASS = `ADD_CLASS`;
 export const GET_CLASS = `GET_CLASS`;
 export const GET_REGULATION_LIST = `GET_REGULATION_LIST`;
+export const GET_REGULATION_BY_ID = `GET_REGULATION_BY_ID`;
+export const UPDATE_REGULATION_BY_ID = `UPDATE_REGULATION_BY_ID`;
 
 export default <EndpointDetails>{
   [REGISTER_USER]: {
@@ -131,5 +133,13 @@ export default <EndpointDetails>{
   [GET_REGULATION_LIST]: {
     requestType: `GET`,
     endpoint: `/api/regulation`,
+  },
+  [GET_REGULATION_BY_ID]: {
+    requestType: `GET`,
+    endpoint: `/api/regulation/[id]`,
+  },
+  [UPDATE_REGULATION_BY_ID]: {
+    requestType: `PUT`,
+    endpoint: `/api/regulation/[id]`,
   },
 };
