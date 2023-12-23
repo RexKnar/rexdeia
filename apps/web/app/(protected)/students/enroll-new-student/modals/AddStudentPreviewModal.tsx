@@ -4,11 +4,11 @@
 import * as Dialog from '@radix-ui/react-dialog';
 import { Contact, Edit, Loader2, Save, X } from 'lucide-react';
 import React, { useEffect } from 'react';
+import { Else, If, Then } from 'react-if';
 import { Button, Text } from 'ui';
 
-import { formatStudentPayload } from '../../../../../lib/utils/formatters';
 import { useCreateStudentMutation } from '../../../../../lib/queries/students/useCreateStudentMutation';
-import { Else, If, Then } from 'react-if';
+import { formatStudentPayload } from '../../../../../lib/utils/formatters';
 
 type AddStudentPreviewModalProps = {
   open: boolean;
@@ -41,8 +41,7 @@ export function AddStudentPreviewModal({
 
   const handleOnSaveClick = async () => {
     const payload = formatStudentPayload(formData);
-    const response = await createStudentMutationAsync(payload);
-    console.info(response);
+    await createStudentMutationAsync(payload);
   };
 
   return (
