@@ -145,7 +145,7 @@ export async function GET(request: Request, { params: { id } }) {
  *         '500':
  *           description: Internal server error.
  */
-export async function DELETE(request: NextRequest, { params: { id } }) {
+export async function DELETE(_: NextRequest, { params: { id } }) {
   try {
     const session = await getServerSession(authOptions);
     if (!session) {

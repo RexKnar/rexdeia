@@ -1,12 +1,14 @@
 export type BatchModel = {
   id: string;
   name: string;
-  isActive: boolean;
-  description?: string;
-  startYear: string;
   endYear: string;
+  isActive: boolean;
   classes: string[];
+  startYear: string;
   students: string[];
+  description?: string;
+  isDeleting?: boolean;
+  isNewlyAdded?: boolean;
 };
 
 export type CreateBatchModel = Pick<

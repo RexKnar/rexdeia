@@ -28,6 +28,10 @@ export const GET_CLASS = `GET_CLASS`;
 export const GET_REGULATION_LIST = `GET_REGULATION_LIST`;
 export const GET_REGULATION_BY_ID = `GET_REGULATION_BY_ID`;
 export const UPDATE_REGULATION_BY_ID = `UPDATE_REGULATION_BY_ID`;
+export const GET_BATCHES_LIST = `GET_BATCHES_LIST`;
+export const GET_BATCH_BY_ID = `GET_BATCH_BY_ID`;
+export const UPDATE_BATCH_BY_ID = `UPDATE_BATCH_BY_ID`;
+export const DELETE_BATCH_BY_ID = `DELETE_BATCH_BY_ID`;
 
 export default <EndpointDetails>{
   [REGISTER_USER]: {
@@ -141,5 +145,13 @@ export default <EndpointDetails>{
   [UPDATE_REGULATION_BY_ID]: {
     requestType: `PUT`,
     endpoint: `/api/regulation/[id]`,
+  },
+  [GET_BATCHES_LIST]: {
+    requestType: `GET`,
+    endpoint: `/api/batch`,
+  },
+  [DELETE_BATCH_BY_ID]: {
+    requestType: `DELETE`,
+    endpoint: `/api/batch/[id]`,
   },
 };

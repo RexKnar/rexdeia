@@ -1,0 +1,376 @@
+'use client';
+
+import {
+  ColumnDef,
+  flexRender,
+  getCoreRowModel,
+  getFilteredRowModel,
+  getPaginationRowModel,
+  getSortedRowModel,
+  useReactTable,
+} from '@tanstack/react-table';
+import { Eye, Loader2, Pencil, Trash2 } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
+import { When } from 'react-if';
+import {
+  Button,
+  Pagination,
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+  useToast,
+} from 'ui';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from 'ui/components/ui/Table';
+
+import { DeleteConfirmationModal } from '../../../../../lib/components/modals/DeleteConfirmationModal';
+import { BatchModel } from '../../../../../lib/domain/batch';
+import {
+  parseAsBoolean,
+  parseAsInteger,
+  parseAsString,
+  useQueryState,
+} from 'next-usequerystate';
+import { useGetBatchesListQuery } from '../../../../../lib/queries/batches/useGetBatchesListQuery';
+import { useDeleteBatchMutationQuery } from '../../../../../lib/queries/batches/useDeleteBatchMutationQuery';
+
+const columns: ColumnDef<BatchModel>[] = [
+  {
+    accessorKey: 'name',
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          className="px-0"
+          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+        >
+          Batch Name
+        </Button>
+      );
+    },
+  },
+  {
+    accessorKey: 'description',
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          className="px-0"
+          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+        >
+          Description
+        </Button>
+      );
+    },
+    cell: ({ row }) => {
+      let description: string = row.getValue('description');
+      return <div>{description || 'N/A'}</div>;
+    },
+  },
+  {
+    accessorKey: 'startYear',
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          className="px-0"
+          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+        >
+          Start Year
+        </Button>
+      );
+    },
+  },
+  {
+    accessorKey: 'endYear',
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          className="px-0"
+          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+        >
+          End Year
+        </Button>
+      );
+    },
+  },
+  {
+    accessorKey: 'isActive',
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          className="px-0"
+          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+        >
+          Status
+        </Button>
+      );
+    },
+    cell: ({ row }) => {
+      return <div>{row.original.isActive ? 'true' : 'false'}</div>;
+    },
+  },
+];
+
+export function BatchesListTable() {
+  const { toast } = useToast();
+
+  const [showDeleteConfirmationModal, setShowDeleteConfirmationModal] =
+    useState(false);
+  const [selectedBatch, setSelectedBatch] = useState<BatchModel | null>(null);
+
+  const [page, setPage] = useQueryState('page', parseAsInteger.withDefault(1));
+  const [limit, setLimit] = useQueryState(
+    'limit',
+    parseAsInteger.withDefault(10)
+  );
+  const [, setIsFlyoutOpen] = useQueryState(
+    'isFlyoutOpen',
+    parseAsBoolean.withDefault(false)
+  );
+
+  const [batchId, setBatchId] = useQueryState(
+    'batchId',
+    parseAsString.withDefault('')
+  );
+
+  const {
+    isError: isDeleteBatchError,
+    isSuccess: isDeleteSuccess,
+    mutateAsync: deleteBatchAsync,
+  } = useDeleteBatchMutationQuery(page, limit);
+
+  const { data: batchesList, isLoading: isBatchesListLoading } =
+    useGetBatchesListQuery({
+      page,
+      limit,
+    });
+
+  useEffect(() => {
+    if (isDeleteBatchError) {
+      toast({
+        title: 'Error',
+        variant: 'destructive',
+        description: 'Error while deleting batch',
+      });
+    }
+  }, []);
+
+  useEffect(() => {
+    if (isDeleteSuccess) {
+      toast({
+        title: 'Success',
+        variant: 'destructive',
+        description: 'Batch deleted successfully',
+      });
+      setSelectedBatch(null);
+    }
+  }, [isDeleteSuccess]);
+
+  const table = useReactTable({
+    columns,
+    data: batchesList?.data || [],
+    getCoreRowModel: getCoreRowModel(),
+    getSortedRowModel: getSortedRowModel(),
+    getFilteredRowModel: getFilteredRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
+  });
+
+  return (
+    <section>
+      <div className="rounded-md ">
+        <Table>
+          <TableHeader>
+            {table.getHeaderGroups().map((headerGroup) => (
+              <TableRow
+                key={headerGroup.id}
+                className="cursor-pointer hover:bg-white"
+              >
+                {headerGroup.headers.map((header) => {
+                  return (
+                    <TableHead key={header.id}>
+                      {header.isPlaceholder
+                        ? null
+                        : flexRender(
+                            header.column.columnDef.header,
+                            header.getContext()
+                          )}
+                    </TableHead>
+                  );
+                })}
+                <TableHead>
+                  <Button variant="ghost" className="px-0">
+                    Actions
+                  </Button>
+                </TableHead>
+              </TableRow>
+            ))}
+          </TableHeader>
+
+          <TableBody>
+            {table.getRowModel().rows?.length ? (
+              table.getRowModel().rows.map((row) => (
+                <TableRow
+                  key={row.id}
+                  data-state={row.getIsSelected() && 'selected'}
+                >
+                  {row.getVisibleCells().map((cell) => (
+                    <TableCell key={cell.id}>
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext()
+                      )}
+                    </TableCell>
+                  ))}
+                  <TableCell className="w-52">
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <Button
+                          title="View"
+                          className="mr-2 h-auto p-0"
+                          variant="destructive"
+                          disabled={row.original.isNewlyAdded}
+                        >
+                          <Eye
+                            size={16}
+                            className="mr-2 text-center text-primary"
+                          />
+                        </Button>
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p>
+                          <span>View</span>
+                          <span className="mx-1 font-semibold">{`${row.original.name}`}</span>
+                        </p>
+                      </TooltipContent>
+                    </Tooltip>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <Button
+                          onClick={async () => {
+                            await setIsFlyoutOpen(true);
+                            await setBatchId(row.original.id);
+                          }}
+                          className="mr-2 h-auto p-0"
+                          variant="destructive"
+                          disabled={row.original.isNewlyAdded}
+                        >
+                          <Pencil
+                            size={16}
+                            className="mr-2 text-center text-black"
+                          />
+                        </Button>
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p>
+                          <span>Edit</span>
+                          <span className="mx-1 font-semibold">{`${row.original.name}`}</span>
+                        </p>
+                      </TooltipContent>
+                    </Tooltip>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <Button
+                          className="h-auto p-0"
+                          variant="destructive"
+                          onClick={() => {
+                            setSelectedBatch(row.original);
+                            setShowDeleteConfirmationModal(true);
+                          }}
+                          disabled={row.original.isNewlyAdded}
+                        >
+                          {row.original.isDeleting ? (
+                            <Loader2 className="mr-2 h-4 w-4 animate-spin text-red-600" />
+                          ) : (
+                            <Trash2
+                              size={16}
+                              className="mr-2 text-center text-red-600"
+                            />
+                          )}
+                        </Button>
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p>
+                          <span>Delete</span>
+                          <span className="mx-1 font-semibold">{`${row.original.name}`}</span>
+                        </p>
+                      </TooltipContent>
+                    </Tooltip>
+                  </TableCell>
+                </TableRow>
+              ))
+            ) : (
+              <TableRow>
+                <TableCell colSpan={5} className="h-24 text-center">
+                  {isBatchesListLoading ? 'Loading...' : 'No Batches Found'}
+                </TableCell>
+              </TableRow>
+            )}
+          </TableBody>
+        </Table>
+      </div>
+      <When condition={batchesList?.data?.length && !isBatchesListLoading}>
+        <section className="mt-5 flex justify-between">
+          <div className="justify-left flex w-2/6">
+            <label className="w-1/3 py-2 text-center text-sm text-gray-700">
+              Entries per page
+            </label>
+            <div className="w-1/3">
+              <Select
+                value={limit.toString()}
+                disabled={isBatchesListLoading}
+                onValueChange={async (value) => {
+                  await setLimit(parseInt(value));
+                }}
+              >
+                <SelectTrigger className="w-auto ">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectGroup>
+                    <SelectItem value={'10'}>10</SelectItem>
+                    <SelectItem value={'25'}>25</SelectItem>
+                    <SelectItem value={'50'}>50</SelectItem>
+                    <SelectItem value={'100'}>100</SelectItem>
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+          <Pagination
+            onPageChange={setPage}
+            pageSize={batchesList?.limit || 0}
+            totalRecords={batchesList?.total || 0}
+          />
+        </section>
+        <DeleteConfirmationModal
+          open={showDeleteConfirmationModal}
+          description={`Are you sure you want to delete "${selectedBatch?.name}"`}
+          onDeleteClick={async () => {
+            if (selectedBatch) {
+              setShowDeleteConfirmationModal(false);
+              await deleteBatchAsync(selectedBatch.id);
+            }
+          }}
+          onCancelClick={() => {
+            setShowDeleteConfirmationModal(false);
+          }}
+        />
+      </When>
+    </section>
+  );
+}

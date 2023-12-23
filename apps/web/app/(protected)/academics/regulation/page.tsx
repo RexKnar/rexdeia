@@ -4,7 +4,7 @@ import React from 'react';
 
 import { authOptions } from '../../../../lib/auth';
 import { RegulationListTable } from './components/RegulationListTable';
-import { RegulationShareFlyout } from './components/RegulationShareFlyout';
+import { SaveRegulationFlyout } from './components/SaveRegulationFlyout';
 import { RegulationsOverviewContainer } from './components/RegulationsOverviewContainer';
 import { RegulationsPageHeader } from './components/RegulationsPageHeader';
 
@@ -28,7 +28,7 @@ export default async function Page() {
       <section className="space-y-2 rounded-md bg-white p-4">
         <RegulationListTable />
       </section>
-      <RegulationShareFlyout />
+      <SaveRegulationFlyout />
     </section>
   );
 }

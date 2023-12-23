@@ -26,8 +26,8 @@ export async function getBatchById(id: string) {
   return db.batch.findFirst({
     where: {
       id: id,
-      branchId: session.branchId,
       isActive: true,
+      branchId: session.branchId,
     },
   });
 }
