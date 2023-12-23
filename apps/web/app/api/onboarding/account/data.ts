@@ -17,9 +17,15 @@ export const admissionForm = {
           isReadOnly: true,
           placeholder: 'Enter your first name',
           validationRules: {
-            required: true,
-            minLength: 1,
-            maxLength: 999,
+            required: { value: true, message: 'First Name is required' },
+            minLength: {
+              value: 1,
+              message: 'First Name must be at least 1 character',
+            },
+            maxLength: {
+              value: 999,
+              message: 'First Name must be less than 999 characters',
+            },
           },
         },
         {
@@ -32,9 +38,15 @@ export const admissionForm = {
           isReadOnly: true,
           placeholder: 'Enter your middle name',
           validationRules: {
-            required: false,
-            minLength: 1,
-            maxLength: 999,
+            required: { value: false },
+            minLength: {
+              value: 1,
+              message: 'First Name must be at least 1 character',
+            },
+            maxLength: {
+              value: 999,
+              message: 'First Name must be less than 999 characters',
+            },
           },
         },
         {
@@ -47,9 +59,15 @@ export const admissionForm = {
           isReadOnly: true,
           placeholder: 'Enter your last name',
           validationRules: {
-            required: true,
-            minLength: 1,
-            maxLength: 999,
+            required: { value: true, message: 'Last Name is required' },
+            minLength: {
+              value: 1,
+              message: 'First Name must be at least 1 character',
+            },
+            maxLength: {
+              value: 999,
+              message: 'First Name must be less than 999 characters',
+            },
           },
         },
         {
@@ -62,7 +80,7 @@ export const admissionForm = {
           isReadOnly: true,
           placeholder: 'Select your DOB',
           validationRules: {
-            required: true,
+            required: { value: true, message: 'Date of Birth is required' },
           },
         },
         {
@@ -75,7 +93,7 @@ export const admissionForm = {
           isReadOnly: true,
           placeholder: 'Enter your phone number',
           validationRules: {
-            required: true,
+            required: { value: true, message: 'Phone Number is required' },
           },
         },
         {
@@ -87,7 +105,7 @@ export const admissionForm = {
           visible: true,
           placeholder: 'Enter your mobile number',
           validationRules: {
-            required: true,
+            required: { value: true, message: 'Mobile Number is required' },
           },
         },
         {
@@ -100,8 +118,11 @@ export const admissionForm = {
           isReadOnly: true,
           placeholder: 'Enter your email',
           validationRules: {
-            required: true,
-            email: true,
+            required: { value: true, message: 'Email is required' },
+            pattern: {
+              value: /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/,
+              message: 'Invalid email format',
+            },
           },
         },
         {
@@ -123,7 +144,10 @@ export const admissionForm = {
             },
           ],
           validationRules: {
-            required: true,
+            required: {
+              value: true,
+              message: 'Gender is required',
+            },
           },
         },
 
@@ -137,7 +161,10 @@ export const admissionForm = {
           isReadOnly: true,
           placeholder: 'Enter your aadhar card number',
           validationRules: {
-            required: true,
+            required: {
+              value: true,
+              message: 'Aadhar Card Number is required',
+            },
           },
         },
         {
@@ -150,7 +177,10 @@ export const admissionForm = {
           isReadOnly: true,
           placeholder: 'Enter your mother tongue',
           validationRules: {
-            required: true,
+            required: {
+              value: true,
+              message: 'Mother Tongue is required',
+            },
           },
         },
         {
@@ -163,7 +193,10 @@ export const admissionForm = {
           isReadOnly: true,
           placeholder: 'Enter your blood group',
           validationRules: {
-            required: true,
+            required: {
+              value: true,
+              message: 'Blood Group is required',
+            },
           },
         },
         {
@@ -176,7 +209,10 @@ export const admissionForm = {
           isReadOnly: true,
           placeholder: 'Enter your religion',
           validationRules: {
-            required: true,
+            required: {
+              value: true,
+              message: 'Religion is required',
+            },
           },
         },
         {
@@ -188,7 +224,10 @@ export const admissionForm = {
           visible: true,
           placeholder: 'Enter your community',
           validationRules: {
-            required: true,
+            required: {
+              value: true,
+              message: 'Community is required',
+            },
           },
         },
         {
@@ -200,7 +239,10 @@ export const admissionForm = {
           visible: true,
           placeholder: 'Enter your caste',
           validationRules: {
-            required: true,
+            required: {
+              value: true,
+              message: 'Caste is required',
+            },
           },
         },
         {
@@ -221,7 +263,10 @@ export const admissionForm = {
             },
           ],
           validationRules: {
-            required: true,
+            required: {
+              value: true,
+              message: 'Marital Status is required',
+            },
           },
         },
       ],
@@ -240,7 +285,10 @@ export const admissionForm = {
           isReadOnly: true,
           placeholder: 'Enter your father name',
           validationRules: {
-            required: true,
+            required: {
+              value: true,
+              message: "Father's Name is required",
+            },
           },
         },
         {
@@ -253,7 +301,10 @@ export const admissionForm = {
           isReadOnly: true,
           placeholder: 'Enter your father occupation',
           validationRules: {
-            required: true,
+            required: {
+              value: true,
+              message: "Father's Occupation is required",
+            },
           },
         },
         {
@@ -266,7 +317,10 @@ export const admissionForm = {
           isReadOnly: true,
           placeholder: 'Enter your mother name',
           validationRules: {
-            required: true,
+            required: {
+              value: true,
+              message: "Mother's Name is required",
+            },
           },
         },
         {
@@ -279,7 +333,10 @@ export const admissionForm = {
           isReadOnly: true,
           placeholder: 'Enter your mother occupation',
           validationRules: {
-            required: true,
+            required: {
+              value: true,
+              message: "Mother's Occupation is required",
+            },
           },
         },
         {
@@ -291,13 +348,16 @@ export const admissionForm = {
           visible: true,
           placeholder: 'Enter annual income',
           validationRules: {
-            required: true,
+            required: {
+              value: true,
+              message: 'Annual Income is required',
+            },
           },
         },
         {
           id: '6',
           type: 'radio',
-          label: 'Parents Seperated',
+          label: 'Parents Separated',
           name: 'parentsSeparated',
           value: '',
           visible: true,
@@ -312,7 +372,10 @@ export const admissionForm = {
             },
           ],
           validationRules: {
-            required: true,
+            required: {
+              value: true,
+              message: 'Parents Separated is required',
+            },
           },
         },
         {
@@ -333,7 +396,10 @@ export const admissionForm = {
             },
           ],
           validationRules: {
-            required: true,
+            required: {
+              value: true,
+              message: 'No of Siblings is required',
+            },
           },
         },
       ],
@@ -352,9 +418,10 @@ export const admissionForm = {
           visible: true,
           placeholder: 'Enter your sibling name',
           validationRules: {
-            required: true,
-            minLength: 1,
-            maxLength: 100,
+            required: {
+              value: true,
+              message: 'Sibling Name is required',
+            },
           },
         },
         {
@@ -366,9 +433,10 @@ export const admissionForm = {
           visible: true,
           placeholder: 'Enter your sibling name',
           validationRules: {
-            required: true,
-            minLength: 1,
-            maxLength: 100,
+            required: {
+              value: true,
+              message: 'Sibling Name is required',
+            },
           },
         },
         {
@@ -378,11 +446,12 @@ export const admissionForm = {
           name: 'siblingClass1',
           value: '',
           visible: true,
-          placeholder: 'Enter your sibling name',
+          placeholder: 'Enter your sibling class',
           validationRules: {
-            required: true,
-            minLength: 1,
-            maxLength: 100,
+            required: {
+              value: true,
+              message: 'Sibling Class is required',
+            },
           },
         },
         {
@@ -394,9 +463,10 @@ export const admissionForm = {
           visible: true,
           placeholder: 'Enter your sibling name',
           validationRules: {
-            required: true,
-            minLength: 1,
-            maxLength: 100,
+            required: {
+              value: true,
+              message: 'Sibling Class is required',
+            },
           },
         },
         {
@@ -417,7 +487,10 @@ export const admissionForm = {
             },
           ],
           validationRules: {
-            required: true,
+            required: {
+              value: true,
+              message: 'Sibling Relation is required',
+            },
           },
         },
         {
@@ -438,7 +511,10 @@ export const admissionForm = {
             },
           ],
           validationRules: {
-            required: true,
+            required: {
+              value: true,
+              message: 'Sibling Relation is required',
+            },
           },
         },
       ],
@@ -456,7 +532,10 @@ export const admissionForm = {
           visible: true,
           placeholder: 'Enter your guardian name',
           validationRules: {
-            required: true,
+            required: {
+              value: true,
+              message: "Guardian's Name is required",
+            },
           },
         },
         {
@@ -468,7 +547,10 @@ export const admissionForm = {
           visible: true,
           placeholder: 'Enter guardian oocupation',
           validationRules: {
-            required: true,
+            required: {
+              value: true,
+              message: "Guardian's Occupation is required",
+            },
           },
         },
         {
@@ -480,7 +562,10 @@ export const admissionForm = {
           visible: true,
           placeholder: 'Enter relationship type',
           validationRules: {
-            required: true,
+            required: {
+              value: true,
+              message: 'Relationship Type is required',
+            },
           },
         },
         {
@@ -492,7 +577,10 @@ export const admissionForm = {
           visible: true,
           placeholder: 'Enter guardian phone number',
           validationRules: {
-            required: true,
+            required: {
+              value: true,
+              message: "Guardian's Phone Number is required",
+            },
           },
         },
       ],
@@ -510,7 +598,10 @@ export const admissionForm = {
           visible: true,
           placeholder: 'Enter residential address',
           validationRules: {
-            required: true,
+            required: {
+              value: true,
+              message: 'Residential Address is required',
+            },
           },
         },
         {
@@ -522,7 +613,10 @@ export const admissionForm = {
           visible: true,
           placeholder: 'Enter district',
           validationRules: {
-            required: true,
+            required: {
+              value: true,
+              message: 'District is required',
+            },
           },
         },
         {
@@ -534,7 +628,10 @@ export const admissionForm = {
           visible: true,
           placeholder: 'Enter state',
           validationRules: {
-            required: true,
+            required: {
+              value: true,
+              message: 'State is required',
+            },
           },
         },
         {
@@ -546,7 +643,10 @@ export const admissionForm = {
           visible: true,
           placeholder: 'Enter postal code',
           validationRules: {
-            required: true,
+            required: {
+              value: true,
+              message: 'Postal / ZIP Code is required',
+            },
           },
         },
         {
@@ -558,7 +658,10 @@ export const admissionForm = {
           visible: true,
           placeholder: 'Enter permonent address',
           validationRules: {
-            required: true,
+            required: {
+              value: true,
+              message: 'Permanent Address is required',
+            },
           },
         },
         {
@@ -570,7 +673,10 @@ export const admissionForm = {
           visible: true,
           placeholder: 'Enter district',
           validationRules: {
-            required: true,
+            required: {
+              value: true,
+              message: 'District is required',
+            },
           },
         },
         {
@@ -582,7 +688,10 @@ export const admissionForm = {
           visible: true,
           placeholder: 'Enter state',
           validationRules: {
-            required: true,
+            required: {
+              value: true,
+              message: 'State is required',
+            },
           },
         },
         {
@@ -594,7 +703,10 @@ export const admissionForm = {
           visible: true,
           placeholder: 'Enter postal code',
           validationRules: {
-            required: true,
+            required: {
+              value: true,
+              message: 'Postal / ZIP Code is required',
+            },
           },
         },
         {
@@ -607,7 +719,10 @@ export const admissionForm = {
           isReadOnly: true,
           placeholder: 'Enter nationality',
           validationRules: {
-            required: true,
+            required: {
+              value: true,
+              message: 'Nationality is required',
+            },
           },
         },
       ],
@@ -625,7 +740,10 @@ export const admissionForm = {
           visible: true,
           placeholder: 'Enter your school name',
           validationRules: {
-            required: true,
+            required: {
+              value: true,
+              message: 'School Name is required',
+            },
           },
         },
         {
@@ -637,7 +755,10 @@ export const admissionForm = {
           visible: true,
           placeholder: 'Enter year of passing',
           validationRules: {
-            required: true,
+            required: {
+              value: true,
+              message: 'Year of Passing is required',
+            },
           },
         },
         {
@@ -649,7 +770,10 @@ export const admissionForm = {
           visible: true,
           placeholder: 'Enter your mark',
           validationRules: {
-            required: true,
+            required: {
+              value: true,
+              message: 'Obtained Mark is required',
+            },
           },
         },
         {
@@ -661,7 +785,10 @@ export const admissionForm = {
           visible: true,
           placeholder: 'Enter year medium of education',
           validationRules: {
-            required: true,
+            required: {
+              value: true,
+              message: 'Medium of Education is required',
+            },
           },
         },
         {
@@ -673,7 +800,10 @@ export const admissionForm = {
           visible: true,
           placeholder: 'Enter your school name',
           validationRules: {
-            required: true,
+            required: {
+              value: true,
+              message: 'School Name is required',
+            },
           },
         },
         {
@@ -685,7 +815,10 @@ export const admissionForm = {
           visible: true,
           placeholder: 'Enter year of passing',
           validationRules: {
-            required: true,
+            required: {
+              value: true,
+              message: 'Year of Passing is required',
+            },
           },
         },
         {
@@ -697,7 +830,10 @@ export const admissionForm = {
           visible: true,
           placeholder: 'Enter your mark',
           validationRules: {
-            required: true,
+            required: {
+              value: true,
+              message: 'Obtained Mark is required',
+            },
           },
         },
         {
@@ -709,7 +845,10 @@ export const admissionForm = {
           visible: true,
           placeholder: 'Enter year medium of education',
           validationRules: {
-            required: true,
+            required: {
+              value: true,
+              message: 'Medium of Education is required',
+            },
           },
         },
       ],
@@ -736,7 +875,10 @@ export const admissionForm = {
             },
           ],
           validationRules: {
-            required: true,
+            required: {
+              value: true,
+              message: 'Deapartment is required',
+            },
           },
         },
         {
@@ -757,7 +899,10 @@ export const admissionForm = {
             },
           ],
           validationRules: {
-            required: true,
+            required: {
+              value: true,
+              message: 'Deapartment is required',
+            },
           },
         },
         {
@@ -778,7 +923,10 @@ export const admissionForm = {
             },
           ],
           validationRules: {
-            required: true,
+            required: {
+              value: true,
+              message: 'Admission Type is required',
+            },
           },
         },
         {
@@ -799,7 +947,10 @@ export const admissionForm = {
             },
           ],
           validationRules: {
-            required: true,
+            required: {
+              value: true,
+              message: 'Admission Mode is required',
+            },
           },
         },
         {
@@ -820,7 +971,10 @@ export const admissionForm = {
             },
           ],
           validationRules: {
-            required: true,
+            required: {
+              value: true,
+              message: 'Scholarship is required',
+            },
           },
         },
         {
@@ -832,7 +986,10 @@ export const admissionForm = {
           visible: true,
           placeholder: 'Enter your first language',
           validationRules: {
-            required: true,
+            required: {
+              value: true,
+              message: 'First Language is required',
+            },
           },
         },
       ],

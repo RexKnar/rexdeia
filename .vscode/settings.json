@@ -1,5 +1,12 @@
 {
-  "cSpell.words": ["acadx", "enquiry", "nextjs", "tanstack"],
+  "cSpell.words": [
+    "acadx",
+    "enquiry",
+    "lucide",
+    "nextjs",
+    "tanstack",
+    "usequerystate"
+  ],
   "editor.tabSize": 2,
   "editor.formatOnSave": true,
   "editor.formatOnPaste": true,

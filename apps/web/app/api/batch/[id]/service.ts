@@ -9,7 +9,7 @@ import {
 
 export async function deleteBatchById(id: string) {
   const session = await getServerSession(authOptions);
-  return await db.batch.update({
+  return db.batch.update({
     where: {
       id: id,
       branchId: session.branchId,
@@ -23,7 +23,7 @@ export async function deleteBatchById(id: string) {
 
 export async function getBatchById(id: string) {
   const session = await getServerSession(authOptions);
-  return await db.batch.findFirst({
+  return db.batch.findFirst({
     where: {
       id: id,
       branchId: session.branchId,
@@ -65,7 +65,7 @@ export async function updateBatchById(
   updateBatch: UpdateBatchModel
 ) {
   const session = await getServerSession(authOptions);
-  return await db.batch.update({
+  return db.batch.update({
     where: {
       id: id,
     },
@@ -86,7 +86,7 @@ export async function updateBatchById(
 
 export async function addBatch(createBatch: CreateBatchModel) {
   const session = await getServerSession(authOptions);
-  return await db.batch.create({
+  return db.batch.create({
     data: {
       name: createBatch.name,
       description: createBatch.description,
@@ -107,7 +107,7 @@ export async function addStudentsToBatch(
   studentIds: string[]
 ) {
   const session = await getServerSession(authOptions);
-  return await db.batch.update({
+  return db.batch.update({
     where: {
       id: batchId,
       branchId: session.branchId,
@@ -122,7 +122,7 @@ export async function addStudentsToBatch(
 
 export async function addClassesToBatch(batchId: string, classIds: string[]) {
   const session = await getServerSession(authOptions);
-  return await db.batch.update({
+  return db.batch.update({
     where: {
       id: batchId,
       branchId: session.branchId,

@@ -1,4 +1,4 @@
-import { AddStudentForm } from '../../../../../lib/components/student/AddStudentForm';
+import { AddStudentForm } from './AddStudentForm';
 import { getFormByCriteria } from '../../../../api/forms/service';
 
 type AddStudentPageProps = {

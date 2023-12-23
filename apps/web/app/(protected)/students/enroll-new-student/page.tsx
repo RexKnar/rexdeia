@@ -9,7 +9,7 @@ export default async function Page() {
   const session = await getServerSession(authOptions);
 
   if (!session.branchId || !session.organizationId) {
-    return redirect('/signin?callbackUrl=/students/add');
+    return redirect('/signin?callbackUrl=/students/enroll-new-student');
   }
 
   return (
