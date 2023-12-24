@@ -129,7 +129,7 @@ export function RegulationListTable() {
         description: 'Error while deleting regulation',
       });
     }
-  }, []);
+  }, [isDeleteRegulationError, toast]);
 
   useEffect(() => {
     if (isDeleteRegulationSuccess) {
@@ -140,7 +140,7 @@ export function RegulationListTable() {
       });
       setSelectedRegulation(null);
     }
-  }, [isDeleteRegulationSuccess]);
+  }, [isDeleteRegulationSuccess, toast]);
 
   const handleOnPageChange = useCallback(
     (page: number) => {

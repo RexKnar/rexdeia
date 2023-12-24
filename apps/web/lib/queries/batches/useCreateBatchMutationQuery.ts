@@ -2,9 +2,9 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import { makeAPICall } from '../../api';
 import { PaginatedResponse } from '../../domain';
+import { BatchModel, CreateBatchModel } from '../../domain/batch';
 import { RegulationModel } from '../../domain/regulation';
 import { CREATE_BATCH, GET_BATCHES_LIST } from '../../endpoints';
-import { BatchModel, CreateBatchModel } from '../../domain/batch';
 
 export function useCreateBatchMutationQuery(page: number, limit: number) {
   const queryClient = useQueryClient();

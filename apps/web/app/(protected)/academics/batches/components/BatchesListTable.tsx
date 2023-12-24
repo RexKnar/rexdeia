@@ -9,7 +9,13 @@ import {
   getSortedRowModel,
   useReactTable,
 } from '@tanstack/react-table';
-import { Eye, Loader2, Pencil, Trash2 } from 'lucide-react';
+import { Loader2, Pencil, Trash2 } from 'lucide-react';
+import {
+  parseAsBoolean,
+  parseAsInteger,
+  parseAsString,
+  useQueryState,
+} from 'next-usequerystate';
 import React, { useEffect, useState } from 'react';
 import { When } from 'react-if';
 import {
@@ -37,14 +43,8 @@ import {
 
 import { DeleteConfirmationModal } from '../../../../../lib/components/modals/DeleteConfirmationModal';
 import { BatchModel } from '../../../../../lib/domain/batch';
-import {
-  parseAsBoolean,
-  parseAsInteger,
-  parseAsString,
-  useQueryState,
-} from 'next-usequerystate';
-import { useGetBatchesListQuery } from '../../../../../lib/queries/batches/useGetBatchesListQuery';
 import { useDeleteBatchMutationQuery } from '../../../../../lib/queries/batches/useDeleteBatchMutationQuery';
+import { useGetBatchesListQuery } from '../../../../../lib/queries/batches/useGetBatchesListQuery';
 
 const columns: ColumnDef<BatchModel>[] = [
   {
@@ -143,7 +143,7 @@ export function BatchesListTable() {
     parseAsBoolean.withDefault(false)
   );
 
-  const [batchId, setBatchId] = useQueryState(
+  const [, setBatchId] = useQueryState(
     'batchId',
     parseAsString.withDefault('')
   );
@@ -168,7 +168,7 @@ export function BatchesListTable() {
         description: 'Error while deleting batch',
       });
     }
-  }, []);
+  }, [isDeleteBatchError, toast]);
 
   useEffect(() => {
     if (isDeleteSuccess) {
@@ -179,7 +179,7 @@ export function BatchesListTable() {
       });
       setSelectedBatch(null);
     }
-  }, [isDeleteSuccess]);
+  }, [isDeleteSuccess, toast]);
 
   const table = useReactTable({
     columns,

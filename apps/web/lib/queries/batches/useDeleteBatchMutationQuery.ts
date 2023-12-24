@@ -2,8 +2,8 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import { makeAPICall } from '../../api';
 import { PaginatedResponse } from '../../domain';
-import { DELETE_BATCH_BY_ID, GET_BATCHES_LIST } from '../../endpoints';
 import { BatchModel } from '../../domain/batch';
+import { DELETE_BATCH_BY_ID, GET_BATCHES_LIST } from '../../endpoints';
 
 export function useDeleteBatchMutationQuery(page: number, limit: number) {
   const queryClient = useQueryClient();

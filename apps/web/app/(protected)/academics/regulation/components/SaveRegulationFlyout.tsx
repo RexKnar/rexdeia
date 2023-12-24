@@ -2,6 +2,12 @@
 
 import format from 'date-fns/format';
 import { CalendarIcon, Loader2, PlusCircle } from 'lucide-react';
+import {
+  parseAsBoolean,
+  parseAsInteger,
+  parseAsString,
+  useQueryState,
+} from 'next-usequerystate';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import {
@@ -22,12 +28,6 @@ import { cn } from 'utils';
 
 import { CreateRegulationModel } from '../../../../../lib/domain/regulation';
 import { useCreateRegulationsMutationQuery } from '../../../../../lib/queries/regulations/useCreateRegulationsMutationQuery';
-import {
-  parseAsBoolean,
-  parseAsInteger,
-  parseAsString,
-  useQueryState,
-} from 'next-usequerystate';
 
 export function SaveRegulationFlyout() {
   const {
@@ -54,11 +54,8 @@ export function SaveRegulationFlyout() {
     parseAsString
   );
 
-  const [page, setPage] = useQueryState('page', parseAsInteger.withDefault(1));
-  const [limit, setLimit] = useQueryState(
-    'limit',
-    parseAsInteger.withDefault(10)
-  );
+  const [page] = useQueryState('page', parseAsInteger.withDefault(1));
+  const [limit] = useQueryState('limit', parseAsInteger.withDefault(10));
 
   const {
     isPending: isPendingCreateRegulations,

@@ -3,8 +3,8 @@ import { useQuery } from '@tanstack/react-query';
 
 import { makeAPICall } from '../../api';
 import { PaginatedResponse } from '../../domain';
-import { GET_BATCHES_LIST } from '../../endpoints';
 import { BatchModel } from '../../domain/batch';
+import { GET_BATCHES_LIST } from '../../endpoints';
 
 function getBatchesList(
   { page, limit }: { page: number; limit: number },

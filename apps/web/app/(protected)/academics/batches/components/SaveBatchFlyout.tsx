@@ -1,14 +1,14 @@
 'use client';
 
-import { useForm } from 'react-hook-form';
+import { Loader2, PlusCircle } from 'lucide-react';
 import {
   parseAsBoolean,
   parseAsInteger,
   parseAsString,
   useQueryState,
 } from 'next-usequerystate';
-import { useCreateBatchMutationQuery } from '../../../../../lib/queries/batches/useCreateBatchMutationQuery';
-import { CreateBatchModel } from '../../../../../lib/domain/batch';
+import { useState } from 'react';
+import { useForm } from 'react-hook-form';
 import {
   Button,
   DateSelector,
@@ -20,8 +20,10 @@ import {
   Switch,
   Text,
 } from 'ui';
-import { Loader2, PlusCircle } from 'lucide-react';
-import { useState } from 'react';
+
+import { CreateBatchModel } from '../../../../../lib/domain/batch';
+import { useCreateBatchMutationQuery } from '../../../../../lib/queries/batches/useCreateBatchMutationQuery';
+
 export function SaveBatchFlyout() {
   const {
     register,
@@ -49,11 +51,8 @@ export function SaveBatchFlyout() {
   );
   const [batchId, setBatchId] = useQueryState('batchId', parseAsString);
 
-  const [page, setPage] = useQueryState('page', parseAsInteger.withDefault(1));
-  const [limit, setLimit] = useQueryState(
-    'limit',
-    parseAsInteger.withDefault(10)
-  );
+  const [page] = useQueryState('page', parseAsInteger.withDefault(1));
+  const [limit] = useQueryState('limit', parseAsInteger.withDefault(10));
 
   const {
     isPending: isPendingCreateBatches,

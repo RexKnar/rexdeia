@@ -4,9 +4,9 @@ import React from 'react';
 
 import { authOptions } from '../../../../lib/auth';
 import { RegulationListTable } from './components/RegulationListTable';
-import { SaveRegulationFlyout } from './components/SaveRegulationFlyout';
 import { RegulationsOverviewContainer } from './components/RegulationsOverviewContainer';
 import { RegulationsPageHeader } from './components/RegulationsPageHeader';
+import { SaveRegulationFlyout } from './components/SaveRegulationFlyout';
 
 export default async function Page() {
   const session = await getServerSession(authOptions);

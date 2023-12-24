@@ -1,9 +1,10 @@
 'use client';
 
 import { parseAsBoolean, useQueryState } from 'next-usequerystate';
-import { PageTitle } from '../../../../../lib/components/PageTitle';
-import { Button } from 'ui';
 import React from 'react';
+import { Button } from 'ui';
+
+import { PageTitle } from '../../../../../lib/components/PageTitle';
 
 export function BatchesPageHeader() {
   const [, setIsFlyoutOpen] = useQueryState(

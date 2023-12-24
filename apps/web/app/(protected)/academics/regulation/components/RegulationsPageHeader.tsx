@@ -1,10 +1,10 @@
 'use client';
 
+import { parseAsBoolean, useQueryState } from 'next-usequerystate';
 import React from 'react';
 import { Button } from 'ui';
 
 import { PageTitle } from '../../../../../lib/components/PageTitle';
-import { parseAsBoolean, useQueryState } from 'next-usequerystate';
 
 export function RegulationsPageHeader() {
   const [, setIsFlyoutOpen] = useQueryState(
