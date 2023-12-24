@@ -15,7 +15,7 @@ export async function deleteBatchById(id: string) {
       branchId: session.branchId,
     },
     data: {
-      isActive: false,
+      isDeleted: true,
       updatedAt: new Date(),
     },
   });
@@ -26,13 +26,13 @@ export async function getBatchById(id: string) {
   return db.batch.findFirst({
     where: {
       id: id,
-      isActive: true,
+      isDeleted: false,
       branchId: session.branchId,
     },
   });
 }
 
-export async function getAllBatches(page: number, pageSize: number) {
+export async function getAllBatches(page: number, limit: number) {
   const session = await getServerSession(authOptions);
 
   const [total, batchList] = await Promise.all([
@@ -43,19 +43,19 @@ export async function getAllBatches(page: number, pageSize: number) {
       },
     }),
     db.batch.findMany({
-      take: pageSize,
-      skip: (page - 1) * pageSize,
+      take: limit,
+      skip: (page - 1) * limit,
       where: {
-        isActive: true,
+        isDeleted: false,
         branchId: session.branchId,
       },
     }),
   ]);
 
   return {
-    total,
     page,
-    pageSize,
+    total,
+    limit,
     data: batchList,
   };
 }
@@ -89,10 +89,10 @@ export async function addBatch(createBatch: CreateBatchModel) {
   return db.batch.create({
     data: {
       name: createBatch.name,
-      description: createBatch.description,
+      endYear: createBatch.endYear,
       isActive: createBatch.isActive,
       startYear: createBatch.startYear,
-      endYear: createBatch.endYear,
+      description: createBatch.description,
       branch: {
         connect: {
           id: session.branchId,

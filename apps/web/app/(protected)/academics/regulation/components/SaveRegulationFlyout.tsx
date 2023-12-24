@@ -29,7 +29,7 @@ import {
   useQueryState,
 } from 'next-usequerystate';
 
-function SaveRegulationFlyout() {
+export function SaveRegulationFlyout() {
   const {
     register,
     handleSubmit,
@@ -234,5 +234,3 @@ function SaveRegulationFlyout() {
     </section>
   );
 }
-
-export { SaveRegulationFlyout };

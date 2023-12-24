@@ -4,6 +4,7 @@ import { redirect } from 'next/navigation';
 import React from 'react';
 import { BatchesPageHeader } from './components/BatchesPageHeader';
 import { BatchesListTable } from './components/BatchesListTable';
+import { SaveBatchFlyout } from './components/SaveBatchFlyout';
 
 export default async function Page() {
   const session = await getServerSession(authOptions);
@@ -16,6 +17,7 @@ export default async function Page() {
       <BatchesPageHeader />
       <section className="space-y-2 rounded-md bg-white p-4">
         <BatchesListTable />
+        <SaveBatchFlyout />
       </section>
     </section>
   );

@@ -240,27 +240,6 @@ export function BatchesListTable() {
                     <Tooltip>
                       <TooltipTrigger asChild>
                         <Button
-                          title="View"
-                          className="mr-2 h-auto p-0"
-                          variant="destructive"
-                          disabled={row.original.isNewlyAdded}
-                        >
-                          <Eye
-                            size={16}
-                            className="mr-2 text-center text-primary"
-                          />
-                        </Button>
-                      </TooltipTrigger>
-                      <TooltipContent>
-                        <p>
-                          <span>View</span>
-                          <span className="mx-1 font-semibold">{`${row.original.name}`}</span>
-                        </p>
-                      </TooltipContent>
-                    </Tooltip>
-                    <Tooltip>
-                      <TooltipTrigger asChild>
-                        <Button
                           onClick={async () => {
                             await setIsFlyoutOpen(true);
                             await setBatchId(row.original.id);

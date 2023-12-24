@@ -325,6 +325,7 @@ model Batch {
   startYear   String
   endYear     String
   isActive    Boolean
+  isDeleted   Boolean   @default(false)
   class       Class[]
   branch      Branch    @relation(fields: [branchId], references: [id])
   branchId    String    @db.ObjectId

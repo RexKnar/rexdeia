@@ -13,13 +13,7 @@ export type BatchModel = {
 
 export type CreateBatchModel = Pick<
   BatchModel,
-  | 'name'
-  | 'isActive'
-  | 'description'
-  | 'startYear'
-  | 'endYear'
-  | 'classes'
-  | 'students'
+  'name' | 'isActive' | 'description' | 'startYear' | 'endYear'
 >;
 
 export type UpdateBatchModel = Pick<

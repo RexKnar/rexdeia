@@ -29,6 +29,7 @@ export const GET_REGULATION_LIST = `GET_REGULATION_LIST`;
 export const GET_REGULATION_BY_ID = `GET_REGULATION_BY_ID`;
 export const UPDATE_REGULATION_BY_ID = `UPDATE_REGULATION_BY_ID`;
 export const GET_BATCHES_LIST = `GET_BATCHES_LIST`;
+export const CREATE_BATCH = `CREATE_BATCH`;
 export const GET_BATCH_BY_ID = `GET_BATCH_BY_ID`;
 export const UPDATE_BATCH_BY_ID = `UPDATE_BATCH_BY_ID`;
 export const DELETE_BATCH_BY_ID = `DELETE_BATCH_BY_ID`;
@@ -148,6 +149,10 @@ export default <EndpointDetails>{
   },
   [GET_BATCHES_LIST]: {
     requestType: `GET`,
+    endpoint: `/api/batch`,
+  },
+  [CREATE_BATCH]: {
+    requestType: `POST`,
     endpoint: `/api/batch`,
   },
   [DELETE_BATCH_BY_ID]: {
