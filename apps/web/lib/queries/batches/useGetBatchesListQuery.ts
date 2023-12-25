@@ -1,4 +1,4 @@
-import type { UseQueryOptions, UseQueryResult } from '@tanstack/react-query';
+import type { UseQueryOptions } from '@tanstack/react-query';
 import { useQuery } from '@tanstack/react-query';
 
 import { makeAPICall } from '../../api';
@@ -30,6 +30,13 @@ function getBatchesList(
 export function useGetBatchesListQuery(
   { page, limit }: { page: number; limit: number },
   options?: UseQueryOptions<PaginatedResponse<BatchModel>>
-): UseQueryResult<PaginatedResponse<BatchModel>> {
-  return useQuery(getBatchesList({ page, limit }, options));
+) {
+  const response = useQuery(getBatchesList({ page, limit }, options));
+
+  const batches = response.data?.data.flatMap((batch) => batch) ?? [];
+
+  return {
+    ...response,
+    batches: batches,
+  };
 }

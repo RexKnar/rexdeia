@@ -21,10 +21,10 @@ import {
   Text,
 } from 'ui';
 
-import { CreateBatchModel } from '../../../../../lib/domain/batch';
-import { useCreateBatchMutationQuery } from '../../../../../lib/queries/batches/useCreateBatchMutationQuery';
-import { useGetBatchByIdQuery } from '../../../../../lib/queries/batches/useGetBatchByIdQuery';
-import { useUpdateBatchMutationQuery } from '../../../../../lib/queries/batches/useUpdateBatchMutationQuery';
+import { CreateBatchModel } from '../../../../../../lib/domain/batch';
+import { useCreateBatchMutationQuery } from '../../../../../../lib/queries/batches/useCreateBatchMutationQuery';
+import { useGetBatchByIdQuery } from '../../../../../../lib/queries/batches/useGetBatchByIdQuery';
+import { useUpdateBatchMutationQuery } from '../../../../../../lib/queries/batches/useUpdateBatchMutationQuery';
 
 export function SaveBatchFlyout() {
   const [endYear, setEndYear] = useState(new Date());

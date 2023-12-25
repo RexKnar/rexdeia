@@ -1,45 +1,33 @@
-'use client';
 import { Text } from 'ui';
+import React from 'react';
 
-export function StudentDetail() {
+type StudentDetailProps = {
+  formSections: any;
+};
+
+export function StudentDetail({ formSections }: StudentDetailProps) {
   return (
-    <div className="flex gap-4">
-      <div className="h-full w-1/6 shrink-0 rounded-lg bg-white p-4">
-        <div className="w-full px-2 text-center">
-          <div className="text-start">
-            <ul className="h-fit shrink-0 rounded-lg">
-              <li className="border-box group mt-3 cursor-pointer rounded-lg px-4 py-3 hover:bg-primary-100 hover:text-primary">
-                <Text className="px-2 text-sm font-semibold text-gray-800 group-hover:text-black">
-                  Personal Info
+    <section>
+      {formSections.map((section) => (
+        <section
+          key={section.sectionTitle}
+          className="mt-4 rounded-md bg-white p-6"
+        >
+          <Text variant="sm-semibold">{section.sectionTitle}</Text>
+          <div className="mt-8 flex flex-wrap gap-12">
+            {section.sectionFields.map((field) => (
+              <div key={field.name}>
+                <label className="text-sm font-semibold text-gray-700">
+                  {field.label}
+                </label>
+                <Text variant="base-regular">
+                  {field.value ? field.value : 'N/A'}
                 </Text>
-              </li>
-              <li className="border-box group mt-3 cursor-pointer rounded-lg px-4 py-3 hover:bg-primary-100 hover:text-primary">
-                <Text className="px-2 text-sm font-semibold text-gray-800 group-hover:text-black">
-                  Educational Info
-                </Text>
-              </li>
-            </ul>
+              </div>
+            ))}
           </div>
-        </div>
-      </div>
-      <div className="w-full rounded-lg bg-white p-2">
-        <div className="mt-1 p-4">
-          <div className="flex flex-wrap gap-4">
-            <div className="p-4">
-              <Text variant="sm-regular" className="gray-700">
-                First Name
-              </Text>
-              <Text variant="base-semibold">Sobin JM</Text>
-            </div>
-            <div className="p-4">
-              <Text variant="sm-regular" className="gray-700">
-                First Name
-              </Text>
-              <Text variant="base-semibold">Sobin JM</Text>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+        </section>
+      ))}
+    </section>
   );
 }

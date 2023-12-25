@@ -9,6 +9,8 @@ import { Button, Text } from 'ui';
 
 import { useCreateStudentMutation } from '../../../../../lib/queries/students/useCreateStudentMutation';
 import { formatStudentPayload } from '../../../../../lib/utils/formatters';
+import { parseAsString, useQueryState } from 'next-usequerystate';
+import { useRouter } from 'next/navigation';
 
 type AddStudentPreviewModalProps = {
   open: boolean;
@@ -25,10 +27,14 @@ export function AddStudentPreviewModal({
   formSections,
   onOpenChange,
 }: AddStudentPreviewModalProps) {
+  const router = useRouter();
+
   const {
     isPending: isCreatingStudent,
     mutateAsync: createStudentMutationAsync,
   } = useCreateStudentMutation(formId);
+
+  const [batchId] = useQueryState('batchId', parseAsString);
 
   useEffect(() => {
     formSections.forEach((section) => {
@@ -41,7 +47,15 @@ export function AddStudentPreviewModal({
 
   const handleOnSaveClick = async () => {
     const payload = formatStudentPayload(formData);
-    await createStudentMutationAsync(payload);
+    const response = await createStudentMutationAsync({
+      ...payload,
+      batchId: batchId,
+    });
+
+    debugger;
+    if (response) {
+      router.push(`/students/${response.id}`);
+    }
   };
 
   return (

@@ -5,7 +5,7 @@ import React from 'react';
 import { authOptions } from '../../../../lib/auth';
 import { BatchesListTable } from './components/BatchesListTable';
 import { BatchesPageHeader } from './components/BatchesPageHeader';
-import { SaveBatchFlyout } from './components/SaveBatchFlyout';
+import { SaveBatchFlyout } from './components/modals/SaveBatchFlyout';
 
 export default async function Page() {
   const session = await getServerSession(authOptions);
