@@ -45,6 +45,7 @@ import { DeleteConfirmationModal } from '../../../../../lib/components/modals/De
 import { BatchModel } from '../../../../../lib/domain/batch';
 import { useDeleteBatchMutationQuery } from '../../../../../lib/queries/batches/useDeleteBatchMutationQuery';
 import { useGetBatchesListQuery } from '../../../../../lib/queries/batches/useGetBatchesListQuery';
+import { usePrefetchBatch } from '../../../../../lib/queries/batches/useGetBatchByIdQuery';
 
 const columns: ColumnDef<BatchModel>[] = [
   {
@@ -154,6 +155,8 @@ export function BatchesListTable() {
     mutateAsync: deleteBatchAsync,
   } = useDeleteBatchMutationQuery(page, limit);
 
+  const { prefetchBatchById } = usePrefetchBatch();
+
   const { data: batchesList, isLoading: isBatchesListLoading } =
     useGetBatchesListQuery({
       page,
@@ -227,6 +230,9 @@ export function BatchesListTable() {
                 <TableRow
                   key={row.id}
                   data-state={row.getIsSelected() && 'selected'}
+                  onMouseEnter={async () => {
+                    await prefetchBatchById(row.original.id);
+                  }}
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id}>
@@ -246,7 +252,9 @@ export function BatchesListTable() {
                           }}
                           className="mr-2 h-auto p-0"
                           variant="destructive"
-                          disabled={row.original.isNewlyAdded}
+                          disabled={
+                            row.original.isNewlyAdded || row.original.isUpdating
+                          }
                         >
                           <Pencil
                             size={16}
@@ -270,7 +278,9 @@ export function BatchesListTable() {
                             setSelectedBatch(row.original);
                             setShowDeleteConfirmationModal(true);
                           }}
-                          disabled={row.original.isNewlyAdded}
+                          disabled={
+                            row.original.isNewlyAdded || row.original.isUpdating
+                          }
                         >
                           {row.original.isDeleting ? (
                             <Loader2 className="mr-2 h-4 w-4 animate-spin text-red-600" />

@@ -159,4 +159,12 @@ export default <EndpointDetails>{
     requestType: `DELETE`,
     endpoint: `/api/batch/[id]`,
   },
+  [GET_BATCH_BY_ID]: {
+    requestType: `GET`,
+    endpoint: `/api/batch/[id]`,
+  },
+  [UPDATE_BATCH_BY_ID]: {
+    requestType: `PUT`,
+    endpoint: `/api/batch/[id]`,
+  },
 };

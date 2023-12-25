@@ -7,7 +7,7 @@ import {
   parseAsString,
   useQueryState,
 } from 'next-usequerystate';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import {
   Button,
@@ -23,8 +23,21 @@ import {
 
 import { CreateBatchModel } from '../../../../../lib/domain/batch';
 import { useCreateBatchMutationQuery } from '../../../../../lib/queries/batches/useCreateBatchMutationQuery';
+import { useGetBatchByIdQuery } from '../../../../../lib/queries/batches/useGetBatchByIdQuery';
+import { useUpdateBatchMutationQuery } from '../../../../../lib/queries/batches/useUpdateBatchMutationQuery';
 
 export function SaveBatchFlyout() {
+  const [endYear, setEndYear] = useState(new Date());
+  const [startYear, setStartYear] = useState(new Date());
+  const [isOpen, setIsOpen] = useQueryState(
+    'isFlyoutOpen',
+    parseAsBoolean.withDefault(false)
+  );
+  const [batchId, setBatchId] = useQueryState('batchId', parseAsString);
+
+  const [page] = useQueryState('page', parseAsInteger.withDefault(1));
+  const [limit] = useQueryState('limit', parseAsInteger.withDefault(10));
+
   const {
     register,
     handleSubmit,
@@ -43,42 +56,74 @@ export function SaveBatchFlyout() {
     },
   });
 
-  const [endYear, setEndYear] = useState(new Date());
-  const [startYear, setStartYear] = useState(new Date());
-  const [isOpen, setIsOpen] = useQueryState(
-    'isFlyoutOpen',
-    parseAsBoolean.withDefault(false)
-  );
-  const [batchId, setBatchId] = useQueryState('batchId', parseAsString);
-
-  const [page] = useQueryState('page', parseAsInteger.withDefault(1));
-  const [limit] = useQueryState('limit', parseAsInteger.withDefault(10));
+  const { data: currentBatch, isLoading } = useGetBatchByIdQuery(batchId, {
+    enabled: !!batchId,
+  });
 
   const {
     isPending: isPendingCreateBatches,
     mutateAsync: mutateCreateBatchesAsync,
   } = useCreateBatchMutationQuery(page, limit);
 
+  const {
+    isPending: isPendingUpdateBatches,
+    mutateAsync: mutateUpdateBatchesAsync,
+  } = useUpdateBatchMutationQuery(page, limit);
+
+  useEffect(() => {
+    if (currentBatch) {
+      const { name, endYear, isActive, startYear, description } = currentBatch;
+
+      setValue('name', name);
+      setValue('isActive', isActive);
+      setValue('description', description);
+      setValue('endYear', new Date(endYear));
+      setValue('startYear', new Date(startYear));
+
+      setEndYear(new Date(endYear));
+      setStartYear(new Date(startYear));
+    } else {
+      setValue('name', null);
+      setValue('endYear', null);
+      setValue('isActive', false);
+      setValue('startYear', null);
+      setValue('description', null);
+
+      setEndYear(null);
+      setStartYear(null);
+    }
+  }, [currentBatch, setValue]);
+
   const closeFlyout = async () => {
     await setIsOpen(false);
     await setBatchId(null);
   };
 
-  async function addBatch(payload: CreateBatchModel) {
+  const saveBatch = async (payload: CreateBatchModel) => {
     try {
-      const batchRequestPayload = {
-        ...payload,
-        endYear: endYear.getFullYear().toString(),
-        startYear: startYear.getFullYear().toString(),
-      };
-      mutateCreateBatchesAsync(batchRequestPayload);
+      if (batchId) {
+        const updateBatchRequestPayload = {
+          ...payload,
+          id: batchId,
+          endYear: endYear.getFullYear().toString(),
+          startYear: startYear.getFullYear().toString(),
+        };
+        mutateUpdateBatchesAsync(updateBatchRequestPayload);
+      } else {
+        const addBatchRequestPayload = {
+          ...payload,
+          endYear: endYear.getFullYear().toString(),
+          startYear: startYear.getFullYear().toString(),
+        };
+        mutateCreateBatchesAsync(addBatchRequestPayload);
+      }
     } catch (error) {
       console.error(error);
     } finally {
       reset();
       await closeFlyout();
     }
-  }
+  };
 
   return (
     <section>
@@ -89,7 +134,7 @@ export function SaveBatchFlyout() {
           className="bg-white p-10"
           onCloseClick={() => closeFlyout()}
         >
-          <form onSubmit={handleSubmit(addBatch)}>
+          <form onSubmit={handleSubmit(saveBatch)} aria-disabled={isLoading}>
             <SheetHeader>
               <SheetTitle className="mb-5">
                 <div className="sm:grid sm:grid-cols-1 sm:gap-4 md:grid md:grid-cols-1 md:gap-4 lg:flex lg:justify-between">
@@ -199,11 +244,13 @@ export function SaveBatchFlyout() {
                 <Button
                   size="lg"
                   variant="default"
-                  disabled={isPendingCreateBatches}
-                  aria-disabled={isPendingCreateBatches}
+                  disabled={isPendingCreateBatches || isPendingUpdateBatches}
+                  aria-disabled={
+                    isPendingCreateBatches || isPendingUpdateBatches
+                  }
                   className="mx-auto flex justify-center px-12 py-4"
                 >
-                  {isPendingCreateBatches ? (
+                  {isPendingCreateBatches || isPendingUpdateBatches ? (
                     <div className="flex items-center justify-center">
                       <Loader2 className="mr-2 h-6 w-6 animate-spin text-white" />
                       Saving
