@@ -56,7 +56,7 @@ export function SaveBatchFlyout() {
     },
   });
 
-  const { data: currentBatch, isLoading } = useGetBatchByIdQuery(batchId, {
+  const { data: currentBatch } = useGetBatchByIdQuery(batchId, {
     enabled: !!batchId,
   });
 
@@ -134,7 +134,7 @@ export function SaveBatchFlyout() {
           className="bg-white p-10"
           onCloseClick={() => closeFlyout()}
         >
-          <form onSubmit={handleSubmit(saveBatch)} aria-disabled={isLoading}>
+          <form onSubmit={handleSubmit(saveBatch)}>
             <SheetHeader>
               <SheetTitle className="mb-5">
                 <div className="sm:grid sm:grid-cols-1 sm:gap-4 md:grid md:grid-cols-1 md:gap-4 lg:flex lg:justify-between">

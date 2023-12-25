@@ -3,14 +3,14 @@
 // eslint-disable-next-line import/no-namespace
 import * as Dialog from '@radix-ui/react-dialog';
 import { Contact, Edit, Loader2, Save, X } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import { parseAsString, useQueryState } from 'next-usequerystate';
 import React, { useEffect } from 'react';
 import { Else, If, Then } from 'react-if';
 import { Button, Text } from 'ui';
 
 import { useCreateStudentMutation } from '../../../../../lib/queries/students/useCreateStudentMutation';
 import { formatStudentPayload } from '../../../../../lib/utils/formatters';
-import { parseAsString, useQueryState } from 'next-usequerystate';
-import { useRouter } from 'next/navigation';
 
 type AddStudentPreviewModalProps = {
   open: boolean;
@@ -52,7 +52,6 @@ export function AddStudentPreviewModal({
       batchId: batchId,
     });
 
-    debugger;
     if (response) {
       router.push(`/students/${response.id}`);
     }

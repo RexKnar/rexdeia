@@ -149,7 +149,7 @@ export function RegulationListTable() {
 
       router.push(pathname + '?' + params.toString());
     },
-    [searchParams]
+    [searchParams, pathname, router]
   );
 
   const table = useReactTable({

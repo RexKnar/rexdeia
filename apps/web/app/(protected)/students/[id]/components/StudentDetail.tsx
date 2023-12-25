@@ -1,5 +1,5 @@
-import { Text } from 'ui';
 import React from 'react';
+import { Text } from 'ui';
 
 type StudentDetailProps = {
   formSections: any;

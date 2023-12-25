@@ -1,4 +1,6 @@
 import { PencilLine, Search } from 'lucide-react';
+import { redirect } from 'next/navigation';
+import { getServerSession } from 'next-auth';
 import { Avatar, AvatarImage, Button, Input, Text } from 'ui';
 import {
   Tabs,
@@ -7,12 +9,10 @@ import {
   TabsTrigger,
 } from 'ui/components/ui/Tabs';
 
-import { PageTitle } from '../../../../lib/components/PageTitle';
-import { StudentDetail } from './components/StudentDetail';
-import { getServerSession } from 'next-auth';
 import { authOptions } from '../../../../lib/auth';
-import { redirect } from 'next/navigation';
+import { PageTitle } from '../../../../lib/components/PageTitle';
 import { getStudentById } from '../../../api/student/service';
+import { StudentDetail } from './components/StudentDetail';
 
 export default async function Page({ params }: { params: { id: string } }) {
   const session = await getServerSession(authOptions);

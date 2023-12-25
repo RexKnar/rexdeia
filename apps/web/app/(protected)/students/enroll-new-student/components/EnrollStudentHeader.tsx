@@ -1,12 +1,13 @@
 'use client';
 
-import { PageTitle } from '../../../../../lib/components/PageTitle';
+import { Check, ChevronsUpDown } from 'lucide-react';
+import { parseAsString, useQueryState } from 'next-usequerystate';
 import { useEffect, useState } from 'react';
 import { Button, Popover, PopoverContent, PopoverTrigger, Text } from 'ui';
-import { Check, ChevronsUpDown, Command } from 'lucide-react';
 import { cn } from 'utils';
+
+import { PageTitle } from '../../../../../lib/components/PageTitle';
 import { useGetBatchesListQuery } from '../../../../../lib/queries/batches/useGetBatchesListQuery';
-import { parseAsString, useQueryState } from 'next-usequerystate';
 
 export function EnrollStudentHeader() {
   const [open, setOpen] = useState(false);
@@ -16,13 +17,13 @@ export function EnrollStudentHeader() {
     limit: 999,
   });
 
+  const [batchId, setBatchId] = useQueryState('batchId', parseAsString);
+
   useEffect(() => {
     if (batches?.length) {
       setBatchId(batches[batches.length - 1].id);
     }
-  }, [batches]);
-
-  const [batchId, setBatchId] = useQueryState('batchId', parseAsString);
+  }, [batches, setBatchId]);
 
   return (
     <section className="flex justify-between">
