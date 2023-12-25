@@ -1,8 +1,9 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { BatchModel, UpdateBatchModel } from '../../domain/batch';
+
 import { makeAPICall } from '../../api';
-import { GET_BATCHES_LIST, UPDATE_BATCH_BY_ID } from '../../endpoints';
 import { PaginatedResponse } from '../../domain';
+import { BatchModel, UpdateBatchModel } from '../../domain/batch';
+import { GET_BATCHES_LIST, UPDATE_BATCH_BY_ID } from '../../endpoints';
 
 export function useUpdateBatchMutationQuery(page: number, limit: number) {
   const queryClient = useQueryClient();

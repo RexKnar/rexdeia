@@ -44,8 +44,8 @@ import {
 import { DeleteConfirmationModal } from '../../../../../lib/components/modals/DeleteConfirmationModal';
 import { BatchModel } from '../../../../../lib/domain/batch';
 import { useDeleteBatchMutationQuery } from '../../../../../lib/queries/batches/useDeleteBatchMutationQuery';
-import { useGetBatchesListQuery } from '../../../../../lib/queries/batches/useGetBatchesListQuery';
 import { usePrefetchBatch } from '../../../../../lib/queries/batches/useGetBatchByIdQuery';
+import { useGetBatchesListQuery } from '../../../../../lib/queries/batches/useGetBatchesListQuery';
 
 const columns: ColumnDef<BatchModel>[] = [
   {

@@ -3,9 +3,10 @@ import {
   useQueryClient,
   UseQueryOptions,
 } from '@tanstack/react-query';
+
+import { makeAPICall } from '../../api';
 import { BatchModel } from '../../domain/batch';
 import { GET_BATCH_BY_ID } from '../../endpoints';
-import { makeAPICall } from '../../api';
 
 function getBatchById(
   id: string,
