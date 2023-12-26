@@ -9,9 +9,14 @@ import {
   getSortedRowModel,
   useReactTable,
 } from '@tanstack/react-table';
-import { Eye, Loader2, Pencil, Trash2 } from 'lucide-react';
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import React, { useCallback, useEffect, useState } from 'react';
+import { Loader2, Pencil, Trash2 } from 'lucide-react';
+import {
+  parseAsBoolean,
+  parseAsInteger,
+  parseAsString,
+  useQueryState,
+} from 'next-usequerystate';
+import React, { useEffect, useState } from 'react';
 import { When } from 'react-if';
 import {
   Button,
@@ -37,13 +42,14 @@ import {
 } from 'ui/components/ui/Table';
 
 import { DeleteConfirmationModal } from '../../../../../lib/components/modals/DeleteConfirmationModal';
-import { RegulationModel } from '../../../../../lib/domain/regulation';
-import { useDeleteRegulationMutationQuery } from '../../../../../lib/queries/regulations/useDeleteRegulationMutationQuery';
-import { useGetRegulationListQuery } from '../../../../../lib/queries/regulations/useGetRegulationListQuery';
+import { BatchModel } from '../../../../../lib/domain/batch';
+import { useDeleteBatchMutationQuery } from '../../../../../lib/queries/batches/useDeleteBatchMutationQuery';
+import { usePrefetchBatch } from '../../../../../lib/queries/batches/useGetBatchByIdQuery';
+import { useGetBatchesListQuery } from '../../../../../lib/queries/batches/useGetBatchesListQuery';
 
-const columns: ColumnDef<RegulationModel>[] = [
+const columns: ColumnDef<BatchModel>[] = [
   {
-    accessorKey: 'regulationName',
+    accessorKey: 'name',
     header: ({ column }) => {
       return (
         <Button
@@ -51,13 +57,13 @@ const columns: ColumnDef<RegulationModel>[] = [
           className="px-0"
           onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
         >
-          Regulation Name
+          Batch Name
         </Button>
       );
     },
   },
   {
-    accessorKey: 'announcedYear',
+    accessorKey: 'description',
     header: ({ column }) => {
       return (
         <Button
@@ -65,14 +71,41 @@ const columns: ColumnDef<RegulationModel>[] = [
           className="px-0"
           onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
         >
-          Announced Year
+          Description
         </Button>
       );
     },
     cell: ({ row }) => {
-      let responseDate: string = row.getValue('announcedYear');
-      let date = new Date(responseDate);
-      return <div>{date.toDateString()}</div>;
+      let description: string = row.getValue('description');
+      return <div>{description || 'N/A'}</div>;
+    },
+  },
+  {
+    accessorKey: 'startYear',
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          className="px-0"
+          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+        >
+          Start Year
+        </Button>
+      );
+    },
+  },
+  {
+    accessorKey: 'endYear',
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          className="px-0"
+          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+        >
+          End Year
+        </Button>
+      );
     },
   },
   {
@@ -94,67 +127,66 @@ const columns: ColumnDef<RegulationModel>[] = [
   },
 ];
 
-export function RegulationListTable() {
+export function BatchesListTable() {
   const { toast } = useToast();
-
-  const pathname = usePathname();
-  const router = useRouter();
-  const searchParams = useSearchParams();
 
   const [showDeleteConfirmationModal, setShowDeleteConfirmationModal] =
     useState(false);
-  const [selectedRegulation, setSelectedRegulation] =
-    useState<RegulationModel | null>(null);
+  const [selectedBatch, setSelectedBatch] = useState<BatchModel | null>(null);
 
-  const page = parseInt(searchParams.get('page')) || 1;
-  const limit = parseInt(searchParams.get('limit')) || 10;
+  const [page, setPage] = useQueryState('page', parseAsInteger.withDefault(1));
+  const [limit, setLimit] = useQueryState(
+    'limit',
+    parseAsInteger.withDefault(10)
+  );
+  const [, setIsFlyoutOpen] = useQueryState(
+    'isFlyoutOpen',
+    parseAsBoolean.withDefault(false)
+  );
+
+  const [, setBatchId] = useQueryState(
+    'batchId',
+    parseAsString.withDefault('')
+  );
 
   const {
-    isError: isDeleteRegulationError,
-    isSuccess: isDeleteRegulationSuccess,
-    mutateAsync: deleteRegulationMutateAsync,
-  } = useDeleteRegulationMutationQuery(page, limit);
+    isError: isDeleteBatchError,
+    isSuccess: isDeleteSuccess,
+    mutateAsync: deleteBatchAsync,
+  } = useDeleteBatchMutationQuery(page, limit);
 
-  const { data: regulationListResponse, isLoading: isRegulationListLoading } =
-    useGetRegulationListQuery({
+  const { prefetchBatchById } = usePrefetchBatch();
+
+  const { data: batchesList, isLoading: isBatchesListLoading } =
+    useGetBatchesListQuery({
       page,
       limit,
     });
 
   useEffect(() => {
-    if (isDeleteRegulationError) {
+    if (isDeleteBatchError) {
       toast({
         title: 'Error',
         variant: 'destructive',
-        description: 'Error while deleting regulation',
+        description: 'Error while deleting batch',
       });
     }
-  }, [isDeleteRegulationError, toast]);
+  }, [isDeleteBatchError, toast]);
 
   useEffect(() => {
-    if (isDeleteRegulationSuccess) {
+    if (isDeleteSuccess) {
       toast({
         title: 'Success',
         variant: 'destructive',
-        description: 'Regulation deleted successfully',
+        description: 'Batch deleted successfully',
       });
-      setSelectedRegulation(null);
+      setSelectedBatch(null);
     }
-  }, [isDeleteRegulationSuccess, toast]);
-
-  const handleOnPageChange = useCallback(
-    (page: number) => {
-      const params = new URLSearchParams(searchParams);
-      params.set('page', page.toString());
-
-      router.push(pathname + '?' + params.toString());
-    },
-    [searchParams, pathname, router]
-  );
+  }, [isDeleteSuccess, toast]);
 
   const table = useReactTable({
     columns,
-    data: regulationListResponse?.data || [],
+    data: batchesList?.data || [],
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
@@ -198,6 +230,9 @@ export function RegulationListTable() {
                 <TableRow
                   key={row.id}
                   data-state={row.getIsSelected() && 'selected'}
+                  onMouseEnter={async () => {
+                    await prefetchBatchById(row.original.id);
+                  }}
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id}>
@@ -211,36 +246,15 @@ export function RegulationListTable() {
                     <Tooltip>
                       <TooltipTrigger asChild>
                         <Button
-                          title="View"
-                          className="mr-2 h-auto p-0"
-                          variant="destructive"
-                          disabled={row.original.isNewlyAdded}
-                        >
-                          <Eye
-                            size={16}
-                            className="mr-2 text-center text-primary"
-                          />
-                        </Button>
-                      </TooltipTrigger>
-                      <TooltipContent>
-                        <p>
-                          <span>View</span>
-                          <span className="mx-1 font-semibold">{`${row.original.regulationName}`}</span>
-                        </p>
-                      </TooltipContent>
-                    </Tooltip>
-                    <Tooltip>
-                      <TooltipTrigger asChild>
-                        <Button
-                          onClick={() => {
-                            const params = new URLSearchParams(searchParams);
-                            params.set('isFlyoutOpen', 'true');
-                            params.set('regulationId', row.original.id);
-                            router.push(pathname + '?' + params.toString());
+                          onClick={async () => {
+                            await setIsFlyoutOpen(true);
+                            await setBatchId(row.original.id);
                           }}
                           className="mr-2 h-auto p-0"
                           variant="destructive"
-                          disabled={row.original.isNewlyAdded}
+                          disabled={
+                            row.original.isNewlyAdded || row.original.isUpdating
+                          }
                         >
                           <Pencil
                             size={16}
@@ -251,7 +265,7 @@ export function RegulationListTable() {
                       <TooltipContent>
                         <p>
                           <span>Edit</span>
-                          <span className="mx-1 font-semibold">{`${row.original.regulationName}`}</span>
+                          <span className="mx-1 font-semibold">{`${row.original.name}`}</span>
                         </p>
                       </TooltipContent>
                     </Tooltip>
@@ -261,10 +275,12 @@ export function RegulationListTable() {
                           className="h-auto p-0"
                           variant="destructive"
                           onClick={() => {
-                            setSelectedRegulation(row.original);
+                            setSelectedBatch(row.original);
                             setShowDeleteConfirmationModal(true);
                           }}
-                          disabled={row.original.isNewlyAdded}
+                          disabled={
+                            row.original.isNewlyAdded || row.original.isUpdating
+                          }
                         >
                           {row.original.isDeleting ? (
                             <Loader2 className="mr-2 h-4 w-4 animate-spin text-red-600" />
@@ -279,7 +295,7 @@ export function RegulationListTable() {
                       <TooltipContent>
                         <p>
                           <span>Delete</span>
-                          <span className="mx-1 font-semibold">{`${row.original.regulationName}`}</span>
+                          <span className="mx-1 font-semibold">{`${row.original.name}`}</span>
                         </p>
                       </TooltipContent>
                     </Tooltip>
@@ -289,20 +305,14 @@ export function RegulationListTable() {
             ) : (
               <TableRow>
                 <TableCell colSpan={5} className="h-24 text-center">
-                  {isRegulationListLoading
-                    ? 'Loading...'
-                    : 'No Regulation Found'}
+                  {isBatchesListLoading ? 'Loading...' : 'No Batches Found'}
                 </TableCell>
               </TableRow>
             )}
           </TableBody>
         </Table>
       </div>
-      <When
-        condition={
-          regulationListResponse?.data?.length && !isRegulationListLoading
-        }
-      >
+      <When condition={batchesList?.data?.length && !isBatchesListLoading}>
         <section className="mt-5 flex justify-between">
           <div className="justify-left flex w-2/6">
             <label className="w-1/3 py-2 text-center text-sm text-gray-700">
@@ -311,12 +321,9 @@ export function RegulationListTable() {
             <div className="w-1/3">
               <Select
                 value={limit.toString()}
-                disabled={isRegulationListLoading}
-                onValueChange={(value) => {
-                  const params = new URLSearchParams(searchParams);
-                  params.set('limit', value.toString());
-
-                  router.push(pathname + '?' + params.toString());
+                disabled={isBatchesListLoading}
+                onValueChange={async (value) => {
+                  await setLimit(parseInt(value));
                 }}
               >
                 <SelectTrigger className="w-auto ">
@@ -334,18 +341,18 @@ export function RegulationListTable() {
             </div>
           </div>
           <Pagination
-            onPageChange={handleOnPageChange}
-            pageSize={regulationListResponse?.limit || 0}
-            totalRecords={regulationListResponse?.total || 0}
+            onPageChange={setPage}
+            pageSize={batchesList?.limit || 0}
+            totalRecords={batchesList?.total || 0}
           />
         </section>
         <DeleteConfirmationModal
           open={showDeleteConfirmationModal}
-          description={`Are you sure you want to delete "${selectedRegulation?.regulationName}"`}
+          description={`Are you sure you want to delete "${selectedBatch?.name}"`}
           onDeleteClick={async () => {
-            if (selectedRegulation) {
+            if (selectedBatch) {
               setShowDeleteConfirmationModal(false);
-              await deleteRegulationMutateAsync(selectedRegulation.id);
+              await deleteBatchAsync(selectedBatch.id);
             }
           }}
           onCancelClick={() => {

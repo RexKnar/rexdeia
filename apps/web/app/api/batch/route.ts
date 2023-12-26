@@ -84,10 +84,9 @@ export async function GET(request: NextRequest) {
 
   try {
     const page = parseInt(request.nextUrl.searchParams.get('page')) || 1;
-    const pageSize =
-      parseInt(request.nextUrl.searchParams.get('pageSize')) || 10;
+    const limit = parseInt(request.nextUrl.searchParams.get('limit')) || 10;
 
-    const paginatedBatchList = await getAllBatches(page, pageSize);
+    const paginatedBatchList = await getAllBatches(page, limit);
     return new NextResponse(JSON.stringify(paginatedBatchList), {
       status: StatusCodes.OK,
     });

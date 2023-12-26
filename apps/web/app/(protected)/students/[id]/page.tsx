@@ -1,4 +1,6 @@
 import { PencilLine, Search } from 'lucide-react';
+import { redirect } from 'next/navigation';
+import { getServerSession } from 'next-auth';
 import { Avatar, AvatarImage, Button, Input, Text } from 'ui';
 import {
   Tabs,
@@ -7,10 +9,28 @@ import {
   TabsTrigger,
 } from 'ui/components/ui/Tabs';
 
+import { authOptions } from '../../../../lib/auth';
 import { PageTitle } from '../../../../lib/components/PageTitle';
+import { getStudentById } from '../../../api/student/service';
 import { StudentDetail } from './components/StudentDetail';
 
-export default async function Page() {
+export default async function Page({ params }: { params: { id: string } }) {
+  const session = await getServerSession(authOptions);
+
+  if (!session.branchId || !session.organizationId) {
+    return redirect(`/signin?callbackUrl=/students/${params.id}`);
+  }
+
+  const studentDetails: any = await getStudentById(params.id, 'form');
+  const userDetails: any = studentDetails.formSections[0].sectionFields;
+
+  const firstName = userDetails.filter((x) => x.name === 'firstName')[0].value;
+  const middleName = userDetails.filter((x) => x.name === 'middleName')[0]
+    .value;
+  const lastName = userDetails.filter((x) => x.name === 'lastName')[0].value;
+  const phoneNumber = userDetails.filter((x) => x.name === 'phoneNumber')[0]
+    .value;
+
   return (
     <section className="w-full bg-gray-50 p-3">
       <PageTitle title="Student Profile" className="mb-3" />
@@ -21,8 +41,8 @@ export default async function Page() {
             <AvatarImage src="https://png.pngtree.com/thumb_back/fh260/background/20230612/pngtree-man-wearing-glasses-is-wearing-colorful-background-image_2905240.jpg" />
           </Avatar>
           <div className="my-auto px-5">
-            <Text variant="base-bold">Sobin JM</Text>
-            <Text variant="base-regular">+91 8940043284</Text>
+            <Text variant="base-bold">{`${firstName} ${middleName} ${lastName}`}</Text>
+            <Text variant="base-regular">{phoneNumber}</Text>
           </div>
         </div>
         <div className="my-auto flex gap-4 px-5">
@@ -64,7 +84,7 @@ export default async function Page() {
           </TabsTrigger>
         </TabsList>
         <TabsContent className="w-full" value="profile">
-          <StudentDetail />
+          <StudentDetail formSections={studentDetails.formSections} />
         </TabsContent>
         <TabsContent value="document">
           <h1>Page 2</h1>

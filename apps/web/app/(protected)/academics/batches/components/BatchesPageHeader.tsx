@@ -6,7 +6,7 @@ import { Button } from 'ui';
 
 import { PageTitle } from '../../../../../lib/components/PageTitle';
 
-export function RegulationsPageHeader() {
+export function BatchesPageHeader() {
   const [, setIsFlyoutOpen] = useQueryState(
     'isFlyoutOpen',
     parseAsBoolean.withDefault(false)
@@ -14,14 +14,14 @@ export function RegulationsPageHeader() {
 
   return (
     <section className="flex justify-between px-2">
-      <PageTitle title="Regulations" />
+      <PageTitle title="Batches" />
       <Button
         variant="default"
         onClick={async () => {
           await setIsFlyoutOpen(true);
         }}
       >
-        Add Regulation
+        Add Batch
       </Button>
     </section>
   );
