@@ -15,5 +15,5 @@ export type CreateRegulationModel = Pick<
 
 export type UpdateRegulationModel = Pick<
   RegulationModel,
-  'regulationName' | 'announcedYear' | 'isActive'
+  'id' | 'regulationName' | 'announcedYear' | 'isActive'
 >;

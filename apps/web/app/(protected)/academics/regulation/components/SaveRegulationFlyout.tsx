@@ -8,7 +8,7 @@ import {
   parseAsString,
   useQueryState,
 } from 'next-usequerystate';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import {
   Button,
@@ -28,6 +28,8 @@ import { cn } from 'utils';
 
 import { CreateRegulationModel } from '../../../../../lib/domain/regulation';
 import { useCreateRegulationsMutationQuery } from '../../../../../lib/queries/regulations/useCreateRegulationsMutationQuery';
+import { useGetRegulationByIdQuery } from '../../../../../lib/queries/regulations/useGetRegulationByIdQuery';
+import { useUpdateRegulationMutationQuery } from '../../../../../lib/queries/regulations/useUpdateRegulationMutationQuery';
 
 export function SaveRegulationFlyout() {
   const {
@@ -69,12 +71,43 @@ export function SaveRegulationFlyout() {
     await setRegulationId(null);
   };
 
-  async function addRegulation(payload: CreateRegulationModel) {
+  const { data: getRegulationByIdResponse } =
+    useGetRegulationByIdQuery(regulationId);
+
+  useEffect(() => {
+    if (getRegulationByIdResponse) {
+      const { regulationName, isActive, announcedYear } =
+        getRegulationByIdResponse;
+
+      setValue('regulationName', regulationName);
+      setValue('isActive', isActive);
+      setValue('announcedYear', new Date(announcedYear));
+    } else {
+      setValue('regulationName', null);
+      setValue('isActive', false);
+      setValue('announcedYear', null);
+    }
+  }, [getRegulationByIdResponse, setValue]);
+
+  const {
+    isPending: isPendingUpdateRegulations,
+    mutateAsync: mutateUpdateRegulationAsync,
+  } = useUpdateRegulationMutationQuery(page, limit);
+
+  async function saveRegulation(payload: CreateRegulationModel) {
     try {
-      const requestPayload = {
-        ...payload,
-      };
-      mutateCreateRegulationsAsync(requestPayload);
+      if (regulationId) {
+        const updateBatchRequestPayload = {
+          ...payload,
+          id: regulationId,
+        };
+        mutateUpdateRegulationAsync(updateBatchRequestPayload);
+      } else {
+        const requestPayload = {
+          ...payload,
+        };
+        mutateCreateRegulationsAsync(requestPayload);
+      }
     } catch (error) {
       console.error(error);
     } finally {
@@ -94,7 +127,7 @@ export function SaveRegulationFlyout() {
           className="bg-white p-10"
           onCloseClick={() => closeFlyout()}
         >
-          <form onSubmit={handleSubmit(addRegulation)}>
+          <form onSubmit={handleSubmit(saveRegulation)}>
             <SheetHeader>
               <SheetTitle className="mb-5">
                 <div className="sm:grid sm:grid-cols-1 sm:gap-4 md:grid md:grid-cols-1 md:gap-4 lg:flex lg:justify-between">
@@ -210,8 +243,12 @@ export function SaveRegulationFlyout() {
                 <Button
                   size="lg"
                   variant="default"
-                  disabled={isPendingCreateRegulations}
-                  aria-disabled={isPendingCreateRegulations}
+                  disabled={
+                    isPendingCreateRegulations || isPendingUpdateRegulations
+                  }
+                  aria-disabled={
+                    isPendingCreateRegulations || isPendingUpdateRegulations
+                  }
                   className="mx-auto flex justify-center px-12 py-4"
                 >
                   {isPendingCreateRegulations ? (
