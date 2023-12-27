@@ -2,7 +2,10 @@ import { getServerSession } from 'next-auth';
 
 import { authOptions } from '../../../lib/auth';
 import { db } from '../../../lib/db';
-import { RegulationModel } from '../../../lib/domain/regulation';
+import {
+  RegulationModel,
+  UpdateRegulationModel,
+} from '../../../lib/domain/regulation';
 
 export async function getRegulationList(page: number, limit: number) {
   const session = await getServerSession(authOptions);
@@ -31,6 +34,15 @@ export async function getRegulationList(page: number, limit: number) {
   };
 }
 
+export async function getRegulationById(id: string) {
+  return await db.regulation.findUnique({
+    where: {
+      id: id,
+      isActive: true,
+    },
+  });
+}
+
 export async function addRegulation(regulation: RegulationModel) {
   const session = await getServerSession(authOptions);
   return db.regulation.create({
@@ -49,6 +61,26 @@ export async function addRegulation(regulation: RegulationModel) {
   });
 }
 
+export async function updateRegulationById(
+  regulationId: string,
+  regulation: UpdateRegulationModel
+) {
+  const session = await getServerSession(authOptions);
+
+  return await db.regulation.update({
+    data: {
+      ...regulation,
+      branch: {
+        connect: {
+          id: session.branchId,
+        },
+      },
+    },
+    where: {
+      id: regulationId,
+    },
+  });
+}
 export async function deleteRegulation(regulationId: string) {
   return db.regulation.update({
     where: {

@@ -9,13 +9,13 @@ import {
 
 export async function deleteBatchById(id: string) {
   const session = await getServerSession(authOptions);
-  return await db.batch.update({
+  return db.batch.update({
     where: {
       id: id,
       branchId: session.branchId,
     },
     data: {
-      isActive: false,
+      isDeleted: true,
       updatedAt: new Date(),
     },
   });
@@ -23,16 +23,16 @@ export async function deleteBatchById(id: string) {
 
 export async function getBatchById(id: string) {
   const session = await getServerSession(authOptions);
-  return await db.batch.findFirst({
+  return db.batch.findFirst({
     where: {
       id: id,
+      isDeleted: false,
       branchId: session.branchId,
-      isActive: true,
     },
   });
 }
 
-export async function getAllBatches(page: number, pageSize: number) {
+export async function getAllBatches(page: number, limit: number) {
   const session = await getServerSession(authOptions);
 
   const [total, batchList] = await Promise.all([
@@ -43,19 +43,19 @@ export async function getAllBatches(page: number, pageSize: number) {
       },
     }),
     db.batch.findMany({
-      take: pageSize,
-      skip: (page - 1) * pageSize,
+      take: limit,
+      skip: (page - 1) * limit,
       where: {
-        isActive: true,
+        isDeleted: false,
         branchId: session.branchId,
       },
     }),
   ]);
 
   return {
-    total,
     page,
-    pageSize,
+    total,
+    limit,
     data: batchList,
   };
 }
@@ -65,7 +65,7 @@ export async function updateBatchById(
   updateBatch: UpdateBatchModel
 ) {
   const session = await getServerSession(authOptions);
-  return await db.batch.update({
+  return db.batch.update({
     where: {
       id: id,
     },
@@ -86,13 +86,13 @@ export async function updateBatchById(
 
 export async function addBatch(createBatch: CreateBatchModel) {
   const session = await getServerSession(authOptions);
-  return await db.batch.create({
+  return db.batch.create({
     data: {
       name: createBatch.name,
-      description: createBatch.description,
+      endYear: createBatch.endYear,
       isActive: createBatch.isActive,
       startYear: createBatch.startYear,
-      endYear: createBatch.endYear,
+      description: createBatch.description,
       branch: {
         connect: {
           id: session.branchId,
@@ -107,7 +107,7 @@ export async function addStudentsToBatch(
   studentIds: string[]
 ) {
   const session = await getServerSession(authOptions);
-  return await db.batch.update({
+  return db.batch.update({
     where: {
       id: batchId,
       branchId: session.branchId,
@@ -122,7 +122,7 @@ export async function addStudentsToBatch(
 
 export async function addClassesToBatch(batchId: string, classIds: string[]) {
   const session = await getServerSession(authOptions);
-  return await db.batch.update({
+  return db.batch.update({
     where: {
       id: batchId,
       branchId: session.branchId,

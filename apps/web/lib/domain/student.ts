@@ -31,7 +31,9 @@ export type Student = {
   additionalAttributes: any;
 };
 
-export type AddStudentModel = Omit<Student, 'id'>;
+export type AddStudentModel = Omit<Student, 'id'> & {
+  batchId: string;
+};
 
 export type GetStudentListModel = {
   page: number;

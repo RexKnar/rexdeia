@@ -2,8 +2,13 @@
 
 import format from 'date-fns/format';
 import { CalendarIcon, Loader2, PlusCircle } from 'lucide-react';
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import { useState } from 'react';
+import {
+  parseAsBoolean,
+  parseAsInteger,
+  parseAsString,
+  useQueryState,
+} from 'next-usequerystate';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import {
   Button,
@@ -23,8 +28,10 @@ import { cn } from 'utils';
 
 import { CreateRegulationModel } from '../../../../../lib/domain/regulation';
 import { useCreateRegulationsMutationQuery } from '../../../../../lib/queries/regulations/useCreateRegulationsMutationQuery';
+import { useGetRegulationByIdQuery } from '../../../../../lib/queries/regulations/useGetRegulationByIdQuery';
+import { useUpdateRegulationMutationQuery } from '../../../../../lib/queries/regulations/useUpdateRegulationMutationQuery';
 
-function RegulationShareFlyout() {
+export function SaveRegulationFlyout() {
   const {
     register,
     handleSubmit,
@@ -40,14 +47,17 @@ function RegulationShareFlyout() {
     },
   });
 
-  const pathname = usePathname();
-  const router = useRouter();
-  const searchParams = useSearchParams();
+  const [isOpen, setIsOpen] = useQueryState(
+    'isFlyoutOpen',
+    parseAsBoolean.withDefault(false)
+  );
+  const [regulationId, setRegulationId] = useQueryState(
+    'regulationId',
+    parseAsString
+  );
 
-  const page = parseInt(searchParams.get('page')) || 1;
-  const limit = parseInt(searchParams.get('limit')) || 10;
-  const isOpen = searchParams.get('isFlyoutOpen') === 'true';
-  const regulationId = searchParams.get('regulationId');
+  const [page] = useQueryState('page', parseAsInteger.withDefault(1));
+  const [limit] = useQueryState('limit', parseAsInteger.withDefault(10));
 
   const {
     isPending: isPendingCreateRegulations,
@@ -56,20 +66,48 @@ function RegulationShareFlyout() {
 
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
 
-  const closeFlyout = () => {
-    const params = new URLSearchParams(searchParams);
-    params.delete('isFlyoutOpen');
-    params.delete('regulationId');
-
-    router.push(pathname + '?' + params.toString());
+  const closeFlyout = async () => {
+    await setIsOpen(false);
+    await setRegulationId(null);
   };
 
-  async function addRegulation(payload: CreateRegulationModel) {
+  const { data: getRegulationByIdResponse } =
+    useGetRegulationByIdQuery(regulationId);
+
+  useEffect(() => {
+    if (getRegulationByIdResponse) {
+      const { regulationName, isActive, announcedYear } =
+        getRegulationByIdResponse;
+
+      setValue('regulationName', regulationName);
+      setValue('isActive', isActive);
+      setValue('announcedYear', new Date(announcedYear));
+    } else {
+      setValue('regulationName', null);
+      setValue('isActive', false);
+      setValue('announcedYear', null);
+    }
+  }, [getRegulationByIdResponse, setValue]);
+
+  const {
+    isPending: isPendingUpdateRegulations,
+    mutateAsync: mutateUpdateRegulationAsync,
+  } = useUpdateRegulationMutationQuery(page, limit);
+
+  async function saveRegulation(payload: CreateRegulationModel) {
     try {
-      const requestPayload = {
-        ...payload,
-      };
-      mutateCreateRegulationsAsync(requestPayload);
+      if (regulationId) {
+        const updateBatchRequestPayload = {
+          ...payload,
+          id: regulationId,
+        };
+        mutateUpdateRegulationAsync(updateBatchRequestPayload);
+      } else {
+        const requestPayload = {
+          ...payload,
+        };
+        mutateCreateRegulationsAsync(requestPayload);
+      }
     } catch (error) {
       console.error(error);
     } finally {
@@ -89,7 +127,7 @@ function RegulationShareFlyout() {
           className="bg-white p-10"
           onCloseClick={() => closeFlyout()}
         >
-          <form onSubmit={handleSubmit(addRegulation)}>
+          <form onSubmit={handleSubmit(saveRegulation)}>
             <SheetHeader>
               <SheetTitle className="mb-5">
                 <div className="sm:grid sm:grid-cols-1 sm:gap-4 md:grid md:grid-cols-1 md:gap-4 lg:flex lg:justify-between">
@@ -205,8 +243,12 @@ function RegulationShareFlyout() {
                 <Button
                   size="lg"
                   variant="default"
-                  disabled={isPendingCreateRegulations}
-                  aria-disabled={isPendingCreateRegulations}
+                  disabled={
+                    isPendingCreateRegulations || isPendingUpdateRegulations
+                  }
+                  aria-disabled={
+                    isPendingCreateRegulations || isPendingUpdateRegulations
+                  }
                   className="mx-auto flex justify-center px-12 py-4"
                 >
                   {isPendingCreateRegulations ? (
@@ -226,5 +268,3 @@ function RegulationShareFlyout() {
     </section>
   );
 }
-
-export { RegulationShareFlyout };

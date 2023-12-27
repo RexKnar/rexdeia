@@ -1,7 +1,7 @@
 import { db } from '../../../lib/db';
 
 export async function getUserDetailsById(userId: string) {
-  return await db.user.findUnique({
+  return db.user.findUnique({
     where: {
       id: userId,
     },
