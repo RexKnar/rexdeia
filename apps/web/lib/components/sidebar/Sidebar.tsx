@@ -9,7 +9,7 @@ import { SidebarItem } from './SidebarItem';
 export function Sidebar() {
   return (
     <AnimatePresence>
-      <aside className="fixed flex h-screen w-72 flex-col overflow-y-auto border-r bg-white">
+      <aside className="sm:w-50 fixed flex h-screen flex-col overflow-y-auto border-r bg-white md:w-72">
         <nav>
           <SidebarHeader />
           <div className="mt-14 py-3">

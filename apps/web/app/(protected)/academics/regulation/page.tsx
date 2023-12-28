@@ -16,7 +16,7 @@ export default async function Page() {
 
   return (
     <section className="flex flex-col gap-6">
-      <section className="space-y-2 rounded-md bg-white p-4">
+      <section className="space-y-2 rounded-md bg-white pb-4 pl-4 pt-4">
         <p className="text-xl font-semibold text-gray-800">Overview</p>
         <p className="text-gray-700">
           This section provides a comprehensive overview of regulations for your
@@ -25,7 +25,7 @@ export default async function Page() {
         <RegulationsOverviewContainer />
       </section>
       <RegulationsPageHeader />
-      <section className="space-y-2 rounded-md bg-white p-4">
+      <section className="space-y-2 rounded-md bg-white pb-4 pl-4 pt-4">
         <RegulationListTable />
       </section>
       <SaveRegulationFlyout />

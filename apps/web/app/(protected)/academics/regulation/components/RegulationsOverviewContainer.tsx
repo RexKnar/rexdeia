@@ -28,7 +28,7 @@ const widgetList = [
 
 export function RegulationsOverviewContainer() {
   return (
-    <section className="mt-4 flex w-full gap-3 overflow-scroll">
+    <section className="gap-auto mt-4 flex justify-between pr-6 pt-2 ">
       {widgetList.map((widget) => (
         <DashboardWidget
           key={widget.label}
