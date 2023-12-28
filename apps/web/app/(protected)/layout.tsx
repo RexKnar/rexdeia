@@ -35,7 +35,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           <NextTopLoader color={primaryColor} showSpinner={false} />
           <section className="flex">
             <Sidebar />
-            <main className="ml-72 h-full w-4/5 flex-1">
+            <main className="ml-72 h-full flex-1">
               <PageHeader />
               <section className="container mx-auto py-6">{children}</section>
             </main>

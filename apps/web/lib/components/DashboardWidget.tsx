@@ -33,13 +33,13 @@ export function DashboardWidget({
   return (
     <section
       className={cn(
-        'flex w-80 cursor-pointer flex-col justify-around gap-4 rounded-md border-[1.5px] bg-white pb-4 pl-4 pt-4 shadow-sm hover:border-gray-700 sm:w-48 sm:gap-1 md:w-64 md:gap-1'
+        'flex w-96 cursor-pointer flex-col gap-4 rounded-md border-[1.5px] bg-white p-4 shadow-sm hover:border-gray-700'
       )}
     >
       <div className="text-sm font-normal text-gray-700">
         {label.toUpperCase()}
       </div>
-      <div className="flex items-center justify-between gap-4 pr-6 sm:gap-1 md:gap-1">
+      <div className="flex items-center justify-between gap-6">
         <motion.div className="text-4xl font-semibold">
           {roundedValue}
         </motion.div>
