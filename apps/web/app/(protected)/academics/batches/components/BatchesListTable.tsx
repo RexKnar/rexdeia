@@ -217,7 +217,7 @@ export function BatchesListTable() {
                 })}
                 <TableHead>
                   <Button variant="ghost" className="px-0">
-                    Actions
+                    Action
                   </Button>
                 </TableHead>
               </TableRow>
