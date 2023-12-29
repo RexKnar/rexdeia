@@ -147,6 +147,9 @@ export function AddStudentForm({ formConfig, formId }: AddStudentFormProps) {
                           <div key={field.id} className="w-full">
                             <label className="mt-1 block text-sm text-gray-700">
                               {field.label}
+                              {field.validationRules.required && (
+                                <span className="text-red-300"> *</span>
+                              )}
                             </label>
                             <Input
                               {...register(field.name, field.validationRules)}
@@ -161,7 +164,7 @@ export function AddStudentForm({ formConfig, formId }: AddStudentFormProps) {
                                 opacity: errors[field.name] ? 1 : 0,
                               }}
                               transition={{ duration: 0.5 }}
-                              className="h-3 pb-2 pt-0.5 text-sm text-red-600"
+                              className="h-3 pb-2 pt-0.5 text-sm text-red-300"
                             >
                               {errors[field.name]?.message as string}
                             </motion.p>
@@ -172,6 +175,9 @@ export function AddStudentForm({ formConfig, formId }: AddStudentFormProps) {
                           <div key={field.id} className="w-full">
                             <label className="block text-gray-700">
                               {field.label}
+                              {field.validationRules.required && (
+                                <span className="text-red-300"> *</span>
+                              )}
                             </label>
                             <textarea
                               {...register(field.name, field.validationRules)}
@@ -185,7 +191,7 @@ export function AddStudentForm({ formConfig, formId }: AddStudentFormProps) {
                                 opacity: errors[field.name] ? 1 : 0,
                               }}
                               transition={{ duration: 0.5 }}
-                              className="h-3 pb-2 pt-0.5 text-sm text-red-600"
+                              className="h-3 pb-2 pt-0.5 text-sm text-red-300"
                             >
                               {errors[field.name]?.message as string}
                             </motion.p>
@@ -197,6 +203,9 @@ export function AddStudentForm({ formConfig, formId }: AddStudentFormProps) {
                             <div key={field.id}>
                               <label className="mb-2 mt-1 block text-sm text-gray-700">
                                 {field.label}
+                                {field.validationRules.required && (
+                                  <span className="text-red-300"> *</span>
+                                )}
                               </label>
                               {field.options.map((option) => (
                                 <React.Fragment key={option.value}>
@@ -218,7 +227,7 @@ export function AddStudentForm({ formConfig, formId }: AddStudentFormProps) {
                                   opacity: errors[field.name] ? 1 : 0,
                                 }}
                                 transition={{ duration: 0.5 }}
-                                className="h-3 pb-2 pt-0.5 text-sm text-red-600"
+                                className="h-3 pb-2 pt-0.5 text-sm text-red-300"
                               >
                                 {errors[field.name]?.message as string}
                               </motion.p>
@@ -230,6 +239,9 @@ export function AddStudentForm({ formConfig, formId }: AddStudentFormProps) {
                           <div key={field.id}>
                             <label className="mb-2 mt-1 block text-sm text-gray-700">
                               {field.label}
+                              {field.validationRules.required && (
+                                <span className="text-red-300"> *</span>
+                              )}
                             </label>
                             <select
                               {...register(field.name, field.validationRules)}
@@ -248,7 +260,7 @@ export function AddStudentForm({ formConfig, formId }: AddStudentFormProps) {
                                 opacity: errors[field.name] ? 1 : 0,
                               }}
                               transition={{ duration: 0.5 }}
-                              className="h-3 pb-2 pt-0.5 text-sm text-red-600"
+                              className="h-3 pb-2 pt-0.5 text-sm text-red-300"
                             >
                               {errors[field.name]?.message as string}
                             </motion.p>
