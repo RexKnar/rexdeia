@@ -22,7 +22,7 @@ import { addClass, getClassList } from './service';
  *                 items:
  *                   # Define the schema for a single class here
  */
-export async function GET() {
+export async function GET(request: NextRequest) {
   const session = await getServerSession(authOptions);
   if (!session) {
     return new NextResponse(JSON.stringify({ error: 'UNAUTHORIZED' }), {
@@ -30,8 +30,11 @@ export async function GET() {
     });
   }
   try {
-    const classListResponse = await getClassList();
-    return new NextResponse(JSON.stringify(classListResponse), {
+    const page = parseInt(request.nextUrl.searchParams.get('page')) || 1;
+    const limit = parseInt(request.nextUrl.searchParams.get('limit')) || 10;
+
+    const classList = await getClassList(page, limit);
+    return new NextResponse(JSON.stringify(classList), {
       status: StatusCodes.OK,
     });
   } catch (e) {

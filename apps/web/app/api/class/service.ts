@@ -4,14 +4,31 @@ import { authOptions } from '../../../lib/auth';
 import { db } from '../../../lib/db';
 import { CreateClassModel, UpdateClassModel } from '../../../lib/domain/class';
 
-export async function getClassList() {
+export async function getClassList(page: number, limit: number) {
   const session = await getServerSession(authOptions);
-  return await db.class.findMany({
-    where: {
-      branchId: session.branchId,
-      isActive: true,
-    },
-  });
+  const [ClassList, totalClasses] = await Promise.all([
+    db.class.findMany({
+      take: limit,
+      skip: (page - 1) * limit,
+      where: {
+        isActive: true,
+        branchId: session.branchId,
+      },
+    }),
+    db.class.count({
+      where: {
+        isActive: true,
+        branchId: session.branchId,
+      },
+    }),
+  ]);
+
+  return {
+    page,
+    limit,
+    data: ClassList,
+    total: totalClasses,
+  };
 }
 
 export async function getAllClassesByBatchId(batchId: string) {
