@@ -10,6 +10,7 @@ import { Button, Input, RadioGroup, RadioGroupItem } from 'ui';
 import { cn } from 'utils';
 
 import { AddStudentPreviewModal } from '../modals/AddStudentPreviewModal';
+import { BatchDropDown } from './BatchDropDown';
 
 type AddStudentFormProps = {
   readonly formId: string;
@@ -137,6 +138,7 @@ export function AddStudentForm({ formConfig, formId }: AddStudentFormProps) {
                 {section.sectionTitle}
               </h1>
               <section className="grid grid-cols-1 flex-wrap justify-between gap-4 md:grid md:grid-cols-1 lg:grid lg:grid-cols-3 ">
+                {section.sectionTitle === 'Other Details' && <BatchDropDown />}
                 {section.sectionFields.map((field) => {
                   if (field.visible) {
                     switch (field.type) {
