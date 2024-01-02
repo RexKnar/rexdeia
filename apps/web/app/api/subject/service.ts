@@ -60,3 +60,20 @@ export async function getAllSubjectBySectionId(id: string) {
     },
   });
 }
+
+export async function getSubjectList(page: number, limit: number) {
+  const [total, subjectList] = await Promise.all([
+    db.subject.count(),
+    db.subject.findMany({
+      take: limit,
+      skip: (page - 1) * limit,
+    }),
+  ]);
+
+  return {
+    total,
+    page,
+    limit,
+    data: subjectList,
+  };
+}
