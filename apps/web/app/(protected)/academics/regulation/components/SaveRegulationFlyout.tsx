@@ -65,6 +65,7 @@ export function SaveRegulationFlyout() {
   } = useCreateRegulationsMutationQuery(page, limit);
 
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
+  const [activeToggleFlag, setActiveToggleFlag] = useState(false);
 
   const closeFlyout = async () => {
     await setIsOpen(false);
@@ -82,6 +83,7 @@ export function SaveRegulationFlyout() {
       setValue('regulationName', regulationName);
       setValue('isActive', isActive);
       setValue('announcedYear', new Date(announcedYear));
+      setActiveToggleFlag(isActive);
     } else {
       setValue('regulationName', null);
       setValue('isActive', false);
@@ -143,7 +145,9 @@ export function SaveRegulationFlyout() {
                       {...register('isActive')}
                       onCheckedChange={(value) => {
                         setValue('isActive', value);
+                        setActiveToggleFlag(value);
                       }}
+                      checked={activeToggleFlag}
                     />
                     <label
                       htmlFor="isActive"
