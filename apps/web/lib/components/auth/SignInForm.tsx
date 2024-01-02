@@ -1,15 +1,11 @@
 'use client';
 import { AlertCircleIcon, Eye, EyeOff, Loader2, Mail } from 'lucide-react';
-import Image from 'next/image';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { signIn } from 'next-auth/react';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Alert, AlertDescription, Button, Input } from 'ui';
-
-import googlelogo from '../../../public/assets/images/Google_logo.png';
-import microsoftlogo from '../../../public/assets/images/Microsoft_logo.png';
 
 const errors = {
   INVALID_PASSWORD:
@@ -129,31 +125,6 @@ export function SignInForm() {
           `Sign in`
         )}
       </Button>
-      <label className="mt-8 block text-center text-sm font-semibold text-gray-800">
-        <div className="flex items-center justify-center">
-          <div className="h-px flex-grow bg-gray-200"></div>
-          <span className="px-2 text-gray-800">or continue with</span>
-          <div className="h-px flex-grow bg-gray-200"></div>
-        </div>
-      </label>
-      <div className="flex flex-col sm:flex-row sm:gap-4">
-        <Button
-          type="button"
-          variant="ghost"
-          className="mt-3 w-full bg-transparent px-4 py-3 text-base text-gray-800 outline outline-gray-300 hover:outline-primary-800"
-        >
-          <Image src={googlelogo} alt={'logo'} className="mr-1"></Image>
-          Google
-        </Button>
-        <Button
-          type="button"
-          variant="ghost"
-          className="mt-3 w-full bg-transparent px-4 py-3 text-base text-gray-800 outline outline-gray-300 hover:outline-primary-800"
-        >
-          <Image src={microsoftlogo} alt={'logo'} className="mr-1"></Image>
-          Microsoft
-        </Button>
-      </div>
     </form>
   );
 }
