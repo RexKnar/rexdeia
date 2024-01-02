@@ -33,7 +33,7 @@ export function SignUpForm() {
     register,
     handleSubmit,
     watch,
-    formState: { errors, isSubmitting },
+    formState: { errors, isLoading, isSubmitting },
     setError,
   } = useForm({
     mode: 'onBlur',
@@ -250,11 +250,11 @@ export function SignUpForm() {
         <Button
           type="submit"
           className={`mt-6 w-full px-4 py-3 text-white ${
-            isSubmitting ? 'cursor-not-allowed opacity-50' : ''
+            isLoading || isSubmitting ? 'cursor-not-allowed opacity-50' : ''
           }`}
-          disabled={isSubmitting}
+          disabled={isLoading}
         >
-          {isSubmitting ? (
+          {isLoading || isSubmitting ? (
             <div className="flex items-center justify-center">
               <Loader2 className="mr-2 h-6 w-6 animate-spin text-white" />
             </div>
