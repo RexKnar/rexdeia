@@ -33,6 +33,8 @@ export const CREATE_BATCH = `CREATE_BATCH`;
 export const GET_BATCH_BY_ID = `GET_BATCH_BY_ID`;
 export const UPDATE_BATCH_BY_ID = `UPDATE_BATCH_BY_ID`;
 export const DELETE_BATCH_BY_ID = `DELETE_BATCH_BY_ID`;
+export const GET_SUBJECT_LIST = `GET_SUBJECT_LIST`;
+export const ADD_SUBJECT = `ADD_SUBJECT`;
 
 export default <EndpointDetails>{
   [REGISTER_USER]: {
@@ -166,5 +168,13 @@ export default <EndpointDetails>{
   [UPDATE_BATCH_BY_ID]: {
     requestType: `PUT`,
     endpoint: `/api/batch/[id]`,
+  },
+  [ADD_SUBJECT]: {
+    requestType: `POST`,
+    endpoint: `/api/subject`,
+  },
+  [GET_SUBJECT_LIST]: {
+    requestType: `GET`,
+    endpoint: `/api/subject`,
   },
 };

@@ -4,7 +4,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 
 import { authOptions } from '../../../lib/auth';
-import { addSubject } from './service';
+import { addSubject, getSubjectList } from './service';
 
 /**
  * @swagger
@@ -45,6 +45,66 @@ export async function POST(request: NextRequest) {
     const batch = await addSubject(payload);
     return new NextResponse(JSON.stringify(batch), {
       status: StatusCodes.CREATED,
+    });
+  } catch (e) {
+    captureException(e);
+    return new NextResponse(e, {
+      status: StatusCodes.BAD_REQUEST,
+    });
+  }
+}
+
+/**
+ * @swagger
+ * /api/subject:
+ *     get:
+ *       summary: Retrieve a paginated list of subjects
+ *       description: >
+ *         This endpoint allows for retrieving a list of subjects in a paginated format.
+ *         It requires user authentication and allows clients to specify the page number
+ *         and page size for the results.
+ *       parameters:
+ *         - in: query
+ *           name: page
+ *           required: false
+ *           schema:
+ *             type: integer
+ *             default: 1
+ *           description: The page number of the paginated results.
+ *         - in: query
+ *           name: pageSize
+ *           required: false
+ *           schema:
+ *             type: integer
+ *             default: 10
+ *           description: The number of items to display per page.
+ *       responses:
+ *         '200':
+ *           description: A successful response with the paginated list of subjects.
+ *           content:
+ *             application/json:
+ *               schema:
+ *                 $ref: '#/components/schemas/PaginatedSubjectsResult'
+ *         '400':
+ *           description: Bad request, usually due to a problem with the request parameters.
+ *         '401':
+ *           description: Unauthorized access, returned when the user is not authenticated.
+ */
+export async function GET(request: NextRequest) {
+  const session = await getServerSession(authOptions);
+  if (!session) {
+    return new NextResponse(JSON.stringify({ error: 'UNAUTHORIZED' }), {
+      status: StatusCodes.UNAUTHORIZED,
+    });
+  }
+
+  try {
+    const page = parseInt(request.nextUrl.searchParams.get('page')) || 1;
+    const limit = parseInt(request.nextUrl.searchParams.get('limit')) || 10;
+
+    const paginatedSubjectList = await getSubjectList(page, limit);
+    return new NextResponse(JSON.stringify(paginatedSubjectList), {
+      status: StatusCodes.OK,
     });
   } catch (e) {
     captureException(e);

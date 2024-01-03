@@ -1,7 +1,6 @@
 import {
   FileText,
   GraduationCap,
-  LayoutDashboard,
   User2,
   UserCircle2,
   UserPlus2,
@@ -10,12 +9,6 @@ import {
 import { SidebarMenuItem } from './types';
 
 export const menuItems: SidebarMenuItem[] = [
-  {
-    id: 'dashboard',
-    label: 'Dashboard',
-    icon: LayoutDashboard,
-    path: '/dashboard',
-  },
   {
     id: 'students',
     label: 'Students',
@@ -83,6 +76,12 @@ export const menuItems: SidebarMenuItem[] = [
         label: 'Batches',
         icon: null,
         path: '/academics/batches',
+      },
+      {
+        id: 'academics-subjects-student',
+        label: 'Subjects',
+        icon: null,
+        path: '/academics/subjects',
       },
     ],
   },
