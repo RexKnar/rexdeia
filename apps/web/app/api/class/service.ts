@@ -47,21 +47,10 @@ export async function addClass(classPayload: CreateClassModel) {
   return await db.class.create({
     data: {
       name: classPayload.name,
-      description: classPayload.description,
       isActive: classPayload.isActive,
       branch: {
         connect: {
           id: session.branchId,
-        },
-      },
-      batch: {
-        connect: {
-          id: classPayload.batchId,
-        },
-      },
-      regulation: {
-        connect: {
-          id: classPayload.regulationId,
         },
       },
     },

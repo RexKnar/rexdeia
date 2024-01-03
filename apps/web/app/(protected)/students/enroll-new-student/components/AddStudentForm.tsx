@@ -70,6 +70,24 @@ export function AddStudentForm({ formConfig, formId }: AddStudentFormProps) {
     return hasErrors && isVisitedOrLast;
   };
 
+  const validateEmail = (value, field) => {
+    const atIndex = value.indexOf('@');
+    const dotIndex = value.lastIndexOf('.');
+
+    if (value === '') {
+      return `${field.label} is required`;
+    }
+
+    if (
+      atIndex === -1 ||
+      dotIndex === -1 ||
+      dotIndex <= atIndex + 1 ||
+      dotIndex === value.length - 1
+    ) {
+      return `${field.label} must be a valid email address`;
+    }
+  };
+
   return (
     <form
       autoFocus
@@ -143,7 +161,6 @@ export function AddStudentForm({ formConfig, formId }: AddStudentFormProps) {
                   if (field.visible) {
                     switch (field.type) {
                       case 'text':
-                      case 'email':
                       case 'date':
                         return (
                           <div key={field.id} className="w-full">
@@ -170,6 +187,31 @@ export function AddStudentForm({ formConfig, formId }: AddStudentFormProps) {
                             >
                               {errors[field.name]?.message as string}
                             </motion.p>
+                          </div>
+                        );
+                      case 'email':
+                        return (
+                          <div key={field.id} className="w-full">
+                            <label className="mt-1 block text-sm text-gray-700">
+                              {field.label}
+                            </label>
+                            <Input
+                              {...register(field.name, {
+                                ...field.validationRules,
+                                required: 'Email is required',
+                                validate: (value) => {
+                                  return validateEmail(value, field);
+                                },
+                              })}
+                              type={field.type}
+                              placeholder={field.placeholder}
+                              className="mt-1"
+                            />
+                            {errors[field.name] && (
+                              <p className="h-2 p-1 text-sm text-red-600">
+                                {errors[field.name].message as string}
+                              </p>
+                            )}
                           </div>
                         );
                       case 'textarea':

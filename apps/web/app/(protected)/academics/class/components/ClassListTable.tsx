@@ -33,7 +33,6 @@ import {
 import { cn } from 'utils';
 
 import { useGetClassListQuery } from '../../../../../lib/queries/class/useGetClassListQuery';
-import { ClassFlyout } from './ClassFlyout';
 
 export function ClassList() {
   const columns: ColumnDef<any>[] = [
@@ -86,10 +85,7 @@ export function ClassList() {
   });
 
   return (
-    <section className=" p-3">
-      <div className="mx-7 flex justify-end">
-        <ClassFlyout />
-      </div>
+    <section className="p-3 ">
       <div className="mt-4 rounded-md border ">
         <Table>
           <TableHeader>
