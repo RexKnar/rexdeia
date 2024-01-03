@@ -72,8 +72,13 @@ export function SaveRegulationFlyout() {
     await setRegulationId(null);
   };
 
-  const { data: getRegulationByIdResponse } =
-    useGetRegulationByIdQuery(regulationId);
+  const { data: getRegulationByIdResponse } = useGetRegulationByIdQuery(
+    regulationId,
+    {
+      enabled: !!regulationId,
+      queryKey: [],
+    }
+  );
 
   useEffect(() => {
     if (getRegulationByIdResponse) {
@@ -201,7 +206,7 @@ export function SaveRegulationFlyout() {
                     <Button
                       variant={'outline'}
                       className={cn(
-                        'w-full justify-start justify-between text-left font-normal',
+                        'w-full justify-between text-left font-normal',
                         !watch('announcedYear') && 'text-muted-foreground flex'
                       )}
                     >

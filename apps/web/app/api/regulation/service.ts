@@ -47,16 +47,14 @@ export async function addRegulation(regulation: RegulationModel) {
   const session = await getServerSession(authOptions);
   return db.regulation.create({
     data: {
-      ...regulation,
-      isActive: true,
-      endYear: regulation.endYear,
+      regulationName: regulation.regulationName,
+      isActive: regulation.isActive,
+      announcedYear: regulation.announcedYear,
       branch: {
         connect: {
           id: session.branchId,
         },
       },
-      announcedYear: regulation.announcedYear,
-      regulationName: regulation.regulationName,
     },
   });
 }
@@ -69,7 +67,9 @@ export async function updateRegulationById(
 
   return await db.regulation.update({
     data: {
-      ...regulation,
+      regulationName: regulation.regulationName,
+      isActive: regulation.isActive,
+      announcedYear: regulation.announcedYear,
       branch: {
         connect: {
           id: session.branchId,
