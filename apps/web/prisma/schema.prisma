@@ -335,19 +335,19 @@ model Batch {
 }
 
 model Class {
-  id           String     @id @default(auto()) @map("_id") @db.ObjectId
+  id           String      @id @default(auto()) @map("_id") @db.ObjectId
   name         String
   description  String?
   isActive     Boolean
   Section      Section[]
-  batch        Batch      @relation(fields: [batchId], references: [id])
-  batchId      String     @db.ObjectId
-  branch       Branch     @relation(fields: [branchId], references: [id])
-  branchId     String     @db.ObjectId
-  regulation   Regulation @relation(fields: [regulationId], references: [id])
-  regulationId String     @db.ObjectId
-  createdAt    DateTime?  @default(now())
-  updatedAt    DateTime?  @default(now())
+  batch        Batch?      @relation(fields: [batchId], references: [id])
+  batchId      String?     @db.ObjectId
+  branch       Branch      @relation(fields: [branchId], references: [id])
+  branchId     String      @db.ObjectId
+  regulation   Regulation? @relation(fields: [regulationId], references: [id])
+  regulationId String?     @db.ObjectId
+  createdAt    DateTime?   @default(now())
+  updatedAt    DateTime?   @default(now())
 }
 
 model Section {

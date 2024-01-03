@@ -240,7 +240,7 @@ export function RegulationListTable() {
                           }}
                           className="mr-2 h-auto p-0"
                           variant="destructive"
-                          disabled={row.original.isNewlyAdded}
+                          // disabled={row.original.isNewlyAdded}
                         >
                           <Pencil
                             size={16}
