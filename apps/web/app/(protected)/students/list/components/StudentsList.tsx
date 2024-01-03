@@ -21,7 +21,7 @@ import {
   Trash2Icon,
 } from 'lucide-react';
 import React, { useState } from 'react';
-import { Else, If, Then } from 'react-if';
+import { Else, If, Then, When } from 'react-if';
 import {
   Avatar,
   AvatarFallback,
@@ -341,36 +341,42 @@ export function StudentsList() {
         </If>
       </div>
 
-      <section className="mt-5 flex justify-between">
-        <section>
-          <Select
-            disabled={isStudentListLoading}
-            onValueChange={(value) => {
-              setPageSize(parseInt(value));
+      <When
+        condition={
+          getStudentListResponse?.data?.length && !isStudentListLoading
+        }
+      >
+        <section className="mt-5 flex justify-between">
+          <section>
+            <Select
+              disabled={isStudentListLoading}
+              onValueChange={(value) => {
+                setPageSize(parseInt(value));
+              }}
+            >
+              <SelectTrigger>
+                <SelectValue placeholder="Page Size: " />
+                <div className="ml-1">10</div>
+              </SelectTrigger>
+              <SelectContent>
+                <SelectGroup>
+                  <SelectItem value={'10'}>10</SelectItem>
+                  <SelectItem value={'25'}>25</SelectItem>
+                  <SelectItem value={'50'}>50</SelectItem>
+                  <SelectItem value={'100'}>100</SelectItem>
+                </SelectGroup>
+              </SelectContent>
+            </Select>
+          </section>
+          <Pagination
+            pageSize={getStudentListResponse?.pageSize || 0}
+            totalRecords={getStudentListResponse?.total || 0}
+            onPageChange={(page) => {
+              setPage(page);
             }}
-          >
-            <SelectTrigger>
-              <SelectValue placeholder="Page Size: " />
-              <div className="ml-1">10</div>
-            </SelectTrigger>
-            <SelectContent>
-              <SelectGroup>
-                <SelectItem value={'10'}>10</SelectItem>
-                <SelectItem value={'25'}>25</SelectItem>
-                <SelectItem value={'50'}>50</SelectItem>
-                <SelectItem value={'100'}>100</SelectItem>
-              </SelectGroup>
-            </SelectContent>
-          </Select>
+          />
         </section>
-        <Pagination
-          pageSize={getStudentListResponse?.pageSize || 0}
-          totalRecords={getStudentListResponse?.total || 0}
-          onPageChange={(page) => {
-            setPage(page);
-          }}
-        />
-      </section>
+      </When>
     </section>
   );
 }
