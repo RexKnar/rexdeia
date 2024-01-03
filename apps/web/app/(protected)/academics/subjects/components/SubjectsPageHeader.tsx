@@ -21,7 +21,7 @@ export function SubjectsPageHeader() {
           await setIsFlyoutOpen(true);
         }}
       >
-        New Subject
+        Add Subject
       </Button>
     </section>
   );

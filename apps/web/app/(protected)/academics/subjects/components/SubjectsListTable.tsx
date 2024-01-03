@@ -5,11 +5,27 @@ import {
   flexRender,
   getCoreRowModel,
   getFilteredRowModel,
+  getPaginationRowModel,
   getSortedRowModel,
   useReactTable,
 } from '@tanstack/react-table';
 import { Pencil, Trash2 } from 'lucide-react';
-import { Button, Tooltip, TooltipContent, TooltipTrigger } from 'ui';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { parseAsInteger, useQueryState } from 'next-usequerystate';
+import { When } from 'react-if';
+import {
+  Button,
+  Pagination,
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from 'ui';
 import {
   Table,
   TableBody,
@@ -20,6 +36,7 @@ import {
 } from 'ui/components/ui/Table';
 
 import { SubjectModel } from '../../../../../lib/domain/subject';
+import { useGetSubjectListQuery } from '../../../../../lib/queries/subjects/useGetSubjectListQuery';
 
 const columns: ColumnDef<SubjectModel>[] = [
   {
@@ -45,7 +62,7 @@ const columns: ColumnDef<SubjectModel>[] = [
           className="px-0"
           onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
         >
-          Class
+          Description
         </Button>
       );
     },
@@ -55,7 +72,7 @@ const columns: ColumnDef<SubjectModel>[] = [
     },
   },
   {
-    accessorKey: 'startYear',
+    accessorKey: 'type',
     header: ({ column }) => {
       return (
         <Button
@@ -86,14 +103,29 @@ const columns: ColumnDef<SubjectModel>[] = [
     },
   },
 ];
-
 export function SubjectsListTable() {
+  const pathname = usePathname();
+  const router = useRouter();
+  const searchParams = useSearchParams();
+
+  const [page, setPage] = useQueryState('page', parseAsInteger.withDefault(1));
+  const [limit, setLimit] = useQueryState(
+    'limit',
+    parseAsInteger.withDefault(10)
+  );
+  const { data: subjectListResponse, isLoading: isSubjectListLoading } =
+    useGetSubjectListQuery({
+      page,
+      limit,
+    });
+
   const table = useReactTable({
     columns,
-    data: [],
+    data: subjectListResponse?.data || [],
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
   });
 
   return (
@@ -149,6 +181,12 @@ export function SubjectsListTable() {
                     <Tooltip>
                       <TooltipTrigger asChild>
                         <Button
+                          onClick={() => {
+                            const params = new URLSearchParams(searchParams);
+                            params.set('isFlyoutOpen', 'true');
+                            params.set('regulationId', row.original.id);
+                            router.push(pathname + '?' + params.toString());
+                          }}
                           className="mr-2 h-auto p-0"
                           variant="destructive"
                         >
@@ -188,12 +226,51 @@ export function SubjectsListTable() {
               ))
             ) : (
               <TableRow>
-                <TableCell colSpan={5} className="h-24 text-center"></TableCell>
+                <TableCell colSpan={5} className="h-24 text-center">
+                  {isSubjectListLoading ? 'Loading...' : 'No Regulation Found'}
+                </TableCell>
               </TableRow>
             )}
           </TableBody>
         </Table>
       </div>
+      <When
+        condition={subjectListResponse?.data?.length && !isSubjectListLoading}
+      >
+        <section className="mt-5 flex justify-between">
+          <div className="justify-left flex w-2/6">
+            <label className="w-1/3 py-2 text-center text-sm text-gray-700">
+              Entries per page
+            </label>
+            <div className="w-1/3">
+              <Select
+                value={limit.toString()}
+                disabled={isSubjectListLoading}
+                onValueChange={async (value) => {
+                  await setLimit(parseInt(value));
+                }}
+              >
+                <SelectTrigger className="w-auto ">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectGroup>
+                    <SelectItem value={'10'}>10</SelectItem>
+                    <SelectItem value={'25'}>25</SelectItem>
+                    <SelectItem value={'50'}>50</SelectItem>
+                    <SelectItem value={'100'}>100</SelectItem>
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+          <Pagination
+            onPageChange={setPage}
+            pageSize={subjectListResponse?.limit || 0}
+            totalRecords={subjectListResponse?.total || 0}
+          />
+        </section>
+      </When>
     </section>
   );
 }
