@@ -13,15 +13,7 @@ export type SectionModel = {
 
 export type CreateSectionModel = Pick<
   SectionModel,
-  | 'name'
-  | 'isActive'
-  | 'medium'
-  | 'classId'
-  | 'faculty'
-  | 'subjects'
-  | 'staffs'
-  | 'students'
-  | 'description'
+  'name' | 'isActive' | 'medium' | 'classId'
 >;
 
 export type UpdateSectionModel = Pick<

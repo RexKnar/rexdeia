@@ -3,6 +3,8 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from '../../../lib/auth';
 import { db } from '../../../lib/db';
 import { CreateClassModel, UpdateClassModel } from '../../../lib/domain/class';
+import { CreateSectionModel } from '../../../lib/domain/section';
+import { addSection } from '../section/service';
 
 export async function getClassList(page: number, limit: number) {
   const session = await getServerSession(authOptions);
@@ -13,6 +15,9 @@ export async function getClassList(page: number, limit: number) {
       where: {
         isActive: true,
         branchId: session.branchId,
+      },
+      include: {
+        Section: true,
       },
     }),
     db.class.count({
@@ -44,7 +49,7 @@ export async function getAllClassesByBatchId(batchId: string) {
 
 export async function addClass(classPayload: CreateClassModel) {
   const session = await getServerSession(authOptions);
-  return await db.class.create({
+  const createdClass = await db.class.create({
     data: {
       name: classPayload.name,
       isActive: classPayload.isActive,
@@ -55,6 +60,17 @@ export async function addClass(classPayload: CreateClassModel) {
       },
     },
   });
+
+  classPayload.section.forEach((section) => {
+    const createSectionModel: CreateSectionModel = {
+      name: createdClass.name,
+      medium: section.medium,
+      isActive: true,
+      classId: createdClass.id,
+    };
+    addSection(createSectionModel);
+  });
+  return createdClass;
 }
 
 export async function deleteClassById(id: string) {
