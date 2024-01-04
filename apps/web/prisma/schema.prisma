@@ -354,8 +354,8 @@ model Section {
   id          String    @id @default(auto()) @map("_id") @db.ObjectId
   name        String
   medium      String
-  description String
-  faculty     String
+  description String?
+  faculty     String?
   isActive    Boolean
   class       Class     @relation(fields: [classId], references: [id])
   staff       Staff[]   @relation(fields: [staffId], references: [id])

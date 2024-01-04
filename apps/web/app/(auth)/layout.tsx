@@ -1,3 +1,5 @@
+import 'configs/tailwind/styles.css';
+
 import { Inter, Roboto_Mono } from 'next/font/google';
 import { ReactNode } from 'react';
 

@@ -57,10 +57,8 @@ export async function addSection(createSection: CreateSectionModel) {
   return await db.section.create({
     data: {
       name: createSection.name,
-      description: createSection.description,
       medium: createSection.medium,
       isActive: createSection.isActive,
-      faculty: createSection.faculty,
       class: {
         connect: {
           id: createSection.classId,

@@ -1,7 +1,8 @@
 import { PencilLine } from 'lucide-react';
 import { Button, Tabs, TabsContent, TabsList, TabsTrigger, Text } from 'ui';
 
-import { PageTitle } from '../../../../../lib/components/PageTitle';
+import { PageTitle } from '../../../../../../../lib/components/PageTitle';
+import { StaffCard } from './components/StaffCard';
 
 export default async function Page() {
   return (
@@ -59,7 +60,11 @@ export default async function Page() {
           <h1>Page 2</h1>
         </TabsContent>
         <TabsContent value="Staffs">
-          <h1>Page 3</h1>
+          <section className="pt-5">
+            <div className="w-3/12">
+              <StaffCard />
+            </div>
+          </section>
         </TabsContent>
       </Tabs>
     </section>
