@@ -1,4 +1,5 @@
 'use client';
+
 import { Loader2, PlusCircle } from 'lucide-react';
 import { parseAsInteger, useQueryState } from 'next-usequerystate';
 import { useState } from 'react';
@@ -16,7 +17,7 @@ import {
   Text,
 } from 'ui';
 
-import { useCreateClassMutationQuery } from '../../../../../lib/queries/class/useCreateClassMutationQuery';
+import { useCreateClassMutationQuery } from '../../../../../../lib/queries/class/useCreateClassMutationQuery';
 
 export default function AddClass() {
   const { control, register, setValue, handleSubmit } = useForm();

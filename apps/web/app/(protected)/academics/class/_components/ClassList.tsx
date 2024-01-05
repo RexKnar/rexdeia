@@ -32,15 +32,6 @@ export function ClassList() {
     widgetId: index + 1,
   }));
 
-  // const table = useReactTable({
-  //   columns,
-  //   data: classList?.data || [],
-  //   getCoreRowModel: getCoreRowModel(),
-  //   getSortedRowModel: getSortedRowModel(),
-  //   getFilteredRowModel: getFilteredRowModel(),
-  //   getPaginationRowModel: getPaginationRowModel(),
-  // });
-
   return (
     <section className=" p-3">
       <div className="flex flex-wrap gap-4">

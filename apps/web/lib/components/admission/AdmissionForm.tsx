@@ -5,8 +5,8 @@ import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Button, Input, RadioGroup, RadioGroupItem } from 'ui';
 
-import { AdmissionPreviewFlyout } from '../../../app/(protected)/admission/add/components/AdmissionPreviewFlyout';
-import { AdmissionShareFlyout } from '../../../app/(protected)/admission/add/components/AdmissionShareFlyout';
+import { AdmissionPreviewFlyout } from '../../../app/(protected)/admission/add/_components/AdmissionPreviewFlyout';
+import { AdmissionShareFlyout } from '../../../app/(protected)/admission/add/_components/AdmissionShareFlyout';
 import { makeAPICall } from '../../api';
 import { ADD_ADMISSION } from '../../endpoints';
 import { useGetAdmissionFormShareDetailsQuery } from '../../queries/useGetAdmissionFormShareDetailsQuery';

@@ -3,7 +3,7 @@ import { getServerSession } from 'next-auth';
 
 import { authOptions } from '../../../../lib/auth';
 import { PageTitle } from '../../../../lib/components/PageTitle';
-import { AdmissionPage } from './components/AdmissionPage';
+import { AdmissionPage } from './_components/AdmissionPage';
 
 export default async function Page() {
   const session = await getServerSession(authOptions);

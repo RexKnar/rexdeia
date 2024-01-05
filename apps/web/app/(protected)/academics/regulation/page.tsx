@@ -3,10 +3,10 @@ import { getServerSession } from 'next-auth';
 import React from 'react';
 
 import { authOptions } from '../../../../lib/auth';
-import { RegulationListTable } from './components/RegulationListTable';
-import { RegulationsOverviewContainer } from './components/RegulationsOverviewContainer';
-import { RegulationsPageHeader } from './components/RegulationsPageHeader';
-import { SaveRegulationFlyout } from './components/SaveRegulationFlyout';
+import { RegulationListTable } from './_components/RegulationListTable';
+import { RegulationsOverviewContainer } from './_components/RegulationsOverviewContainer';
+import { RegulationsPageHeader } from './_components/RegulationsPageHeader';
+import { SaveRegulationFlyout } from './_components/SaveRegulationFlyout';
 
 export default async function Page() {
   const session = await getServerSession(authOptions);

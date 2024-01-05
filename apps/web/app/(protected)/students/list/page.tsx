@@ -1,5 +1,5 @@
 import { PageTitle } from '../../../../lib/components/PageTitle';
-import { StudentsList } from './components/StudentsList';
+import { StudentsList } from './_components/StudentsList';
 
 export default async function Page() {
   return (
