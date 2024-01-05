@@ -7,6 +7,7 @@ import { PageTitle } from '../../../../../../../lib/components/PageTitle';
 import SaveSectionFlyout from './components/SaveSectionFlyout';
 import { StaffCard } from './components/StaffCard';
 import { StudentCard } from './components/StudentCard';
+import { SubjectCard } from './components/SubjectCard';
 
 export default function Page() {
   const pathname = usePathname();
@@ -72,12 +73,16 @@ export default function Page() {
           <TabsContent className="w-full" value="Subjects">
             <section className="pt-5">
               <div className="w-3/12">
-                <StudentCard />
+                <SubjectCard />
               </div>
             </section>
           </TabsContent>
           <TabsContent value="Students">
-            <h1>Page 2</h1>
+            <section className="pt-5">
+              <div className="w-3/12">
+                <StudentCard />
+              </div>
+            </section>
           </TabsContent>
           <TabsContent value="Staffs">
             <section className="pt-5">
