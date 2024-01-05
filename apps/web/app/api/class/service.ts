@@ -63,7 +63,7 @@ export async function addClass(classPayload: CreateClassModel) {
 
   classPayload.section.forEach((section) => {
     const createSectionModel: CreateSectionModel = {
-      name: createdClass.name,
+      name: section.name,
       medium: section.medium,
       isActive: true,
       classId: createdClass.id,
