@@ -2,7 +2,7 @@ import { getServerSession } from 'next-auth';
 
 import { authOptions } from '../../../../lib/auth';
 import { PageTitle } from '../../../../lib/components/PageTitle';
-import { EnquiryPage } from '../components/EnquiryPage';
+import { EnquiryPage } from '../_components/EnquiryPage';
 
 export default async function page() {
   const session = await getServerSession(authOptions);

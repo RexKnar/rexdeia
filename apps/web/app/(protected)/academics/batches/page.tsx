@@ -3,9 +3,9 @@ import { getServerSession } from 'next-auth';
 import React from 'react';
 
 import { authOptions } from '../../../../lib/auth';
-import { BatchesListTable } from './components/BatchesListTable';
-import { BatchesPageHeader } from './components/BatchesPageHeader';
-import { SaveBatchFlyout } from './components/modals/SaveBatchFlyout';
+import { BatchesListTable } from './_components/BatchesListTable';
+import { BatchesPageHeader } from './_components/BatchesPageHeader';
+import { SaveBatchFlyout } from './_components/modals/SaveBatchFlyout';
 
 export default async function Page() {
   const session = await getServerSession(authOptions);

@@ -3,9 +3,9 @@ import { getServerSession } from 'next-auth';
 import React from 'react';
 
 import { authOptions } from '../../../../lib/auth';
-import { SaveSubjectFlyout } from './components/SaveSubjectFlyout';
-import { SubjectsListTable } from './components/SubjectsListTable';
-import { SubjectsPageHeader } from './components/SubjectsPageHeader';
+import { SaveSubjectFlyout } from './_components/SaveSubjectFlyout';
+import { SubjectsListTable } from './_components/SubjectsListTable';
+import { SubjectsPageHeader } from './_components/SubjectsPageHeader';
 
 export default async function Page() {
   const session = await getServerSession(authOptions);

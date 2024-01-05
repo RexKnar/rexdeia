@@ -12,7 +12,7 @@ import {
 import { authOptions } from '../../../../lib/auth';
 import { PageTitle } from '../../../../lib/components/PageTitle';
 import { getStudentById } from '../../../api/student/service';
-import { StudentDetail } from './components/StudentDetail';
+import { StudentDetail } from './_components/StudentDetail';
 
 export default async function Page({ params }: { params: { id: string } }) {
   const session = await getServerSession(authOptions);

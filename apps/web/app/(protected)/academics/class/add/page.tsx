@@ -2,7 +2,7 @@ import { redirect } from 'next/navigation';
 import { getServerSession } from 'next-auth';
 
 import { authOptions } from '../../../../../lib/auth';
-import AddClass from './AddClass';
+import AddClass from './_components/AddClass';
 
 export default async function Page() {
   const session = await getServerSession(authOptions);

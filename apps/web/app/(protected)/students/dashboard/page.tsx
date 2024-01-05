@@ -4,9 +4,9 @@ import React from 'react';
 
 import noStudentData from '../../../../public/assets/images/no-student-data.svg';
 import { getRecentlyAddedStudentsList } from '../../../api/student/service';
-import { RecentEnrolledStudents } from './components/RecentEnrolledStudents';
-import { StudentDashboardBanner } from './components/StudentDashboardBanner';
-import { StudentsWidgetContainer } from './components/StudentsWidgetContainer';
+import { RecentEnrolledStudents } from './_components/RecentEnrolledStudents';
+import { StudentDashboardBanner } from './_components/StudentDashboardBanner';
+import { StudentsWidgetContainer } from './_components/StudentsWidgetContainer';
 
 export default async function Page() {
   const studentsList = await getRecentlyAddedStudentsList({

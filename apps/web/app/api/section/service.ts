@@ -5,7 +5,7 @@ import {
 } from '../../../lib/domain/section';
 
 export async function deleteSectionById(id: string) {
-  return await db.section.update({
+  return db.section.update({
     where: {
       id: id,
     },
@@ -17,7 +17,7 @@ export async function deleteSectionById(id: string) {
 }
 
 export async function getSectionById(id: string) {
-  return await db.section.findFirst({
+  return db.section.findFirst({
     where: {
       id: id,
       isActive: true,
@@ -26,7 +26,7 @@ export async function getSectionById(id: string) {
 }
 
 export async function getAllSectionsByClassId(classId: string) {
-  return await db.section.findMany({
+  return db.section.findMany({
     where: {
       classId: classId,
       isActive: true,
@@ -38,7 +38,7 @@ export async function updateSectionById(
   id: string,
   updateSection: UpdateSectionModel
 ) {
-  return await db.section.update({
+  return db.section.update({
     where: {
       id: id,
     },
@@ -54,7 +54,7 @@ export async function updateSectionById(
 }
 
 export async function addSection(createSection: CreateSectionModel) {
-  return await db.section.create({
+  return db.section.create({
     data: {
       name: createSection.name,
       medium: createSection.medium,
@@ -72,7 +72,7 @@ export async function addStudentsToSection(
   sectionId: string,
   studentIds: string[]
 ) {
-  return await db.section.update({
+  return db.section.update({
     where: {
       id: sectionId,
     },
@@ -88,7 +88,7 @@ export async function addStaffsToSection(
   sectionId: string,
   staffIds: string[]
 ) {
-  return await db.section.update({
+  return db.section.update({
     where: {
       id: sectionId,
     },
@@ -104,7 +104,7 @@ export async function addSubjectsToSection(
   sectionId: string,
   subjectIds: string[]
 ) {
-  return await db.section.update({
+  return db.section.update({
     where: {
       id: sectionId,
     },

@@ -5,7 +5,7 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from '../../../../lib/auth';
 import { LinkButton } from '../../../../lib/components/LinkButton';
 import { PageTitle } from '../../../../lib/components/PageTitle';
-import { ClassList } from './components/ClassListTable';
+import { ClassList } from './_components/ClassList';
 
 export default async function Page() {
   const session = await getServerSession(authOptions);

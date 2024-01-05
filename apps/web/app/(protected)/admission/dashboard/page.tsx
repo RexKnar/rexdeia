@@ -7,8 +7,8 @@ import admissionRequestIcon from '../../../../public/assets/images/admission-req
 import inProgressIcon from '../../../../public/assets/images/in-progress.svg';
 import rejectedIcon from '../../../../public/assets/images/rejected.svg';
 import shortlistedIcon from '../../../../public/assets/images/short-listed.svg';
-import { AdmissionsList } from './components/AdmissionsList';
-import { DashboardCard } from './components/DashboardCard';
+import { AdmissionsList } from './_components/AdmissionsList';
+import { DashboardCard } from './_components/DashboardCard';
 
 export default async function Page() {
   const statisticsCardList = [
