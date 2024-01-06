@@ -9,7 +9,7 @@ import {
   getSortedRowModel,
   useReactTable,
 } from '@tanstack/react-table';
-import { Eye, Loader2, Pencil, Trash2 } from 'lucide-react';
+import { Loader2, Pencil, Trash2 } from 'lucide-react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import React, { useCallback, useEffect, useState } from 'react';
 import { When } from 'react-if';
@@ -35,6 +35,7 @@ import {
   TableHeader,
   TableRow,
 } from 'ui/components/ui/Table';
+import { cn } from 'utils';
 
 import { DeleteConfirmationModal } from '../../../../../lib/components/modals/DeleteConfirmationModal';
 import { RegulationModel } from '../../../../../lib/domain/regulation';
@@ -81,7 +82,7 @@ const columns: ColumnDef<RegulationModel>[] = [
       return (
         <Button
           variant="ghost"
-          className="px-0"
+          className="px-1"
           onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
         >
           Status
@@ -89,7 +90,16 @@ const columns: ColumnDef<RegulationModel>[] = [
       );
     },
     cell: ({ row }) => {
-      return <div>{row.original.isActive ? 'true' : 'false'}</div>;
+      return (
+        <span
+          className={cn(
+            'ml-1 rounded px-2 py-1 text-center text-sm font-medium',
+            row.original.isActive ? 'bg-green-600' : 'bg-red-600'
+          )}
+        >
+          {row.original.isActive ? 'Active' : 'Inactive'}
+        </span>
+      );
     },
   },
 ];
@@ -163,140 +173,121 @@ export function RegulationListTable() {
 
   return (
     <section>
-      <div className="rounded-md ">
-        <Table>
-          <TableHeader>
-            {table.getHeaderGroups().map((headerGroup) => (
-              <TableRow
-                key={headerGroup.id}
-                className="cursor-pointer hover:bg-white"
-              >
-                {headerGroup.headers.map((header) => {
-                  return (
-                    <TableHead key={header.id}>
-                      {header.isPlaceholder
-                        ? null
-                        : flexRender(
-                            header.column.columnDef.header,
-                            header.getContext()
-                          )}
-                    </TableHead>
-                  );
-                })}
-                <TableHead>
-                  <Button variant="ghost" className="px-0">
-                    Actions
-                  </Button>
-                </TableHead>
-              </TableRow>
-            ))}
-          </TableHeader>
-
-          <TableBody>
-            {table.getRowModel().rows?.length ? (
-              table.getRowModel().rows.map((row) => (
+      <div className="overflow-hidden">
+        <div className="max-h-screen overflow-y-auto">
+          <Table>
+            <TableHeader>
+              {table.getHeaderGroups().map((headerGroup) => (
                 <TableRow
-                  key={row.id}
-                  data-state={row.getIsSelected() && 'selected'}
+                  key={headerGroup.id}
+                  className="cursor-pointer hover:bg-white"
                 >
-                  {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id}>
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext()
-                      )}
-                    </TableCell>
-                  ))}
-                  <TableCell className="w-52">
-                    <Tooltip>
-                      <TooltipTrigger asChild>
-                        <Button
-                          title="View"
-                          className="mr-2 h-auto p-0"
-                          variant="destructive"
-                          disabled={row.original.isNewlyAdded}
-                        >
-                          <Eye
-                            size={16}
-                            className="mr-2 text-center text-primary"
-                          />
-                        </Button>
-                      </TooltipTrigger>
-                      <TooltipContent>
-                        <p>
-                          <span>View</span>
-                          <span className="mx-1 font-semibold">{`${row.original.regulationName}`}</span>
-                        </p>
-                      </TooltipContent>
-                    </Tooltip>
-                    <Tooltip>
-                      <TooltipTrigger asChild>
-                        <Button
-                          onClick={() => {
-                            const params = new URLSearchParams(searchParams);
-                            params.set('isFlyoutOpen', 'true');
-                            params.set('regulationId', row.original.id);
-                            router.push(pathname + '?' + params.toString());
-                          }}
-                          className="mr-2 h-auto p-0"
-                          variant="destructive"
-                          disabled={row.original.isNewlyAdded}
-                        >
-                          <Pencil
-                            size={16}
-                            className="mr-2 text-center text-black"
-                          />
-                        </Button>
-                      </TooltipTrigger>
-                      <TooltipContent>
-                        <p>
-                          <span>Edit</span>
-                          <span className="mx-1 font-semibold">{`${row.original.regulationName}`}</span>
-                        </p>
-                      </TooltipContent>
-                    </Tooltip>
-                    <Tooltip>
-                      <TooltipTrigger asChild>
-                        <Button
-                          className="h-auto p-0"
-                          variant="destructive"
-                          onClick={() => {
-                            setSelectedRegulation(row.original);
-                            setShowDeleteConfirmationModal(true);
-                          }}
-                          disabled={row.original.isNewlyAdded}
-                        >
-                          {row.original.isDeleting ? (
-                            <Loader2 className="mr-2 h-4 w-4 animate-spin text-red-600" />
-                          ) : (
-                            <Trash2
-                              size={16}
-                              className="mr-2 text-center text-red-600"
+                  {headerGroup.headers.map((header) => {
+                    return (
+                      <TableHead key={header.id}>
+                        {header.isPlaceholder
+                          ? null
+                          : flexRender(
+                              header.column.columnDef.header,
+                              header.getContext()
+                            )}
+                      </TableHead>
+                    );
+                  })}
+                  <TableHead>
+                    <Button variant="ghost" className="px-0">
+                      Actions
+                    </Button>
+                  </TableHead>
+                </TableRow>
+              ))}
+            </TableHeader>
+
+            <TableBody>
+              {table.getRowModel().rows?.length ? (
+                table.getRowModel().rows.map((row) => (
+                  <TableRow
+                    key={row.id}
+                    data-state={row.getIsSelected() && 'selected'}
+                  >
+                    {row.getVisibleCells().map((cell) => (
+                      <TableCell key={cell.id}>
+                        {flexRender(
+                          cell.column.columnDef.cell,
+                          cell.getContext()
+                        )}
+                      </TableCell>
+                    ))}
+                    <TableCell className="w-52">
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <Button
+                            onClick={() => {
+                              const params = new URLSearchParams(searchParams);
+                              params.set('isFlyoutOpen', 'true');
+                              params.set('regulationId', row.original.id);
+                              router.push(pathname + '?' + params.toString());
+                            }}
+                            className="mr-2 h-auto px-3 py-2 "
+                            variant="mild"
+                            disabled={row.original.isNewlyAdded}
+                          >
+                            <Pencil
+                              size={12}
+                              className=" text-center text-black"
                             />
-                          )}
-                        </Button>
-                      </TooltipTrigger>
-                      <TooltipContent>
-                        <p>
-                          <span>Delete</span>
-                          <span className="mx-1 font-semibold">{`${row.original.regulationName}`}</span>
-                        </p>
-                      </TooltipContent>
-                    </Tooltip>
+                          </Button>
+                        </TooltipTrigger>
+                        <TooltipContent>
+                          <p>
+                            <span>Edit</span>
+                            <span className="mx-1 font-semibold">{`${row.original.regulationName}`}</span>
+                          </p>
+                        </TooltipContent>
+                      </Tooltip>
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <Button
+                            className="h-auto px-3 py-2"
+                            variant="mild"
+                            onClick={() => {
+                              setSelectedRegulation(row.original);
+                              setShowDeleteConfirmationModal(true);
+                            }}
+                            disabled={row.original.isNewlyAdded}
+                          >
+                            {row.original.isDeleting ? (
+                              <Loader2 className="mr-2 h-4 w-4 animate-spin text-red-600" />
+                            ) : (
+                              <Trash2
+                                size={12}
+                                className=" text-center text-red-600"
+                              />
+                            )}
+                          </Button>
+                        </TooltipTrigger>
+                        <TooltipContent>
+                          <p>
+                            <span>Delete</span>
+                            <span className="mx-1 font-semibold">{`${row.original.regulationName}`}</span>
+                          </p>
+                        </TooltipContent>
+                      </Tooltip>
+                    </TableCell>
+                  </TableRow>
+                ))
+              ) : (
+                <TableRow>
+                  <TableCell colSpan={5} className="h-24 text-center">
+                    {isRegulationListLoading
+                      ? 'Loading...'
+                      : 'No Regulation Found'}
                   </TableCell>
                 </TableRow>
-              ))
-            ) : (
-              <TableRow>
-                <TableCell colSpan={5} className="h-24 text-center">
-                  {isRegulationListLoading
-                    ? 'Loading...'
-                    : 'No Regulation Found'}
-                </TableCell>
-              </TableRow>
-            )}
-          </TableBody>
-        </Table>
+              )}
+            </TableBody>
+          </Table>
+        </div>
       </div>
       <When
         condition={
