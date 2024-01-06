@@ -72,6 +72,18 @@ export const menuItems: SidebarMenuItem[] = [
         path: '/academics/regulation',
       },
       {
+        id: 'academics-medium',
+        label: 'Medium',
+        icon: null,
+        path: '/academics/medium',
+      },
+      {
+        id: 'academics-group',
+        label: 'Group',
+        icon: null,
+        path: '/academics/group',
+      },
+      {
         id: 'academics-batches',
         label: 'Batches',
         icon: null,
