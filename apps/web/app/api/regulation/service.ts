@@ -38,7 +38,6 @@ export async function getRegulationById(id: string) {
   return await db.regulation.findUnique({
     where: {
       id: id,
-      isActive: true,
     },
   });
 }
