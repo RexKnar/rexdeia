@@ -29,7 +29,10 @@ export const metadata = {
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang="en" className={`${inter.variable} ${roboto_mono.variable}`}>
+    <html
+      lang="en"
+      className={`${inter.variable} ${roboto_mono.variable} bg-white`}
+    >
       <Providers>
         <body className="h-screen bg-gray-50">
           <NextTopLoader color={primaryColor} showSpinner={false} />
