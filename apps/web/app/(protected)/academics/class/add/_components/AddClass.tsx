@@ -1,6 +1,7 @@
 'use client';
 
 import { Loader2, PlusCircle } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 import { parseAsInteger, useQueryState } from 'next-usequerystate';
 import { useState } from 'react';
 import { Controller, useFieldArray, useForm } from 'react-hook-form';
@@ -34,10 +35,14 @@ export default function AddClass() {
     mutateAsync: mutateCreateClassAsync,
     isPending: isPendingCreateClass,
   } = useCreateClassMutationQuery(page, limit);
-
+  const router = useRouter();
   async function addClass(payload) {
     try {
-      await mutateCreateClassAsync(payload);
+      const response = await mutateCreateClassAsync(payload);
+
+      if (response) {
+        router.push(`/academics/class/`);
+      }
     } catch (error) {
       console.error(error);
     }

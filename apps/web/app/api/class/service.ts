@@ -13,7 +13,6 @@ export async function getClassList(page: number, limit: number) {
       take: limit,
       skip: (page - 1) * limit,
       where: {
-        isActive: true,
         branchId: session.branchId,
       },
       include: {
@@ -22,7 +21,6 @@ export async function getClassList(page: number, limit: number) {
     }),
     db.class.count({
       where: {
-        isActive: true,
         branchId: session.branchId,
       },
     }),
