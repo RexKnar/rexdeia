@@ -18,15 +18,10 @@ const roboto_mono = Roboto_Mono({
   variable: '--font-roboto-mono',
 });
 
-export const metadata = {
-  title: 'Capeo - Simplifying the way you manage your business',
-  description: 'Capeo is a business management platform for small businesses.',
-};
-
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="en" className={`${inter.variable} ${roboto_mono.variable}`}>
-      <body className="h-screen">
+      <body className="h-screen bg-gray-50">
         <Providers>{children}</Providers>
       </body>
     </html>

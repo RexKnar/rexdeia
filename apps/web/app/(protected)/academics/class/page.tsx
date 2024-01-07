@@ -6,7 +6,7 @@ import { authOptions } from '../../../../lib/auth';
 import { LinkButton } from '../../../../lib/components/LinkButton';
 import { PageTitle } from '../../../../lib/components/PageTitle';
 import { ClassList } from './_components/ClassList';
-import SaveSectionFlyout from './[id]/section/[SectionId]/components/SaveSectionFlyout';
+import SaveSectionFlyout from './[id]/section/[sectionId]/_components/SaveSectionFlyout';
 
 export default async function Page() {
   const session = await getServerSession(authOptions);

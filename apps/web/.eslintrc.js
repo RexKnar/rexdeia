@@ -1,6 +1,5 @@
 module.exports = {
   root: false,
-  // extends: ['eslint:recommended', 'next', 'turbo', 'plugin:react/recommended'],
   extends: ['eslint:recommended', 'next', 'turbo'],
   plugins: [
     '@typescript-eslint',
@@ -45,5 +44,16 @@ module.exports = {
       presets: [require.resolve('next/babel')],
     },
   },
-  ignorePatterns: ['db.ts', 'next.config.js', 'next-env.d.ts', 'public/*'],
+  ignorePatterns: [
+    'db.ts',
+    'public/*',
+    '**/dist',
+    '**/out',
+    '**/build',
+    '**/.next',
+    '**/.vercel',
+    'next-env.d.ts',
+    'next.config.js',
+    '**/node_modules',
+  ],
 };
