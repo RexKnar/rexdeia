@@ -57,7 +57,7 @@ const columns: ColumnDef<BatchModel>[] = [
           className="px-0"
           onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
         >
-          Batch Name
+          Academic Name
         </Button>
       );
     },
@@ -127,7 +127,7 @@ const columns: ColumnDef<BatchModel>[] = [
   },
 ];
 
-export function BatchesListTable() {
+export function AcademicYearListTable() {
   const { toast } = useToast();
 
   const [showDeleteConfirmationModal, setShowDeleteConfirmationModal] =
@@ -250,15 +250,15 @@ export function BatchesListTable() {
                             await setIsFlyoutOpen(true);
                             await setBatchId(row.original.id);
                           }}
-                          className="mr-2 h-auto p-0"
-                          variant="destructive"
+                          className="mr-3 h-auto px-3 py-2"
+                          variant="mild"
                           disabled={
                             row.original.isNewlyAdded || row.original.isUpdating
                           }
                         >
                           <Pencil
-                            size={16}
-                            className="mr-2 text-center text-black"
+                            size={12}
+                            className="text-center text-black"
                           />
                         </Button>
                       </TooltipTrigger>
@@ -272,8 +272,8 @@ export function BatchesListTable() {
                     <Tooltip>
                       <TooltipTrigger asChild>
                         <Button
-                          className="h-auto p-0"
-                          variant="destructive"
+                          className="h-auto px-3 py-2"
+                          variant="mild"
                           onClick={() => {
                             setSelectedBatch(row.original);
                             setShowDeleteConfirmationModal(true);
@@ -286,8 +286,8 @@ export function BatchesListTable() {
                             <Loader2 className="mr-2 h-4 w-4 animate-spin text-red-600" />
                           ) : (
                             <Trash2
-                              size={16}
-                              className="mr-2 text-center text-red-600"
+                              size={12}
+                              className="text-center text-red-600 "
                             />
                           )}
                         </Button>
@@ -326,7 +326,7 @@ export function BatchesListTable() {
                   await setLimit(parseInt(value));
                 }}
               >
-                <SelectTrigger className="w-auto ">
+                <SelectTrigger className="w-auto">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>

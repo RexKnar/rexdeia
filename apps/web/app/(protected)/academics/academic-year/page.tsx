@@ -3,9 +3,9 @@ import { getServerSession } from 'next-auth';
 import React from 'react';
 
 import { authOptions } from '../../../../lib/auth';
-import { BatchesListTable } from './_components/BatchesListTable';
-import { BatchesPageHeader } from './_components/BatchesPageHeader';
-import { SaveBatchFlyout } from './_components/modals/SaveBatchFlyout';
+import { AcademicYearListTable } from './_components/AcademicYearListTable';
+import { AcademicYearPageHeader } from './_components/AcademicYearPageHeader';
+import { SaveAcademicYearFlyout } from './_components/modals/SaveAcademicYearFlyout';
 
 export default async function Page() {
   const session = await getServerSession(authOptions);
@@ -15,10 +15,10 @@ export default async function Page() {
 
   return (
     <section className="flex flex-col gap-6">
-      <BatchesPageHeader />
+      <AcademicYearPageHeader />
       <section className="space-y-2 rounded-md bg-white p-4">
-        <BatchesListTable />
-        <SaveBatchFlyout />
+        <AcademicYearListTable />
+        <SaveAcademicYearFlyout />
       </section>
     </section>
   );

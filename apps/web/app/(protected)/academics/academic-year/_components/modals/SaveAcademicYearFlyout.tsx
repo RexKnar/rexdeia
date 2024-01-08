@@ -26,7 +26,7 @@ import { useCreateBatchMutationQuery } from '../../../../../../lib/queries/batch
 import { useGetBatchByIdQuery } from '../../../../../../lib/queries/batches/useGetBatchByIdQuery';
 import { useUpdateBatchMutationQuery } from '../../../../../../lib/queries/batches/useUpdateBatchMutationQuery';
 
-export function SaveBatchFlyout() {
+export function SaveAcademicYearFlyout() {
   const [endYear, setEndYear] = useState(new Date());
   const [startYear, setStartYear] = useState(new Date());
   const [isOpen, setIsOpen] = useQueryState(
@@ -153,7 +153,7 @@ export function SaveBatchFlyout() {
                     <div className="flex items-center">
                       <PlusCircle size={20} strokeWidth={1.5} />
                       <Text variant="lg-semibold" className="ml-2">
-                        {batchId ? 'Update Batch' : 'Add Batch'}
+                        {batchId ? 'Update Academic year' : 'Add Academic year'}
                       </Text>
                     </div>
                     <div className="flex items-center">
@@ -184,7 +184,7 @@ export function SaveBatchFlyout() {
                     htmlFor="name"
                     className="text-sm font-semibold text-gray-700"
                   >
-                    Batch Name
+                    Academic Name
                   </label>
                   <Input
                     {...register('name', {

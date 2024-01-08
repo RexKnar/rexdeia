@@ -228,13 +228,13 @@ export function RegulationListTable() {
                               params.set('regulationId', row.original.id);
                               router.push(pathname + '?' + params.toString());
                             }}
-                            className="mr-2 h-auto px-3 py-2 "
+                            className="mr-2 h-auto px-3 py-2"
                             variant="mild"
                             disabled={row.original.isNewlyAdded}
                           >
                             <Pencil
                               size={12}
-                              className=" text-center text-black"
+                              className="text-center text-black"
                             />
                           </Button>
                         </TooltipTrigger>
@@ -261,7 +261,7 @@ export function RegulationListTable() {
                             ) : (
                               <Trash2
                                 size={12}
-                                className=" text-center text-red-600"
+                                className="text-center text-red-600"
                               />
                             )}
                           </Button>
@@ -310,7 +310,7 @@ export function RegulationListTable() {
                   router.push(pathname + '?' + params.toString());
                 }}
               >
-                <SelectTrigger className="w-auto ">
+                <SelectTrigger className="w-auto">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>

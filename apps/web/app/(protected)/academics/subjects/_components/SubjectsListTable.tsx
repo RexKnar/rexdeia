@@ -187,12 +187,12 @@ export function SubjectsListTable() {
                             params.set('regulationId', row.original.id);
                             router.push(pathname + '?' + params.toString());
                           }}
-                          className="mr-2 h-auto p-0"
-                          variant="destructive"
+                          className="mr-2 h-auto px-3 py-2"
+                          variant="mild"
                         >
                           <Pencil
-                            size={16}
-                            className="mr-2 text-center text-black"
+                            size={12}
+                            className="text-center text-black"
                           />
                         </Button>
                       </TooltipTrigger>
@@ -205,11 +205,11 @@ export function SubjectsListTable() {
                     </Tooltip>
                     <Tooltip>
                       <TooltipTrigger asChild>
-                        <Button className="h-auto p-0" variant="destructive">
+                        <Button className="h-auto px-3 py-2" variant="mild">
                           {
                             <Trash2
-                              size={16}
-                              className="mr-2 text-center text-red-600"
+                              size={12}
+                              className="text-center text-red-600 "
                             />
                           }
                         </Button>
@@ -250,7 +250,7 @@ export function SubjectsListTable() {
                   await setLimit(parseInt(value));
                 }}
               >
-                <SelectTrigger className="w-auto ">
+                <SelectTrigger className="w-auto">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
