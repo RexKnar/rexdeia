@@ -93,7 +93,7 @@ const columns: ColumnDef<RegulationModel>[] = [
       return (
         <span
           className={cn(
-            'ml-1 rounded px-2 py-1 text-center text-sm font-medium',
+            'ml-1 rounded px-2 py-1 text-center text-sm font-medium text-gray-100',
             row.original.isActive ? 'bg-green-600' : 'bg-red-600'
           )}
         >

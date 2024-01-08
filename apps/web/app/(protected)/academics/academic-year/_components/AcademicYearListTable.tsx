@@ -40,6 +40,7 @@ import {
   TableHeader,
   TableRow,
 } from 'ui/components/ui/Table';
+import { cn } from 'utils';
 
 import { DeleteConfirmationModal } from '../../../../../lib/components/modals/DeleteConfirmationModal';
 import { BatchModel } from '../../../../../lib/domain/batch';
@@ -122,7 +123,16 @@ const columns: ColumnDef<BatchModel>[] = [
       );
     },
     cell: ({ row }) => {
-      return <div>{row.original.isActive ? 'true' : 'false'}</div>;
+      return (
+        <span
+          className={cn(
+            'ml-1 rounded px-2 py-1 text-center text-sm font-medium text-gray-100',
+            row.original.isActive ? 'bg-green-600' : 'bg-red-600'
+          )}
+        >
+          {row.original.isActive ? 'Active' : 'Inactive'}
+        </span>
+      );
     },
   },
 ];
