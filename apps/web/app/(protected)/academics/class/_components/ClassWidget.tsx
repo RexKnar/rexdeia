@@ -1,17 +1,28 @@
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
+import { parseAsBoolean, useQueryState } from 'next-usequerystate';
 import { Button } from 'ui';
 import { cn } from 'utils';
 
 export function ClassWidget(props) {
-  const pathname = usePathname();
   const router = useRouter();
-  const searchParams = useSearchParams();
+  const [, isSectionFlyoutOpen] = useQueryState(
+    'isSectionFlyoutOpen',
+    parseAsBoolean.withDefault(false)
+  );
 
   return (
     <div className="widget-container space-y-4">
       <div className="widget h-32 min-w-80 rounded-lg border border-primary-200 bg-white p-4 shadow-md">
         <div className="widget-title  flex items-center text-lg font-semibold">
-          {props.classDetails.name}
+          <Button
+            className={cn('ps-0 text-lg font-semibold')}
+            variant="ghost"
+            onClick={() => {
+              router.push(`class/${props.classDetails.id}`);
+            }}
+          >
+            {props.classDetails.name}
+          </Button>
           <Button
             variant="outline"
             className={cn(
@@ -32,10 +43,7 @@ export function ClassWidget(props) {
             variant="outline"
             className="h-7 w-7 gap-1 rounded p-1"
             onClick={() => {
-              const params = new URLSearchParams(searchParams);
-              params.set('isSectionFlyoutOpen', 'true');
-              params.set('classId', props.classDetails.id);
-              router.push(pathname + '?' + params.toString());
+              isSectionFlyoutOpen(true);
             }}
           >
             <svg

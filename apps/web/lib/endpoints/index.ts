@@ -24,7 +24,9 @@ export const CREATE_SHARE_FOR_FORM = `CREATE_SHARE_FOR_FORM`;
 export const UPDATE_SHARE_FOR_FORM = `UPDATE_SHARE_FOR_FORM`;
 export const GET_STUDENTS_LIST = `GET_STUDENTS_LIST`;
 export const ADD_CLASS = `ADD_CLASS`;
-export const GET_CLASS = `GET_CLASS`;
+export const GET_CLASS_LIST = `GET_CLASS_LIST`;
+export const GET_CLASS_BY_ID = `GET_CLASS_BY_ID`;
+export const UPDATE_CLASS_BY_ID = `UPDATE_CLASS_BY_ID`;
 export const GET_REGULATION_LIST = `GET_REGULATION_LIST`;
 export const GET_REGULATION_BY_ID = `GET_REGULATION_BY_ID`;
 export const UPDATE_REGULATION_BY_ID = `UPDATE_REGULATION_BY_ID`;
@@ -133,9 +135,17 @@ export default <EndpointDetails>{
     requestType: `POST`,
     endpoint: `/api/class`,
   },
-  [GET_CLASS]: {
+  [GET_CLASS_LIST]: {
     requestType: `GET`,
     endpoint: `/api/class`,
+  },
+  [GET_CLASS_BY_ID]: {
+    requestType: `GET`,
+    endpoint: `/api/class/[id]`,
+  },
+  [UPDATE_CLASS_BY_ID]: {
+    requestType: `PUT`,
+    endpoint: `/api/class/[id]`,
   },
   [GET_REGULATION_LIST]: {
     requestType: `GET`,

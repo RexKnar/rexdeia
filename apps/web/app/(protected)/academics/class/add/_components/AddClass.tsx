@@ -21,7 +21,13 @@ import {
 import { useCreateClassMutationQuery } from '../../../../../../lib/queries/class/useCreateClassMutationQuery';
 
 export default function AddClass() {
-  const { control, register, setValue, handleSubmit } = useForm();
+  const {
+    control,
+    register,
+    setValue,
+    handleSubmit,
+    formState: { errors: fieldErrors },
+  } = useForm();
   const { fields, append, remove } = useFieldArray({
     control,
     name: 'section',
@@ -59,6 +65,7 @@ export default function AddClass() {
         </div>
         <div className="items-center">
           <Switch
+            id="isActive"
             {...register('isActive')}
             onCheckedChange={(value) => {
               setValue('isActive', value);
@@ -90,7 +97,15 @@ export default function AddClass() {
                 id="name"
               />
             </div>
-            <div></div>
+            <p
+              className={`h-2 p-1 text-sm text-red-600 ${
+                fieldErrors.name
+                  ? 'opacity-100 transition-opacity duration-300'
+                  : 'opacity-0 transition-opacity duration-300'
+              }`}
+            >
+              {fieldErrors.name?.message as string}
+            </p>
           </div>
           <div>
             <div className="mt-3 ">
@@ -116,8 +131,14 @@ export default function AddClass() {
                       id="sectionName"
                     />
                     <p
-                      className={`h-2 p-1 text-center text-sm text-red-600 `}
-                    ></p>
+                      className={`h-2 p-1 text-sm text-red-600 ${
+                        fieldErrors.name
+                          ? 'opacity-100 transition-opacity duration-300'
+                          : 'opacity-0 transition-opacity duration-300'
+                      }`}
+                    >
+                      {fieldErrors.name?.message as string}
+                    </p>
                   </div>
                   <div className="">
                     <label
@@ -186,6 +207,7 @@ export default function AddClass() {
                   <Button
                     className=" outline-danger"
                     variant="outline"
+                    type="button"
                     onClick={() => {
                       remove(parseInt(row.id));
                     }}

@@ -91,7 +91,6 @@ export async function getClassById(id: string) {
     where: {
       id: id,
       branchId: session.branchId,
-      isActive: true,
     },
   });
 }
@@ -107,7 +106,8 @@ export async function updateClassById(
       branchId: session.branchId,
     },
     data: {
-      ...updateClass,
+      name: updateClass.name,
+      isActive: updateClass.isActive,
     },
   });
 }
