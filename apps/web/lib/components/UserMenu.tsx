@@ -11,7 +11,7 @@ import {
   Text,
 } from 'ui';
 
-import { useGetUserDetailsQuery } from '../../queries/useGetUserDetailsQuery';
+import { useGetUserDetailsQuery } from '../queries/useGetUserDetailsQuery';
 
 export function UserMenu() {
   const { data, isLoading } = useGetUserDetailsQuery();

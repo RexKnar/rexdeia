@@ -34,6 +34,7 @@ import {
   TableHeader,
   TableRow,
 } from 'ui/components/ui/Table';
+import { cn } from 'utils';
 
 import { SubjectModel } from '../../../../../lib/domain/subject';
 import { useGetSubjectListQuery } from '../../../../../lib/queries/subjects/useGetSubjectListQuery';
@@ -99,7 +100,16 @@ const columns: ColumnDef<SubjectModel>[] = [
       );
     },
     cell: ({ row }) => {
-      return <div>{row.original.isActive ? 'true' : 'false'}</div>;
+      return (
+        <span
+          className={cn(
+            'ml-1 rounded px-2 py-1 text-center text-sm font-medium text-gray-100',
+            row.original.isActive ? 'bg-green-600' : 'bg-red-600'
+          )}
+        >
+          {row.original.isActive ? 'Active' : 'Inactive'}
+        </span>
+      );
     },
   },
 ];
@@ -187,12 +197,12 @@ export function SubjectsListTable() {
                             params.set('regulationId', row.original.id);
                             router.push(pathname + '?' + params.toString());
                           }}
-                          className="mr-2 h-auto p-0"
-                          variant="destructive"
+                          className="mr-2 h-auto px-3 py-2"
+                          variant="mild"
                         >
                           <Pencil
-                            size={16}
-                            className="mr-2 text-center text-black"
+                            size={12}
+                            className="text-center text-black"
                           />
                         </Button>
                       </TooltipTrigger>
@@ -205,11 +215,11 @@ export function SubjectsListTable() {
                     </Tooltip>
                     <Tooltip>
                       <TooltipTrigger asChild>
-                        <Button className="h-auto p-0" variant="destructive">
+                        <Button className="h-auto px-3 py-2" variant="mild">
                           {
                             <Trash2
-                              size={16}
-                              className="mr-2 text-center text-red-600"
+                              size={12}
+                              className="text-center text-red-600 "
                             />
                           }
                         </Button>
@@ -250,7 +260,7 @@ export function SubjectsListTable() {
                   await setLimit(parseInt(value));
                 }}
               >
-                <SelectTrigger className="w-auto ">
+                <SelectTrigger className="w-auto">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>

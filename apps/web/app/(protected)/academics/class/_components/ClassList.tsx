@@ -1,5 +1,6 @@
 'use client';
 
+import { Loader2 } from 'lucide-react';
 import { parseAsInteger, useQueryState } from 'next-usequerystate';
 import React from 'react';
 import { When } from 'react-if';
@@ -23,24 +24,29 @@ export function ClassList() {
     parseAsInteger.withDefault(10)
   );
 
-  const { data: classList, isLoading: isclassListLoading } =
+  const { data: classList, isLoading: isClassListLoading } =
     useGetClassListQuery({
       page,
       limit,
     });
-  const widgetsData = Array.from({ length: 11 }, (_, index) => ({
-    widgetId: index + 1,
-  }));
 
-  return (
-    <section className=" p-3">
-      <div className="flex flex-wrap gap-4">
-        {widgetsData.map((widgetData) => (
-          <ClassWidget key={widgetData.widgetId} />
-        ))}
+  if (isClassListLoading) {
+    return (
+      <div className="flex items-center justify-center">
+        <Loader2 className="mr-2 h-6 w-6 animate-spin text-white" />
+        Fetching
       </div>
-      <div className="mt-4 rounded-md border "></div>
-      <When condition={classList?.data?.length && !isclassListLoading}>
+    );
+  }
+  return (
+    <section className="p-3">
+      <When condition={classList.data.length}>
+        <div className="flex flex-wrap gap-4">
+          {classList.data.map((widgetData) => (
+            <ClassWidget classDetails={widgetData} key={widgetData.id} />
+          ))}
+        </div>
+        <div className="mt-4 rounded-md border "></div>
         <section className="mt-5 flex justify-between">
           <div className="justify-left flex w-2/6">
             <label className="w-1/3 py-2 text-center text-sm text-gray-700">
@@ -49,7 +55,7 @@ export function ClassList() {
             <div className="w-1/3">
               <Select
                 value={limit.toString()}
-                disabled={isclassListLoading}
+                disabled={isClassListLoading}
                 onValueChange={async (value) => {
                   await setLimit(parseInt(value));
                 }}

@@ -3,9 +3,9 @@
 import { Search } from 'lucide-react';
 import { Input } from 'ui';
 
-import { UserMenu } from './footer/UserMenu';
 import { NotificationPopover } from './notification/NotificationPopover';
 import { PathBreadcrumb } from './PathBreadcrumb';
+import { UserMenu } from './UserMenu';
 
 export function PageHeader() {
   return (

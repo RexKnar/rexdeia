@@ -18,15 +18,31 @@ const roboto_mono = Roboto_Mono({
   variable: '--font-roboto-mono',
 });
 
-export const metadata = {
-  title: 'Capeo - Simplifying the way you manage your business',
-  description: 'Capeo is a business management platform for small businesses.',
-};
-
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="en" className={`${inter.variable} ${roboto_mono.variable}`}>
-      <body className="h-screen">
+      <head>
+        <link
+          sizes="180x180"
+          rel="apple-touch-icon"
+          href="/apple-touch-icon.png"
+        />
+        <link
+          rel="icon"
+          sizes="32x32"
+          type="image/png"
+          href="/favicon-32x32.png"
+        />
+        <link
+          rel="icon"
+          sizes="16x16"
+          type="image/png"
+          href="/favicon-16x16.png"
+        />
+        <link rel="manifest" href="/site.webmanifest" />
+        <title>acadx.io | Elevate your academic experience</title>
+      </head>
+      <body className="h-screen bg-gray-50">
         <Providers>{children}</Providers>
       </body>
     </html>

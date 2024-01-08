@@ -6,7 +6,7 @@ import { Button } from 'ui';
 
 import { PageTitle } from '../../../../../lib/components/PageTitle';
 
-export function BatchesPageHeader() {
+export function AcademicYearPageHeader() {
   const [, setIsFlyoutOpen] = useQueryState(
     'isFlyoutOpen',
     parseAsBoolean.withDefault(false)
@@ -14,14 +14,14 @@ export function BatchesPageHeader() {
 
   return (
     <section className="flex justify-between px-2">
-      <PageTitle title="Batches" />
+      <PageTitle title="Academic Year" />
       <Button
         variant="default"
         onClick={async () => {
           await setIsFlyoutOpen(true);
         }}
       >
-        Add Batch
+        Add Academic Year
       </Button>
     </section>
   );

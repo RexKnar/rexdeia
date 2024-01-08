@@ -84,10 +84,10 @@ export const menuItems: SidebarMenuItem[] = [
         path: '/academics/group',
       },
       {
-        id: 'academics-batches',
-        label: 'Batches',
+        id: 'academics-year',
+        label: 'Academic Year',
         icon: null,
-        path: '/academics/batches',
+        path: '/academics/academic-year',
       },
       {
         id: 'academics-subjects-student',

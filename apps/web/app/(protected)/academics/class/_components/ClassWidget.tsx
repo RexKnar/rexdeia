@@ -1,48 +1,42 @@
-import React, { useState } from 'react';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { Button } from 'ui';
+import { cn } from 'utils';
 
-export function ClassWidget() {
-  const [buttons, setButtons] = useState([
-    { label: 'A', className: 'h-7 w-7 rounded p-1 text-sm' },
-    { label: 'C', className: 'h-7 w-7 rounded p-1 text-sm' },
-    { label: 'D', className: 'h-7 w-7 rounded p-1 text-sm' },
-  ]);
-
-  const handleAddButtonClick = () => {
-    const lastLabel =
-      buttons.length > 0 ? buttons[buttons.length - 1].label : 'A';
-    const nextLabel = String.fromCharCode(lastLabel.charCodeAt(0) + 1);
-
-    const newButton = {
-      label: nextLabel,
-      className: 'h-7 w-7 gap-1 rounded p-1 text-sm',
-    };
-
-    setButtons([...buttons, newButton]);
-  };
+export function ClassWidget(props) {
+  const pathname = usePathname();
+  const router = useRouter();
+  const searchParams = useSearchParams();
 
   return (
     <div className="widget-container space-y-4">
       <div className="widget h-32 min-w-80 rounded-lg border border-primary-200 bg-white p-4 shadow-md">
         <div className="widget-title  flex items-center text-lg font-semibold">
-          Class Name
+          {props.classDetails.name}
           <Button
             variant="outline"
-            className="w-18 ml-auto h-6 rounded border-primary-300 p-2 text-sm text-black"
+            className={cn(
+              'w-18 ml-auto  h-6 rounded-sm border-primary-300  px-2 py-1 text-center text-sm font-medium text-white',
+              props.classDetails.isActive ? 'bg-green-600' : 'bg-red-600'
+            )}
           >
-            Students
+            {props.classDetails.isActive ? 'Active' : 'Inactive'}
           </Button>
         </div>
         <div className="mt-6 flex flex-wrap content-center items-center gap-2 self-stretch">
-          {buttons.map((button, index) => (
-            <Button key={index} className={button.className}>
-              {button.label}
+          {props.classDetails.Section.map((section, index) => (
+            <Button key={index} className="text-center">
+              {section.name}
             </Button>
           ))}
           <Button
             variant="outline"
             className="h-7 w-7 gap-1 rounded p-1"
-            onClick={handleAddButtonClick}
+            onClick={() => {
+              const params = new URLSearchParams(searchParams);
+              params.set('isSectionFlyoutOpen', 'true');
+              params.set('classId', props.classDetails.id);
+              router.push(pathname + '?' + params.toString());
+            }}
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"

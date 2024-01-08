@@ -2,6 +2,8 @@
 
 import { ChevronDown, Plus, Settings } from 'lucide-react';
 import {
+  Avatar,
+  AvatarImage,
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuGroup,
@@ -11,7 +13,6 @@ import {
 } from 'ui';
 
 import { useGetUserDetailsQuery } from '../../queries/useGetUserDetailsQuery';
-import { UserMenu } from '../header/UserMenu';
 
 export function SidebarHeader() {
   const { data, isLoading } = useGetUserDetailsQuery();
@@ -19,7 +20,9 @@ export function SidebarHeader() {
   return (
     <div className="fixed flex h-[64px] w-full items-center justify-between border border-b-gray-200 border-r-transparent bg-white px-4 text-lg font-semibold">
       <div className="flex items-center gap-4 text-left">
-        <UserMenu />
+        <Avatar className="cursor-pointer">
+          <AvatarImage src="https://avatars.githubusercontent.com/u/124599?v=4" />
+        </Avatar>
         <DropdownMenu>
           <DropdownMenuTrigger>
             <div className="flex cursor-pointer text-sm font-semibold">

@@ -1,14 +1,11 @@
 'use client';
 
 import { Eye, EyeOff, Loader2, Mail, PhoneCall, User2 } from 'lucide-react';
-import Image from 'next/image';
 import { signIn } from 'next-auth/react';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Button, Input } from 'ui';
 
-import googleLogo from '../../../public/assets/images/Google_logo.png';
-import microsoftLogo from '../../../public/assets/images/Microsoft_logo.png';
 import { makeAPICall } from '../../api';
 import { REGISTER_USER } from '../../endpoints';
 
@@ -261,31 +258,6 @@ export function SignUpForm() {
           ) : (
             `Signup`
           )}
-        </Button>
-      </div>
-      <label className="inter mt-8 block text-center text-sm font-semibold text-gray-800">
-        <div className="flex items-center justify-center">
-          <div className="h-px flex-grow bg-gray-200"></div>
-          <span className="px-2 text-gray-800">or continue with</span>
-          <div className="h-px flex-grow bg-gray-200"></div>
-        </div>
-      </label>
-      <div className="flex justify-center gap-4">
-        <Button
-          type="button"
-          variant="ghost"
-          className="mt-3 w-full bg-transparent px-4 py-3 text-base text-gray-800 outline outline-gray-300 hover:outline-primary-800"
-        >
-          <Image src={googleLogo} alt={'logo'} className="mr-1"></Image>
-          Google
-        </Button>
-        <Button
-          type="button"
-          variant="ghost"
-          className="mt-3 w-full bg-transparent px-4 py-3 text-base text-gray-800 outline outline-gray-300 hover:outline-primary-800"
-        >
-          <Image src={microsoftLogo} alt={'logo'} className="mr-1"></Image>
-          Microsoft
         </Button>
       </div>
     </form>
