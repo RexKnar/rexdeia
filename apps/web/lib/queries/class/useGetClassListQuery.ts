@@ -7,7 +7,7 @@ import {
 import { makeAPICall } from '../../api';
 import { PaginatedResponse } from '../../domain';
 import { ClassModel } from '../../domain/class';
-import { GET_CLASS } from '../../endpoints';
+import { GET_CLASS_LIST } from '../../endpoints';
 
 function getClassList(
   { page, limit }: { page: number; limit: number },
@@ -15,10 +15,10 @@ function getClassList(
 ): UseQueryOptions<PaginatedResponse<ClassModel>> {
   return {
     ...options,
-    queryKey: [GET_CLASS, page, limit],
+    queryKey: [GET_CLASS_LIST, page, limit],
     queryFn: async () => {
       return await makeAPICall<PaginatedResponse<ClassModel>>(
-        GET_CLASS,
+        GET_CLASS_LIST,
         {},
         {
           page: page,

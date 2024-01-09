@@ -19,5 +19,5 @@ export type CreateClassModel = Pick<
 
 export type UpdateClassModel = Pick<
   ClassModel,
-  'name' | 'isActive' | 'batchId' | 'branchId' | 'regulationId'
+  'id' | 'name' | 'isActive' | 'branchId'
 >;

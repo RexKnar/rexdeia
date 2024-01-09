@@ -3,7 +3,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { makeAPICall } from '../../api';
 import { PaginatedResponse } from '../../domain';
 import { ClassModel, CreateClassModel } from '../../domain/class';
-import { ADD_CLASS, GET_CLASS } from '../../endpoints';
+import { ADD_CLASS, GET_CLASS_LIST } from '../../endpoints';
 
 export function useCreateClassMutationQuery(page: number, limit: number) {
   const queryClient = useQueryClient();
@@ -13,16 +13,16 @@ export function useCreateClassMutationQuery(page: number, limit: number) {
     },
     onMutate: async (payload: CreateClassModel) => {
       await queryClient.cancelQueries({
-        queryKey: [GET_CLASS, page, limit],
+        queryKey: [GET_CLASS_LIST, page, limit],
       });
 
       const previousClasses = queryClient.getQueryData<
         PaginatedResponse<ClassModel>
-      >([GET_CLASS, page, limit]);
+      >([GET_CLASS_LIST, page, limit]);
 
       if (previousClasses) {
         queryClient.setQueryData(
-          [GET_CLASS, page, limit],
+          [GET_CLASS_LIST, page, limit],
           (existingClass: PaginatedResponse<ClassModel>) => {
             return {
               ...existingClass,
@@ -39,12 +39,12 @@ export function useCreateClassMutationQuery(page: number, limit: number) {
     },
     onError: (error, _, context) => {
       if (context.previousClass) {
-        queryClient.setQueryData([GET_CLASS], context.previousClass);
+        queryClient.setQueryData([GET_CLASS_LIST], context.previousClass);
       }
     },
     onSuccess: async () => {
       await queryClient.refetchQueries({
-        queryKey: [GET_CLASS, page, limit],
+        queryKey: [GET_CLASS_LIST, page, limit],
       });
     },
   });

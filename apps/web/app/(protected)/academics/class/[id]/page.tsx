@@ -2,11 +2,10 @@ import { redirect } from 'next/navigation';
 import { getServerSession } from 'next-auth';
 
 import { authOptions } from '../../../../../lib/auth';
-import ClassDetail from './section/_components/ClassDetail';
+import { ClassDetail } from './components/ClassDetail';
 
 export default async function Page() {
   const session = await getServerSession(authOptions);
-
   if (!session.branchId || !session.organizationId) {
     return redirect('/signIn?callbackUrl=/admission/add');
   }

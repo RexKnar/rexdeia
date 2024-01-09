@@ -216,43 +216,49 @@ export function SaveAcademicYearFlyout() {
                     id="name"
                   />
                 </div>
-                <div>
-                  <label
-                    htmlFor="startYear"
-                    className="text-sm font-semibold text-gray-700"
-                  >
-                    Start Year
-                  </label>
-                  <DateSelector
-                    id="startYear"
-                    {...register('startYear')}
-                    onChange={(value) => {
-                      setStartYear(value);
-                      setValue('startYear', value);
-                    }}
-                    showYearPicker
-                    dateFormat="yyyy"
-                    selected={startYear}
-                  />
-                </div>
-                <div>
-                  <label
-                    htmlFor="endYear"
-                    className="text-sm font-semibold text-gray-700"
-                  >
-                    End Year
-                  </label>
-                  <DateSelector
-                    id="endYear"
-                    {...register('endYear')}
-                    onChange={(value) => {
-                      setEndYear(value);
-                      setValue('endYear', value);
-                    }}
-                    showYearPicker
-                    dateFormat="yyyy"
-                    selected={endYear}
-                  />
+                <div className="mt-3 flex justify-between">
+                  <div>
+                    <label
+                      htmlFor="startYear"
+                      className="text-sm font-semibold text-gray-700"
+                    >
+                      Start Year
+                    </label>
+                    <DateSelector
+                      id="startYear"
+                      placeholderText="Start Year"
+                      autoComplete="off"
+                      {...register('startYear')}
+                      onChange={(value) => {
+                        setStartYear(value);
+                        setValue('startYear', value);
+                      }}
+                      showYearPicker
+                      dateFormat="yyyy"
+                      selected={startYear}
+                    />
+                  </div>
+                  <div>
+                    <label
+                      htmlFor="endYear"
+                      className="text-sm font-semibold text-gray-700"
+                    >
+                      End Year
+                    </label>
+                    <DateSelector
+                      id="endYear"
+                      autoComplete="off"
+                      placeholderText="End Year"
+                      {...register('endYear')}
+                      onChange={(value) => {
+                        setEndYear(value);
+                        setValue('endYear', value);
+                      }}
+                      showYearPicker
+                      dateFormat="yyyy"
+                      selected={endYear}
+                    />
+                  </div>
                 </div>
                 <div className="mt-10">
                   <Button
