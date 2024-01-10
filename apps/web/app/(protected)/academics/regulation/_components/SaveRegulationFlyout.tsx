@@ -1,7 +1,6 @@
 'use client';
 
-import format from 'date-fns/format';
-import { CalendarIcon, Loader2, PlusCircle } from 'lucide-react';
+import { Loader2, PlusCircle } from 'lucide-react';
 import {
   parseAsBoolean,
   parseAsInteger,
@@ -12,11 +11,8 @@ import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import {
   Button,
-  Calendar,
+  DateSelector,
   Input,
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
   Sheet,
   SheetContent,
   SheetHeader,
@@ -24,7 +20,6 @@ import {
   Switch,
   Text,
 } from 'ui';
-import { cn } from 'utils';
 
 import { CreateRegulationModel } from '../../../../../lib/domain/regulation';
 import { useCreateRegulationsMutationQuery } from '../../../../../lib/queries/regulations/useCreateRegulationsMutationQuery';
@@ -47,6 +42,7 @@ export function SaveRegulationFlyout() {
     },
   });
 
+  const [announcedYear, setAnnouncedYear] = useState(null);
   const [isOpen, setIsOpen] = useQueryState(
     'isFlyoutOpen',
     parseAsBoolean.withDefault(false)
@@ -63,8 +59,6 @@ export function SaveRegulationFlyout() {
     isPending: isPendingCreateRegulations,
     mutateAsync: mutateCreateRegulationsAsync,
   } = useCreateRegulationsMutationQuery(page, limit);
-
-  const [isCalendarOpen, setIsCalendarOpen] = useState(false);
   const [activeToggleFlag, setActiveToggleFlag] = useState(false);
 
   const closeFlyout = async () => {
@@ -122,6 +116,7 @@ export function SaveRegulationFlyout() {
       setValue('announcedYear', new Date());
       reset();
       closeFlyout();
+      setAnnouncedYear(null);
     }
   }
 
@@ -198,45 +193,18 @@ export function SaveRegulationFlyout() {
                 >
                   Start Year
                 </label>
-                <Popover open={isCalendarOpen} onOpenChange={setIsCalendarOpen}>
-                  <PopoverTrigger
-                    asChild
-                    className="rounded-md border border-primary-200 p-3"
-                  >
-                    <Button
-                      variant={'outline'}
-                      className={cn(
-                        'w-full justify-between text-left font-normal',
-                        !watch('announcedYear') && 'text-muted-foreground flex'
-                      )}
-                    >
-                      <span>
-                        {watch('announcedYear') ? (
-                          format(watch('announcedYear'), 'PPP')
-                        ) : (
-                          <>Pick a date</>
-                        )}
-                      </span>
-                      <label className="flex justify-end text-sm font-normal text-gray-700">
-                        <CalendarIcon className="mr-2 flex h-4 w-4 justify-end text-primary-500" />
-                      </label>
-                    </Button>
-                  </PopoverTrigger>
-                  <PopoverContent className="z-index-99 w-auto bg-white p-0">
-                    <Calendar
-                      {...register('announcedYear', {
-                        required: 'Start Year is Required',
-                      })}
-                      mode="single"
-                      selected={watch('announcedYear')}
-                      onSelect={(selectedDate) => {
-                        setValue('announcedYear', selectedDate);
-                        setIsCalendarOpen(false);
-                      }}
-                      id="announcedYear"
-                    />
-                  </PopoverContent>
-                </Popover>
+                <DateSelector
+                  id="announcedYear"
+                  autoComplete="off"
+                  placeholderText="Regulation Year"
+                  onChange={(value) => {
+                    setValue('announcedYear', value);
+                    setAnnouncedYear(value);
+                  }}
+                  dateFormat="dd/MM/yyyy"
+                  selected={announcedYear}
+                  isClearable={false}
+                />
                 <p
                   className={`h-2 p-1 text-sm text-red-600 ${
                     fieldErrors.announcedYear
