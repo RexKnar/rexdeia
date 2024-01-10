@@ -1,4 +1,5 @@
 export type SectionModel = {
+  Section: string[];
   id: string;
   name: string;
   isActive: boolean;
@@ -6,6 +7,7 @@ export type SectionModel = {
   medium: string;
   classId: string;
   faculty: string;
+  department: string;
   subjects: string[];
   staffs: string[];
   students: string[];
@@ -13,7 +15,7 @@ export type SectionModel = {
 
 export type CreateSectionModel = Pick<
   SectionModel,
-  'name' | 'isActive' | 'medium' | 'classId'
+  'name' | 'isActive' | 'medium' | 'classId' | 'department'
 >;
 
 export type UpdateSectionModel = Pick<

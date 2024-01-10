@@ -50,7 +50,7 @@ export function ClassDetail() {
                       : 'bg-red-500'
                   )}
                 >
-                  {getClassByIdResponse.isActive ? 'active' : 'inActive'}
+                  {getClassByIdResponse.isActive ? 'active' : 'Inactive'}
                 </span>
               </div>
             </div>

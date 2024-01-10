@@ -85,6 +85,7 @@ model Branch {
   Student        Student[]
   class          Class[]
   staff          Staff[]
+  group          Group[]
 }
 
 model Organization {
@@ -378,6 +379,17 @@ model Subject {
   updatedAt   DateTime? @default(now())
   Section     Section[] @relation(fields: [sectionId], references: [id])
   sectionId   String[]  @db.ObjectId
+}
+
+model Group {
+  id        String    @id @default(auto()) @map("_id") @db.ObjectId
+  name      String
+  isActive  Boolean
+  isDeleted Boolean   @default(false)
+  branch    Branch    @relation(fields: [branchId], references: [id])
+  branchId  String    @db.ObjectId
+  createdAt DateTime? @default(now())
+  updatedAt DateTime? @default(now())
 }
 
 model Test {

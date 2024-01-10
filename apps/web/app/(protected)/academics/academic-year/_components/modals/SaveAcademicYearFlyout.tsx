@@ -27,8 +27,8 @@ import { useGetBatchByIdQuery } from '../../../../../../lib/queries/batches/useG
 import { useUpdateBatchMutationQuery } from '../../../../../../lib/queries/batches/useUpdateBatchMutationQuery';
 
 export function SaveAcademicYearFlyout() {
-  const [endYear, setEndYear] = useState(new Date());
-  const [startYear, setStartYear] = useState(new Date());
+  const [endYear, setEndYear] = useState(null);
+  const [startYear, setStartYear] = useState(null);
   const [isOpen, setIsOpen] = useQueryState(
     'isFlyoutOpen',
     parseAsBoolean.withDefault(false)
@@ -94,9 +94,6 @@ export function SaveAcademicYearFlyout() {
       setValue('isActive', false);
       setValue('startYear', null);
       setValue('description', null);
-
-      setEndYear(null);
-      setStartYear(null);
     }
   }, [currentBatch, setValue]);
 
@@ -128,6 +125,8 @@ export function SaveAcademicYearFlyout() {
     } finally {
       reset();
       await closeFlyout();
+      setEndYear(null);
+      setStartYear(null);
     }
   };
 

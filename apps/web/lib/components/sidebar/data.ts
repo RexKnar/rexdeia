@@ -54,18 +54,6 @@ export const menuItems: SidebarMenuItem[] = [
         path: '/academics/class',
       },
       {
-        id: 'academics-course-student',
-        label: 'Course',
-        icon: null,
-        path: '/academics/course',
-      },
-      {
-        id: 'academics-department-student',
-        label: 'Department',
-        icon: null,
-        path: '/academics/department',
-      },
-      {
         id: 'academics-regulation-student',
         label: 'Regulations',
         icon: null,
