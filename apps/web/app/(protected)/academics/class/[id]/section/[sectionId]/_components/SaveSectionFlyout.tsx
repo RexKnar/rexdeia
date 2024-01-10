@@ -1,7 +1,13 @@
 'use client';
 
-import { PlusCircle } from 'lucide-react';
-import { parseAsBoolean, useQueryState } from 'next-usequerystate';
+import { Loader2, PlusCircle } from 'lucide-react';
+import {
+  parseAsBoolean,
+  parseAsString,
+  useQueryState,
+} from 'next-usequerystate';
+import { useState } from 'react';
+import { useForm } from 'react-hook-form';
 import {
   Button,
   Input,
@@ -12,14 +18,55 @@ import {
   Switch,
   Text,
 } from 'ui';
+import { cn } from 'utils';
+
+import { CreateSectionModel } from '../../../../../../../../lib/domain/section';
+import { useCreateSectionMutationQuery } from '../../../../../../../../lib/queries/section/useCreateSectionMutationQuery';
 
 function SaveSectionFlyout() {
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    reset,
+    watch,
+    formState: { errors: fieldErrors },
+  } = useForm({
+    mode: 'onChange',
+    defaultValues: {
+      name: null,
+      medium: null,
+      isActive: false,
+      department: null,
+    },
+  });
   const [isOpen, setIsOpen] = useQueryState(
     'isSectionFlyoutOpen',
     parseAsBoolean.withDefault(false)
   );
+  const [classId, setClassId] = useQueryState('classId', parseAsString);
+  const [activeToggleFlag, setActiveToggleFlag] = useState(false);
   const closeFlyout = async () => {
     await setIsOpen(false);
+    setClassId(null);
+  };
+  const {
+    isPending: isPendingCreateSection,
+    mutateAsync: mutateCreateSectionAsync,
+  } = useCreateSectionMutationQuery();
+  const saveSection = async (payload: CreateSectionModel) => {
+    try {
+      const addSectionPayload = {
+        ...payload,
+        classId,
+      };
+      mutateCreateSectionAsync(addSectionPayload);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      reset();
+      await closeFlyout();
+    }
   };
 
   return (
@@ -31,7 +78,7 @@ function SaveSectionFlyout() {
           className="bg-white p-10"
           onCloseClick={() => closeFlyout()}
         >
-          <form>
+          <form onSubmit={handleSubmit(saveSection)}>
             <SheetHeader>
               <SheetTitle>
                 <div className="sm:grid sm:grid-cols-1 sm:gap-4 md:grid md:grid-cols-1 md:gap-4 lg:flex lg:justify-between">
@@ -41,13 +88,21 @@ function SaveSectionFlyout() {
                       New Section
                     </Text>
                   </div>
-                  <div>
-                    <Switch />
+                  <div className="flex items-center">
+                    <Switch
+                      id="isActive"
+                      {...register('isActive')}
+                      onCheckedChange={(value) => {
+                        setValue('isActive', value);
+                        setActiveToggleFlag(value);
+                      }}
+                      checked={activeToggleFlag}
+                    />
                     <label
                       htmlFor="isActive"
                       className="ml-2 text-sm font-semibold"
                     >
-                      Active
+                      {watch('isActive') ? 'Active' : 'Inactive'}
                     </label>
                   </div>
                 </div>
@@ -63,8 +118,24 @@ function SaveSectionFlyout() {
                 >
                   Section Name
                 </label>
-                <Input className="mt-2" />
+                <Input
+                  className="mt-2"
+                  {...register('name', {
+                    required: 'Section Name is Required',
+                  })}
+                  id="name"
+                />
               </div>
+              <p
+                className={cn(
+                  'h-2 p-1 text-sm text-red-600',
+                  fieldErrors.name
+                    ? 'opacity-100 transition-opacity duration-300'
+                    : 'opacity-0 transition-opacity duration-300'
+                )}
+              >
+                {fieldErrors.name?.message as string}
+              </p>
               <div className="mt-2">
                 <label
                   htmlFor="regulationName"
@@ -72,7 +143,23 @@ function SaveSectionFlyout() {
                 >
                   Medium
                 </label>
-                <Input className="mt-2" placeholder="English" />
+                <Input
+                  className="mt-2"
+                  {...register('medium', {
+                    required: 'Medium is Required',
+                  })}
+                  id="medium"
+                />
+                <p
+                  className={cn(
+                    'h-2 p-1 text-sm text-red-600',
+                    fieldErrors.medium
+                      ? 'opacity-100 transition-opacity duration-300'
+                      : 'opacity-0 transition-opacity duration-300'
+                  )}
+                >
+                  {fieldErrors.medium?.message as string}
+                </p>
               </div>
               <div className="mt-2">
                 <label
@@ -81,23 +168,39 @@ function SaveSectionFlyout() {
                 >
                   Department
                 </label>
-                <Input className="mt-2" placeholder="Science" />
+                <Input
+                  className="mt-2"
+                  {...register('department', {
+                    required: 'Medium is Required',
+                  })}
+                  id="department"
+                />
+                <p
+                  className={cn(
+                    'h-2 p-1 text-sm text-red-600',
+                    fieldErrors.department
+                      ? 'opacity-100 transition-opacity duration-300'
+                      : 'opacity-0 transition-opacity duration-300'
+                  )}
+                >
+                  {fieldErrors.department?.message as string}
+                </p>
               </div>
-
               <div className="mt-10 flex">
                 <Button
                   size="lg"
                   variant="default"
+                  type="submit"
                   className="mx-auto flex justify-center px-12 py-4"
                 >
-                  Save
-                </Button>
-                <Button
-                  size="lg"
-                  variant="default"
-                  className="mx-auto flex justify-center px-12 py-4"
-                >
-                  Save & close
+                  {isPendingCreateSection ? (
+                    <div className="flex items-center justify-center">
+                      <Loader2 className="mr-2 h-6 w-6 animate-spin text-white" />
+                      Saving
+                    </div>
+                  ) : (
+                    'Save'
+                  )}
                 </Button>
               </div>
             </div>

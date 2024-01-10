@@ -1,5 +1,9 @@
 import { useRouter } from 'next/navigation';
-import { parseAsBoolean, useQueryState } from 'next-usequerystate';
+import {
+  parseAsBoolean,
+  parseAsString,
+  useQueryState,
+} from 'next-usequerystate';
 import { Button } from 'ui';
 import { cn } from 'utils';
 
@@ -8,6 +12,10 @@ export function ClassWidget(props) {
   const [, isSectionFlyoutOpen] = useQueryState(
     'isSectionFlyoutOpen',
     parseAsBoolean.withDefault(false)
+  );
+  const [, setClassId] = useQueryState(
+    'classId',
+    parseAsString.withDefault('')
   );
 
   return (
@@ -43,6 +51,7 @@ export function ClassWidget(props) {
             variant="outline"
             className="h-7 w-7 gap-1 rounded p-1"
             onClick={() => {
+              setClassId(props.classDetails.id);
               isSectionFlyoutOpen(true);
             }}
           >

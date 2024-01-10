@@ -114,6 +114,9 @@ importers:
       http-status-codes:
         specifier: ^2.3.0
         version: 2.3.0
+      immer:
+        specifier: ^10.0.3
+        version: 10.0.3
       lucide-react:
         specifier: ^0.308.0
         version: 0.308.0(react@18.2.0)
@@ -6171,6 +6174,10 @@ packages:
 
   /immediate@3.0.6:
     resolution: {integrity: sha512-XXOFtyqDjNDAQxVfYxuF7g9Il/IbWmmlQg2MYKOH8ExIT1qg6xc4zyS3HaEEATgs1btfzxq15ciUiY7gjSXRGQ==}
+    dev: false
+
+  /immer@10.0.3:
+    resolution: {integrity: sha512-pwupu3eWfouuaowscykeckFmVTpqbzW+rXFCX8rQLkZzM9ftBmU/++Ra+o+L27mz03zJTlyV4UUr+fdKNffo4A==}
     dev: false
 
   /immutable@3.8.2:

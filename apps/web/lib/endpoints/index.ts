@@ -37,6 +37,8 @@ export const UPDATE_BATCH_BY_ID = `UPDATE_BATCH_BY_ID`;
 export const DELETE_BATCH_BY_ID = `DELETE_BATCH_BY_ID`;
 export const GET_SUBJECT_LIST = `GET_SUBJECT_LIST`;
 export const ADD_SUBJECT = `ADD_SUBJECT`;
+export const ADD_SECTION = `ADD_SECTION`;
+export const GET_SECTION_BY_ID = `GET_SECTION_BY_ID`;
 
 export default <EndpointDetails>{
   [REGISTER_USER]: {
@@ -186,5 +188,13 @@ export default <EndpointDetails>{
   [GET_SUBJECT_LIST]: {
     requestType: `GET`,
     endpoint: `/api/subject`,
+  },
+  [GET_SECTION_BY_ID]: {
+    requestType: `GET`,
+    endpoint: `/api/section/[id]`,
+  },
+  [ADD_SECTION]: {
+    requestType: `POST`,
+    endpoint: `/api/section`,
   },
 };
