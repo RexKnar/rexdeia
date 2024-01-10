@@ -1,6 +1,6 @@
 'use client';
 
-import { Loader2, PlusCircle } from 'lucide-react';
+import { Loader2, Plus, Trash } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { parseAsInteger, useQueryState } from 'next-usequerystate';
 import { useState } from 'react';
@@ -58,9 +58,8 @@ export default function AddClass() {
     <section className="relative mt-[20px] w-full">
       <div className="sm:grid sm:grid-cols-1 sm:gap-4 md:grid md:grid-cols-1 md:gap-4 lg:flex lg:justify-between">
         <div className="flex items-center">
-          <PlusCircle size={20} strokeWidth={1.5} />
-          <Text variant="lg-semibold" className="ml-2">
-            Add Class
+          <Text variant="lg-semibold" className="ml-2 text-2xl">
+            New Class
           </Text>
         </div>
         <div className="items-center">
@@ -81,7 +80,7 @@ export default function AddClass() {
 
       <div>
         <form onSubmit={handleSubmit(addClass)}>
-          <div className="mt-4 grid grid-cols-1 flex-wrap justify-between gap-4 md:grid md:grid-cols-1 lg:grid lg:grid-cols-2 ">
+          <div className="mt-4 grid grid-cols-1 flex-wrap justify-between gap-5 md:grid md:grid-cols-1 lg:grid lg:grid-cols-2">
             <div className="col-6">
               <label
                 htmlFor="name"
@@ -108,8 +107,7 @@ export default function AddClass() {
             </p>
           </div>
           <div>
-            <div className="mt-3 ">
-              <h2>Sections</h2>
+            <div className="mt-8">
               {fields.map((row, index) => (
                 <div
                   key={row.id}
@@ -126,7 +124,7 @@ export default function AddClass() {
                       {...register(`section.${index}.name`, {
                         required: 'Section Name is Required',
                       })}
-                      key={row.id}
+                      key={index}
                       className="border-primary-200 p-1"
                       id="sectionName"
                     />
@@ -153,7 +151,7 @@ export default function AddClass() {
                       render={({ field }) => {
                         return (
                           <Select onValueChange={field.onChange} {...field}>
-                            <SelectTrigger className="w-auto ">
+                            <SelectTrigger className="w-52">
                               <SelectValue />
                             </SelectTrigger>
                             <SelectContent>
@@ -185,7 +183,7 @@ export default function AddClass() {
                       render={({ field }) => {
                         return (
                           <Select onValueChange={field.onChange} {...field}>
-                            <SelectTrigger className="w-auto ">
+                            <SelectTrigger className="w-52">
                               <SelectValue />
                             </SelectTrigger>
                             <SelectContent>
@@ -204,26 +202,29 @@ export default function AddClass() {
                       }}
                     ></Controller>
                   </div>
-                  <Button
-                    className=" outline-danger"
-                    variant="outline"
-                    type="button"
-                    onClick={() => {
-                      remove(parseInt(row.id));
-                    }}
-                  >
-                    Remove
-                  </Button>
+                  <div className="flex items-center justify-center">
+                    <Button
+                      className="mt-5 h-9 w-9  border-transparent bg-red-600 p-2 "
+                      variant="outline"
+                      type="button"
+                      onClick={() => {
+                        remove(index);
+                      }}
+                    >
+                      <Trash size={32} className="text-center text-white" />
+                    </Button>
+                  </div>
                 </div>
               ))}
               <Button
-                className=""
-                variant="ghost"
+                type="button"
+                className=" ml-4 mt-[1.5rem]  w-full border-dotted  p-2 text-primary "
+                variant="outline"
                 onClick={() => {
                   append({ section: 'section' });
                 }}
               >
-                Add Section
+                <Plus size={32} className="text-center text-primary" />
               </Button>
             </div>
           </div>
