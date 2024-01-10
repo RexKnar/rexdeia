@@ -4,13 +4,17 @@ import { authOptions } from '../../../lib/auth';
 import { db } from '../../../lib/db';
 import { CreateGroupModel, UpdateGroupModel } from '../../../lib/domain/group';
 
-export async function getAllGroups(page: number, limit: number) {
+export async function getAllGroups(
+  page: number,
+  limit: number,
+  status: string
+) {
   const session = await getServerSession(authOptions);
 
   const [total, groupList] = await Promise.all([
     db.group.count({
       where: {
-        isActive: true,
+        isActive: status ? true : false,
         branchId: session.branchId,
       },
     }),
@@ -20,6 +24,7 @@ export async function getAllGroups(page: number, limit: number) {
       where: {
         branchId: session.branchId,
         isDeleted: false,
+        isActive: status ? true : false,
       },
     }),
   ]);

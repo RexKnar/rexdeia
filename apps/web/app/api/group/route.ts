@@ -37,8 +37,9 @@ export async function GET(request: NextRequest) {
   try {
     const page = parseInt(request.nextUrl.searchParams.get('page')) || 1;
     const limit = parseInt(request.nextUrl.searchParams.get('limit')) || 10;
+    const status = request.nextUrl.searchParams.get('status');
 
-    const paginatedGroupList = await getAllGroups(page, limit);
+    const paginatedGroupList = await getAllGroups(page, limit, status);
     return new NextResponse(JSON.stringify(paginatedGroupList), {
       status: StatusCodes.OK,
     });
