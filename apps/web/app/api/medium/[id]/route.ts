@@ -4,28 +4,28 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 
 import { authOptions } from '../../../../lib/auth';
-import { deleteGroupById, getGroupById, updateGroupById } from '../service';
+import { deleteMediumById, getMediumById, updateMediumById } from '../service';
 
 /**
  * @swagger
- * /api/group/{id}:
+ * /api/medium/{id}:
  *     get:
- *       summary: Get Group by Id
- *       description: Get Group by Id
+ *       summary: Get Medium by Id
+ *       description: Get Medium by Id
  *       parameters:
  *         - name: id
  *           in: path
  *           required: true
- *           description: Unique identifier of the group.
+ *           description: Unique identifier of the medium.
  *           schema:
  *             type: string
  *       responses:
  *         '200':
- *           description: Group details are fetched successfully.
+ *           description: Medium details are fetched successfully.
  *           content:
  *             application/json:
  *               schema:
- *                 # Define the schema of your group object here
+ *                 # Define the schema of your medium object here
  *         '400':
  *           description: Bad request due to validation error.
  *         '401':
@@ -42,9 +42,9 @@ export async function GET(request: Request, { params: { id } }) {
   }
 
   try {
-    const group = await getGroupById(id);
+    const medium = await getMediumById(id);
 
-    return new NextResponse(JSON.stringify(group), {
+    return new NextResponse(JSON.stringify(medium), {
       status: StatusCodes.OK,
     });
   } catch (e) {
@@ -60,15 +60,15 @@ export async function GET(request: Request, { params: { id } }) {
 
 /**
  * @swagger
- * /api/group/{id}:
+ * /api/medium/{id}:
  *     put:
- *       summary: Update group details By Id
- *       description: Updates the details of an existing group.
+ *       summary: Update medium By Id
+ *       description: Updates the details of an existing medium.
  *       parameters:
  *         - name: id
  *           in: path
  *           required: true
- *           description: Unique identifier of the group.
+ *           description: Unique identifier of the medium.
  *           schema:
  *             type: string
  *       requestBody:
@@ -79,11 +79,11 @@ export async function GET(request: Request, { params: { id } }) {
  *               type: object
  *       responses:
  *         '200':
- *           description: Group details updated successfully.
+ *           description: Medium details updated successfully.
  *           content:
  *             application/json:
  *               schema:
- *                 # Define the schema of your group object here
+ *                 # Define the schema of your medium object here
  *         '400':
  *           description: Bad request due to validation error.
  *         '401':
@@ -102,9 +102,9 @@ export async function PUT(request: Request, { params: { id } }) {
   try {
     const payload = await request.json();
 
-    const group = await updateGroupById(id, payload);
+    const medium = await updateMediumById(id, payload);
 
-    return new NextResponse(JSON.stringify(group), {
+    return new NextResponse(JSON.stringify(medium), {
       status: StatusCodes.OK,
     });
   } catch (e) {
@@ -120,10 +120,10 @@ export async function PUT(request: Request, { params: { id } }) {
 
 /**
  * @swagger
- * /api/group/{id}:
+ * /api/medium/{id}:
  *     delete:
- *       summary: Delete group by Id
- *       description: Delete group by Id
+ *       summary: Delete medium by Id
+ *       description: Delete medium by Id
  *       parameters:
  *         - name: id
  *           in: path
@@ -133,7 +133,7 @@ export async function PUT(request: Request, { params: { id } }) {
  *             type: string
  *       responses:
  *         '200':
- *           description: Group details deleted successfully.
+ *           description: Medium details deleted successfully.
  *           content:
  *             application/json:
  *               schema:
@@ -154,15 +154,15 @@ export async function DELETE(_: NextRequest, { params: { id } }) {
       });
     }
 
-    const group = await getGroupById(id);
+    const getMedium = await getMediumById(id);
 
-    if (group) {
-      const group = await deleteGroupById(id);
-      return new Response(JSON.stringify(group), {
+    if (getMedium) {
+      const deleteMedium = await deleteMediumById(id);
+      return new Response(JSON.stringify(deleteMedium), {
         status: StatusCodes.OK,
       });
     } else {
-      return new Response(JSON.stringify({ error: 'GROUP_NOT_FOUND' }), {
+      return new Response(JSON.stringify({ error: 'MEDIUM_NOT_FOUND' }), {
         status: StatusCodes.NOT_FOUND,
       });
     }

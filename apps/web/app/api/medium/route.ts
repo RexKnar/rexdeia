@@ -4,21 +4,21 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 
 import { authOptions } from '../../../lib/auth';
-import { addGroup, getAllGroups } from './service';
+import { addMedium, getAllMediums } from './service';
 
 /**
  * @swagger
- * /api/group:
+ * /api/medium:
  *     get:
- *       summary: Get All Groups
- *       description: Get All Groups
+ *       summary: Get All Mediums
+ *       description: Get All Mediums
  *       responses:
  *         '200':
- *           description: Group details are s fetched Successfully.
+ *           description: Medium's details are s fetched Successfully.
  *           content:
  *             application/json:
  *               schema:
- *                 # Define the schema of your group object here
+ *                 # Define the schema of your medium object here
  *         '400':
  *           description: Bad request due to validation error.
  *         '401':
@@ -39,8 +39,8 @@ export async function GET(request: NextRequest) {
     const limit = parseInt(request.nextUrl.searchParams.get('limit')) || 10;
     const status = request.nextUrl.searchParams.get('status');
 
-    const paginatedGroupList = await getAllGroups(page, limit, status);
-    return new NextResponse(JSON.stringify(paginatedGroupList), {
+    const paginatedMediumList = await getAllMediums(page, limit, status);
+    return new NextResponse(JSON.stringify(paginatedMediumList), {
       status: StatusCodes.OK,
     });
   } catch (e) {
@@ -53,10 +53,10 @@ export async function GET(request: NextRequest) {
 
 /**
  * @swagger
- * /api/group:
+ * /api/medium:
  *     post:
- *       summary: Add new Group
- *       description: Add New Group
+ *       summary: Add new Medium
+ *       description: Add New Medium
  *       requestBody:
  *         required: true
  *         content:
@@ -65,11 +65,11 @@ export async function GET(request: NextRequest) {
  *               type: object
  *       responses:
  *         '200':
- *           description: Group details added successfully.
+ *           description: Medium's details added successfully.
  *           content:
  *             application/json:
  *               schema:
- *                 # Define the schema of your Group object here
+ *                 # Define the schema of your Medium object here
  *         '400':
  *           description: Bad request due to validation error.
  *         '401':
@@ -87,8 +87,8 @@ export async function POST(request: NextRequest) {
   const payload = await request.json();
 
   try {
-    const group = await addGroup(payload);
-    return new NextResponse(JSON.stringify(group), {
+    const medium = await addMedium(payload);
+    return new NextResponse(JSON.stringify(medium), {
       status: StatusCodes.CREATED,
     });
   } catch (e) {

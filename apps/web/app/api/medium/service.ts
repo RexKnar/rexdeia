@@ -2,23 +2,26 @@ import { getServerSession } from 'next-auth';
 
 import { authOptions } from '../../../lib/auth';
 import { db } from '../../../lib/db';
-import { CreateGroupModel, UpdateGroupModel } from '../../../lib/domain/group';
+import {
+  CreateMediumModel,
+  UpdateMediumModel,
+} from '../../../lib/domain/medium';
 
-export async function getAllGroups(
+export async function getAllMediums(
   page: number,
   limit: number,
   status: string
 ) {
   const session = await getServerSession(authOptions);
 
-  const [total, groupList] = await Promise.all([
-    db.group.count({
+  const [total, mediumList] = await Promise.all([
+    db.medium.count({
       where: {
         isActive: Boolean(status),
         branchId: session.branchId,
       },
     }),
-    db.group.findMany({
+    db.medium.findMany({
       take: limit,
       skip: (page - 1) * limit,
       where: {
@@ -33,16 +36,16 @@ export async function getAllGroups(
     page,
     total,
     limit,
-    data: groupList,
+    data: mediumList,
   };
 }
 
-export async function addGroup(createGroupPayload: CreateGroupModel) {
+export async function addMedium(createMediumPayload: CreateMediumModel) {
   const session = await getServerSession(authOptions);
-  return db.group.create({
+  return db.medium.create({
     data: {
-      name: createGroupPayload.name,
-      isActive: createGroupPayload.isActive,
+      name: createMediumPayload.name,
+      isActive: createMediumPayload.isActive,
       branch: {
         connect: {
           id: session.branchId,
@@ -52,18 +55,18 @@ export async function addGroup(createGroupPayload: CreateGroupModel) {
   });
 }
 
-export async function updateGroupById(
+export async function updateMediumById(
   id: string,
-  updateGroupPayload: UpdateGroupModel
+  updateMediumPayload: UpdateMediumModel
 ) {
   const session = await getServerSession(authOptions);
-  return db.group.update({
+  return db.medium.update({
     where: {
       id: id,
     },
     data: {
-      name: updateGroupPayload.name,
-      isActive: updateGroupPayload.isActive,
+      name: updateMediumPayload.name,
+      isActive: updateMediumPayload.isActive,
       branch: {
         connect: {
           id: session.branchId,
@@ -73,9 +76,9 @@ export async function updateGroupById(
   });
 }
 
-export async function getGroupById(id: string) {
+export async function getMediumById(id: string) {
   const session = await getServerSession(authOptions);
-  return db.group.findFirst({
+  return db.medium.findFirst({
     where: {
       id: id,
       isDeleted: false,
@@ -84,9 +87,9 @@ export async function getGroupById(id: string) {
   });
 }
 
-export async function deleteGroupById(id: string) {
+export async function deleteMediumById(id: string) {
   const session = await getServerSession(authOptions);
-  return db.group.update({
+  return db.medium.update({
     where: {
       id: id,
       branchId: session.branchId,

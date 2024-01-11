@@ -86,6 +86,7 @@ model Branch {
   class          Class[]
   staff          Staff[]
   group          Group[]
+  medium         Medium[]
 }
 
 model Organization {
@@ -382,6 +383,17 @@ model Subject {
 }
 
 model Group {
+  id        String    @id @default(auto()) @map("_id") @db.ObjectId
+  name      String
+  isActive  Boolean
+  isDeleted Boolean   @default(false)
+  branch    Branch    @relation(fields: [branchId], references: [id])
+  branchId  String    @db.ObjectId
+  createdAt DateTime? @default(now())
+  updatedAt DateTime? @default(now())
+}
+
+model Medium {
   id        String    @id @default(auto()) @map("_id") @db.ObjectId
   name      String
   isActive  Boolean
