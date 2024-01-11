@@ -60,8 +60,8 @@ export function AddStudentPreviewModal({
   return (
     <Dialog.Root open={open} onOpenChange={onOpenChange}>
       <Dialog.Portal>
-        <Dialog.Overlay className="data-[state=open]:animate-overlayShow fixed inset-0" />
-        <Dialog.Content className="data-[state=open]:animate-contentShow fixed left-[50%] top-[50%] z-50 h-[95vh] w-[98vw] translate-x-[-50%] translate-y-[-50%]  rounded-[6px] bg-gray-50 p-[25px] shadow-[hsl(206_22%_7%_/_35%)_0px_10px_38px_-10px,_hsl(206_22%_7%_/_20%)_0px_10px_20px_-15px] focus:outline-none">
+        <Dialog.Overlay className="data-[state=open]:animate-overlayShow fixed inset-0 backdrop-blur-sm backdrop-brightness-95" />
+        <Dialog.Content className="data-[state=open]:animate-contentShow fixed left-[50%] top-[50%] z-50 h-[85vh] w-[80vw] translate-x-[-50%] translate-y-[-50%]  rounded-[6px] bg-gray-50 p-[25px] focus:outline-none">
           <Dialog.Title className="m-0 flex items-center justify-between">
             <section className="relative flex items-center">
               <section className="absolute bottom-0 left-0 top-0 flex items-center justify-center">
@@ -91,7 +91,7 @@ export function AddStudentPreviewModal({
             student&apos;s information. If everything looks correct, click
             &apos;Submit&apos; to proceed.
           </Dialog.Description>
-          <section className="max-h-[75vh] overflow-y-auto">
+          <section className="max-h-[50vh] overflow-y-auto">
             {formSections.map((section) => (
               <div
                 key={section.sectionTitle}
@@ -113,7 +113,7 @@ export function AddStudentPreviewModal({
               </div>
             ))}
           </section>
-          <section className="mt-6 flex justify-center gap-4">
+          <section className="mt-10 flex justify-center gap-4">
             <Button
               variant="outline"
               disabled={isCreatingStudent}
