@@ -3,7 +3,7 @@ import endpointInfo from './endpoints';
 export async function makeAPICall<T>(
   apiName: string,
   payload: Record<string, unknown> = {},
-  params: Record<string, string | number> = {},
+  params: Record<string, string | number | boolean> = {},
   substitutions: Record<string, string> = {}
 ): Promise<T> {
   let { endpoint, requestType } = endpointInfo[apiName];
