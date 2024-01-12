@@ -84,6 +84,9 @@ importers:
       '@sentry/nextjs':
         specifier: ^7.86.0
         version: 7.86.0(next@14.0.4)(react@18.2.0)
+      '@sentry/utils':
+        specifier: ^7.93.0
+        version: 7.93.0
       '@tanstack/react-query':
         specifier: ^5.13.4
         version: 5.13.4(react@18.2.0)
@@ -105,6 +108,9 @@ importers:
       configs:
         specifier: workspace:*
         version: link:../../packages/configs
+      date-fns:
+        specifier: ^2.30.0
+        version: 2.30.0
       framer-motion:
         specifier: ^10.16.16
         version: 10.16.16(react-dom@18.2.0)(react@18.2.0)
@@ -2563,11 +2569,23 @@ packages:
     engines: {node: '>=8'}
     dev: false
 
+  /@sentry/types@7.93.0:
+    resolution: {integrity: sha512-UnzUccNakhFRA/esWBWP+0v7cjNg+RilFBQC03Mv9OEMaZaS29zSbcOGtRzuFOXXLBdbr44BWADqpz3VW0XaNw==}
+    engines: {node: '>=8'}
+    dev: false
+
   /@sentry/utils@7.86.0:
     resolution: {integrity: sha512-6PejFtw9VTFFy5vu0ks+U7Ozkqz+eMt+HN8AZKBKErYzX5/xs0kpkOcSRpu3ETdTYcZf8VAmLVgFgE2BE+3WuQ==}
     engines: {node: '>=8'}
     dependencies:
       '@sentry/types': 7.86.0
+    dev: false
+
+  /@sentry/utils@7.93.0:
+    resolution: {integrity: sha512-Iovj7tUnbgSkh/WrAaMrd5UuYjW7AzyzZlFDIUrwidsyIdUficjCG2OIxYzh76H6nYIx9SxewW0R54Q6XoB4uA==}
+    engines: {node: '>=8'}
+    dependencies:
+      '@sentry/types': 7.93.0
     dev: false
 
   /@sentry/vercel-edge@7.86.0:
