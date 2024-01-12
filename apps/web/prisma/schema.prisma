@@ -355,10 +355,11 @@ model Class {
 model Section {
   id          String    @id @default(auto()) @map("_id") @db.ObjectId
   name        String
-  medium      String
   description String?
   faculty     String?
   isActive    Boolean
+  medium      Medium    @relation(fields: [mediumId], references: [id])
+  mediumId    String    @db.ObjectId
   class       Class     @relation(fields: [classId], references: [id])
   staff       Staff[]   @relation(fields: [staffId], references: [id])
   staffId     String[]  @db.ObjectId
@@ -397,6 +398,7 @@ model Medium {
   id        String    @id @default(auto()) @map("_id") @db.ObjectId
   name      String
   isActive  Boolean
+  section   Section[]
   isDeleted Boolean   @default(false)
   branch    Branch    @relation(fields: [branchId], references: [id])
   branchId  String    @db.ObjectId

@@ -35,15 +35,15 @@ function SaveSectionFlyout() {
     mode: 'onChange',
     defaultValues: {
       name: null,
-      medium: null,
+      mediumId: null,
       isActive: false,
-      department: null,
     },
   });
   const [isOpen, setIsOpen] = useQueryState(
     'isSectionFlyoutOpen',
     parseAsBoolean.withDefault(false)
   );
+
   const [classId, setClassId] = useQueryState('classId', parseAsString);
   const [activeToggleFlag, setActiveToggleFlag] = useState(false);
   const closeFlyout = async () => {
@@ -138,14 +138,14 @@ function SaveSectionFlyout() {
               </p>
               <div className="mt-2">
                 <label
-                  htmlFor="regulationName"
+                  htmlFor="medium"
                   className="text-sm font-semibold text-gray-700"
                 >
                   Medium
                 </label>
                 <Input
                   className="mt-2"
-                  {...register('medium', {
+                  {...register('mediumId', {
                     required: 'Medium is Required',
                   })}
                   id="medium"
@@ -153,37 +153,12 @@ function SaveSectionFlyout() {
                 <p
                   className={cn(
                     'h-2 p-1 text-sm text-red-600',
-                    fieldErrors.medium
+                    fieldErrors.mediumId
                       ? 'opacity-100 transition-opacity duration-300'
                       : 'opacity-0 transition-opacity duration-300'
                   )}
                 >
-                  {fieldErrors.medium?.message as string}
-                </p>
-              </div>
-              <div className="mt-2">
-                <label
-                  htmlFor="regulationName"
-                  className="text-sm font-semibold text-gray-700"
-                >
-                  Department
-                </label>
-                <Input
-                  className="mt-2"
-                  {...register('department', {
-                    required: 'Medium is Required',
-                  })}
-                  id="department"
-                />
-                <p
-                  className={cn(
-                    'h-2 p-1 text-sm text-red-600',
-                    fieldErrors.department
-                      ? 'opacity-100 transition-opacity duration-300'
-                      : 'opacity-0 transition-opacity duration-300'
-                  )}
-                >
-                  {fieldErrors.department?.message as string}
+                  {fieldErrors.mediumId?.message as string}
                 </p>
               </div>
               <div className="mt-10 flex">

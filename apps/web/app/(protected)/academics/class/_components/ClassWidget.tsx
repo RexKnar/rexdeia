@@ -54,6 +54,11 @@ export function ClassWidget(props) {
             <Button
               key={index}
               className="h-6 w-6 bg-primary-200 text-center text-black"
+              onClick={() => {
+                router.push(
+                  `/academics/class/${props.classDetails.id}/section/${section.id}`
+                );
+              }}
             >
               {section.name}
             </Button>

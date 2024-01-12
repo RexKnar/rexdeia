@@ -138,7 +138,7 @@ export default function AddClass() {
                       {fieldErrors.name?.message as string}
                     </p>
                   </div>
-                  <div className="">
+                  <div>
                     <label
                       htmlFor="medium"
                       className="text-sm font-semibold text-gray-700"
@@ -162,38 +162,6 @@ export default function AddClass() {
                                 <SelectItem value={'Tamil'}>Tamil</SelectItem>
                                 <SelectItem value={'Malayalam'}>
                                   Malayalam
-                                </SelectItem>
-                              </SelectGroup>
-                            </SelectContent>
-                          </Select>
-                        );
-                      }}
-                    ></Controller>
-                  </div>
-                  <div className="">
-                    <label
-                      htmlFor="department"
-                      className="text-sm font-semibold text-gray-700"
-                    >
-                      Department
-                    </label>
-                    <Controller
-                      control={control}
-                      name={`section.${index}.department`}
-                      render={({ field }) => {
-                        return (
-                          <Select onValueChange={field.onChange} {...field}>
-                            <SelectTrigger className="w-52">
-                              <SelectValue />
-                            </SelectTrigger>
-                            <SelectContent>
-                              <SelectGroup>
-                                <SelectItem value={'maths'}>maths</SelectItem>
-                                <SelectItem value={'Biology'}>
-                                  Biology
-                                </SelectItem>
-                                <SelectItem value={'commerce'}>
-                                  commerce
                                 </SelectItem>
                               </SelectGroup>
                             </SelectContent>

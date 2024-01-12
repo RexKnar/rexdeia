@@ -39,6 +39,7 @@ export const GET_SUBJECT_LIST = `GET_SUBJECT_LIST`;
 export const ADD_SUBJECT = `ADD_SUBJECT`;
 export const ADD_SECTION = `ADD_SECTION`;
 export const GET_SECTION_BY_ID = `GET_SECTION_BY_ID`;
+export const UPDATE_SECTION_BY_ID = `UPDATE_SECTION_BY_ID`;
 
 export default <EndpointDetails>{
   [REGISTER_USER]: {
@@ -196,5 +197,9 @@ export default <EndpointDetails>{
   [ADD_SECTION]: {
     requestType: `POST`,
     endpoint: `/api/section`,
+  },
+  [UPDATE_SECTION_BY_ID]: {
+    requestType: `PUT`,
+    endpoint: `/api/section/[id]`,
   },
 };
