@@ -14,12 +14,14 @@ import {
 import {
   CreditCardIcon,
   Edit2Icon,
+  Eye,
   Gem,
   HeartPulse,
   MailPlusIcon,
   PhoneCallIcon,
   Trash2Icon,
 } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
 import { Else, If, Then, When } from 'react-if';
 import {
@@ -51,6 +53,7 @@ import { Student } from '../../../../../lib/domain';
 import { useGetStudentListQuery } from '../../../../../lib/queries/useGetStudentListQuery';
 
 export function StudentsList() {
+  const router = useRouter();
   const [showDeleteConfirmationModal, setShowDeleteConfirmationModal] =
     useState(false);
   const [selectedStudent, setSelectedStudent] = useState<Student | null>(null);
@@ -220,18 +223,30 @@ export function StudentsList() {
         );
       },
       cell: ({ row }) => {
+        const student = row.original;
         return (
           <div className="flex">
+            <Button variant="mild" className="ml-2 p-1">
+              <Edit2Icon size={24} className="mr-3 pl-2 text-black" />
+            </Button>
+            <Button
+              onMouseEnter={() => {
+                router.prefetch(`/students/${student.id}`);
+              }}
+              onClick={() => {
+                router.push(`/students/${student.id}`);
+              }}
+              variant="mild"
+              className="ml-3 p-1"
+            >
+              <Eye size={24} className="mr-2 pl-2  text-blue-600" />
+            </Button>
             <Button
               variant="mild"
-              className="p-1"
-              onClick={handleDeleteStudentClick(row.original)}
+              className="ml-3 p-1"
+              onClick={handleDeleteStudentClick(student)}
             >
               <Trash2Icon size={24} className="mr-2 pl-2 text-red-500" />
-            </Button>
-
-            <Button variant="mild" className="ml-2 p-1">
-              <Edit2Icon size={24} className="mr-2 pl-2 text-blue-600" />
             </Button>
           </div>
         );
