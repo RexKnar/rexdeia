@@ -6,13 +6,13 @@ generator client {
 }
 
 datasource db {
-  provider = "mongodb"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
 model Account {
-  id                String  @id @default(auto()) @map("_id") @db.ObjectId
-  userId            String  @db.ObjectId
+  id                String  @id @default(uuid()) @map("_id") @db.Uuid
+  userId            String  @db.Uuid
   type              String
   provider          String
   providerAccountId String
@@ -30,15 +30,15 @@ model Account {
 }
 
 model Session {
-  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  id           String   @id @default(uuid()) @map("_id") @db.Uuid
   sessionToken String   @unique
-  userId       String   @db.ObjectId
+  userId       String   @db.Uuid
   expires      DateTime
   user         User     @relation(fields: [userId], references: [id])
 }
 
 model User {
-  id            String    @id @default(auto()) @map("_id") @db.ObjectId
+  id            String    @id @default(uuid()) @map("_id") @db.Uuid
   name          String?
   email         String    @unique
   emailVerified DateTime?
@@ -67,11 +67,11 @@ enum UserRole {
 }
 
 model Branch {
-  id             String             @id @default(auto()) @map("_id") @db.ObjectId
+  id             String             @id @default(uuid()) @map("_id") @db.Uuid
   name           String
   address        String
   organization   Organization       @relation(fields: [organizationId], references: [id])
-  organizationId String             @db.ObjectId
+  organizationId String             @db.Uuid
   users          UserOrganization[]
   forms          Form[]
   department     Department[]
@@ -80,7 +80,7 @@ model Branch {
   createdAt      DateTime?          @default(now())
   updatedAt      DateTime?          @default(now())
   createdBy      User               @relation(fields: [createdById], references: [id])
-  createdById    String             @db.ObjectId
+  createdById    String             @db.Uuid
   Batch          Batch[]
   Student        Student[]
   class          Class[]
@@ -90,7 +90,7 @@ model Branch {
 }
 
 model Organization {
-  id          String             @id @default(auto()) @map("_id") @db.ObjectId
+  id          String             @id @default(uuid()) @map("_id") @db.Uuid
   name        String
   institute   String
   description String?
@@ -102,36 +102,36 @@ model Organization {
   createdAt   DateTime?          @default(now())
   updatedAt   DateTime?          @default(now())
   createdBy   User               @relation(fields: [createdById], references: [id])
-  createdById String             @db.ObjectId
+  createdById String             @db.Uuid
   Student     Student[]
   staff       Staff[]
 }
 
 model UserOrganization {
-  id             String       @id @default(auto()) @map("_id") @db.ObjectId
+  id             String       @id @default(uuid()) @map("_id") @db.Uuid
   user           User         @relation(fields: [userId], references: [id])
-  userId         String       @db.ObjectId
+  userId         String       @db.Uuid
   organization   Organization @relation(fields: [organizationId], references: [id])
-  organizationId String       @db.ObjectId
+  organizationId String       @db.Uuid
   branch         Branch?      @relation(fields: [branchId], references: [id])
-  branchId       String?      @db.ObjectId
+  branchId       String?      @db.Uuid
 }
 
 model AdmissionForm {
-  id          String          @id @default(auto()) @map("_id") @db.ObjectId
+  id          String          @id @default(uuid()) @map("_id") @db.Uuid
   student     Student         @relation(fields: [studentId], references: [id])
-  studentId   String          @db.ObjectId
+  studentId   String          @db.Uuid
   createdAt   DateTime?       @default(now())
   updatedAt   DateTime?       @default(now())
   createdBy   User            @relation(fields: [createdById], references: [id])
-  createdById String          @db.ObjectId
+  createdById String          @db.Uuid
   status      AdmissionStatus
   form        Form            @relation(fields: [formId], references: [id])
-  formId      String          @db.ObjectId
+  formId      String          @db.Uuid
 }
 
 model EnquiryForm {
-  id                    String  @id @default(auto()) @map("_id") @db.ObjectId
+  id                    String  @id @default(uuid()) @map("_id") @db.Uuid
   name                  String
   date                  String
   emailId               String
@@ -161,11 +161,11 @@ model EnquiryForm {
   yearOfPassing12th     String
   mediumOfEducation12th String
   form                  Form?   @relation(fields: [formId], references: [id])
-  formId                String? @db.ObjectId
+  formId                String? @db.Uuid
 }
 
 model Department {
-  id             String    @id @default(auto()) @map("_id") @db.ObjectId
+  id             String    @id @default(uuid()) @map("_id") @db.Uuid
   departmentName String
   noOfYears      String
   departmentCode String
@@ -175,11 +175,11 @@ model Department {
   isDeleted      Boolean   @default(false)
   deletedAt      DateTime?
   branch         Branch?   @relation(fields: [branchId], references: [id])
-  branchId       String?   @db.ObjectId
+  branchId       String?   @db.Uuid
 }
 
 model Regulation {
-  id             String    @id @default(auto()) @map("_id") @db.ObjectId
+  id             String    @id @default(uuid()) @map("_id") @db.Uuid
   regulationName String
   announcedYear  String
   endYear        String?
@@ -187,32 +187,32 @@ model Regulation {
   isDeleted      Boolean   @default(false)
   deletedAt      DateTime?
   branch         Branch?   @relation(fields: [branchId], references: [id])
-  branchId       String?   @db.ObjectId
+  branchId       String?   @db.Uuid
   Class          Class[]
 }
 
 model Course {
-  id           String      @id @default(auto()) @map("_id") @db.ObjectId
+  id           String      @id @default(uuid()) @map("_id") @db.Uuid
   courseName   String
   isActive     Boolean
   description  String
   isDeleted    Boolean     @default(false)
   deletedAt    DateTime?
   department   Department? @relation(fields: [departmentId], references: [id])
-  departmentId String?     @db.ObjectId
+  departmentId String?     @db.Uuid
 }
 
 model Form {
-  id             String          @id @default(auto()) @map("_id") @db.ObjectId
+  id             String          @id @default(uuid()) @map("_id") @db.Uuid
   createdAt      DateTime?       @default(now())
   updatedAt      DateTime?       @default(now())
   type           String
   json           Json
   isActive       Boolean         @default(false)
   organization   Organization?   @relation(fields: [organizationId], references: [id])
-  organizationId String?         @db.ObjectId
+  organizationId String?         @db.Uuid
   branch         Branch?         @relation(fields: [branchId], references: [id])
-  branchId       String?         @db.ObjectId
+  branchId       String?         @db.Uuid
   EnquiryForm    EnquiryForm[]
   Share          Share[]
   Student        Student[]
@@ -220,7 +220,7 @@ model Form {
 }
 
 model Payment {
-  id                  String                @id @default(auto()) @map("_id") @db.ObjectId
+  id                  String                @id @default(uuid()) @map("_id") @db.Uuid
   transactionId       String
   receipt             String
   amount              String
@@ -234,17 +234,17 @@ model Payment {
 }
 
 model PaymentAssociations {
-  id                  String    @id @default(auto()) @map("_id") @db.ObjectId
+  id                  String    @id @default(uuid()) @map("_id") @db.Uuid
   associationType     String
   associationEntityId String
   isDeleted           Boolean   @default(false)
   deletedAt           DateTime?
   Payment             Payment?  @relation(fields: [paymentId], references: [id])
-  paymentId           String?   @db.ObjectId
+  paymentId           String?   @db.Uuid
 }
 
 model Share {
-  id             String    @id @default(auto()) @map("_id") @db.ObjectId
+  id             String    @id @default(uuid()) @map("_id") @db.Uuid
   isActive       Boolean   @default(true)
   acceptPayment  Boolean   @default(false)
   actualAmount   Float?
@@ -252,11 +252,11 @@ model Share {
   activeFromDate DateTime?
   activeToDate   DateTime?
   form           Form      @relation(fields: [formId], references: [id])
-  formId         String    @db.ObjectId
+  formId         String    @db.Uuid
 }
 
 model Student {
-  id                   String        @id @default(auto()) @map("_id") @db.ObjectId
+  id                   String        @id @default(uuid()) @map("_id") @db.Uuid
   firstName            String
   middleName           String
   lastName             String
@@ -284,22 +284,22 @@ model Student {
   additionalAttributes Json
 
   section        Section?        @relation(fields: [sectionId], references: [id])
-  sectionId      String?         @db.ObjectId
-  userId         String          @unique @db.ObjectId
+  sectionId      String?         @db.Uuid
+  userId         String          @unique @db.Uuid
   user           User            @relation(fields: [userId], references: [id])
   branch         Branch          @relation(fields: [branchId], references: [id])
-  branchId       String          @db.ObjectId
+  branchId       String          @db.Uuid
   batch          Batch?          @relation(fields: [batchId], references: [id])
-  batchId        String?         @db.ObjectId
+  batchId        String?         @db.Uuid
   organization   Organization    @relation(fields: [organizationId], references: [id])
-  organizationId String          @db.ObjectId
+  organizationId String          @db.Uuid
   form           Form            @relation(fields: [formId], references: [id])
   AdmissionForm  AdmissionForm[]
-  formId         String          @db.ObjectId
+  formId         String          @db.Uuid
 }
 
 model Staff {
-  id               String        @id @default(auto()) @map("_id") @db.ObjectId
+  id               String        @id @default(uuid()) @map("_id") @db.Uuid
   type             StaffType
   aadharCardNumber String
   annualIncome     String
@@ -308,20 +308,20 @@ model Staff {
   address          String
   dateOfJoining    String
   status           StaffStatus
-  userId           String        @unique @db.ObjectId
+  userId           String        @unique @db.Uuid
   user             User          @relation(fields: [userId], references: [id])
-  Section          Section[]     @relation(fields: [sectionId], references: [id])
-  sectionId        String[]      @db.ObjectId
   createdAt        DateTime?     @default(now())
   updatedAt        DateTime?     @default(now())
   Organization     Organization? @relation(fields: [organizationId], references: [id])
-  organizationId   String?       @db.ObjectId
+  organizationId   String?       @db.Uuid
   Branch           Branch?       @relation(fields: [branchId], references: [id])
-  branchId         String?       @db.ObjectId
+  branchId         String?       @db.Uuid
+  Section          Section?      @relation(fields: [sectionId], references: [id])
+  sectionId        String?       @db.Uuid
 }
 
 model Batch {
-  id          String    @id @default(auto()) @map("_id") @db.ObjectId
+  id          String    @id @default(uuid()) @map("_id") @db.Uuid
   name        String
   description String?
   startYear   String
@@ -330,84 +330,95 @@ model Batch {
   isDeleted   Boolean   @default(false)
   class       Class[]
   branch      Branch    @relation(fields: [branchId], references: [id])
-  branchId    String    @db.ObjectId
+  branchId    String    @db.Uuid
   students    Student[]
   createdAt   DateTime? @default(now())
   updatedAt   DateTime? @default(now())
 }
 
 model Class {
-  id           String      @id @default(auto()) @map("_id") @db.ObjectId
+  id           String      @id @default(uuid()) @map("_id") @db.Uuid
   name         String
   description  String?
   isActive     Boolean
   Section      Section[]
   batch        Batch?      @relation(fields: [batchId], references: [id])
-  batchId      String?     @db.ObjectId
+  batchId      String?     @db.Uuid
   branch       Branch      @relation(fields: [branchId], references: [id])
-  branchId     String      @db.ObjectId
+  branchId     String      @db.Uuid
   regulation   Regulation? @relation(fields: [regulationId], references: [id])
-  regulationId String?     @db.ObjectId
+  regulationId String?     @db.Uuid
   createdAt    DateTime?   @default(now())
   updatedAt    DateTime?   @default(now())
 }
 
+model SectionSubject {
+  sectionId String  @db.Uuid
+  subjectId String  @db.Uuid
+  section   Section @relation(fields: [sectionId], references: [id])
+  subject   Subject @relation(fields: [subjectId], references: [id])
+
+  @@id([sectionId, subjectId])
+}
+
 model Section {
-  id          String    @id @default(auto()) @map("_id") @db.ObjectId
-  name        String
-  description String?
-  faculty     String?
-  isActive    Boolean
-  medium      Medium    @relation(fields: [mediumId], references: [id])
-  mediumId    String    @db.ObjectId
-  class       Class     @relation(fields: [classId], references: [id])
-  staff       Staff[]   @relation(fields: [staffId], references: [id])
-  staffId     String[]  @db.ObjectId
-  students    Student[]
-  classId     String    @db.ObjectId
-  createdAt   DateTime? @default(now())
-  updatedAt   DateTime? @default(now())
-  subjects    Subject[] @relation(fields: [subjectIds], references: [id])
-  subjectIds  String[]  @db.ObjectId
+  id              String           @id @default(uuid()) @map("_id") @db.Uuid
+  name            String
+  description     String?
+  faculty         String?
+  isActive        Boolean
+  medium          Medium           @relation(fields: [mediumId], references: [id])
+  mediumId        String           @db.Uuid
+  class           Class            @relation(fields: [classId], references: [id])
+  staff           Staff[]
+  students        Student[]
+  classId         String           @db.Uuid
+  createdAt       DateTime?        @default(now())
+  updatedAt       DateTime?        @default(now())
+  sectionSubjects SectionSubject[]
+  subjectIds      String[]         @db.Uuid
+  Subject         Subject?         @relation(fields: [subjectId], references: [id])
+  subjectId       String?          @db.Uuid
 }
 
 model Subject {
-  id          String    @id @default(auto()) @map("_id") @db.ObjectId
-  description String?
-  name        String
-  type        String
-  isActive    Boolean
-  createdAt   DateTime? @default(now())
-  updatedAt   DateTime? @default(now())
-  Section     Section[] @relation(fields: [sectionId], references: [id])
-  sectionId   String[]  @db.ObjectId
+  id             String           @id @default(uuid()) @map("_id") @db.Uuid
+  description    String?
+  name           String
+  type           String
+  isActive       Boolean
+  createdAt      DateTime?        @default(now())
+  updatedAt      DateTime?        @default(now())
+  Section        Section[]
+  sectionId      String[]         @db.Uuid
+  SectionSubject SectionSubject[]
 }
 
 model Group {
-  id        String    @id @default(auto()) @map("_id") @db.ObjectId
+  id        String    @id @default(uuid()) @map("_id") @db.Uuid
   name      String
   isActive  Boolean
   isDeleted Boolean   @default(false)
   branch    Branch    @relation(fields: [branchId], references: [id])
-  branchId  String    @db.ObjectId
+  branchId  String    @db.Uuid
   createdAt DateTime? @default(now())
   updatedAt DateTime? @default(now())
 }
 
 model Medium {
-  id        String    @id @default(auto()) @map("_id") @db.ObjectId
+  id        String    @id @default(uuid()) @map("_id") @db.Uuid
   name      String
   isActive  Boolean
   section   Section[]
   isDeleted Boolean   @default(false)
   branch    Branch    @relation(fields: [branchId], references: [id])
-  branchId  String    @db.ObjectId
+  branchId  String    @db.Uuid
   createdAt DateTime? @default(now())
   updatedAt DateTime? @default(now())
 }
 
 model Test {
-  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  id           String   @id @default(uuid()) @map("_id") @db.Uuid
   testType     TestType
   testNumber   Int
   studentMarks Json

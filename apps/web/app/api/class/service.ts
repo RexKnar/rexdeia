@@ -36,7 +36,7 @@ export async function getClassList(page: number, limit: number) {
 
 export async function getAllClassesByBatchId(batchId: string) {
   const session = await getServerSession(authOptions);
-  return await db.class.findMany({
+  return db.class.findMany({
     where: {
       branchId: session.branchId,
       batchId: batchId,
@@ -59,7 +59,7 @@ export async function addClass(classPayload: CreateClassModel) {
     },
   });
 
-  classPayload.Section.forEach((section) => {
+  classPayload.section.forEach((section) => {
     const createSectionModel: CreateSectionModel = {
       name: section.name,
       isActive: true,
@@ -73,7 +73,7 @@ export async function addClass(classPayload: CreateClassModel) {
 
 export async function deleteClassById(id: string) {
   const session = await getServerSession(authOptions);
-  return await db.class.update({
+  return db.class.update({
     where: {
       id: id,
       branchId: session.branchId,
@@ -87,7 +87,7 @@ export async function deleteClassById(id: string) {
 
 export async function getClassById(id: string) {
   const session = await getServerSession(authOptions);
-  return await db.class.findFirst({
+  return db.class.findFirst({
     where: {
       id: id,
       branchId: session.branchId,
@@ -100,7 +100,7 @@ export async function updateClassById(
   updateClass: UpdateClassModel
 ) {
   const session = await getServerSession(authOptions);
-  return await db.class.update({
+  return db.class.update({
     where: {
       id: id,
       branchId: session.branchId,

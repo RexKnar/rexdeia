@@ -8,7 +8,7 @@ export default async function Page() {
   const session = await getServerSession(authOptions);
 
   if (!session.branchId || !session.organizationId) {
-    return redirect('/signIn?callbackUrl=/admission/add');
+    return redirect('/signIn?callbackUrl=/academics/class/add');
   }
 
   return (

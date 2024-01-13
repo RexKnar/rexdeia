@@ -14,8 +14,10 @@ export type ClassModel = {
 export type CreateSectionModel = Pick<SectionModel, 'name' | 'mediumId'>;
 export type CreateClassModel = Pick<
   ClassModel,
-  'name' | 'isActive' | 'branchId' | 'Section'
->;
+  'name' | 'isActive' | 'branchId'
+> & {
+  section: CreateSectionModel[];
+};
 
 export type UpdateClassModel = Pick<
   ClassModel,

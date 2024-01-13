@@ -21,6 +21,8 @@ import {
 import { useCreateClassMutationQuery } from '../../../../../../lib/queries/class/useCreateClassMutationQuery';
 
 export default function AddClass() {
+  const router = useRouter();
+
   const {
     control,
     register,
@@ -41,7 +43,7 @@ export default function AddClass() {
     mutateAsync: mutateCreateClassAsync,
     isPending: isPendingCreateClass,
   } = useCreateClassMutationQuery(page, limit);
-  const router = useRouter();
+
   async function addClass(payload) {
     try {
       const response = await mutateCreateClassAsync(payload);
