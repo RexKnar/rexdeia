@@ -29,8 +29,8 @@ RUN rm -f .env
 
 # Environment variables
 ENV NODE_ENV=production
-ENV NEXTAUTH_URL=http://localhost:3000
-ENV NEXT_PUBLIC_API_URL=http://localhost:3000
+ENV NEXTAUTH_URL=https://acadx-io-t2n3p6jkhq-el.a.run.app
+ENV NEXT_PUBLIC_API_URL=https://acadx-io-t2n3p6jkhq-el.a.run.app
 ENV NEXTAUTH_SECRET=2b7e151628aed2a6abf7158809cf4f3c762e7160f38b4da56a784d9045190cba
 ENV DATABASE_URL=postgresql://admin:^%*f8pKbsnWvGs3!@35.200.189.125:5432/acadx
 ENV NEXT_SITE_NAME=acadx.io
