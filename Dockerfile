@@ -12,20 +12,20 @@ COPY pnpm-lock.yaml ./
 COPY package.json ./
 COPY turbo.json ./
 
-# Remove the .env file
-RUN rm -f .env
-
 # Copy the rest of your application source code
 COPY . .
 
 # Install dependencies
-RUN pnpm install
+RUN pnpm install --frozen-lockfile
 
 # Build
 RUN pnpm turbo run build
 
 # Change to the apps/web directory
 WORKDIR /usr/src/app/apps/web
+
+# Remove the .env file
+RUN rm -f .env
 
 # Run Prisma migration
 RUN npx prisma migrate deploy
