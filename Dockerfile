@@ -27,6 +27,19 @@ WORKDIR /usr/src/app/apps/web
 # Remove the .env file
 RUN rm -f .env
 
+# Environment variables
+ENV NODE_ENV=development
+ENV NEXTAUTH_URL=http://localhost:3000
+ENV NEXT_PUBLIC_API_URL=http://localhost:3000
+ENV NEXTAUTH_SECRET=2b7e151628aed2a6abf7158809cf4f3c762e7160f38b4da56a784d9045190cba
+ENV DATABASE_URL=postgresql://admin:^%*f8pKbsnWvGs3!@35.200.189.125:5432/acadx
+ENV NEXT_SITE_NAME=acadx.io
+ENV NEXT_RAZORPAY_KEY_ID=rzp_test_FgPdhSoHy5q9CO
+ENV NEXT_RAZORPAY_KEY_SECRET=xt6nQmfxv4bjKZdC0xEU14ei
+ENV NEXT_PUBLIC_ZOHO_SALESIQ_WIDGET_CODE=siq5f54d9690e6a1b3453aa252fa32856e9d676d3ef7876ff962cbdcf05a99278df
+ENV SENTRY_DSN=https://f2357e98a997b7d0e86b80c08fc29fe1@o4506321037950976.ingest.sentry.io/4506321044307968
+ENV NEXT_PUBLIC_SENTRY_DSN=https://f2357e98a997b7d0e86b80c08fc29fe1@o4506321037950976.ingest.sentry.io/4506321044307968
+
 # Run Prisma migration
 RUN npx prisma migrate deploy
 
