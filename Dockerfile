@@ -28,7 +28,7 @@ WORKDIR /usr/src/app/apps/web
 RUN rm -f .env
 
 # Environment variables
-ENV NODE_ENV=development
+ENV NODE_ENV=production
 ENV NEXTAUTH_URL=http://localhost:3000
 ENV NEXT_PUBLIC_API_URL=http://localhost:3000
 ENV NEXTAUTH_SECRET=2b7e151628aed2a6abf7158809cf4f3c762e7160f38b4da56a784d9045190cba
