@@ -19,16 +19,16 @@ RUN rm -f .env
 COPY . .
 
 # Install dependencies
-RUN pnpm install
+RUN pnpm install --frozen-lockfile
 
 # Build
 RUN pnpm turbo run build
 
-# Run Prisma migration
-RUN npx prisma migrate deploy
-
 # Change to the apps/web directory
 WORKDIR /usr/src/app/apps/web
+
+# Run Prisma migration
+RUN npx prisma migrate deploy
 
 # Expose the port the app runs on
 EXPOSE 3000

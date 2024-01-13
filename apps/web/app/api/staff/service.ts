@@ -5,7 +5,7 @@ import { db } from '../../../lib/db';
 import { AddStaffModel, UpdateStaffModel } from '../../../lib/domain/staff';
 
 export async function getStaffById(id: string) {
-  return await db.staff.findFirst({
+  return db.staff.findFirst({
     where: {
       id,
     },
@@ -13,7 +13,7 @@ export async function getStaffById(id: string) {
 }
 
 export async function deleteStaffById(id: string) {
-  return await db.staff.update({
+  return db.staff.update({
     where: {
       id: id,
     },
@@ -28,7 +28,7 @@ export async function updateStaffById(
   id: string,
   updatedStaff: UpdateStaffModel
 ) {
-  return await db.staff.update({
+  return db.staff.update({
     where: {
       id: id,
     },
@@ -79,7 +79,7 @@ export async function addStaff(staff: AddStaffModel) {
     },
   });
 
-  const createdStaff = await db.staff.create({
+  return db.staff.create({
     data: {
       type: staff.type,
       aadharCardNumber: staff.aadharCardNumber,
@@ -108,8 +108,6 @@ export async function addStaff(staff: AddStaffModel) {
       },
     },
   });
-
-  return createdStaff;
 }
 
 export async function getStaffList(page: number, pageSize: number) {
@@ -143,13 +141,11 @@ export async function getStaffList(page: number, pageSize: number) {
 
 export async function getAllStaffsBySectionId(sectionId: string) {
   const session = await getServerSession(authOptions);
-  return await db.staff.findMany({
+  return db.staff.findMany({
     where: {
       branchId: session.branchId,
       organizationId: session.organizationId,
-      sectionId: {
-        has: sectionId,
-      },
+      sectionId: sectionId,
     },
   });
 }
