@@ -97,19 +97,3 @@ export async function addStaffsToSection(
     },
   });
 }
-
-export async function addSubjectsToSection(
-  sectionId: string,
-  subjectIds: string[]
-) {
-  return db.section.update({
-    where: {
-      id: sectionId,
-    },
-    data: {
-      subjects: {
-        connect: subjectIds.map((id) => ({ id })),
-      },
-    },
-  });
-}
