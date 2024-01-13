@@ -19,7 +19,7 @@ RUN rm -f .env
 COPY . .
 
 # Install dependencies
-RUN pnpm install --frozen-lockfile
+RUN pnpm install
 
 # Build
 RUN pnpm turbo run build
