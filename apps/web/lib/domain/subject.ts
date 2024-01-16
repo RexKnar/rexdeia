@@ -5,6 +5,9 @@ export type SubjectModel = {
   description?: string;
   sectionId: string;
   type: string;
+  isDeleting?: boolean;
+  isUpdating?: boolean;
+  isNewlyAdded?: boolean;
 };
 
 export type CreateSubjectModel = Pick<
@@ -14,5 +17,5 @@ export type CreateSubjectModel = Pick<
 
 export type UpdateSubjectModel = Pick<
   SubjectModel,
-  'name' | 'isActive' | 'description' | 'type'
+  'name' | 'isActive' | 'description' | 'type' | 'id'
 >;
