@@ -31,7 +31,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html
       lang="en"
-      className={`${inter.variable} ${roboto_mono.variable} bg-white`}
+      className={`${inter.variable} ${roboto_mono.variable} bg-gray-50`}
     >
       <Providers>
         <body className="h-screen bg-gray-50">

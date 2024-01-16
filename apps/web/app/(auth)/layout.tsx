@@ -19,7 +19,10 @@ const roboto_mono = Roboto_Mono({
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang="en" className={`${inter.variable} ${roboto_mono.variable}`}>
+    <html
+      lang="en"
+      className={`${inter.variable} ${roboto_mono.variable} bg-white`}
+    >
       <body>
         <main>{children}</main>
         <ZohoSalesIQ />
