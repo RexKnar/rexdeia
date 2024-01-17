@@ -187,14 +187,14 @@ export function SaveAcademicYearFlyout() {
                   </label>
                   <Input
                     {...register('name', {
-                      required: 'Batch Name is Required',
+                      required: 'Academic Year Name is Required',
                     })}
                     className="mt-2"
                     id="name"
                     errorMessage={fieldErrors?.name?.message.toString()}
                   />
                 </div>
-                <div>
+                <div className="mt-5">
                   <label
                     htmlFor="name"
                     className="text-sm font-semibold text-gray-700"
@@ -210,7 +210,7 @@ export function SaveAcademicYearFlyout() {
                     errorMessage={fieldErrors?.description?.message.toString()}
                   />
                 </div>
-                <div className="mt-3 flex justify-between">
+                <div className="mt-5 flex justify-between">
                   <div>
                     <label
                       htmlFor="startYear"
