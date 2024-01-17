@@ -30,7 +30,7 @@
     "fs": "0.0.1-security",
     "http-status-codes": "^2.3.0",
     "immer": "^10.0.3",
-    "lucide-react": "^0.309.0",
+    "lucide-react": "^0.311.0",
     "nanoid": "^5.0.4",
     "next": "^14.0.4",
     "next-auth": "4.24.5",
