@@ -40,9 +40,6 @@ ENV NEXT_PUBLIC_ZOHO_SALESIQ_WIDGET_CODE=siq5f54d9690e6a1b3453aa252fa32856e9d676
 ENV SENTRY_DSN=https://f2357e98a997b7d0e86b80c08fc29fe1@o4506321037950976.ingest.sentry.io/4506321044307968
 ENV NEXT_PUBLIC_SENTRY_DSN=https://f2357e98a997b7d0e86b80c08fc29fe1@o4506321037950976.ingest.sentry.io/4506321044307968
 
-# Run Prisma migration
-RUN npx prisma migrate deploy
-
 # Expose the port the app runs on
 EXPOSE 3000
 
