@@ -65,6 +65,9 @@ export async function getSubjectList(page: number, limit: number) {
   const [total, subjectList] = await Promise.all([
     db.subject.count(),
     db.subject.findMany({
+      where: {
+        isActive: true,
+      },
       take: limit,
       skip: (page - 1) * limit,
     }),

@@ -20,7 +20,10 @@ const roboto_mono = Roboto_Mono({
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang="en" className={`${inter.variable} ${roboto_mono.variable}`}>
+    <html
+      lang="en"
+      className={`${inter.variable} ${roboto_mono.variable} bg-white`}
+    >
       <head>
         <link
           sizes="180x180"
@@ -42,7 +45,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         <link rel="manifest" href="/site.webmanifest" />
         <title>acadx.io | Elevate your academic experience</title>
       </head>
-      <body className="h-screen bg-gray-50">
+      <body className="h-screen">
         <Providers>{children}</Providers>
       </body>
     </html>

@@ -1,0 +1,41 @@
+# Docker Specific Files
+Dockerfile
+.dockerignore
+
+# Dependency Directories
+**/node_modules/
+
+# Log Files
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Version Control System
+.git/
+
+# Build Artifacts and Directories
+build/
+dist/
+.next
+
+# Configuration and Environment Files
+.env*
+*.pem
+
+# Miscellaneous Files
+.DS_Store
+.turbo
+.vercel
+
+# Test and Documentation Files
+__tests__/
+*.md
+
+# Temporary Files
+*.tmp
+*.temp
+
+# Specific Local Development Files
+# Add any local development specific files/directories here

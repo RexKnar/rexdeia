@@ -9,9 +9,14 @@ import {
   getSortedRowModel,
   useReactTable,
 } from '@tanstack/react-table';
-import { Pencil, Trash2 } from 'lucide-react';
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import { parseAsInteger, useQueryState } from 'next-usequerystate';
+import { Loader2, Pencil, Trash2 } from 'lucide-react';
+import {
+  parseAsBoolean,
+  parseAsInteger,
+  parseAsString,
+  useQueryState,
+} from 'next-usequerystate';
+import { useEffect, useState } from 'react';
 import { When } from 'react-if';
 import {
   Button,
@@ -25,6 +30,7 @@ import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
+  useToast,
 } from 'ui';
 import {
   Table,
@@ -36,7 +42,9 @@ import {
 } from 'ui/components/ui/Table';
 import { cn } from 'utils';
 
+import { DeleteConfirmationModal } from '../../../../../lib/components/modals/DeleteConfirmationModal';
 import { SubjectModel } from '../../../../../lib/domain/subject';
+import { useDeleteSubjectMutationQuery } from '../../../../../lib/queries/subjects/useDeleteSubjectMutationQuery';
 import { useGetSubjectListQuery } from '../../../../../lib/queries/subjects/useGetSubjectListQuery';
 
 const columns: ColumnDef<SubjectModel>[] = [
@@ -114,20 +122,60 @@ const columns: ColumnDef<SubjectModel>[] = [
   },
 ];
 export function SubjectsListTable() {
-  const pathname = usePathname();
-  const router = useRouter();
-  const searchParams = useSearchParams();
+  const { toast } = useToast();
+
+  const [showDeleteConfirmationModal, setShowDeleteConfirmationModal] =
+    useState(false);
+  const [selectedSubject, setSelectedSubject] = useState<SubjectModel | null>(
+    null
+  );
 
   const [page, setPage] = useQueryState('page', parseAsInteger.withDefault(1));
   const [limit, setLimit] = useQueryState(
     'limit',
     parseAsInteger.withDefault(10)
   );
+  const [, setIsFlyoutOpen] = useQueryState(
+    'isFlyoutOpen',
+    parseAsBoolean.withDefault(false)
+  );
+
+  const [, setSubjectId] = useQueryState(
+    'subjectId',
+    parseAsString.withDefault('')
+  );
   const { data: subjectListResponse, isLoading: isSubjectListLoading } =
     useGetSubjectListQuery({
       page,
       limit,
     });
+
+  const {
+    isError: isDeleteSubjectError,
+    isSuccess: isDeleteSuccess,
+    mutateAsync: deleteSubjectAsync,
+  } = useDeleteSubjectMutationQuery(page, limit);
+
+  useEffect(() => {
+    if (isDeleteSubjectError) {
+      toast({
+        title: 'Error',
+        variant: 'destructive',
+        description: 'Error while deleting subject',
+      });
+    }
+  }, [isDeleteSubjectError, toast]);
+
+  useEffect(() => {
+    if (isDeleteSuccess) {
+      toast({
+        title: 'Success',
+        variant: 'destructive',
+        description: 'Subject deleted successfully',
+      });
+      setSelectedSubject(null);
+    }
+  }, [isDeleteSuccess, toast]);
 
   const table = useReactTable({
     columns,
@@ -191,14 +239,15 @@ export function SubjectsListTable() {
                     <Tooltip>
                       <TooltipTrigger asChild>
                         <Button
-                          onClick={() => {
-                            const params = new URLSearchParams(searchParams);
-                            params.set('isFlyoutOpen', 'true');
-                            params.set('regulationId', row.original.id);
-                            router.push(pathname + '?' + params.toString());
+                          onClick={async () => {
+                            await setIsFlyoutOpen(true);
+                            await setSubjectId(row.original.id);
                           }}
-                          className="mr-2 h-auto px-3 py-2"
+                          className="mr-3 h-auto px-3 py-2"
                           variant="mild"
+                          disabled={
+                            row.original.isNewlyAdded || row.original.isUpdating
+                          }
                         >
                           <Pencil
                             size={12}
@@ -213,15 +262,28 @@ export function SubjectsListTable() {
                         </p>
                       </TooltipContent>
                     </Tooltip>
+                    <Tooltip></Tooltip>
                     <Tooltip>
                       <TooltipTrigger asChild>
-                        <Button className="h-auto px-3 py-2" variant="mild">
-                          {
+                        <Button
+                          className="h-auto px-3 py-2"
+                          variant="mild"
+                          onClick={() => {
+                            setSelectedSubject(row.original);
+                            setShowDeleteConfirmationModal(true);
+                          }}
+                          disabled={
+                            row.original.isNewlyAdded || row.original.isUpdating
+                          }
+                        >
+                          {row.original.isDeleting ? (
+                            <Loader2 className="mr-2 h-4 w-4 animate-spin text-red-600" />
+                          ) : (
                             <Trash2
                               size={12}
                               className="text-center text-red-600 "
                             />
-                          }
+                          )}
                         </Button>
                       </TooltipTrigger>
                       <TooltipContent>
@@ -237,7 +299,7 @@ export function SubjectsListTable() {
             ) : (
               <TableRow>
                 <TableCell colSpan={5} className="h-24 text-center">
-                  {isSubjectListLoading ? 'Loading...' : 'No Regulation Found'}
+                  {isSubjectListLoading ? 'Loading...' : 'No Subject Found'}
                 </TableCell>
               </TableRow>
             )}
@@ -280,6 +342,19 @@ export function SubjectsListTable() {
             totalRecords={subjectListResponse?.total || 0}
           />
         </section>
+        <DeleteConfirmationModal
+          open={showDeleteConfirmationModal}
+          description={`Are you sure you want to delete "${selectedSubject?.name}"`}
+          onDeleteClick={async () => {
+            if (selectedSubject) {
+              setShowDeleteConfirmationModal(false);
+              await deleteSubjectAsync(selectedSubject.id);
+            }
+          }}
+          onCancelClick={() => {
+            setShowDeleteConfirmationModal(false);
+          }}
+        />
       </When>
     </section>
   );

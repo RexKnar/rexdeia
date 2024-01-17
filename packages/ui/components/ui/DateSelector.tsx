@@ -11,9 +11,7 @@ export function DateSelector(props: ReactDatePickerProps) {
         {...props}
         className="w-40 outline-none hover:border-none"
         showIcon
-        icon={
-          <CalendarIcon className="mr-2 flex justify-end text-primary-500" />
-        }
+        icon={<CalendarIcon className="flex justify-end text-primary-500" />}
       />
     </div>
   );

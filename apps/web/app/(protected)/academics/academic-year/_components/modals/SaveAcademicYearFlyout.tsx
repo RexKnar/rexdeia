@@ -191,16 +191,8 @@ export function SaveAcademicYearFlyout() {
                     })}
                     className="mt-2"
                     id="name"
+                    errorMessage={fieldErrors?.name?.message.toString()}
                   />
-                  <p
-                    className={`h-2 p-1 text-sm text-red-600 ${
-                      fieldErrors.name
-                        ? 'opacity-100 transition-opacity duration-300'
-                        : 'opacity-0 transition-opacity duration-300'
-                    }`}
-                  >
-                    {fieldErrors.name?.message as string}
-                  </p>
                 </div>
                 <div>
                   <label
@@ -210,9 +202,12 @@ export function SaveAcademicYearFlyout() {
                     Batch Description
                   </label>
                   <Input
-                    {...register('description')}
+                    {...register('description', {
+                      required: 'Academic year description is Required',
+                    })}
                     className="mt-2"
-                    id="name"
+                    id="description"
+                    errorMessage={fieldErrors?.description?.message.toString()}
                   />
                 </div>
                 <div className="mt-3 flex justify-between">
@@ -225,6 +220,7 @@ export function SaveAcademicYearFlyout() {
                     </label>
                     <DateSelector
                       id="startYear"
+                      required
                       placeholderText="Start Year"
                       autoComplete="off"
                       {...register('startYear')}
@@ -246,6 +242,7 @@ export function SaveAcademicYearFlyout() {
                     </label>
                     <DateSelector
                       id="endYear"
+                      required
                       autoComplete="off"
                       placeholderText="End Year"
                       {...register('endYear')}

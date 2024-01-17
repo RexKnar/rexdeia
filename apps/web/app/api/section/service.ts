@@ -22,6 +22,9 @@ export async function getSectionById(id: string) {
       id: id,
       isActive: true,
     },
+    include: {
+      medium: true,
+    },
   });
 }
 
@@ -44,7 +47,6 @@ export async function updateSectionById(
     },
     data: {
       name: updateSection.name,
-      medium: updateSection.medium,
       description: updateSection.description,
       faculty: updateSection.faculty,
       isActive: updateSection.isActive,
@@ -57,13 +59,9 @@ export async function addSection(createSection: CreateSectionModel) {
   return db.section.create({
     data: {
       name: createSection.name,
-      medium: createSection.medium,
       isActive: createSection.isActive,
-      class: {
-        connect: {
-          id: createSection.classId,
-        },
-      },
+      classId: createSection.classId,
+      mediumId: createSection.mediumId,
     },
   });
 }
@@ -95,22 +93,6 @@ export async function addStaffsToSection(
     data: {
       staff: {
         connect: staffIds.map((id) => ({ id })),
-      },
-    },
-  });
-}
-
-export async function addSubjectsToSection(
-  sectionId: string,
-  subjectIds: string[]
-) {
-  return db.section.update({
-    where: {
-      id: sectionId,
-    },
-    data: {
-      subjects: {
-        connect: subjectIds.map((id) => ({ id })),
       },
     },
   });

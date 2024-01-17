@@ -14,7 +14,7 @@ export async function getAllGroups(
   const [total, groupList] = await Promise.all([
     db.group.count({
       where: {
-        isActive: status ? true : false,
+        isActive: Boolean(status),
         branchId: session.branchId,
       },
     }),
@@ -23,8 +23,8 @@ export async function getAllGroups(
       skip: (page - 1) * limit,
       where: {
         branchId: session.branchId,
+        isActive: Boolean(status),
         isDeleted: false,
-        isActive: status ? true : false,
       },
     }),
   ]);

@@ -174,17 +174,10 @@ export function SaveRegulationFlyout() {
                     required: 'Regulation Name is Required',
                   })}
                   className="mt-2"
+                  placeholder="Regulation Name"
                   id="regulationName"
+                  errorMessage={fieldErrors?.regulationName?.message.toString()}
                 />
-                <p
-                  className={`h-2 p-1 text-sm text-red-600 ${
-                    fieldErrors.regulationName
-                      ? 'opacity-100 transition-opacity duration-300'
-                      : 'opacity-0 transition-opacity duration-300'
-                  }`}
-                >
-                  {fieldErrors.regulationName?.message as string}
-                </p>
               </div>
               <div className="mt-4">
                 <label
@@ -195,6 +188,7 @@ export function SaveRegulationFlyout() {
                 </label>
                 <DateSelector
                   id="announcedYear"
+                  required
                   autoComplete="off"
                   placeholderText="Regulation Year"
                   onChange={(value) => {
@@ -205,15 +199,6 @@ export function SaveRegulationFlyout() {
                   selected={announcedYear}
                   isClearable={false}
                 />
-                <p
-                  className={`h-2 p-1 text-sm text-red-600 ${
-                    fieldErrors.announcedYear
-                      ? 'opacity-100 transition-opacity duration-300'
-                      : 'opacity-0 transition-opacity duration-300'
-                  }`}
-                >
-                  {fieldErrors.announcedYear?.message as string}
-                </p>
               </div>
 
               <div className="mt-10">

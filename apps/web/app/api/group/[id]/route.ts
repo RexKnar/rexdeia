@@ -162,7 +162,7 @@ export async function DELETE(_: NextRequest, { params: { id } }) {
         status: StatusCodes.OK,
       });
     } else {
-      return new Response(JSON.stringify({ error: 'BATCH_NOT_FOUND' }), {
+      return new Response(JSON.stringify({ error: 'GROUP_NOT_FOUND' }), {
         status: StatusCodes.NOT_FOUND,
       });
     }

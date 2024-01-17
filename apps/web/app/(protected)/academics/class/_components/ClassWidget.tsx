@@ -19,8 +19,8 @@ export function ClassWidget(props) {
   );
 
   return (
-    <div className="widget-container space-y-4">
-      <div className="widget h-32 min-w-80 rounded-lg border border-primary-200 bg-white p-4 shadow-md">
+    <div className="flex flex-wrap content-start items-start gap-6 self-stretch md:gap-24 md:space-x-24">
+      <div className="widget min-w-64 rounded-lg border border-primary-200 bg-white p-4 shadow-md shadow-primary-200">
         <div className="widget-title  flex items-center text-lg font-semibold">
           <Button
             className={cn('ps-0 text-lg font-semibold')}
@@ -34,22 +34,38 @@ export function ClassWidget(props) {
           <Button
             variant="outline"
             className={cn(
-              'w-18 ml-auto  h-6 rounded-sm border-primary-300  px-2 py-1 text-center text-sm font-medium text-white',
-              props.classDetails.isActive ? 'bg-green-600' : 'bg-red-600'
+              'w-18 ml-2 h-5 rounded-lg border-none  bg-blue-100 px-2 py-1 text-center text-sm font-medium text-indigo-700'
+            )}
+          >
+            Students
+          </Button>
+          <Button
+            variant="outline"
+            className={cn(
+              'w-18 ml-2 h-5 rounded-lg border-none  px-2 py-1 text-center text-sm font-medium text-teal-800',
+              props.classDetails.isActive ? 'bg-teal-100' : 'bg-red-600'
             )}
           >
             {props.classDetails.isActive ? 'Active' : 'Inactive'}
           </Button>
         </div>
-        <div className="mt-6 flex flex-wrap content-center items-center gap-2 self-stretch">
+        <div className="mb-2 mt-4 flex flex-wrap content-center items-center gap-2 self-stretch">
           {props.classDetails.Section.map((section, index) => (
-            <Button key={index} className="text-center">
+            <Button
+              key={index}
+              className="h-6 w-6 bg-primary-200 text-center text-black"
+              onClick={() => {
+                router.push(
+                  `/academics/class/${props.classDetails.id}/section/${section.id}`
+                );
+              }}
+            >
               {section.name}
             </Button>
           ))}
           <Button
             variant="outline"
-            className="h-7 w-7 gap-1 rounded p-1"
+            className="h-6 w-6 rounded p-1"
             onClick={() => {
               setClassId(props.classDetails.id);
               isSectionFlyoutOpen(true);

@@ -5,21 +5,19 @@ export type ClassModel = {
   name: string;
   isActive: boolean;
   description?: string;
-  department: string;
   batchId: string;
   branchId: string;
   regulationId: string;
   Section: CreateSectionModel[];
 };
 
-export type CreateSectionModel = Pick<
-  SectionModel,
-  'name' | 'medium' | 'department'
->;
+export type CreateSectionModel = Pick<SectionModel, 'name' | 'mediumId'>;
 export type CreateClassModel = Pick<
   ClassModel,
-  'name' | 'isActive' | 'branchId' | 'Section'
->;
+  'name' | 'isActive' | 'branchId'
+> & {
+  section: CreateSectionModel[];
+};
 
 export type UpdateClassModel = Pick<
   ClassModel,

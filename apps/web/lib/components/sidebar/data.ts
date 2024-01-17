@@ -1,8 +1,8 @@
 import {
+  BetweenHorizontalEndIcon,
   FileText,
   GraduationCap,
-  User2,
-  UserCircle2,
+  SquareUserRound,
   UserPlus2,
 } from 'lucide-react';
 
@@ -12,7 +12,7 @@ export const menuItems: SidebarMenuItem[] = [
   {
     id: 'students',
     label: 'Students',
-    icon: UserCircle2,
+    icon: SquareUserRound,
     path: '',
     children: [
       {
@@ -37,9 +37,17 @@ export const menuItems: SidebarMenuItem[] = [
   },
   {
     id: 'staffs',
-    label: 'Staff',
-    icon: User2,
-    path: '/staffs',
+    label: 'Staffs',
+    icon: BetweenHorizontalEndIcon,
+    path: '',
+    children: [
+      {
+        icon: null,
+        label: 'Onboard Staff',
+        id: 'enroll-new-student',
+        path: '/staffs/onboard-new-staff',
+      },
+    ],
   },
   {
     id: 'academics',
