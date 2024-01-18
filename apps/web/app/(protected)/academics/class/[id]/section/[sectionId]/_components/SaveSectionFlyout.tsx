@@ -1,12 +1,13 @@
 'use client';
 
 import { Loader2, PlusCircle } from 'lucide-react';
+import { useParams } from 'next/navigation';
 import {
   parseAsBoolean,
   parseAsString,
   useQueryState,
 } from 'next-usequerystate';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import {
   Button,
@@ -20,10 +21,12 @@ import {
 } from 'ui';
 import { cn } from 'utils';
 
-import { CreateSectionModel } from '../../../../../../../../lib/domain/section';
+import { SectionModel } from '../../../../../../../../lib/domain/section';
 import { useCreateSectionMutationQuery } from '../../../../../../../../lib/queries/section/useCreateSectionMutationQuery';
+import { useGetSectionByIdQuery } from '../../../../../../../../lib/queries/section/useGetSectionByIdQuery';
+import { useUpdateSectionMutationQuery } from '../../../../../../../../lib/queries/section/useUpdateSectionMutationQuery';
 
-function SaveSectionFlyout() {
+export function SaveSectionFlyout() {
   const {
     register,
     handleSubmit,
@@ -39,6 +42,7 @@ function SaveSectionFlyout() {
       isActive: false,
     },
   });
+  const params = useParams<{ sectionId: string }>();
   const [isOpen, setIsOpen] = useQueryState(
     'isSectionFlyoutOpen',
     parseAsBoolean.withDefault(false)
@@ -50,17 +54,51 @@ function SaveSectionFlyout() {
     await setIsOpen(false);
     setClassId(null);
   };
+  const { data: getSectionResponse } = useGetSectionByIdQuery(
+    params.sectionId,
+    {
+      enabled: !!params.sectionId,
+    }
+  );
+
+  useEffect(() => {
+    if (getSectionResponse) {
+      const { name, isActive, medium } = getSectionResponse;
+
+      setValue('name', name);
+      setValue('isActive', isActive);
+      setValue('mediumId', medium.name);
+      setActiveToggleFlag(isActive);
+    } else {
+      setValue('name', null);
+      setValue('isActive', false);
+      setValue('mediumId', null);
+    }
+  }, [getSectionResponse, setValue]);
+
   const {
     isPending: isPendingCreateSection,
     mutateAsync: mutateCreateSectionAsync,
   } = useCreateSectionMutationQuery();
-  const saveSection = async (payload: CreateSectionModel) => {
+
+  const {
+    isPending: isPendingUpdateSection,
+    mutateAsync: mutateUpdateSectionAsync,
+  } = useUpdateSectionMutationQuery(params.sectionId);
+  const saveSection = async (payload: SectionModel) => {
     try {
-      const addSectionPayload = {
-        ...payload,
-        classId,
-      };
-      mutateCreateSectionAsync(addSectionPayload);
+      if (classId) {
+        const addSectionPayload = {
+          ...payload,
+          classId,
+        };
+        mutateCreateSectionAsync(addSectionPayload);
+      } else {
+        const updateSectionPayload = {
+          ...payload,
+        };
+        mutateUpdateSectionAsync(updateSectionPayload);
+      }
     } catch (error) {
       console.error(error);
     } finally {
@@ -85,7 +123,7 @@ function SaveSectionFlyout() {
                   <div className="flex items-center">
                     <PlusCircle size={20} strokeWidth={1.5} />
                     <Text variant="lg-semibold" className="ml-2">
-                      New Section
+                      {classId ? 'New Section' : 'Update Section'}
                     </Text>
                   </div>
                   <div className="flex items-center">
@@ -168,13 +206,13 @@ function SaveSectionFlyout() {
                   type="submit"
                   className="mx-auto flex justify-center px-12 py-4"
                 >
-                  {isPendingCreateSection ? (
+                  {isPendingCreateSection || isPendingUpdateSection ? (
                     <div className="flex items-center justify-center">
                       <Loader2 className="mr-2 h-6 w-6 animate-spin text-white" />
-                      Saving
+                      {classId ? 'Saving' : 'updating'}
                     </div>
                   ) : (
-                    'Save'
+                    `${classId ? 'Save' : 'Update'}`
                   )}
                 </Button>
               </div>
@@ -185,5 +223,3 @@ function SaveSectionFlyout() {
     </section>
   );
 }
-
-export default SaveSectionFlyout;

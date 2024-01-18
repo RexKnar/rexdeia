@@ -31,6 +31,7 @@ export const GET_REGULATION_LIST = `GET_REGULATION_LIST`;
 export const GET_REGULATION_BY_ID = `GET_REGULATION_BY_ID`;
 export const UPDATE_REGULATION_BY_ID = `UPDATE_REGULATION_BY_ID`;
 export const GET_GROUP_LIST = `GET_GROUP_LIST`;
+export const GET_MEDIUM_LIST = `GET_MEDIUM_LIST`;
 export const GET_BATCHES_LIST = `GET_BATCHES_LIST`;
 export const CREATE_BATCH = `CREATE_BATCH`;
 export const GET_BATCH_BY_ID = `GET_BATCH_BY_ID`;
@@ -165,6 +166,10 @@ export default <EndpointDetails>{
   [GET_GROUP_LIST]: {
     requestType: `GET`,
     endpoint: `/api/group`,
+  },
+  [GET_MEDIUM_LIST]: {
+    requestType: `GET`,
+    endpoint: `/api/medium`,
   },
   [UPDATE_REGULATION_BY_ID]: {
     requestType: `PUT`,
