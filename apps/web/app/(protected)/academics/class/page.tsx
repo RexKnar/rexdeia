@@ -4,7 +4,7 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from '../../../../lib/auth';
 import { ClassList } from './_components/ClassList';
 import { ClassPageHeader } from './_components/ClassPageHeader';
-import SaveSectionFlyout from './[id]/section/[sectionId]/_components/SaveSectionFlyout';
+import { SaveSectionFlyout } from './[id]/section/[sectionId]/_components/SaveSectionFlyout';
 
 export default async function Page() {
   const session = await getServerSession(authOptions);
