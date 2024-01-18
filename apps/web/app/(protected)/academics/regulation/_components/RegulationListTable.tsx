@@ -135,7 +135,7 @@ export function RegulationListTable() {
     if (isDeleteRegulationError) {
       toast({
         title: 'Error',
-        variant: 'destructive',
+        variant: 'default',
         description: 'Error while deleting regulation',
       });
     }
@@ -145,7 +145,7 @@ export function RegulationListTable() {
     if (isDeleteRegulationSuccess) {
       toast({
         title: 'Success',
-        variant: 'destructive',
+        variant: 'default',
         description: 'Regulation deleted successfully',
       });
       setSelectedRegulation(null);
