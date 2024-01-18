@@ -7,17 +7,12 @@ import {
   UpdateMediumModel,
 } from '../../../lib/domain/medium';
 
-export async function getAllMediums(
-  page: number,
-  limit: number,
-  status: string
-) {
+export async function getAllMediums(page: number, limit: number) {
   const session = await getServerSession(authOptions);
 
   const [total, mediumList] = await Promise.all([
     db.medium.count({
       where: {
-        isActive: Boolean(status),
         branchId: session.branchId,
       },
     }),
@@ -26,7 +21,6 @@ export async function getAllMediums(
       skip: (page - 1) * limit,
       where: {
         branchId: session.branchId,
-        isActive: Boolean(status),
         isDeleted: false,
       },
     }),
