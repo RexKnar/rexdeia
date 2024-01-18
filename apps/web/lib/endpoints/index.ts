@@ -45,6 +45,7 @@ export const DELETE_SUBJECT_BY_ID = `DELETE_SUBJECT_BY_ID`;
 export const UPDATE_SUBJECT_BY_ID = `UPDATE_SUBJECT_BY_ID`;
 export const GET_SUBJECT_BY_ID = `GET_SUBJECT_BY_ID`;
 export const UPDATE_SECTION_BY_ID = `UPDATE_SECTION_BY_ID`;
+export const DELETE_GROUP_BY_ID = `DELETE_GROUP_BY_ID`;
 
 export default <EndpointDetails>{
   [REGISTER_USER]: {
@@ -226,5 +227,9 @@ export default <EndpointDetails>{
   [UPDATE_SECTION_BY_ID]: {
     requestType: `PUT`,
     endpoint: `/api/section/[id]`,
+  },
+  [DELETE_GROUP_BY_ID]: {
+    requestType: `DELETE`,
+    endpoint: `/api/group/[id]`,
   },
 };
