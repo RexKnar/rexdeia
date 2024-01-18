@@ -34,7 +34,7 @@
     "nanoid": "^5.0.4",
     "next": "^14.0.4",
     "next-auth": "4.24.5",
-    "next-intl": "3.4.2",
+    "next-intl": "3.4.4",
     "next-swagger-doc": "^0.4.0",
     "next-usequerystate": "^1.13.2",
     "nextjs-toploader": "^1.6.4",
