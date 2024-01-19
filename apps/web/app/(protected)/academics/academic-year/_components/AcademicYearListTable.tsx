@@ -177,7 +177,7 @@ export function AcademicYearListTable() {
     if (isDeleteBatchError) {
       toast({
         title: 'Error',
-        variant: 'destructive',
+        variant: 'default',
         description: 'Error while deleting batch',
       });
     }
@@ -187,7 +187,7 @@ export function AcademicYearListTable() {
     if (isDeleteSuccess) {
       toast({
         title: 'Success',
-        variant: 'destructive',
+        variant: 'default',
         description: 'Batch deleted successfully',
       });
       setSelectedBatch(null);

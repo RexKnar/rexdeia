@@ -160,7 +160,7 @@ export function SubjectsListTable() {
     if (isDeleteSubjectError) {
       toast({
         title: 'Error',
-        variant: 'destructive',
+        variant: 'default',
         description: 'Error while deleting subject',
       });
     }
@@ -170,7 +170,7 @@ export function SubjectsListTable() {
     if (isDeleteSuccess) {
       toast({
         title: 'Success',
-        variant: 'destructive',
+        variant: 'default',
         description: 'Subject deleted successfully',
       });
       setSelectedSubject(null);
