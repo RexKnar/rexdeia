@@ -11,7 +11,7 @@ import {
 } from '@tanstack/react-table';
 import { Loader2, Pencil, Trash2 } from 'lucide-react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import React, { useCallback } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { When } from 'react-if';
 import {
   Button,
@@ -25,6 +25,7 @@ import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
+  useToast,
 } from 'ui';
 import {
   Table,
@@ -36,7 +37,9 @@ import {
 } from 'ui/components/ui/Table';
 import { cn } from 'utils';
 
+import { DeleteConfirmationModal } from '../../../../../lib/components/modals/DeleteConfirmationModal';
 import { GroupModel } from '../../../../../lib/domain/group';
+import { useDeleteGroupMutationQuery } from '../../../../../lib/queries/group/useDeleteGroupMutationQuery';
 import { useGetGroupListQuery } from '../../../../../lib/queries/group/useGetGroupListQuery';
 
 const columns: ColumnDef<GroupModel>[] = [
@@ -101,6 +104,11 @@ const columns: ColumnDef<GroupModel>[] = [
 ];
 
 export function GroupListTable() {
+  const { toast } = useToast();
+
+  const [showDeleteConfirmationModal, setShowDeleteConfirmationModal] =
+    useState(false);
+  const [selectedGroup, setSelectedGroup] = useState<GroupModel | null>(null);
   const pathname = usePathname();
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -115,6 +123,33 @@ export function GroupListTable() {
       limit,
       status,
     });
+
+  const {
+    isError: isDeleteGroupError,
+    isSuccess: isDeleteSuccess,
+    mutateAsync: deleteGroupAsync,
+  } = useDeleteGroupMutationQuery(page, limit);
+
+  useEffect(() => {
+    if (isDeleteGroupError) {
+      toast({
+        title: 'Error',
+        variant: 'default',
+        description: 'Error while deleting group',
+      });
+    }
+  }, [isDeleteGroupError, toast]);
+
+  useEffect(() => {
+    if (isDeleteSuccess) {
+      toast({
+        title: 'Success',
+        variant: 'default',
+        description: 'Group deleted successfully',
+      });
+      setSelectedGroup(null);
+    }
+  }, [isDeleteSuccess, toast]);
 
   const handleOnPageChange = useCallback(
     (page: number) => {
@@ -206,7 +241,14 @@ export function GroupListTable() {
                           <Button
                             className="h-auto px-3 py-2"
                             variant="mild"
-                            disabled={row.original.isNewlyAdded}
+                            onClick={() => {
+                              setSelectedGroup(row.original);
+                              setShowDeleteConfirmationModal(true);
+                            }}
+                            disabled={
+                              row.original.isNewlyAdded ||
+                              row.original.isUpdating
+                            }
                           >
                             {row.original.isDeleting ? (
                               <Loader2 className="mr-2 h-4 w-4 animate-spin text-red-600" />
@@ -221,6 +263,7 @@ export function GroupListTable() {
                         <TooltipContent>
                           <p>
                             <span>Delete</span>
+                            <span className="mx-1 font-semibold">{`${row.original.name}`}</span>
                           </p>
                         </TooltipContent>
                       </Tooltip>
@@ -274,6 +317,19 @@ export function GroupListTable() {
             totalRecords={groupListResponse?.total || 0}
           />
         </section>
+        <DeleteConfirmationModal
+          open={showDeleteConfirmationModal}
+          description={`Are you sure you want to delete "${selectedGroup?.name}"`}
+          onDeleteClick={async () => {
+            if (selectedGroup) {
+              setShowDeleteConfirmationModal(false);
+              await deleteGroupAsync(selectedGroup.id);
+            }
+          }}
+          onCancelClick={() => {
+            setShowDeleteConfirmationModal(false);
+          }}
+        />
       </When>
     </section>
   );
