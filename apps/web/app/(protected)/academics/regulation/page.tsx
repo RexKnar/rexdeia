@@ -1,6 +1,6 @@
 import { redirect } from 'next/navigation';
 import { getServerSession } from 'next-auth';
-import React from 'react';
+import React, { Suspense } from 'react';
 
 import { authOptions } from '../../../../lib/auth';
 import { RegulationListTable } from './_components/RegulationListTable';
@@ -17,7 +17,9 @@ export default async function Page() {
     <section className="flex flex-col gap-6">
       <RegulationsPageHeader />
       <section className="space-y-2 rounded-md bg-white p-4">
-        <RegulationListTable />
+        <Suspense>
+          <RegulationListTable />
+        </Suspense>
       </section>
       <SaveRegulationFlyout />
     </section>

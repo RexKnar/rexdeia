@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import { Suspense } from 'react';
 
 import { RecoveryPasswordForm } from '../../../lib/components/auth/RecoveryPasswordForm';
 import logo from '../../../public/assets/images/acadx-logo.png';
@@ -17,7 +18,9 @@ export default async function Page() {
         <div className="flex justify-center">
           <Image src={logo} className="pt-10" alt={'logo'} width={100}></Image>
         </div>
-        <RecoveryPasswordForm />
+        <Suspense>
+          <RecoveryPasswordForm />
+        </Suspense>
       </section>
       <section
         className="flex-grow bg-cover bg-left bg-no-repeat sm:flex sm:w-1/4"
