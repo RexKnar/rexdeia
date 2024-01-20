@@ -39,6 +39,7 @@ export function UpdateClassFlyout() {
     'isUpdateClassFlyoutOpen',
     parseAsBoolean.withDefault(false)
   );
+
   const params = useParams<{ id: string }>();
 
   const [activeToggleFlag, setActiveToggleFlag] = useState(false);
@@ -46,6 +47,7 @@ export function UpdateClassFlyout() {
   const { data: geClassByIdResponse } = useGetClassByIdQuery(params.id, {
     enabled: !!params.id,
   });
+
   useEffect(() => {
     if (geClassByIdResponse) {
       const { name, isActive } = geClassByIdResponse;

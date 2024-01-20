@@ -48,9 +48,11 @@ export function SaveSectionFlyout() {
       isActive: false,
     },
   });
+
   useEffect(() => {
     setValue('mediumId', 'Tamil');
   }, [setValue]);
+
   const [medium, setMedium] = useState('Tamil');
   const params = useParams<{ sectionId: string }>();
   const [isOpen, setIsOpen] = useQueryState(
@@ -63,6 +65,7 @@ export function SaveSectionFlyout() {
     await setIsOpen(false);
     setClassId(null);
   };
+
   const { data: getSectionResponse } = useGetSectionByIdQuery(
     params.sectionId,
     {
@@ -94,6 +97,7 @@ export function SaveSectionFlyout() {
     isPending: isPendingUpdateSection,
     mutateAsync: mutateUpdateSectionAsync,
   } = useUpdateSectionMutationQuery(params.sectionId);
+
   const saveSection = async (payload: SectionModel) => {
     try {
       if (classId) {

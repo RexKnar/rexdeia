@@ -23,6 +23,7 @@ export function ClassDetail() {
     useGetClassByIdQuery(params.id, {
       enabled: !!params.id,
     });
+
   if (isLoadingGetClassById) {
     return (
       <div className="flex items-center justify-center">
