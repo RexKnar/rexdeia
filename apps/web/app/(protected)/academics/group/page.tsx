@@ -1,8 +1,8 @@
 import { Suspense } from 'react';
 
+import SaveGroupFlyout from './_components/_modals/SaveGroupFlyout';
 import { GroupListTable } from './_components/GroupListTable';
 import { GroupPageHeader } from './_components/GroupPageHeader';
-import SaveGroupFlyout from './_components/modals/SaveGroupFlyout';
 
 export default async function Page() {
   return (

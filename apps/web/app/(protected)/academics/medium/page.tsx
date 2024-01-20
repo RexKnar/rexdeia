@@ -1,8 +1,8 @@
 import { Suspense } from 'react';
 
+import SaveMediumFlyout from './_components/_modals/SaveMediumFlyout';
 import { MediumListTable } from './_components/MediumListTable';
 import { MediumPageHeader } from './_components/MediumPageHeader';
-import SaveMediumFlyout from './_components/modals/SaveMediumFlyout';
 
 export default async function Page() {
   return (
