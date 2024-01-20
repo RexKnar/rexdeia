@@ -4,7 +4,8 @@ export type SubjectModel = {
   isActive: boolean;
   description?: string;
   sectionId: string;
-  type: string;
+  subjectTypeId: string;
+  subjectFormatId: string;
   isDeleting?: boolean;
   isUpdating?: boolean;
   isNewlyAdded?: boolean;
@@ -12,10 +13,50 @@ export type SubjectModel = {
 
 export type CreateSubjectModel = Pick<
   SubjectModel,
-  'name' | 'isActive' | 'description' | 'type'
+  'name' | 'isActive' | 'description' | 'subjectTypeId' | 'subjectFormatId'
 >;
 
 export type UpdateSubjectModel = Pick<
   SubjectModel,
-  'name' | 'isActive' | 'description' | 'type' | 'id'
+  'name' | 'isActive' | 'description' | 'subjectTypeId' | 'id'
+>;
+
+export type SubjectTypeModel = {
+  id: string;
+  name: string;
+  isActive: boolean;
+  branchId: string;
+  isDeleting?: boolean;
+  isUpdating?: boolean;
+  isNewlyAdded?: boolean;
+};
+
+export type CreateSubjectTypeModel = Pick<
+  SubjectTypeModel,
+  'name' | 'isActive'
+>;
+
+export type UpdateSubjectTypeModel = Pick<
+  SubjectTypeModel,
+  'name' | 'isActive' | 'id'
+>;
+
+export type SubjectFormatModel = {
+  id: string;
+  name: string;
+  isActive: boolean;
+  branchId: string;
+  isDeleting?: boolean;
+  isUpdating?: boolean;
+  isNewlyAdded?: boolean;
+};
+
+export type CreateSubjectFormatModel = Pick<
+  SubjectFormatModel,
+  'name' | 'isActive'
+>;
+
+export type UpdateSubjectFormatModel = Pick<
+  SubjectFormatModel,
+  'name' | 'isActive' | 'id'
 >;
