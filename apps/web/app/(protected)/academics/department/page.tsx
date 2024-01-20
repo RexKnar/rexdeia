@@ -10,6 +10,7 @@ export default async function Page() {
   if (!session.branchId || !session.organizationId) {
     return redirect('/signin?callbackUrl=/academics/department');
   }
+
   try {
     const apiResponse = await getDepartmentList({
       branchId: session.branchId,

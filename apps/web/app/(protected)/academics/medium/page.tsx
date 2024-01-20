@@ -1,10 +1,18 @@
+import { redirect } from 'next/navigation';
+import { getServerSession } from 'next-auth';
 import { Suspense } from 'react';
 
+import { authOptions } from '../../../../lib/auth';
 import SaveMediumFlyout from './_components/_modals/SaveMediumFlyout';
 import { MediumListTable } from './_components/MediumListTable';
 import { MediumPageHeader } from './_components/MediumPageHeader';
 
 export default async function Page() {
+  const session = await getServerSession(authOptions);
+  if (!session.branchId || !session.organizationId) {
+    return redirect('/signin?callbackUrl=/academics/medium');
+  }
+
   return (
     <section className="flex flex-col gap-6">
       <Suspense>
