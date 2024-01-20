@@ -12,6 +12,12 @@ import { useForm } from 'react-hook-form';
 import {
   Button,
   Input,
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
   Sheet,
   SheetContent,
   SheetHeader,
@@ -42,12 +48,15 @@ export function SaveSectionFlyout() {
       isActive: false,
     },
   });
+  useEffect(() => {
+    setValue('mediumId', 'Tamil');
+  }, [setValue]);
+  const [medium, setMedium] = useState('Tamil');
   const params = useParams<{ sectionId: string }>();
   const [isOpen, setIsOpen] = useQueryState(
     'isSectionFlyoutOpen',
     parseAsBoolean.withDefault(false)
   );
-
   const [classId, setClassId] = useQueryState('classId', parseAsString);
   const [activeToggleFlag, setActiveToggleFlag] = useState(false);
   const closeFlyout = async () => {
@@ -151,7 +160,7 @@ export function SaveSectionFlyout() {
             <div className="mt-5">
               <div>
                 <label
-                  htmlFor="regulationName"
+                  htmlFor="sectionName"
                   className="text-sm font-semibold text-gray-700"
                 >
                   Section Name
@@ -176,28 +185,31 @@ export function SaveSectionFlyout() {
               </p>
               <div className="mt-2">
                 <label
-                  htmlFor="medium"
+                  htmlFor="mediumName"
                   className="text-sm font-semibold text-gray-700"
                 >
                   Medium
                 </label>
-                <Input
-                  className="mt-2"
-                  {...register('mediumId', {
-                    required: 'Medium is Required',
-                  })}
-                  id="medium"
-                />
-                <p
-                  className={cn(
-                    'h-2 p-1 text-sm text-red-600',
-                    fieldErrors.mediumId
-                      ? 'opacity-100 transition-opacity duration-300'
-                      : 'opacity-0 transition-opacity duration-300'
-                  )}
-                >
-                  {fieldErrors.mediumId?.message as string}
-                </p>
+                <div className="mt-2 w-full">
+                  <Select
+                    value={medium}
+                    onValueChange={(value) => {
+                      setMedium(value);
+                      setValue('mediumId', value);
+                    }}
+                  >
+                    <SelectTrigger className="w-full" defaultValue={'Tamil'}>
+                      <SelectValue {...register('mediumId')} />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectGroup>
+                        <SelectItem value={'Tamil'}>Tamil</SelectItem>
+                        <SelectItem value={'English'}>English</SelectItem>
+                        <SelectItem value={'Malayalam'}>Malayalam</SelectItem>
+                      </SelectGroup>
+                    </SelectContent>
+                  </Select>
+                </div>
               </div>
               <div className="mt-10 flex">
                 <Button

@@ -8,6 +8,7 @@ import { cn } from 'utils';
 
 import { PageTitle } from '../../../../../../lib/components/PageTitle';
 import { useGetClassByIdQuery } from '../../../../../../lib/queries/class/useGetClassByIdQuery';
+import { SectionCard } from '../section/[sectionId]/_components/SectionCard';
 import { StaffCard } from '../section/[sectionId]/_components/StaffCard';
 import { UpdateClassFlyout } from './UpdateClassFlyout';
 
@@ -92,6 +93,12 @@ export function ClassDetail() {
               >
                 Staffs
               </TabsTrigger>
+              <TabsTrigger
+                value="Sections"
+                className="mr-2 text-base focus:border-b-4 focus:border-primary"
+              >
+                Sections
+              </TabsTrigger>
             </TabsList>
             <TabsContent className="w-full" value="Subjects">
               <section className="pt-5">
@@ -105,6 +112,13 @@ export function ClassDetail() {
               <section className="pt-5">
                 <div className="w-3/12">
                   <StaffCard />
+                </div>
+              </section>
+            </TabsContent>
+            <TabsContent value="Sections">
+              <section className="pt-5">
+                <div className="w-4/12">
+                  <SectionCard />
                 </div>
               </section>
             </TabsContent>
