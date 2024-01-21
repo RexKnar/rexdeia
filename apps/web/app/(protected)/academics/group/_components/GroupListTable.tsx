@@ -128,7 +128,7 @@ export function GroupListTable() {
     isError: isDeleteGroupError,
     isSuccess: isDeleteSuccess,
     mutateAsync: deleteGroupAsync,
-  } = useDeleteGroupMutationQuery(page, limit);
+  } = useDeleteGroupMutationQuery(page, limit, status);
 
   useEffect(() => {
     if (isDeleteGroupError) {
