@@ -46,7 +46,8 @@ export function SaveSubjectFlyout() {
   } = useForm({
     defaultValues: {
       name: null,
-      type: null,
+      subjectTypeId: null,
+      subjectFormatId: null,
       description: null,
       isActive: false,
       subjectName: null,
@@ -191,7 +192,7 @@ export function SaveSubjectFlyout() {
                     Subject Type
                   </label>
                   <Input
-                    {...register('type', {
+                    {...register('subjectTypeId', {
                       required: 'Subject type is Required',
                     })}
                     className="mt-2"
@@ -199,12 +200,12 @@ export function SaveSubjectFlyout() {
                   />
                   <p
                     className={`h-2 p-1 text-sm text-red-600 ${
-                      fieldErrors.type
+                      fieldErrors.subjectTypeId
                         ? 'opacity-100 transition-opacity duration-300'
                         : 'opacity-0 transition-opacity duration-300'
                     }`}
                   >
-                    {fieldErrors.type?.message as string}
+                    {fieldErrors.subjectTypeId?.message as string}
                   </p>
                 </div>
                 <div>

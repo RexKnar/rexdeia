@@ -11,7 +11,7 @@ import {
 } from '@tanstack/react-table';
 import { Loader2, Pencil, Trash2 } from 'lucide-react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import React, { useCallback } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { When } from 'react-if';
 import {
   Button,
@@ -25,6 +25,7 @@ import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
+  useToast,
 } from 'ui';
 import {
   Table,
@@ -35,7 +36,9 @@ import {
   TableRow,
 } from 'ui/components/ui/Table';
 
+import { DeleteConfirmationModal } from '../../../../../lib/components/modals/DeleteConfirmationModal';
 import { MediumModel } from '../../../../../lib/domain/medium';
+import { useDeleteMediumMutationQuery } from '../../../../../lib/queries/medium/useDeleteMediumMutationQuery';
 import { useGetMediumListQuery } from '../../../../../lib/queries/medium/useGetMediumListQuery';
 
 const columns: ColumnDef<MediumModel>[] = [
@@ -91,6 +94,14 @@ const columns: ColumnDef<MediumModel>[] = [
 ];
 
 export function MediumListTable() {
+  const { toast } = useToast();
+
+  const [showDeleteConfirmationModal, setShowDeleteConfirmationModal] =
+    useState(false);
+  const [selectedMedium, setSelectedMedium] = useState<MediumModel | null>(
+    null
+  );
+
   const pathname = usePathname();
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -106,6 +117,32 @@ export function MediumListTable() {
       status,
     });
 
+  const {
+    isError: isDeleteMediumError,
+    isSuccess: isDeleteSuccess,
+    mutateAsync: deleteMediumAsync,
+  } = useDeleteMediumMutationQuery(page, limit, status);
+
+  useEffect(() => {
+    if (isDeleteMediumError) {
+      toast({
+        title: 'Error',
+        variant: 'default',
+        description: 'Error while deleting medium',
+      });
+    }
+  }, [isDeleteMediumError, toast]);
+
+  useEffect(() => {
+    if (isDeleteSuccess) {
+      toast({
+        title: 'Success',
+        variant: 'default',
+        description: 'Medium deleted successfully',
+      });
+      setSelectedMedium(null);
+    }
+  }, [isDeleteSuccess, toast]);
   const handleOnPageChange = useCallback(
     (page: number) => {
       const params = new URLSearchParams(searchParams);
@@ -117,7 +154,7 @@ export function MediumListTable() {
   );
   const table = useReactTable({
     columns,
-    data: [],
+    data: mediumListResponse?.data || [],
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
@@ -193,14 +230,21 @@ export function MediumListTable() {
                           <Button
                             className="h-auto px-3 py-2"
                             variant="mild"
-                            disabled={row.original.isNewlyAdded}
+                            onClick={() => {
+                              setSelectedMedium(row.original);
+                              setShowDeleteConfirmationModal(true);
+                            }}
+                            disabled={
+                              row.original.isNewlyAdded ||
+                              row.original.isUpdating
+                            }
                           >
                             {row.original.isDeleting ? (
                               <Loader2 className="mr-2 h-4 w-4 animate-spin text-red-600" />
                             ) : (
                               <Trash2
                                 size={12}
-                                className="text-center text-red-600"
+                                className="text-center text-red-600 "
                               />
                             )}
                           </Button>
@@ -208,6 +252,7 @@ export function MediumListTable() {
                         <TooltipContent>
                           <p>
                             <span>Delete</span>
+                            <span className="mx-1 font-semibold">{`${row.original.name}`}</span>
                           </p>
                         </TooltipContent>
                       </Tooltip>
@@ -263,6 +308,19 @@ export function MediumListTable() {
             totalRecords={mediumListResponse?.total || 0}
           />
         </section>
+        <DeleteConfirmationModal
+          open={showDeleteConfirmationModal}
+          description={`Are you sure you want to delete "${selectedMedium?.name}"`}
+          onDeleteClick={async () => {
+            if (selectedMedium) {
+              setShowDeleteConfirmationModal(false);
+              await deleteMediumAsync(selectedMedium.id);
+            }
+          }}
+          onCancelClick={() => {
+            setShowDeleteConfirmationModal(false);
+          }}
+        />
       </When>
     </section>
   );

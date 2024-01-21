@@ -1,15 +1,27 @@
-import React from 'react';
+import { redirect } from 'next/navigation';
+import { getServerSession } from 'next-auth';
+import { Suspense } from 'react';
 
+import { authOptions } from '../../../../lib/auth';
+import SaveMediumFlyout from './_components/_modals/SaveMediumFlyout';
 import { MediumListTable } from './_components/MediumListTable';
 import { MediumPageHeader } from './_components/MediumPageHeader';
-import SaveMediumFlyout from './_components/modals/SaveMediumFlyout';
 
 export default async function Page() {
+  const session = await getServerSession(authOptions);
+  if (!session.branchId || !session.organizationId) {
+    return redirect('/signin?callbackUrl=/academics/medium');
+  }
+
   return (
     <section className="flex flex-col gap-6">
-      <MediumPageHeader />
+      <Suspense>
+        <MediumPageHeader />
+      </Suspense>
       <section className="space-y-2 rounded-md bg-white p-4">
-        <MediumListTable />
+        <Suspense>
+          <MediumListTable />
+        </Suspense>
         <SaveMediumFlyout />
       </section>
     </section>

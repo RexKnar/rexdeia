@@ -1,7 +1,6 @@
 'use client';
 
 import { FileText, Loader2 } from 'lucide-react';
-import React from 'react';
 
 import { LinkButton } from '../../../../../lib/components/LinkButton';
 import { useGetClassListQuery } from '../../../../../lib/queries/class/useGetClassListQuery';
@@ -25,6 +24,7 @@ export function ClassList() {
       </div>
     );
   }
+
   return (
     <section className="p-3">
       <div className="w-30 flex justify-end pb-6 pr-1">

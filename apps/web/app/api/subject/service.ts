@@ -22,6 +22,10 @@ export async function getSubjectById(id: string) {
       id: id,
       isActive: true,
     },
+    include: {
+      SubjectType: true,
+      SubjectFormat: true,
+    },
   });
 }
 
@@ -45,7 +49,8 @@ export async function addSubject(createSubject: CreateSubjectModel) {
       name: createSubject.name,
       description: createSubject.description,
       isActive: createSubject.isActive,
-      type: createSubject.type,
+      subjectTypeId: createSubject.subjectTypeId,
+      subjectFormatId: createSubject.subjectFormatId,
     },
   });
 }
@@ -67,6 +72,10 @@ export async function getSubjectList(page: number, limit: number) {
     db.subject.findMany({
       where: {
         isActive: true,
+      },
+      include: {
+        SubjectType: true,
+        SubjectFormat: true,
       },
       take: limit,
       skip: (page - 1) * limit,

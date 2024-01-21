@@ -10,6 +10,7 @@ export function MediumPageHeader() {
   const pathname = usePathname();
   const router = useRouter();
   const searchParams = useSearchParams();
+
   return (
     <section className="flex justify-between px-2">
       <PageTitle title="Medium" />
