@@ -1,6 +1,3 @@
-'use client';
-import React from 'react';
-
 import { PageTitle } from '../../../../../lib/components/PageTitle';
 
 export function ClassPageHeader() {

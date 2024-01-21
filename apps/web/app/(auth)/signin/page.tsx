@@ -2,6 +2,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import { getServerSession } from 'next-auth';
+import { Suspense } from 'react';
 import { Text } from 'ui';
 
 import { authOptions } from '../../../lib/auth';
@@ -39,7 +40,9 @@ export default async function Page() {
             <Text variant="sm-regular" className="text-gray-800">
               Sign in to your account to get started.
             </Text>
-            <SignInForm />
+            <Suspense>
+              <SignInForm />
+            </Suspense>
             <Text
               variant="sm-semibold"
               className="mt-12 text-center text-gray-800"

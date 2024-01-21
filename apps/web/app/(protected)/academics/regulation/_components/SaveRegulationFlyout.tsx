@@ -132,29 +132,33 @@ export function SaveRegulationFlyout() {
           <form onSubmit={handleSubmit(saveRegulation)}>
             <SheetHeader>
               <SheetTitle className="mb-5">
-                <div className="sm:grid sm:grid-cols-1 sm:gap-4 md:grid md:grid-cols-1 md:gap-4 lg:flex lg:justify-between">
+                <div className="sm:grid sm:grid-cols-1 sm:gap-4 md:grid md:grid-cols-1 md:gap-4 lg:flex">
                   <div className="flex items-center">
                     <PlusCircle size={20} strokeWidth={1.5} />
                     <Text variant="lg-semibold" className="ml-2">
                       {regulationId ? 'Update Regulation' : 'Add Regulation'}
                     </Text>
                   </div>
-                  <div className="flex items-center">
-                    <Switch
-                      id="isActive"
-                      {...register('isActive')}
-                      onCheckedChange={(value) => {
-                        setValue('isActive', value);
-                        setActiveToggleFlag(value);
-                      }}
-                      checked={activeToggleFlag}
-                    />
-                    <label
-                      htmlFor="isActive"
-                      className="ml-2 text-sm font-semibold"
-                    >
-                      {watch('isActive') ? 'Active' : 'Inactive'}
-                    </label>
+                  <div className="ml-28 flex">
+                    <div className="flex items-center">
+                      <Switch
+                        id="isActive"
+                        {...register('isActive')}
+                        onCheckedChange={(value) => {
+                          setValue('isActive', value);
+                          setActiveToggleFlag(value);
+                        }}
+                        checked={activeToggleFlag}
+                      />
+                    </div>
+                    <div className="flex items-center">
+                      <label
+                        htmlFor="isActive"
+                        className="ml-2 text-sm font-semibold"
+                      >
+                        {watch('isActive') ? 'Active' : 'Inactive'}
+                      </label>
+                    </div>
                   </div>
                 </div>
               </SheetTitle>

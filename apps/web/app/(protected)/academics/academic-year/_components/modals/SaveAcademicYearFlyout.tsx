@@ -53,7 +53,6 @@ export function SaveAcademicYearFlyout() {
       endYear: null,
       isActive: false,
       startYear: null,
-      description: null,
     },
   });
 
@@ -77,11 +76,10 @@ export function SaveAcademicYearFlyout() {
 
   useEffect(() => {
     if (currentBatch) {
-      const { name, endYear, isActive, startYear, description } = currentBatch;
+      const { name, endYear, isActive, startYear } = currentBatch;
 
       setValue('name', name);
       setValue('isActive', isActive);
-      setValue('description', description);
       setValue('endYear', new Date(endYear));
       setValue('startYear', new Date(startYear));
       setActiveToggleFlag(isActive);
@@ -93,7 +91,6 @@ export function SaveAcademicYearFlyout() {
       setValue('endYear', null);
       setValue('isActive', false);
       setValue('startYear', null);
-      setValue('description', null);
     }
   }, [currentBatch, setValue]);
 
@@ -194,23 +191,7 @@ export function SaveAcademicYearFlyout() {
                     errorMessage={fieldErrors?.name?.message.toString()}
                   />
                 </div>
-                <div className="mt-5">
-                  <label
-                    htmlFor="name"
-                    className="text-sm font-semibold text-gray-700"
-                  >
-                    Batch Description
-                  </label>
-                  <Input
-                    {...register('description', {
-                      required: 'Academic year description is Required',
-                    })}
-                    className="mt-2"
-                    id="description"
-                    errorMessage={fieldErrors?.description?.message.toString()}
-                  />
-                </div>
-                <div className="mt-5 flex justify-between">
+                <div className="mt-3 flex justify-between">
                   <div>
                     <label
                       htmlFor="startYear"
