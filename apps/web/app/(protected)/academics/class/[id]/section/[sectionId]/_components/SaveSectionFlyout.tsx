@@ -25,7 +25,6 @@ import {
   Switch,
   Text,
 } from 'ui';
-import { cn } from 'utils';
 
 import { SectionModel } from '../../../../../../../../lib/domain/section';
 import { useCreateSectionMutationQuery } from '../../../../../../../../lib/queries/section/useCreateSectionMutationQuery';
@@ -49,14 +48,11 @@ export function SaveSectionFlyout() {
     },
   });
 
-  useEffect(() => {
-    setValue('mediumId', 'Tamil');
-  }, [setValue]);
-
   const [medium, setMedium] = useState('Tamil');
   useEffect(() => {
     setValue('mediumId', 'Tamil');
   }, [setValue]);
+
   const params = useParams<{ sectionId: string }>();
   const [isOpen, setIsOpen] = useQueryState(
     'isSectionFlyoutOpen',
@@ -178,18 +174,9 @@ export function SaveSectionFlyout() {
                     required: 'Section Name is Required',
                   })}
                   id="name"
+                  errorMessage={fieldErrors?.name?.message.toString()}
                 />
               </div>
-              <p
-                className={cn(
-                  'h-2 p-1 text-sm text-red-600',
-                  fieldErrors.name
-                    ? 'opacity-100 transition-opacity duration-300'
-                    : 'opacity-0 transition-opacity duration-300'
-                )}
-              >
-                {fieldErrors.name?.message as string}
-              </p>
               <div className="mt-2">
                 <label
                   htmlFor="mediumName"
@@ -197,26 +184,6 @@ export function SaveSectionFlyout() {
                 >
                   Medium
                 </label>
-                <div className="mt-2 w-full">
-                  <Select
-                    value={medium}
-                    onValueChange={(value) => {
-                      setMedium(value);
-                      setValue('mediumId', value);
-                    }}
-                  >
-                    <SelectTrigger className="w-full" defaultValue={'Tamil'}>
-                      <SelectValue {...register('mediumId')} />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectGroup>
-                        <SelectItem value={'Tamil'}>Tamil</SelectItem>
-                        <SelectItem value={'English'}>English</SelectItem>
-                        <SelectItem value={'Malayalam'}>Malayalam</SelectItem>
-                      </SelectGroup>
-                    </SelectContent>
-                  </Select>
-                </div>
                 <div className="mt-2 w-full">
                   <Select
                     value={medium}

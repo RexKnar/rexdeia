@@ -139,16 +139,8 @@ export function UpdateClassFlyout() {
                   })}
                   className="mt-2"
                   id="name"
+                  errorMessage={fieldErrors?.name?.message.toString()}
                 />
-                <p
-                  className={`h-2 p-1 text-sm text-red-600 ${
-                    fieldErrors.name
-                      ? 'opacity-100 transition-opacity duration-300'
-                      : 'opacity-0 transition-opacity duration-300'
-                  }`}
-                >
-                  {fieldErrors.name?.message as string}
-                </p>
               </div>
               <div className="mt-10">
                 <Button

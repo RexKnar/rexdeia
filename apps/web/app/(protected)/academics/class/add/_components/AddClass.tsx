@@ -96,17 +96,9 @@ export default function AddClass() {
                 })}
                 className="border-primary-200 p-1"
                 id="name"
+                errorMessage={fieldErrors?.name?.message.toString()}
               />
             </div>
-            <p
-              className={`h-2 p-1 text-sm text-red-600 ${
-                fieldErrors.name
-                  ? 'opacity-100 transition-opacity duration-300'
-                  : 'opacity-0 transition-opacity duration-300'
-              }`}
-            >
-              {fieldErrors.name?.message as string}
-            </p>
           </div>
           <div>
             <div className="mt-8">
@@ -123,22 +115,11 @@ export default function AddClass() {
                       Section Name
                     </label>
                     <Input
-                      {...register(`section.${index}.name`, {
-                        required: 'Section Name is Required',
-                      })}
+                      {...register(`section.${index}.name`)}
                       key={index}
                       className="border-primary-200 p-1"
                       id="sectionName"
                     />
-                    <p
-                      className={`h-2 p-1 text-sm text-red-600 ${
-                        fieldErrors.name
-                          ? 'opacity-100 transition-opacity duration-300'
-                          : 'opacity-0 transition-opacity duration-300'
-                      }`}
-                    >
-                      {fieldErrors.name?.message as string}
-                    </p>
                   </div>
                   <div>
                     <label
