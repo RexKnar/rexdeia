@@ -7,7 +7,6 @@ import { Button, Tabs, TabsContent, TabsList, TabsTrigger, Text } from 'ui';
 
 import { PageTitle } from '../../../../../../../lib/components/PageTitle';
 import { useGetSectionByIdQuery } from '../../../../../../../lib/queries/section/useGetSectionByIdQuery';
-import { SaveSectionFlyout } from './_components/SaveSectionFlyout';
 import { StaffCard } from './_components/StaffCard';
 import { StudentCard } from './_components/StudentCard';
 import { SubjectCard } from './_components/SubjectCard';
@@ -112,7 +111,6 @@ export default function Page() {
           </section>
         </TabsContent>
       </Tabs>
-      <SaveSectionFlyout />
     </section>
   );
 }

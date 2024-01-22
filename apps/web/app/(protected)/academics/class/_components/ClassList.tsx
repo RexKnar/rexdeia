@@ -40,7 +40,7 @@ export function ClassList() {
           ))}
         </div>
       ) : (
-        'No Classes Found'
+        <div className="flex items-center justify-center">No Classes Found</div>
       )}
     </section>
   );
