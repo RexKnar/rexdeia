@@ -19,6 +19,7 @@ import {
 } from 'ui';
 
 import { useCreateClassMutationQuery } from '../../../../../../lib/queries/class/useCreateClassMutationQuery';
+import { useGetMediumListQuery } from '../../../../../../lib/queries/medium/useGetMediumListQuery';
 
 export default function AddClass() {
   const router = useRouter();
@@ -43,6 +44,13 @@ export default function AddClass() {
     mutateAsync: mutateCreateClassAsync,
     isPending: isPendingCreateClass,
   } = useCreateClassMutationQuery(page, limit);
+
+  const { data: mediumListResponse, isLoading: isMediumListLoading } =
+    useGetMediumListQuery({
+      page: 1,
+      limit: 999,
+      status: true,
+    });
 
   async function addClass(payload) {
     try {
@@ -115,7 +123,9 @@ export default function AddClass() {
                       Section Name
                     </label>
                     <Input
-                      {...register(`section.${index}.name`)}
+                      {...register(`section.${index}.name`, {
+                        required: 'Section Name is Required',
+                      })}
                       key={index}
                       className="border-primary-200 p-1"
                       id="sectionName"
@@ -130,22 +140,24 @@ export default function AddClass() {
                     </label>
                     <Controller
                       control={control}
-                      name={`section.${index}.medium`}
+                      name={`section.${index}.mediumId`}
                       render={({ field }) => {
                         return (
-                          <Select onValueChange={field.onChange} {...field}>
+                          <Select
+                            onValueChange={field.onChange}
+                            {...field}
+                            disabled={isMediumListLoading}
+                          >
                             <SelectTrigger className="w-52">
                               <SelectValue />
                             </SelectTrigger>
                             <SelectContent>
                               <SelectGroup>
-                                <SelectItem value={'English'}>
-                                  English
-                                </SelectItem>
-                                <SelectItem value={'Tamil'}>Tamil</SelectItem>
-                                <SelectItem value={'Malayalam'}>
-                                  Malayalam
-                                </SelectItem>
+                                {mediumListResponse?.data?.map((item) => (
+                                  <SelectItem key={item.id} value={item.id}>
+                                    {item.name}
+                                  </SelectItem>
+                                ))}
                               </SelectGroup>
                             </SelectContent>
                           </Select>
