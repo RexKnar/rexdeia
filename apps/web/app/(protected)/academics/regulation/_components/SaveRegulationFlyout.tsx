@@ -17,6 +17,7 @@ import {
   SheetContent,
   SheetHeader,
   SheetTitle,
+  Spinner,
   Switch,
   Text,
 } from 'ui';
@@ -66,13 +67,14 @@ export function SaveRegulationFlyout() {
     await setRegulationId(null);
   };
 
-  const { data: getRegulationByIdResponse } = useGetRegulationByIdQuery(
-    regulationId,
-    {
-      enabled: !!regulationId,
-      queryKey: [],
-    }
-  );
+  const {
+    data: getRegulationByIdResponse,
+    isLoading: isCurrentRegulationLoading,
+    isFetching: isCurrentRegulationFetching,
+  } = useGetRegulationByIdQuery(regulationId, {
+    enabled: !!regulationId,
+    queryKey: [],
+  });
 
   useEffect(() => {
     if (getRegulationByIdResponse) {
@@ -129,106 +131,113 @@ export function SaveRegulationFlyout() {
           className="bg-white p-10"
           onCloseClick={() => closeFlyout()}
         >
-          <form onSubmit={handleSubmit(saveRegulation)}>
-            <SheetHeader>
-              <SheetTitle className="mb-5">
-                <div className="sm:grid sm:grid-cols-1 sm:gap-4 md:grid md:grid-cols-1 md:gap-4 lg:flex">
-                  <div className="flex items-center">
-                    <PlusCircle size={20} strokeWidth={1.5} />
-                    <Text variant="lg-semibold" className="ml-2">
-                      {regulationId ? 'Update Regulation' : 'Add Regulation'}
-                    </Text>
-                  </div>
-                  <div className="ml-28 flex">
+          {isCurrentRegulationLoading || isCurrentRegulationFetching ? (
+            <section className="flex h-96 w-full flex-col items-center justify-center gap-4">
+              <Spinner />
+              <p>Fetching Data</p>
+            </section>
+          ) : (
+            <form onSubmit={handleSubmit(saveRegulation)}>
+              <SheetHeader>
+                <SheetTitle className="mb-5">
+                  <div className="sm:grid sm:grid-cols-1 sm:gap-4 md:grid md:grid-cols-1 md:gap-4 lg:flex">
                     <div className="flex items-center">
-                      <Switch
-                        id="isActive"
-                        {...register('isActive')}
-                        onCheckedChange={(value) => {
-                          setValue('isActive', value);
-                          setActiveToggleFlag(value);
-                        }}
-                        checked={activeToggleFlag}
-                      />
+                      <PlusCircle size={20} strokeWidth={1.5} />
+                      <Text variant="lg-semibold" className="ml-2">
+                        {regulationId ? 'Update Regulation' : 'Add Regulation'}
+                      </Text>
                     </div>
-                    <div className="flex items-center">
-                      <label
-                        htmlFor="isActive"
-                        className="ml-2 text-sm font-semibold"
-                      >
-                        {watch('isActive') ? 'Active' : 'Inactive'}
-                      </label>
+                    <div className="ml-28 flex">
+                      <div className="flex items-center">
+                        <Switch
+                          id="isActive"
+                          {...register('isActive')}
+                          onCheckedChange={(value) => {
+                            setValue('isActive', value);
+                            setActiveToggleFlag(value);
+                          }}
+                          checked={activeToggleFlag}
+                        />
+                      </div>
+                      <div className="flex items-center">
+                        <label
+                          htmlFor="isActive"
+                          className="ml-2 text-sm font-semibold"
+                        >
+                          {watch('isActive') ? 'Active' : 'Inactive'}
+                        </label>
+                      </div>
                     </div>
                   </div>
+                </SheetTitle>
+                <hr className="border-t border-gray-300"></hr>
+              </SheetHeader>
+
+              <div className="mt-5">
+                <div>
+                  <label
+                    htmlFor="regulationName"
+                    className="text-sm font-semibold text-gray-700"
+                  >
+                    Regulation Name
+                  </label>
+                  <Input
+                    {...register('regulationName', {
+                      required: 'Regulation Name is Required',
+                    })}
+                    className="mt-2"
+                    placeholder="Regulation Name"
+                    id="regulationName"
+                    errorMessage={fieldErrors?.regulationName?.message.toString()}
+                  />
                 </div>
-              </SheetTitle>
-              <hr className="border-t border-gray-300"></hr>
-            </SheetHeader>
+                <div className="mt-4">
+                  <label
+                    htmlFor="announcedYear"
+                    className="text-sm font-semibold text-gray-700"
+                  >
+                    Start Year
+                  </label>
+                  <DateSelector
+                    id="announcedYear"
+                    required
+                    autoComplete="off"
+                    placeholderText="Regulation Year"
+                    onChange={(value) => {
+                      setValue('announcedYear', value);
+                      setAnnouncedYear(value);
+                    }}
+                    dateFormat="dd/MM/yyyy"
+                    selected={announcedYear}
+                    isClearable={false}
+                  />
+                </div>
 
-            <div className="mt-5">
-              <div>
-                <label
-                  htmlFor="regulationName"
-                  className="text-sm font-semibold text-gray-700"
-                >
-                  Regulation Name
-                </label>
-                <Input
-                  {...register('regulationName', {
-                    required: 'Regulation Name is Required',
-                  })}
-                  className="mt-2"
-                  placeholder="Regulation Name"
-                  id="regulationName"
-                  errorMessage={fieldErrors?.regulationName?.message.toString()}
-                />
+                <div className="mt-10">
+                  <Button
+                    size="lg"
+                    variant="default"
+                    disabled={
+                      isPendingCreateRegulations || isPendingUpdateRegulations
+                    }
+                    aria-disabled={
+                      isPendingCreateRegulations || isPendingUpdateRegulations
+                    }
+                    className="mx-auto flex justify-center px-12 py-4"
+                  >
+                    {isPendingCreateRegulations ? (
+                      <div className="flex items-center justify-center">
+                        <Loader2 className="mr-2 h-6 w-6 animate-spin text-white" />
+                        Saving
+                      </div>
+                    ) : (
+                      `${regulationId ? 'Update' : 'Save'}`
+                    )}
+                  </Button>
+                </div>
               </div>
-              <div className="mt-4">
-                <label
-                  htmlFor="announcedYear"
-                  className="text-sm font-semibold text-gray-700"
-                >
-                  Start Year
-                </label>
-                <DateSelector
-                  id="announcedYear"
-                  required
-                  autoComplete="off"
-                  placeholderText="Regulation Year"
-                  onChange={(value) => {
-                    setValue('announcedYear', value);
-                    setAnnouncedYear(value);
-                  }}
-                  dateFormat="dd/MM/yyyy"
-                  selected={announcedYear}
-                  isClearable={false}
-                />
-              </div>
-
-              <div className="mt-10">
-                <Button
-                  size="lg"
-                  variant="default"
-                  disabled={
-                    isPendingCreateRegulations || isPendingUpdateRegulations
-                  }
-                  aria-disabled={
-                    isPendingCreateRegulations || isPendingUpdateRegulations
-                  }
-                  className="mx-auto flex justify-center px-12 py-4"
-                >
-                  {isPendingCreateRegulations ? (
-                    <div className="flex items-center justify-center">
-                      <Loader2 className="mr-2 h-6 w-6 animate-spin text-white" />
-                      Saving
-                    </div>
-                  ) : (
-                    `${regulationId ? 'Update' : 'Save'}`
-                  )}
-                </Button>
-              </div>
-            </div>
-          </form>
+            </form>
+          )}
         </SheetContent>
       </Sheet>
     </section>

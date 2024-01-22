@@ -54,6 +54,9 @@ export function SaveSectionFlyout() {
   }, [setValue]);
 
   const [medium, setMedium] = useState('Tamil');
+  useEffect(() => {
+    setValue('mediumId', 'Tamil');
+  }, [setValue]);
   const params = useParams<{ sectionId: string }>();
   const [isOpen, setIsOpen] = useQueryState(
     'isSectionFlyoutOpen',
@@ -194,6 +197,26 @@ export function SaveSectionFlyout() {
                 >
                   Medium
                 </label>
+                <div className="mt-2 w-full">
+                  <Select
+                    value={medium}
+                    onValueChange={(value) => {
+                      setMedium(value);
+                      setValue('mediumId', value);
+                    }}
+                  >
+                    <SelectTrigger className="w-full" defaultValue={'Tamil'}>
+                      <SelectValue {...register('mediumId')} />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectGroup>
+                        <SelectItem value={'Tamil'}>Tamil</SelectItem>
+                        <SelectItem value={'English'}>English</SelectItem>
+                        <SelectItem value={'Malayalam'}>Malayalam</SelectItem>
+                      </SelectGroup>
+                    </SelectContent>
+                  </Select>
+                </div>
                 <div className="mt-2 w-full">
                   <Select
                     value={medium}

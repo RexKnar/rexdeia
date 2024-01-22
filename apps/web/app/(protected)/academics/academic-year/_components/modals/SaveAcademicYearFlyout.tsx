@@ -184,7 +184,7 @@ export function SaveAcademicYearFlyout() {
                   </label>
                   <Input
                     {...register('name', {
-                      required: 'Academic Year Name is Required',
+                      required: 'Academic Year is Required',
                     })}
                     className="mt-2"
                     id="name"
