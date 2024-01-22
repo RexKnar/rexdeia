@@ -38,7 +38,7 @@
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.0.0",
     "cmdk": "^0.2.0",
-    "date-fns": "^2.30.0",
+    "date-fns": "^3.0.0",
     "lucide-react": "^0.314.0",
     "postcss": "^8.4.29",
     "react-datepicker": "^4.25.0",

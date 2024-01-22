@@ -25,7 +25,7 @@
     "bcrypt": "^5.1.1",
     "class-variance-authority": "^0.7.0",
     "configs": "workspace:*",
-    "date-fns": "^2.30.0",
+    "date-fns": "^3.0.0",
     "framer-motion": "^10.16.16",
     "fs": "0.0.1-security",
     "http-status-codes": "^2.3.0",
