@@ -49,6 +49,10 @@ export function SaveSectionFlyout() {
     },
   });
 
+  useEffect(() => {
+    setValue('mediumId', 'Tamil');
+  }, [setValue]);
+
   const [medium, setMedium] = useState('Tamil');
   useEffect(() => {
     setValue('mediumId', 'Tamil');
@@ -59,6 +63,7 @@ export function SaveSectionFlyout() {
     'isSectionFlyoutOpen',
     parseAsBoolean.withDefault(false)
   );
+
   const [classId, setClassId] = useQueryState('classId', parseAsString);
   const [activeToggleFlag, setActiveToggleFlag] = useState(false);
   const closeFlyout = async () => {

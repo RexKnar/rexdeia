@@ -147,26 +147,24 @@ export function SaveRegulationFlyout() {
                         {regulationId ? 'Update Regulation' : 'Add Regulation'}
                       </Text>
                     </div>
-                    <div className="ml-28 flex">
-                      <div className="flex items-center">
-                        <Switch
-                          id="isActive"
-                          {...register('isActive')}
-                          onCheckedChange={(value) => {
-                            setValue('isActive', value);
-                            setActiveToggleFlag(value);
-                          }}
-                          checked={activeToggleFlag}
-                        />
-                      </div>
-                      <div className="flex items-center">
-                        <label
-                          htmlFor="isActive"
-                          className="ml-2 text-sm font-semibold"
-                        >
-                          {watch('isActive') ? 'Active' : 'Inactive'}
-                        </label>
-                      </div>
+                    <div className="ml-14 flex items-center">
+                      <Switch
+                        id="isActive"
+                        {...register('isActive')}
+                        onCheckedChange={(value) => {
+                          setValue('isActive', value);
+                          setActiveToggleFlag(value);
+                        }}
+                        checked={activeToggleFlag}
+                      />
+                    </div>
+                    <div className="flex items-center">
+                      <label
+                        htmlFor="isActive"
+                        className="ml-2 text-sm font-semibold"
+                      >
+                        {watch('isActive') ? 'Active' : 'Inactive'}
+                      </label>
                     </div>
                   </div>
                 </SheetTitle>
