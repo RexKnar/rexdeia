@@ -27,6 +27,7 @@ import {
 } from 'ui';
 
 import { SectionModel } from '../../../../../../../../lib/domain/section';
+import { useGetMediumListQuery } from '../../../../../../../../lib/queries/medium/useGetMediumListQuery';
 import { useCreateSectionMutationQuery } from '../../../../../../../../lib/queries/section/useCreateSectionMutationQuery';
 import { useGetSectionByIdQuery } from '../../../../../../../../lib/queries/section/useGetSectionByIdQuery';
 import { useUpdateSectionMutationQuery } from '../../../../../../../../lib/queries/section/useUpdateSectionMutationQuery';
@@ -92,6 +93,12 @@ export function SaveSectionFlyout() {
     mutateAsync: mutateCreateSectionAsync,
   } = useCreateSectionMutationQuery();
 
+  const { data: mediumListResponse, isLoading: isMediumListLoading } =
+    useGetMediumListQuery({
+      page: 1,
+      limit: 999,
+      status: true,
+    });
   const {
     isPending: isPendingUpdateSection,
     mutateAsync: mutateUpdateSectionAsync,
@@ -186,6 +193,7 @@ export function SaveSectionFlyout() {
                 </label>
                 <div className="mt-2 w-full">
                   <Select
+                    disabled={isMediumListLoading}
                     value={medium}
                     onValueChange={(value) => {
                       setMedium(value);
@@ -197,28 +205,33 @@ export function SaveSectionFlyout() {
                     </SelectTrigger>
                     <SelectContent>
                       <SelectGroup>
-                        <SelectItem value={'Tamil'}>Tamil</SelectItem>
-                        <SelectItem value={'English'}>English</SelectItem>
-                        <SelectItem value={'Malayalam'}>Malayalam</SelectItem>
+                        {mediumListResponse?.data?.map((item) => (
+                          <SelectItem key={item.id} value={item.id}>
+                            {item.name}
+                          </SelectItem>
+                        ))}
                       </SelectGroup>
                     </SelectContent>
                   </Select>
                 </div>
               </div>
-              <div className="mt-10 flex">
+              <div className="mt-16">
                 <Button
                   size="lg"
                   variant="default"
-                  type="submit"
+                  disabled={isPendingCreateSection || isPendingUpdateSection}
+                  aria-disabled={
+                    isPendingCreateSection || isPendingUpdateSection
+                  }
                   className="mx-auto flex justify-center px-12 py-4"
                 >
                   {isPendingCreateSection || isPendingUpdateSection ? (
                     <div className="flex items-center justify-center">
                       <Loader2 className="mr-2 h-6 w-6 animate-spin text-white" />
-                      {classId ? 'Saving' : 'updating'}
+                      `${classId ? 'Updating' : 'Saving'}`
                     </div>
                   ) : (
-                    `${classId ? 'Save' : 'Update'}`
+                    `${classId ? 'Update' : 'Save'}`
                   )}
                 </Button>
               </div>
