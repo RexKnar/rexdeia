@@ -38,10 +38,13 @@ export const GET_MEDIUM_LIST = `GET_MEDIUM_LIST`;
 export const GET_BATCHES_LIST = `GET_BATCHES_LIST`;
 export const CREATE_BATCH = `CREATE_BATCH`;
 export const GET_BATCH_BY_ID = `GET_BATCH_BY_ID`;
+export const GET_GROUP_BY_ID = `GET_GROUP_BY_ID`;
 export const UPDATE_BATCH_BY_ID = `UPDATE_BATCH_BY_ID`;
 export const DELETE_BATCH_BY_ID = `DELETE_BATCH_BY_ID`;
+export const UPDATE_GROUP_BY_ID = `UPDATE_GROUP_BY_ID`;
 export const GET_SUBJECT_LIST = `GET_SUBJECT_LIST`;
 export const ADD_SUBJECT = `ADD_SUBJECT`;
+export const ADD_GROUP = `ADD_GROUP`;
 export const ADD_SECTION = `ADD_SECTION`;
 export const GET_SECTION_BY_ID = `GET_SECTION_BY_ID`;
 export const DELETE_SUBJECT_BY_ID = `DELETE_SUBJECT_BY_ID`;
@@ -89,6 +92,10 @@ export default <EndpointDetails>{
   [ADD_REGULATION]: {
     requestType: `POST`,
     endpoint: `/api/regulation`,
+  },
+  [ADD_GROUP]: {
+    requestType: `POST`,
+    endpoint: `/api/group`,
   },
   [DELETE_REGULATION]: {
     requestType: `DELETE`,
@@ -178,8 +185,12 @@ export default <EndpointDetails>{
     requestType: `GET`,
     endpoint: `/api/medium/[id]`,
   },
-  [GET_GROUP_LIST]: {
+  [GET_GROUP_BY_ID]: {
     requestType: `GET`,
+    endpoint: `/api/group/[id]`,
+  },
+  [GET_GROUP_LIST]: {
+    requestType: `PUT`,
     endpoint: `/api/group`,
   },
   [GET_MEDIUM_LIST]: {
@@ -193,6 +204,10 @@ export default <EndpointDetails>{
   [UPDATE_MEDIUM_BY_ID]: {
     requestType: `PUT`,
     endpoint: `/api/medium/[id]`,
+  },
+  [UPDATE_GROUP_BY_ID]: {
+    requestType: `PUT`,
+    endpoint: `/api/group/[id]`,
   },
   [GET_BATCHES_LIST]: {
     requestType: `GET`,

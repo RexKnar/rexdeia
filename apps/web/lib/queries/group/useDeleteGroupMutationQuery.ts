@@ -5,11 +5,7 @@ import { PaginatedResponse } from '../../domain';
 import { GroupModel } from '../../domain/group';
 import { DELETE_GROUP_BY_ID, GET_GROUP_LIST } from '../../endpoints';
 
-export function useDeleteGroupMutationQuery(
-  page: number,
-  limit: number,
-  status: boolean
-) {
+export function useDeleteGroupMutationQuery(page: number, limit: number) {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: async (id) => {
@@ -17,15 +13,15 @@ export function useDeleteGroupMutationQuery(
     },
     onMutate: async (id: string) => {
       await queryClient.cancelQueries({
-        queryKey: [GET_GROUP_LIST, page, limit, status],
+        queryKey: [GET_GROUP_LIST, page, limit],
       });
 
       const previousGroups = queryClient.getQueryData<
         PaginatedResponse<GroupModel>
-      >([GET_GROUP_LIST, page, limit, status]);
+      >([GET_GROUP_LIST, page, limit]);
 
       queryClient.setQueryData(
-        [GET_GROUP_LIST, page, limit, status],
+        [GET_GROUP_LIST, page, limit],
         (currentPaginatedGroups: PaginatedResponse<GroupModel>) => {
           return {
             ...currentPaginatedGroups,
@@ -47,13 +43,13 @@ export function useDeleteGroupMutationQuery(
     },
     onError: (error, _, context) => {
       queryClient.setQueryData(
-        [GET_GROUP_LIST, page, limit, status],
+        [GET_GROUP_LIST, page, limit],
         context.previousGroups
       );
     },
     onSuccess: async () => {
       await queryClient.refetchQueries({
-        queryKey: [GET_GROUP_LIST, page, limit, status],
+        queryKey: [GET_GROUP_LIST, page, limit],
       });
     },
   });

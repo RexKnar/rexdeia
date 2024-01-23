@@ -1,25 +1,24 @@
 'use client';
 
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { parseAsBoolean, useQueryState } from 'next-usequerystate';
 import React from 'react';
 import { Button } from 'ui';
 
 import { PageTitle } from '../../../../../lib/components/PageTitle';
 
 export function GroupPageHeader() {
-  const pathname = usePathname();
-  const router = useRouter();
-  const searchParams = useSearchParams();
+  const [, isGroupFlyoutOpen] = useQueryState(
+    'isGroupFlyoutOpen',
+    parseAsBoolean.withDefault(false)
+  );
 
   return (
     <section className="flex justify-between px-2">
       <PageTitle title="Group" />
       <Button
         variant="default"
-        onClick={() => {
-          const params = new URLSearchParams(searchParams);
-          params.set('isGroupFlyoutOpen', 'true');
-          router.push(pathname + '?' + params.toString());
+        onClick={async () => {
+          await isGroupFlyoutOpen(true);
         }}
       >
         Add Group
