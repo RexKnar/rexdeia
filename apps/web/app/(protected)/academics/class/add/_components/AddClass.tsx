@@ -49,7 +49,6 @@ export default function AddClass() {
     useGetMediumListQuery({
       page: 1,
       limit: 999,
-      status: true,
     });
 
   async function addClass(payload) {

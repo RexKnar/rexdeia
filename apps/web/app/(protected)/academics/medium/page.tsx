@@ -1,6 +1,5 @@
 import { redirect } from 'next/navigation';
 import { getServerSession } from 'next-auth';
-import { Suspense } from 'react';
 
 import { authOptions } from '../../../../lib/auth';
 import SaveMediumFlyout from './_components/_modals/SaveMediumFlyout';
@@ -15,13 +14,9 @@ export default async function Page() {
 
   return (
     <section className="flex flex-col gap-6">
-      <Suspense>
-        <MediumPageHeader />
-      </Suspense>
+      <MediumPageHeader />
       <section className="space-y-2 rounded-md bg-white p-4">
-        <Suspense>
-          <MediumListTable />
-        </Suspense>
+        <MediumListTable />
         <SaveMediumFlyout />
       </section>
     </section>

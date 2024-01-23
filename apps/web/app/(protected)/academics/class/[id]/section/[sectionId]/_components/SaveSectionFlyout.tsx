@@ -102,7 +102,6 @@ export function SaveSectionFlyout() {
     useGetMediumListQuery({
       page: 1,
       limit: 999,
-      status: true,
     });
   const {
     isPending: isPendingUpdateSection,
