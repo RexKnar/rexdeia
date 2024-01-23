@@ -98,26 +98,6 @@ export function OnboardStaffSidebar() {
           </h2>
         </Button>
       </li>
-
-      <li>
-        <Button
-          type="button"
-          variant="link"
-          onClick={() => setCurrentStep(4)}
-          className="grid cursor-pointer grid-cols-[4px_minmax(170px,_1fr)_10px] px-4 py-1 hover:no-underline"
-        >
-          <motion.div
-            initial={false}
-            animate={{
-              opacity: currentStep === 4 ? 1 : 0,
-            }}
-            className="h-6 border-l-2 border-primary"
-          />
-          <h2 className={`px-2 text-left text-sm font-semibold`}>
-            Previous School Details
-          </h2>
-        </Button>
-      </li>
     </ul>
   );
 }
