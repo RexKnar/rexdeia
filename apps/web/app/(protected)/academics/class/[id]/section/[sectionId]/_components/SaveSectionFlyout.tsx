@@ -25,9 +25,9 @@ import {
   Switch,
   Text,
 } from 'ui';
-import { cn } from 'utils';
 
 import { SectionModel } from '../../../../../../../../lib/domain/section';
+import { useGetMediumListQuery } from '../../../../../../../../lib/queries/medium/useGetMediumListQuery';
 import { useCreateSectionMutationQuery } from '../../../../../../../../lib/queries/section/useCreateSectionMutationQuery';
 import { useGetSectionByIdQuery } from '../../../../../../../../lib/queries/section/useGetSectionByIdQuery';
 import { useUpdateSectionMutationQuery } from '../../../../../../../../lib/queries/section/useUpdateSectionMutationQuery';
@@ -57,11 +57,13 @@ export function SaveSectionFlyout() {
   useEffect(() => {
     setValue('mediumId', 'Tamil');
   }, [setValue]);
+
   const params = useParams<{ sectionId: string }>();
   const [isOpen, setIsOpen] = useQueryState(
     'isSectionFlyoutOpen',
     parseAsBoolean.withDefault(false)
   );
+
   const [classId, setClassId] = useQueryState('classId', parseAsString);
   const [activeToggleFlag, setActiveToggleFlag] = useState(false);
   const closeFlyout = async () => {
@@ -96,6 +98,12 @@ export function SaveSectionFlyout() {
     mutateAsync: mutateCreateSectionAsync,
   } = useCreateSectionMutationQuery();
 
+  const { data: mediumListResponse, isLoading: isMediumListLoading } =
+    useGetMediumListQuery({
+      page: 1,
+      limit: 999,
+      status: true,
+    });
   const {
     isPending: isPendingUpdateSection,
     mutateAsync: mutateUpdateSectionAsync,
@@ -178,18 +186,9 @@ export function SaveSectionFlyout() {
                     required: 'Section Name is Required',
                   })}
                   id="name"
+                  errorMessage={fieldErrors?.name?.message.toString()}
                 />
               </div>
-              <p
-                className={cn(
-                  'h-2 p-1 text-sm text-red-600',
-                  fieldErrors.name
-                    ? 'opacity-100 transition-opacity duration-300'
-                    : 'opacity-0 transition-opacity duration-300'
-                )}
-              >
-                {fieldErrors.name?.message as string}
-              </p>
               <div className="mt-2">
                 <label
                   htmlFor="mediumName"
@@ -199,6 +198,7 @@ export function SaveSectionFlyout() {
                 </label>
                 <div className="mt-2 w-full">
                   <Select
+                    disabled={isMediumListLoading}
                     value={medium}
                     onValueChange={(value) => {
                       setMedium(value);
@@ -210,48 +210,33 @@ export function SaveSectionFlyout() {
                     </SelectTrigger>
                     <SelectContent>
                       <SelectGroup>
-                        <SelectItem value={'Tamil'}>Tamil</SelectItem>
-                        <SelectItem value={'English'}>English</SelectItem>
-                        <SelectItem value={'Malayalam'}>Malayalam</SelectItem>
-                      </SelectGroup>
-                    </SelectContent>
-                  </Select>
-                </div>
-                <div className="mt-2 w-full">
-                  <Select
-                    value={medium}
-                    onValueChange={(value) => {
-                      setMedium(value);
-                      setValue('mediumId', value);
-                    }}
-                  >
-                    <SelectTrigger className="w-full" defaultValue={'Tamil'}>
-                      <SelectValue {...register('mediumId')} />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectGroup>
-                        <SelectItem value={'Tamil'}>Tamil</SelectItem>
-                        <SelectItem value={'English'}>English</SelectItem>
-                        <SelectItem value={'Malayalam'}>Malayalam</SelectItem>
+                        {mediumListResponse?.data?.map((item) => (
+                          <SelectItem key={item.id} value={item.id}>
+                            {item.name}
+                          </SelectItem>
+                        ))}
                       </SelectGroup>
                     </SelectContent>
                   </Select>
                 </div>
               </div>
-              <div className="mt-10 flex">
+              <div className="mt-16">
                 <Button
                   size="lg"
                   variant="default"
-                  type="submit"
+                  disabled={isPendingCreateSection || isPendingUpdateSection}
+                  aria-disabled={
+                    isPendingCreateSection || isPendingUpdateSection
+                  }
                   className="mx-auto flex justify-center px-12 py-4"
                 >
                   {isPendingCreateSection || isPendingUpdateSection ? (
                     <div className="flex items-center justify-center">
                       <Loader2 className="mr-2 h-6 w-6 animate-spin text-white" />
-                      {classId ? 'Saving' : 'updating'}
+                      `${classId ? 'Updating' : 'Saving'}`
                     </div>
                   ) : (
-                    `${classId ? 'Save' : 'Update'}`
+                    `${classId ? 'Update' : 'Save'}`
                   )}
                 </Button>
               </div>

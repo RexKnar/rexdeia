@@ -1,8 +1,12 @@
 'use client';
 
-import { Loader2, PencilLine } from 'lucide-react';
+import { Loader2, PencilLine, PlusCircle } from 'lucide-react';
 import { useParams } from 'next/navigation';
-import { parseAsBoolean, useQueryState } from 'next-usequerystate';
+import {
+  parseAsBoolean,
+  parseAsString,
+  useQueryState,
+} from 'next-usequerystate';
 import { Button, Tabs, TabsContent, TabsList, TabsTrigger, Text } from 'ui';
 import { cn } from 'utils';
 
@@ -18,11 +22,18 @@ export function ClassDetail() {
     'isUpdateClassFlyoutOpen',
     parseAsBoolean.withDefault(false)
   );
-
+  const [, isSectionFlyoutOpen] = useQueryState(
+    'isSectionFlyoutOpen',
+    parseAsBoolean.withDefault(false)
+  );
   const { data: getClassByIdResponse, isLoading: isLoadingGetClassById } =
     useGetClassByIdQuery(params.id, {
       enabled: !!params.id,
     });
+  const [, setClassId] = useQueryState(
+    'classId',
+    parseAsString.withDefault('')
+  );
 
   if (isLoadingGetClassById) {
     return (
@@ -57,6 +68,22 @@ export function ClassDetail() {
               </div>
             </div>
             <div className="my-auto flex gap-4 px-5">
+              <div className="relative my-auto">
+                <Button
+                  className="text-primary"
+                  onClick={() => {
+                    isSectionFlyoutOpen(true);
+                    setClassId(getClassByIdResponse.id);
+                  }}
+                >
+                  <PlusCircle
+                    size={20}
+                    strokeWidth={1.5}
+                    className="text-white"
+                  />
+                  <span className="pl-2 text-white">Add Section</span>
+                </Button>
+              </div>
               <div className="relative my-auto">
                 <Button
                   className="text-primary"

@@ -7,6 +7,9 @@ import {
   UpdateMediumModel,
 } from '../../../lib/domain/medium';
 
+type MediumFilter = {
+  status: boolean;
+};
 export async function getAllMediums(page: number, limit: number) {
   const session = await getServerSession(authOptions);
 
@@ -22,6 +25,38 @@ export async function getAllMediums(page: number, limit: number) {
       where: {
         branchId: session.branchId,
         isDeleted: false,
+      },
+    }),
+  ]);
+
+  return {
+    page,
+    total,
+    limit,
+    data: mediumList,
+  };
+}
+
+export async function getAllMediumsWithFilter(
+  page: number,
+  limit: number,
+  filter: MediumFilter
+) {
+  const session = await getServerSession(authOptions);
+
+  const [total, mediumList] = await Promise.all([
+    db.medium.count({
+      where: {
+        branchId: session.branchId,
+      },
+    }),
+    db.medium.findMany({
+      take: limit,
+      skip: (page - 1) * limit,
+      where: {
+        branchId: session.branchId,
+        isDeleted: false,
+        ...filter,
       },
     }),
   ]);

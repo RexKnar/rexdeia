@@ -19,6 +19,7 @@ import {
 } from 'ui';
 
 import { useCreateClassMutationQuery } from '../../../../../../lib/queries/class/useCreateClassMutationQuery';
+import { useGetMediumListQuery } from '../../../../../../lib/queries/medium/useGetMediumListQuery';
 
 export default function AddClass() {
   const router = useRouter();
@@ -43,6 +44,13 @@ export default function AddClass() {
     mutateAsync: mutateCreateClassAsync,
     isPending: isPendingCreateClass,
   } = useCreateClassMutationQuery(page, limit);
+
+  const { data: mediumListResponse, isLoading: isMediumListLoading } =
+    useGetMediumListQuery({
+      page: 1,
+      limit: 999,
+      status: true,
+    });
 
   async function addClass(payload) {
     try {
@@ -96,17 +104,9 @@ export default function AddClass() {
                 })}
                 className="border-primary-200 p-1"
                 id="name"
+                errorMessage={fieldErrors?.name?.message.toString()}
               />
             </div>
-            <p
-              className={`h-2 p-1 text-sm text-red-600 ${
-                fieldErrors.name
-                  ? 'opacity-100 transition-opacity duration-300'
-                  : 'opacity-0 transition-opacity duration-300'
-              }`}
-            >
-              {fieldErrors.name?.message as string}
-            </p>
           </div>
           <div>
             <div className="mt-8">
@@ -130,15 +130,6 @@ export default function AddClass() {
                       className="border-primary-200 p-1"
                       id="sectionName"
                     />
-                    <p
-                      className={`h-2 p-1 text-sm text-red-600 ${
-                        fieldErrors.name
-                          ? 'opacity-100 transition-opacity duration-300'
-                          : 'opacity-0 transition-opacity duration-300'
-                      }`}
-                    >
-                      {fieldErrors.name?.message as string}
-                    </p>
                   </div>
                   <div>
                     <label
@@ -149,22 +140,24 @@ export default function AddClass() {
                     </label>
                     <Controller
                       control={control}
-                      name={`section.${index}.medium`}
+                      name={`section.${index}.mediumId`}
                       render={({ field }) => {
                         return (
-                          <Select onValueChange={field.onChange} {...field}>
+                          <Select
+                            onValueChange={field.onChange}
+                            {...field}
+                            disabled={isMediumListLoading}
+                          >
                             <SelectTrigger className="w-52">
                               <SelectValue />
                             </SelectTrigger>
                             <SelectContent>
                               <SelectGroup>
-                                <SelectItem value={'English'}>
-                                  English
-                                </SelectItem>
-                                <SelectItem value={'Tamil'}>Tamil</SelectItem>
-                                <SelectItem value={'Malayalam'}>
-                                  Malayalam
-                                </SelectItem>
+                                {mediumListResponse?.data?.map((item) => (
+                                  <SelectItem key={item.id} value={item.id}>
+                                    {item.name}
+                                  </SelectItem>
+                                ))}
                               </SelectGroup>
                             </SelectContent>
                           </Select>

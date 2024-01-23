@@ -173,16 +173,8 @@ export function SaveSubjectFlyout() {
                     })}
                     className="mt-2"
                     id="name"
+                    errorMessage={fieldErrors?.name?.message.toString()}
                   />
-                  <p
-                    className={`h-2 p-1 text-sm text-red-600 ${
-                      fieldErrors.name
-                        ? 'opacity-100 transition-opacity duration-300'
-                        : 'opacity-0 transition-opacity duration-300'
-                    }`}
-                  >
-                    {fieldErrors.name?.message as string}
-                  </p>
                 </div>
                 <div>
                   <label
@@ -197,16 +189,8 @@ export function SaveSubjectFlyout() {
                     })}
                     className="mt-2"
                     id="type"
+                    errorMessage={fieldErrors?.subjectTypeId?.message.toString()}
                   />
-                  <p
-                    className={`h-2 p-1 text-sm text-red-600 ${
-                      fieldErrors.subjectTypeId
-                        ? 'opacity-100 transition-opacity duration-300'
-                        : 'opacity-0 transition-opacity duration-300'
-                    }`}
-                  >
-                    {fieldErrors.subjectTypeId?.message as string}
-                  </p>
                 </div>
                 <div>
                   <label
@@ -221,16 +205,8 @@ export function SaveSubjectFlyout() {
                     })}
                     className="mt-2"
                     id="description"
+                    errorMessage={fieldErrors?.description?.message.toString()}
                   />
-                  <p
-                    className={`h-2 p-1 text-sm text-red-600 ${
-                      fieldErrors.description
-                        ? 'opacity-100 transition-opacity duration-300'
-                        : 'opacity-0 transition-opacity duration-300'
-                    }`}
-                  >
-                    {fieldErrors.description?.message as string}
-                  </p>
                 </div>
 
                 <div className="mt-10">
