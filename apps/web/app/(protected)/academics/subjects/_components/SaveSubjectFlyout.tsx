@@ -12,6 +12,12 @@ import { useForm } from 'react-hook-form';
 import {
   Button,
   Input,
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
   Sheet,
   SheetContent,
   SheetHeader,
@@ -22,8 +28,10 @@ import {
 } from 'ui';
 
 import { CreateSubjectModel } from '../../../../../lib/domain/subject';
-import { useGetBatchByIdQuery } from '../../../../../lib/queries/batches/useGetBatchByIdQuery';
+import { useGetSubjectFormatList } from '../../../../../lib/queries/subject-format/useGetSubjectFormatList';
+import { useGetSubjectTypeList } from '../../../../../lib/queries/subject-type/useGetSubjectTypeQuery';
 import { useCreateSubjectMutationQuery } from '../../../../../lib/queries/subjects/useCreateSubjectMutationQuery';
+import { useGetSubjectByIdQuery } from '../../../../../lib/queries/subjects/useGetSubjectByIdQuery';
 import { useUpdateSubjectMutationQuery } from '../../../../../lib/queries/subjects/useUpdateSubjectMutationQuery';
 
 export function SaveSubjectFlyout() {
@@ -31,6 +39,7 @@ export function SaveSubjectFlyout() {
     'isFlyoutOpen',
     parseAsBoolean.withDefault(false)
   );
+
   const [subjectId, setSubjectId] = useQueryState('subjectId', parseAsString);
   const [page] = useQueryState('page', parseAsInteger.withDefault(1));
   const [limit] = useQueryState('limit', parseAsInteger.withDefault(10));
@@ -46,19 +55,33 @@ export function SaveSubjectFlyout() {
   } = useForm({
     defaultValues: {
       name: null,
+      isActive: false,
+      description: null,
       subjectTypeId: null,
       subjectFormatId: null,
-      description: null,
-      isActive: false,
-      subjectName: null,
     },
   });
+
+  const selectedSubjectTypeId = watch('subjectTypeId');
+  const selectedSubjectFormatId = watch('subjectFormatId');
+
+  const { data: subjectTypeList, isLoading: isSubjectTypeListLoading } =
+    useGetSubjectTypeList({
+      page: 1,
+      limit: 999,
+    });
+
+  const { data: subjectFormatList, isLoading: isSubjectFormatLoading } =
+    useGetSubjectFormatList({
+      page: 1,
+      limit: 999,
+    });
 
   const {
     data: currentSubject,
     isLoading: isCurrentSubjectLoading,
     isFetching: isCurrentSubjectFetching,
-  } = useGetBatchByIdQuery(subjectId, {
+  } = useGetSubjectByIdQuery(subjectId, {
     enabled: !!subjectId,
   });
 
@@ -66,6 +89,7 @@ export function SaveSubjectFlyout() {
     isPending: isPendingCreateSubjects,
     mutateAsync: mutateCreateSubjectsAsync,
   } = useCreateSubjectMutationQuery(page, limit);
+
   const {
     isPending: isPendingUpdateSubjects,
     mutateAsync: mutateUpdateSubjectsAsync,
@@ -73,18 +97,31 @@ export function SaveSubjectFlyout() {
 
   useEffect(() => {
     if (currentSubject) {
-      const { name, isActive, description } = currentSubject;
+      const { name, isActive, subjectTypeId, subjectFormatId } = currentSubject;
 
       setValue('name', name);
       setValue('isActive', isActive);
-      setValue('description', description);
+      setValue('subjectTypeId', subjectTypeId);
+      setValue('subjectFormatId', subjectFormatId);
       setActiveToggleFlag(isActive);
     } else {
       setValue('name', null);
       setValue('isActive', false);
-      setValue('description', null);
+      setValue('subjectTypeId', null);
+      setValue('subjectFormatId', null);
     }
   }, [currentSubject, setValue]);
+
+  // Setting default values when loading
+  useEffect(() => {
+    if (!subjectId && subjectTypeList && subjectTypeList.data[0]) {
+      setValue('subjectTypeId', subjectTypeList.data[0].id);
+    }
+
+    if (!subjectId && subjectFormatList && subjectFormatList.data[0]) {
+      setValue('subjectFormatId', subjectFormatList.data[0].id);
+    }
+  }, [setValue, subjectFormatList, subjectId, subjectTypeList]);
 
   const closeFlyout = async () => {
     await setIsOpen(false);
@@ -112,6 +149,7 @@ export function SaveSubjectFlyout() {
       await closeFlyout();
     }
   };
+
   return (
     <section>
       <Sheet open={isOpen}>
@@ -121,7 +159,10 @@ export function SaveSubjectFlyout() {
           className="bg-white p-10"
           onCloseClick={() => closeFlyout()}
         >
-          {isCurrentSubjectLoading || isCurrentSubjectFetching ? (
+          {isCurrentSubjectLoading ||
+          isCurrentSubjectFetching ||
+          isSubjectFormatLoading ||
+          isSubjectTypeListLoading ? (
             <section className="flex h-96 w-full flex-col items-center justify-center gap-4">
               <Spinner />
               <p>Fetching Data</p>
@@ -183,30 +224,54 @@ export function SaveSubjectFlyout() {
                   >
                     Subject Type
                   </label>
-                  <Input
-                    {...register('subjectTypeId', {
-                      required: 'Subject type is Required',
-                    })}
-                    className="mt-2"
-                    id="type"
-                    errorMessage={fieldErrors?.subjectTypeId?.message.toString()}
-                  />
+                  <Select
+                    value={selectedSubjectTypeId}
+                    disabled={isSubjectTypeListLoading}
+                    onValueChange={(value) => {
+                      setValue('subjectTypeId', value);
+                    }}
+                  >
+                    <SelectTrigger className="w-full">
+                      <SelectValue {...register('subjectTypeId')} />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectGroup>
+                        {subjectTypeList?.data?.map((item) => (
+                          <SelectItem key={item.id} value={item.id}>
+                            {item.name}
+                          </SelectItem>
+                        ))}
+                      </SelectGroup>
+                    </SelectContent>
+                  </Select>
                 </div>
                 <div>
                   <label
                     htmlFor="description"
                     className="text-sm font-semibold text-gray-700"
                   >
-                    Subject Description
+                    Subject Format
                   </label>
-                  <Input
-                    {...register('description', {
-                      required: 'Subject Description is Required',
-                    })}
-                    className="mt-2"
-                    id="description"
-                    errorMessage={fieldErrors?.description?.message.toString()}
-                  />
+                  <Select
+                    value={selectedSubjectFormatId}
+                    disabled={isSubjectFormatLoading}
+                    onValueChange={(value) => {
+                      setValue('subjectFormatId', value);
+                    }}
+                  >
+                    <SelectTrigger className="w-full">
+                      <SelectValue {...register('subjectFormatId')} />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectGroup>
+                        {subjectFormatList?.data?.map((item) => (
+                          <SelectItem key={item.id} value={item.id}>
+                            {item.name}
+                          </SelectItem>
+                        ))}
+                      </SelectGroup>
+                    </SelectContent>
+                  </Select>
                 </div>
 
                 <div className="mt-10">

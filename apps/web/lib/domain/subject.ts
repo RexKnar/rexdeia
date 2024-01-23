@@ -9,6 +9,8 @@ export type SubjectModel = {
   isDeleting?: boolean;
   isUpdating?: boolean;
   isNewlyAdded?: boolean;
+  SubjectType?: SubjectTypeModel;
+  SubjectFormat?: SubjectFormatModel;
 };
 
 export type CreateSubjectModel = Pick<

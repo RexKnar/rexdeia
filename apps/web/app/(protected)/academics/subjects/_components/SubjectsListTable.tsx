@@ -43,7 +43,11 @@ import {
 import { cn } from 'utils';
 
 import { DeleteConfirmationModal } from '../../../../../lib/components/modals/DeleteConfirmationModal';
-import { SubjectModel } from '../../../../../lib/domain/subject';
+import {
+  SubjectFormatModel,
+  SubjectModel,
+  SubjectTypeModel,
+} from '../../../../../lib/domain/subject';
 import { useDeleteSubjectMutationQuery } from '../../../../../lib/queries/subjects/useDeleteSubjectMutationQuery';
 import { useGetSubjectListQuery } from '../../../../../lib/queries/subjects/useGetSubjectListQuery';
 
@@ -63,7 +67,7 @@ const columns: ColumnDef<SubjectModel>[] = [
     },
   },
   {
-    accessorKey: 'description',
+    accessorKey: 'SubjectType',
     header: ({ column }) => {
       return (
         <Button
@@ -71,17 +75,21 @@ const columns: ColumnDef<SubjectModel>[] = [
           className="px-0"
           onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
         >
-          Description
+          Subject Type
         </Button>
       );
     },
     cell: ({ row }) => {
-      let description: string = row.getValue('description');
-      return <div>{description || 'N/A'}</div>;
+      const subjectType = row.getValue('SubjectType');
+      if (!subjectType) {
+        return <div>N/A</div>;
+      } else {
+        return <div>{(subjectType as SubjectTypeModel).name}</div>;
+      }
     },
   },
   {
-    accessorKey: 'type',
+    accessorKey: 'SubjectFormat',
     header: ({ column }) => {
       return (
         <Button
@@ -89,9 +97,17 @@ const columns: ColumnDef<SubjectModel>[] = [
           className="px-0"
           onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
         >
-          Subject type
+          Subject Format
         </Button>
       );
+    },
+    cell: ({ row }) => {
+      const subjectFormat = row.getValue('SubjectFormat');
+      if (!subjectFormat) {
+        return <div>N/A</div>;
+      } else {
+        return <div>{(subjectFormat as SubjectFormatModel).name}</div>;
+      }
     },
   },
   {

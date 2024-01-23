@@ -5,7 +5,7 @@ import {
 } from '../../../lib/domain/subject';
 
 export async function deleteSubjectById(id: string) {
-  return await db.subject.update({
+  return db.subject.update({
     where: {
       id: id,
     },
@@ -17,10 +17,9 @@ export async function deleteSubjectById(id: string) {
 }
 
 export async function getSubjectById(id: string) {
-  return await db.subject.findFirst({
+  return db.subject.findFirst({
     where: {
       id: id,
-      isActive: true,
     },
     include: {
       SubjectType: true,
@@ -33,7 +32,7 @@ export async function updateSubjectById(
   id: string,
   updateSubject: UpdateSubjectModel
 ) {
-  return await db.subject.update({
+  return db.subject.update({
     where: {
       id: id,
     },
@@ -44,7 +43,7 @@ export async function updateSubjectById(
 }
 
 export async function addSubject(createSubject: CreateSubjectModel) {
-  return await db.subject.create({
+  return db.subject.create({
     data: {
       name: createSubject.name,
       description: createSubject.description,
@@ -56,7 +55,7 @@ export async function addSubject(createSubject: CreateSubjectModel) {
 }
 
 export async function getAllSubjectBySectionId(id: string) {
-  return await db.subject.findMany({
+  return db.subject.findMany({
     where: {
       sectionId: {
         has: id,
@@ -70,9 +69,6 @@ export async function getSubjectList(page: number, limit: number) {
   const [total, subjectList] = await Promise.all([
     db.subject.count(),
     db.subject.findMany({
-      where: {
-        isActive: true,
-      },
       include: {
         SubjectType: true,
         SubjectFormat: true,

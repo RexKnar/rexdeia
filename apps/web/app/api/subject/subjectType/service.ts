@@ -8,19 +8,18 @@ import {
 } from '../../../../lib/domain/subject';
 
 export async function deleteSubjectTypeById(id: string) {
-  return await db.subjectType.update({
+  return db.subjectType.update({
     where: {
       id: id,
     },
     data: {
-      isActive: false,
       updatedAt: new Date(),
     },
   });
 }
 
 export async function getSubjectTypeById(id: string) {
-  return await db.subjectType.findFirst({
+  return db.subjectType.findFirst({
     where: {
       id: id,
       isActive: true,
@@ -32,7 +31,7 @@ export async function updateSubjectTypeById(
   id: string,
   updateSubjectType: UpdateSubjectTypeModel
 ) {
-  return await db.subjectType.update({
+  return db.subjectType.update({
     where: {
       id: id,
     },
@@ -46,7 +45,7 @@ export async function addSubjectType(
   createSubjectType: CreateSubjectTypeModel
 ) {
   const session = await getServerSession(authOptions);
-  return await db.subjectType.create({
+  return db.subjectType.create({
     data: {
       name: createSubjectType.name,
       isActive: createSubjectType.isActive,
@@ -60,11 +59,14 @@ export async function addSubjectType(
 }
 
 export async function getSubjectTypeList(page: number, limit: number) {
+  const session = await getServerSession(authOptions);
+
   const [total, subjectTypeList] = await Promise.all([
     db.subjectType.count(),
     db.subjectType.findMany({
       where: {
         isActive: true,
+        branchId: session.branchId,
       },
       take: limit,
       skip: (page - 1) * limit,

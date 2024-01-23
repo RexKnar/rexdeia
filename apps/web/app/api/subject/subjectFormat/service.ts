@@ -8,7 +8,7 @@ import {
 } from '../../../../lib/domain/subject';
 
 export async function deleteSubjectFormatById(id: string) {
-  return await db.subjectFormat.update({
+  return db.subjectFormat.update({
     where: {
       id: id,
     },
@@ -20,7 +20,7 @@ export async function deleteSubjectFormatById(id: string) {
 }
 
 export async function getSubjectFormatById(id: string) {
-  return await db.subjectFormat.findFirst({
+  return db.subjectFormat.findFirst({
     where: {
       id: id,
       isActive: true,
@@ -32,7 +32,7 @@ export async function updateSubjectFormatById(
   id: string,
   updateSubjectFormat: UpdateSubjectFormatModel
 ) {
-  return await db.subjectFormat.update({
+  return db.subjectFormat.update({
     where: {
       id: id,
     },
@@ -46,7 +46,8 @@ export async function addSubjectFormat(
   createSubjectFormat: CreateSubjectFormatModel
 ) {
   const session = await getServerSession(authOptions);
-  return await db.subjectFormat.create({
+
+  return db.subjectFormat.create({
     data: {
       name: createSubjectFormat.name,
       isActive: createSubjectFormat.isActive,
@@ -60,11 +61,13 @@ export async function addSubjectFormat(
 }
 
 export async function getSubjectFormatList(page: number, limit: number) {
+  const session = await getServerSession(authOptions);
+
   const [total, subjectFormatList] = await Promise.all([
     db.subjectFormat.count(),
     db.subjectFormat.findMany({
       where: {
-        isActive: true,
+        branchId: session.branchId,
       },
       take: limit,
       skip: (page - 1) * limit,

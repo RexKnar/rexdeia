@@ -10,12 +10,12 @@ import { MediumModel } from '../../domain/medium';
 import { GET_MEDIUM_LIST } from '../../endpoints';
 
 function getMediumList(
-  { page, limit, status }: { page: number; limit: number; status: boolean },
+  { page, limit }: { page: number; limit: number },
   options?: UseQueryOptions<PaginatedResponse<MediumModel>>
 ): UseQueryOptions<PaginatedResponse<MediumModel>> {
   return {
     ...options,
-    queryKey: [GET_MEDIUM_LIST, page, limit, status],
+    queryKey: [GET_MEDIUM_LIST, page, limit],
     queryFn: async () => {
       return await makeAPICall<PaginatedResponse<MediumModel>>(
         GET_MEDIUM_LIST,
@@ -23,7 +23,6 @@ function getMediumList(
         {
           page: page,
           limit: limit,
-          status: status,
         },
         {}
       );
@@ -32,8 +31,8 @@ function getMediumList(
 }
 
 export function useGetMediumListQuery(
-  { page, limit, status }: { page: number; limit: number; status: boolean },
+  { page, limit }: { page: number; limit: number },
   options?: UseQueryOptions<PaginatedResponse<MediumModel>>
 ): UseQueryResult<PaginatedResponse<MediumModel>> {
-  return useQuery(getMediumList({ page, limit, status }, options));
+  return useQuery(getMediumList({ page, limit }, options));
 }

@@ -108,20 +108,18 @@ export function MediumListTable() {
 
   const page = parseInt(searchParams.get('page')) || 1;
   const limit = parseInt(searchParams.get('limit')) || 10;
-  const status = true;
 
   const { data: mediumListResponse, isLoading: isMediumListLoading } =
     useGetMediumListQuery({
       page,
       limit,
-      status,
     });
 
   const {
     isError: isDeleteMediumError,
     isSuccess: isDeleteSuccess,
     mutateAsync: deleteMediumAsync,
-  } = useDeleteMediumMutationQuery(page, limit, status);
+  } = useDeleteMediumMutationQuery(page, limit);
 
   useEffect(() => {
     if (isDeleteMediumError) {
@@ -210,6 +208,12 @@ export function MediumListTable() {
                       <Tooltip>
                         <TooltipTrigger asChild>
                           <Button
+                            onClick={() => {
+                              const params = new URLSearchParams(searchParams);
+                              params.set('isMediumFlyoutOpen', 'true');
+                              params.set('mediumId', row.original.id);
+                              router.push(pathname + '?' + params.toString());
+                            }}
                             className="mr-2 h-auto px-3 py-2"
                             variant="mild"
                           >
@@ -262,7 +266,7 @@ export function MediumListTable() {
               ) : (
                 <TableRow>
                   <TableCell colSpan={5} className="h-24 text-center">
-                    {isMediumListLoading ? 'Loading...' : 'No Group Found'}
+                    {isMediumListLoading ? 'Loading...' : 'No Medium Found'}
                   </TableCell>
                 </TableRow>
               )}
