@@ -73,6 +73,9 @@ export async function getSubjectList(page: number, limit: number) {
         SubjectType: true,
         SubjectFormat: true,
       },
+      orderBy: {
+        createdAt: 'desc',
+      },
       take: limit,
       skip: (page - 1) * limit,
     }),
