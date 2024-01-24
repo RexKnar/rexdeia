@@ -115,20 +115,18 @@ export function GroupListTable() {
 
   const page = parseInt(searchParams.get('page')) || 1;
   const limit = parseInt(searchParams.get('limit')) || 10;
-  const status = true;
 
   const { data: groupListResponse, isLoading: isGroupListLoading } =
     useGetGroupListQuery({
       page,
       limit,
-      status,
     });
 
   const {
     isError: isDeleteGroupError,
     isSuccess: isDeleteSuccess,
     mutateAsync: deleteGroupAsync,
-  } = useDeleteGroupMutationQuery(page, limit, status);
+  } = useDeleteGroupMutationQuery(page, limit);
 
   useEffect(() => {
     if (isDeleteGroupError) {
@@ -221,6 +219,12 @@ export function GroupListTable() {
                       <Tooltip>
                         <TooltipTrigger asChild>
                           <Button
+                            onClick={() => {
+                              const params = new URLSearchParams(searchParams);
+                              params.set('isGroupFlyoutOpen', 'true');
+                              params.set('groupId', row.original.id);
+                              router.push(pathname + '?' + params.toString());
+                            }}
                             className="mr-2 h-auto px-3 py-2"
                             variant="mild"
                           >

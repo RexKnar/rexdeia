@@ -68,6 +68,9 @@ export async function getSubjectTypeList(page: number, limit: number) {
         isActive: true,
         branchId: session.branchId,
       },
+      orderBy: {
+        createdAt: 'desc',
+      },
       take: limit,
       skip: (page - 1) * limit,
     }),

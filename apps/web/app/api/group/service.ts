@@ -4,6 +4,9 @@ import { authOptions } from '../../../lib/auth';
 import { db } from '../../../lib/db';
 import { CreateGroupModel, UpdateGroupModel } from '../../../lib/domain/group';
 
+type GroupFilter = {
+  status: boolean;
+};
 export async function getAllGroups(
   page: number,
   limit: number,
@@ -37,6 +40,37 @@ export async function getAllGroups(
   };
 }
 
+export async function getAllGroupsWithFilter(
+  page: number,
+  limit: number,
+  filter: GroupFilter
+) {
+  const session = await getServerSession(authOptions);
+
+  const [total, groupList] = await Promise.all([
+    db.group.count({
+      where: {
+        branchId: session.branchId,
+      },
+    }),
+    db.group.findMany({
+      take: limit,
+      skip: (page - 1) * limit,
+      where: {
+        branchId: session.branchId,
+        isDeleted: false,
+        ...filter,
+      },
+    }),
+  ]);
+
+  return {
+    page,
+    total,
+    limit,
+    data: groupList,
+  };
+}
 export async function addGroup(createGroupPayload: CreateGroupModel) {
   const session = await getServerSession(authOptions);
   return db.group.create({

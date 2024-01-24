@@ -10,12 +10,12 @@ import { GroupModel } from '../../domain/group';
 import { GET_GROUP_LIST } from '../../endpoints';
 
 function getGroupList(
-  { page, limit, status }: { page: number; limit: number; status: boolean },
+  { page, limit }: { page: number; limit: number },
   options?: UseQueryOptions<PaginatedResponse<GroupModel>>
 ): UseQueryOptions<PaginatedResponse<GroupModel>> {
   return {
     ...options,
-    queryKey: [GET_GROUP_LIST, page, limit, status],
+    queryKey: [GET_GROUP_LIST, page, limit],
     queryFn: async () => {
       return await makeAPICall<PaginatedResponse<GroupModel>>(
         GET_GROUP_LIST,
@@ -23,7 +23,6 @@ function getGroupList(
         {
           page: page,
           limit: limit,
-          status: status,
         },
         {}
       );
@@ -32,8 +31,8 @@ function getGroupList(
 }
 
 export function useGetGroupListQuery(
-  { page, limit, status }: { page: number; limit: number; status: boolean },
+  { page, limit }: { page: number; limit: number },
   options?: UseQueryOptions<PaginatedResponse<GroupModel>>
 ): UseQueryResult<PaginatedResponse<GroupModel>> {
-  return useQuery(getGroupList({ page, limit, status }, options));
+  return useQuery(getGroupList({ page, limit }, options));
 }
