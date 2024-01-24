@@ -1,4 +1,4 @@
-import { ChevronDown } from 'lucide-react';
+import { ChevronDown, ChevronRight } from 'lucide-react';
 import { signOut } from 'next-auth/react';
 import {
   Avatar,
@@ -28,18 +28,30 @@ export function UserMenu() {
       </DropdownMenuTrigger>
       <DropdownMenuContent className="bg-white" align="end" sideOffset={15}>
         <DropdownMenuItem className="flex cursor-pointer items-center">
-          <span className="flex-1">Profile</span>
+          <Text variant="sm-medium" className="flex-1">
+            Profile
+          </Text>
+          <ChevronRight
+            className="h-4 w-5 rounded-full bg-gray-200 stroke-current text-primary shadow-md"
+            stroke-width="1.5"
+          />
         </DropdownMenuItem>
         <DropdownMenuSeparator className="bg-gray-100 text-gray-500" />
         <DropdownMenuItem
-          className="flex cursor-pointer items-center"
           onClick={async () => {
             await signOut({
               callbackUrl: '/signin',
             });
           }}
+          className="flex cursor-pointer items-center"
         >
-          <span className="flex-1">Logout</span>
+          <Text variant="sm-medium" className="flex-1">
+            Logout
+          </Text>
+          <ChevronRight
+            className="h-4 w-5 rounded-full bg-gray-200 stroke-current text-primary shadow-md"
+            stroke-width="1.5"
+          />
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
