@@ -16,12 +16,6 @@ import { When } from 'react-if';
 import {
   Button,
   Pagination,
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
   Tooltip,
   TooltipContent,
   TooltipTrigger,
@@ -55,24 +49,6 @@ const columns: ColumnDef<GroupModel>[] = [
           Group Name
         </Button>
       );
-    },
-  },
-  {
-    accessorKey: 'description',
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          className="px-0"
-          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-        >
-          Description
-        </Button>
-      );
-    },
-    cell: ({ row }) => {
-      let description: string = row.getValue('description');
-      return <div>{description || 'N/A'}</div>;
     },
   },
   {
@@ -286,41 +262,19 @@ export function GroupListTable() {
         </div>
       </div>
       <When condition={groupListResponse?.data?.length && !isGroupListLoading}>
-        <section className="mt-5 flex justify-between">
-          <div className="justify-left flex w-2/6">
-            <label className="w-1/3 py-2 text-center text-sm text-gray-700">
-              Entries per page
-            </label>
-            <div className="w-1/3">
-              <Select
-                value={limit.toString()}
-                disabled={isGroupListLoading}
-                onValueChange={(value) => {
-                  const params = new URLSearchParams(searchParams);
-                  params.set('limit', value.toString());
-                  router.push(pathname + '?' + params.toString());
-                }}
-              >
-                <SelectTrigger className="w-auto">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectGroup>
-                    <SelectItem value={'10'}>10</SelectItem>
-                    <SelectItem value={'25'}>25</SelectItem>
-                    <SelectItem value={'50'}>50</SelectItem>
-                    <SelectItem value={'100'}>100</SelectItem>
-                  </SelectGroup>
-                </SelectContent>
-              </Select>
-            </div>
-          </div>
-          <Pagination
-            onPageChange={handleOnPageChange}
-            pageSize={groupListResponse?.limit || 0}
-            totalRecords={groupListResponse?.total || 0}
-          />
-        </section>
+        <Pagination
+          value={limit.toString()}
+          onPageChange={handleOnPageChange}
+          pageSize={groupListResponse?.limit || 0}
+          totalRecords={groupListResponse?.total || 0}
+          disabled={isGroupListLoading}
+          onValueChange={(value) => {
+            const params = new URLSearchParams(searchParams);
+            params.set('limit', value.toString());
+
+            router.push(pathname + '?' + params.toString());
+          }}
+        />
         <DeleteConfirmationModal
           open={showDeleteConfirmationModal}
           description={`Are you sure you want to delete "${selectedGroup?.name}"`}

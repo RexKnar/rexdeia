@@ -10,23 +10,17 @@ import {
   useReactTable,
 } from '@tanstack/react-table';
 import { Loader2, Pencil, Trash2 } from 'lucide-react';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import {
   parseAsBoolean,
-  parseAsInteger,
   parseAsString,
   useQueryState,
 } from 'next-usequerystate';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { When } from 'react-if';
 import {
   Button,
   Pagination,
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
   Tooltip,
   TooltipContent,
   TooltipTrigger,
@@ -122,15 +116,16 @@ const columns: ColumnDef<BatchModel>[] = [
 export function AcademicYearListTable() {
   const { toast } = useToast();
 
+  const pathname = usePathname();
+  const router = useRouter();
+  const searchParams = useSearchParams();
+
   const [showDeleteConfirmationModal, setShowDeleteConfirmationModal] =
     useState(false);
   const [selectedBatch, setSelectedBatch] = useState<BatchModel | null>(null);
 
-  const [page, setPage] = useQueryState('page', parseAsInteger.withDefault(1));
-  const [limit, setLimit] = useQueryState(
-    'limit',
-    parseAsInteger.withDefault(10)
-  );
+  const page = parseInt(searchParams.get('page')) || 1;
+  const limit = parseInt(searchParams.get('limit')) || 10;
   const [, setIsFlyoutOpen] = useQueryState(
     'isFlyoutOpen',
     parseAsBoolean.withDefault(false)
@@ -154,6 +149,16 @@ export function AcademicYearListTable() {
       page,
       limit,
     });
+
+  const handleOnPageChange = useCallback(
+    (page: number) => {
+      const params = new URLSearchParams(searchParams);
+      params.set('page', page.toString());
+
+      router.push(pathname + '?' + params.toString());
+    },
+    [searchParams, pathname, router]
+  );
 
   useEffect(() => {
     if (isDeleteBatchError) {
@@ -305,39 +310,19 @@ export function AcademicYearListTable() {
         </Table>
       </div>
       <When condition={batchesList?.data?.length && !isBatchesListLoading}>
-        <section className="mt-5 flex justify-between">
-          <div className="justify-left flex w-2/6">
-            <label className="w-1/3 py-2 text-center text-sm text-gray-700">
-              Entries per page
-            </label>
-            <div className="w-1/3">
-              <Select
-                value={limit.toString()}
-                disabled={isBatchesListLoading}
-                onValueChange={async (value) => {
-                  await setLimit(parseInt(value));
-                }}
-              >
-                <SelectTrigger className="w-auto">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectGroup>
-                    <SelectItem value={'10'}>10</SelectItem>
-                    <SelectItem value={'25'}>25</SelectItem>
-                    <SelectItem value={'50'}>50</SelectItem>
-                    <SelectItem value={'100'}>100</SelectItem>
-                  </SelectGroup>
-                </SelectContent>
-              </Select>
-            </div>
-          </div>
-          <Pagination
-            onPageChange={setPage}
-            pageSize={batchesList?.limit || 0}
-            totalRecords={batchesList?.total || 0}
-          />
-        </section>
+        <Pagination
+          value={limit.toString()}
+          onPageChange={handleOnPageChange}
+          pageSize={batchesList?.limit || 0}
+          totalRecords={batchesList?.total || 0}
+          disabled={isBatchesListLoading}
+          onValueChange={(value) => {
+            const params = new URLSearchParams(searchParams);
+            params.set('limit', value.toString());
+
+            router.push(pathname + '?' + params.toString());
+          }}
+        />
         <DeleteConfirmationModal
           open={showDeleteConfirmationModal}
           description={`Are you sure you want to delete "${selectedBatch?.name}"`}
