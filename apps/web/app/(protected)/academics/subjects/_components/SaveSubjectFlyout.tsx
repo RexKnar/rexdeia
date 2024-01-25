@@ -7,7 +7,7 @@ import {
   parseAsString,
   useQueryState,
 } from 'next-usequerystate';
-import { useCallback, useEffect } from 'react';
+import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import {
   Button,
@@ -75,8 +75,6 @@ export function SaveSubjectFlyout() {
     resolver: zodResolver(schema),
   });
 
-  const selectedActiveStatus = watch('isActive');
-  const selectedSubjectTypeId = watch('subjectTypeId');
   const selectedSubjectFormatId = watch('subjectFormatId');
 
   const {
@@ -124,6 +122,11 @@ export function SaveSubjectFlyout() {
     isSubjectTypeListFetching;
 
   useEffect(() => {
+    if (!isOpen) {
+      return;
+    }
+
+    reset();
     if (currentSubject) {
       const { name, isActive, subjectTypeId, subjectFormatId } = currentSubject;
 
@@ -148,6 +151,7 @@ export function SaveSubjectFlyout() {
       );
     }
   }, [
+    reset,
     isOpen,
     setValue,
     isLoading,
@@ -162,33 +166,20 @@ export function SaveSubjectFlyout() {
   };
 
   const saveSubject = async (payload: CreateSubjectModel) => {
-    try {
-      if (subjectId) {
-        const updateSubjectRequestPayload = {
-          ...payload,
-          id: subjectId,
-        };
-        await mutateUpdateSubjectsAsync(updateSubjectRequestPayload);
-      } else {
-        const addSubjectRequestPayload = {
-          ...payload,
-        };
-        await mutateCreateSubjectsAsync(addSubjectRequestPayload);
-      }
-    } catch (error) {
-      console.error(error);
-    } finally {
-      reset();
-      await closeFlyout();
+    if (subjectId) {
+      const updateSubjectRequestPayload = {
+        ...payload,
+        id: subjectId,
+      };
+      await mutateUpdateSubjectsAsync(updateSubjectRequestPayload);
+    } else {
+      const addSubjectRequestPayload = {
+        ...payload,
+      };
+      await mutateCreateSubjectsAsync(addSubjectRequestPayload);
     }
+    await closeFlyout();
   };
-
-  const onSubjectTypeChange = useCallback(
-    (value: string) => {
-      setValue('subjectTypeId', value);
-    },
-    [setValue]
-  );
 
   return (
     <section>
@@ -222,7 +213,7 @@ export function SaveSubjectFlyout() {
                         onCheckedChange={(value) => {
                           setValue('isActive', value);
                         }}
-                        checked={selectedActiveStatus}
+                        checked={watch('isActive')}
                       />
                       <label
                         htmlFor="isActive"
@@ -245,9 +236,7 @@ export function SaveSubjectFlyout() {
                     Subject Name
                   </label>
                   <Input
-                    {...register('name', {
-                      required: 'name is Required',
-                    })}
+                    {...register('name')}
                     id="name"
                     autoFocus
                     type="text"
@@ -265,11 +254,16 @@ export function SaveSubjectFlyout() {
                   </label>
                   <Select
                     autoComplete="off"
-                    value={selectedSubjectTypeId}
-                    onValueChange={onSubjectTypeChange}
+                    {...register('subjectTypeId')}
+                    value={watch('subjectTypeId')}
+                    onValueChange={(value) => {
+                      if (value) {
+                        setValue('subjectTypeId', value);
+                      }
+                    }}
                   >
                     <SelectTrigger className="w-full">
-                      <SelectValue {...register('subjectTypeId')} />
+                      <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
                       <SelectGroup>
@@ -290,13 +284,16 @@ export function SaveSubjectFlyout() {
                     Subject Format
                   </label>
                   <Select
+                    {...register('subjectFormatId')}
                     value={selectedSubjectFormatId}
                     onValueChange={(value) => {
-                      setValue('subjectFormatId', value);
+                      if (value) {
+                        setValue('subjectFormatId', value);
+                      }
                     }}
                   >
                     <SelectTrigger className="w-full">
-                      <SelectValue {...register('subjectFormatId')} />
+                      <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
                       <SelectGroup>
