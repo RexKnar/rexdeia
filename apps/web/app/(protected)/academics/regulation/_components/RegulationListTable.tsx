@@ -16,12 +16,6 @@ import { When } from 'react-if';
 import {
   Button,
   Pagination,
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
   Tooltip,
   TooltipContent,
   TooltipTrigger,
@@ -294,42 +288,19 @@ export function RegulationListTable() {
           regulationListResponse?.data?.length && !isRegulationListLoading
         }
       >
-        <section className="mt-5 flex justify-between">
-          <div className="justify-left flex w-2/6">
-            <label className="w-1/3 py-2 text-center text-sm text-gray-700">
-              Entries per page
-            </label>
-            <div className="w-1/3">
-              <Select
-                value={limit.toString()}
-                disabled={isRegulationListLoading}
-                onValueChange={(value) => {
-                  const params = new URLSearchParams(searchParams);
-                  params.set('limit', value.toString());
+        <Pagination
+          value={limit.toString()}
+          disabled={isRegulationListLoading}
+          onPageChange={handleOnPageChange}
+          pageSize={regulationListResponse?.limit || 0}
+          totalRecords={regulationListResponse?.total || 0}
+          onValueChange={(value) => {
+            const params = new URLSearchParams(searchParams);
+            params.set('limit', value.toString());
 
-                  router.push(pathname + '?' + params.toString());
-                }}
-              >
-                <SelectTrigger className="w-auto">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectGroup>
-                    <SelectItem value={'10'}>10</SelectItem>
-                    <SelectItem value={'25'}>25</SelectItem>
-                    <SelectItem value={'50'}>50</SelectItem>
-                    <SelectItem value={'100'}>100</SelectItem>
-                  </SelectGroup>
-                </SelectContent>
-              </Select>
-            </div>
-          </div>
-          <Pagination
-            onPageChange={handleOnPageChange}
-            pageSize={regulationListResponse?.limit || 0}
-            totalRecords={regulationListResponse?.total || 0}
-          />
-        </section>
+            router.push(pathname + '?' + params.toString());
+          }}
+        />
         <DeleteConfirmationModal
           open={showDeleteConfirmationModal}
           description={`Are you sure you want to delete "${selectedRegulation?.regulationName}"`}

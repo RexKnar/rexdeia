@@ -21,8 +21,8 @@ import {
   PhoneCallIcon,
   Trash2Icon,
 } from 'lucide-react';
-import { useRouter } from 'next/navigation';
-import React, { useState } from 'react';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import React, { useCallback, useState } from 'react';
 import { Else, If, Then, When } from 'react-if';
 import {
   Avatar,
@@ -30,12 +30,6 @@ import {
   AvatarImage,
   Button,
   Pagination,
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
   Spinner,
 } from 'ui';
 import {
@@ -54,6 +48,8 @@ import { useGetStudentListQuery } from '../../../../../lib/queries/useGetStudent
 
 export function StudentsList() {
   const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
   const [showDeleteConfirmationModal, setShowDeleteConfirmationModal] =
     useState(false);
   const [selectedStudent, setSelectedStudent] = useState<Student | null>(null);
@@ -254,8 +250,8 @@ export function StudentsList() {
     },
   ];
 
-  const [pageSize, setPageSize] = useState(10);
-  const [page, setPage] = useState(1);
+  const page = parseInt(searchParams.get('page')) || 1;
+  const pageSize = parseInt(searchParams.get('limit')) || 10;
 
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
@@ -265,6 +261,15 @@ export function StudentsList() {
       page,
       pageSize,
     });
+  const handleOnPageChange = useCallback(
+    (page: number) => {
+      const params = new URLSearchParams(searchParams);
+      params.set('page', page.toString());
+
+      router.push(pathname + '?' + params.toString());
+    },
+    [searchParams, pathname, router]
+  );
 
   const table = useReactTable({
     columns,
@@ -361,36 +366,19 @@ export function StudentsList() {
           getStudentListResponse?.data?.length && !isStudentListLoading
         }
       >
-        <section className="mt-5 flex justify-between">
-          <section>
-            <Select
-              disabled={isStudentListLoading}
-              onValueChange={(value) => {
-                setPageSize(parseInt(value));
-              }}
-            >
-              <SelectTrigger>
-                <SelectValue placeholder="Page Size: " />
-                <div className="ml-1">10</div>
-              </SelectTrigger>
-              <SelectContent>
-                <SelectGroup>
-                  <SelectItem value={'10'}>10</SelectItem>
-                  <SelectItem value={'25'}>25</SelectItem>
-                  <SelectItem value={'50'}>50</SelectItem>
-                  <SelectItem value={'100'}>100</SelectItem>
-                </SelectGroup>
-              </SelectContent>
-            </Select>
-          </section>
-          <Pagination
-            pageSize={getStudentListResponse?.pageSize || 0}
-            totalRecords={getStudentListResponse?.total || 0}
-            onPageChange={(page) => {
-              setPage(page);
-            }}
-          />
-        </section>
+        <Pagination
+          value={pageSize.toString()}
+          onPageChange={handleOnPageChange}
+          pageSize={getStudentListResponse?.pageSize || 0}
+          totalRecords={getStudentListResponse?.total || 0}
+          disabled={isStudentListLoading}
+          onValueChange={(value) => {
+            const params = new URLSearchParams(searchParams);
+            params.set('limit', value.toString());
+
+            router.push(pathname + '?' + params.toString());
+          }}
+        />
       </When>
     </section>
   );
