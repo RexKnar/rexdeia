@@ -64,24 +64,6 @@ const columns: ColumnDef<BatchModel>[] = [
     },
   },
   {
-    accessorKey: 'description',
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          className="px-0"
-          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-        >
-          Description
-        </Button>
-      );
-    },
-    cell: ({ row }) => {
-      let description: string = row.getValue('description');
-      return <div>{description || 'N/A'}</div>;
-    },
-  },
-  {
     accessorKey: 'startYear',
     header: ({ column }) => {
       return (
