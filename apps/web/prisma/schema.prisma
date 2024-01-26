@@ -298,6 +298,8 @@ model Student {
   form           Form            @relation(fields: [formId], references: [id])
   AdmissionForm  AdmissionForm[]
   formId         String          @db.Uuid
+
+  isDeleted Boolean @default(false)
 }
 
 model Staff {
