@@ -13,6 +13,7 @@ export async function getStudentById(id: string, format: string) {
       id,
       branchId: session.branchId,
       organizationId: session.organizationId,
+      isDeleted: false,
     },
   });
 
@@ -246,6 +247,20 @@ export async function getAllStudentsBySectionId(sectionId: string) {
       organizationId: session.organizationId,
       sectionId: sectionId,
       status: 'Active',
+    },
+  });
+}
+
+export async function deleteStudentById(id: string) {
+  const session = await getServerSession(authOptions);
+  return db.student.update({
+    where: {
+      id: id,
+      branchId: session.branchId,
+    },
+    data: {
+      isDeleted: true,
+      updatedAt: new Date(),
     },
   });
 }
