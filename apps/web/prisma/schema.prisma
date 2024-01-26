@@ -29,6 +29,50 @@ model Account {
   @@unique([provider, providerAccountId])
 }
 
+model Exam {
+  id                  String      @id @default(uuid()) @map("_id") @db.Uuid
+  name                String
+  type                String
+  Section             Section?    @relation(fields: [sectionId], references: [id])
+  sectionId           String?     @db.Uuid
+  totalMarks          Int
+  convertToPercentage Int
+  examgroup           ExamGroup[]
+}
+
+model ExamGroup {
+  id                  String        @id @default(uuid()) @map("_id") @db.Uuid
+  name                String
+  totalMarks          Int
+  convertToPercentage Int
+  examSubject         ExamSubject[]
+  Exam1               Exam?         @relation(fields: [exam1Id], references: [id])
+  exam1Id             String?       @db.Uuid
+}
+
+model ExamSubject {
+  id                   String                 @id @default(uuid()) @map("_id") @db.Uuid
+  subjectId            String                 @db.Uuid
+  subject              Subject                @relation(fields: [subjectId], references: [id])
+  totalMarks           Int
+  convertToPercentage  Int
+  examSubjectPartition ExamSubjectPartition[]
+  ExamGroup            ExamGroup?             @relation(fields: [examGroupId], references: [id])
+  examGroupId          String?                @db.Uuid
+}
+
+model ExamSubjectPartition {
+  id                  String       @id @default(uuid()) @map("_id") @db.Uuid
+  subjectId           String       @db.Uuid
+  subject             Subject      @relation(fields: [subjectId], references: [id])
+  minMark             Int
+  totalMarks          Int
+  convertToPercentage Int
+  partitionName       String
+  ExamSubject         ExamSubject? @relation(fields: [examSubjectId], references: [id])
+  examSubjectId       String?      @db.Uuid
+}
+
 model Session {
   id           String   @id @default(uuid()) @map("_id") @db.Uuid
   sessionToken String   @unique
@@ -383,22 +427,25 @@ model Section {
   subjectIds      String[]         @db.Uuid
   Subject         Subject?         @relation(fields: [subjectId], references: [id])
   subjectId       String?          @db.Uuid
+  Exam            Exam[]
 }
 
 model Subject {
-  id              String           @id @default(uuid()) @map("_id") @db.Uuid
-  description     String?
-  name            String
-  isActive        Boolean
-  SubjectType     SubjectType      @relation(fields: [subjectTypeId], references: [id])
-  subjectTypeId   String           @db.Uuid
-  SubjectFormat   SubjectFormat    @relation(fields: [subjectFormatId], references: [id])
-  subjectFormatId String           @db.Uuid
-  createdAt       DateTime?        @default(now())
-  updatedAt       DateTime?        @default(now())
-  Section         Section[]
-  sectionId       String[]         @db.Uuid
-  SectionSubject  SectionSubject[]
+  id                   String                 @id @default(uuid()) @map("_id") @db.Uuid
+  description          String?
+  name                 String
+  isActive             Boolean
+  SubjectType          SubjectType            @relation(fields: [subjectTypeId], references: [id])
+  subjectTypeId        String                 @db.Uuid
+  SubjectFormat        SubjectFormat          @relation(fields: [subjectFormatId], references: [id])
+  subjectFormatId      String                 @db.Uuid
+  createdAt            DateTime?              @default(now())
+  updatedAt            DateTime?              @default(now())
+  Section              Section[]
+  sectionId            String[]               @db.Uuid
+  SectionSubject       SectionSubject[]
+  ExamSubject          ExamSubject[]
+  ExamSubjectPartition ExamSubjectPartition[]
 }
 
 model SubjectType {
