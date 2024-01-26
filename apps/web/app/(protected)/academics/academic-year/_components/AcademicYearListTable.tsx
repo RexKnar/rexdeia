@@ -11,11 +11,6 @@ import {
 } from '@tanstack/react-table';
 import { Loader2, Pencil, Trash2 } from 'lucide-react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import {
-  parseAsBoolean,
-  parseAsString,
-  useQueryState,
-} from 'next-usequerystate';
 import React, { useCallback, useEffect, useState } from 'react';
 import { When } from 'react-if';
 import {
@@ -126,15 +121,6 @@ export function AcademicYearListTable() {
 
   const page = parseInt(searchParams.get('page')) || 1;
   const limit = parseInt(searchParams.get('limit')) || 10;
-  const [, setIsFlyoutOpen] = useQueryState(
-    'isFlyoutOpen',
-    parseAsBoolean.withDefault(false)
-  );
-
-  const [, setBatchId] = useQueryState(
-    'batchId',
-    parseAsString.withDefault('')
-  );
 
   const {
     isError: isDeleteBatchError,
@@ -155,7 +141,7 @@ export function AcademicYearListTable() {
       const params = new URLSearchParams(searchParams);
       params.set('page', page.toString());
 
-      router.push(pathname + '?' + params.toString());
+      router.replace(pathname + '?' + params.toString());
     },
     [searchParams, pathname, router]
   );
@@ -244,8 +230,11 @@ export function AcademicYearListTable() {
                       <TooltipTrigger asChild>
                         <Button
                           onClick={async () => {
-                            await setIsFlyoutOpen(true);
-                            await setBatchId(row.original.id);
+                            const params = new URLSearchParams(searchParams);
+                            params.set('isFlyoutOpen', 'true');
+                            params.set('batchId', row.original.id);
+
+                            router.replace(pathname + '?' + params.toString());
                           }}
                           className="mr-3 h-auto px-3 py-2"
                           variant="mild"
@@ -320,7 +309,7 @@ export function AcademicYearListTable() {
             const params = new URLSearchParams(searchParams);
             params.set('limit', value.toString());
 
-            router.push(pathname + '?' + params.toString());
+            router.replace(pathname + '?' + params.toString());
           }}
         />
         <DeleteConfirmationModal

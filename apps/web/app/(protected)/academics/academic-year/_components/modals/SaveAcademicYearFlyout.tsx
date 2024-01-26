@@ -1,11 +1,7 @@
 'use client';
+
 import { Loader2, PlusCircle } from 'lucide-react';
-import {
-  parseAsBoolean,
-  parseAsInteger,
-  parseAsString,
-  useQueryState,
-} from 'next-usequerystate';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import {
@@ -27,16 +23,19 @@ import { useGetBatchByIdQuery } from '../../../../../../lib/queries/batches/useG
 import { useUpdateBatchMutationQuery } from '../../../../../../lib/queries/batches/useUpdateBatchMutationQuery';
 
 export function SaveAcademicYearFlyout() {
+  const pathname = usePathname();
+  const router = useRouter();
+  const searchParams = useSearchParams();
+
   const [endYear, setEndYear] = useState(null);
   const [startYear, setStartYear] = useState(null);
-  const [isOpen, setIsOpen] = useQueryState(
-    'isFlyoutOpen',
-    parseAsBoolean.withDefault(false)
-  );
-  const [batchId, setBatchId] = useQueryState('batchId', parseAsString);
 
-  const [page] = useQueryState('page', parseAsInteger.withDefault(1));
-  const [limit] = useQueryState('limit', parseAsInteger.withDefault(10));
+  const batchId = searchParams.get('batchId');
+  const isOpen = searchParams.get('isFlyoutOpen') === 'true';
+
+  const page = parseInt(searchParams.get('page')) || 1;
+  const limit = parseInt(searchParams.get('limit')) || 10;
+
   const [activeToggleFlag, setActiveToggleFlag] = useState(false);
 
   const {
@@ -94,9 +93,12 @@ export function SaveAcademicYearFlyout() {
     }
   }, [currentBatch, setValue]);
 
-  const closeFlyout = async () => {
-    await setIsOpen(false);
-    await setBatchId(null);
+  const closeFlyout = () => {
+    const params = new URLSearchParams(searchParams);
+    params.set('isFlyoutOpen', 'false');
+    params.delete('batchId');
+
+    router.replace(pathname + '?' + params.toString());
   };
 
   const saveBatch = async (payload: CreateBatchModel) => {

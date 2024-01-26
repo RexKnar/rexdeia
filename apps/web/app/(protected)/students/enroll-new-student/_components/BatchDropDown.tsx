@@ -1,7 +1,7 @@
 'use client';
 
 import { Check, ChevronsUpDown } from 'lucide-react';
-import { parseAsString, useQueryState } from 'next-usequerystate';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { Button, Popover, PopoverContent, PopoverTrigger, Text } from 'ui';
 import { cn } from 'utils';
@@ -9,6 +9,10 @@ import { cn } from 'utils';
 import { useGetBatchesListQuery } from '../../../../../lib/queries/batches/useGetBatchesListQuery';
 
 export function BatchDropDown() {
+  const pathname = usePathname();
+  const router = useRouter();
+  const searchParams = useSearchParams();
+
   const [open, setOpen] = useState(false);
 
   const { batches } = useGetBatchesListQuery({
@@ -16,13 +20,16 @@ export function BatchDropDown() {
     limit: 999,
   });
 
-  const [batchId, setBatchId] = useQueryState('batchId', parseAsString);
+  const batchId = searchParams.get('batchId');
 
   useEffect(() => {
     if (batches?.length) {
-      setBatchId(batches[batches.length - 1].id);
+      const params = new URLSearchParams(searchParams);
+      params.set('batchId', batches[batches.length - 1].id);
+
+      router.replace(pathname + '?' + params.toString());
     }
-  }, [batches, setBatchId]);
+  }, [batches, pathname, router, searchParams]);
 
   return (
     <div className="w-full">

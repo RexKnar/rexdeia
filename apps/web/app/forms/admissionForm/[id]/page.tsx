@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { Form } from '../../../../lib/components/shared/Form';
 import { getFormByCriteria } from '../../../api/forms/service';
 

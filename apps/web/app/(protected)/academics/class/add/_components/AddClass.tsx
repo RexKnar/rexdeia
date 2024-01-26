@@ -1,8 +1,7 @@
 'use client';
 
 import { Loader2, Plus, Trash } from 'lucide-react';
-import { useRouter } from 'next/navigation';
-import { parseAsInteger, useQueryState } from 'next-usequerystate';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useState } from 'react';
 import { Controller, useFieldArray, useForm } from 'react-hook-form';
 import {
@@ -23,6 +22,10 @@ import { useGetMediumListQuery } from '../../../../../../lib/queries/medium/useG
 
 export default function AddClass() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+
+  const page = parseInt(searchParams.get('page')) || 1;
+  const limit = parseInt(searchParams.get('limit')) || 10;
 
   const {
     control,
@@ -31,13 +34,12 @@ export default function AddClass() {
     handleSubmit,
     formState: { errors: fieldErrors },
   } = useForm();
+
   const { fields, append, remove } = useFieldArray({
     control,
     name: 'section',
   });
 
-  const [page] = useQueryState('page', parseAsInteger.withDefault(1));
-  const [limit] = useQueryState('limit', parseAsInteger.withDefault(10));
   const [activeToggleFlag, setActiveToggleFlag] = useState(false);
 
   const {

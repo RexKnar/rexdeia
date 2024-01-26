@@ -1,16 +1,16 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { parseAsInteger, useQueryState } from 'next-usequerystate';
-import React from 'react';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { Button } from 'ui';
 import { cn } from 'utils';
 
 export function OnboardStaffSidebar() {
-  const [currentStep, setCurrentStep] = useQueryState(
-    'step',
-    parseAsInteger.withDefault(0)
-  );
+  const pathname = usePathname();
+  const router = useRouter();
+  const searchParams = useSearchParams();
+
+  const currentStep = parseInt(searchParams.get('step')) || 0;
 
   return (
     <ul className="rounded-lg bg-white py-3">
@@ -18,7 +18,12 @@ export function OnboardStaffSidebar() {
         <Button
           type="button"
           variant="link"
-          onClick={() => setCurrentStep(0)}
+          onClick={() => {
+            const params = new URLSearchParams(searchParams);
+            params.set('step', '0');
+
+            router.replace(pathname + '?' + params.toString());
+          }}
           className="grid cursor-pointer grid-cols-[4px_minmax(170px,_1fr)_10px] px-4 py-1 hover:no-underline"
         >
           <motion.div
@@ -43,7 +48,12 @@ export function OnboardStaffSidebar() {
         <Button
           type="button"
           variant="link"
-          onClick={() => setCurrentStep(1)}
+          onClick={() => {
+            const params = new URLSearchParams(searchParams);
+            params.set('step', '1');
+
+            router.replace(pathname + '?' + params.toString());
+          }}
           className="grid cursor-pointer grid-cols-[4px_minmax(170px,_1fr)_10px] px-4 py-1 hover:no-underline"
         >
           <motion.div
@@ -63,7 +73,12 @@ export function OnboardStaffSidebar() {
         <Button
           type="button"
           variant="link"
-          onClick={() => setCurrentStep(2)}
+          onClick={() => {
+            const params = new URLSearchParams(searchParams);
+            params.set('step', '2');
+
+            router.replace(pathname + '?' + params.toString());
+          }}
           className="grid cursor-pointer grid-cols-[4px_minmax(170px,_1fr)_10px] px-4 py-1 hover:no-underline"
         >
           <motion.div
@@ -83,7 +98,12 @@ export function OnboardStaffSidebar() {
         <Button
           type="button"
           variant="link"
-          onClick={() => setCurrentStep(3)}
+          onClick={() => {
+            const params = new URLSearchParams(searchParams);
+            params.set('step', '3');
+
+            router.replace(pathname + '?' + params.toString());
+          }}
           className="grid cursor-pointer grid-cols-[4px_minmax(170px,_1fr)_10px] px-4 py-1 hover:no-underline"
         >
           <motion.div

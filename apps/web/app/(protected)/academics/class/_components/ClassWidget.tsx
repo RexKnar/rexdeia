@@ -1,22 +1,11 @@
-import { useRouter } from 'next/navigation';
-import {
-  parseAsBoolean,
-  parseAsString,
-  useQueryState,
-} from 'next-usequerystate';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { Button } from 'ui';
 import { cn } from 'utils';
 
 export function ClassWidget(props) {
+  const pathname = usePathname();
   const router = useRouter();
-  const [, isSectionFlyoutOpen] = useQueryState(
-    'isSectionFlyoutOpen',
-    parseAsBoolean.withDefault(false)
-  );
-  const [, setClassId] = useQueryState(
-    'classId',
-    parseAsString.withDefault('')
-  );
+  const searchParams = useSearchParams();
 
   return (
     <div className="flex flex-wrap content-start items-start gap-6 self-stretch md:gap-24 md:space-x-24">
@@ -67,8 +56,11 @@ export function ClassWidget(props) {
             variant="outline"
             className="h-6 w-6 rounded p-1"
             onClick={() => {
-              setClassId(props.classDetails.id);
-              isSectionFlyoutOpen(true);
+              const params = new URLSearchParams(searchParams);
+              params.set('isSectionFlyoutOpen', 'true');
+              params.set('classId', props.classDetails.id);
+
+              router.replace(pathname + '?' + params.toString());
             }}
           >
             <svg

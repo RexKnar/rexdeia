@@ -3,8 +3,7 @@
 // eslint-disable-next-line import/no-namespace
 import * as Dialog from '@radix-ui/react-dialog';
 import { Contact, Edit, Loader2, Save, X } from 'lucide-react';
-import { useRouter } from 'next/navigation';
-import { parseAsString, useQueryState } from 'next-usequerystate';
+import { useRouter, useSearchParams } from 'next/navigation';
 import React, { useEffect } from 'react';
 import { Else, If, Then } from 'react-if';
 import { Button, Text } from 'ui';
@@ -27,14 +26,15 @@ export function AddStudentPreviewModal({
   formSections,
   onOpenChange,
 }: AddStudentPreviewModalProps) {
+  const searchParams = useSearchParams();
   const router = useRouter();
+
+  const batchId = searchParams.get('batchId');
 
   const {
     isPending: isCreatingStudent,
     mutateAsync: createStudentMutationAsync,
   } = useCreateStudentMutation(formId);
-
-  const [batchId] = useQueryState('batchId', parseAsString);
 
   useEffect(() => {
     formSections.forEach((section) => {

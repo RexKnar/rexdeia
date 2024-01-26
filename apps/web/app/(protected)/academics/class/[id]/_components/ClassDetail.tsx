@@ -1,12 +1,12 @@
 'use client';
 
 import { Loader2, PencilLine, PlusCircle } from 'lucide-react';
-import { useParams } from 'next/navigation';
 import {
-  parseAsBoolean,
-  parseAsString,
-  useQueryState,
-} from 'next-usequerystate';
+  useParams,
+  usePathname,
+  useRouter,
+  useSearchParams,
+} from 'next/navigation';
 import { Button, Tabs, TabsContent, TabsList, TabsTrigger, Text } from 'ui';
 import { cn } from 'utils';
 
@@ -17,23 +17,15 @@ import { StaffCard } from '../section/[sectionId]/_components/StaffCard';
 import { UpdateClassFlyout } from './UpdateClassFlyout';
 
 export function ClassDetail() {
+  const pathname = usePathname();
+  const router = useRouter();
   const params = useParams<{ id: string }>();
-  const [, isUpdateClassFlyoutOpen] = useQueryState(
-    'isUpdateClassFlyoutOpen',
-    parseAsBoolean.withDefault(false)
-  );
-  const [, isSectionFlyoutOpen] = useQueryState(
-    'isSectionFlyoutOpen',
-    parseAsBoolean.withDefault(false)
-  );
+  const searchParams = useSearchParams();
+
   const { data: getClassByIdResponse, isLoading: isLoadingGetClassById } =
     useGetClassByIdQuery(params.id, {
       enabled: !!params.id,
     });
-  const [, setClassId] = useQueryState(
-    'classId',
-    parseAsString.withDefault('')
-  );
 
   if (isLoadingGetClassById) {
     return (
@@ -72,8 +64,11 @@ export function ClassDetail() {
                 <Button
                   className="text-primary"
                   onClick={() => {
-                    isSectionFlyoutOpen(true);
-                    setClassId(getClassByIdResponse.id);
+                    const params = new URLSearchParams(searchParams);
+                    params.set('isSectionFlyoutOpen', 'true');
+                    params.set('classId', getClassByIdResponse.id);
+
+                    router.replace(pathname + '?' + params.toString());
                   }}
                 >
                   <PlusCircle
@@ -88,7 +83,10 @@ export function ClassDetail() {
                 <Button
                   className="text-primary"
                   onClick={() => {
-                    isUpdateClassFlyoutOpen(true);
+                    const params = new URLSearchParams(searchParams);
+                    params.set('isUpdateClassFlyoutOpen', 'true');
+
+                    router.replace(pathname + '?' + params.toString());
                   }}
                 >
                   <PencilLine

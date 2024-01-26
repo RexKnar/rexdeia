@@ -1,12 +1,7 @@
 'use client';
 
 import { Loader2, PlusCircle } from 'lucide-react';
-import {
-  parseAsBoolean,
-  parseAsInteger,
-  parseAsString,
-  useQueryState,
-} from 'next-usequerystate';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import {
@@ -28,6 +23,10 @@ import { useGetRegulationByIdQuery } from '../../../../../lib/queries/regulation
 import { useUpdateRegulationMutationQuery } from '../../../../../lib/queries/regulations/useUpdateRegulationMutationQuery';
 
 export function SaveRegulationFlyout() {
+  const pathname = usePathname();
+  const router = useRouter();
+  const searchParams = useSearchParams();
+
   const {
     register,
     handleSubmit,
@@ -44,17 +43,12 @@ export function SaveRegulationFlyout() {
   });
 
   const [announcedYear, setAnnouncedYear] = useState(null);
-  const [isOpen, setIsOpen] = useQueryState(
-    'isFlyoutOpen',
-    parseAsBoolean.withDefault(false)
-  );
-  const [regulationId, setRegulationId] = useQueryState(
-    'regulationId',
-    parseAsString
-  );
 
-  const [page] = useQueryState('page', parseAsInteger.withDefault(1));
-  const [limit] = useQueryState('limit', parseAsInteger.withDefault(10));
+  const isOpen = searchParams.get('isFlyoutOpen') === 'true';
+  const regulationId = searchParams.get('regulationId');
+
+  const page = parseInt(searchParams.get('page')) || 1;
+  const limit = parseInt(searchParams.get('limit')) || 10;
 
   const {
     isPending: isPendingCreateRegulations,
@@ -62,9 +56,12 @@ export function SaveRegulationFlyout() {
   } = useCreateRegulationsMutationQuery(page, limit);
   const [activeToggleFlag, setActiveToggleFlag] = useState(false);
 
-  const closeFlyout = async () => {
-    await setIsOpen(false);
-    await setRegulationId(null);
+  const closeFlyout = () => {
+    const params = new URLSearchParams(searchParams);
+    params.set('isFlyoutOpen', 'false');
+    params.delete('regulationId');
+
+    router.replace(pathname + '?' + params.toString());
   };
 
   const {
