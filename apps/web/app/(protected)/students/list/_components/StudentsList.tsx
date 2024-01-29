@@ -13,24 +13,28 @@ import {
 } from '@tanstack/react-table';
 import {
   CreditCardIcon,
-  Edit2Icon,
   Eye,
   Gem,
   HeartPulse,
+  Loader2,
   MailPlusIcon,
+  Pencil,
   PhoneCallIcon,
-  Trash2Icon,
+  Trash2,
 } from 'lucide-react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import React, { useCallback, useState } from 'react';
-import { Else, If, Then, When } from 'react-if';
+import React, { useCallback, useEffect, useState } from 'react';
+import { When } from 'react-if';
 import {
   Avatar,
   AvatarFallback,
   AvatarImage,
   Button,
   Pagination,
-  Spinner,
+  toast,
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
 } from 'ui';
 import {
   Table,
@@ -40,10 +44,11 @@ import {
   TableHeader,
   TableRow,
 } from 'ui/components/ui/Table';
-import { cn, titilize } from 'utils';
+import { titilize } from 'utils';
 
 import { DeleteConfirmationModal } from '../../../../../lib/components/modals/DeleteConfirmationModal';
 import { Student } from '../../../../../lib/domain';
+import { useDeleteStudentMutationQuery } from '../../../../../lib/queries/students/useDeleteStudentMutationQuery';
 import { useGetStudentListQuery } from '../../../../../lib/queries/useGetStudentListQuery';
 
 export function StudentsList() {
@@ -53,11 +58,6 @@ export function StudentsList() {
   const [showDeleteConfirmationModal, setShowDeleteConfirmationModal] =
     useState(false);
   const [selectedStudent, setSelectedStudent] = useState<Student | null>(null);
-
-  const handleDeleteStudentClick = (student: Student) => () => {
-    setSelectedStudent(student);
-    setShowDeleteConfirmationModal(true);
-  };
 
   const columns: ColumnDef<Student>[] = [
     {
@@ -207,50 +207,10 @@ export function StudentsList() {
       },
       cell: () => <p className="text-sm text-gray-800">N/A</p>,
     },
-    {
-      accessorKey: 'actions',
-      header: ({ column }) => {
-        return (
-          <Button
-            variant="ghost"
-            className="px-0"
-            onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-          ></Button>
-        );
-      },
-      cell: ({ row }) => {
-        const student = row.original;
-        return (
-          <div className="flex">
-            <Button variant="mild" className="ml-2 p-1">
-              <Edit2Icon size={24} className="mr-3 pl-2 text-black" />
-            </Button>
-            <Button
-              onMouseEnter={() => {
-                router.prefetch(`/students/${student.id}`);
-              }}
-              onClick={() => {
-                router.push(`/students/${student.id}`);
-              }}
-              variant="mild"
-              className="ml-3 p-1"
-            >
-              <Eye size={24} className="mr-2 pl-2  text-blue-600" />
-            </Button>
-            <Button
-              variant="mild"
-              className="ml-3 p-1"
-              onClick={handleDeleteStudentClick(student)}
-            >
-              <Trash2Icon size={24} className="mr-2 pl-2 text-red-500" />
-            </Button>
-          </div>
-        );
-      },
-    },
   ];
 
   const page = parseInt(searchParams.get('page')) || 1;
+  const limit = parseInt(searchParams.get('limit')) || 10;
   const pageSize = parseInt(searchParams.get('limit')) || 10;
 
   const [sorting, setSorting] = useState<SortingState>([]);
@@ -261,6 +221,12 @@ export function StudentsList() {
       page,
       pageSize,
     });
+  const {
+    isError: isDeleteStudentError,
+    isSuccess: isDeleteSuccess,
+    mutateAsync: deleteSubjectAsync,
+  } = useDeleteStudentMutationQuery();
+
   const handleOnPageChange = useCallback(
     (page: number) => {
       const params = new URLSearchParams(searchParams);
@@ -270,6 +236,26 @@ export function StudentsList() {
     },
     [searchParams, pathname, router]
   );
+  useEffect(() => {
+    if (isDeleteStudentError) {
+      toast({
+        title: 'Error',
+        variant: 'default',
+        description: 'Error while deleting student',
+      });
+    }
+  }, [isDeleteStudentError, toast]);
+
+  useEffect(() => {
+    if (isDeleteSuccess) {
+      toast({
+        title: 'Success',
+        variant: 'default',
+        description: 'Student deleted successfully',
+      });
+      setSelectedStudent(null);
+    }
+  }, [isDeleteSuccess, toast]);
 
   const table = useReactTable({
     columns,
@@ -288,86 +274,155 @@ export function StudentsList() {
 
   return (
     <section>
-      <DeleteConfirmationModal
-        description={`Are you sure you want to delete ${selectedStudent?.firstName} ${selectedStudent?.lastName} ?`}
-        open={showDeleteConfirmationModal}
-        onDeleteClick={() => {
-          setShowDeleteConfirmationModal(false);
-        }}
-        onCancelClick={() => {
-          setShowDeleteConfirmationModal(false);
-        }}
-      />
-      <div className="rounded-md border">
-        <If condition={isStudentListLoading}>
-          <Then>
-            <section className="flex h-96 w-full flex-col items-center justify-center gap-4">
-              <Spinner />
-              <p>Fetching Student&apos;s list</p>
-            </section>
-          </Then>
-          <Else>
-            <Table>
-              <TableHeader>
-                {table.getHeaderGroups().map((headerGroup) => (
-                  <TableRow key={headerGroup.id} className="cursor-pointer">
-                    {headerGroup.headers.map((header) => {
-                      return (
-                        <TableHead key={header.id}>
-                          {header.isPlaceholder
-                            ? null
-                            : flexRender(
-                                header.column.columnDef.header,
-                                header.getContext()
-                              )}
-                        </TableHead>
-                      );
-                    })}
-                  </TableRow>
-                ))}
-              </TableHeader>
-
-              <TableBody>
-                {table.getRowModel().rows?.length ? (
-                  table.getRowModel().rows.map((row) => (
-                    <TableRow
-                      key={row.id}
-                      data-state={row.getIsSelected() && 'selected'}
-                      className={cn('cursor-pointer')}
-                    >
-                      {row.getVisibleCells().map((cell) => (
-                        <TableCell key={cell.id}>
-                          {flexRender(
-                            cell.column.columnDef.cell,
-                            cell.getContext()
+      <div className="rounded-md ">
+        <Table>
+          <TableHeader>
+            {table.getHeaderGroups().map((headerGroup) => (
+              <TableRow
+                key={headerGroup.id}
+                className="cursor-pointer hover:bg-white"
+              >
+                {headerGroup.headers.map((header) => {
+                  return (
+                    <TableHead key={header.id}>
+                      {header.isPlaceholder
+                        ? null
+                        : flexRender(
+                            header.column.columnDef.header,
+                            header.getContext()
                           )}
-                        </TableCell>
-                      ))}
-                    </TableRow>
-                  ))
-                ) : (
-                  <TableRow>
-                    <TableCell
-                      colSpan={columns.length}
-                      className="h-24 text-center"
-                    >
-                      No Admissions Found
-                    </TableCell>
-                  </TableRow>
-                )}
-              </TableBody>
-            </Table>
-          </Else>
-        </If>
-      </div>
+                    </TableHead>
+                  );
+                })}
+                <TableHead>
+                  <Button variant="ghost" className="px-0">
+                    Actions
+                  </Button>
+                </TableHead>
+              </TableRow>
+            ))}
+          </TableHeader>
 
+          <TableBody>
+            {table.getRowModel().rows?.length ? (
+              table.getRowModel().rows.map((row) => (
+                <TableRow
+                  key={row.id}
+                  data-state={row.getIsSelected() && 'selected'}
+                  onMouseEnter={async () => {
+                    row.original.id;
+                  }}
+                >
+                  {row.getVisibleCells().map((cell) => (
+                    <TableCell key={cell.id}>
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext()
+                      )}
+                    </TableCell>
+                  ))}
+                  <TableCell className="w-52">
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <Button
+                          onClick={async () => {
+                            const params = new URLSearchParams(searchParams);
+                            params.set('isFlyoutOpen', 'true');
+                            params.set('subjectId', row.original.id);
+
+                            router.replace(pathname + '?' + params.toString());
+                          }}
+                          className="mr-3 h-auto px-3 py-2"
+                          variant="mild"
+                          disabled={
+                            row.original.isNewlyAdded || row.original.isUpdating
+                          }
+                        >
+                          <Pencil
+                            size={12}
+                            className="text-center text-black"
+                          />
+                        </Button>
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p>
+                          <span>Edit</span>
+                          <span className="mx-1 font-semibold">{`${row.original.name}`}</span>
+                        </p>
+                      </TooltipContent>
+                    </Tooltip>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <Button
+                          onMouseEnter={() => {
+                            router.prefetch(`/students/${selectedStudent.id}`);
+                          }}
+                          onClick={() => {
+                            router.push(`/students/${selectedStudent.id}`);
+                          }}
+                          variant="mild"
+                          className="h-auto px-3 py-2"
+                        >
+                          <Eye size={12} className="text-center text-black" />
+                        </Button>
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p>
+                          <span>view</span>
+                          <span className="mx-1 font-semibold">{`${row.original.name}`}</span>
+                        </p>
+                      </TooltipContent>
+                    </Tooltip>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <Button
+                          className="h-auto px-3 py-2"
+                          variant="mild"
+                          onClick={() => {
+                            setSelectedStudent(row.original);
+                            setShowDeleteConfirmationModal(true);
+                          }}
+                          disabled={
+                            row.original.isNewlyAdded || row.original.isUpdating
+                          }
+                        >
+                          {row.original.isDeleting ? (
+                            <Loader2 className="mr-2 h-4 w-4 animate-spin text-red-600" />
+                          ) : (
+                            <Trash2
+                              size={12}
+                              className="text-center text-red-600 "
+                            />
+                          )}
+                        </Button>
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p>
+                          <span>Delete</span>
+                          <span className="mx-1 font-semibold">{`${row.original.name}`}</span>
+                        </p>
+                      </TooltipContent>
+                    </Tooltip>
+                  </TableCell>
+                </TableRow>
+              ))
+            ) : (
+              <TableRow>
+                <TableCell colSpan={5} className="h-24 text-center">
+                  {isStudentListLoading ? 'Loading...' : 'No Student Found'}
+                </TableCell>
+              </TableRow>
+            )}
+          </TableBody>
+        </Table>
+      </div>
       <When
         condition={
           getStudentListResponse?.data?.length && !isStudentListLoading
         }
       >
         <Pagination
-          value={pageSize.toString()}
+          value={limit.toString()}
           onPageChange={handleOnPageChange}
           pageSize={getStudentListResponse?.pageSize || 0}
           totalRecords={getStudentListResponse?.total || 0}
@@ -376,7 +431,20 @@ export function StudentsList() {
             const params = new URLSearchParams(searchParams);
             params.set('limit', value.toString());
 
-            router.push(pathname + '?' + params.toString());
+            router.replace(pathname + '?' + params.toString());
+          }}
+        />
+        <DeleteConfirmationModal
+          open={showDeleteConfirmationModal}
+          description={`Are you sure you want to delete "${selectedStudent?.name}"`}
+          onDeleteClick={async () => {
+            if (selectedStudent) {
+              setShowDeleteConfirmationModal(false);
+              await deleteSubjectAsync(selectedStudent.id);
+            }
+          }}
+          onCancelClick={() => {
+            setShowDeleteConfirmationModal(false);
           }}
         />
       </When>

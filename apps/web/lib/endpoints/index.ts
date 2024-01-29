@@ -56,6 +56,7 @@ export const UPDATE_SECTION_BY_ID = `UPDATE_SECTION_BY_ID`;
 export const DELETE_GROUP_BY_ID = `DELETE_GROUP_BY_ID`;
 export const DELETE_MEDIUM_BY_ID = `DELETE_MEDIUM_BY_ID`;
 export const GET_SUBJECT_LIST_BY_SECTION_ID = `GET_SUBJECT_LIST_BY_SECTION_ID`;
+export const DELETE_STUDENT_BY_ID = `DELETE_STUDENT_BY_ID`;
 
 export default <EndpointDetails>{
   [REGISTER_USER]: {
@@ -281,5 +282,9 @@ export default <EndpointDetails>{
   [GET_SUBJECT_LIST_BY_SECTION_ID]: {
     requestType: `GET`,
     endpoint: `/api/section/[id]/subjects`,
+  },
+  [DELETE_STUDENT_BY_ID]: {
+    requestType: `DELETE`,
+    endpoint: `/api/student/[id]`,
   },
 };

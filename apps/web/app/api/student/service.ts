@@ -160,7 +160,7 @@ export async function getStudentsList(page: number, pageSize: number) {
   const [total, studentsList] = await Promise.all([
     db.student.count({
       where: {
-        status: 'Active',
+        isDeleted: false,
         branchId: session.branchId,
         organizationId: session.organizationId,
       },
@@ -169,7 +169,7 @@ export async function getStudentsList(page: number, pageSize: number) {
       take: pageSize,
       skip: (page - 1) * pageSize,
       where: {
-        status: 'Active',
+        isDeleted: false,
         branchId: session.branchId,
         organizationId: session.organizationId,
       },
