@@ -189,12 +189,13 @@ export function SaveAcademicYearFlyout() {
                       required: 'Academic Year is Required',
                     })}
                     className="mt-2"
+                    placeholder="Academic Name"
                     id="name"
                     errorMessage={fieldErrors?.name?.message.toString()}
                   />
                 </div>
-                <div className="mt-3 flex justify-between">
-                  <div>
+                <div className="mt-3 flex space-x-4">
+                  <div className="w-1/2">
                     <label
                       htmlFor="startYear"
                       className="text-sm font-semibold text-gray-700"
@@ -216,7 +217,7 @@ export function SaveAcademicYearFlyout() {
                       selected={startYear}
                     />
                   </div>
-                  <div>
+                  <div className="w-1/2">
                     <label
                       htmlFor="endYear"
                       className="text-sm font-semibold text-gray-700"
