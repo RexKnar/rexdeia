@@ -1,6 +1,7 @@
 'use client';
 
-import * as React from 'react';
+import React, { useRef } from 'react';
+import { useOnClickOutside } from 'usehooks-ts';
 import * as SheetPrimitive from '@radix-ui/react-dialog';
 import { cva, type VariantProps } from 'class-variance-authority';
 import { cn } from 'utils';
@@ -81,11 +82,19 @@ const SheetContent = React.forwardRef<
     },
     ref,
   ) => {
+    const sheetRef = useRef(null);
+
+    const handleClickOutside = () => {
+      onCloseClick?.();
+    };
+
+    useOnClickOutside(sheetRef, handleClickOutside);
+
     return (
       <SheetPortal>
         <SheetOverlay />
         <SheetPrimitive.Content
-          ref={ref}
+          ref={sheetRef}
           className={cn(sheetVariants({ side, widthSize }), className)}
           {...props}
         >
