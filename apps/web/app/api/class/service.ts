@@ -6,6 +6,9 @@ import { CreateClassModel, UpdateClassModel } from '../../../lib/domain/class';
 import { CreateSectionModel } from '../../../lib/domain/section';
 import { addSection } from '../section/service';
 
+type ClassFilter = {
+  status: boolean;
+};
 export async function getClassList(page: number, limit: number) {
   const session = await getServerSession(authOptions);
   const [ClassList, totalClasses] = await Promise.all([
@@ -31,6 +34,38 @@ export async function getClassList(page: number, limit: number) {
     limit,
     data: ClassList,
     total: totalClasses,
+  };
+}
+
+export async function getAllClassesWithFilter(
+  page: number,
+  limit: number,
+  filter: ClassFilter
+) {
+  const session = await getServerSession(authOptions);
+
+  const [total, classList] = await Promise.all([
+    db.class.count({
+      where: {
+        branchId: session.branchId,
+      },
+    }),
+    db.class.findMany({
+      take: limit,
+      skip: (page - 1) * limit,
+      where: {
+        branchId: session.branchId,
+        isDeleted: false,
+        ...filter,
+      },
+    }),
+  ]);
+
+  return {
+    page,
+    total,
+    limit,
+    data: classList,
   };
 }
 

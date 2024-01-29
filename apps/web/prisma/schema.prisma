@@ -389,6 +389,7 @@ model Class {
   name         String
   description  String?
   isActive     Boolean
+  isDeleted    Boolean     @default(false)
   Section      Section[]
   batch        Batch?      @relation(fields: [batchId], references: [id])
   batchId      String?     @db.Uuid

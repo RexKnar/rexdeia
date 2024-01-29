@@ -7,6 +7,9 @@ import {
   UpdateBatchModel,
 } from '../../../../lib/domain/batch';
 
+type BatchFilter = {
+  status: boolean;
+};
 export async function deleteBatchById(id: string) {
   const session = await getServerSession(authOptions);
   return db.batch.update({
@@ -48,6 +51,38 @@ export async function getAllBatches(page: number, limit: number) {
       where: {
         isDeleted: false,
         branchId: session.branchId,
+      },
+    }),
+  ]);
+
+  return {
+    page,
+    total,
+    limit,
+    data: batchList,
+  };
+}
+
+export async function getAllBatchesWithFilter(
+  page: number,
+  limit: number,
+  filter: BatchFilter
+) {
+  const session = await getServerSession(authOptions);
+
+  const [total, batchList] = await Promise.all([
+    db.batch.count({
+      where: {
+        branchId: session.branchId,
+      },
+    }),
+    db.batch.findMany({
+      take: limit,
+      skip: (page - 1) * limit,
+      where: {
+        branchId: session.branchId,
+        isDeleted: false,
+        ...filter,
       },
     }),
   ]);
