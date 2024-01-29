@@ -62,6 +62,10 @@ export async function getAllSubjectBySectionId(id: string) {
       },
       isActive: true,
     },
+    include: {
+      SubjectType: true,
+      SubjectFormat: true,
+    },
   });
 }
 

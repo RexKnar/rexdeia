@@ -13,7 +13,7 @@ import { PageTitle } from '../../../../../../../lib/components/PageTitle';
 import { useGetSectionByIdQuery } from '../../../../../../../lib/queries/section/useGetSectionByIdQuery';
 import { StaffCard } from './_components/StaffCard';
 import { StudentCard } from './_components/StudentCard';
-import { SubjectCard } from './_components/SubjectCard';
+import { SubjectList } from './_components/SubjectList';
 
 export default function Page() {
   const pathname = usePathname();
@@ -98,9 +98,7 @@ export default function Page() {
         </TabsList>
         <TabsContent className="w-full" value="Subjects">
           <section className="pt-5">
-            <div className="w-3/12">
-              <SubjectCard />
-            </div>
+            <SubjectList />
           </section>
         </TabsContent>
         <TabsContent value="Students">
