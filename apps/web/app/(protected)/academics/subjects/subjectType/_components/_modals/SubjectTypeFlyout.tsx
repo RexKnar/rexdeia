@@ -2,7 +2,6 @@
 
 import { PlusCircle } from 'lucide-react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import {
   Button,
@@ -33,8 +32,6 @@ export function SubjectTypeFlyout() {
     },
   });
 
-  const [activeToggleFlag, setActiveToggleFlag] = useState(false);
-
   const closeFlyout = async () => {
     const params = new URLSearchParams(searchParams);
     params.set('isFlyoutOpen', 'false');
@@ -64,11 +61,9 @@ export function SubjectTypeFlyout() {
                   <div className="flex items-center">
                     <Switch
                       id="isActive"
-                      onCheckedChange={(value) => {
-                        setValue('isActive', value);
-                        setActiveToggleFlag(value);
-                      }}
-                      checked={activeToggleFlag}
+                      {...register('isActive')}
+                      onCheckedChange={(value) => setValue('isActive', value)}
+                      checked={watch('isActive')}
                     />
                     <label
                       htmlFor="isActive"

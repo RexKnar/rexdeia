@@ -66,7 +66,6 @@ export function SaveSectionFlyout() {
   const isOpen = searchParams.get('isSectionFlyoutOpen') === 'true';
   const classId = searchParams.get('classId');
 
-  const [activeToggleFlag, setActiveToggleFlag] = useState(false);
   const closeFlyout = () => {
     const params = new URLSearchParams(searchParams);
     params.set('isSectionFlyoutOpen', 'false');
@@ -89,7 +88,6 @@ export function SaveSectionFlyout() {
       setValue('name', name);
       setValue('isActive', isActive);
       setValue('mediumId', medium.name);
-      setActiveToggleFlag(isActive);
     } else {
       setValue('name', null);
       setValue('isActive', false);
@@ -157,11 +155,8 @@ export function SaveSectionFlyout() {
                     <Switch
                       id="isActive"
                       {...register('isActive')}
-                      onCheckedChange={(value) => {
-                        setValue('isActive', value);
-                        setActiveToggleFlag(value);
-                      }}
-                      checked={activeToggleFlag}
+                      onCheckedChange={(value) => setValue('isActive', value)}
+                      checked={watch('isActive')}
                     />
                     <label
                       htmlFor="isActive"

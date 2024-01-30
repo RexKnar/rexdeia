@@ -2,7 +2,7 @@
 
 import { Loader2, PlusCircle } from 'lucide-react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import {
   Button,
@@ -49,7 +49,6 @@ export default function SaveGroupFlyout() {
     isPending: isPendingCreateGroup,
     mutateAsync: mutateCreateGroupAsync,
   } = useCreateGroupMutationQuery(page, limit);
-  const [activeToggleFlag, setActiveToggleFlag] = useState(false);
 
   const closeFlyout = () => {
     const params = new URLSearchParams(searchParams);
@@ -69,7 +68,6 @@ export default function SaveGroupFlyout() {
 
       setValue('name', name);
       setValue('isActive', isActive);
-      setActiveToggleFlag(isActive);
     } else {
       setValue('name', null);
       setValue('isActive', false);
@@ -127,11 +125,8 @@ export default function SaveGroupFlyout() {
                     <Switch
                       id="isActive"
                       {...register('isActive')}
-                      onCheckedChange={(value) => {
-                        setValue('isActive', value);
-                        setActiveToggleFlag(value);
-                      }}
-                      checked={activeToggleFlag}
+                      onCheckedChange={(value) => setValue('isActive', value)}
+                      checked={watch('isActive')}
                     />
                     <label
                       htmlFor="isActive"

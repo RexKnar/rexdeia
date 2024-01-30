@@ -54,7 +54,6 @@ export function SaveRegulationFlyout() {
     isPending: isPendingCreateRegulations,
     mutateAsync: mutateCreateRegulationsAsync,
   } = useCreateRegulationsMutationQuery(page, limit);
-  const [activeToggleFlag, setActiveToggleFlag] = useState(false);
 
   const closeFlyout = () => {
     const params = new URLSearchParams(searchParams);
@@ -81,7 +80,6 @@ export function SaveRegulationFlyout() {
       setValue('regulationName', regulationName);
       setValue('isActive', isActive);
       setValue('announcedYear', new Date(announcedYear));
-      setActiveToggleFlag(isActive);
     } else {
       setValue('regulationName', null);
       setValue('isActive', false);
@@ -148,11 +146,8 @@ export function SaveRegulationFlyout() {
                       <Switch
                         id="isActive"
                         {...register('isActive')}
-                        onCheckedChange={(value) => {
-                          setValue('isActive', value);
-                          setActiveToggleFlag(value);
-                        }}
-                        checked={activeToggleFlag}
+                        onCheckedChange={(value) => setValue('isActive', value)}
+                        checked={watch('isActive')}
                       />
                     </div>
                     <div className="flex items-center">

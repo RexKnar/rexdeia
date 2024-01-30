@@ -36,8 +36,6 @@ export function SaveAcademicYearFlyout() {
   const page = parseInt(searchParams.get('page')) || 1;
   const limit = parseInt(searchParams.get('limit')) || 10;
 
-  const [activeToggleFlag, setActiveToggleFlag] = useState(false);
-
   const {
     register,
     handleSubmit,
@@ -81,7 +79,6 @@ export function SaveAcademicYearFlyout() {
       setValue('isActive', isActive);
       setValue('endYear', new Date(endYear));
       setValue('startYear', new Date(startYear));
-      setActiveToggleFlag(isActive);
 
       setEndYear(new Date(endYear));
       setStartYear(new Date(startYear));
@@ -158,11 +155,8 @@ export function SaveAcademicYearFlyout() {
                       <Switch
                         id="isActive"
                         {...register('isActive')}
-                        onCheckedChange={(value) => {
-                          setValue('isActive', value);
-                          setActiveToggleFlag(value);
-                        }}
-                        checked={activeToggleFlag}
+                        onCheckedChange={(value) => setValue('isActive', value)}
+                        checked={watch('isActive')}
                       />
                       <label
                         htmlFor="isActive"
