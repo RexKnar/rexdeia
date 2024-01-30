@@ -133,8 +133,8 @@ importers:
         specifier: ^4.17.21
         version: 4.17.21
       lucide-react:
-        specifier: ^0.318.0
-        version: 0.318.0(react@18.2.0)
+        specifier: ^0.319.0
+        version: 0.319.0(react@18.2.0)
       multer:
         specifier: 1.4.5-lts.1
         version: 1.4.5-lts.1
@@ -361,8 +361,8 @@ importers:
         specifier: ^3.0.0
         version: 3.3.1
       lucide-react:
-        specifier: ^0.318.0
-        version: 0.318.0(react@18.2.0)
+        specifier: ^0.319.0
+        version: 0.319.0(react@18.2.0)
       postcss:
         specifier: ^8.4.29
         version: 8.4.29
@@ -7276,8 +7276,8 @@ packages:
     engines: {node: '>=12'}
     dev: true
 
-  /lucide-react@0.318.0(react@18.2.0):
-    resolution: {integrity: sha512-+jiyUYCwikKorvpirG5GDph/yq9UFLpA9xyabWlVTVNgLTBUghag20tmsNIyV/CLkBjwffDM1wA677Pms1EbAw==}
+  /lucide-react@0.319.0(react@18.2.0):
+    resolution: {integrity: sha512-IIbu4TfVI3yPI3ba/Li53mKeOd+WwcWI6+WcyoVdFLtrBfH88m2uQ/uTmtzBWt523HyxCFjWy3RFs0OxDFYm8w==}
     peerDependencies:
       react: ^16.5.1 || ^17.0.0 || ^18.0.0
     dependencies:
