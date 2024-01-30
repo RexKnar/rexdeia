@@ -55,14 +55,41 @@ export async function addSubject(createSubject: CreateSubjectModel) {
 }
 
 export async function getAllSubjectBySectionId(id: string) {
-  return db.subject.findMany({
+  const subjects = await db.sectionSubject.findMany({
     where: {
-      sectionId: {
-        has: id,
+      sectionId: id,
+    },
+    select: {
+      subject: {
+        include: {
+          SubjectType: true,
+          SubjectFormat: true,
+        },
       },
-      isActive: true,
     },
   });
+
+  return [...subjects.map((data) => data.subject)];
+}
+
+export async function getAllSubjectBySectionIds(ids: string[]) {
+  const subjects = await db.sectionSubject.findMany({
+    where: {
+      sectionId: {
+        in: ids,
+      },
+    },
+    select: {
+      subject: {
+        include: {
+          SubjectType: true,
+          SubjectFormat: true,
+        },
+      },
+    },
+  });
+
+  return [...subjects.map((data) => data.subject)];
 }
 
 export async function getSubjectList(page: number, limit: number) {

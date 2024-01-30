@@ -1,8 +1,12 @@
 'use client';
 
 import { Loader2, PlusCircle } from 'lucide-react';
-import { useParams } from 'next/navigation';
-import { parseAsBoolean, useQueryState } from 'next-usequerystate';
+import {
+  useParams,
+  usePathname,
+  useRouter,
+  useSearchParams,
+} from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import {
@@ -21,6 +25,10 @@ import { useUpdateClassMutationQuery } from '../../../../../../lib/queries/class
 import { useGetClassByIdQuery } from '../../../../../../lib/queries/class/useGetClassByIdQuery';
 
 export function UpdateClassFlyout() {
+  const pathname = usePathname();
+  const router = useRouter();
+  const searchParams = useSearchParams();
+
   const {
     register,
     handleSubmit,
@@ -35,10 +43,7 @@ export function UpdateClassFlyout() {
     },
   });
 
-  const [isOpen, setIsOpen] = useQueryState(
-    'isUpdateClassFlyoutOpen',
-    parseAsBoolean.withDefault(false)
-  );
+  const isOpen = searchParams.get('isUpdateClassFlyoutOpen') === 'true';
 
   const params = useParams<{ id: string }>();
 
@@ -78,7 +83,11 @@ export function UpdateClassFlyout() {
     } finally {
       setValue('isActive', false);
       reset();
-      await setIsOpen(false);
+      const params = new URLSearchParams(searchParams);
+      params.set('isUpdateClassFlyoutOpen', 'false');
+      params.delete('regulationId');
+
+      router.replace(pathname + '?' + params.toString());
     }
   }
 
@@ -89,8 +98,12 @@ export function UpdateClassFlyout() {
           side="right"
           widthSize="sm"
           className="bg-white p-10"
-          onCloseClick={async () => {
-            await setIsOpen(false);
+          onCloseClick={() => {
+            const params = new URLSearchParams(searchParams);
+            params.set('isUpdateClassFlyoutOpen', 'false');
+            params.delete('regulationId');
+
+            router.replace(pathname + '?' + params.toString());
           }}
         >
           <form onSubmit={handleSubmit(updateClass)}>

@@ -9,12 +9,18 @@ import {
   Text,
 } from 'ui';
 
-export function SubjectCard() {
+type SubjectCardProps = {
+  id: string;
+  name: string;
+  type: string;
+  format: string;
+};
+export function SubjectCard(props: SubjectCardProps) {
   return (
     <div className="rounded-lg bg-white">
       <div className="flex p-3 pb-0">
         <div className="my-auto w-2/4">
-          <Text variant="base-bold">Subject Name</Text>
+          <Text variant="base-bold">{props.name}</Text>
           <div className="inline-flex">
             <Text variant="base-regular">staff Name</Text>
           </div>
@@ -44,22 +50,21 @@ export function SubjectCard() {
           </div>
         </div>
       </div>
-      <div className="flex flex-wrap p-3 ">
-        <span className="me-2 mt-2 rounded bg-blue-100 px-2 py-1 text-sm font-medium text-blue-800 dark:bg-blue-900 dark:text-blue-300">
-          SUB1032
-        </span>
-        <span className="me-2 mt-2 rounded bg-indigo-100 px-2 py-1 text-sm font-medium text-indigo-800 dark:bg-indigo-900 dark:text-indigo-300">
-          English
-        </span>
-        <span className="me-2 mt-2 rounded bg-red-300 p-2 px-2 py-1 text-sm font-medium text-red-800 dark:bg-red-900 dark:text-red-300">
-          curriculum
-        </span>
-        <span className="me-2 mt-2 rounded bg-yellow-100 px-2 py-1 text-sm font-medium text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300">
-          100Marks
-        </span>
-        <span className="me-2 mt-2 rounded bg-pink-100 px-2 py-1 text-sm font-medium text-pink-800 dark:bg-pink-900 dark:text-pink-300">
-          67%
-        </span>
+      <div>
+        <ul>
+          <li
+            key={props.id}
+            value={props.id}
+            className="flex flex-wrap gap-2 p-2"
+          >
+            <div className="rounded-md bg-sky-200 p-1 text-sm">
+              {props.type}
+            </div>
+            <div className="rounded-md bg-sky-100 p-1 text-sm">
+              {props.format}
+            </div>
+          </li>
+        </ul>
       </div>
     </div>
   );

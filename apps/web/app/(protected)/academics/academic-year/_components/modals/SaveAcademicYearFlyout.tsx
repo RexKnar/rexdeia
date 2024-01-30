@@ -1,11 +1,7 @@
 'use client';
+
 import { Loader2, PlusCircle } from 'lucide-react';
-import {
-  parseAsBoolean,
-  parseAsInteger,
-  parseAsString,
-  useQueryState,
-} from 'next-usequerystate';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import {
@@ -27,17 +23,18 @@ import { useGetBatchByIdQuery } from '../../../../../../lib/queries/batches/useG
 import { useUpdateBatchMutationQuery } from '../../../../../../lib/queries/batches/useUpdateBatchMutationQuery';
 
 export function SaveAcademicYearFlyout() {
+  const pathname = usePathname();
+  const router = useRouter();
+  const searchParams = useSearchParams();
+
   const [endYear, setEndYear] = useState(null);
   const [startYear, setStartYear] = useState(null);
-  const [isOpen, setIsOpen] = useQueryState(
-    'isFlyoutOpen',
-    parseAsBoolean.withDefault(false)
-  );
-  const [batchId, setBatchId] = useQueryState('batchId', parseAsString);
 
-  const [page] = useQueryState('page', parseAsInteger.withDefault(1));
-  const [limit] = useQueryState('limit', parseAsInteger.withDefault(10));
-  const [activeToggleFlag, setActiveToggleFlag] = useState(false);
+  const batchId = searchParams.get('batchId');
+  const isOpen = searchParams.get('isFlyoutOpen') === 'true';
+
+  const page = parseInt(searchParams.get('page')) || 1;
+  const limit = parseInt(searchParams.get('limit')) || 10;
 
   const {
     register,
@@ -82,7 +79,6 @@ export function SaveAcademicYearFlyout() {
       setValue('isActive', isActive);
       setValue('endYear', new Date(endYear));
       setValue('startYear', new Date(startYear));
-      setActiveToggleFlag(isActive);
 
       setEndYear(new Date(endYear));
       setStartYear(new Date(startYear));
@@ -94,9 +90,12 @@ export function SaveAcademicYearFlyout() {
     }
   }, [currentBatch, setValue]);
 
-  const closeFlyout = async () => {
-    await setIsOpen(false);
-    await setBatchId(null);
+  const closeFlyout = () => {
+    const params = new URLSearchParams(searchParams);
+    params.set('isFlyoutOpen', 'false');
+    params.delete('batchId');
+
+    router.replace(pathname + '?' + params.toString());
   };
 
   const saveBatch = async (payload: CreateBatchModel) => {
@@ -156,11 +155,8 @@ export function SaveAcademicYearFlyout() {
                       <Switch
                         id="isActive"
                         {...register('isActive')}
-                        onCheckedChange={(value) => {
-                          setValue('isActive', value);
-                          setActiveToggleFlag(value);
-                        }}
-                        checked={activeToggleFlag}
+                        onCheckedChange={(value) => setValue('isActive', value)}
+                        checked={watch('isActive')}
                       />
                       <label
                         htmlFor="isActive"
@@ -187,12 +183,13 @@ export function SaveAcademicYearFlyout() {
                       required: 'Academic Year is Required',
                     })}
                     className="mt-2"
+                    placeholder="Academic Name"
                     id="name"
                     errorMessage={fieldErrors?.name?.message.toString()}
                   />
                 </div>
-                <div className="mt-3 flex justify-between">
-                  <div>
+                <div className="mt-3 flex space-x-4">
+                  <div className="w-1/2">
                     <label
                       htmlFor="startYear"
                       className="text-sm font-semibold text-gray-700"
@@ -214,7 +211,7 @@ export function SaveAcademicYearFlyout() {
                       selected={startYear}
                     />
                   </div>
-                  <div>
+                  <div className="w-1/2">
                     <label
                       htmlFor="endYear"
                       className="text-sm font-semibold text-gray-700"

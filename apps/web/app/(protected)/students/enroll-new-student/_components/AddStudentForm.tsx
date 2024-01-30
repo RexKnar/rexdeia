@@ -2,7 +2,7 @@
 
 import { motion } from 'framer-motion';
 import { AlertTriangle, Check } from 'lucide-react';
-import { parseAsInteger, useQueryState } from 'next-usequerystate';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Else, If, Then, When } from 'react-if';
@@ -18,6 +18,12 @@ type AddStudentFormProps = {
 };
 
 export function AddStudentForm({ formConfig, formId }: AddStudentFormProps) {
+  const pathname = usePathname();
+  const router = useRouter();
+  const searchParams = useSearchParams();
+
+  const currentStep = parseInt(searchParams.get('step')) || 0;
+
   const {
     trigger,
     getValues,
@@ -34,10 +40,6 @@ export function AddStudentForm({ formConfig, formId }: AddStudentFormProps) {
   const [formData, setFormData] = useState({} as Record<string, unknown>);
   const [isPreviewModalOpen, setIsPreviewModalOpen] = useState(false);
   const [visitedSteps, setVisitedSteps] = useState([]);
-  const [currentStep, setCurrentStep] = useQueryState(
-    'step',
-    parseAsInteger.withDefault(0)
-  );
 
   const handleOnFormSubmit = async (data: Record<string, unknown>) => {
     setFormData(data);
@@ -98,7 +100,7 @@ export function AddStudentForm({ formConfig, formId }: AddStudentFormProps) {
       <section className="flex gap-4">
         <ul className="h-fit w-[215px] shrink-0 rounded-lg bg-white py-3">
           <li>
-            {formConfig.json.formSections.map((section, index) => (
+            {formConfig.json.formSections.map((section, index: number) => (
               <Button
                 type="button"
                 variant="link"
@@ -107,7 +109,10 @@ export function AddStudentForm({ formConfig, formId }: AddStudentFormProps) {
                   if (!visitedSteps.includes(currentStep)) {
                     setVisitedSteps([...visitedSteps, currentStep]);
                   }
-                  setCurrentStep(index);
+                  const params = new URLSearchParams(searchParams);
+                  params.set('step', index.toString());
+
+                  router.replace(pathname + '?' + params.toString());
                 }}
                 className="grid cursor-pointer grid-cols-[4px_minmax(170px,_1fr)_10px] px-4 py-1 hover:no-underline"
               >
@@ -333,7 +338,11 @@ export function AddStudentForm({ formConfig, formId }: AddStudentFormProps) {
                       if (!visitedSteps.includes(currentStep)) {
                         setVisitedSteps([...visitedSteps, currentStep]);
                       }
-                      setCurrentStep(currentStep - 1);
+
+                      const params = new URLSearchParams(searchParams);
+                      params.set('step', (currentStep - 1).toString());
+
+                      router.replace(pathname + '?' + params.toString());
                     }
                   }}
                 >
@@ -367,7 +376,10 @@ export function AddStudentForm({ formConfig, formId }: AddStudentFormProps) {
                         if (!visitedSteps.includes(currentStep)) {
                           setVisitedSteps([...visitedSteps, currentStep]);
                         }
-                        setCurrentStep(currentStep + 1);
+                        const params = new URLSearchParams(searchParams);
+                        params.set('step', (currentStep + 1).toString());
+
+                        router.replace(pathname + '?' + params.toString());
                         e.preventDefault();
                         e.stopPropagation();
                       }}

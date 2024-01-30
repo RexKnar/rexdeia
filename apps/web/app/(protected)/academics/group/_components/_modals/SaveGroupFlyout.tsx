@@ -1,13 +1,8 @@
 'use client';
 
 import { Loader2, PlusCircle } from 'lucide-react';
-import {
-  parseAsBoolean,
-  parseAsInteger,
-  parseAsString,
-  useQueryState,
-} from 'next-usequerystate';
-import React, { useEffect, useState } from 'react';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import React, { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import {
   Button,
@@ -26,6 +21,10 @@ import { useGetGroupByIdQuery } from '../../../../../../lib/queries/group/useGet
 import { useUpdateGroupMutationQuery } from '../../../../../../lib/queries/group/useUpdateGroupMutationQuery';
 
 export default function SaveGroupFlyout() {
+  const pathname = usePathname();
+  const router = useRouter();
+  const searchParams = useSearchParams();
+
   const {
     register,
     setValue,
@@ -40,24 +39,23 @@ export default function SaveGroupFlyout() {
     },
   });
 
-  const [isOpen, setIsOpen] = useQueryState(
-    'isGroupFlyoutOpen',
-    parseAsBoolean.withDefault(false)
-  );
-  const [groupId, setGroupId] = useQueryState('groupId', parseAsString);
+  const isOpen = searchParams.get('isGroupFlyoutOpen') === 'true';
+  const groupId = searchParams.get('groupId');
 
-  const [page] = useQueryState('page', parseAsInteger.withDefault(1));
-  const [limit] = useQueryState('limit', parseAsInteger.withDefault(10));
+  const page = parseInt(searchParams.get('page')) || 1;
+  const limit = parseInt(searchParams.get('limit')) || 10;
 
   const {
     isPending: isPendingCreateGroup,
     mutateAsync: mutateCreateGroupAsync,
   } = useCreateGroupMutationQuery(page, limit);
-  const [activeToggleFlag, setActiveToggleFlag] = useState(false);
 
-  const closeFlyout = async () => {
-    await setIsOpen(false);
-    await setGroupId(null);
+  const closeFlyout = () => {
+    const params = new URLSearchParams(searchParams);
+    params.set('isGroupFlyoutOpen', 'false');
+    params.delete('groupId');
+
+    router.replace(pathname + '?' + params.toString());
   };
 
   const { data: getGroupByIdResponse } = useGetGroupByIdQuery(groupId, {
@@ -70,7 +68,6 @@ export default function SaveGroupFlyout() {
 
       setValue('name', name);
       setValue('isActive', isActive);
-      setActiveToggleFlag(isActive);
     } else {
       setValue('name', null);
       setValue('isActive', false);
@@ -128,11 +125,8 @@ export default function SaveGroupFlyout() {
                     <Switch
                       id="isActive"
                       {...register('isActive')}
-                      onCheckedChange={(value) => {
-                        setValue('isActive', value);
-                        setActiveToggleFlag(value);
-                      }}
-                      checked={activeToggleFlag}
+                      onCheckedChange={(value) => setValue('isActive', value)}
+                      checked={watch('isActive')}
                     />
                     <label
                       htmlFor="isActive"

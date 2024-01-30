@@ -11,11 +11,6 @@ import {
 } from '@tanstack/react-table';
 import { Loader2, Pencil, Trash2 } from 'lucide-react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import {
-  parseAsBoolean,
-  parseAsString,
-  useQueryState,
-} from 'next-usequerystate';
 import { useCallback, useEffect, useState } from 'react';
 import { When } from 'react-if';
 import {
@@ -146,15 +141,6 @@ export function SubjectsListTable() {
 
   const page = parseInt(searchParams.get('page')) || 1;
   const limit = parseInt(searchParams.get('limit')) || 10;
-  const [, setIsFlyoutOpen] = useQueryState(
-    'isFlyoutOpen',
-    parseAsBoolean.withDefault(false)
-  );
-
-  const [, setSubjectId] = useQueryState(
-    'subjectId',
-    parseAsString.withDefault('')
-  );
   const { data: subjectListResponse, isLoading: isSubjectListLoading } =
     useGetSubjectListQuery({
       page,
@@ -261,8 +247,11 @@ export function SubjectsListTable() {
                       <TooltipTrigger asChild>
                         <Button
                           onClick={async () => {
-                            await setIsFlyoutOpen(true);
-                            await setSubjectId(row.original.id);
+                            const params = new URLSearchParams(searchParams);
+                            params.set('isFlyoutOpen', 'true');
+                            params.set('subjectId', row.original.id);
+
+                            router.replace(pathname + '?' + params.toString());
                           }}
                           className="mr-3 h-auto px-3 py-2"
                           variant="mild"
@@ -340,7 +329,7 @@ export function SubjectsListTable() {
             const params = new URLSearchParams(searchParams);
             params.set('limit', value.toString());
 
-            router.push(pathname + '?' + params.toString());
+            router.replace(pathname + '?' + params.toString());
           }}
         />
         <DeleteConfirmationModal

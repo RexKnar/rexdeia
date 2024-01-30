@@ -1,16 +1,14 @@
 'use client';
 
-import { parseAsBoolean, useQueryState } from 'next-usequerystate';
-import React from 'react';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { Button } from 'ui';
 
 import { PageTitle } from '../../../../../lib/components/PageTitle';
 
 export function SubjectsPageHeader() {
-  const [, setIsFlyoutOpen] = useQueryState(
-    'isFlyoutOpen',
-    parseAsBoolean.withDefault(false)
-  );
+  const pathname = usePathname();
+  const router = useRouter();
+  const searchParams = useSearchParams();
 
   return (
     <section className="flex justify-between px-2">
@@ -18,7 +16,10 @@ export function SubjectsPageHeader() {
       <Button
         variant="default"
         onClick={async () => {
-          await setIsFlyoutOpen(true);
+          const params = new URLSearchParams(searchParams);
+          params.set('isFlyoutOpen', 'true');
+
+          router.replace(pathname + '?' + params.toString());
         }}
       >
         Add Subject

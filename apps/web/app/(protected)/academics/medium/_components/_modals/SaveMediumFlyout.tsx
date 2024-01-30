@@ -1,13 +1,8 @@
 'use client';
 
 import { Loader2, PlusCircle } from 'lucide-react';
-import {
-  parseAsBoolean,
-  parseAsInteger,
-  parseAsString,
-  useQueryState,
-} from 'next-usequerystate';
-import React, { useEffect, useState } from 'react';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import React, { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import {
   Button,
@@ -26,6 +21,16 @@ import { useGetMediumByIdQuery } from '../../../../../../lib/queries/medium/useG
 import { useUpdateMediumMutationQuery } from '../../../../../../lib/queries/medium/useUpdateMediumMutationQuery';
 
 export default function SaveMediumFlyout() {
+  const pathname = usePathname();
+  const router = useRouter();
+  const searchParams = useSearchParams();
+
+  const mediumId = searchParams.get('mediumId');
+  const isOpen = searchParams.get('isMediumFlyoutOpen') === 'true';
+
+  const page = parseInt(searchParams.get('page')) || 1;
+  const limit = parseInt(searchParams.get('limit')) || 10;
+
   const {
     register,
     setValue,
@@ -40,24 +45,17 @@ export default function SaveMediumFlyout() {
     },
   });
 
-  const [isOpen, setIsOpen] = useQueryState(
-    'isMediumFlyoutOpen',
-    parseAsBoolean.withDefault(false)
-  );
-  const [mediumId, setMediumId] = useQueryState('mediumId', parseAsString);
-
-  const [page] = useQueryState('page', parseAsInteger.withDefault(1));
-  const [limit] = useQueryState('limit', parseAsInteger.withDefault(10));
-
   const {
     isPending: isPendingCreateMedium,
     mutateAsync: mutateCreateMediumAsync,
   } = useCreateMediumMutationQuery(page, limit);
-  const [activeToggleFlag, setActiveToggleFlag] = useState(false);
 
-  const closeMediumFlyout = async () => {
-    await setIsOpen(false);
-    await setMediumId(null);
+  const closeMediumFlyout = () => {
+    const params = new URLSearchParams(searchParams);
+    params.set('isMediumFlyoutOpen', 'false');
+    params.delete('mediumId');
+
+    router.replace(pathname + '?' + params.toString());
   };
 
   const { data: getMediumByIdResponse } = useGetMediumByIdQuery(mediumId, {
@@ -70,7 +68,6 @@ export default function SaveMediumFlyout() {
 
       setValue('name', name);
       setValue('isActive', isActive);
-      setActiveToggleFlag(isActive);
     } else {
       setValue('name', null);
       setValue('isActive', false);
@@ -128,11 +125,8 @@ export default function SaveMediumFlyout() {
                     <Switch
                       id="isActive"
                       {...register('isActive')}
-                      onCheckedChange={(value) => {
-                        setValue('isActive', value);
-                        setActiveToggleFlag(value);
-                      }}
-                      checked={activeToggleFlag}
+                      onCheckedChange={(value) => setValue('isActive', value)}
+                      checked={watch('isActive')}
                     />
                     <label
                       htmlFor="isActive"

@@ -1,11 +1,20 @@
+import uniqBy from 'lodash/uniqBy';
 import { getServerSession } from 'next-auth';
 
 import { authOptions } from '../../../lib/auth';
 import { db } from '../../../lib/db';
 import { CreateClassModel, UpdateClassModel } from '../../../lib/domain/class';
 import { CreateSectionModel } from '../../../lib/domain/section';
-import { addSection } from '../section/service';
+import {
+  addSection,
+  addSubjectsToSection,
+  getAllSectionsByClassId,
+} from '../section/service';
+import { getAllSubjectBySectionIds } from '../subject/service';
 
+type ClassFilter = {
+  status: boolean;
+};
 export async function getClassList(page: number, limit: number) {
   const session = await getServerSession(authOptions);
   const [ClassList, totalClasses] = await Promise.all([
@@ -31,6 +40,38 @@ export async function getClassList(page: number, limit: number) {
     limit,
     data: ClassList,
     total: totalClasses,
+  };
+}
+
+export async function getAllClassesWithFilter(
+  page: number,
+  limit: number,
+  filter: ClassFilter
+) {
+  const session = await getServerSession(authOptions);
+
+  const [total, classList] = await Promise.all([
+    db.class.count({
+      where: {
+        branchId: session.branchId,
+      },
+    }),
+    db.class.findMany({
+      take: limit,
+      skip: (page - 1) * limit,
+      where: {
+        branchId: session.branchId,
+        isDeleted: false,
+        ...filter,
+      },
+    }),
+  ]);
+
+  return {
+    page,
+    total,
+    limit,
+    data: classList,
   };
 }
 
@@ -110,4 +151,20 @@ export async function updateClassById(
       isActive: updateClass.isActive,
     },
   });
+}
+
+export async function addSubjectsToClass(
+  classId: string,
+  subjectIds: string[]
+) {
+  const sections = await getAllSectionsByClassId(classId);
+  sections.forEach(function (section) {
+    addSubjectsToSection(section.id, subjectIds);
+  });
+}
+
+export async function getAllSubjectByClassId(id: string) {
+  const sections = await getAllSectionsByClassId(id);
+  const subjects = await getAllSubjectBySectionIds(sections.map((x) => x.id));
+  return uniqBy(subjects, (subject) => subject.id);
 }

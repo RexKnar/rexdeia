@@ -1,12 +1,12 @@
 'use client';
 
 import { Loader2, PlusCircle } from 'lucide-react';
-import { useParams } from 'next/navigation';
 import {
-  parseAsBoolean,
-  parseAsString,
-  useQueryState,
-} from 'next-usequerystate';
+  useParams,
+  usePathname,
+  useRouter,
+  useSearchParams,
+} from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import {
@@ -33,6 +33,10 @@ import { useGetSectionByIdQuery } from '../../../../../../../../lib/queries/sect
 import { useUpdateSectionMutationQuery } from '../../../../../../../../lib/queries/section/useUpdateSectionMutationQuery';
 
 export function SaveSectionFlyout() {
+  const pathname = usePathname();
+  const router = useRouter();
+  const searchParams = useSearchParams();
+
   const {
     register,
     handleSubmit,
@@ -59,16 +63,15 @@ export function SaveSectionFlyout() {
   }, [setValue]);
 
   const params = useParams<{ sectionId: string }>();
-  const [isOpen, setIsOpen] = useQueryState(
-    'isSectionFlyoutOpen',
-    parseAsBoolean.withDefault(false)
-  );
+  const isOpen = searchParams.get('isSectionFlyoutOpen') === 'true';
+  const classId = searchParams.get('classId');
 
-  const [classId, setClassId] = useQueryState('classId', parseAsString);
-  const [activeToggleFlag, setActiveToggleFlag] = useState(false);
-  const closeFlyout = async () => {
-    await setIsOpen(false);
-    setClassId(null);
+  const closeFlyout = () => {
+    const params = new URLSearchParams(searchParams);
+    params.set('isSectionFlyoutOpen', 'false');
+    params.delete('sectionId');
+
+    router.replace(pathname + '?' + params.toString());
   };
 
   const { data: getSectionResponse } = useGetSectionByIdQuery(
@@ -85,7 +88,6 @@ export function SaveSectionFlyout() {
       setValue('name', name);
       setValue('isActive', isActive);
       setValue('mediumId', medium.name);
-      setActiveToggleFlag(isActive);
     } else {
       setValue('name', null);
       setValue('isActive', false);
@@ -153,11 +155,8 @@ export function SaveSectionFlyout() {
                     <Switch
                       id="isActive"
                       {...register('isActive')}
-                      onCheckedChange={(value) => {
-                        setValue('isActive', value);
-                        setActiveToggleFlag(value);
-                      }}
-                      checked={activeToggleFlag}
+                      onCheckedChange={(value) => setValue('isActive', value)}
+                      checked={watch('isActive')}
                     />
                     <label
                       htmlFor="isActive"

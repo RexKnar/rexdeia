@@ -1,10 +1,11 @@
 import { captureException } from '@sentry/nextjs';
 import { StatusCodes } from 'http-status-codes';
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 
 import { authOptions } from '../../../../../lib/auth';
 import { getAllSubjectBySectionId } from '../../../subject/service';
+import { addSubjectsToSection } from '../../service';
 
 /**
  * @swagger
@@ -54,6 +55,61 @@ export async function GET(request: Request, { params: { id } }) {
         e.message === 'VALIDATION_ERROR'
           ? StatusCodes.BAD_REQUEST
           : StatusCodes.INTERNAL_SERVER_ERROR,
+    });
+  }
+}
+
+/**
+ * @swagger
+ *   /api/section/{id}/subjects:
+ *     post:
+ *       summary: Add subjects to a section
+ *       description: Add subjects list to a section
+ *       parameters:
+ *         - name: id
+ *           in: path
+ *           required: true
+ *           description: Unique identifier of the section.
+ *           schema:
+ *             type: string
+ *       requestBody:
+ *         required: true
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *       responses:
+ *         '200':
+ *           description: Successfully added subjects to a section
+ *           content:
+ *             application/json:
+ *               schema:
+ *                 type: array
+ *                 items:
+ *                   # Define the schema for a single class here
+ *         '401':
+ *           description: Unauthorized access.
+ *         '400':
+ *           description: Bad request due to an error in processing the request.
+ */
+export async function POST(request: NextRequest, { params: { id } }) {
+  const session = await getServerSession(authOptions);
+  if (!session) {
+    return new NextResponse(JSON.stringify({ error: 'UNAUTHORIZED' }), {
+      status: StatusCodes.UNAUTHORIZED,
+    });
+  }
+  const payload = await request.json();
+  try {
+    const createdClass = await addSubjectsToSection(id, payload['subjectIds']);
+    return new NextResponse(JSON.stringify(createdClass), {
+      status: StatusCodes.CREATED,
+    });
+  } catch (e) {
+    captureException(e);
+    return new NextResponse(e, {
+      status: StatusCodes.BAD_REQUEST,
     });
   }
 }

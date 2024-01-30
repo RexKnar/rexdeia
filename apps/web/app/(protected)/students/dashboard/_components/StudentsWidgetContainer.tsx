@@ -6,7 +6,6 @@ import {
   LucidePartyPopper,
   UserCircle2,
 } from 'lucide-react';
-import React from 'react';
 
 import { DashboardWidget } from '../../../../../lib/components/DashboardWidget';
 

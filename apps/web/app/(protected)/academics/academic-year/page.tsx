@@ -1,6 +1,5 @@
 import { redirect } from 'next/navigation';
 import { getServerSession } from 'next-auth';
-import React from 'react';
 
 import { authOptions } from '../../../../lib/auth';
 import { AcademicYearListTable } from './_components/AcademicYearListTable';

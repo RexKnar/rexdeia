@@ -1,5 +1,6 @@
 export type Student = {
   id: string;
+  name: string;
   dob: string;
   gender: string;
   batchId: string;
@@ -26,6 +27,9 @@ export type Student = {
   motherPhoneNumber: string;
   guardiansOccupation: string;
   guardianPhoneNumber: string;
+  isDeleting?: boolean;
+  isUpdating?: boolean;
+  isNewlyAdded?: boolean;
   status: 'Active' | 'Rejected' | 'Pending';
 
   additionalAttributes: any;

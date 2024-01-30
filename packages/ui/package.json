@@ -39,12 +39,13 @@
     "clsx": "^2.0.0",
     "cmdk": "^0.2.0",
     "date-fns": "^3.0.0",
-    "lucide-react": "^0.315.0",
+    "lucide-react": "^0.317.0",
     "postcss": "^8.4.29",
-    "react-datepicker": "^4.25.0",
+    "react-datepicker": "^5.0.0",
     "react-day-picker": "^8.9.0",
     "tailwind": "^4.0.0",
     "tailwind-merge": "^1.14.0",
+    "usehooks-ts": "^2.10.0",
     "utils": "workspace:*"
   }
 }

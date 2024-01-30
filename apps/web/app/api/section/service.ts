@@ -37,6 +37,26 @@ export async function getAllSectionsByClassId(classId: string) {
   });
 }
 
+export async function addSubjectsToSection(
+  sectionId: string,
+  subjectIds: string[]
+) {
+  await db.$transaction(
+    subjectIds.map((subjectId) => {
+      return db.section.update({
+        where: {
+          id: sectionId,
+        },
+        data: {
+          sectionSubjects: {
+            create: [{ subjectId: subjectId }],
+          },
+        },
+      });
+    })
+  );
+}
+
 export async function updateSectionById(
   id: string,
   updateSection: UpdateSectionModel

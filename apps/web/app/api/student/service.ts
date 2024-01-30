@@ -13,6 +13,7 @@ export async function getStudentById(id: string, format: string) {
       id,
       branchId: session.branchId,
       organizationId: session.organizationId,
+      isDeleted: false,
     },
   });
 
@@ -159,7 +160,7 @@ export async function getStudentsList(page: number, pageSize: number) {
   const [total, studentsList] = await Promise.all([
     db.student.count({
       where: {
-        status: 'Active',
+        isDeleted: false,
         branchId: session.branchId,
         organizationId: session.organizationId,
       },
@@ -168,7 +169,7 @@ export async function getStudentsList(page: number, pageSize: number) {
       take: pageSize,
       skip: (page - 1) * pageSize,
       where: {
-        status: 'Active',
+        isDeleted: false,
         branchId: session.branchId,
         organizationId: session.organizationId,
       },
@@ -246,6 +247,20 @@ export async function getAllStudentsBySectionId(sectionId: string) {
       organizationId: session.organizationId,
       sectionId: sectionId,
       status: 'Active',
+    },
+  });
+}
+
+export async function deleteStudentById(id: string) {
+  const session = await getServerSession(authOptions);
+  return db.student.update({
+    where: {
+      id: id,
+      branchId: session.branchId,
+    },
+    data: {
+      isDeleted: true,
+      updatedAt: new Date(),
     },
   });
 }

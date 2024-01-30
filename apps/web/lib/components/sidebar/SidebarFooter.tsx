@@ -5,7 +5,7 @@ import logo from '../../../public/assets/images/acadx-logo.png';
 
 export function SidebarFooter() {
   return (
-    <footer className="flex flex-col  items-center align-middle">
+    <footer className="flex w-full flex-col items-center align-middle">
       <Image
         src={logo}
         alt="acadx Logo"

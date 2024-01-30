@@ -1,22 +1,26 @@
 'use client';
 
 import { Loader2, PencilLine } from 'lucide-react';
-import { useParams } from 'next/navigation';
-import { parseAsBoolean, useQueryState } from 'next-usequerystate';
+import {
+  useParams,
+  usePathname,
+  useRouter,
+  useSearchParams,
+} from 'next/navigation';
 import { Button, Tabs, TabsContent, TabsList, TabsTrigger, Text } from 'ui';
 
 import { PageTitle } from '../../../../../../../lib/components/PageTitle';
 import { useGetSectionByIdQuery } from '../../../../../../../lib/queries/section/useGetSectionByIdQuery';
 import { StaffCard } from './_components/StaffCard';
 import { StudentCard } from './_components/StudentCard';
-import { SubjectCard } from './_components/SubjectCard';
+import { SubjectList } from './_components/SubjectList';
 
 export default function Page() {
+  const pathname = usePathname();
+  const router = useRouter();
+  const searchParams = useSearchParams();
   const params = useParams<{ sectionId: string }>();
-  const [, isSectionFlyoutOpen] = useQueryState(
-    'isSectionFlyoutOpen',
-    parseAsBoolean.withDefault(false)
-  );
+
   const {
     data: getSectionResponse,
     isError: isGetSectionResponseError,
@@ -59,7 +63,10 @@ export default function Page() {
             <Button
               className="text-primary"
               onClick={() => {
-                isSectionFlyoutOpen(true);
+                const params = new URLSearchParams(searchParams);
+                params.set('isSectionFlyoutOpen', 'true');
+
+                router.replace(pathname + '?' + params.toString());
               }}
             >
               <PencilLine size={18} strokeWidth={2} className="text-white" />
@@ -91,9 +98,7 @@ export default function Page() {
         </TabsList>
         <TabsContent className="w-full" value="Subjects">
           <section className="pt-5">
-            <div className="w-3/12">
-              <SubjectCard />
-            </div>
+            <SubjectList />
           </section>
         </TabsContent>
         <TabsContent value="Students">

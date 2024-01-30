@@ -1,7 +1,5 @@
 'use client';
 
-import React from 'react';
-
 import { LinkButton } from '../../../../../lib/components/LinkButton';
 import { PageTitle } from '../../../../../lib/components/PageTitle';
 

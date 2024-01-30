@@ -1,6 +1,7 @@
 'use client';
+
 import { motion } from 'framer-motion';
-import { parseAsInteger, useQueryState } from 'next-usequerystate';
+import { useSearchParams } from 'next/navigation';
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import { Input, RadioGroup, RadioGroupItem } from 'ui';
@@ -10,7 +11,9 @@ import staffForm from '../data/onboard-staff-fields';
 import { OnboardStaffSidebar } from './OnboardStaffSidebar';
 
 export function OnboardStaffForm() {
-  const [currentStep] = useQueryState('step', parseAsInteger.withDefault(0));
+  const searchParams = useSearchParams();
+  const currentStep = parseInt(searchParams.get('step')) || 0;
+
   const {
     register,
     formState: { errors },
@@ -18,6 +21,7 @@ export function OnboardStaffForm() {
     mode: 'all',
     reValidateMode: 'onChange',
   });
+
   const validateEmail = (value, field) => {
     const atIndex = value.indexOf('@');
     const dotIndex = value.lastIndexOf('.');

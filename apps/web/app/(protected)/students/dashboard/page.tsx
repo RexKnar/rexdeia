@@ -1,6 +1,5 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import React from 'react';
 
 import noStudentData from '../../../../public/assets/images/no-student-data.svg';
 import { getRecentlyAddedStudentsList } from '../../../api/student/service';

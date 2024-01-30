@@ -2,11 +2,7 @@
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Loader2, PlusCircle } from 'lucide-react';
-import {
-  parseAsBoolean,
-  parseAsString,
-  useQueryState,
-} from 'next-usequerystate';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import {
@@ -57,12 +53,12 @@ const schema = z.object({
 type SchemaType = z.infer<typeof schema>;
 
 export function SaveSubjectFlyout() {
-  const [isOpen, setIsOpen] = useQueryState(
-    'isFlyoutOpen',
-    parseAsBoolean.withDefault(false)
-  );
+  const pathname = usePathname();
+  const router = useRouter();
+  const searchParams = useSearchParams();
 
-  const [subjectId, setSubjectId] = useQueryState('subjectId', parseAsString);
+  const subjectId = searchParams.get('subjectId');
+  const isOpen = searchParams.get('isFlyoutOpen') === 'true';
 
   const {
     watch,
@@ -161,8 +157,11 @@ export function SaveSubjectFlyout() {
   ]);
 
   const closeFlyout = async () => {
-    await setIsOpen(false);
-    await setSubjectId(null);
+    const params = new URLSearchParams(searchParams);
+    params.set('isFlyoutOpen', 'false');
+    params.delete('subjectId');
+
+    router.replace(pathname + '?' + params.toString());
   };
 
   const saveSubject = async (payload: CreateSubjectModel) => {
