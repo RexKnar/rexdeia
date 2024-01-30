@@ -402,10 +402,12 @@ model Class {
 }
 
 model SectionSubject {
-  sectionId String  @db.Uuid
-  subjectId String  @db.Uuid
-  section   Section @relation(fields: [sectionId], references: [id])
-  subject   Subject @relation(fields: [subjectId], references: [id])
+  sectionId String    @db.Uuid
+  subjectId String    @db.Uuid
+  section   Section   @relation(fields: [sectionId], references: [id])
+  subject   Subject   @relation(fields: [subjectId], references: [id])
+  createdAt DateTime? @default(now())
+  updatedAt DateTime? @default(now())
 
   @@id([sectionId, subjectId])
 }
@@ -425,7 +427,6 @@ model Section {
   createdAt       DateTime?        @default(now())
   updatedAt       DateTime?        @default(now())
   sectionSubjects SectionSubject[]
-  subjectIds      String[]         @db.Uuid
   Subject         Subject?         @relation(fields: [subjectId], references: [id])
   subjectId       String?          @db.Uuid
   Exam            Exam[]

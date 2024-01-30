@@ -4,15 +4,14 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 
 import { authOptions } from '../../../../../lib/auth';
-import { getAllSubjectBySectionId } from '../../../subject/service';
-import { addSubjectsToSection } from '../../service';
+import { addSubjectsToClass, getAllSubjectByClassId } from '../../service';
 
 /**
  * @swagger
- * /api/section/{id}/subjects:
+ * /api/class/{id}/subjects:
  *     get:
- *       summary: Get All Subjects in a section
- *       description: Get All Subjects in a section
+ *       summary: Get All Subjects in a class
+ *       description: Get All Subjects in a class
  *       parameters:
  *         - name: id
  *           in: path
@@ -43,7 +42,7 @@ export async function GET(request: Request, { params: { id } }) {
   }
 
   try {
-    const sections = await getAllSubjectBySectionId(id);
+    const sections = await getAllSubjectByClassId(id);
 
     return new NextResponse(JSON.stringify(sections), {
       status: StatusCodes.OK,
@@ -61,15 +60,15 @@ export async function GET(request: Request, { params: { id } }) {
 
 /**
  * @swagger
- *   /api/section/{id}/subjects:
+ *   /api/class/{id}/subjects:
  *     post:
- *       summary: Add subjects to a section
- *       description: Add subjects list to a section
+ *       summary: Add subjects to a class
+ *       description: Add subjects list to a class
  *       parameters:
  *         - name: id
  *           in: path
  *           required: true
- *           description: Unique identifier of the section.
+ *           description: Unique identifier of the class.
  *           schema:
  *             type: string
  *       requestBody:
@@ -81,7 +80,7 @@ export async function GET(request: Request, { params: { id } }) {
  *               properties:
  *       responses:
  *         '200':
- *           description: Successfully added subjects to a section
+ *           description: Successfully added subjects to a class
  *           content:
  *             application/json:
  *               schema:
@@ -102,7 +101,7 @@ export async function POST(request: NextRequest, { params: { id } }) {
   }
   const payload = await request.json();
   try {
-    const createdClass = await addSubjectsToSection(id, payload['subjectIds']);
+    const createdClass = await addSubjectsToClass(id, payload['subjectIds']);
     return new NextResponse(JSON.stringify(createdClass), {
       status: StatusCodes.CREATED,
     });
