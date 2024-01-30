@@ -57,6 +57,7 @@ export const DELETE_GROUP_BY_ID = `DELETE_GROUP_BY_ID`;
 export const DELETE_MEDIUM_BY_ID = `DELETE_MEDIUM_BY_ID`;
 export const GET_SUBJECT_LIST_BY_SECTION_ID = `GET_SUBJECT_LIST_BY_SECTION_ID`;
 export const DELETE_STUDENT_BY_ID = `DELETE_STUDENT_BY_ID`;
+export const ADD_STAFF = `ADD_STAFF`;
 
 export default <EndpointDetails>{
   [REGISTER_USER]: {
@@ -286,5 +287,9 @@ export default <EndpointDetails>{
   [DELETE_STUDENT_BY_ID]: {
     requestType: `DELETE`,
     endpoint: `/api/student/[id]`,
+  },
+  [ADD_STAFF]: {
+    requestType: `POST`,
+    endpoint: `/api/staff/`,
   },
 };

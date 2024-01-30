@@ -1,26 +1,41 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { useSearchParams } from 'next/navigation';
-import React from 'react';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { Input, RadioGroup, RadioGroupItem } from 'ui';
+import { Else, If, Then } from 'react-if';
+import { Button, Input, RadioGroup, RadioGroupItem } from 'ui';
 import { cn } from 'utils';
 
 import staffForm from '../data/onboard-staff-fields';
+import { StaffPreviewModal } from '../models/staffPreviewModel';
 import { OnboardStaffSidebar } from './OnboardStaffSidebar';
 
 export function OnboardStaffForm() {
   const searchParams = useSearchParams();
+  const pathname = usePathname();
+  const router = useRouter();
   const currentStep = parseInt(searchParams.get('step')) || 0;
+  const totalSteps = staffForm.length;
 
   const {
+    trigger,
     register,
-    formState: { errors },
+    handleSubmit,
+    formState: { errors, isValid },
   } = useForm({
     mode: 'all',
     reValidateMode: 'onChange',
   });
+  const [visitedSteps, setVisitedSteps] = useState([]);
+  const [formData, setFormData] = useState({} as Record<string, unknown>);
+  const [isPreviewModalOpen, setIsPreviewModalOpen] = useState(false);
+
+  const handleOnFormSubmit = async (data: Record<string, unknown>) => {
+    setFormData(data);
+    setIsPreviewModalOpen(true);
+  };
 
   const validateEmail = (value, field) => {
     const atIndex = value.indexOf('@');
@@ -41,7 +56,12 @@ export function OnboardStaffForm() {
   };
 
   return (
-    <form autoFocus autoComplete="off" className="relative mt-[20px] w-full">
+    <form
+      autoFocus
+      autoComplete="off"
+      className="relative mt-[20px] w-full"
+      onSubmit={handleSubmit(handleOnFormSubmit)}
+    >
       <section className="flex gap-4">
         <OnboardStaffSidebar />
 
@@ -225,8 +245,75 @@ export function OnboardStaffForm() {
                   }
                 })}
               </section>
+              <section className="mt-8 flex justify-end gap-2">
+                <Button
+                  type="button"
+                  className="mr-2"
+                  disabled={currentStep === 0}
+                  onClick={() => {
+                    section.sectionFields.forEach((field) => {
+                      trigger(field.name);
+                    });
+
+                    if (currentStep > 0) {
+                      if (!visitedSteps.includes(currentStep)) {
+                        setVisitedSteps([...visitedSteps, currentStep]);
+                      }
+
+                      const params = new URLSearchParams(searchParams);
+                      params.set('step', (currentStep - 1).toString());
+
+                      router.replace(pathname + '?' + params.toString());
+                    }
+                  }}
+                >
+                  Back
+                </Button>
+                <If condition={currentStep === totalSteps - 1}>
+                  <Then>
+                    <Button
+                      type="submit"
+                      disabled={!isValid}
+                      aria-disabled={!isValid}
+                    >
+                      Preview & Submit
+                    </Button>
+                    <StaffPreviewModal
+                      formData={formData}
+                      open={isPreviewModalOpen}
+                      onOpenChange={setIsPreviewModalOpen}
+                      formSections={staffForm}
+                    />
+                  </Then>
+                  <Else>
+                    <Button
+                      type="button"
+                      onClick={(e) => {
+                        section.sectionFields.forEach((field) => {
+                          trigger(field.name);
+                        });
+
+                        if (!visitedSteps.includes(currentStep)) {
+                          setVisitedSteps([...visitedSteps, currentStep]);
+                        }
+                        const params = new URLSearchParams(searchParams);
+                        params.set('step', (currentStep + 1).toString());
+
+                        router.replace(pathname + '?' + params.toString());
+                        e.preventDefault();
+                        e.stopPropagation();
+                      }}
+                    >
+                      Next
+                    </Button>
+                  </Else>
+                </If>
+              </section>
             </motion.section>
           ))}
+          <Button variant="default" type="submit">
+            save
+          </Button>
         </section>
       </section>
     </form>
