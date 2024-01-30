@@ -51,11 +51,11 @@ export async function addStaff(staff: AddStaffModel) {
     user = await db.user.create({
       data: {
         password: '',
-        name: staff.name,
         email: staff.email,
         role: 'TeachingStaff',
         username: staff.email,
-        phoneNumber: staff.phoneNumber,
+        phoneNumber: staff.mobile,
+        name: `${staff.firstName} ${staff.middleName} ${staff.lastName}`,
       },
     });
   }
@@ -81,14 +81,8 @@ export async function addStaff(staff: AddStaffModel) {
 
   return db.staff.create({
     data: {
-      type: staff.type,
-      aadharCardNumber: staff.aadharCardNumber,
-      annualIncome: staff.annualIncome,
-      bloodGroup: staff.bloodGroup,
-      dob: staff.dob,
-      address: staff.address,
-      dateOfJoining: staff.dateOfJoining,
-      status: 'Active',
+      ...staff,
+      dateOfJoining: new Date(staff.dateOfJoining),
       createdAt: new Date(),
       updatedAt: new Date(),
       user: {

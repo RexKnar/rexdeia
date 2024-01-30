@@ -347,25 +347,72 @@ model Student {
 }
 
 model Staff {
-  id               String        @id @default(uuid()) @map("_id") @db.Uuid
-  type             StaffType
-  aadharCardNumber String
-  annualIncome     String
-  bloodGroup       String
-  dob              String
-  address          String
-  dateOfJoining    String
-  status           StaffStatus
-  userId           String        @unique @db.Uuid
-  user             User          @relation(fields: [userId], references: [id])
-  createdAt        DateTime?     @default(now())
-  updatedAt        DateTime?     @default(now())
-  Organization     Organization? @relation(fields: [organizationId], references: [id])
-  organizationId   String?       @db.Uuid
-  Branch           Branch?       @relation(fields: [branchId], references: [id])
-  branchId         String?       @db.Uuid
-  Section          Section?      @relation(fields: [sectionId], references: [id])
-  sectionId        String?       @db.Uuid
+  id                           String        @id @default(uuid()) @map("_id") @db.Uuid
+  image                        String?
+  aadharCardNumber             String?
+  firstName                    String        @default("")
+  middleName                   String?       @default("")
+  lastName                     String        @default("")
+  dateOfBirth                  DateTime      @default(now())
+  gender                       String        @default("")
+  mobile                       String        @default("")
+  email                        String        @default("")
+  bloodGroup                   String?
+  religion                     String?
+  caste                        String?
+  nationality                  String?
+  motherTongue                 String?
+  enrollmentNumber             String?
+  specialCategory              String?
+  differentlyAbled             Boolean       @default(false)
+  epfNumber                    String?
+  fatherName                   String?
+  fatherOccupation             String?
+  motherName                   String?
+  motherOccupation             String?
+  spouseName                   String?
+  spouseOccupation             String?
+  currentAddressLine1          String?
+  currentAddressLine2          String?
+  currentCity                  String?
+  currentState                 String?
+  currentCountry               String?
+  currentPincode               String?
+  permanentAddress1            String?
+  permanentAddress2            String?
+  permanentCity                String?
+  permanentState               String?
+  permanentPincode             String?
+  permanentCountry             String?
+  birthCertificate             String?
+  communityCertificate         String?
+  childImmunicationCertificate String?
+  medicalCertificate           String?
+  covidVaccinationCertificate  String?
+  characterCertificate         String?
+  fathersPhoto                 String?
+  mothersPhoto                 String?
+  spousePhoto                  String?
+  incomeCertificate            String?
+  transferCertificate          String?
+  sslcMarksCard                String?
+  pucMarksCard                 String?
+  degreeMarksCard              String?
+  pgMarksCard                  String?
+  otherCertificate             String?
+  type                         StaffType     @default(Teaching)
+  dateOfJoining                DateTime      @default(now())
+  status                       StaffStatus   @default(Active)
+  userId                       String        @unique @db.Uuid
+  user                         User          @relation(fields: [userId], references: [id])
+  createdAt                    DateTime?     @default(now())
+  updatedAt                    DateTime?     @default(now())
+  Organization                 Organization? @relation(fields: [organizationId], references: [id])
+  organizationId               String?       @db.Uuid
+  Branch                       Branch?       @relation(fields: [branchId], references: [id])
+  branchId                     String?       @db.Uuid
+  Section                      Section?      @relation(fields: [sectionId], references: [id])
+  sectionId                    String?       @db.Uuid
 }
 
 model Batch {
