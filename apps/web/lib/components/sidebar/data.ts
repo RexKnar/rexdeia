@@ -91,6 +91,18 @@ export const menuItems: SidebarMenuItem[] = [
         icon: null,
         path: '/academics/subjects',
       },
+      {
+        id: 'academics-subjects-type',
+        label: 'Subject Type',
+        icon: null,
+        path: '/academics/subjects/subjectType',
+      },
+      {
+        id: 'academics-subjects-format',
+        label: 'Subject Format',
+        icon: null,
+        path: '/academics/subjects/subjectFormat',
+      },
     ],
   },
   {
