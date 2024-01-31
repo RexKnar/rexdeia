@@ -135,22 +135,20 @@ export function SaveRegulationFlyout() {
             <form onSubmit={handleSubmit(saveRegulation)}>
               <SheetHeader>
                 <SheetTitle className="mb-5">
-                  <div className="sm:grid sm:grid-cols-1 sm:gap-4 md:grid md:grid-cols-1 md:gap-4 lg:flex">
+                  <div className="sm:grid sm:grid-cols-1 sm:gap-4 md:grid md:grid-cols-1 md:gap-4 lg:grid  lg:grid-cols-[1fr_100px]">
                     <div className="flex items-center">
                       <PlusCircle size={20} strokeWidth={1.5} />
                       <Text variant="lg-semibold" className="ml-2">
                         {regulationId ? 'Update Regulation' : 'Add Regulation'}
                       </Text>
                     </div>
-                    <div className="ml-14 flex items-center">
+                    <div className="flex items-center">
                       <Switch
                         id="isActive"
                         {...register('isActive')}
                         onCheckedChange={(value) => setValue('isActive', value)}
                         checked={watch('isActive')}
                       />
-                    </div>
-                    <div className="flex items-center">
                       <label
                         htmlFor="isActive"
                         className="ml-2 text-sm font-semibold"
