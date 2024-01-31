@@ -114,6 +114,9 @@ importers:
       configs:
         specifier: workspace:*
         version: link:../../packages/configs
+      country-state-city:
+        specifier: ^3.2.1
+        version: 3.2.1
       date-fns:
         specifier: ^3.0.0
         version: 3.3.1
@@ -4585,6 +4588,10 @@ packages:
     dependencies:
       object-assign: 4.1.1
       vary: 1.1.2
+    dev: false
+
+  /country-state-city@3.2.1:
+    resolution: {integrity: sha512-kxbanqMc6izjhc/EHkGPCTabSPZ2G6eG4/97akAYHJUN4stzzFEvQPZoF8oXDQ+10gM/O/yUmISCR1ZVxyb6EA==}
     dev: false
 
   /create-require@1.1.1:
