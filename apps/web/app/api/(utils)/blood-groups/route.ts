@@ -16,7 +16,7 @@ import { bloodGroups } from './data';
  */
 export async function GET() {
   try {
-    return new Response(JSON.stringify(bloodGroups), {
+    return new NextResponse(JSON.stringify(bloodGroups), {
       status: StatusCodes.OK,
     });
   } catch (e) {

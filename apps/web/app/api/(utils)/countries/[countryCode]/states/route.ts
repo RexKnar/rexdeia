@@ -24,7 +24,7 @@ export async function GET(_: Request, { params: { countryCode } }) {
   try {
     const statesList = State.getStatesOfCountry(countryCode);
 
-    return new Response(JSON.stringify(statesList), {
+    return new NextResponse(JSON.stringify(statesList), {
       status: StatusCodes.OK,
     });
   } catch (e) {

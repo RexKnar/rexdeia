@@ -30,7 +30,7 @@ export async function GET(_: Request, { params: { stateCode, countryCode } }) {
   try {
     const citiesList = City.getCitiesOfState(countryCode, stateCode);
 
-    return new Response(JSON.stringify(citiesList), {
+    return new NextResponse(JSON.stringify(citiesList), {
       status: StatusCodes.OK,
     });
   } catch (e) {

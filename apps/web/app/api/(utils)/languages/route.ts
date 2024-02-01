@@ -1,23 +1,23 @@
 import { captureException } from '@sentry/nextjs';
-import { Country } from 'country-state-city';
 import { StatusCodes } from 'http-status-codes';
 import { NextResponse } from 'next/server';
 
+import { languages } from './data';
+import { GetLanguagesResponse } from '../../../../lib/domain/language';
+
 /**
  * @swagger
- * /api/countries:
+ * /api/languages:
  *     get:
- *       summary: Retrieve countries list
- *       description: Gets a list of all countries.
+ *       summary: Retrieve languages list
+ *       description: Gets a list of all languages.
  *       responses:
  *         '200':
- *           description: Successfully retrieved the list of countries.
+ *           description: Successfully retrieved the list of languages.
  */
 export async function GET() {
   try {
-    const countriesList = Country.getAllCountries();
-
-    return new NextResponse(JSON.stringify(countriesList), {
+    return new NextResponse<GetLanguagesResponse>(JSON.stringify(languages), {
       status: StatusCodes.OK,
     });
   } catch (e) {
