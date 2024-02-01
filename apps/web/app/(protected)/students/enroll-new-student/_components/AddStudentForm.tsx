@@ -26,6 +26,7 @@ export function AddStudentForm({ formConfig, formId }: AddStudentFormProps) {
 
   const {
     trigger,
+    setValue,
     getValues,
     register,
     handleSubmit,
@@ -248,7 +249,12 @@ export function AddStudentForm({ formConfig, formId }: AddStudentFormProps) {
                         );
                       case 'radio':
                         return (
-                          <RadioGroup>
+                          <RadioGroup
+                            name={field.name}
+                            onValueChange={(e) => {
+                              setValue(field.name, e);
+                            }}
+                          >
                             <div key={field.id}>
                               <label className="mb-2 mt-1 block text-sm text-gray-700">
                                 {field.label}
