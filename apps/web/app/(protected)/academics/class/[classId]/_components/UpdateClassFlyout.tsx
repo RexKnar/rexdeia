@@ -110,7 +110,7 @@ export function UpdateClassFlyout() {
                   <div className="flex items-center">
                     <PlusCircle size={20} strokeWidth={1.5} />
                     <Text variant="lg-semibold" className="ml-2">
-                      Update Regulation
+                      Update Class
                     </Text>
                   </div>
                   <div className="flex items-center">
