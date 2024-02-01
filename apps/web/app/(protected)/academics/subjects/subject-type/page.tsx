@@ -9,7 +9,7 @@ import { SubjectTypeListTable } from './_components/SubjectTypeListTable';
 export default async function Page() {
   const session = await getServerSession(authOptions);
   if (!session.branchId || !session.organizationId) {
-    return redirect('/signin?callbackUrl=/academics/batches');
+    return redirect('/signin?callbackUrl=/academics/subjects/subject-type');
   }
   return (
     <section className="flex flex-col gap-6">

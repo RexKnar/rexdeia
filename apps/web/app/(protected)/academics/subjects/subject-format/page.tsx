@@ -9,7 +9,7 @@ import { SubjectFormatListTable } from './_components/SubjectFormatListTable';
 export default async function Page() {
   const session = await getServerSession(authOptions);
   if (!session.branchId || !session.organizationId) {
-    return redirect('/signin?callbackUrl=/academics/batches');
+    return redirect('/signin?callbackUrl=/academics/subjects/subject-format');
   }
 
   return (

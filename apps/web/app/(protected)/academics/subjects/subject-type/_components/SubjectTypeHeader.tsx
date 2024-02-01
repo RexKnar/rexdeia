@@ -17,7 +17,7 @@ export function SubjectTypeHeader() {
         variant="default"
         onClick={async () => {
           const params = new URLSearchParams(searchParams);
-          params.set('isFlyoutOpen', 'true');
+          params.set('isSubjectTypeFlyoutOpen', 'true');
 
           router.replace(pathname + '?' + params.toString());
         }}
