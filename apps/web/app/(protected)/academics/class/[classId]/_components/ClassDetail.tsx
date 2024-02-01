@@ -12,8 +12,8 @@ import { cn } from 'utils';
 
 import { PageTitle } from '../../../../../../lib/components/PageTitle';
 import { useGetClassByIdQuery } from '../../../../../../lib/queries/class/useGetClassByIdQuery';
-import { SectionCard } from '../section/[sectionId]/_components/SectionCard';
 import { StaffCard } from '../section/[sectionId]/_components/StaffCard';
+import { SectionList } from './SectionList';
 import { SubjectList } from './SubjectList';
 import { UpdateClassFlyout } from './UpdateClassFlyout';
 
@@ -144,9 +144,7 @@ export function ClassDetail() {
             </TabsContent>
             <TabsContent value="Sections">
               <section className="pt-5">
-                <div className="w-4/12">
-                  <SectionCard />
-                </div>
+                <SectionList />
               </section>
             </TabsContent>
           </Tabs>
