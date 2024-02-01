@@ -2,8 +2,8 @@ import { captureException } from '@sentry/nextjs';
 import { StatusCodes } from 'http-status-codes';
 import { NextResponse } from 'next/server';
 
-import { languages } from './data';
 import { GetLanguagesResponse } from '../../../../lib/domain/language';
+import { languages } from './data';
 
 /**
  * @swagger
