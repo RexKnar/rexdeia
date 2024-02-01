@@ -5,7 +5,7 @@ import { getServerSession } from 'next-auth';
 
 import { authOptions } from '../../../../lib/auth';
 import { deleteStaffById, getStaffById, updateStaffById } from '../service';
-import { validateUpdateStaff } from '../validator';
+import { validateUpdateStaff } from '../schemas';
 
 export async function GET(_: NextRequest, { params: { id } }) {
   const session = await getServerSession(authOptions);

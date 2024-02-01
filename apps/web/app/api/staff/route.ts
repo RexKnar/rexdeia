@@ -4,8 +4,9 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 
 import { authOptions } from '../../../lib/auth';
+import { Staff } from '../../../lib/domain/staff';
+import { addStaffSchema } from './schemas';
 import { addStaff, getStaffList } from './service';
-import { validateAddStaff } from './validator';
 
 export async function POST(request: NextRequest) {
   const session = await getServerSession(authOptions);
@@ -16,19 +17,26 @@ export async function POST(request: NextRequest) {
   }
 
   const payload = await request.json();
+  const validationResponse = addStaffSchema.safeParse(payload);
 
-  try {
-    await validateAddStaff(payload);
-
-    const addedStaff = await addStaff(payload);
-    return new NextResponse(JSON.stringify(addedStaff), {
-      status: StatusCodes.CREATED,
-    });
-  } catch (e) {
-    captureException(e);
-    return new NextResponse(e, {
+  if (validationResponse.success === false) {
+    const { error } = validationResponse;
+    return new NextResponse(JSON.stringify(error), {
       status: StatusCodes.BAD_REQUEST,
     });
+  } else {
+    try {
+      const addedStaff = await addStaff(payload);
+
+      return new NextResponse<Staff>(JSON.stringify(addedStaff), {
+        status: StatusCodes.CREATED,
+      });
+    } catch (e) {
+      captureException(e);
+      return new NextResponse(e, {
+        status: StatusCodes.BAD_REQUEST,
+      });
+    }
   }
 }
 

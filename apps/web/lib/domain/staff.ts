@@ -11,7 +11,6 @@ export type Staff = {
   status: 'Active' | 'InActive' | 'Resigned' | 'Suspended' | 'Fired';
   annualIncome: string;
   bloodGroup?: string;
-  address: string;
   dateOfJoining: Date;
   email: string;
   mobile: string;
