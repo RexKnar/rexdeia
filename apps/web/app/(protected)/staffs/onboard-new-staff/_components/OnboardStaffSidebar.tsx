@@ -36,7 +36,7 @@ export function OnboardStaffSidebar() {
           <h2
             className={cn(
               'px-2 text-left text-sm font-semibold',
-              currentStep === 1 ? 'text-primary' : 'text-gray-800'
+              currentStep === 0 ? 'text-primary' : 'text-gray-800'
             )}
           >
             Basic Details
@@ -63,8 +63,13 @@ export function OnboardStaffSidebar() {
             }}
             className="h-6 border-l-2 border-primary"
           />
-          <h2 className={`px-2 text-left text-sm font-semibold`}>
-            Address Details
+          <h2
+            className={cn(
+              'px-2 text-left text-sm font-semibold',
+              currentStep === 1 ? 'text-primary' : 'text-gray-800'
+            )}
+          >
+            Parents Details
           </h2>
         </Button>
       </li>
@@ -88,8 +93,13 @@ export function OnboardStaffSidebar() {
             }}
             className="h-6 border-l-2 border-primary"
           />
-          <h2 className={`px-2 text-left text-sm font-semibold`}>
-            Parents Details
+          <h2
+            className={cn(
+              'px-2 text-left text-sm font-semibold',
+              currentStep === 2 ? 'text-primary' : 'text-gray-800'
+            )}
+          >
+            Address Details
           </h2>
         </Button>
       </li>
@@ -113,8 +123,42 @@ export function OnboardStaffSidebar() {
             }}
             className="h-6 border-l-2 border-primary"
           />
-          <h2 className={`px-2 text-left text-sm font-semibold`}>
+          <h2
+            className={cn(
+              'px-2 text-left text-sm font-semibold',
+              currentStep === 3 ? 'text-primary' : 'text-gray-800'
+            )}
+          >
             Additional Details
+          </h2>
+        </Button>
+      </li>
+      <li>
+        <Button
+          type="button"
+          variant="link"
+          onClick={() => {
+            const params = new URLSearchParams(searchParams);
+            params.set('step', '4');
+
+            router.replace(pathname + '?' + params.toString());
+          }}
+          className="grid cursor-pointer grid-cols-[4px_minmax(170px,_1fr)_10px] px-4 py-1 hover:no-underline"
+        >
+          <motion.div
+            initial={false}
+            animate={{
+              opacity: currentStep === 4 ? 1 : 0,
+            }}
+            className="h-6 border-l-2 border-primary"
+          />
+          <h2
+            className={cn(
+              'px-2 text-left text-sm font-semibold',
+              currentStep === 4 ? 'text-primary' : 'text-gray-800'
+            )}
+          >
+            Education Details
           </h2>
         </Button>
       </li>

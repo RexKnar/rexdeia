@@ -38,6 +38,32 @@ export async function updateStaffById(
   });
 }
 
+/**
+ * @swagger
+ * /api/staff:
+ *     post:
+ *       summary: Add new staff
+ *       description: Add New staff
+ *       requestBody:
+ *         required: true
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *       responses:
+ *         '200':
+ *           description: New staff added successfully.
+ *           content:
+ *             application/json:
+ *               schema:
+ *                 # Define the schema of your staff object here
+ *         '400':
+ *           description: Bad request due to validation error.
+ *         '401':
+ *           description: Unauthorized access.
+ *         '500':
+ *           description: Internal server error.
+ */
 export async function addStaff(staff: AddStaffModel) {
   const session = await getServerSession(authOptions);
 
@@ -82,7 +108,6 @@ export async function addStaff(staff: AddStaffModel) {
   return db.staff.create({
     data: {
       ...staff,
-      dateOfJoining: new Date(staff.dateOfJoining),
       createdAt: new Date(),
       updatedAt: new Date(),
       user: {

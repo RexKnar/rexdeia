@@ -244,7 +244,7 @@ export function StudentsList() {
         description: 'Error while deleting student',
       });
     }
-  }, [isDeleteStudentError, toast]);
+  }, [isDeleteStudentError]);
 
   useEffect(() => {
     if (isDeleteSuccess) {
@@ -255,7 +255,7 @@ export function StudentsList() {
       });
       setSelectedStudent(null);
     }
-  }, [isDeleteSuccess, toast]);
+  }, [isDeleteSuccess]);
 
   const table = useReactTable({
     columns,
