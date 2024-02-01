@@ -14,17 +14,18 @@ import { PageTitle } from '../../../../../../lib/components/PageTitle';
 import { useGetClassByIdQuery } from '../../../../../../lib/queries/class/useGetClassByIdQuery';
 import { SectionCard } from '../section/[sectionId]/_components/SectionCard';
 import { StaffCard } from '../section/[sectionId]/_components/StaffCard';
+import { SubjectList } from './SubjectList';
 import { UpdateClassFlyout } from './UpdateClassFlyout';
 
 export function ClassDetail() {
   const pathname = usePathname();
   const router = useRouter();
-  const params = useParams<{ id: string }>();
+  const params = useParams<{ classId: string }>();
   const searchParams = useSearchParams();
 
   const { data: getClassByIdResponse, isLoading: isLoadingGetClassById } =
-    useGetClassByIdQuery(params.id, {
-      enabled: !!params.id,
+    useGetClassByIdQuery(params.classId, {
+      enabled: !!params.classId,
     });
 
   if (isLoadingGetClassById) {
@@ -128,7 +129,7 @@ export function ClassDetail() {
             </TabsList>
             <TabsContent className="w-full" value="Subjects">
               <section className="pt-5">
-                <div className="w-3/12">Page1</div>
+                <SubjectList />
               </section>
             </TabsContent>
             <TabsContent value="Students">

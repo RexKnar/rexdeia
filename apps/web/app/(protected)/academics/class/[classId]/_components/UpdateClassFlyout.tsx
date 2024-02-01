@@ -7,7 +7,7 @@ import {
   useRouter,
   useSearchParams,
 } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import {
   Button,
@@ -47,8 +47,6 @@ export function UpdateClassFlyout() {
 
   const params = useParams<{ id: string }>();
 
-  const [activeToggleFlag, setActiveToggleFlag] = useState(false);
-
   const { data: geClassByIdResponse } = useGetClassByIdQuery(params.id, {
     enabled: !!params.id,
   });
@@ -59,7 +57,6 @@ export function UpdateClassFlyout() {
 
       setValue('name', name);
       setValue('isActive', isActive);
-      setActiveToggleFlag(isActive);
     } else {
       setValue('name', null);
       setValue('isActive', false);
@@ -120,11 +117,8 @@ export function UpdateClassFlyout() {
                     <Switch
                       id="isActive"
                       {...register('isActive')}
-                      onCheckedChange={(value) => {
-                        setValue('isActive', value);
-                        setActiveToggleFlag(value);
-                      }}
-                      checked={activeToggleFlag}
+                      onCheckedChange={(value) => setValue('isActive', value)}
+                      checked={watch('isActive')}
                     />
                     <label
                       htmlFor="isActive"
