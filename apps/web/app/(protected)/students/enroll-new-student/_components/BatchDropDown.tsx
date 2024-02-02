@@ -23,13 +23,13 @@ export function BatchDropDown() {
   const batchId = searchParams.get('batchId');
 
   useEffect(() => {
-    if (batches?.length) {
+    if (batches?.length && !batchId) {
       const params = new URLSearchParams(searchParams);
       params.set('batchId', batches[batches.length - 1].id);
 
       router.replace(pathname + '?' + params.toString());
     }
-  }, [batches, pathname, router, searchParams]);
+  }, [batches, batchId, pathname, router, searchParams]);
 
   return (
     <div className="w-full">
