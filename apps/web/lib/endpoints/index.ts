@@ -59,6 +59,7 @@ export const DELETE_MEDIUM_BY_ID = `DELETE_MEDIUM_BY_ID`;
 export const GET_SUBJECT_LIST_BY_SECTION_ID = `GET_SUBJECT_LIST_BY_SECTION_ID`;
 export const DELETE_STUDENT_BY_ID = `DELETE_STUDENT_BY_ID`;
 export const ADD_STAFF = `ADD_STAFF`;
+export const GET_STAFF_LIST = `GET_STAFF_LIST`;
 export const GET_SUBJECT_LIST_BY_CLASS_ID = `GET_SUBJECT_LIST_BY_CLASS_ID`;
 export const GET_ALL_SECTIONS_BY_CLASS_ID = `GET_ALL_SECTIONS_BY_CLASS_ID`;
 
@@ -297,7 +298,11 @@ export default <EndpointDetails>{
   },
   [ADD_STAFF]: {
     requestType: `POST`,
-    endpoint: `/api/staff/`,
+    endpoint: `/api/staff`,
+  },
+  [GET_STAFF_LIST]: {
+    requestType: `GET`,
+    endpoint: `/api/staff`,
   },
   [GET_SUBJECT_LIST_BY_CLASS_ID]: {
     requestType: `GET`,

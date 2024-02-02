@@ -47,6 +47,12 @@ export const menuItems: SidebarMenuItem[] = [
         id: 'enroll-new-student',
         path: '/staffs/onboard-new-staff',
       },
+      {
+        icon: null,
+        label: 'Staff List',
+        id: 'staff-list',
+        path: '/staffs/list',
+      },
     ],
   },
   {

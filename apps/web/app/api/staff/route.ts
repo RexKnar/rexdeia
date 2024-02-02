@@ -50,10 +50,9 @@ export async function GET(request: NextRequest) {
 
   try {
     const page = parseInt(request.nextUrl.searchParams.get('page')) || 1;
-    const pageSize =
-      parseInt(request.nextUrl.searchParams.get('pageSize')) || 10;
+    const limit = parseInt(request.nextUrl.searchParams.get('limit')) || 10;
 
-    const paginatedStaffResult = await getStaffList(page, pageSize);
+    const paginatedStaffResult = await getStaffList(page, limit);
     return new NextResponse(JSON.stringify(paginatedStaffResult), {
       status: StatusCodes.OK,
     });

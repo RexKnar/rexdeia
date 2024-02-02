@@ -129,13 +129,13 @@ export async function addStaff(staff: AddStaffModel) {
   });
 }
 
-export async function getStaffList(page: number, pageSize: number) {
+export async function getStaffList(page: number, limit: number) {
   const session = await getServerSession(authOptions);
 
   const [staffList, total] = await Promise.all([
     db.staff.findMany({
-      take: pageSize,
-      skip: (page - 1) * pageSize,
+      take: limit,
+      skip: (page - 1) * limit,
       where: {
         status: 'Active',
         branchId: session.branchId,
@@ -153,7 +153,7 @@ export async function getStaffList(page: number, pageSize: number) {
   return {
     total,
     page,
-    pageSize,
+    limit,
     data: staffList,
   };
 }

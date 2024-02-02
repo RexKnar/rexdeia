@@ -56,6 +56,10 @@ export type Staff = {
   degreeMarksCard?: string;
   pgMarksCard?: string;
   otherCertificate?: string;
+  isDeleting?: boolean;
+  isUpdating?: boolean;
+  isNewlyAdded?: boolean;
+  additionalAttributes: Staff;
 };
 
 export type AddStaffModel = Omit<Staff, 'id' | 'status'>;
