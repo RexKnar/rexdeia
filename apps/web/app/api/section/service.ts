@@ -37,7 +37,7 @@ export async function getAllSectionsByClassId(classId: string) {
   });
 }
 
-export async function addSubjectsToSection(
+export async function mapSubjectsToSection(
   sectionId: string,
   subjectIds: string[]
 ) {

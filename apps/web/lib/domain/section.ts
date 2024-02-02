@@ -1,4 +1,5 @@
 import { MediumModel } from './medium';
+import { CreateSubjectModel } from './subject';
 
 export type SectionModel = {
   id: string;
@@ -33,3 +34,11 @@ export type UpdateSectionModel = Pick<
   | 'students'
   | 'description'
 >;
+
+export type AddSubjectsToSectionRequestModel =
+  | {
+      subjectIds: string[];
+    }
+  | {
+      subjects: CreateSubjectModel[];
+    };
