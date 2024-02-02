@@ -160,7 +160,7 @@ export function SubjectTypeListTable() {
                           onClick={() => {
                             const params = new URLSearchParams(searchParams);
                             params.set('isSubjectTypeFlyoutOpen', 'true');
-                            params.set('subjectType', row.original.id);
+                            params.set('subjectTypeId', row.original.id);
                             router.push(pathname + '?' + params.toString());
                           }}
                           className="mr-2 h-auto px-3 py-2"
@@ -175,6 +175,7 @@ export function SubjectTypeListTable() {
                       <TooltipContent>
                         <p>
                           <span>Edit</span>
+                          <span className="mx-1 font-semibold">{`${row.original.name}`}</span>
                         </p>
                       </TooltipContent>
                     </Tooltip>

@@ -2,6 +2,7 @@
 
 import { Loader2, PlusCircle } from 'lucide-react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import {
   Button,
@@ -16,12 +17,19 @@ import {
 
 import { CreateSubjectTypeModel } from '../../../../../../../lib/domain/subject';
 import { useCreateSubjectTypeMutationQuery } from '../../../../../../../lib/queries/subject-type/useCreateSubjectTypeMutationQuery';
+import { useGetSubjectTypeByIdQuery } from '../../../../../../../lib/queries/subject-type/useGetSubjectTypeByIdQuery';
+import { useUpdateSubjectTypeMutationQuery } from '../../../../../../../lib/queries/subject-type/useUpdateSubjectTypeMutationQuery';
 
 export function SubjectTypeFlyout() {
   const pathname = usePathname();
   const router = useRouter();
   const searchParams = useSearchParams();
+
+  const subjectTypeId = searchParams.get('subjectTypeId');
   const isOpen = searchParams.get('isSubjectTypeFlyoutOpen') === 'true';
+
+  const page = parseInt(searchParams.get('page')) || 1;
+  const limit = parseInt(searchParams.get('limit')) || 10;
 
   const {
     register,
@@ -45,23 +53,57 @@ export function SubjectTypeFlyout() {
   const closeSubjectTypeFlyout = () => {
     const params = new URLSearchParams(searchParams);
     params.set('isSubjectTypeFlyoutOpen', 'false');
-    reset();
+    params.delete('subjectTypeId');
     router.replace(pathname + '?' + params.toString());
   };
 
+  const { data: getSubjectTypeByIdRespone } = useGetSubjectTypeByIdQuery(
+    subjectTypeId,
+    {
+      enabled: !!subjectTypeId,
+    }
+  );
+
+  useEffect(() => {
+    if (getSubjectTypeByIdRespone) {
+      const { name, isActive } = getSubjectTypeByIdRespone;
+
+      setValue('name', name);
+      setValue('isActive', isActive);
+    } else {
+      setValue('name', null);
+      setValue('isActive', false);
+    }
+  }, [getSubjectTypeByIdRespone, setValue]);
+
+  const {
+    isPending: isPendingUpdateSubjectType,
+    mutateAsync: mutateUpdateSubjectTypeAsync,
+  } = useUpdateSubjectTypeMutationQuery(page, limit);
+
   async function saveSubjectType(payload: CreateSubjectTypeModel) {
     try {
-      const requestPayload = {
-        ...payload,
-      };
-      mutateCreateSubjectTypeAsync(requestPayload);
+      if (subjectTypeId) {
+        const updateSubjectTypeRequestPayload = {
+          ...payload,
+          id: subjectTypeId,
+        };
+        mutateUpdateSubjectTypeAsync(updateSubjectTypeRequestPayload);
+      } else {
+        const requestPayload = {
+          ...payload,
+        };
+        mutateCreateSubjectTypeAsync(requestPayload);
+      }
     } catch (error) {
       console.error(error);
     } finally {
+      setValue('isActive', false);
       reset();
       closeSubjectTypeFlyout();
     }
   }
+
   return (
     <section>
       <Sheet open={isOpen}>
@@ -78,7 +120,9 @@ export function SubjectTypeFlyout() {
                   <div className="flex items-center">
                     <PlusCircle size={20} strokeWidth={1.5} />
                     <Text variant="lg-semibold" className="ml-2">
-                      Add Subject Type
+                      {subjectTypeId
+                        ? 'Update Subject Type'
+                        : 'Add Subject Type'}
                     </Text>
                   </div>
                   <div className="ml-14 flex items-center">
@@ -124,8 +168,12 @@ export function SubjectTypeFlyout() {
                 <Button
                   size="lg"
                   variant="default"
-                  disabled={isPendingCreateSubjectType}
-                  aria-disabled={isPendingCreateSubjectType}
+                  disabled={
+                    isPendingCreateSubjectType || isPendingUpdateSubjectType
+                  }
+                  aria-disabled={
+                    isPendingCreateSubjectType || isPendingUpdateSubjectType
+                  }
                   className="mx-auto flex justify-center px-12 py-4"
                 >
                   {isPendingCreateSubjectType ? (
@@ -134,7 +182,7 @@ export function SubjectTypeFlyout() {
                       Saving
                     </div>
                   ) : (
-                    'Save'
+                    `${subjectTypeId ? 'Update' : 'Save'}`
                   )}
                 </Button>
               </div>

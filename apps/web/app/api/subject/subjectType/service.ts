@@ -22,7 +22,7 @@ export async function getSubjectTypeById(id: string) {
   return db.subjectType.findFirst({
     where: {
       id: id,
-      isActive: true,
+      isDeleted: false,
     },
   });
 }
