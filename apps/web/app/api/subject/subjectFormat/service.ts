@@ -68,6 +68,7 @@ export async function getSubjectFormatList(page: number, limit: number) {
     db.subjectFormat.findMany({
       where: {
         branchId: session.branchId,
+        isActive: true,
       },
       take: limit,
       skip: (page - 1) * limit,

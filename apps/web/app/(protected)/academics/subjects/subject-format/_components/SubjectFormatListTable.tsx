@@ -162,7 +162,7 @@ export function SubjectFormatListTable() {
                           onClick={() => {
                             const params = new URLSearchParams(searchParams);
                             params.set('isSubjectFormatFlyoutOpen', 'true');
-                            params.set('subjectFormat', row.original.id);
+                            params.set('subjectFormatId', row.original.id);
                             router.push(pathname + '?' + params.toString());
                           }}
                           className="mr-2 h-auto px-3 py-2"
@@ -177,6 +177,7 @@ export function SubjectFormatListTable() {
                       <TooltipContent>
                         <p>
                           <span>Edit</span>
+                          <span className="mx-1 font-semibold">{`${row.original.name}`}</span>
                         </p>
                       </TooltipContent>
                     </Tooltip>
@@ -214,7 +215,7 @@ export function SubjectFormatListTable() {
                 <TableCell colSpan={5} className="h-24 text-center">
                   {isSubjectFormatListLoading
                     ? 'Loading...'
-                    : 'No Subject Type Found'}
+                    : 'No Subject Format Found'}
                 </TableCell>
               </TableRow>
             )}

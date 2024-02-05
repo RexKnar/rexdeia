@@ -2,6 +2,7 @@
 
 import { Loader2, PlusCircle } from 'lucide-react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import {
   Button,
@@ -16,19 +17,26 @@ import {
 
 import { CreateSubjectFormatModel } from '../../../../../../../lib/domain/subject';
 import { useCreateSubjectFormatMutationQuery } from '../../../../../../../lib/queries/subject-format/useCreateSubjectFormatMutationQuery';
+import { useGetSubjectFormatByIdQuery } from '../../../../../../../lib/queries/subject-format/useGetSubjectFormatByIdQuery';
+import { useUpdateSubjectFormatMutationQuery } from '../../../../../../../lib/queries/subject-format/useUpdateSubjectFormatMutationQuery';
 
 export function SubjectFormatFlyout() {
   const pathname = usePathname();
   const router = useRouter();
   const searchParams = useSearchParams();
+
+  const subjectFormatId = searchParams.get('subjectFormatId');
   const isOpen = searchParams.get('isSubjectFormatFlyoutOpen') === 'true';
+
+  const page = parseInt(searchParams.get('page')) || 1;
+  const limit = parseInt(searchParams.get('limit')) || 10;
 
   const {
     register,
     setValue,
     reset,
-    handleSubmit,
     watch,
+    handleSubmit,
     formState: { errors: fieldErrors },
   } = useForm({
     defaultValues: {
@@ -39,26 +47,58 @@ export function SubjectFormatFlyout() {
 
   const {
     isPending: isPendingCreateSubjectFormat,
-    mutateAsync: mutateCreateSubjectFormatAsync,
+    mutateAsync: mutateCreateSubjectFormateAsync,
   } = useCreateSubjectFormatMutationQuery();
 
   const closeSubjectFormatFlyout = async () => {
     const params = new URLSearchParams(searchParams);
     params.set('isSubjectFormatFlyoutOpen', 'false');
-    params.delete('subjectId');
-
+    params.delete('subjectFormatId');
     router.replace(pathname + '?' + params.toString());
   };
 
+  const { data: getSubjectFormatByIdRespone } = useGetSubjectFormatByIdQuery(
+    subjectFormatId,
+    {
+      enabled: !!subjectFormatId,
+    }
+  );
+
+  useEffect(() => {
+    if (getSubjectFormatByIdRespone) {
+      const { name, isActive } = getSubjectFormatByIdRespone;
+
+      setValue('name', name);
+      setValue('isActive', isActive);
+    } else {
+      setValue('name', null);
+      setValue('isActive', false);
+    }
+  }, [getSubjectFormatByIdRespone, setValue]);
+
+  const {
+    isPending: isPendingUpdateSubjectFormat,
+    mutateAsync: mutateUpdateSubjectFormatAsync,
+  } = useUpdateSubjectFormatMutationQuery(page, limit);
+
   async function saveSubjectFormat(payload: CreateSubjectFormatModel) {
     try {
-      const requestPayload = {
-        ...payload,
-      };
-      mutateCreateSubjectFormatAsync(requestPayload);
+      if (subjectFormatId) {
+        const updateSubjectFormatRequestPayload = {
+          ...payload,
+          id: subjectFormatId,
+        };
+        mutateUpdateSubjectFormatAsync(updateSubjectFormatRequestPayload);
+      } else {
+        const requestPayload = {
+          ...payload,
+        };
+        mutateCreateSubjectFormateAsync(requestPayload);
+      }
     } catch (error) {
       console.error(error);
     } finally {
+      setValue('isActive', false);
       reset();
       closeSubjectFormatFlyout();
     }
@@ -80,7 +120,9 @@ export function SubjectFormatFlyout() {
                   <div className="flex items-center">
                     <PlusCircle size={20} strokeWidth={1.5} />
                     <Text variant="lg-semibold" className="ml-2">
-                      Add Subject Format
+                      {subjectFormatId
+                        ? 'Update Subject Format'
+                        : 'Add Subject Format'}
                     </Text>
                   </div>
                   <div className="flex items-center">
@@ -124,9 +166,13 @@ export function SubjectFormatFlyout() {
                 <Button
                   size="lg"
                   variant="default"
+                  disabled={
+                    isPendingCreateSubjectFormat || isPendingUpdateSubjectFormat
+                  }
+                  aria-disabled={
+                    isPendingCreateSubjectFormat || isPendingUpdateSubjectFormat
+                  }
                   className="mx-auto flex justify-center px-12 py-4"
-                  disabled={isPendingCreateSubjectFormat}
-                  aria-disabled={isPendingCreateSubjectFormat}
                 >
                   {isPendingCreateSubjectFormat ? (
                     <div className="flex items-center justify-center">
@@ -134,7 +180,7 @@ export function SubjectFormatFlyout() {
                       Saving
                     </div>
                   ) : (
-                    'Save'
+                    `${subjectFormatId ? 'Update' : 'Save'}`
                   )}
                 </Button>
               </div>

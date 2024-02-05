@@ -125,15 +125,13 @@ export function SubjectTypeFlyout() {
                         : 'Add Subject Type'}
                     </Text>
                   </div>
-                  <div className="ml-14 flex items-center">
+                  <div className="flex items-center">
                     <Switch
                       id="isActive"
                       {...register('isActive')}
                       onCheckedChange={(value) => setValue('isActive', value)}
                       checked={watch('isActive')}
                     />
-                  </div>
-                  <div className="flex items-center">
                     <label
                       htmlFor="isActive"
                       className="ml-2 text-sm font-semibold"
