@@ -143,7 +143,7 @@ export function ClassDetail() {
             <TabsContent value="Staffs">
               <section className="pt-5">
                 <div className="w-3/12">
-                  <StaffCard />
+                  <StaffCard id={''} name={''} />
                 </div>
               </section>
             </TabsContent>

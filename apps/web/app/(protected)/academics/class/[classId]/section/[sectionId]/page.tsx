@@ -11,7 +11,7 @@ import { Button, Tabs, TabsContent, TabsList, TabsTrigger, Text } from 'ui';
 
 import { PageTitle } from '../../../../../../../lib/components/PageTitle';
 import { useGetSectionByIdQuery } from '../../../../../../../lib/queries/section/useGetSectionByIdQuery';
-import { StaffCard } from './_components/StaffCard';
+import { StaffList } from './_components/StaffList';
 import { StudentCard } from './_components/StudentCard';
 import { SubjectList } from './_components/SubjectList';
 
@@ -116,9 +116,7 @@ export default function Page() {
         </TabsContent>
         <TabsContent value="Staffs">
           <section className="pt-5">
-            <div className="w-3/12">
-              <StaffCard />
-            </div>
+            <StaffList />
           </section>
         </TabsContent>
         <TabsContent value="Assessments">

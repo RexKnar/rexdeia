@@ -8,6 +8,32 @@ import { Staff } from '../../../lib/domain/staff';
 import { addStaffSchema } from './schemas';
 import { addStaff, getStaffList } from './service';
 
+/**
+ * @swagger
+ * /api/staff:
+ *     post:
+ *       summary: Add Staff
+ *       description: Add New Staff
+ *       requestBody:
+ *         required: true
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *       responses:
+ *         '200':
+ *           description: Staff details added successfully.
+ *           content:
+ *             application/json:
+ *               schema:
+ *                 # Define the schema of your staff object here
+ *         '400':
+ *           description: Bad request due to validation error.
+ *         '401':
+ *           description: Unauthorized access.
+ *         '500':
+ *           description: Internal server error.
+ */
 export async function POST(request: NextRequest) {
   const session = await getServerSession(authOptions);
   if (!session) {

@@ -69,6 +69,7 @@ export const GET_SUBJECT_LIST_BY_CLASS_ID = `GET_SUBJECT_LIST_BY_CLASS_ID`;
 export const GET_ALL_SECTIONS_BY_CLASS_ID = `GET_ALL_SECTIONS_BY_CLASS_ID`;
 export const GET_STATE_BY_COUNTRY_CODE = `GET_STATE_BY_COUNTRY_CODE`;
 export const GET_COUNTRY_LIST = `GET_COUNTRY_LIST`;
+export const GET_STAFF_LIST_BY_SECTION_ID = `GET_STAFF_LIST_BY_SECTION_ID`;
 
 export default <EndpointDetails>{
   [REGISTER_USER]: {
@@ -346,5 +347,9 @@ export default <EndpointDetails>{
   [GET_COUNTRY_LIST]: {
     requestType: `GET`,
     endpoint: `/api/countries`,
+  },
+  [GET_STAFF_LIST_BY_SECTION_ID]: {
+    requestType: `GET`,
+    endpoint: `/api/section/[id]/staffs`,
   },
 };

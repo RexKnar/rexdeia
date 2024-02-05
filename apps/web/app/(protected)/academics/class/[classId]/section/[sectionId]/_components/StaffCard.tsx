@@ -11,7 +11,12 @@ import {
   Text,
 } from 'ui';
 
-export function StaffCard() {
+type StaffCardProps = {
+  id: string;
+  name: string;
+};
+
+export function StaffCard(props: StaffCardProps) {
   return (
     <div className="flex bg-white p-3">
       <div className="w-1/4">
@@ -21,7 +26,7 @@ export function StaffCard() {
       </div>
 
       <div className="my-auto w-2/4 px-2">
-        <Text variant="base-bold">Gopi kumar</Text>
+        <Text variant="base-bold">{props.name}</Text>
         <div className="inline-flex">
           <Text variant="base-regular">English</Text>
           <span className="ml-1 rounded bg-red-300 p-2 px-1.5 py-0.5 text-sm font-medium text-red-800 dark:bg-red-900 dark:text-red-300">
