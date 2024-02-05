@@ -13,6 +13,7 @@ export async function deleteSubjectTypeById(id: string) {
       id: id,
     },
     data: {
+      isDeleted: true,
       updatedAt: new Date(),
     },
   });
@@ -66,6 +67,7 @@ export async function getSubjectTypeList(page: number, limit: number) {
     db.subjectType.findMany({
       where: {
         isActive: true,
+        isDeleted: false,
         branchId: session.branchId,
       },
       orderBy: {

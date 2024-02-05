@@ -11,7 +11,7 @@ import {
 } from '@tanstack/react-table';
 import { Loader2, Pencil, Trash2 } from 'lucide-react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import { useCallback } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { When } from 'react-if';
 import {
   Button,
@@ -19,6 +19,7 @@ import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
+  useToast,
 } from 'ui';
 import {
   Table,
@@ -30,7 +31,9 @@ import {
 } from 'ui/components/ui/Table';
 import { cn } from 'utils';
 
+import { DeleteConfirmationModal } from '../../../../../../lib/components/modals/DeleteConfirmationModal';
 import { SubjectTypeModel } from '../../../../../../lib/domain/subject';
+import { useDeleteSubjectTypeMutationQuery } from '../../../../../../lib/queries/subject-type/useDeleteSubjectTypeMutationQuery';
 import { useGetSubjectTypeList } from '../../../../../../lib/queries/subject-type/useGetSubjectTypeQuery';
 
 const columns: ColumnDef<SubjectTypeModel>[] = [
@@ -77,6 +80,13 @@ const columns: ColumnDef<SubjectTypeModel>[] = [
 ];
 
 export function SubjectTypeListTable() {
+  const { toast } = useToast();
+
+  const [showDeleteConfirmationModal, setShowDeleteConfirmationModal] =
+    useState(false);
+  const [selectedSubjectType, setSelectedSubjectType] =
+    useState<SubjectTypeModel | null>(null);
+
   const pathname = usePathname();
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -90,6 +100,32 @@ export function SubjectTypeListTable() {
       limit,
     });
 
+  const {
+    isError: isDeleteSubjectTypeError,
+    isSuccess: isDeleteSuccess,
+    mutateAsync: deleteSubjectTypeAsync,
+  } = useDeleteSubjectTypeMutationQuery(page, limit);
+
+  useEffect(() => {
+    if (isDeleteSubjectTypeError) {
+      toast({
+        title: 'Error',
+        variant: 'default',
+        description: 'Error while deleting subject type',
+      });
+    }
+  }, [isDeleteSubjectTypeError, toast]);
+
+  useEffect(() => {
+    if (isDeleteSuccess) {
+      toast({
+        title: 'Success',
+        variant: 'default',
+        description: 'Subject Type deleted successfully',
+      });
+      setSelectedSubjectType(null);
+    }
+  }, [isDeleteSuccess, toast]);
   const handleOnPageChange = useCallback(
     (page: number) => {
       const params = new URLSearchParams(searchParams);
@@ -99,7 +135,6 @@ export function SubjectTypeListTable() {
     },
     [searchParams, pathname, router]
   );
-
   const table = useReactTable({
     columns,
     data: subjectTypeListResponse?.data || [],
@@ -184,6 +219,10 @@ export function SubjectTypeListTable() {
                         <Button
                           className="h-auto px-3 py-2"
                           variant="mild"
+                          onClick={() => {
+                            setSelectedSubjectType(row.original);
+                            setShowDeleteConfirmationModal(true);
+                          }}
                           disabled={
                             row.original.isNewlyAdded || row.original.isUpdating
                           }
@@ -236,6 +275,19 @@ export function SubjectTypeListTable() {
             params.set('limit', value.toString());
 
             router.push(pathname + '?' + params.toString());
+          }}
+        />
+        <DeleteConfirmationModal
+          open={showDeleteConfirmationModal}
+          description={`Are you sure you want to delete "${selectedSubjectType?.name}"`}
+          onDeleteClick={async () => {
+            if (selectedSubjectType) {
+              setShowDeleteConfirmationModal(false);
+              await deleteSubjectTypeAsync(selectedSubjectType.id);
+            }
+          }}
+          onCancelClick={() => {
+            setShowDeleteConfirmationModal(false);
           }}
         />
       </When>

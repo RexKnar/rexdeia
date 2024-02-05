@@ -59,6 +59,7 @@ export const GET_SUBJECT_FORMAT_LIST = `GET_SUBJECT_FORMAT_LIST`;
 export const UPDATE_SECTION_BY_ID = `UPDATE_SECTION_BY_ID`;
 export const DELETE_GROUP_BY_ID = `DELETE_GROUP_BY_ID`;
 export const DELETE_MEDIUM_BY_ID = `DELETE_MEDIUM_BY_ID`;
+export const DELETE_SUBJECT_TYPE_BY_ID = `DELETE_SUBJECT_TYPE_BY_ID`;
 export const GET_SUBJECT_LIST_BY_SECTION_ID = `GET_SUBJECT_LIST_BY_SECTION_ID`;
 export const DELETE_STUDENT_BY_ID = `DELETE_STUDENT_BY_ID`;
 export const ADD_STAFF = `ADD_STAFF`;
@@ -289,6 +290,10 @@ export default <EndpointDetails>{
   [DELETE_MEDIUM_BY_ID]: {
     requestType: `DELETE`,
     endpoint: `/api/medium/[id]`,
+  },
+  [DELETE_SUBJECT_TYPE_BY_ID]: {
+    requestType: `DELETE`,
+    endpoint: `/api/subject/subjectType/[id]`,
   },
   [GET_SUBJECT_TYPE_LIST]: {
     requestType: `GET`,
