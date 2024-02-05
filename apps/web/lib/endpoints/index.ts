@@ -62,8 +62,11 @@ export const GET_SUBJECT_LIST_BY_SECTION_ID = `GET_SUBJECT_LIST_BY_SECTION_ID`;
 export const DELETE_STUDENT_BY_ID = `DELETE_STUDENT_BY_ID`;
 export const ADD_STAFF = `ADD_STAFF`;
 export const GET_STAFF_LIST = `GET_STAFF_LIST`;
+export const GET_STAFF_BY_ID = `GET_STAFF_BY_ID`;
 export const GET_SUBJECT_LIST_BY_CLASS_ID = `GET_SUBJECT_LIST_BY_CLASS_ID`;
 export const GET_ALL_SECTIONS_BY_CLASS_ID = `GET_ALL_SECTIONS_BY_CLASS_ID`;
+export const GET_STATE_BY_COUNTRY_CODE = `GET_STATE_BY_COUNTRY_CODE`;
+export const GET_COUNTRY_LIST = `GET_COUNTRY_LIST`;
 
 export default <EndpointDetails>{
   [REGISTER_USER]: {
@@ -314,6 +317,10 @@ export default <EndpointDetails>{
     requestType: `GET`,
     endpoint: `/api/staff`,
   },
+  [GET_STAFF_BY_ID]: {
+    requestType: `GET`,
+    endpoint: `/api/staff/[id]`,
+  },
   [GET_SUBJECT_LIST_BY_CLASS_ID]: {
     requestType: `GET`,
     endpoint: `/api/class/[id]/subjects`,
@@ -321,5 +328,13 @@ export default <EndpointDetails>{
   [GET_ALL_SECTIONS_BY_CLASS_ID]: {
     requestType: `GET`,
     endpoint: `/api/class/[id]/sections`,
+  },
+  [GET_STATE_BY_COUNTRY_CODE]: {
+    requestType: `GET`,
+    endpoint: `/api/countries/[countryCode]/states`,
+  },
+  [GET_COUNTRY_LIST]: {
+    requestType: `GET`,
+    endpoint: `/api/countries`,
   },
 };

@@ -288,6 +288,9 @@ export function StaffList() {
                         <Button
                           variant="mild"
                           className="mr-3 h-auto px-3 py-2"
+                          onClick={() => {
+                            router.replace(`/staffs/${row.original.id}`);
+                          }}
                         >
                           <Eye size={12} className="text-center text-black" />
                         </Button>
@@ -324,10 +327,15 @@ export function StaffList() {
               ))
             ) : (
               <TableRow>
-                <TableCell colSpan={5} className="h-24 text-center">
-                  {isStaffListLoading
-                    ? `Loading... ${isStaffListLoading}`
-                    : 'Staffs not Found'}
+                <TableCell colSpan={5} className="">
+                  {isStaffListLoading ? (
+                    <div className="flex h-20 items-center justify-center">
+                      <Loader2 className="mr-2  w-6 animate-spin text-black" />
+                      <p className=" text-black">Fetching Staff List...</p>
+                    </div>
+                  ) : (
+                    'Staffs not Found'
+                  )}
                 </TableCell>
               </TableRow>
             )}

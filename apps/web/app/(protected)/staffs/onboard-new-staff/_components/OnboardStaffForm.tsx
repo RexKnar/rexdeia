@@ -9,6 +9,8 @@ import { Button, Input, RadioGroup, RadioGroupItem } from 'ui';
 import { cn } from 'utils';
 
 import { AddStaffModel } from '../../../../../lib/domain/staff';
+import { useGetCountryListQuery } from '../../../../../lib/queries/common/useGetCountryListQuery';
+import { useGetStateByCountryCodeQuery } from '../../../../../lib/queries/common/useGetStateListQuery';
 import staffForm from '../data/onboard-staff-fields';
 import { StaffPreviewModal } from '../models/staffPreviewModel';
 import { OnboardStaffSidebar } from './OnboardStaffSidebar';
@@ -56,6 +58,19 @@ export function OnboardStaffForm() {
     }
   };
 
+  const countryCode = searchParams.get('isoCode');
+  const { data: getStateByCountryIdResponse } = useGetStateByCountryCodeQuery(
+    countryCode,
+    {
+      enabled: !!countryCode,
+    }
+  );
+  const { data: getCountryListRespose } = useGetCountryListQuery();
+
+  let customCountryList = {
+    permanentCountry: getCountryListRespose || [{ name: 'Loading...' }],
+    permanentState: getStateByCountryIdResponse || [{ name: 'Loading...' }],
+  };
   return (
     <form
       autoFocus
@@ -217,12 +232,26 @@ export function OnboardStaffForm() {
                             </label>
                             <select
                               {...register(field.name, field.validationRules)}
+                              onChange={(e) => {
+                                const selectedValue = e.target.value;
+                                const params = new URLSearchParams(
+                                  searchParams
+                                );
+                                params.set(field.optionValue, selectedValue);
+                                router.push(pathname + '?' + params.toString());
+                              }}
                               placeholder={field.placeholder}
                               className="ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring mt-1 flex h-10 w-full rounded-md border border-gray-300 bg-transparent px-3 py-2 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
                             >
-                              {field.options.map((option, index) => (
-                                <option key={index} value={option.value}>
-                                  {option.label}
+                              {(field.options && field.options.length > 0
+                                ? field.options
+                                : customCountryList[field.name]
+                              ).map((option, index) => (
+                                <option
+                                  key={index}
+                                  value={option[field.optionValue]}
+                                >
+                                  {option[field.optionKey]}
                                 </option>
                               ))}
                             </select>
