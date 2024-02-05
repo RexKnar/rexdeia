@@ -28,6 +28,10 @@ export function UpdateClassFlyout() {
   const pathname = usePathname();
   const router = useRouter();
   const searchParams = useSearchParams();
+  const params = useParams<{ classId: string }>();
+  const { data: getClassByIdResponse } = useGetClassByIdQuery(params.classId, {
+    enabled: !!params.classId,
+  });
 
   const {
     register,
@@ -39,21 +43,15 @@ export function UpdateClassFlyout() {
   } = useForm({
     defaultValues: {
       isActive: false,
-      name: null,
+      name: getClassByIdResponse?.name || '',
     },
   });
 
   const isOpen = searchParams.get('isUpdateClassFlyoutOpen') === 'true';
 
-  const params = useParams<{ id: string }>();
-
-  const { data: geClassByIdResponse } = useGetClassByIdQuery(params.id, {
-    enabled: !!params.id,
-  });
-
   useEffect(() => {
-    if (geClassByIdResponse) {
-      const { name, isActive } = geClassByIdResponse;
+    if (getClassByIdResponse) {
+      const { name, isActive } = getClassByIdResponse;
 
       setValue('name', name);
       setValue('isActive', isActive);
@@ -61,18 +59,18 @@ export function UpdateClassFlyout() {
       setValue('name', null);
       setValue('isActive', false);
     }
-  }, [geClassByIdResponse, setValue]);
+  }, [getClassByIdResponse, setValue]);
 
   const {
     isPending: isPendingUpdateClass,
     mutateAsync: mutateUpdateClassAsync,
-  } = useUpdateClassMutationQuery(params.id);
+  } = useUpdateClassMutationQuery(params.classId);
 
   async function updateClass(payload: UpdateClassModel) {
     try {
       const updateClassPayload = {
         ...payload,
-        id: params.id,
+        id: params.classId,
       };
       mutateUpdateClassAsync(updateClassPayload);
     } catch (error) {

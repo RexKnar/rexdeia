@@ -66,9 +66,8 @@ export function ClassDetail() {
                   className="text-primary"
                   onClick={() => {
                     const params = new URLSearchParams(searchParams);
-                    params.set('isSectionFlyoutOpen', 'true');
+                    params.set('isUpdateClassFlyoutOpen', 'true');
                     params.set('classId', getClassByIdResponse.id);
-
                     router.replace(pathname + '?' + params.toString());
                   }}
                 >
