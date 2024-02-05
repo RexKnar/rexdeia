@@ -12,7 +12,7 @@ import { Button, Tabs, TabsContent, TabsList, TabsTrigger, Text } from 'ui';
 import { PageTitle } from '../../../../../../../lib/components/PageTitle';
 import { useGetSectionByIdQuery } from '../../../../../../../lib/queries/section/useGetSectionByIdQuery';
 import { StaffList } from './_components/StaffList';
-import { StudentCard } from './_components/StudentCard';
+import { StudentList } from './_components/StudentList';
 import { SubjectList } from './_components/SubjectList';
 
 export default function Page() {
@@ -109,9 +109,7 @@ export default function Page() {
         </TabsContent>
         <TabsContent value="Students">
           <section className="pt-5">
-            <div className="w-3/12">
-              <StudentCard />
-            </div>
+            <StudentList />
           </section>
         </TabsContent>
         <TabsContent value="Staffs">
