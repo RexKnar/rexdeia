@@ -95,6 +95,12 @@ export default function Page() {
           >
             Staffs
           </TabsTrigger>
+          <TabsTrigger
+            value="Assessments"
+            className="mr-2 text-base focus:border-b-4 focus:border-primary"
+          >
+            Assessments
+          </TabsTrigger>
         </TabsList>
         <TabsContent className="w-full" value="Subjects">
           <section className="pt-5">
@@ -114,6 +120,9 @@ export default function Page() {
               <StaffCard />
             </div>
           </section>
+        </TabsContent>
+        <TabsContent value="Assessments">
+          <h1>Page 4</h1>
         </TabsContent>
       </Tabs>
     </section>

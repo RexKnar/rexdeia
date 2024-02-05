@@ -126,6 +126,12 @@ export function ClassDetail() {
               >
                 Sections
               </TabsTrigger>
+              <TabsTrigger
+                value="Assessments"
+                className="mr-2 text-base focus:border-b-4 focus:border-primary"
+              >
+                Assessments
+              </TabsTrigger>
             </TabsList>
             <TabsContent className="w-full" value="Subjects">
               <section className="pt-5">
@@ -146,6 +152,9 @@ export function ClassDetail() {
               <section className="pt-5">
                 <SectionList />
               </section>
+            </TabsContent>
+            <TabsContent value="Assessments">
+              <h1>Page 5</h1>
             </TabsContent>
           </Tabs>
           <UpdateClassFlyout />
