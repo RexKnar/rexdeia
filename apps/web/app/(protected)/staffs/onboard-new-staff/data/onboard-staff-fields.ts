@@ -1,4 +1,24 @@
-const staffForm = [
+export type staffFormSectionType = {
+  id: number;
+  sectionTitle: string;
+  sectionFields: sectionFieldsType[];
+};
+
+export type sectionFieldsType = {
+  id: number;
+  type: string;
+  name: string;
+  value?: string;
+  placeholder: string;
+  optionKey?: string;
+  optionValue?: string;
+  label: string;
+  visible: boolean;
+  options: Record<string, string>[];
+  validationRules: Record<string, string | boolean | number>;
+};
+
+const staffForm: staffFormSectionType[] = [
   {
     id: 0,
     sectionTitle: 'BASIC DETAILS',
@@ -42,21 +62,9 @@ const staffForm = [
       {
         id: 3,
         type: 'date',
-        name: 'DOB',
-        placeholder: 'DOB',
-        label: 'DOB',
-        visible: true,
-        options: [],
-        validationRules: {
-          required: true,
-        },
-      },
-      {
-        id: 4,
-        type: 'text',
-        name: 'age',
-        placeholder: 'age',
-        label: 'age',
+        name: 'dateOfBirth',
+        placeholder: 'Date of Birth',
+        label: 'Date of Birth',
         visible: true,
         options: [],
         validationRules: {
@@ -78,7 +86,7 @@ const staffForm = [
       {
         id: 6,
         type: 'text',
-        name: 'mobileNumber',
+        name: 'mobile',
         placeholder: 'Mobile Number',
         label: 'Mobile Number',
         visible: true,
@@ -101,10 +109,12 @@ const staffForm = [
       },
       {
         id: 8,
-        type: 'text',
+        type: 'dropdown',
         name: 'bloodGroup',
         placeholder: 'Blood Group',
         label: 'Blood Group',
+        optionKey: 'bloodType',
+        optionValue: 'bloodType',
         visible: true,
         options: [],
         validationRules: {
@@ -113,10 +123,12 @@ const staffForm = [
       },
       {
         id: 9,
-        type: 'select',
+        type: 'dropdown',
         name: 'religion',
         placeholder: 'Religion',
         label: 'Religion',
+        optionKey: 'value',
+        optionValue: 'value',
         visible: true,
         options: [
           {
@@ -138,10 +150,12 @@ const staffForm = [
       },
       {
         id: 10,
-        type: 'select',
+        type: 'dropdown',
         name: 'caste',
         placeholder: 'Caste',
         label: 'Caste',
+        optionKey: 'value',
+        optionValue: 'value',
         visible: true,
         options: [
           {
@@ -163,22 +177,39 @@ const staffForm = [
       },
       {
         id: 11,
-        type: 'select',
+        type: 'dropdown',
         name: 'nationality',
         placeholder: 'Nationality',
         label: 'Nationality',
+        optionKey: 'value',
+        optionValue: 'value',
         visible: true,
-        options: [],
+        options: [
+          {
+            value: 'indian',
+            label: 'Indian',
+          },
+          {
+            value: 'USA',
+            label: 'USA',
+          },
+          {
+            value: 'british',
+            label: 'British',
+          },
+        ],
         validationRules: {
           required: true,
         },
       },
       {
         id: 12,
-        type: 'select',
+        type: 'dropdown',
         name: 'motherTongue',
         placeholder: 'Mother Tongue',
         label: 'Mother Tongue',
+        optionKey: 'value',
+        optionValue: 'value',
         visible: true,
         options: [
           {
@@ -199,21 +230,9 @@ const staffForm = [
         },
       },
       {
-        id: 13,
-        type: 'text',
-        name: 'enrollmentId',
-        placeholder: 'enrollment ID',
-        label: 'enrollment ID',
-        visible: true,
-        options: [],
-        validationRules: {
-          required: true,
-        },
-      },
-      {
         id: 14,
         type: 'text',
-        name: 'aadharNumber',
+        name: 'aadharCardNumber',
         placeholder: 'Aadhar Number',
         label: 'Aadhar Number',
         visible: true,
@@ -231,11 +250,11 @@ const staffForm = [
         visible: true,
         options: [
           {
-            value: 'yes',
+            value: 'true',
             label: 'Yes',
           },
           {
-            value: 'no',
+            value: 'false',
             label: 'No',
           },
         ],
@@ -258,7 +277,7 @@ const staffForm = [
       {
         id: 17,
         type: 'text',
-        name: 'epfNo',
+        name: 'epfNumber',
         placeholder: 'ESI/EPF NO',
         label: 'ESI/EPF NO',
         visible: true,
@@ -318,9 +337,9 @@ const staffForm = [
       {
         id: 0,
         type: 'textarea',
-        name: 'addressLine1',
-        placeholder: 'Address Line1',
-        label: 'Address Line1',
+        name: 'currentAddressLine1',
+        placeholder: 'Current Address1',
+        label: 'Current Address1',
         visible: true,
         options: [],
         validationRules: {
@@ -330,9 +349,9 @@ const staffForm = [
       {
         id: 1,
         type: 'textarea',
-        name: 'addressLine1',
-        placeholder: 'Address Line2',
-        label: 'Address Line2',
+        name: 'currentAddressLine1',
+        placeholder: 'Current Address2',
+        label: 'Current Address2',
         visible: true,
         options: [],
         validationRules: {
@@ -342,9 +361,37 @@ const staffForm = [
       {
         id: 2,
         type: 'text',
-        name: 'pinCode',
-        placeholder: 'Pin code',
-        label: 'Pin code',
+        name: 'currentPincode',
+        placeholder: 'Current Pincode',
+        label: 'Current Pincode',
+        visible: true,
+        options: [],
+        validationRules: {
+          required: true,
+        },
+      },
+      {
+        id: 5,
+        type: 'dropdown',
+        name: 'currentCountry',
+        placeholder: 'Current Country',
+        label: 'Current Country',
+        optionKey: 'name',
+        optionValue: 'isoCode',
+        visible: true,
+        options: [],
+        validationRules: {
+          required: true,
+        },
+      },
+      {
+        id: 4,
+        type: 'dropdown',
+        name: 'currentState',
+        placeholder: 'Current State',
+        label: 'Current State',
+        optionKey: 'name',
+        optionValue: 'isoCode',
         visible: true,
         options: [],
         validationRules: {
@@ -353,60 +400,62 @@ const staffForm = [
       },
       {
         id: 3,
-        type: 'select',
-        name: 'city',
-        placeholder: 'City',
-        label: 'City',
+        type: 'dropdown',
+        name: 'currentCity',
+        placeholder: 'Current City',
+        label: 'Current City',
+        optionKey: 'name',
+        optionValue: 'isoCode',
         visible: true,
-        options: [
-          {
-            value: 'kanyakumari',
-            label: 'kanyakumari',
-          },
-          {
-            value: 'chennai',
-            label: 'chennai',
-          },
-          {
-            value: 'madurai',
-            label: 'madurai',
-          },
-        ],
+        options: [],
         validationRules: {
           required: true,
         },
       },
       {
-        id: 4,
-        type: 'select',
-        name: 'state',
-        placeholder: 'State',
-        label: 'State',
+        id: 0,
+        type: 'textarea',
+        name: 'permanentAddress1',
+        placeholder: 'Permanent Address1',
+        label: 'Permanent Address1',
         visible: true,
-        options: [
-          {
-            value: 'tamilnadu',
-            label: 'Tamilnadu',
-          },
-          {
-            value: 'kerala',
-            label: 'Kerala',
-          },
-          {
-            value: 'karnataka',
-            label: 'Karnataka',
-          },
-        ],
+        options: [],
+        validationRules: {
+          required: true,
+        },
+      },
+      {
+        id: 1,
+        type: 'textarea',
+        name: 'permanentAddress1',
+        placeholder: 'Permanent Address',
+        label: 'Permanent Address',
+        visible: true,
+        options: [],
+        validationRules: {
+          required: true,
+        },
+      },
+      {
+        id: 2,
+        type: 'text',
+        name: 'permanentPincode',
+        placeholder: 'Permanent Pincode',
+        label: 'Permanent Pincode',
+        visible: true,
+        options: [],
         validationRules: {
           required: true,
         },
       },
       {
         id: 5,
-        type: 'text',
-        name: 'country',
-        placeholder: 'Country',
-        label: 'Country',
+        type: 'dropdown',
+        name: 'permanentCountry',
+        placeholder: 'Permanent Country',
+        optionKey: 'name',
+        optionValue: 'isoCode',
+        label: 'Permanent Country',
         visible: true,
         options: [],
         validationRules: {
@@ -414,97 +463,27 @@ const staffForm = [
         },
       },
       {
-        id: 6,
-        type: 'textarea',
-        name: 'addressLine1',
-        placeholder: 'Address Line1',
-        label: 'Address Line1',
+        id: 4,
+        type: 'dropdown',
+        name: 'permanentState',
+        placeholder: 'Permanent State',
+        label: 'Permanent State',
         visible: true,
+        optionKey: 'name',
+        optionValue: 'isoCode',
         options: [],
         validationRules: {
           required: true,
         },
       },
       {
-        id: 7,
-        type: 'textarea',
-        name: 'addressLine1',
-        placeholder: 'Address Line2',
-        label: 'Address Line2',
-        visible: true,
-        options: [],
-        validationRules: {
-          required: true,
-        },
-      },
-      {
-        id: 8,
-        type: 'text',
-        name: 'pinCode',
-        placeholder: 'Pin code',
-        label: 'Pin code',
-        visible: true,
-        options: [],
-        validationRules: {
-          required: true,
-        },
-      },
-      {
-        id: 9,
-        type: 'select',
-        name: 'city',
-        placeholder: 'City',
-        label: 'City',
-        visible: true,
-        options: [
-          {
-            value: 'kanyakumari',
-            label: 'kanyakumari',
-          },
-          {
-            value: 'chennai',
-            label: 'chennai',
-          },
-          {
-            value: 'madurai',
-            label: 'madurai',
-          },
-        ],
-        validationRules: {
-          required: true,
-        },
-      },
-      {
-        id: 10,
-        type: 'select',
-        name: 'state',
-        placeholder: 'State',
-        label: 'State',
-        visible: true,
-        options: [
-          {
-            value: 'tamilnadu',
-            label: 'Tamilnadu',
-          },
-          {
-            value: 'kerala',
-            label: 'Kerala',
-          },
-          {
-            value: 'karnataka',
-            label: 'Karnataka',
-          },
-        ],
-        validationRules: {
-          required: true,
-        },
-      },
-      {
-        id: 11,
-        type: 'text',
-        name: 'country',
-        placeholder: 'Country',
-        label: 'Country',
+        id: 3,
+        type: 'dropdown',
+        name: 'permanentCity',
+        placeholder: 'Permanent City',
+        label: 'Permanent City',
+        optionKey: 'name',
+        optionValue: 'isoCode',
         visible: true,
         options: [],
         validationRules: {
@@ -519,166 +498,28 @@ const staffForm = [
     sectionFields: [
       {
         id: 0,
-        type: 'text',
-        name: 'category',
-        placeholder: 'Category',
-        label: 'Category',
-        visible: true,
-        options: [],
-        validationRules: {
-          required: true,
-        },
-      },
-      {
-        id: 1,
-        type: 'text',
+        type: 'dropdown',
         name: 'type',
         placeholder: 'type',
         label: 'type',
+        optionKey: 'value',
+        optionValue: 'value',
         visible: true,
-        options: [],
+        options: [
+          { value: 'Teaching', label: 'Teaching' },
+          { value: 'NonTeaching', label: 'NonTeaching' },
+          { value: 'Principal', label: 'Principal' },
+        ],
         validationRules: {
           required: true,
         },
       },
       {
         id: 2,
-        type: 'text',
-        name: 'classIncharge',
-        placeholder: 'Class Incharge',
-        label: 'Class Incharge',
-        visible: true,
-        options: [],
-        validationRules: {
-          required: true,
-        },
-      },
-      {
-        id: 3,
-        type: 'text',
-        name: 'subjectHandling',
-        placeholder: 'Subject Handling',
-        label: 'Subject Handling',
-        visible: true,
-        options: [],
-        validationRules: {
-          required: true,
-        },
-      },
-      {
-        id: 4,
-        type: 'text',
-        name: 'classesName',
-        placeholder: 'Classes Name',
-        label: 'Classes Name',
-        visible: true,
-        options: [],
-        validationRules: {
-          required: true,
-        },
-      },
-      {
-        id: 5,
-        type: 'text',
-        name: 'natureOfPosting',
-        placeholder: 'Nature Of Posting',
-        label: 'Nature Of Posting',
-        visible: true,
-        options: [],
-        validationRules: {
-          required: true,
-        },
-      },
-      {
-        id: 6,
         type: 'date',
-        name: 'dateOfAppoinment',
-        placeholder: 'Date Of Appoinment',
-        label: 'Date Of Appoinment',
-        visible: true,
-        options: [],
-        validationRules: {
-          required: true,
-        },
-      },
-      {
-        id: 7,
-        type: 'date',
-        name: 'dateOfRegularisation',
-        placeholder: 'Date Of Regularisation',
-        label: 'Date Of Regularisation',
-        visible: true,
-        options: [],
-        validationRules: {
-          required: true,
-        },
-      },
-      {
-        id: 8,
-        type: 'date',
-        name: 'dateOfDetainment',
-        placeholder: 'Date Of Detainment',
-        label: 'Date Of Detainment',
-        visible: true,
-        options: [],
-        validationRules: {
-          required: true,
-        },
-      },
-      {
-        id: 9,
-        type: 'text',
-        name: 'employeeId',
-        placeholder: 'Employee ID',
-        label: 'Employee ID',
-        visible: true,
-        options: [],
-        validationRules: {
-          required: true,
-        },
-      },
-      {
-        id: 10,
-        type: 'text',
-        name: 'cps',
-        placeholder: 'CPS',
-        label: 'CPS',
-        visible: true,
-        options: [],
-        validationRules: {
-          required: true,
-        },
-      },
-      {
-        id: 11,
-        type: 'text',
-        name: 'tpf',
-        placeholder: 'TPF',
-        label: 'TPF',
-        visible: true,
-        options: [],
-        validationRules: {
-          required: true,
-        },
-      },
-      {
-        id: 12,
-        type: 'text',
-        name: 'employmentType',
-        placeholder: 'Employment Type',
-        label: 'Employment Type',
-        visible: true,
-        options: [],
-        validationRules: {
-          required: true,
-        },
-      },
-      {
-        id: 13,
-        type: 'text',
-        name: 'designation',
-        placeholder: 'Designation',
-        label: 'Designation',
+        name: 'dateOfJoining',
+        placeholder: 'Date Of Joining',
+        label: 'Date Of Joining',
         visible: true,
         options: [],
         validationRules: {
@@ -687,23 +528,5 @@ const staffForm = [
       },
     ],
   },
-  // {
-  //   id: 4,
-  //   sectionTitle: 'Demo1',
-  //   sectionFields: [
-  //     {
-  //       id: 0,
-  //       type: 'email',
-  //       name: 'demo1',
-  //       placeholder: 'demo1',
-  //       label: 'demo1',
-  //       visible: true,
-  //       options: [],
-  //       validationRules: {
-  //         required: true,
-  //       },
-  //     },
-  //   ],
-  // },
 ];
 export default staffForm;

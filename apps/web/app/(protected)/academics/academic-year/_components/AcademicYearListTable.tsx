@@ -141,7 +141,7 @@ export function AcademicYearListTable() {
       const params = new URLSearchParams(searchParams);
       params.set('page', page.toString());
 
-      router.replace(pathname + '?' + params.toString());
+      router.push(pathname + '?' + params.toString());
     },
     [searchParams, pathname, router]
   );
@@ -309,7 +309,7 @@ export function AcademicYearListTable() {
             const params = new URLSearchParams(searchParams);
             params.set('limit', value.toString());
 
-            router.replace(pathname + '?' + params.toString());
+            router.push(pathname + '?' + params.toString());
           }}
         />
         <DeleteConfirmationModal

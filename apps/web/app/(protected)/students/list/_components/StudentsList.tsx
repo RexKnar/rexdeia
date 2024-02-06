@@ -227,6 +227,10 @@ export function StudentsList() {
     mutateAsync: deleteSubjectAsync,
   } = useDeleteStudentMutationQuery();
 
+  const handleViewClick = (studentId) => {
+    router.push(`/students/${studentId}`);
+  };
+
   const handleOnPageChange = useCallback(
     (page: number) => {
       const params = new URLSearchParams(searchParams);
@@ -244,7 +248,7 @@ export function StudentsList() {
         description: 'Error while deleting student',
       });
     }
-  }, [isDeleteStudentError, toast]);
+  }, [isDeleteStudentError]);
 
   useEffect(() => {
     if (isDeleteSuccess) {
@@ -255,7 +259,7 @@ export function StudentsList() {
       });
       setSelectedStudent(null);
     }
-  }, [isDeleteSuccess, toast]);
+  }, [isDeleteSuccess]);
 
   const table = useReactTable({
     columns,
@@ -347,7 +351,7 @@ export function StudentsList() {
                       <TooltipContent>
                         <p>
                           <span>Edit</span>
-                          <span className="mx-1 font-semibold">{`${row.original.name}`}</span>
+                          <span className="mx-1 font-semibold">{`${row.original.firstName}`}</span>
                         </p>
                       </TooltipContent>
                     </Tooltip>
@@ -355,13 +359,13 @@ export function StudentsList() {
                       <TooltipTrigger asChild>
                         <Button
                           onMouseEnter={() => {
-                            router.prefetch(`/students/${selectedStudent.id}`);
+                            router.prefetch(`/students/${row.original.id}`);
                           }}
                           onClick={() => {
-                            router.push(`/students/${selectedStudent.id}`);
+                            handleViewClick(row.original.id);
                           }}
                           variant="mild"
-                          className="h-auto px-3 py-2"
+                          className="mr-3 h-auto px-3 py-2"
                         >
                           <Eye size={12} className="text-center text-black" />
                         </Button>
@@ -369,7 +373,7 @@ export function StudentsList() {
                       <TooltipContent>
                         <p>
                           <span>view</span>
-                          <span className="mx-1 font-semibold">{`${row.original.name}`}</span>
+                          <span className="mx-1 font-semibold">{`${row.original.firstName}`}</span>
                         </p>
                       </TooltipContent>
                     </Tooltip>
@@ -399,7 +403,7 @@ export function StudentsList() {
                       <TooltipContent>
                         <p>
                           <span>Delete</span>
-                          <span className="mx-1 font-semibold">{`${row.original.name}`}</span>
+                          <span className="mx-1 font-semibold">{`${row.original.firstName}`}</span>
                         </p>
                       </TooltipContent>
                     </Tooltip>

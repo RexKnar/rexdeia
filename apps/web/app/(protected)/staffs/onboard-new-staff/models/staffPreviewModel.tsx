@@ -7,13 +7,15 @@ import React, { useEffect } from 'react';
 import { Else, If, Then } from 'react-if';
 import { Button, Text } from 'ui';
 
+import { AddStaffModel } from '../../../../../lib/domain/staff';
 import { useCreateStaffMutationQuery } from '../../../../../lib/queries/staff/useCreateStaffMutationQuery';
+import { staffFormSectionType } from '../data/onboard-staff-fields';
 
 type AddStaffPreviewModalProps = {
   open: boolean;
-  formData: Record<string, any>;
+  formData: AddStaffModel;
   onOpenChange(open: boolean): void;
-  formSections: Record<string, any>[];
+  formSections: staffFormSectionType[];
 };
 
 export function StaffPreviewModal({
@@ -35,20 +37,16 @@ export function StaffPreviewModal({
   }, [formData, formSections]);
 
   const handleOnSaveClick = async () => {
-    const response = await createStaffMutationAsync({
-      ...formData,
-      lastName: '',
-      firstName: '',
-      dateOfBirth: undefined,
-      gender: '',
-      type: 'Teaching',
-      annualIncome: '',
-      address: '',
-      dateOfJoining: undefined,
-      email: '',
-      mobile: '',
-      differentlyAbled: false,
-    });
+    try {
+      await createStaffMutationAsync({
+        ...formData,
+        differentlyAbled: Boolean(formData.differentlyAbled),
+        dateOfJoining: new Date(formData.dateOfJoining),
+        dateOfBirth: new Date(formData.dateOfBirth),
+      });
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (

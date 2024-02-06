@@ -132,7 +132,7 @@ export function SaveSubjectFlyout() {
       setValue('subjectFormatId', subjectFormatId);
     } else {
       setValue('name', null);
-      setValue('isActive', true);
+      setValue('isActive', false);
       setValue(
         'subjectTypeId',
         subjectTypeList && subjectTypeList.data.length

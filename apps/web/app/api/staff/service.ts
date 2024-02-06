@@ -38,6 +38,32 @@ export async function updateStaffById(
   });
 }
 
+/**
+ * @swagger
+ * /api/staff:
+ *     post:
+ *       summary: Add new staff
+ *       description: Add New staff
+ *       requestBody:
+ *         required: true
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *       responses:
+ *         '200':
+ *           description: New staff added successfully.
+ *           content:
+ *             application/json:
+ *               schema:
+ *                 # Define the schema of your staff object here
+ *         '400':
+ *           description: Bad request due to validation error.
+ *         '401':
+ *           description: Unauthorized access.
+ *         '500':
+ *           description: Internal server error.
+ */
 export async function addStaff(staff: AddStaffModel) {
   const session = await getServerSession(authOptions);
 
@@ -82,7 +108,6 @@ export async function addStaff(staff: AddStaffModel) {
   return db.staff.create({
     data: {
       ...staff,
-      dateOfJoining: new Date(staff.dateOfJoining),
       createdAt: new Date(),
       updatedAt: new Date(),
       user: {
@@ -104,13 +129,13 @@ export async function addStaff(staff: AddStaffModel) {
   });
 }
 
-export async function getStaffList(page: number, pageSize: number) {
+export async function getStaffList(page: number, limit: number) {
   const session = await getServerSession(authOptions);
 
   const [staffList, total] = await Promise.all([
     db.staff.findMany({
-      take: pageSize,
-      skip: (page - 1) * pageSize,
+      take: limit,
+      skip: (page - 1) * limit,
       where: {
         status: 'Active',
         branchId: session.branchId,
@@ -128,7 +153,7 @@ export async function getStaffList(page: number, pageSize: number) {
   return {
     total,
     page,
-    pageSize,
+    limit,
     data: staffList,
   };
 }

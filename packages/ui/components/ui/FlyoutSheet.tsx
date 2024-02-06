@@ -84,12 +84,6 @@ const SheetContent = React.forwardRef<
   ) => {
     const sheetRef = useRef(null);
 
-    const handleClickOutside = () => {
-      onCloseClick?.();
-    };
-
-    useOnClickOutside(sheetRef, handleClickOutside);
-
     return (
       <SheetPortal>
         <SheetOverlay />

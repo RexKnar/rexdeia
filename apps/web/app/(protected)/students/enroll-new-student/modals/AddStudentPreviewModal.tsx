@@ -53,7 +53,7 @@ export function AddStudentPreviewModal({
     });
 
     if (response) {
-      router.push(`/students/${response.id}`);
+      router.push(`/students/list`);
     }
   };
 

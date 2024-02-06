@@ -7,8 +7,8 @@ import { CreateClassModel, UpdateClassModel } from '../../../lib/domain/class';
 import { CreateSectionModel } from '../../../lib/domain/section';
 import {
   addSection,
-  addSubjectsToSection,
   getAllSectionsByClassId,
+  mapSubjectsToSection,
 } from '../section/service';
 import { getAllSubjectBySectionIds } from '../subject/service';
 
@@ -153,13 +153,13 @@ export async function updateClassById(
   });
 }
 
-export async function addSubjectsToClass(
+export async function mapSubjectsToClass(
   classId: string,
   subjectIds: string[]
 ) {
   const sections = await getAllSectionsByClassId(classId);
   sections.forEach(function (section) {
-    addSubjectsToSection(section.id, subjectIds);
+    mapSubjectsToSection(section.id, subjectIds);
   });
 }
 

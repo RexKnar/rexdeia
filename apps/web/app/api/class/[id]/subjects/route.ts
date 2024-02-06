@@ -4,7 +4,10 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 
 import { authOptions } from '../../../../../lib/auth';
-import { addSubjectsToClass, getAllSubjectByClassId } from '../../service';
+import { AddSubjectsToClassRequestModel } from '../../../../../lib/domain/class';
+import { addSubjects } from '../../../subject/service';
+import { getAllSubjectByClassId, mapSubjectsToClass } from '../../service';
+import { hasSubjectIds, hasSubjects } from './utils';
 
 /**
  * @swagger
@@ -94,16 +97,41 @@ export async function GET(request: Request, { params: { id } }) {
  */
 export async function POST(request: NextRequest, { params: { id } }) {
   const session = await getServerSession(authOptions);
+
   if (!session) {
     return new NextResponse(JSON.stringify({ error: 'UNAUTHORIZED' }), {
       status: StatusCodes.UNAUTHORIZED,
     });
   }
-  const payload = await request.json();
+
+  const payload: AddSubjectsToClassRequestModel = await request.json();
+
   try {
-    const createdClass = await addSubjectsToClass(id, payload['subjectIds']);
-    return new NextResponse(JSON.stringify(createdClass), {
-      status: StatusCodes.CREATED,
+    if (hasSubjectIds(payload)) {
+      const { subjectIds } = payload;
+      const response = await mapSubjectsToClass(id, subjectIds);
+
+      return new NextResponse(JSON.stringify(response), {
+        status: StatusCodes.CREATED,
+      });
+    }
+
+    if (hasSubjects(payload)) {
+      const { subjects } = payload;
+      const createdSubjects = await addSubjects(subjects);
+
+      const response = await mapSubjectsToClass(
+        id,
+        createdSubjects.map((subject) => subject.id)
+      );
+
+      return new NextResponse(JSON.stringify(response), {
+        status: StatusCodes.CREATED,
+      });
+    }
+
+    return new NextResponse(JSON.stringify({ error: 'VALIDATION_ERROR' }), {
+      status: StatusCodes.BAD_REQUEST,
     });
   } catch (e) {
     captureException(e);

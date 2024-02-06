@@ -4,8 +4,13 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 
 import { authOptions } from '../../../../../lib/auth';
-import { getAllSubjectBySectionId } from '../../../subject/service';
-import { addSubjectsToSection } from '../../service';
+import { AddSubjectsToSectionRequestModel } from '../../../../../lib/domain/section';
+import {
+  addSubjects,
+  getAllSubjectBySectionId,
+} from '../../../subject/service';
+import { mapSubjectsToSection } from '../../service';
+import { hasSubjectIds, hasSubjects } from './utils';
 
 /**
  * @swagger
@@ -100,11 +105,31 @@ export async function POST(request: NextRequest, { params: { id } }) {
       status: StatusCodes.UNAUTHORIZED,
     });
   }
-  const payload = await request.json();
+  const payload: AddSubjectsToSectionRequestModel = await request.json();
   try {
-    const createdClass = await addSubjectsToSection(id, payload['subjectIds']);
-    return new NextResponse(JSON.stringify(createdClass), {
-      status: StatusCodes.CREATED,
+    if (hasSubjectIds(payload)) {
+      const { subjectIds } = payload;
+      const createdClass = await mapSubjectsToSection(id, subjectIds);
+      return new NextResponse(JSON.stringify(createdClass), {
+        status: StatusCodes.CREATED,
+      });
+    }
+
+    if (hasSubjects(payload)) {
+      const { subjects } = payload;
+      const createdSubjects = await addSubjects(subjects);
+
+      const response = await mapSubjectsToSection(
+        id,
+        createdSubjects.map((subject) => subject.id)
+      );
+      return new NextResponse(JSON.stringify(response), {
+        status: StatusCodes.CREATED,
+      });
+    }
+
+    return new NextResponse(JSON.stringify({ error: 'VALIDATION_ERROR' }), {
+      status: StatusCodes.BAD_REQUEST,
     });
   } catch (e) {
     captureException(e);

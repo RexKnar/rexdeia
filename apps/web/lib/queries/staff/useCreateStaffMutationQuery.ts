@@ -7,8 +7,8 @@ import { ADD_STAFF } from '../../endpoints';
 export function useCreateStaffMutationQuery() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: async (shareDetails: AddStaffModel) => {
-      return await makeAPICall(ADD_STAFF, shareDetails, {}, {});
+    mutationFn: async (staffDetails: AddStaffModel) => {
+      return await makeAPICall(ADD_STAFF, staffDetails, {}, {});
     },
     onSuccess: async () => {
       await queryClient.refetchQueries({});

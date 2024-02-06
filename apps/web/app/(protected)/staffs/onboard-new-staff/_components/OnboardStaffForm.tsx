@@ -8,6 +8,11 @@ import { Else, If, Then } from 'react-if';
 import { Button, Input, RadioGroup, RadioGroupItem } from 'ui';
 import { cn } from 'utils';
 
+import { AddStaffModel } from '../../../../../lib/domain/staff';
+import { useGetBloodGroupListQuery } from '../../../../../lib/queries/common/useGetBloodGroupListQuery';
+import { useGetCityByStateCodeQuery } from '../../../../../lib/queries/common/useGetCityListQuery';
+import { useGetCountryListQuery } from '../../../../../lib/queries/common/useGetCountryListQuery';
+import { useGetStateByCountryCodeQuery } from '../../../../../lib/queries/common/useGetStateListQuery';
 import staffForm from '../data/onboard-staff-fields';
 import { StaffPreviewModal } from '../models/staffPreviewModel';
 import { OnboardStaffSidebar } from './OnboardStaffSidebar';
@@ -29,10 +34,14 @@ export function OnboardStaffForm() {
     reValidateMode: 'onChange',
   });
   const [visitedSteps, setVisitedSteps] = useState([]);
-  const [formData, setFormData] = useState({} as Record<string, unknown>);
+  const [formData, setFormData] = useState({} as AddStaffModel);
   const [isPreviewModalOpen, setIsPreviewModalOpen] = useState(false);
+  const [currentCountryCode, setCurrentCountryCode] = useState('');
+  const [permanentCountryCode, setPermanentCountryCode] = useState('');
+  const [currentStateCode, setCurrentStateCode] = useState('');
+  const [permanentStateCode, setPermanentStateCode] = useState('');
 
-  const handleOnFormSubmit = async (data: Record<string, unknown>) => {
+  const handleOnFormSubmit = async (data: AddStaffModel) => {
     setFormData(data);
     setIsPreviewModalOpen(true);
   };
@@ -55,6 +64,40 @@ export function OnboardStaffForm() {
     }
   };
 
+  const { data: getCurrentStateByCountryIdResponse } =
+    useGetStateByCountryCodeQuery(currentCountryCode, {
+      enabled: !!currentCountryCode,
+    });
+  const { data: getPermanentStateByCountryIdResponse } =
+    useGetStateByCountryCodeQuery(permanentCountryCode, {
+      enabled: !!permanentCountryCode,
+    });
+  const { data: getCurrentCityByStateCodeResponse } =
+    useGetCityByStateCodeQuery(currentCountryCode, currentStateCode, {
+      enabled: !!currentStateCode,
+    });
+  const { data: getPermanentCityByStateCodeResponse } =
+    useGetCityByStateCodeQuery(permanentCountryCode, permanentStateCode, {
+      enabled: !!permanentStateCode,
+    });
+  const { data: getCountryListResponse } = useGetCountryListQuery();
+  const { data: getBloodGroupListResponse } = useGetBloodGroupListQuery();
+
+  let customDataList = {
+    bloodGroup: getBloodGroupListResponse || [{ bloodType: 'Loading' }],
+    permanentCountry: getCountryListResponse || [{ name: 'Loading...' }],
+    permanentState: getPermanentStateByCountryIdResponse || [
+      { name: 'Loading...' },
+    ],
+    permanentCity: getPermanentCityByStateCodeResponse || [
+      { name: 'Loading...' },
+    ],
+    currentCountry: getCountryListResponse || [{ name: 'Loading...' }],
+    currentState: getCurrentStateByCountryIdResponse || [
+      { name: 'Loading...' },
+    ],
+    currentCity: getCurrentCityByStateCodeResponse || [{ name: 'Loading...' }],
+  };
   return (
     <form
       autoFocus
@@ -178,8 +221,8 @@ export function OnboardStaffForm() {
                                   <span className="text-red-300"> *</span>
                                 )}
                               </label>
-                              {field.options.map((option) => (
-                                <React.Fragment key={option.value}>
+                              {field.options.map((option, index) => (
+                                <React.Fragment key={index}>
                                   <RadioGroupItem
                                     className="mr-2"
                                     name={field.name}
@@ -216,12 +259,30 @@ export function OnboardStaffForm() {
                             </label>
                             <select
                               {...register(field.name, field.validationRules)}
+                              onChange={(e) => {
+                                const selectedValue = e.target.value;
+                                if (field.name === 'currentCountry') {
+                                  setCurrentCountryCode(selectedValue);
+                                } else if (field.name === 'permanentCountry') {
+                                  setPermanentCountryCode(selectedValue);
+                                } else if (field.name === 'currentState') {
+                                  setCurrentStateCode(selectedValue);
+                                } else if (field.name === 'permanentState') {
+                                  setPermanentStateCode(selectedValue);
+                                }
+                              }}
                               placeholder={field.placeholder}
                               className="ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring mt-1 flex h-10 w-full rounded-md border border-gray-300 bg-transparent px-3 py-2 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
                             >
-                              {field.options.map((option, index) => (
-                                <option key={index} value={option.value}>
-                                  {option.label}
+                              {(field.options && field.options.length > 0
+                                ? field.options
+                                : customDataList[field.name]
+                              ).map((option, index) => (
+                                <option
+                                  key={index}
+                                  value={option[field.optionValue]}
+                                >
+                                  {option[field.optionKey]}
                                 </option>
                               ))}
                             </select>

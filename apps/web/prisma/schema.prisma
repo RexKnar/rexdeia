@@ -133,6 +133,7 @@ model Branch {
   medium         Medium[]
   subjectType    SubjectType[]
   subjectFormat  SubjectFormat[]
+  Subject        Subject[]
 }
 
 model Organization {
@@ -495,6 +496,8 @@ model Subject {
   SectionSubject       SectionSubject[]
   ExamSubject          ExamSubject[]
   ExamSubjectPartition ExamSubjectPartition[]
+  branchId             String?                @db.Uuid
+  branch               Branch?                @relation(fields: [branchId], references: [id])
 }
 
 model SubjectType {

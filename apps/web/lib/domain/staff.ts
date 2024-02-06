@@ -11,7 +11,6 @@ export type Staff = {
   status: 'Active' | 'InActive' | 'Resigned' | 'Suspended' | 'Fired';
   annualIncome: string;
   bloodGroup?: string;
-  address: string;
   dateOfJoining: Date;
   email: string;
   mobile: string;
@@ -57,6 +56,10 @@ export type Staff = {
   degreeMarksCard?: string;
   pgMarksCard?: string;
   otherCertificate?: string;
+  isDeleting?: boolean;
+  isUpdating?: boolean;
+  isNewlyAdded?: boolean;
+  additionalAttributes: Staff;
 };
 
 export type AddStaffModel = Omit<Staff, 'id' | 'status'>;

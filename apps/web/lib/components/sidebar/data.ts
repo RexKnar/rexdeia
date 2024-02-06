@@ -47,6 +47,12 @@ export const menuItems: SidebarMenuItem[] = [
         id: 'enroll-new-student',
         path: '/staffs/onboard-new-staff',
       },
+      {
+        icon: null,
+        label: 'Staff List',
+        id: 'staff-list',
+        path: '/staffs/list',
+      },
     ],
   },
   {
@@ -95,13 +101,13 @@ export const menuItems: SidebarMenuItem[] = [
         id: 'academics-subjects-type',
         label: 'Subject Type',
         icon: null,
-        path: '/academics/subjects/subjectType',
+        path: '/academics/subjects/subject-type',
       },
       {
         id: 'academics-subjects-format',
         label: 'Subject Format',
         icon: null,
-        path: '/academics/subjects/subjectFormat',
+        path: '/academics/subjects/subject-format',
       },
     ],
   },

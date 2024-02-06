@@ -1,4 +1,5 @@
 import { SectionModel } from './section';
+import { CreateSubjectModel } from './subject';
 
 export type ClassModel = {
   id: string;
@@ -23,3 +24,11 @@ export type UpdateClassModel = Pick<
   ClassModel,
   'id' | 'name' | 'isActive' | 'branchId'
 >;
+
+export type AddSubjectsToClassRequestModel =
+  | {
+      subjectIds: string[];
+    }
+  | {
+      subjects: CreateSubjectModel[];
+    };
