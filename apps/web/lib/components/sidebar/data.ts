@@ -92,6 +92,12 @@ export const menuItems: SidebarMenuItem[] = [
         path: '/academics/academic-year',
       },
       {
+        id: 'academics-exams',
+        label: 'Exams',
+        icon: null,
+        path: '/academics/exams',
+      },
+      {
         id: 'academics-subjects-student',
         label: 'Subjects',
         icon: null,
