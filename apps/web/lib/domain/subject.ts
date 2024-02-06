@@ -5,12 +5,12 @@ export type SubjectModel = {
   description?: string;
   sectionId: string;
   subjectTypeId: string;
-  subjectFormatId: string;
+  subjectFormatId: string[];
   isDeleting?: boolean;
   isUpdating?: boolean;
   isNewlyAdded?: boolean;
   SubjectType?: SubjectTypeModel;
-  SubjectFormat?: SubjectFormatModel;
+  SubjectFormat: SubjectFormatModel[];
 };
 
 export type CreateSubjectModel = Pick<

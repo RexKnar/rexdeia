@@ -481,23 +481,24 @@ model Section {
 }
 
 model Subject {
-  id                   String                 @id @default(uuid()) @map("_id") @db.Uuid
-  description          String?
-  name                 String
-  isActive             Boolean
-  SubjectType          SubjectType            @relation(fields: [subjectTypeId], references: [id])
-  subjectTypeId        String                 @db.Uuid
-  SubjectFormat        SubjectFormat          @relation(fields: [subjectFormatId], references: [id])
-  subjectFormatId      String                 @db.Uuid
-  createdAt            DateTime?              @default(now())
-  updatedAt            DateTime?              @default(now())
-  Section              Section[]
-  sectionId            String[]               @db.Uuid
-  SectionSubject       SectionSubject[]
-  ExamSubject          ExamSubject[]
-  ExamSubjectPartition ExamSubjectPartition[]
-  branchId             String?                @db.Uuid
-  branch               Branch?                @relation(fields: [branchId], references: [id])
+  id                     String                   @id @default(uuid()) @map("_id") @db.Uuid
+  description            String?
+  name                   String
+  isActive               Boolean
+  SubjectType            SubjectType              @relation(fields: [subjectTypeId], references: [id])
+  subjectTypeId          String                   @db.Uuid
+  SubjectFormat          SubjectFormat?           @relation(fields: [subjectFormatId], references: [id])
+  subjectFormatId        String?                  @db.Uuid
+  createdAt              DateTime?                @default(now())
+  updatedAt              DateTime?                @default(now())
+  Section                Section[]
+  sectionId              String[]                 @db.Uuid
+  SectionSubject         SectionSubject[]
+  ExamSubject            ExamSubject[]
+  ExamSubjectPartition   ExamSubjectPartition[]
+  branchId               String?                  @db.Uuid
+  branch                 Branch?                  @relation(fields: [branchId], references: [id])
+  subjectToSubjectFormat SubjectToSubjectFormat[]
 }
 
 model SubjectType {
@@ -513,15 +514,27 @@ model SubjectType {
 }
 
 model SubjectFormat {
-  id        String    @id @default(uuid()) @map("_id") @db.Uuid
-  name      String
-  isActive  Boolean
-  subject   Subject[]
-  branch    Branch    @relation(fields: [branchId], references: [id])
-  branchId  String    @db.Uuid
-  isDeleted Boolean   @default(false)
-  createdAt DateTime? @default(now())
-  updatedAt DateTime? @default(now())
+  id                     String                   @id @default(uuid()) @map("_id") @db.Uuid
+  name                   String
+  isActive               Boolean
+  subject                Subject[]
+  branch                 Branch                   @relation(fields: [branchId], references: [id])
+  branchId               String                   @db.Uuid
+  isDeleted              Boolean                  @default(false)
+  createdAt              DateTime?                @default(now())
+  updatedAt              DateTime?                @default(now())
+  subjectToSubjectFormat SubjectToSubjectFormat[]
+}
+
+model SubjectToSubjectFormat {
+  subjectFormatId String        @db.Uuid
+  subjectId       String        @db.Uuid
+  subjectFormat   SubjectFormat @relation(fields: [subjectFormatId], references: [id])
+  subject         Subject       @relation(fields: [subjectId], references: [id])
+  createdAt       DateTime?     @default(now())
+  updatedAt       DateTime?     @default(now())
+
+  @@id([subjectFormatId, subjectId])
 }
 
 model Group {

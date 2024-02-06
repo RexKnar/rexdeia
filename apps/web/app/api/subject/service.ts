@@ -28,7 +28,11 @@ export async function getSubjectById(id: string) {
     },
     include: {
       SubjectType: true,
-      SubjectFormat: true,
+      subjectToSubjectFormat: {
+        include: {
+          subjectFormat: true,
+        },
+      },
     },
   });
 }
@@ -50,37 +54,42 @@ export async function updateSubjectById(
 export async function addSubjects(subjects: CreateSubjectModel[]) {
   const session = await getServerSession(authOptions);
 
-  // Using this workaround to avoid Prisma bug with createMany of not returning created records.
-  // https://github.com/prisma/prisma/issues/8131#issuecomment-997667070
-  return await db.$transaction(
-    subjects.map((subject) =>
-      db.subject.create({
+  return await db.$transaction(async (prisma) => {
+    for (const subject of subjects) {
+      const createdSubject = await prisma.subject.create({
         data: {
           name: subject.name,
           branchId: session.branchId,
           isActive: subject.isActive,
           description: subject.description,
           subjectTypeId: subject.subjectTypeId,
-          subjectFormatId: subject.subjectFormatId,
         },
-      })
-    )
-  );
+      });
+
+      await mapSubjectFormatsToSubject(
+        createdSubject.id,
+        subject.subjectFormatId
+      );
+    }
+  });
 }
 
 export async function addSubject(createSubject: CreateSubjectModel) {
   const session = await getServerSession(authOptions);
 
-  return db.subject.create({
+  const createdSubject = await db.subject.create({
     data: {
       name: createSubject.name,
       branchId: session.branchId,
       description: createSubject.description,
       isActive: createSubject.isActive,
       subjectTypeId: createSubject.subjectTypeId,
-      subjectFormatId: createSubject.subjectFormatId,
     },
   });
+  return await mapSubjectFormatsToSubject(
+    createdSubject.id,
+    createSubject.subjectFormatId
+  );
 }
 
 export async function getAllSubjectBySectionId(id: string) {
@@ -92,7 +101,11 @@ export async function getAllSubjectBySectionId(id: string) {
       subject: {
         include: {
           SubjectType: true,
-          SubjectFormat: true,
+          subjectToSubjectFormat: {
+            include: {
+              subjectFormat: true,
+            },
+          },
         },
       },
     },
@@ -112,7 +125,11 @@ export async function getAllSubjectBySectionIds(ids: string[]) {
       subject: {
         include: {
           SubjectType: true,
-          SubjectFormat: true,
+          subjectToSubjectFormat: {
+            include: {
+              subjectFormat: true,
+            },
+          },
         },
       },
     },
@@ -136,7 +153,11 @@ export async function getSubjectList(page: number, limit: number) {
       },
       include: {
         SubjectType: true,
-        SubjectFormat: true,
+        subjectToSubjectFormat: {
+          include: {
+            subjectFormat: true,
+          },
+        },
       },
       orderBy: {
         createdAt: 'desc',
@@ -152,4 +173,24 @@ export async function getSubjectList(page: number, limit: number) {
     limit,
     data: subjectList,
   };
+}
+
+export async function mapSubjectFormatsToSubject(
+  subjectId: string,
+  subjectFormatIds: string[]
+) {
+  await db.$transaction(
+    subjectFormatIds.map((subjectFormatId) => {
+      return db.subject.update({
+        where: {
+          id: subjectId,
+        },
+        data: {
+          subjectToSubjectFormat: {
+            create: [{ subjectFormatId: subjectFormatId }],
+          },
+        },
+      });
+    })
+  );
 }
