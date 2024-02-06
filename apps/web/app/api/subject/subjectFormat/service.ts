@@ -23,7 +23,7 @@ export async function getSubjectFormatById(id: string) {
   return db.subjectFormat.findFirst({
     where: {
       id: id,
-      isActive: true,
+      isDeleted: false,
     },
   });
 }
@@ -66,14 +66,12 @@ export async function getSubjectFormatList(page: number, limit: number) {
   const [total, subjectFormatList] = await Promise.all([
     db.subjectFormat.count({
       where: {
-        isActive: true,
         isDeleted: false,
         branchId: session.branchId,
       },
     }),
     db.subjectFormat.findMany({
       where: {
-        isActive: true,
         isDeleted: false,
         branchId: session.branchId,
       },
