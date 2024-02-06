@@ -153,7 +153,9 @@ export function SubjectFormatFlyout() {
                   Subject Format Name
                 </label>
                 <Input
-                  {...register('name')}
+                  {...register('name', {
+                    required: 'Name is Required',
+                  })}
                   id="name"
                   autoFocus
                   type="text"

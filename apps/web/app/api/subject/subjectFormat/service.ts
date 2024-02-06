@@ -64,7 +64,13 @@ export async function getSubjectFormatList(page: number, limit: number) {
   const session = await getServerSession(authOptions);
 
   const [total, subjectFormatList] = await Promise.all([
-    db.subjectFormat.count(),
+    db.subjectFormat.count({
+      where: {
+        isActive: true,
+        isDeleted: false,
+        branchId: session.branchId,
+      },
+    }),
     db.subjectFormat.findMany({
       where: {
         isActive: true,
