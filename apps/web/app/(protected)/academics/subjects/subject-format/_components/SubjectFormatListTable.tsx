@@ -11,7 +11,7 @@ import {
 } from '@tanstack/react-table';
 import { Loader2, Pencil, Trash2 } from 'lucide-react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import { useCallback } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { When } from 'react-if';
 import {
   Button,
@@ -19,6 +19,7 @@ import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
+  useToast,
 } from 'ui';
 import {
   Table,
@@ -30,7 +31,9 @@ import {
 } from 'ui/components/ui/Table';
 import { cn } from 'utils';
 
+import { DeleteConfirmationModal } from '../../../../../../lib/components/modals/DeleteConfirmationModal';
 import { SubjectFormatModel } from '../../../../../../lib/domain/subject';
+import { useDeleteSubjectFormatMutationQuery } from '../../../../../../lib/queries/subject-format/useDeleteSubjectFormatMutationQuery';
 import { useGetSubjectFormatList } from '../../../../../../lib/queries/subject-format/useGetSubjectFormatList';
 
 const columns: ColumnDef<SubjectFormatModel>[] = [
@@ -77,6 +80,13 @@ const columns: ColumnDef<SubjectFormatModel>[] = [
 ];
 
 export function SubjectFormatListTable() {
+  const { toast } = useToast();
+
+  const [showDeleteConfirmationModal, setShowDeleteConfirmationModal] =
+    useState(false);
+  const [selectedSubjectFormat, setSelectedSubjectFormat] =
+    useState<SubjectFormatModel | null>(null);
+
   const pathname = usePathname();
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -92,6 +102,32 @@ export function SubjectFormatListTable() {
     limit,
   });
 
+  const {
+    isError: isDeleteSubjectFormatError,
+    isSuccess: isDeleteSuccess,
+    mutateAsync: deleteSubjectFormatAsync,
+  } = useDeleteSubjectFormatMutationQuery(page, limit);
+
+  useEffect(() => {
+    if (isDeleteSubjectFormatError) {
+      toast({
+        title: 'Error',
+        variant: 'default',
+        description: 'Error while deleting subject format',
+      });
+    }
+  }, [isDeleteSubjectFormatError, toast]);
+
+  useEffect(() => {
+    if (isDeleteSuccess) {
+      toast({
+        title: 'Success',
+        variant: 'default',
+        description: 'Subject Format deleted successfully',
+      });
+      setSelectedSubjectFormat(null);
+    }
+  }, [isDeleteSuccess, toast]);
   const handleOnPageChange = useCallback(
     (page: number) => {
       const params = new URLSearchParams(searchParams);
@@ -186,6 +222,10 @@ export function SubjectFormatListTable() {
                         <Button
                           className="h-auto px-3 py-2"
                           variant="mild"
+                          onClick={() => {
+                            setSelectedSubjectFormat(row.original);
+                            setShowDeleteConfirmationModal(true);
+                          }}
                           disabled={
                             row.original.isNewlyAdded || row.original.isUpdating
                           }
@@ -238,6 +278,19 @@ export function SubjectFormatListTable() {
             params.set('limit', value.toString());
 
             router.push(pathname + '?' + params.toString());
+          }}
+        />
+        <DeleteConfirmationModal
+          open={showDeleteConfirmationModal}
+          description={`Are you sure you want to delete "${selectedSubjectFormat?.name}"`}
+          onDeleteClick={async () => {
+            if (selectedSubjectFormat) {
+              setShowDeleteConfirmationModal(false);
+              await deleteSubjectFormatAsync(selectedSubjectFormat.id);
+            }
+          }}
+          onCancelClick={() => {
+            setShowDeleteConfirmationModal(false);
           }}
         />
       </When>

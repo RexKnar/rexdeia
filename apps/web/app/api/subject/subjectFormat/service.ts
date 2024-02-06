@@ -13,7 +13,7 @@ export async function deleteSubjectFormatById(id: string) {
       id: id,
     },
     data: {
-      isActive: false,
+      isDeleted: true,
       updatedAt: new Date(),
     },
   });
@@ -67,8 +67,9 @@ export async function getSubjectFormatList(page: number, limit: number) {
     db.subjectFormat.count(),
     db.subjectFormat.findMany({
       where: {
-        branchId: session.branchId,
         isActive: true,
+        isDeleted: false,
+        branchId: session.branchId,
       },
       take: limit,
       skip: (page - 1) * limit,
