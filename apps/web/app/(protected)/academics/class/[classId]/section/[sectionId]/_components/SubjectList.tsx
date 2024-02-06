@@ -37,7 +37,7 @@ export function SubjectList() {
           <SubjectCard
             id={subjectItem.id}
             name={subjectItem.name}
-            format={subjectItem.SubjectFormat.name}
+            format=""
             type={subjectItem.SubjectType.name}
           />
         </div>

@@ -42,8 +42,8 @@ export async function POST(request: NextRequest) {
   const payload = await request.json();
 
   try {
-    const batch = await addSubject(payload);
-    return new NextResponse(JSON.stringify(batch), {
+    const subject = await addSubject(payload);
+    return new NextResponse(JSON.stringify(subject), {
       status: StatusCodes.CREATED,
     });
   } catch (e) {

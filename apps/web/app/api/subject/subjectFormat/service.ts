@@ -13,7 +13,7 @@ export async function deleteSubjectFormatById(id: string) {
       id: id,
     },
     data: {
-      isActive: false,
+      isDeleted: true,
       updatedAt: new Date(),
     },
   });
@@ -23,7 +23,7 @@ export async function getSubjectFormatById(id: string) {
   return db.subjectFormat.findFirst({
     where: {
       id: id,
-      isActive: true,
+      isDeleted: false,
     },
   });
 }
@@ -64,11 +64,16 @@ export async function getSubjectFormatList(page: number, limit: number) {
   const session = await getServerSession(authOptions);
 
   const [total, subjectFormatList] = await Promise.all([
-    db.subjectFormat.count(),
+    db.subjectFormat.count({
+      where: {
+        isDeleted: false,
+        branchId: session.branchId,
+      },
+    }),
     db.subjectFormat.findMany({
       where: {
+        isDeleted: false,
         branchId: session.branchId,
-        isActive: true,
       },
       take: limit,
       skip: (page - 1) * limit,

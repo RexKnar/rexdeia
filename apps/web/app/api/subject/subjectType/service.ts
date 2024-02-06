@@ -63,10 +63,14 @@ export async function getSubjectTypeList(page: number, limit: number) {
   const session = await getServerSession(authOptions);
 
   const [total, subjectTypeList] = await Promise.all([
-    db.subjectType.count(),
+    db.subjectType.count({
+      where: {
+        isDeleted: false,
+        branchId: session.branchId,
+      },
+    }),
     db.subjectType.findMany({
       where: {
-        isActive: true,
         isDeleted: false,
         branchId: session.branchId,
       },
