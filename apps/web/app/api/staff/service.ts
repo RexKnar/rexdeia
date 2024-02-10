@@ -168,3 +168,17 @@ export async function getAllStaffsBySectionId(sectionId: string) {
     },
   });
 }
+
+export async function getAllStaffsBySectionIds(ids: string[]) {
+  const session = await getServerSession(authOptions);
+  return await db.staff.findMany({
+    where: {
+      sectionId: {
+        in: ids,
+      },
+      status: 'Active',
+      branchId: session.branchId,
+      organizationId: session.organizationId,
+    },
+  });
+}
