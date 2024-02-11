@@ -180,6 +180,7 @@ export function SaveSectionFlyout() {
                 </label>
                 <Input
                   className="mt-2"
+                  autoFocus
                   {...register('name', {
                     required: 'Section Name is Required',
                   })}

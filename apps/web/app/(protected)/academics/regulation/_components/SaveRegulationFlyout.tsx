@@ -173,6 +173,7 @@ export function SaveRegulationFlyout() {
                     {...register('regulationName', {
                       required: 'Regulation Name is Required',
                     })}
+                    autoFocus
                     className="mt-2"
                     placeholder="Regulation Name"
                     id="regulationName"

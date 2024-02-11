@@ -142,6 +142,7 @@ export function UpdateClassFlyout() {
                   {...register('name', {
                     required: 'Class Name is Required',
                   })}
+                  autoFocus
                   className="mt-2"
                   id="name"
                   errorMessage={fieldErrors?.name?.message.toString()}

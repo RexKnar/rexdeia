@@ -152,6 +152,7 @@ export default function SaveGroupFlyout() {
                   {...register('name', {
                     required: 'name is Required',
                   })}
+                  autoFocus
                   className="mt-2"
                   id="name"
                 />
