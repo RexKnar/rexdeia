@@ -71,6 +71,7 @@ export async function updateSectionById(
       faculty: updateSection.faculty,
       isActive: updateSection.isActive,
       classId: updateSection.classId,
+      mediumId: updateSection.mediumId,
     },
   });
 }

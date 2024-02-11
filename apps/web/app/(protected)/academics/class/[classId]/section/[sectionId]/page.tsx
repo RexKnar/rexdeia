@@ -11,6 +11,7 @@ import { Button, Tabs, TabsContent, TabsList, TabsTrigger, Text } from 'ui';
 
 import { PageTitle } from '../../../../../../../lib/components/PageTitle';
 import { useGetSectionByIdQuery } from '../../../../../../../lib/queries/section/useGetSectionByIdQuery';
+import { SaveSectionFlyout } from './_components/SaveSectionFlyout';
 import { StaffList } from './_components/StaffList';
 import { StudentList } from './_components/StudentList';
 import { SubjectList } from './_components/SubjectList';
@@ -121,6 +122,7 @@ export default function Page() {
           <h1>Page 4</h1>
         </TabsContent>
       </Tabs>
+      <SaveSectionFlyout />
     </section>
   );
 }

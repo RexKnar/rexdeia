@@ -15,7 +15,7 @@ export type SectionModel = {
   students: string[];
 };
 
-export type GetMediumModel = Pick<MediumModel, 'name' | 'isActive'>;
+export type GetMediumModel = Pick<MediumModel, 'name' | 'isActive' | 'id'>;
 
 export type CreateSectionModel = Pick<
   SectionModel,

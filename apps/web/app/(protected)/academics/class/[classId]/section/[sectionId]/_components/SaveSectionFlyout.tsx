@@ -53,25 +53,16 @@ export function SaveSectionFlyout() {
     },
   });
 
-  useEffect(() => {
-    setValue('mediumId', 'Tamil');
-  }, [setValue]);
-
-  const [medium, setMedium] = useState('Tamil');
-  useEffect(() => {
-    setValue('mediumId', 'Tamil');
-  }, [setValue]);
-
   const params = useParams<{ sectionId: string }>();
   const isOpen = searchParams.get('isSectionFlyoutOpen') === 'true';
   const classId = searchParams.get('classId');
 
   const closeFlyout = () => {
+    setMediumId('');
     const params = new URLSearchParams(searchParams);
     params.set('isSectionFlyoutOpen', 'false');
     params.delete('sectionId');
-
-    router.replace(pathname + '?' + params.toString());
+    router.push(pathname + '?' + params.toString());
   };
 
   const { data: getSectionResponse } = useGetSectionByIdQuery(
@@ -81,13 +72,14 @@ export function SaveSectionFlyout() {
     }
   );
 
+  const [mediumId, setMediumId] = useState('');
   useEffect(() => {
     if (getSectionResponse) {
-      const { name, isActive, medium } = getSectionResponse;
-
+      const { name, isActive, mediumId } = getSectionResponse;
       setValue('name', name);
       setValue('isActive', isActive);
-      setValue('mediumId', medium.name);
+      setValue('mediumId', mediumId);
+      setMediumId(mediumId);
     } else {
       setValue('name', null);
       setValue('isActive', false);
@@ -105,30 +97,37 @@ export function SaveSectionFlyout() {
       page: 1,
       limit: 999,
     });
+
   const {
     isPending: isPendingUpdateSection,
     mutateAsync: mutateUpdateSectionAsync,
   } = useUpdateSectionMutationQuery(params.sectionId);
 
+  const isEditing = !!params.sectionId;
+
   const saveSection = async (payload: SectionModel) => {
     try {
-      if (classId) {
-        const addSectionPayload = {
-          ...payload,
-          classId,
-        };
-        mutateCreateSectionAsync(addSectionPayload);
-      } else {
+      if (isEditing) {
         const updateSectionPayload = {
           ...payload,
         };
-        mutateUpdateSectionAsync(updateSectionPayload);
+        await mutateUpdateSectionAsync(updateSectionPayload);
+      } else {
+        if (classId) {
+          const addSectionPayload = {
+            ...payload,
+            classId,
+          };
+          await mutateCreateSectionAsync(addSectionPayload);
+        }
       }
+
+      reset();
+      await closeFlyout();
     } catch (error) {
       console.error(error);
     } finally {
-      reset();
-      await closeFlyout();
+      setMediumId('');
     }
   };
 
@@ -198,13 +197,13 @@ export function SaveSectionFlyout() {
                 <div className="mt-2 w-full">
                   <Select
                     disabled={isMediumListLoading}
-                    value={medium}
+                    value={mediumId}
                     onValueChange={(value) => {
-                      setMedium(value);
+                      setMediumId(value);
                       setValue('mediumId', value);
                     }}
                   >
-                    <SelectTrigger className="w-full" defaultValue={'Tamil'}>
+                    <SelectTrigger className="w-full">
                       <SelectValue {...register('mediumId')} />
                     </SelectTrigger>
                     <SelectContent>
@@ -232,10 +231,12 @@ export function SaveSectionFlyout() {
                   {isPendingCreateSection || isPendingUpdateSection ? (
                     <div className="flex items-center justify-center">
                       <Loader2 className="mr-2 h-6 w-6 animate-spin text-white" />
-                      `${classId ? 'Updating' : 'Saving'}`
+                      {isEditing ? 'Updating' : 'Saving'}
                     </div>
+                  ) : isEditing ? (
+                    'Update'
                   ) : (
-                    `${classId ? 'Update' : 'Save'}`
+                    'Save'
                   )}
                 </Button>
               </div>
