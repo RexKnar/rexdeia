@@ -120,12 +120,12 @@ export async function POST(request: NextRequest, { params: { id } }) {
       const { subjects } = payload;
       const createdSubjects = await addSubjects(subjects);
 
-      const response = await mapSubjectsToClass(
+      await mapSubjectsToClass(
         id,
         createdSubjects.map((subject) => subject.id)
       );
 
-      return new NextResponse(JSON.stringify(response), {
+      return new NextResponse(JSON.stringify({}), {
         status: StatusCodes.CREATED,
       });
     }

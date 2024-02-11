@@ -25,5 +25,8 @@
   },
   "volta": {
     "node": "20.11.0"
+  },
+  "dependencies": {
+    "@radix-ui/react-checkbox": "^1.0.4"
   }
 }

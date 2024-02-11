@@ -4,9 +4,10 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Loader2, PlusCircle } from 'lucide-react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useEffect } from 'react';
-import { useForm } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 import {
   Button,
+  Checkbox,
   Input,
   Select,
   SelectContent,
@@ -25,6 +26,7 @@ import {
 import * as z from 'zod';
 
 import { CreateSubjectModel } from '../../../../../lib/domain/subject';
+import { useGetGroupListQuery } from '../../../../../lib/queries/group/useGetGroupListQuery';
 import { useGetSubjectFormatList } from '../../../../../lib/queries/subject-format/useGetSubjectFormatList';
 import { useGetSubjectTypeList } from '../../../../../lib/queries/subject-type/useGetSubjectTypeQuery';
 import { useCreateSubjectMutationQuery } from '../../../../../lib/queries/subjects/useCreateSubjectMutationQuery';
@@ -43,10 +45,13 @@ const schema = z.object({
     })
     .min(1),
   subjectFormatId: z
-    .string({
-      required_error: 'Subject Format is required',
-    })
-    .min(1),
+    .array(z.string())
+    .refine((value) => value.some((item) => item), {
+      message: 'Subject Format is required',
+    }),
+  groupId: z.array(z.string()).refine((value) => value.some((item) => item), {
+    message: 'Group is required',
+  }),
   isActive: z.boolean().default(true),
 });
 
@@ -61,6 +66,7 @@ export function SaveSubjectFlyout() {
   const isOpen = searchParams.get('isFlyoutOpen') === 'true';
 
   const {
+    control,
     watch,
     reset,
     setValue,
@@ -69,9 +75,11 @@ export function SaveSubjectFlyout() {
     formState: { errors: fieldErrors },
   } = useForm<SchemaType>({
     resolver: zodResolver(schema),
+    defaultValues: {
+      subjectFormatId: [],
+      groupId: [],
+    },
   });
-
-  const selectedSubjectFormatId = watch('subjectFormatId');
 
   const {
     data: subjectTypeList,
@@ -87,6 +95,14 @@ export function SaveSubjectFlyout() {
     isLoading: isSubjectFormatLoading,
     isFetching: isSubjectFormatFetching,
   } = useGetSubjectFormatList({
+    page: 1,
+    limit: 999,
+  });
+  const {
+    data: groupList,
+    isLoading: isGroupListLoading,
+    isFetching: isGroupListFetching,
+  } = useGetGroupListQuery({
     page: 1,
     limit: 999,
   });
@@ -115,8 +131,9 @@ export function SaveSubjectFlyout() {
     isCurrentSubjectLoading ||
     isCurrentSubjectFetching ||
     isSubjectTypeListLoading ||
-    isSubjectTypeListFetching;
-
+    isSubjectTypeListFetching ||
+    isGroupListLoading ||
+    isGroupListFetching;
   useEffect(() => {
     if (!isOpen) {
       return;
@@ -137,12 +154,6 @@ export function SaveSubjectFlyout() {
         'subjectTypeId',
         subjectTypeList && subjectTypeList.data.length
           ? subjectTypeList.data[0].id
-          : null
-      );
-      setValue(
-        'subjectFormatId',
-        subjectFormatList && subjectFormatList.data.length
-          ? subjectFormatList.data[0].id
           : null
       );
     }
@@ -238,11 +249,84 @@ export function SaveSubjectFlyout() {
                     {...register('name')}
                     id="name"
                     autoFocus
+                    required
                     type="text"
                     className="mt-2"
                     placeholder="Enter Subject Name"
                     errorMessage={fieldErrors?.name?.message.toString()}
                   />
+                </div>
+                <div className="pt-3">
+                  <label
+                    htmlFor="group"
+                    className="text-sm font-semibold text-gray-700"
+                  >
+                    Group
+                  </label>
+                  <div className="mt-2 flex flex-wrap">
+                    {groupList?.data?.map((item) => (
+                      <Controller
+                        key={item.id}
+                        control={control}
+                        name="groupId"
+                        render={({ field }) => {
+                          return (
+                            <label className="me-5">
+                              <Checkbox
+                                className="me-2 items-center space-x-2 rounded border border-primary-500"
+                                onCheckedChange={(checked) => {
+                                  return checked
+                                    ? field.onChange([...field.value, item.id])
+                                    : field.onChange(
+                                        field.value?.filter(
+                                          (value) => value !== item.id
+                                        )
+                                      );
+                                }}
+                              />
+                              <span>{item.name}</span>
+                            </label>
+                          );
+                        }}
+                      />
+                    ))}
+                  </div>
+                </div>
+                <div className="py-4">
+                  <label
+                    htmlFor="description"
+                    className="text-sm font-semibold text-gray-700"
+                  >
+                    Subject Format
+                  </label>
+                  <div className="mt-2 flex flex-wrap">
+                    {subjectFormatList?.data?.map((item) => (
+                      <Controller
+                        key={item.id}
+                        control={control}
+                        name="subjectFormatId"
+                        render={({ field }) => {
+                          return (
+                            <label className="me-5">
+                              <Checkbox
+                                className="me-2 items-center space-x-2 rounded border border-primary-500"
+                                onCheckedChange={(checked) => {
+                                  return checked
+                                    ? field.onChange([...field.value, item.id])
+                                    : field.onChange(
+                                        field.value?.filter(
+                                          (value) => value !== item.id
+                                        )
+                                      );
+                                }}
+                              />
+                              <span>{item.name}</span>
+                            </label>
+                          );
+                        }}
+                      />
+                    ))}
+                  </div>
                 </div>
                 <div>
                   <label
@@ -253,7 +337,7 @@ export function SaveSubjectFlyout() {
                   </label>
                   <Select
                     autoComplete="off"
-                    {...register('subjectTypeId')}
+                    {...register('subjectTypeId', { required: true })}
                     value={watch('subjectTypeId')}
                     onValueChange={(value) => {
                       if (value) {
@@ -275,37 +359,6 @@ export function SaveSubjectFlyout() {
                     </SelectContent>
                   </Select>
                 </div>
-                <div>
-                  <label
-                    htmlFor="description"
-                    className="text-sm font-semibold text-gray-700"
-                  >
-                    Subject Format
-                  </label>
-                  <Select
-                    {...register('subjectFormatId')}
-                    value={selectedSubjectFormatId}
-                    onValueChange={(value) => {
-                      if (value) {
-                        setValue('subjectFormatId', value);
-                      }
-                    }}
-                  >
-                    <SelectTrigger className="w-full">
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectGroup>
-                        {subjectFormatList?.data?.map((item) => (
-                          <SelectItem key={item.id} value={item.id}>
-                            {item.name}
-                          </SelectItem>
-                        ))}
-                      </SelectGroup>
-                    </SelectContent>
-                  </Select>
-                </div>
-
                 <div className="mt-10">
                   <Button
                     size="lg"
