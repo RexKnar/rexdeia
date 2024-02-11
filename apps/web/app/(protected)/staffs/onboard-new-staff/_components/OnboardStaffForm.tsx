@@ -372,6 +372,9 @@ export function OnboardStaffForm() {
               </section>
             </motion.section>
           ))}
+          <Button variant="default" type="submit">
+            save
+          </Button>
         </section>
       </section>
     </form>

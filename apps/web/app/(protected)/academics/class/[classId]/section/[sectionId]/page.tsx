@@ -32,7 +32,7 @@ export default function Page() {
     return (
       <div className="flex items-center justify-center">
         <Loader2 className="mr-2 h-6 w-6 animate-spin text-black" />
-        <p className=" text-black">Fetching Section Details...</p>
+        <p className="text-black ">Fetching Section Details...</p>
       </div>
     );
   }
@@ -40,7 +40,7 @@ export default function Page() {
   if (isGetSectionResponseError) {
     return (
       <div className="flex items-center justify-center">
-        <p className=" text-black">No Data Found</p>
+        <p className="text-black ">No Data Found</p>
       </div>
     );
   }
