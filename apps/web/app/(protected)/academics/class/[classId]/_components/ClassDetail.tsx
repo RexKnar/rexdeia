@@ -145,6 +145,19 @@ export function ClassDetail() {
                 <div className="w-3/12">
                   <StaffList />
                 </div>
+                <Button
+                  variant="default"
+                  onClick={async () => {
+                    const params = new URLSearchParams(searchParams);
+                    params.set(
+                      'isAssignStaffClassDetailPageFlyoutOpen',
+                      'true'
+                    );
+                    router.replace(pathname + '?' + params.toString());
+                  }}
+                >
+                  Assign Staff
+                </Button>
               </section>
             </TabsContent>
             <TabsContent value="Sections">
