@@ -1,7 +1,12 @@
 'use client';
 
 import { PlusCircle } from 'lucide-react';
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import {
+  useParams,
+  usePathname,
+  useRouter,
+  useSearchParams,
+} from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import {
   Button,
@@ -22,7 +27,7 @@ export function AddSubjectFlyout() {
   const pathname = usePathname();
   const router = useRouter();
   const searchParams = useSearchParams();
-
+  const params = useParams<{ sectionId: string }>();
   const isOpen = searchParams.get('isAddSubjectFlyoutOpen') === 'true';
 
   const { reset } = useForm();
@@ -77,6 +82,16 @@ export function AddSubjectFlyout() {
                 </SelectContent>
               </Select>
             </div>
+            {!params.sectionId && (
+              <div className="mt-5">
+                <label
+                  htmlFor="name"
+                  className="text-sm font-semibold text-gray-700"
+                >
+                  Section
+                </label>
+              </div>
+            )}
             <div className="mt-5">
               <label
                 htmlFor="name"
