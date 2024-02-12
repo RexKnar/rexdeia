@@ -1,7 +1,12 @@
 'use client';
 
 import { PlusCircle } from 'lucide-react';
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import {
+  useParams,
+  usePathname,
+  useRouter,
+  useSearchParams,
+} from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import {
   Button,
@@ -24,6 +29,7 @@ export function AssignStudentFlyout() {
   const pathname = usePathname();
   const router = useRouter();
   const searchParams = useSearchParams();
+  const params = useParams<{ sectionId: string }>();
   const isOpen = searchParams.get('isAssignStudentFlyoutOpen') === 'true';
 
   const { reset } = useForm();
@@ -78,28 +84,30 @@ export function AssignStudentFlyout() {
                 </SelectContent>
               </Select>
             </div>
-            <div className="mt-5">
-              <label
-                htmlFor="name"
-                className="text-sm font-semibold text-gray-700"
-              >
-                Section
-              </label>
-              <Select>
-                <SelectTrigger className="mt-2 w-full">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectGroup>
-                    <SelectItem value="2015-2016">2015-2016</SelectItem>
-                    <SelectItem value="2016-2017">2016-2017</SelectItem>
-                    <SelectItem value="2017-2018">2017-2018</SelectItem>
-                    <SelectItem value="2018-2019">2018-2019</SelectItem>
-                    <SelectItem value="2019-2020">2019-2020</SelectItem>
-                  </SelectGroup>
-                </SelectContent>
-              </Select>
-            </div>
+            {!params.sectionId && (
+              <div className="mt-5">
+                <label
+                  htmlFor="name"
+                  className="text-sm font-semibold text-gray-700"
+                >
+                  Section
+                </label>
+                <Select>
+                  <SelectTrigger className="mt-2 w-full">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectGroup>
+                      <SelectItem value="2015-2016">2015-2016</SelectItem>
+                      <SelectItem value="2016-2017">2016-2017</SelectItem>
+                      <SelectItem value="2017-2018">2017-2018</SelectItem>
+                      <SelectItem value="2018-2019">2018-2019</SelectItem>
+                      <SelectItem value="2019-2020">2019-2020</SelectItem>
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
+              </div>
+            )}
             <div className="mt-5">
               <label
                 htmlFor="name"
