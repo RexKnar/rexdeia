@@ -1,12 +1,22 @@
 'use client';
 
 import { Loader2 } from 'lucide-react';
-import { useParams } from 'next/navigation';
+import {
+  useParams,
+  usePathname,
+  useRouter,
+  useSearchParams,
+} from 'next/navigation';
+import { Button } from 'ui';
 
 import { useGetStaffListBySectionIdQuery } from '../../../../../../../../lib/queries/staff/useGetStaffListBySectionIdQuery';
+import { SaveAssignStaffFlyout } from './SaveAssignStaffFlyout';
 import { StaffCard } from './StaffCard';
 
 export function StaffList() {
+  const pathname = usePathname();
+  const router = useRouter();
+  const searchParams = useSearchParams();
   const params = useParams<{ sectionId: string }>();
   const { data: staffListResponse, isLoading: isStaffListLoading } =
     useGetStaffListBySectionIdQuery(params.sectionId, {
@@ -31,12 +41,28 @@ export function StaffList() {
   }
 
   return (
-    <div className="flex flex-wrap gap-4">
-      {staffListResponse.map((staffItem) => (
-        <div key={staffItem.id} className="w-[275px]">
-          <StaffCard id={staffItem.id} name={staffItem.firstName} />
-        </div>
-      ))}
+    <div>
+      <section className="flex justify-between px-2">
+        <Button
+          variant="default"
+          onClick={async () => {
+            const params = new URLSearchParams(searchParams);
+            params.set('isSaveAssignStaffFlyoutOpen', 'true');
+
+            router.replace(pathname + '?' + params.toString());
+          }}
+        >
+          Assign staff
+        </Button>
+        <SaveAssignStaffFlyout />
+      </section>
+      <div className="flex flex-wrap gap-4">
+        {staffListResponse.map((staffItem) => (
+          <div key={staffItem.id} className="w-[275px]">
+            <StaffCard id={staffItem.id} name={staffItem.firstName} />
+          </div>
+        ))}
+      </div>
     </div>
   );
 }

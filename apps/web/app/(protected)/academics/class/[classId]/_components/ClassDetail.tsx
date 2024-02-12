@@ -12,8 +12,9 @@ import { cn } from 'utils';
 
 import { PageTitle } from '../../../../../../lib/components/PageTitle';
 import { useGetClassByIdQuery } from '../../../../../../lib/queries/class/useGetClassByIdQuery';
-import { StaffCard } from '../section/[sectionId]/_components/StaffCard';
 import { SectionList } from './SectionList';
+import { StaffList } from './StaffList';
+import { StudentList } from './StudentList';
 import { SubjectList } from './SubjectList';
 import { UpdateClassFlyout } from './UpdateClassFlyout';
 
@@ -138,13 +139,26 @@ export function ClassDetail() {
               </section>
             </TabsContent>
             <TabsContent value="Students">
-              <h1>Page 2</h1>
+              <StudentList />
             </TabsContent>
             <TabsContent value="Staffs">
               <section className="pt-5">
                 <div className="w-3/12">
-                  <StaffCard id={''} name={''} />
+                  <StaffList />
                 </div>
+                <Button
+                  variant="default"
+                  onClick={async () => {
+                    const params = new URLSearchParams(searchParams);
+                    params.set(
+                      'isAssignStaffClassDetailPageFlyoutOpen',
+                      'true'
+                    );
+                    router.replace(pathname + '?' + params.toString());
+                  }}
+                >
+                  Assign Staff
+                </Button>
               </section>
             </TabsContent>
             <TabsContent value="Sections">

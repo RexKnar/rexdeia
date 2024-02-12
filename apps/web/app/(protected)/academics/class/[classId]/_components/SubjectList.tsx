@@ -1,12 +1,23 @@
 'use client';
 
 import { Loader2 } from 'lucide-react';
-import { useParams } from 'next/navigation';
+import {
+  useParams,
+  usePathname,
+  useRouter,
+  useSearchParams,
+} from 'next/navigation';
+import { Button } from 'ui';
 
 import { useGetSubjectListByClassIdQuery } from '../../../../../../lib/queries/subjects/useGetSubjectListByClassIdQuery';
+import { AddSubjectFlyout } from '../section/[sectionId]/_components/AddSubjectFlyout';
 import { SubjectCard } from '../section/[sectionId]/_components/SubjectCard';
 
 export function SubjectList() {
+  const pathname = usePathname();
+  const router = useRouter();
+  const searchParams = useSearchParams();
+
   const params = useParams<{ classId: string }>();
   const { data: subjectListResponse, isLoading: isSubjectListLoading } =
     useGetSubjectListByClassIdQuery(params.classId, {
@@ -31,17 +42,30 @@ export function SubjectList() {
   }
 
   return (
-    <div className="flex flex-wrap gap-4">
-      {subjectListResponse.map((subjectItem) => (
-        <div key={subjectItem.id} className="w-[275px]">
-          <SubjectCard
-            id={subjectItem.id}
-            name={subjectItem.name}
-            format=""
-            type={subjectItem.SubjectType.name}
-          />
-        </div>
-      ))}
-    </div>
+    <section className="flex w-full justify-between">
+      <Button
+        variant="default"
+        onClick={async () => {
+          const params = new URLSearchParams(searchParams);
+          params.set('isAddSubjectFlyoutOpen', 'true');
+          router.replace(pathname + '?' + params.toString());
+        }}
+      >
+        Add Subject
+      </Button>
+      <AddSubjectFlyout />
+      <div className="flex flex-wrap gap-4">
+        {subjectListResponse.map((subjectItem) => (
+          <div key={subjectItem.id} className="w-[275px]">
+            <SubjectCard
+              id={subjectItem.id}
+              name={subjectItem.name}
+              format=""
+              type={subjectItem.SubjectType.name}
+            />
+          </div>
+        ))}
+      </div>
+    </section>
   );
 }

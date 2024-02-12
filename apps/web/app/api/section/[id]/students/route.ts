@@ -72,7 +72,7 @@ export async function POST(request: NextRequest, { params: { id } }) {
  *         - name: id
  *           in: path
  *           required: true
- *           description: Unique identifier of the class.
+ *           description: Unique identifier of the section.
  *           schema:
  *             type: string
  *       responses:

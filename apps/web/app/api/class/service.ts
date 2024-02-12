@@ -10,6 +10,8 @@ import {
   getAllSectionsByClassId,
   mapSubjectsToSection,
 } from '../section/service';
+import { getAllStaffsBySectionIds } from '../staff/service';
+import { getAllStudentsBySectionIds } from '../student/service';
 import { getAllSubjectBySectionIds } from '../subject/service';
 
 type ClassFilter = {
@@ -167,4 +169,16 @@ export async function getAllSubjectByClassId(id: string) {
   const sections = await getAllSectionsByClassId(id);
   const subjects = await getAllSubjectBySectionIds(sections.map((x) => x.id));
   return uniqBy(subjects, (subject) => subject.id);
+}
+
+export async function getAllStudentsByClassId(id: string) {
+  const sections = await getAllSectionsByClassId(id);
+  const students = await getAllStudentsBySectionIds(sections.map((x) => x.id));
+  return uniqBy(students, (student) => student.id);
+}
+
+export async function getAllStaffsByClassId(id: string) {
+  const sections = await getAllSectionsByClassId(id);
+  const staffs = await getAllStaffsBySectionIds(sections.map((x) => x.id));
+  return uniqBy(staffs, (staff) => staff.id);
 }

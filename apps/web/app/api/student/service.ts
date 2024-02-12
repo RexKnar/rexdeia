@@ -251,6 +251,20 @@ export async function getAllStudentsBySectionId(sectionId: string) {
   });
 }
 
+export async function getAllStudentsBySectionIds(ids: string[]) {
+  const session = await getServerSession(authOptions);
+  return await db.student.findMany({
+    where: {
+      sectionId: {
+        in: ids,
+      },
+      status: 'Active',
+      branchId: session.branchId,
+      organizationId: session.organizationId,
+    },
+  });
+}
+
 export async function deleteStudentById(id: string) {
   const session = await getServerSession(authOptions);
   return db.student.update({

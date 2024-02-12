@@ -2,7 +2,7 @@
 
 import { Loader2, Plus, Trash } from 'lucide-react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Controller, useFieldArray, useForm } from 'react-hook-form';
 import {
   Button,
@@ -52,6 +52,10 @@ export default function AddClass() {
       page: 1,
       limit: 999,
     });
+
+  useEffect(() => {
+    setValue('isActive', false);
+  }, []);
 
   async function addClass(payload) {
     try {

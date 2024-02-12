@@ -182,6 +182,7 @@ export function SaveAcademicYearFlyout() {
                     {...register('name', {
                       required: 'Academic Year is Required',
                     })}
+                    autoFocus
                     className="mt-2"
                     placeholder="Academic Name"
                     id="name"

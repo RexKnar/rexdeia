@@ -152,10 +152,11 @@ export default function SaveGroupFlyout() {
                   {...register('name', {
                     required: 'name is Required',
                   })}
+                  autoFocus
                   className="mt-2"
                   id="name"
+                  errorMessage={fieldErrors?.name?.message.toString()}
                 />
-                <p>{fieldErrors.name?.message as string}</p>
               </div>
               <div className="mt-10">
                 <Button

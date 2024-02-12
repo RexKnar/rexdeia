@@ -55,7 +55,9 @@ export function SectionCard(props: SectionCardProps) {
               <DropdownMenuSeparator className="bg-gray-100 text-gray-500" />
               <DropdownMenuItem
                 className="flex cursor-pointer items-center"
-                onClick={() => {}}
+                onClick={(e) => {
+                  e.stopPropagation();
+                }}
               >
                 <span className="flex-1">Remove</span>
               </DropdownMenuItem>

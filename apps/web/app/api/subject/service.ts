@@ -52,9 +52,10 @@ export async function updateSubjectById(
 }
 
 export async function addSubjects(subjects: CreateSubjectModel[]) {
+  const createdSubjectsIds = [];
   const session = await getServerSession(authOptions);
 
-  return await db.$transaction(async (prisma) => {
+  await db.$transaction(async (prisma) => {
     for (const subject of subjects) {
       const createdSubject = await prisma.subject.create({
         data: {
@@ -65,12 +66,29 @@ export async function addSubjects(subjects: CreateSubjectModel[]) {
           subjectTypeId: subject.subjectTypeId,
         },
       });
+      createdSubjectsIds.push(createdSubject.id);
 
       await mapSubjectFormatsToSubject(
         createdSubject.id,
         subject.subjectFormatId
       );
     }
+  });
+
+  return db.subject.findMany({
+    where: {
+      id: {
+        in: createdSubjectsIds,
+      },
+    },
+    include: {
+      SubjectType: true,
+      subjectToSubjectFormat: {
+        include: {
+          subjectFormat: true,
+        },
+      },
+    },
   });
 }
 

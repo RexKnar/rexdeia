@@ -3,6 +3,7 @@ import { getServerSession } from 'next-auth';
 
 import { authOptions } from '../../../../../lib/auth';
 import { ClassDetail } from './_components/ClassDetail';
+import { AssignStaffClassDetailPageFlyout } from './section/[sectionId]/_components/AssignStaffClassDetailPageFlyout';
 import { SaveSectionFlyout } from './section/[sectionId]/_components/SaveSectionFlyout';
 
 export default async function Page() {
@@ -15,6 +16,7 @@ export default async function Page() {
     <section className="mx-auto my-5 rounded-md bg-white p-6">
       <ClassDetail />
       <SaveSectionFlyout />
+      <AssignStaffClassDetailPageFlyout />
     </section>
   );
 }

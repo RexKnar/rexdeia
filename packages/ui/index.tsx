@@ -37,3 +37,4 @@ export * from './components/ui/Pagination';
 export * from './colors';
 export * from './components/ui/Tooltip';
 export * from './components/ui/RadioGroup';
+export * from './components/ui/CheckBox';

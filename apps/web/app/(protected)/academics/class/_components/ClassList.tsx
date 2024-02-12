@@ -1,8 +1,7 @@
 'use client';
 
-import { FileText, Loader2 } from 'lucide-react';
+import { Loader2 } from 'lucide-react';
 
-import { LinkButton } from '../../../../../lib/components/LinkButton';
 import { useGetClassListQuery } from '../../../../../lib/queries/class/useGetClassListQuery';
 import { ClassWidget } from './ClassWidget';
 
@@ -27,14 +26,8 @@ export function ClassList() {
 
   return (
     <section className="p-3">
-      <div className="w-30 flex justify-end pb-6 pr-1">
-        <LinkButton variant="primary" url="class/add">
-          <FileText size={16} className="mr-2" />
-          Add Class
-        </LinkButton>
-      </div>
       {classList.data.length ? (
-        <div className="flex flex-wrap gap-4">
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
           {classList.data.map((widgetData) => (
             <ClassWidget classDetails={widgetData} key={widgetData.id} />
           ))}
