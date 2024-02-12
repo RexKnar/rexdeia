@@ -158,27 +158,42 @@ export async function getStaffList(page: number, limit: number) {
   };
 }
 
-export async function getAllStaffsBySectionId(sectionId: string) {
-  const session = await getServerSession(authOptions);
-  return db.staff.findMany({
+export async function getAllStaffsBySectionId(id: string) {
+  const staffs = await db.staffSection.findMany({
     where: {
-      branchId: session.branchId,
-      organizationId: session.organizationId,
-      sectionId: sectionId,
+      sectionId: id,
+    },
+    select: {
+      staff: true,
     },
   });
+  return [...staffs.map((data) => data.staff)];
+}
+
+export async function getAllSectionsByStaffIds(ids: string[]) {
+  const sections = await db.staffSection.findMany({
+    where: {
+      staffId: {
+        in: ids,
+      },
+    },
+    select: {
+      section: true,
+    },
+  });
+  return [...sections.map((data) => data.section)];
 }
 
 export async function getAllStaffsBySectionIds(ids: string[]) {
-  const session = await getServerSession(authOptions);
-  return await db.staff.findMany({
+  const staffs = await db.staffSection.findMany({
     where: {
       sectionId: {
         in: ids,
       },
-      status: 'Active',
-      branchId: session.branchId,
-      organizationId: session.organizationId,
+    },
+    select: {
+      staff: true,
     },
   });
+  return [...staffs.map((data) => data.staff)];
 }

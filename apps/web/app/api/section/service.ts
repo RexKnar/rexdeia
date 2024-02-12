@@ -1,6 +1,7 @@
 import { db } from '../../../lib/db';
 import {
   CreateSectionModel,
+  MapEntitiesToSectionModel,
   UpdateSectionModel,
 } from '../../../lib/domain/section';
 
@@ -57,6 +58,104 @@ export async function mapSubjectsToSection(
   );
 }
 
+export async function mapStaffsToSection(
+  sectionId: string,
+  entitiesToClassModels: MapEntitiesToSectionModel
+) {
+  await db.$transaction(
+    entitiesToClassModels.entities.map((entity) => {
+      const updateData = {
+        staffSections: {},
+        sectionSubjects: {},
+      };
+      if (entity.staffId) {
+        updateData.staffSections = {
+          create: [
+            {
+              staffId: entity.staffId,
+            },
+          ],
+        };
+      }
+
+      if (entity.subjectId) {
+        updateData.sectionSubjects = {
+          create: [
+            {
+              subjectId: entity.subjectId,
+            },
+          ],
+        };
+      }
+
+      return db.section.update({
+        where: {
+          id: sectionId,
+        },
+        data: updateData,
+      });
+    })
+  );
+}
+
+export async function unMapSubjectsFromSection(
+  sectionId: string,
+  entitiesToClassModels: MapEntitiesToSectionModel
+) {
+  const operations = entitiesToClassModels.entities.flatMap((entity) => {
+    const ops = [];
+
+    // If subjectId is provided, prepare to delete the corresponding SectionSubject entry
+    if (entity.subjectId) {
+      ops.push(
+        db.sectionSubject.deleteMany({
+          where: {
+            sectionId: sectionId,
+            subjectId: entity.subjectId,
+          },
+        })
+      );
+    }
+
+    if (entity.staffId) {
+      ops.push(
+        db.staffSection.deleteMany({
+          where: {
+            sectionId: sectionId,
+            staffId: entity.staffId,
+          },
+        })
+      );
+    }
+    return ops;
+  });
+
+  await db.$transaction(operations);
+}
+
+export async function unMapStaffsFromSection(
+  sectionId: string,
+  staffIds: string[]
+) {
+  const operations = staffIds.flatMap((staffId) => {
+    const ops = [];
+    // If staffId is provided, prepare to delete the corresponding SectionSubject entry
+    if (staffId) {
+      ops.push(
+        db.staffSection.deleteMany({
+          where: {
+            sectionId: sectionId,
+            staffId: staffId,
+          },
+        })
+      );
+    }
+    return ops;
+  });
+
+  await db.$transaction(operations);
+}
+
 export async function updateSectionById(
   id: string,
   updateSection: UpdateSectionModel
@@ -103,17 +202,17 @@ export async function addStudentsToSection(
   });
 }
 
-export async function addStaffsToSection(
+export async function removeStudentsFromSection(
   sectionId: string,
-  staffIds: string[]
+  studentIds: string[]
 ) {
   return db.section.update({
     where: {
       id: sectionId,
     },
     data: {
-      staff: {
-        connect: staffIds.map((id) => ({ id })),
+      students: {
+        disconnect: studentIds.map((id) => ({ id })),
       },
     },
   });

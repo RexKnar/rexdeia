@@ -4,9 +4,16 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 
 import { authOptions } from '../../../../../lib/auth';
-import { AddSubjectsToClassRequestModel } from '../../../../../lib/domain/class';
+import {
+  AddSubjectsToClassRequestModel,
+  MapEntitiesToClassModel,
+} from '../../../../../lib/domain/class';
 import { addSubjects } from '../../../subject/service';
-import { getAllSubjectByClassId, mapSubjectsToClass } from '../../service';
+import {
+  getAllSubjectByClassId,
+  mapSubjectsToClass,
+  unMapSubjectsFromClass,
+} from '../../service';
 import { hasSubjectIds, hasSubjects } from './utils';
 
 /**
@@ -132,6 +139,61 @@ export async function POST(request: NextRequest, { params: { id } }) {
 
     return new NextResponse(JSON.stringify({ error: 'VALIDATION_ERROR' }), {
       status: StatusCodes.BAD_REQUEST,
+    });
+  } catch (e) {
+    captureException(e);
+    return new NextResponse(e, {
+      status: StatusCodes.BAD_REQUEST,
+    });
+  }
+}
+
+/**
+ * @swagger
+ * /api/class/{id}/subjects:
+ *     delete:
+ *       summary: Remove subjects from class
+ *       description: Remove subjects from existing class
+ *       parameters:
+ *         - name: id
+ *           in: path
+ *           required: true
+ *           description: Unique identifier of the class.
+ *           schema:
+ *             type: string
+ *       requestBody:
+ *         required: true
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *       responses:
+ *         '200':
+ *           description: subjects details removed successfully.
+ *           content:
+ *             application/json:
+ *               schema:
+ *                 # Define the schema of your subject object here
+ *         '400':
+ *           description: Bad request due to validation error.
+ *         '401':
+ *           description: Unauthorized access.
+ *         '500':
+ *           description: Internal server error.
+ */
+export async function DELETE(request: NextRequest, { params: { id } }) {
+  const session = await getServerSession(authOptions);
+  if (!session) {
+    return new NextResponse(JSON.stringify({ error: 'UNAUTHORIZED' }), {
+      status: StatusCodes.UNAUTHORIZED,
+    });
+  }
+  const payload: MapEntitiesToClassModel = await request.json();
+
+  try {
+    const section = await unMapSubjectsFromClass(id, payload);
+    return new NextResponse(JSON.stringify(section), {
+      status: StatusCodes.OK,
     });
   } catch (e) {
     captureException(e);
