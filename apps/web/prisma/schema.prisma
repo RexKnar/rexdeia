@@ -134,6 +134,7 @@ model Branch {
   subjectType    SubjectType[]
   subjectFormat  SubjectFormat[]
   Subject        Subject[]
+  Category       Category[]
 }
 
 model Organization {
@@ -558,6 +559,19 @@ model Medium {
   branchId  String    @db.Uuid
   createdAt DateTime? @default(now())
   updatedAt DateTime? @default(now())
+}
+
+model Category {
+  id        String    @id @default(uuid()) @map("_id") @db.Uuid
+  name      String
+  parent    String?
+  isActive  Boolean
+  isDeleted Boolean   @default(false)
+  branch    Branch    @relation(fields: [branchId], references: [id])
+  branchId  String    @db.Uuid
+  createdAt DateTime? @default(now())
+  updatedAt DateTime? @default(now())
+  deletedAt DateTime? @default(now())
 }
 
 model Test {
