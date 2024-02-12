@@ -14,6 +14,7 @@ import { PageTitle } from '../../../../../../lib/components/PageTitle';
 import { useGetClassByIdQuery } from '../../../../../../lib/queries/class/useGetClassByIdQuery';
 import { SectionList } from './SectionList';
 import { StaffList } from './StaffList';
+import { StudentList } from './StudentList';
 import { SubjectList } from './SubjectList';
 import { UpdateClassFlyout } from './UpdateClassFlyout';
 
@@ -138,7 +139,7 @@ export function ClassDetail() {
               </section>
             </TabsContent>
             <TabsContent value="Students">
-              <h1>Page 2</h1>
+              <StudentList />
             </TabsContent>
             <TabsContent value="Staffs">
               <section className="pt-5">

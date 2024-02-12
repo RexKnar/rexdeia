@@ -77,6 +77,7 @@ export const GET_CITY_BY_STATE_CODE = `GET_CITY_BY_STATE_CODE`;
 export const GET_STAFF_LIST_BY_SECTION_ID = `GET_STAFF_LIST_BY_SECTION_ID`;
 export const GET_STUDENT_LIST_BY_SECTION_ID = `GET_STUDENT_LIST_BY_SECTION_ID`;
 export const GET_STAFF_LIST_BY_CLASS_ID = `GET_STAFF_LIST_BY_CLASS_ID`;
+export const GET_STUDENT_LIST_BY_CLASS_ID = `GET_STUDENT_LIST_BY_CLASS_ID`;
 
 export default <EndpointDetails>{
   [REGISTER_USER]: {
@@ -386,5 +387,9 @@ export default <EndpointDetails>{
   [GET_STAFF_LIST_BY_CLASS_ID]: {
     requestType: `GET`,
     endpoint: `/api/class/[id]/staffs`,
+  },
+  [GET_STUDENT_LIST_BY_CLASS_ID]: {
+    requestType: `GET`,
+    endpoint: `/api/class/[id]/students`,
   },
 };
