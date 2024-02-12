@@ -27,7 +27,7 @@ export function ClassList() {
   return (
     <section className="p-3">
       {classList.data.length ? (
-        <div className="flex flex-wrap gap-4">
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
           {classList.data.map((widgetData) => (
             <ClassWidget classDetails={widgetData} key={widgetData.id} />
           ))}
