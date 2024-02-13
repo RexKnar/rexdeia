@@ -562,16 +562,18 @@ model Medium {
 }
 
 model Category {
-  id        String    @id @default(uuid()) @map("_id") @db.Uuid
-  name      String
-  parent    String?
-  isActive  Boolean
-  isDeleted Boolean   @default(false)
-  branch    Branch    @relation(fields: [branchId], references: [id])
-  branchId  String    @db.Uuid
-  createdAt DateTime? @default(now())
-  updatedAt DateTime? @default(now())
-  deletedAt DateTime? @default(now())
+  id              String     @id @default(uuid()) @map("_id") @db.Uuid
+  name            String
+  parent          String?    @db.Uuid
+  parentCategory  Category?  @relation("ParentChild", fields: [parent], references: [id])
+  childCategories Category[] @relation("ParentChild")
+  isActive        Boolean
+  isDeleted       Boolean    @default(false)
+  branch          Branch     @relation(fields: [branchId], references: [id])
+  branchId        String     @db.Uuid
+  createdAt       DateTime   @default(now())
+  updatedAt       DateTime   @default(now())
+  deletedAt       DateTime?
 }
 
 model Test {
