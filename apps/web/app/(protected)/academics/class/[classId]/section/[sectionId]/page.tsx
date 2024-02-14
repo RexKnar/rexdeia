@@ -11,6 +11,7 @@ import { Button, Tabs, TabsContent, TabsList, TabsTrigger, Text } from 'ui';
 
 import { PageTitle } from '../../../../../../../lib/components/PageTitle';
 import { useGetSectionByIdQuery } from '../../../../../../../lib/queries/section/useGetSectionByIdQuery';
+import { AssignStudentFlyout } from '../../_components/AssignStudentFlyout';
 import { SaveSectionFlyout } from './_components/SaveSectionFlyout';
 import { StaffList } from './_components/StaffList';
 import { StudentList } from './_components/StudentList';
@@ -110,6 +111,16 @@ export default function Page() {
         </TabsContent>
         <TabsContent value="Students">
           <section className="pt-5">
+            <Button
+              variant="default"
+              onClick={async () => {
+                const params = new URLSearchParams(searchParams);
+                params.set('isAssignStudentFlyoutOpen', 'true');
+                router.replace(pathname + '?' + params.toString());
+              }}
+            >
+              Assign Student
+            </Button>
             <StudentList />
           </section>
         </TabsContent>
@@ -123,6 +134,7 @@ export default function Page() {
         </TabsContent>
       </Tabs>
       <SaveSectionFlyout />
+      <AssignStudentFlyout />
     </section>
   );
 }

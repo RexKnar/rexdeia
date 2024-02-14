@@ -12,6 +12,7 @@ import { cn } from 'utils';
 
 import { PageTitle } from '../../../../../../lib/components/PageTitle';
 import { useGetClassByIdQuery } from '../../../../../../lib/queries/class/useGetClassByIdQuery';
+import { AssignStudentFlyout } from './AssignStudentFlyout';
 import { SectionList } from './SectionList';
 import { StaffList } from './StaffList';
 import { StudentList } from './StudentList';
@@ -139,6 +140,16 @@ export function ClassDetail() {
               </section>
             </TabsContent>
             <TabsContent value="Students">
+              <Button
+                variant="default"
+                onClick={async () => {
+                  const params = new URLSearchParams(searchParams);
+                  params.set('isAssignStudentFlyoutOpen', 'true');
+                  router.replace(pathname + '?' + params.toString());
+                }}
+              >
+                Assign Student
+              </Button>
               <StudentList />
             </TabsContent>
             <TabsContent value="Staffs">
@@ -171,6 +182,7 @@ export function ClassDetail() {
             </TabsContent>
           </Tabs>
           <UpdateClassFlyout />
+          <AssignStudentFlyout />
         </>
       ) : (
         ' Details Not Found'

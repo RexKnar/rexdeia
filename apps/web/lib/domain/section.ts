@@ -42,3 +42,10 @@ export type AddSubjectsToSectionRequestModel =
   | {
       subjects: CreateSubjectModel[];
     };
+
+export type MapEntitiesToSectionModel = {
+  entities: {
+    subjectId?: string;
+    staffId?: string;
+  }[];
+};
