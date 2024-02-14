@@ -74,6 +74,7 @@ export async function addSubjects(subjects: CreateSubjectModel[]) {
     );
 
     await mapSubjectToGroup(createdSubject.id, subject.groupId);
+    await mapSubjectToCategory(createdSubject.id, subject.categoryId);
   }
 
   return db.subject.findMany({
@@ -225,6 +226,26 @@ export async function mapSubjectToGroup(subjectId: string, groupIds: string[]) {
         data: {
           subjectToGroup: {
             create: [{ groupId: groupId }],
+          },
+        },
+      });
+    })
+  );
+}
+
+export async function mapSubjectToCategory(
+  subjectId: string,
+  categoryIds: string[]
+) {
+  await db.$transaction(
+    categoryIds.map((categoryId) => {
+      return db.subject.update({
+        where: {
+          id: subjectId,
+        },
+        data: {
+          subjectToCategory: {
+            create: [{ categoryId: categoryId }],
           },
         },
       });

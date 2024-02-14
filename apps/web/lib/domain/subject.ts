@@ -8,6 +8,7 @@ export type SubjectModel = {
   subjectTypeId: string;
   subjectFormatId: string[];
   groupId: string[];
+  categoryId: string[];
   isDeleting?: boolean;
   isUpdating?: boolean;
   isNewlyAdded?: boolean;
@@ -24,6 +25,7 @@ export type CreateSubjectModel = Pick<
   | 'subjectFormatId'
   | 'groupId'
   | 'elective'
+  | 'categoryId'
 >;
 
 export type UpdateSubjectModel = Pick<
