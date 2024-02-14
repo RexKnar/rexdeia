@@ -32,3 +32,11 @@ export type AddSubjectsToClassRequestModel =
   | {
       subjects: CreateSubjectModel[];
     };
+
+export type MapEntitiesToClassModel = {
+  sectionIds: string[];
+  entities: {
+    subjectId?: string;
+    staffId?: string;
+  }[];
+};

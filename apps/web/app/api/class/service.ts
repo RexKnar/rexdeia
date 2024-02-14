@@ -3,12 +3,19 @@ import { getServerSession } from 'next-auth';
 
 import { authOptions } from '../../../lib/auth';
 import { db } from '../../../lib/db';
-import { CreateClassModel, UpdateClassModel } from '../../../lib/domain/class';
+import {
+  CreateClassModel,
+  MapEntitiesToClassModel,
+  UpdateClassModel,
+} from '../../../lib/domain/class';
 import { CreateSectionModel } from '../../../lib/domain/section';
 import {
   addSection,
   getAllSectionsByClassId,
+  mapStaffsToSection,
   mapSubjectsToSection,
+  unMapStaffsFromSection,
+  unMapSubjectsFromSection,
 } from '../section/service';
 import { getAllStaffsBySectionIds } from '../staff/service';
 import { getAllStudentsBySectionIds } from '../student/service';
@@ -163,6 +170,65 @@ export async function mapSubjectsToClass(
   sections.forEach(function (section) {
     mapSubjectsToSection(section.id, subjectIds);
   });
+}
+
+export async function unMapSubjectsFromClass(
+  classId: string,
+  mapEntitiesToClassModel: MapEntitiesToClassModel
+) {
+  if (
+    mapEntitiesToClassModel.sectionIds === undefined ||
+    mapEntitiesToClassModel.sectionIds.length == 0
+  ) {
+    const sections = await getAllSectionsByClassId(classId);
+    sections.forEach(function (section) {
+      unMapSubjectsFromSection(section.id, {
+        entities: mapEntitiesToClassModel.entities,
+      });
+    });
+  } else {
+    mapEntitiesToClassModel.sectionIds.forEach(function (section) {
+      unMapSubjectsFromSection(section, {
+        entities: mapEntitiesToClassModel.entities,
+      });
+    });
+  }
+}
+
+export async function mapStaffsToClass(
+  classId: string,
+  staffSubjects: MapEntitiesToClassModel
+) {
+  if (
+    staffSubjects.sectionIds === undefined ||
+    staffSubjects.sectionIds.length == 0
+  ) {
+    const sections = await getAllSectionsByClassId(classId);
+    sections.forEach(function (section) {
+      mapStaffsToSection(section.id, staffSubjects);
+    });
+  } else {
+    staffSubjects.sectionIds.forEach(function (section) {
+      mapStaffsToSection(section, staffSubjects);
+    });
+  }
+}
+
+export async function unMapStaffsFromClass(
+  classId: string,
+  staffIds: string[],
+  sectionIds: string[]
+) {
+  if (sectionIds === undefined || sectionIds.length == 0) {
+    const sections = await getAllSectionsByClassId(classId);
+    sections.forEach(function (section) {
+      unMapStaffsFromSection(section.id, staffIds);
+    });
+  } else {
+    sectionIds.forEach(function (section) {
+      unMapStaffsFromSection(section, staffIds);
+    });
+  }
 }
 
 export async function getAllSubjectByClassId(id: string) {
