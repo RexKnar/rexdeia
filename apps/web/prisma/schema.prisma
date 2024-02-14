@@ -578,8 +578,8 @@ model Medium {
 model Category {
   id              String     @id @default(uuid()) @map("_id") @db.Uuid
   name            String
-  parent          String?    @db.Uuid
-  parentCategory  Category?  @relation("ParentChild", fields: [parent], references: [id])
+  parentId        String?    @db.Uuid
+  parentCategory  Category?  @relation("ParentChild", fields: [parentId], references: [id])
   childCategories Category[] @relation("ParentChild")
   isActive        Boolean
   isDeleted       Boolean    @default(false)

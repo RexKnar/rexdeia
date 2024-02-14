@@ -3,7 +3,7 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from '../../../lib/auth';
 import { db } from '../../../lib/db';
 import {
-  CategoryModel,
+  CreateCategoryModel,
   UpdateCategoryModel,
 } from '../../../lib/domain/category';
 
@@ -35,20 +35,29 @@ export async function getCategoryList(page: number, limit: number) {
 }
 
 export async function getCategoryById(id: string) {
-  return await db.category.findUnique({
+  return db.category.findUnique({
     where: {
       id: id,
+      isActive: true,
     },
   });
 }
 
-export async function addCategory(category: CategoryModel) {
+export async function addCategory(
+  parentId: string | null | undefined,
+  category: CreateCategoryModel
+) {
   const session = await getServerSession(authOptions);
+
   return db.category.create({
     data: {
       name: category.name,
       isActive: category.isActive,
-      parent: category.parent,
+      parentCategory: {
+        connect: {
+          id: parentId,
+        },
+      },
       branch: {
         connect: {
           id: session.branchId,
@@ -64,11 +73,15 @@ export async function updateCategoryById(
 ) {
   const session = await getServerSession(authOptions);
 
-  return await db.category.update({
+  return db.category.update({
     data: {
       name: category.name,
       isActive: category.isActive,
-      parent: category.parent,
+      parentCategory: {
+        connect: {
+          id: category.parentId,
+        },
+      },
       branch: {
         connect: {
           id: session.branchId,
@@ -80,6 +93,7 @@ export async function updateCategoryById(
     },
   });
 }
+
 export async function deleteCategory(categoryId: string) {
   return db.category.update({
     where: {
