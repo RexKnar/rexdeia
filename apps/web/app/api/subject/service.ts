@@ -55,25 +55,26 @@ export async function addSubjects(subjects: CreateSubjectModel[]) {
   const createdSubjectsIds = [];
   const session = await getServerSession(authOptions);
 
-  await db.$transaction(async (prisma) => {
-    for (const subject of subjects) {
-      const createdSubject = await prisma.subject.create({
-        data: {
-          name: subject.name,
-          branchId: session.branchId,
-          isActive: subject.isActive,
-          description: subject.description,
-          subjectTypeId: subject.subjectTypeId,
-        },
-      });
-      createdSubjectsIds.push(createdSubject.id);
+  for (const subject of subjects) {
+    const createdSubject = await db.subject.create({
+      data: {
+        name: subject.name,
+        branchId: session.branchId,
+        isActive: subject.isActive,
+        description: subject.description,
+        subjectTypeId: subject.subjectTypeId,
+        elective: subject.elective,
+      },
+    });
+    createdSubjectsIds.push(createdSubject.id);
 
-      await mapSubjectFormatsToSubject(
-        createdSubject.id,
-        subject.subjectFormatId
-      );
-    }
-  });
+    await mapSubjectFormatsToSubject(
+      createdSubject.id,
+      subject.subjectFormatId
+    );
+
+    await mapSubjectToGroup(createdSubject.id, subject.groupId);
+  }
 
   return db.subject.findMany({
     where: {
@@ -102,6 +103,7 @@ export async function addSubject(createSubject: CreateSubjectModel) {
       description: createSubject.description,
       isActive: createSubject.isActive,
       subjectTypeId: createSubject.subjectTypeId,
+      elective: createSubject.elective,
     },
   });
   return await mapSubjectFormatsToSubject(
@@ -206,6 +208,23 @@ export async function mapSubjectFormatsToSubject(
         data: {
           subjectToSubjectFormat: {
             create: [{ subjectFormatId: subjectFormatId }],
+          },
+        },
+      });
+    })
+  );
+}
+
+export async function mapSubjectToGroup(subjectId: string, groupIds: string[]) {
+  await db.$transaction(
+    groupIds.map((groupId) => {
+      return db.subject.update({
+        where: {
+          id: subjectId,
+        },
+        data: {
+          subjectToGroup: {
+            create: [{ groupId: groupId }],
           },
         },
       });
