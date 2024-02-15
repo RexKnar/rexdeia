@@ -10,8 +10,8 @@ import { addCategory, getCategoryList } from './service';
  * @swagger
  * /api/category:
  *     post:
- *       summary: Add new category
- *       description: Add New category
+ *       summary: Add new category W/O Parent
+ *       description: Add New category W/O Parent
  *       requestBody:
  *         required: true
  *         content:
@@ -42,7 +42,7 @@ export async function POST(request: NextRequest) {
   const payload = await request.json();
 
   try {
-    const newCategory = await addCategory(payload);
+    const newCategory = await addCategory(null, payload);
     return new NextResponse(JSON.stringify(newCategory), {
       status: StatusCodes.CREATED,
     });

@@ -5,6 +5,7 @@ import { getServerSession } from 'next-auth';
 
 import { authOptions } from '../../../../lib/auth';
 import {
+  addCategory,
   deleteCategory,
   getCategoryById,
   updateCategoryById,
@@ -175,6 +176,54 @@ export async function DELETE(request: NextRequest, { params: { id } }) {
     captureException(e);
     return new Response(JSON.stringify({ error: e.message }), {
       status: StatusCodes.INTERNAL_SERVER_ERROR,
+    });
+  }
+}
+
+/**
+ * @swagger
+ * /api/category/{id}:
+ *     post:
+ *       summary: Add new category with Parent
+ *       description: Add New category with Parent
+ *       requestBody:
+ *         required: true
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *       responses:
+ *         '200':
+ *           description: New category added successfully.
+ *           content:
+ *             application/json:
+ *               schema:
+ *                 # Define the schema of your category  object here
+ *         '400':
+ *           description: Bad request due to validation error.
+ *         '401':
+ *           description: Unauthorized access.
+ *         '500':
+ *           description: Internal server error.
+ */
+export async function POST(request: NextRequest, { params: { id } }) {
+  const session = await getServerSession(authOptions);
+  if (!session) {
+    return new NextResponse(JSON.stringify({ error: 'UNAUTHORIZED' }), {
+      status: StatusCodes.UNAUTHORIZED,
+    });
+  }
+  const payload = await request.json();
+
+  try {
+    const newCategory = await addCategory(id, payload);
+    return new NextResponse(JSON.stringify(newCategory), {
+      status: StatusCodes.CREATED,
+    });
+  } catch (e) {
+    captureException(e);
+    return new NextResponse(e, {
+      status: StatusCodes.BAD_REQUEST,
     });
   }
 }

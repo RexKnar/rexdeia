@@ -50,7 +50,10 @@ export async function getCategoryById(id: string) {
   });
 }
 
-export async function addCategory(category: CreateCategoryModel) {
+export async function addCategory(
+  parentId: string | null | undefined,
+  category: CreateCategoryModel
+) {
   const session = await getServerSession(authOptions);
   const data = {
     name: category.name,
@@ -62,10 +65,10 @@ export async function addCategory(category: CreateCategoryModel) {
     },
   };
 
-  if (category.parentId !== null && category.parentId !== undefined) {
+  if (parentId !== null && parentId !== undefined) {
     data['parentCategory'] = {
       connect: {
-        id: category.parentId,
+        id: parentId,
       },
     };
   }
@@ -74,6 +77,29 @@ export async function addCategory(category: CreateCategoryModel) {
     data,
   });
 }
+// export async function addCategory(
+//   parentId: string | null | undefined,
+//   category: CreateCategoryModel
+// ) {
+//   const session = await getServerSession(authOptions);
+
+//   return db.category.create({
+//     data: {
+//       name: category.name,
+//       isActive: category.isActive,
+//       parentCategory: {
+//         connect: {
+//           id: parentId,
+//         },
+//       },
+//       branch: {
+//         connect: {
+//           id: session.branchId,
+//         },
+//       },
+//     },
+//   });
+// }
 
 export async function updateCategoryById(
   categoryId: string,
