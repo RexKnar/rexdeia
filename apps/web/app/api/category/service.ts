@@ -17,6 +17,10 @@ export async function getCategoryList(page: number, limit: number) {
         isDeleted: false,
         branchId: session.branchId,
       },
+      include: {
+        parentCategory: true,
+        childCategories: true,
+      },
     }),
     db.category.count({
       where: {
@@ -40,6 +44,9 @@ export async function getCategoryById(id: string) {
       id: id,
       isActive: true,
     },
+    include: {
+      childCategories: true,
+    },
   });
 }
 
@@ -48,22 +55,26 @@ export async function addCategory(
   category: CreateCategoryModel
 ) {
   const session = await getServerSession(authOptions);
-
-  return db.category.create({
-    data: {
-      name: category.name,
-      isActive: category.isActive,
-      parentCategory: {
-        connect: {
-          id: parentId,
-        },
-      },
-      branch: {
-        connect: {
-          id: session.branchId,
-        },
+  const data = {
+    name: category.name,
+    isActive: category.isActive,
+    branch: {
+      connect: {
+        id: session.branchId,
       },
     },
+  };
+
+  if (parentId !== null && parentId !== undefined) {
+    data['parentCategory'] = {
+      connect: {
+        id: parentId,
+      },
+    };
+  }
+
+  return db.category.create({
+    data,
   });
 }
 

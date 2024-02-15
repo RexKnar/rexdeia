@@ -10,8 +10,8 @@ import { addCategory, getCategoryList } from './service';
  * @swagger
  * /api/category:
  *     post:
- *       summary: Add new category
- *       description: Add New category
+ *       summary: Add new category W/O Parent
+ *       description: Add New category W/O Parent
  *       requestBody:
  *         required: true
  *         content:
