@@ -38,7 +38,7 @@
     "multer": "1.4.5-lts.1",
     "nanoid": "^5.0.4",
     "next": "^14.1.0",
-    "next-auth": "4.24.5",
+    "next-auth": "4.24.6",
     "next-intl": "3.5.4",
     "next-swagger-doc": "^0.4.0",
     "nextjs-toploader": "^1.6.4",
