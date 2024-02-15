@@ -1,3 +1,6 @@
+'use client';
+import { Loader2 } from 'lucide-react';
+import { useSearchParams } from 'next/navigation';
 import {
   Input,
   Select,
@@ -8,9 +11,26 @@ import {
   SelectValue,
 } from 'ui';
 
+import { useGetClassListQuery } from '../../../../../../lib/queries/class/useGetClassListQuery';
+import { useGetAllSectionByClassIdQuery } from '../../../../../../lib/queries/section/useGetAllSectionsByClassIdQuery';
 import { ExamCard } from './ExamCard';
 
 export function AddExamLayout() {
+  const page = 1;
+  const limit = 999;
+  const searchParams = useSearchParams();
+  const classId = searchParams.get('classId');
+
+  const { data: classList, isLoading: isClassListLoading } =
+    useGetClassListQuery({
+      page,
+      limit,
+    });
+  const { data: sectionListResponse, isLoading: isSectionListLoading } =
+    useGetAllSectionByClassIdQuery(classId, {
+      enabled: !!classId,
+    });
+
   return (
     <>
       <section className="mb-4 flex flex-row gap-5 rounded-md bg-white p-4">
@@ -52,22 +72,36 @@ export function AddExamLayout() {
           </SelectContent>
         </Select>
       </section>
-      <section className="flex flex-row gap-1 rounded-xl bg-white p-1">
+      <section className="flex h-screen flex-row gap-1 rounded-xl bg-white p-1">
         <div className="basis-1/6 rounded-l-lg bg-gray-50 text-center">
           <div className="p-2">Class</div>
-          <div>
-            <ExamCard examProps="class2" />
-            <ExamCard examProps="class1" />
-          </div>
+          {!isClassListLoading ? (
+            <div className="">
+              {classList?.data.map((cardData) => (
+                <ExamCard examProps={cardData} key={cardData.id} />
+              ))}
+            </div>
+          ) : (
+            <div className="flex justify-center pt-36 ">
+              <Loader2 className="mr-2 h-6 w-6 animate-spin text-black" />
+              <p className="text-black ">Fetching Classes...</p>
+            </div>
+          )}
         </div>
         <div className="basis-1/6 bg-red-50 text-center">
           <div className="p-2">Section</div>
-          <div>
-            <ExamCard examProps="Section1" />
-            <ExamCard examProps="Section2" />
-            <ExamCard examProps="Section3" />
-            <ExamCard examProps="Section4" />
-          </div>
+          {!isSectionListLoading ? (
+            <div>
+              {sectionListResponse?.map((cardData) => (
+                <ExamCard examProps={cardData} key={cardData.id} />
+              ))}
+            </div>
+          ) : (
+            <div className="flex justify-center pt-36">
+              <Loader2 className="mr-2 h-6 w-6 animate-spin text-black" />
+              <p className="text-black ">Fetching Sections...</p>
+            </div>
+          )}
         </div>
         <div className="basis-1/6 bg-green-50 text-center">
           <div className="p-2">Curriculam</div>
