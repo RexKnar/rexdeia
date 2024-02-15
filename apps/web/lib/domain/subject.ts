@@ -4,9 +4,11 @@ export type SubjectModel = {
   isActive: boolean;
   description?: string;
   sectionId: string;
+  elective: number;
   subjectTypeId: string;
   subjectFormatId: string[];
   groupId: string[];
+  categoryId: string[];
   isDeleting?: boolean;
   isUpdating?: boolean;
   isNewlyAdded?: boolean;
@@ -22,6 +24,8 @@ export type CreateSubjectModel = Pick<
   | 'subjectTypeId'
   | 'subjectFormatId'
   | 'groupId'
+  | 'elective'
+  | 'categoryId'
 >;
 
 export type UpdateSubjectModel = Pick<
