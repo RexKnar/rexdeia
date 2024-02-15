@@ -77,29 +77,6 @@ export async function addCategory(
     data,
   });
 }
-// export async function addCategory(
-//   parentId: string | null | undefined,
-//   category: CreateCategoryModel
-// ) {
-//   const session = await getServerSession(authOptions);
-
-//   return db.category.create({
-//     data: {
-//       name: category.name,
-//       isActive: category.isActive,
-//       parentCategory: {
-//         connect: {
-//           id: parentId,
-//         },
-//       },
-//       branch: {
-//         connect: {
-//           id: session.branchId,
-//         },
-//       },
-//     },
-//   });
-// }
 
 export async function updateCategoryById(
   categoryId: string,
