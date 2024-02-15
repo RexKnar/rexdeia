@@ -42,7 +42,7 @@ export async function POST(request: NextRequest) {
   const payload = await request.json();
 
   try {
-    const newCategory = await addCategory(null, payload);
+    const newCategory = await addCategory(payload);
     return new NextResponse(JSON.stringify(newCategory), {
       status: StatusCodes.CREATED,
     });
