@@ -7,6 +7,9 @@ import {
   UpdateSubjectModel,
 } from '../../../lib/domain/subject';
 
+type SubjectFilter = {
+  subjectTypeIds: string[];
+};
 export async function deleteSubjectById(id: string) {
   return db.subject.update({
     where: {
@@ -193,6 +196,39 @@ export async function getSubjectList(page: number, limit: number) {
     page,
     limit,
     data: subjectList,
+  };
+}
+
+export async function getAllSubjectsWithFilter(
+  page: number,
+  limit: number,
+  filter: SubjectFilter
+) {
+  const session = await getServerSession(authOptions);
+
+  const [total, subjectsList] = await Promise.all([
+    db.subject.count({
+      where: {
+        branchId: session.branchId,
+        subjectTypeId: { in: filter.subjectTypeIds },
+      },
+    }),
+    db.subject.findMany({
+      take: limit,
+      skip: (page - 1) * limit,
+      where: {
+        branchId: session.branchId,
+        isDeleted: false,
+        subjectTypeId: { in: filter.subjectTypeIds },
+      },
+    }),
+  ]);
+
+  return {
+    page,
+    total,
+    limit,
+    data: subjectsList,
   };
 }
 
