@@ -8,7 +8,10 @@ export type CategoryModel = {
   isNewlyAdded?: boolean;
 };
 
-export type CreateCategoryModel = Pick<CategoryModel, 'name' | 'isActive'>;
+export type CreateCategoryModel = Pick<
+  CategoryModel,
+  'name' | 'isActive' | 'parentId'
+>;
 
 export type UpdateCategoryModel = Pick<
   CategoryModel,
