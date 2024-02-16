@@ -58,6 +58,12 @@ export const UPDATE_SUBJECT_TYPE_BY_ID = `UPDATE_SUBJECT_TYPE_BY_ID`;
 export const UPDATE_SUBJECT_FORMAT_BY_ID = `UPDATE_SUBJECT_FORMAT_BY_ID`;
 export const GET_SUBJECT_FORMAT_BY_ID = `GET_SUBJECT_FORMAT_BY_ID`;
 export const GET_SUBJECT_FORMAT_LIST = `GET_SUBJECT_FORMAT_LIST`;
+export const GET_CATEGORY_LIST = `GET_CATEGORY_LIST`;
+export const ADD_CATEGORY = 'ADD_CATEGORY';
+export const GET_CATEGORY_BY_ID = `GET_CATEGORY_BY_ID`;
+export const UPDATE_CATEGORY_BY_ID = `UPDATE_CATEGORY_BY_ID`;
+export const DELETE_CATEGORY_BY_ID = `DELETE_CATEGORY_BY_ID`;
+export const ADD_CATEGORY_WITH_PARENT_BY_ID = `ADD_CATEGORY_WITH_PARENT_BY_ID`;
 export const UPDATE_SECTION_BY_ID = `UPDATE_SECTION_BY_ID`;
 export const DELETE_GROUP_BY_ID = `DELETE_GROUP_BY_ID`;
 export const DELETE_MEDIUM_BY_ID = `DELETE_MEDIUM_BY_ID`;
@@ -323,6 +329,30 @@ export default <EndpointDetails>{
   [GET_SUBJECT_FORMAT_LIST]: {
     requestType: `GET`,
     endpoint: `/api/subject/subjectFormat`,
+  },
+  [GET_CATEGORY_LIST]: {
+    requestType: `GET`,
+    endpoint: `/api/category`,
+  },
+  [ADD_CATEGORY]: {
+    requestType: `POST`,
+    endpoint: `/api/category`,
+  },
+  [GET_CATEGORY_BY_ID]: {
+    requestType: `GET`,
+    endpoint: `/api/category/[id]`,
+  },
+  [UPDATE_CATEGORY_BY_ID]: {
+    requestType: `PUT`,
+    endpoint: `/api/category/[id]`,
+  },
+  [DELETE_CATEGORY_BY_ID]: {
+    requestType: `DELETE`,
+    endpoint: `/api/category/[id]`,
+  },
+  [ADD_CATEGORY_WITH_PARENT_BY_ID]: {
+    requestType: `POST`,
+    endpoint: `/api/category/[id]`,
   },
   [GET_SUBJECT_LIST_BY_SECTION_ID]: {
     requestType: `GET`,
