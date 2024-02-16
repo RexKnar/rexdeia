@@ -54,8 +54,12 @@ export function SaveSectionFlyout() {
   });
 
   const params = useParams<{ sectionId: string }>();
+  const classIdFromQueryParams = useParams<{ classId: string }>();
   const isOpen = searchParams.get('isSectionFlyoutOpen') === 'true';
-  const classId = searchParams.get('classId');
+  const classIdFromSearchParams = searchParams.get('classId');
+  const classId = classIdFromSearchParams
+    ? classIdFromSearchParams
+    : classIdFromQueryParams?.classId;
 
   const closeFlyout = () => {
     setMediumId('');
@@ -113,13 +117,11 @@ export function SaveSectionFlyout() {
         };
         await mutateUpdateSectionAsync(updateSectionPayload);
       } else {
-        if (classId) {
-          const addSectionPayload = {
-            ...payload,
-            classId,
-          };
-          await mutateCreateSectionAsync(addSectionPayload);
-        }
+        const addSectionPayload = {
+          ...payload,
+          classId,
+        };
+        await mutateCreateSectionAsync(addSectionPayload);
       }
 
       reset();
@@ -147,7 +149,7 @@ export function SaveSectionFlyout() {
                   <div className="flex items-center">
                     <PlusCircle size={20} strokeWidth={1.5} />
                     <Text variant="lg-semibold" className="ml-2">
-                      {classId ? 'New Section' : 'Update Section'}
+                      {params.sectionId ? 'Update Section' : 'New Section'}
                     </Text>
                   </div>
                   <div className="flex items-center">
