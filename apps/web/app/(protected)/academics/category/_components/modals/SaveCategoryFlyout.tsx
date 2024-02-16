@@ -1,8 +1,7 @@
 'use client';
 
-import { PlusCircle } from 'lucide-react';
+import { Loader2, PlusCircle } from 'lucide-react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import {
   Button,
@@ -21,6 +20,11 @@ import {
   Text,
 } from 'ui';
 
+import { CreateCategoryModel } from '../../../../../../lib/domain/category';
+import { useGetCategoryList } from '../../../../../../lib/queries/category/useCategoryList';
+import { useCreateCategoryMutationQuery } from '../../../../../../lib/queries/category/useCreateCategoryMutationQuery';
+import { useCreateCategoryWithParentMutationQuery } from '../../../../../../lib/queries/category/useCreateCategoryWithParentMutationQuery';
+
 export function CategoryFlyout() {
   const pathname = usePathname();
   const router = useRouter();
@@ -31,24 +35,55 @@ export function CategoryFlyout() {
     register,
     setValue,
     watch,
+    handleSubmit,
     reset,
     formState: { errors: fieldErrors },
   } = useForm({
     defaultValues: {
       name: null,
       isActive: false,
+      parentId: null,
     },
   });
 
-  const [activeToggleFlag, setActiveToggleFlag] = useState(false);
+  const { data: categoryList } = useGetCategoryList({
+    page: 1,
+    limit: 999,
+  });
+
+  const {
+    isPending: isPendingCreateCategory,
+    mutateAsync: mutateCreateCategoryAsync,
+  } = useCreateCategoryMutationQuery();
+
+  const {
+    isPending: isPendingCreateCategoryWithParent,
+    mutateAsync: mutateCreateCategoryWithParentAsync,
+  } = useCreateCategoryWithParentMutationQuery();
 
   const closeFlyout = async () => {
     const params = new URLSearchParams(searchParams);
     params.set('isCategoryFlyoutOpen', 'false');
     reset();
-
+    params.delete('parentId');
     router.replace(pathname + '?' + params.toString());
   };
+
+  async function saveCategory(payload: CreateCategoryModel) {
+    try {
+      if (!payload.parentId) {
+        await mutateCreateCategoryAsync(payload);
+      } else {
+        await mutateCreateCategoryWithParentAsync(payload);
+      }
+    } catch (error) {
+      console.error(error);
+    } finally {
+      reset();
+      closeFlyout();
+    }
+  }
+
   return (
     <section>
       <Sheet open={isOpen}>
@@ -58,24 +93,24 @@ export function CategoryFlyout() {
           className="bg-white p-10"
           onCloseClick={() => closeFlyout()}
         >
-          <form>
+          <form onSubmit={handleSubmit(saveCategory)}>
             <SheetHeader>
               <SheetTitle className="mb-5">
                 <div className="sm:grid sm:grid-cols-1 sm:gap-4 md:grid md:grid-cols-1 md:gap-4 lg:flex lg:justify-between">
                   <div className="flex items-center">
                     <PlusCircle size={20} strokeWidth={1.5} />
                     <Text variant="lg-semibold" className="ml-2">
-                      Add Category Name
+                      Add Category
                     </Text>
                   </div>
                   <div className="flex items-center">
                     <Switch
                       id="isActive"
+                      {...register('isActive')}
                       onCheckedChange={(value) => {
                         setValue('isActive', value);
-                        setActiveToggleFlag(value);
                       }}
-                      checked={activeToggleFlag}
+                      checked={watch('isActive')}
                     />
                     <label
                       htmlFor="isActive"
@@ -97,14 +132,26 @@ export function CategoryFlyout() {
                 >
                   Parent Category Name
                 </label>
-                <Select>
+                <Select
+                  autoComplete="off"
+                  {...register('parentId')}
+                  value={watch('parentId')}
+                  onValueChange={(value) => {
+                    if (value) {
+                      setValue('parentId', value);
+                    }
+                  }}
+                >
                   <SelectTrigger className="w-full">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
                     <SelectGroup>
-                      <SelectItem value="Mother">Mother</SelectItem>
-                      <SelectItem value="Father">Father</SelectItem>
+                      {categoryList?.data?.map((item) => (
+                        <SelectItem key={item.id} value={item.id}>
+                          {item.name}
+                        </SelectItem>
+                      ))}
                     </SelectGroup>
                   </SelectContent>
                 </Select>
@@ -124,7 +171,7 @@ export function CategoryFlyout() {
                   autoFocus
                   type="text"
                   className="mt-2"
-                  placeholder="Enter Subject Type Name"
+                  placeholder="Enter Category Name"
                   errorMessage={fieldErrors?.name?.message.toString()}
                 />
               </div>
@@ -133,8 +180,21 @@ export function CategoryFlyout() {
                   size="lg"
                   variant="default"
                   className="mx-auto flex justify-center px-12 py-4"
+                  disabled={
+                    isPendingCreateCategory || isPendingCreateCategoryWithParent
+                  }
+                  aria-disabled={
+                    isPendingCreateCategory || isPendingCreateCategoryWithParent
+                  }
                 >
-                  Save
+                  {isPendingCreateCategory ? (
+                    <div className="flex items-center justify-center">
+                      <Loader2 className="mr-2 h-6 w-6 animate-spin text-white" />
+                      Saving
+                    </div>
+                  ) : (
+                    'Save'
+                  )}
                 </Button>
               </div>
             </div>
