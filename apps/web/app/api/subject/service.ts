@@ -9,6 +9,7 @@ import {
 
 type SubjectFilter = {
   subjectTypeIds: string[];
+  categoryIds: string[];
 };
 export async function deleteSubjectById(id: string) {
   return db.subject.update({
@@ -218,8 +219,18 @@ export async function getAllSubjectsWithFilter(
       skip: (page - 1) * limit,
       where: {
         branchId: session.branchId,
-        isDeleted: false,
         subjectTypeId: { in: filter.subjectTypeIds },
+        isDeleted: false,
+        categories: {
+          some: {
+            categoryId: {
+              in: filter.categoryIds,
+            },
+          },
+        },
+      },
+      include: {
+        categories: true,
       },
     }),
   ]);
@@ -280,7 +291,7 @@ export async function mapSubjectToCategory(
           id: subjectId,
         },
         data: {
-          subjectToCategory: {
+          categories: {
             create: [{ categoryId: categoryId }],
           },
         },

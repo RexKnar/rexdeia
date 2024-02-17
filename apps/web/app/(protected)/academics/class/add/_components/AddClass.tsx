@@ -55,7 +55,7 @@ export default function AddClass() {
 
   useEffect(() => {
     setValue('isActive', false);
-  }, []);
+  }, [setValue]);
 
   async function addClass(payload) {
     try {
@@ -172,7 +172,7 @@ export default function AddClass() {
                   </div>
                   <div className="flex items-center justify-center">
                     <Button
-                      className="mt-5 h-9 w-9  border-transparent bg-red-600 p-2 "
+                      className="mt-5 h-9 w-9 border-transparent bg-red-600 p-2 "
                       variant="outline"
                       type="button"
                       onClick={() => {
