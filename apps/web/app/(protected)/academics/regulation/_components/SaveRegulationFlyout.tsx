@@ -80,6 +80,8 @@ export function SaveRegulationFlyout() {
       setValue('regulationName', regulationName);
       setValue('isActive', isActive);
       setValue('announcedYear', new Date(announcedYear));
+
+      setAnnouncedYear(new Date(announcedYear));
     } else {
       setValue('regulationName', null);
       setValue('isActive', false);
