@@ -237,6 +237,7 @@ model Regulation {
   branch         Branch?   @relation(fields: [branchId], references: [id])
   branchId       String?   @db.Uuid
   Class          Class[]
+  subject        Subject[]
 }
 
 model Course {
@@ -509,6 +510,8 @@ model Subject {
   updatedAt              DateTime?                @default(now())
   isDeleted              Boolean                  @default(false)
   Section                Section[]
+  regulation             Regulation               @relation(fields: [regulationId], references: [id])
+  regulationId           String                   @db.Uuid
   sectionId              String[]                 @db.Uuid
   SectionSubject         SectionSubject[]
   ExamSubject            ExamSubject[]
