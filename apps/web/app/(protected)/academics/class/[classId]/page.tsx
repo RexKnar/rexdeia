@@ -2,8 +2,8 @@ import { redirect } from 'next/navigation';
 import { getServerSession } from 'next-auth';
 
 import { authOptions } from '../../../../../lib/auth';
+import { AssignStaffClassDetailPageFlyout } from './_components/AssignStaffClassDetailPageFlyout';
 import { ClassDetail } from './_components/ClassDetail';
-import { AssignStaffClassDetailPageFlyout } from './section/[sectionId]/_components/AssignStaffClassDetailPageFlyout';
 import { SaveSectionFlyout } from './section/[sectionId]/_components/SaveSectionFlyout';
 
 export default async function Page() {

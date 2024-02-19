@@ -68,17 +68,18 @@ export async function addSubjects(subjects: CreateSubjectModel[]) {
         description: subject.description,
         subjectTypeId: subject.subjectTypeId,
         elective: subject.elective,
+        regulationId: subject.regulationId,
       },
     });
     createdSubjectsIds.push(createdSubject.id);
 
     await mapSubjectFormatsToSubject(
       createdSubject.id,
-      subject.subjectFormatId
+      subject.subjectFormatIds
     );
 
-    await mapSubjectToGroup(createdSubject.id, subject.groupId);
-    await mapSubjectToCategory(createdSubject.id, subject.categoryId);
+    await mapSubjectToGroup(createdSubject.id, subject.groupIds);
+    await mapSubjectToCategory(createdSubject.id, subject.categoryIds);
   }
 
   return db.subject.findMany({
@@ -109,11 +110,12 @@ export async function addSubject(createSubject: CreateSubjectModel) {
       isActive: createSubject.isActive,
       subjectTypeId: createSubject.subjectTypeId,
       elective: createSubject.elective,
+      regulationId: createSubject.regulationId,
     },
   });
   return await mapSubjectFormatsToSubject(
     createdSubject.id,
-    createSubject.subjectFormatId
+    createSubject.subjectFormatIds
   );
 }
 

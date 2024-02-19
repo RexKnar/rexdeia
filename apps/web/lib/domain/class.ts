@@ -40,3 +40,12 @@ export type MapEntitiesToClassModel = {
     staffId?: string;
   }[];
 };
+
+export type LinkStaffToSectionModel = {
+  staffId: string;
+  sections: string[];
+  subjectIds: string[];
+};
+export type LinkStaffModel = {
+  data: LinkStaffToSectionModel[];
+};

@@ -44,7 +44,7 @@ const schema = z.object({
       required_error: 'Subject Type is required',
     })
     .min(1),
-  subjectFormatId: z
+  subjectFormatIds: z
     .array(z.string())
     .refine((value) => value.some((item) => item), {
       message: 'Subject Format is required',
@@ -76,7 +76,7 @@ export function SaveSubjectFlyout() {
   } = useForm<SchemaType>({
     resolver: zodResolver(schema),
     defaultValues: {
-      subjectFormatId: [],
+      subjectFormatIds: [],
       groupId: [],
     },
   });
@@ -141,12 +141,13 @@ export function SaveSubjectFlyout() {
 
     reset();
     if (currentSubject) {
-      const { name, isActive, subjectTypeId, subjectFormatId } = currentSubject;
+      const { name, isActive, subjectTypeId, subjectFormatIds } =
+        currentSubject;
 
       setValue('name', name);
       setValue('isActive', isActive);
       setValue('subjectTypeId', subjectTypeId);
-      setValue('subjectFormatId', subjectFormatId);
+      setValue('subjectFormatIds', subjectFormatIds);
     } else {
       setValue('name', null);
       setValue('isActive', false);
@@ -304,7 +305,7 @@ export function SaveSubjectFlyout() {
                       <Controller
                         key={item.id}
                         control={control}
-                        name="subjectFormatId"
+                        name="subjectFormatIds"
                         render={({ field }) => {
                           return (
                             <label className="me-5">
