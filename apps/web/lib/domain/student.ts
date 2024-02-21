@@ -45,3 +45,10 @@ export type GetStudentListModel = {
   data: Student[];
   pageSize: number;
 };
+
+export type AssignStudentsToClassModel = {
+  studentIds: string[];
+  sectionId: string;
+  groupId: string;
+  academicYear: string;
+};

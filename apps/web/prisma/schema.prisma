@@ -332,21 +332,33 @@ model Student {
   updatedAt            DateTime      @default(now())
   additionalAttributes Json
 
-  section        Section?        @relation(fields: [sectionId], references: [id])
-  sectionId      String?         @db.Uuid
-  userId         String          @unique @db.Uuid
-  user           User            @relation(fields: [userId], references: [id])
-  branch         Branch          @relation(fields: [branchId], references: [id])
-  branchId       String          @db.Uuid
-  batch          Batch?          @relation(fields: [batchId], references: [id])
-  batchId        String?         @db.Uuid
-  organization   Organization    @relation(fields: [organizationId], references: [id])
-  organizationId String          @db.Uuid
-  form           Form            @relation(fields: [formId], references: [id])
+  userId         String           @unique @db.Uuid
+  user           User             @relation(fields: [userId], references: [id])
+  branch         Branch           @relation(fields: [branchId], references: [id])
+  branchId       String           @db.Uuid
+  batch          Batch?           @relation(fields: [batchId], references: [id])
+  batchId        String?          @db.Uuid
+  organization   Organization     @relation(fields: [organizationId], references: [id])
+  organizationId String           @db.Uuid
+  form           Form             @relation(fields: [formId], references: [id])
   AdmissionForm  AdmissionForm[]
-  formId         String          @db.Uuid
+  formId         String           @db.Uuid
+  studentmapping StudentMapping[]
 
   isDeleted Boolean @default(false)
+}
+
+model StudentMapping {
+  studentId String  @db.Uuid
+  student   Student @relation(fields: [studentId], references: [id])
+  classId   String  @db.Uuid
+  class     Class   @relation(fields: [classId], references: [id])
+  sectionId String  @db.Uuid
+  section   Section @relation(fields: [sectionId], references: [id])
+  groupId   String  @db.Uuid
+  group     Group   @relation(fields: [groupId], references: [id])
+
+  @@id([studentId, classId, sectionId, groupId])
 }
 
 model Staff {
@@ -436,20 +448,21 @@ model Batch {
 }
 
 model Class {
-  id           String      @id @default(uuid()) @map("_id") @db.Uuid
-  name         String
-  description  String?
-  isActive     Boolean
-  isDeleted    Boolean     @default(false)
-  Section      Section[]
-  batch        Batch?      @relation(fields: [batchId], references: [id])
-  batchId      String?     @db.Uuid
-  branch       Branch      @relation(fields: [branchId], references: [id])
-  branchId     String      @db.Uuid
-  regulation   Regulation? @relation(fields: [regulationId], references: [id])
-  regulationId String?     @db.Uuid
-  createdAt    DateTime?   @default(now())
-  updatedAt    DateTime?   @default(now())
+  id             String           @id @default(uuid()) @map("_id") @db.Uuid
+  name           String
+  description    String?
+  isActive       Boolean
+  isDeleted      Boolean          @default(false)
+  Section        Section[]
+  batch          Batch?           @relation(fields: [batchId], references: [id])
+  batchId        String?          @db.Uuid
+  branch         Branch           @relation(fields: [branchId], references: [id])
+  branchId       String           @db.Uuid
+  regulation     Regulation?      @relation(fields: [regulationId], references: [id])
+  regulationId   String?          @db.Uuid
+  studentmapping StudentMapping[]
+  createdAt      DateTime?        @default(now())
+  updatedAt      DateTime?        @default(now())
 }
 
 model SectionSubject {
@@ -484,7 +497,6 @@ model Section {
   mediumId        String           @db.Uuid
   class           Class            @relation(fields: [classId], references: [id])
   staff           Staff?           @relation(fields: [staffId], references: [id])
-  students        Student[]
   classId         String           @db.Uuid
   createdAt       DateTime?        @default(now())
   updatedAt       DateTime?        @default(now())
@@ -494,6 +506,7 @@ model Section {
   Exam            Exam[]
   staffSections   StaffSection[]
   staffId         String?          @db.Uuid
+  studentMapping  StudentMapping[]
 }
 
 model Subject {
@@ -591,6 +604,7 @@ model Group {
   createdAt      DateTime?        @default(now())
   updatedAt      DateTime?        @default(now())
   subjectToGroup SubjectToGroup[]
+  studentMapping StudentMapping[]
 }
 
 model Medium {
