@@ -230,7 +230,6 @@ export async function mapStudentToClass(
           studentmapping: {
             create: [
               {
-                sectionId: studentPayload.sectionId,
                 groupId: studentPayload.groupId,
                 classId: classId,
               },

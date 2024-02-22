@@ -344,6 +344,8 @@ model Student {
   AdmissionForm  AdmissionForm[]
   formId         String           @db.Uuid
   studentmapping StudentMapping[]
+  sectionId      String           @db.Uuid
+  section        Section          @relation(fields: [sectionId], references: [id])
 
   isDeleted Boolean @default(false)
 }
@@ -353,12 +355,10 @@ model StudentMapping {
   student   Student @relation(fields: [studentId], references: [id])
   classId   String  @db.Uuid
   class     Class   @relation(fields: [classId], references: [id])
-  sectionId String  @db.Uuid
-  section   Section @relation(fields: [sectionId], references: [id])
   groupId   String  @db.Uuid
   group     Group   @relation(fields: [groupId], references: [id])
 
-  @@id([studentId, classId, sectionId, groupId])
+  @@id([studentId, classId, groupId])
 }
 
 model Staff {
@@ -506,7 +506,7 @@ model Section {
   Exam            Exam[]
   staffSections   StaffSection[]
   staffId         String?          @db.Uuid
-  studentMapping  StudentMapping[]
+  students        Student[]
 }
 
 model Subject {
