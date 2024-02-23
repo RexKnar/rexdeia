@@ -54,7 +54,7 @@ export default function SaveMediumFlyout() {
     const params = new URLSearchParams(searchParams);
     params.set('isMediumFlyoutOpen', 'false');
     params.delete('mediumId');
-
+    reset();
     router.replace(pathname + '?' + params.toString());
   };
 
@@ -97,7 +97,6 @@ export default function SaveMediumFlyout() {
       console.error(error);
     } finally {
       setValue('isActive', false);
-      reset();
       closeMediumFlyout();
     }
   }
@@ -114,7 +113,7 @@ export default function SaveMediumFlyout() {
           <form onSubmit={handleSubmit(saveMedium)}>
             <SheetHeader>
               <SheetTitle className="mb-5">
-                <div className="sm:grid sm:grid-cols-1 sm:gap-4 md:grid md:grid-cols-1 md:gap-4 lg:flex lg:justify-between">
+                <div className="sm:grid sm:grid-cols-1 sm:gap-4 md:grid md:grid-cols-1 md:gap-4 lg:grid  lg:grid-cols-[1fr_100px]">
                   <div className="flex items-center">
                     <PlusCircle size={20} strokeWidth={1.5} />
                     <Text variant="lg-semibold" className="ml-2">
