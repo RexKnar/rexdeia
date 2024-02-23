@@ -90,7 +90,7 @@ export function SaveAcademicYearFlyout() {
     }
   }, [currentBatch, setValue]);
 
-  const closeFlyout = () => {
+  const closeFlyout = async () => {
     const params = new URLSearchParams(searchParams);
     params.set('isFlyoutOpen', 'false');
     params.delete('batchId');
@@ -107,20 +107,20 @@ export function SaveAcademicYearFlyout() {
           endYear: endYear.getFullYear().toString(),
           startYear: startYear.getFullYear().toString(),
         };
-        mutateUpdateBatchesAsync(updateBatchRequestPayload);
+        await mutateUpdateBatchesAsync(updateBatchRequestPayload);
       } else {
         const addBatchRequestPayload = {
           ...payload,
           endYear: endYear.getFullYear().toString(),
           startYear: startYear.getFullYear().toString(),
         };
-        mutateCreateBatchesAsync(addBatchRequestPayload);
+        await mutateCreateBatchesAsync(addBatchRequestPayload);
       }
     } catch (error) {
       console.error(error);
     } finally {
-      reset();
       await closeFlyout();
+      reset();
       setEndYear(null);
       setStartYear(null);
     }

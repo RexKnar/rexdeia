@@ -81,7 +81,7 @@ export function AssignStaffClassDetailPageFlyout() {
       enabled: !!params.classId,
     }
   );
-  const closeFlyout = () => {
+  const closeFlyout = async () => {
     const params = new URLSearchParams(searchParams.toString());
     params.set('isAssignStaffClassDetailPageFlyoutOpen', 'false');
     params.delete('sectionId');
@@ -99,8 +99,8 @@ export function AssignStaffClassDetailPageFlyout() {
         payload as LinkStaffModel & { classId: string }
       );
     } finally {
+      await closeFlyout();
       reset();
-      closeFlyout();
     }
   };
 

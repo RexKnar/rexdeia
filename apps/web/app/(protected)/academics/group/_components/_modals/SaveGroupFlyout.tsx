@@ -50,7 +50,7 @@ export default function SaveGroupFlyout() {
     mutateAsync: mutateCreateGroupAsync,
   } = useCreateGroupMutationQuery(page, limit);
 
-  const closeFlyout = () => {
+  const closeFlyout = async () => {
     const params = new URLSearchParams(searchParams);
     params.set('isGroupFlyoutOpen', 'false');
     params.delete('groupId');
@@ -86,19 +86,19 @@ export default function SaveGroupFlyout() {
           ...payload,
           id: groupId,
         };
-        mutateUpdateGroupAsync(updateBatchRequestPayload);
+        await mutateUpdateGroupAsync(updateBatchRequestPayload);
       } else {
         const requestPayload = {
           ...payload,
         };
-        mutateCreateGroupAsync(requestPayload);
+        await mutateCreateGroupAsync(requestPayload);
       }
     } catch (error) {
       console.error(error);
     } finally {
       setValue('isActive', false);
+      await closeFlyout();
       reset();
-      closeFlyout();
     }
   }
 

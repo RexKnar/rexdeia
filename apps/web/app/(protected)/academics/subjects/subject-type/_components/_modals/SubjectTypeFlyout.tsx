@@ -88,19 +88,19 @@ export function SubjectTypeFlyout() {
           ...payload,
           id: subjectTypeId,
         };
-        mutateUpdateSubjectTypeAsync(updateSubjectTypeRequestPayload);
+        await mutateUpdateSubjectTypeAsync(updateSubjectTypeRequestPayload);
       } else {
         const requestPayload = {
           ...payload,
         };
-        mutateCreateSubjectTypeAsync(requestPayload);
+        await mutateCreateSubjectTypeAsync(requestPayload);
       }
     } catch (error) {
       console.error(error);
     } finally {
       setValue('isActive', false);
+      await closeSubjectTypeFlyout();
       reset();
-      closeSubjectTypeFlyout();
     }
   }
 

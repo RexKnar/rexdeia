@@ -1,5 +1,4 @@
 'use client';
-
 import { Loader2, PlusCircle } from 'lucide-react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import React, { useEffect } from 'react';
@@ -50,7 +49,7 @@ export default function SaveMediumFlyout() {
     mutateAsync: mutateCreateMediumAsync,
   } = useCreateMediumMutationQuery(page, limit);
 
-  const closeMediumFlyout = () => {
+  const closeMediumFlyout = async () => {
     const params = new URLSearchParams(searchParams);
     params.set('isMediumFlyoutOpen', 'false');
     params.delete('mediumId');
@@ -86,18 +85,19 @@ export default function SaveMediumFlyout() {
           ...payload,
           id: mediumId,
         };
-        mutateUpdateMediumAsync(updateBatchRequestPayload);
+        await mutateUpdateMediumAsync(updateBatchRequestPayload);
       } else {
         const requestPayload = {
           ...payload,
         };
-        mutateCreateMediumAsync(requestPayload);
+        await mutateCreateMediumAsync(requestPayload);
       }
     } catch (error) {
       console.error(error);
     } finally {
       setValue('isActive', false);
-      closeMediumFlyout();
+      await closeMediumFlyout();
+      reset();
     }
   }
 

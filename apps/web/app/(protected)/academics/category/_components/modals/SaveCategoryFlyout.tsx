@@ -79,8 +79,8 @@ export function CategoryFlyout() {
     } catch (error) {
       console.error(error);
     } finally {
+      await closeFlyout();
       reset();
-      closeFlyout();
     }
   }
 

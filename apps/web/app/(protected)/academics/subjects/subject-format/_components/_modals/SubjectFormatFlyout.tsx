@@ -88,19 +88,20 @@ export function SubjectFormatFlyout() {
           ...payload,
           id: subjectFormatId,
         };
-        mutateUpdateSubjectFormatAsync(updateSubjectFormatRequestPayload);
+        await mutateUpdateSubjectFormatAsync(updateSubjectFormatRequestPayload);
       } else {
         const requestPayload = {
           ...payload,
         };
-        mutateCreateSubjectFormateAsync(requestPayload);
+        await mutateCreateSubjectFormateAsync(requestPayload);
       }
     } catch (error) {
       console.error(error);
     } finally {
       setValue('isActive', false);
+
+      await closeSubjectFormatFlyout();
       reset();
-      closeSubjectFormatFlyout();
     }
   }
 

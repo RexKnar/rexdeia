@@ -61,7 +61,7 @@ export function SaveSectionFlyout() {
     ? classIdFromSearchParams
     : classIdFromQueryParams?.classId;
 
-  const closeFlyout = () => {
+  const closeFlyout = async () => {
     setMediumId('');
     const params = new URLSearchParams(searchParams);
     params.set('isSectionFlyoutOpen', 'false');
@@ -124,8 +124,8 @@ export function SaveSectionFlyout() {
         await mutateCreateSectionAsync(addSectionPayload);
       }
 
-      reset();
       await closeFlyout();
+      reset();
     } catch (error) {
       console.error(error);
     } finally {
