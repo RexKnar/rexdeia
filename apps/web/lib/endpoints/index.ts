@@ -85,6 +85,7 @@ export const GET_STUDENT_LIST_BY_SECTION_ID = `GET_STUDENT_LIST_BY_SECTION_ID`;
 export const GET_STAFF_LIST_BY_CLASS_ID = `GET_STAFF_LIST_BY_CLASS_ID`;
 export const GET_STUDENT_LIST_BY_CLASS_ID = `GET_STUDENT_LIST_BY_CLASS_ID`;
 export const ASSIGN_STAFF_BY_CLASS_ID = `ASSIGN_STAFF_BY_CLASS_ID`;
+export const ADD_SUBJECT_BY_CLASS_ID = `ADD_SUBJECT_BY_CLASS_ID`;
 
 export default <EndpointDetails>{
   [REGISTER_USER]: {
@@ -426,5 +427,9 @@ export default <EndpointDetails>{
   [ASSIGN_STAFF_BY_CLASS_ID]: {
     requestType: `POST`,
     endpoint: `/api/class/[id]/staffs`,
+  },
+  [ADD_SUBJECT_BY_CLASS_ID]: {
+    requestType: `POST`,
+    endpoint: `/api/class/[id]/subjects`,
   },
 };

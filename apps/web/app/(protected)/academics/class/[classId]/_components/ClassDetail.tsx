@@ -12,6 +12,7 @@ import { cn } from 'utils';
 
 import { PageTitle } from '../../../../../../lib/components/PageTitle';
 import { useGetClassByIdQuery } from '../../../../../../lib/queries/class/useGetClassByIdQuery';
+import { AddSubjectFlyout } from './AddSubjectFlyout';
 import { AssignStudentFlyout } from './AssignStudentFlyout';
 import { SectionList } from './SectionList';
 import { StaffList } from './StaffList';
@@ -134,10 +135,21 @@ export function ClassDetail() {
               </TabsTrigger>
             </TabsList>
             <TabsContent className="w-full" value="Subjects">
-              <section className="pt-5">
+              <div className="mb-4 flex items-center justify-between">
                 <SubjectList />
-              </section>
+                <Button
+                  variant="default"
+                  onClick={async () => {
+                    const params = new URLSearchParams(searchParams);
+                    params.set('isAddSubjectFlyoutOpen', 'true');
+                    router.replace(pathname + '?' + params.toString());
+                  }}
+                >
+                  Add Subject
+                </Button>
+              </div>
             </TabsContent>
+
             <TabsContent value="Students">
               <Button
                 variant="default"
@@ -182,6 +194,7 @@ export function ClassDetail() {
           </Tabs>
           <UpdateClassFlyout />
           <AssignStudentFlyout />
+          <AddSubjectFlyout />
         </>
       ) : (
         ' Details Not Found'
