@@ -300,24 +300,26 @@ export function AcademicYearListTable() {
         </Table>
       </div>
 
-      {!isBatchesListLoading && !batchesList?.data?.length && (
-        <Pagination
-          limit={limit.toString()}
-          disabled={isBatchesListLoading}
-          onPageChange={handleOnPageChange}
-          pageSize={batchesList?.limit || 0}
-          onLimitChange={handleOnLimitChange}
-          totalRecords={batchesList?.total || 0}
-        />
-      )}
+      {!isBatchesListLoading &&
+        batchesList.total > limit &&
+        !batchesList?.data?.length && (
+          <Pagination
+            limit={limit.toString()}
+            disabled={isBatchesListLoading}
+            onPageChange={handleOnPageChange}
+            pageSize={batchesList?.limit || 0}
+            onLimitChange={handleOnLimitChange}
+            totalRecords={batchesList?.total || 0}
+          />
+        )}
 
       <DeleteConfirmationModal
         open={showDeleteConfirmationModal}
         description={`Are you sure you want to delete "${selectedBatch?.name}"`}
         onDeleteClick={async () => {
           if (selectedBatch) {
-            setShowDeleteConfirmationModal(false);
             await deleteBatchAsync(selectedBatch.id);
+            setShowDeleteConfirmationModal(false);
           }
         }}
         onCancelClick={() => {

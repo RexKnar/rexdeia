@@ -243,7 +243,7 @@ export function SaveAcademicYearFlyout() {
                     {isPendingCreateBatches || isPendingUpdateBatches ? (
                       <div className="flex items-center justify-center">
                         <Loader2 className="mr-2 h-6 w-6 animate-spin text-white" />
-                        Saving
+                        {batchId ? 'Updating' : 'Saving'}
                       </div>
                     ) : (
                       `${batchId ? 'Update' : 'Save'}`
