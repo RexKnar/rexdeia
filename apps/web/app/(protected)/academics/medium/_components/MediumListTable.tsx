@@ -31,7 +31,8 @@ import {
 } from 'ui/components/ui/Table';
 import { cn } from 'utils';
 
-import { DeleteConfirmationModal } from '../../../../../lib/components/modals/DeleteConfirmationModal';
+import { DeleteConfirmationModal } from '@/components/modals/DeleteConfirmationModal';
+
 import { MediumModel } from '../../../../../lib/domain/medium';
 import { useDeleteMediumMutationQuery } from '../../../../../lib/queries/medium/useDeleteMediumMutationQuery';
 import { useGetMediumListQuery } from '../../../../../lib/queries/medium/useGetMediumListQuery';

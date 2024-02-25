@@ -10,8 +10,7 @@ import {
   useReactTable,
 } from '@tanstack/react-table';
 import { Loader2, Pencil, Trash2 } from 'lucide-react';
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { When } from 'react-if';
 import {
   Button,
@@ -31,7 +30,9 @@ import {
 } from 'ui/components/ui/Table';
 import { cn } from 'utils';
 
-import { DeleteConfirmationModal } from '../../../../../lib/components/modals/DeleteConfirmationModal';
+import { DeleteConfirmationModal } from '@/components/modals/DeleteConfirmationModal';
+import { useQueryParams } from '@/hooks/useQueryParams';
+
 import { BatchModel } from '../../../../../lib/domain/batch';
 import { useDeleteBatchMutationQuery } from '../../../../../lib/queries/batches/useDeleteBatchMutationQuery';
 import { usePrefetchBatch } from '../../../../../lib/queries/batches/useGetBatchByIdQuery';
@@ -111,16 +112,14 @@ const columns: ColumnDef<BatchModel>[] = [
 export function AcademicYearListTable() {
   const { toast } = useToast();
 
-  const pathname = usePathname();
-  const router = useRouter();
-  const searchParams = useSearchParams();
+  const { getParam, setParams } = useQueryParams();
 
   const [showDeleteConfirmationModal, setShowDeleteConfirmationModal] =
     useState(false);
   const [selectedBatch, setSelectedBatch] = useState<BatchModel | null>(null);
 
-  const page = parseInt(searchParams.get('page')) || 1;
-  const limit = parseInt(searchParams.get('limit')) || 10;
+  const page = parseInt(getParam('page')) || 1;
+  const limit = parseInt(getParam('limit')) || 10;
 
   const {
     isError: isDeleteBatchError,
@@ -135,16 +134,6 @@ export function AcademicYearListTable() {
       page,
       limit,
     });
-
-  const handleOnPageChange = useCallback(
-    (page: number) => {
-      const params = new URLSearchParams(searchParams);
-      params.set('page', page.toString());
-
-      router.push(pathname + '?' + params.toString());
-    },
-    [searchParams, pathname, router]
-  );
 
   useEffect(() => {
     if (isDeleteBatchError) {
@@ -229,12 +218,11 @@ export function AcademicYearListTable() {
                     <Tooltip>
                       <TooltipTrigger asChild>
                         <Button
-                          onClick={async () => {
-                            const params = new URLSearchParams(searchParams);
-                            params.set('isFlyoutOpen', 'true');
-                            params.set('batchId', row.original.id);
-
-                            router.replace(pathname + '?' + params.toString());
+                          onClick={() => {
+                            setParams({
+                              isFlyoutOpen: 'true',
+                              batchId: row.original.id,
+                            });
                           }}
                           className="mr-3 h-auto px-3 py-2"
                           variant="mild"
@@ -301,15 +289,14 @@ export function AcademicYearListTable() {
       <When condition={batchesList?.data?.length && !isBatchesListLoading}>
         <Pagination
           value={limit.toString()}
-          onPageChange={handleOnPageChange}
+          onPageChange={(page) => {
+            setParams({ page: page.toString() });
+          }}
           pageSize={batchesList?.limit || 0}
           totalRecords={batchesList?.total || 0}
           disabled={isBatchesListLoading}
           onValueChange={(value) => {
-            const params = new URLSearchParams(searchParams);
-            params.set('limit', value.toString());
-
-            router.push(pathname + '?' + params.toString());
+            setParams({ limit: value.toString() });
           }}
         />
         <DeleteConfirmationModal

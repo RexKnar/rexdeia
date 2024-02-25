@@ -1,25 +1,20 @@
 'use client';
 
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { Button } from 'ui';
 
-import { PageTitle } from '../../../../../lib/components/PageTitle';
+import { PageTitle } from '@/components/PageTitle';
+import { useQueryParams } from '@/hooks/useQueryParams';
 
 export function AcademicYearPageHeader() {
-  const pathname = usePathname();
-  const router = useRouter();
-  const searchParams = useSearchParams();
+  const { setParams } = useQueryParams();
 
   return (
     <section className="flex justify-between px-2">
       <PageTitle title="Academic Year" />
       <Button
         variant="default"
-        onClick={async () => {
-          const params = new URLSearchParams(searchParams);
-          params.set('isFlyoutOpen', 'true');
-
-          router.replace(pathname + '?' + params.toString());
+        onClick={() => {
+          setParams({ isFlyoutOpen: 'true' });
         }}
       >
         Add Academic Year

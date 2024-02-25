@@ -9,9 +9,10 @@ import {
 } from 'next/navigation';
 import { Button, Tabs, TabsContent, TabsList, TabsTrigger, Text } from 'ui';
 
-import { PageTitle } from '../../../../../../../lib/components/PageTitle';
+import { PageTitle } from '@/components/PageTitle';
+
 import { useGetSectionByIdQuery } from '../../../../../../../lib/queries/section/useGetSectionByIdQuery';
-import { AssignStudentFlyout } from '../../_components/AssignStudentFlyout';
+import { AssignStudentFlyout } from '../../_modals/AssignStudentFlyout';
 import { SaveSectionFlyout } from './_components/SaveSectionFlyout';
 import { StaffList } from './_components/StaffList';
 import { StudentList } from './_components/StudentList';

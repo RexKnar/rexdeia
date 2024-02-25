@@ -46,7 +46,8 @@ import {
 } from 'ui/components/ui/Table';
 import { titilize } from 'utils';
 
-import { DeleteConfirmationModal } from '../../../../../lib/components/modals/DeleteConfirmationModal';
+import { DeleteConfirmationModal } from '@/components/modals/DeleteConfirmationModal';
+
 import { Student } from '../../../../../lib/domain';
 import { useDeleteStudentMutationQuery } from '../../../../../lib/queries/students/useDeleteStudentMutationQuery';
 import { useGetStudentListQuery } from '../../../../../lib/queries/useGetStudentListQuery';

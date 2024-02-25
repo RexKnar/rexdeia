@@ -31,7 +31,8 @@ import {
 } from 'ui/components/ui/Table';
 import { cn } from 'utils';
 
-import { DeleteConfirmationModal } from '../../../../../../lib/components/modals/DeleteConfirmationModal';
+import { DeleteConfirmationModal } from '@/components/modals/DeleteConfirmationModal';
+
 import { SubjectFormatModel } from '../../../../../../lib/domain/subject';
 import { useDeleteSubjectFormatMutationQuery } from '../../../../../../lib/queries/subject-format/useDeleteSubjectFormatMutationQuery';
 import { useGetSubjectFormatList } from '../../../../../../lib/queries/subject-format/useGetSubjectFormatList';

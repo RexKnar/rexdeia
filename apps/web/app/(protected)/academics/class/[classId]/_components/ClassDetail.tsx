@@ -10,15 +10,16 @@ import {
 import { Button, Tabs, TabsContent, TabsList, TabsTrigger, Text } from 'ui';
 import { cn } from 'utils';
 
-import { PageTitle } from '../../../../../../lib/components/PageTitle';
+import { PageTitle } from '@/components/PageTitle';
+
 import { useGetClassByIdQuery } from '../../../../../../lib/queries/class/useGetClassByIdQuery';
-import { AddSubjectFlyout } from './AddSubjectFlyout';
-import { AssignStudentFlyout } from './AssignStudentFlyout';
+import { AddSubjectFlyout } from '../_modals/AddSubjectFlyout';
+import { AssignStudentFlyout } from '../_modals/AssignStudentFlyout';
+import { UpdateClassFlyout } from '../_modals/UpdateClassFlyout';
 import { SectionList } from './SectionList';
 import { StaffList } from './StaffList';
 import { StudentList } from './StudentList';
 import { SubjectList } from './SubjectList';
-import { UpdateClassFlyout } from './UpdateClassFlyout';
 
 export function ClassDetail() {
   const pathname = usePathname();

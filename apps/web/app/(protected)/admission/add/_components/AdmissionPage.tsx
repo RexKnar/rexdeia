@@ -1,4 +1,5 @@
-import { AdmissionForm } from '../../../../../lib/components/admission/AdmissionForm';
+import { AdmissionForm } from '@/components/admission/AdmissionForm';
+
 import { getFormByCriteria } from '../../../../api/forms/service';
 
 type AdmissionPageProp = {

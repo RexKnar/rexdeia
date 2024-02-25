@@ -3,7 +3,7 @@
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { Button } from 'ui';
 
-import { PageTitle } from '../../../../../lib/components/PageTitle';
+import { PageTitle } from '@/components/PageTitle';
 
 export function GroupPageHeader() {
   const pathname = usePathname();

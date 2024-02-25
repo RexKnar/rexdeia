@@ -31,7 +31,8 @@ import {
 } from 'ui/components/ui/Table';
 import { cn } from 'utils';
 
-import { DeleteConfirmationModal } from '../../../../../lib/components/modals/DeleteConfirmationModal';
+import { DeleteConfirmationModal } from '@/components/modals/DeleteConfirmationModal';
+
 import { GroupModel } from '../../../../../lib/domain/group';
 import { useDeleteGroupMutationQuery } from '../../../../../lib/queries/group/useDeleteGroupMutationQuery';
 import { useGetGroupListQuery } from '../../../../../lib/queries/group/useGetGroupListQuery';

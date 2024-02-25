@@ -1,4 +1,4 @@
-import { PageTitle } from '../../../../../lib/components/PageTitle';
+import { PageTitle } from '@/components/PageTitle';
 
 export function EnrollStudentHeader() {
   return (

@@ -1,4 +1,5 @@
 'use client';
+
 import {
   ColumnDef,
   flexRender,
@@ -30,7 +31,8 @@ import {
 } from 'ui/components/ui/Table';
 import { cn } from 'utils';
 
-import { DeleteConfirmationModal } from '../../../../../lib/components/modals/DeleteConfirmationModal';
+import { DeleteConfirmationModal } from '@/components/modals/DeleteConfirmationModal';
+
 import { CategoryModel } from '../../../../../lib/domain/category';
 import { useGetCategoryList } from '../../../../../lib/queries/category/useCategoryList';
 import { useDeleteCategoryMutationQuery } from '../../../../../lib/queries/category/useDeleteCategoryMutationQuery';

@@ -1,8 +1,9 @@
 import { redirect } from 'next/navigation';
 import { getServerSession } from 'next-auth';
 
+import { Workspace } from '@/components/auth/Workspace';
+
 import { authOptions } from '../../../lib/auth';
-import { Workspace } from '../../../lib/components/auth/Workspace';
 import { getOrganisationsByUserId } from '../../api/user/organization/service';
 
 export const metadata = {

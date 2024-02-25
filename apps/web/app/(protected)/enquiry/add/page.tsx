@@ -1,7 +1,8 @@
 import { getServerSession } from 'next-auth';
 
+import { PageTitle } from '@/components/PageTitle';
+
 import { authOptions } from '../../../../lib/auth';
-import { PageTitle } from '../../../../lib/components/PageTitle';
 import { EnquiryPage } from '../_components/EnquiryPage';
 
 export default async function page() {

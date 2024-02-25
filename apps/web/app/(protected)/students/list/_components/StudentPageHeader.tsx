@@ -1,7 +1,7 @@
 'use client';
 
-import { LinkButton } from '../../../../../lib/components/LinkButton';
-import { PageTitle } from '../../../../../lib/components/PageTitle';
+import { LinkButton } from '@/components/LinkButton';
+import { PageTitle } from '@/components/PageTitle';
 
 export function StudentPageHeader() {
   return (

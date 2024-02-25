@@ -1,8 +1,9 @@
 import { redirect } from 'next/navigation';
 import { getServerSession } from 'next-auth';
 
+import { CourseList } from '@/components/course/courseList';
+
 import { authOptions } from '../../../../lib/auth';
-import { CourseList } from '../../../../lib/components/course/courseList';
 import { getCourseList } from '../../../api/course/service';
 
 export default async function Page() {

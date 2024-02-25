@@ -1,8 +1,9 @@
 import { redirect } from 'next/navigation';
 import { getServerSession } from 'next-auth';
 
+import { PageTitle } from '@/components/PageTitle';
+
 import { authOptions } from '../../../../lib/auth';
-import { PageTitle } from '../../../../lib/components/PageTitle';
 import { OnboardStaffForm } from './_components/OnboardStaffForm';
 
 export default async function Page() {

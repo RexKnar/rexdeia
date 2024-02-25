@@ -1,4 +1,5 @@
-import { EnquiryForm } from '../../../../lib/components/admission/EnquiryForm';
+import { EnquiryForm } from '@/components/admission/EnquiryForm';
+
 import { getFormByCriteria } from '../../../api/forms/service';
 
 type EnquiryPageProp = {

@@ -1,6 +1,6 @@
 'use client';
 
-import { PageTitle } from '../../../../../../lib/components/PageTitle';
+import { PageTitle } from '@/components/PageTitle';
 
 export function PageHeader() {
   return (

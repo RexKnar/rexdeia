@@ -1,7 +1,8 @@
 import Image from 'next/image';
 import { Suspense } from 'react';
 
-import { RecoveryPasswordForm } from '../../../lib/components/auth/RecoveryPasswordForm';
+import { RecoveryPasswordForm } from '@/components/auth/RecoveryPasswordForm';
+
 import logo from '../../../public/assets/images/acadx-logo.png';
 
 export default async function Page() {
