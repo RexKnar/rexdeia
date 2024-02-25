@@ -1,7 +1,6 @@
 'use client';
 
 import { Loader2, PlusCircle } from 'lucide-react';
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import {
@@ -17,24 +16,24 @@ import {
   Text,
 } from 'ui';
 
+import { useQueryParams } from '@/hooks/useQueryParams';
+
 import { CreateBatchModel } from '../../../../../../lib/domain/batch';
 import { useCreateBatchMutationQuery } from '../../../../../../lib/queries/batches/useCreateBatchMutationQuery';
 import { useGetBatchByIdQuery } from '../../../../../../lib/queries/batches/useGetBatchByIdQuery';
 import { useUpdateBatchMutationQuery } from '../../../../../../lib/queries/batches/useUpdateBatchMutationQuery';
 
 export function SaveAcademicYearFlyout() {
-  const pathname = usePathname();
-  const router = useRouter();
-  const searchParams = useSearchParams();
+  const { getParam, removeParams } = useQueryParams();
 
   const [endYear, setEndYear] = useState(null);
   const [startYear, setStartYear] = useState(null);
 
-  const batchId = searchParams.get('batchId');
-  const isOpen = searchParams.get('isFlyoutOpen') === 'true';
+  const batchId = getParam('batchId');
+  const isOpen = getParam('isFlyoutOpen') === 'true';
 
-  const page = parseInt(searchParams.get('page')) || 1;
-  const limit = parseInt(searchParams.get('limit')) || 10;
+  const page = parseInt(getParam('page')) || 1;
+  const limit = parseInt(getParam('limit')) || 10;
 
   const {
     register,
@@ -90,12 +89,8 @@ export function SaveAcademicYearFlyout() {
     }
   }, [currentBatch, setValue]);
 
-  const closeFlyout = async () => {
-    const params = new URLSearchParams(searchParams);
-    params.set('isFlyoutOpen', 'false');
-    params.delete('batchId');
-
-    router.replace(pathname + '?' + params.toString());
+  const closeFlyout = () => {
+    removeParams(['batchId', 'isFlyoutOpen']);
   };
 
   const saveBatch = async (payload: CreateBatchModel) => {
@@ -119,7 +114,7 @@ export function SaveAcademicYearFlyout() {
     } catch (error) {
       console.error(error);
     } finally {
-      await closeFlyout();
+      closeFlyout();
       reset();
       setEndYear(null);
       setStartYear(null);
@@ -258,7 +253,6 @@ export function SaveAcademicYearFlyout() {
               </div>
             </form>
           )}
-          {/* </If> */}
         </SheetContent>
       </Sheet>
     </section>

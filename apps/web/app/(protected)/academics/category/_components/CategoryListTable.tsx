@@ -276,12 +276,12 @@ export function CategoryListTable() {
         condition={categoryListResponse?.data?.length && !isCategoryListLoading}
       >
         <Pagination
-          value={limit.toString()}
+          limit={limit.toString()}
           onPageChange={handleOnPageChange}
           pageSize={categoryListResponse?.limit || 0}
           totalRecords={categoryListResponse?.total || 0}
           disabled={isCategoryListLoading}
-          onValueChange={(value) => {
+          onLimitChange={(value) => {
             const params = new URLSearchParams(searchParams);
             params.set('limit', value.toString());
 

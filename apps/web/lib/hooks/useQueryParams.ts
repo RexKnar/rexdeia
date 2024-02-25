@@ -1,4 +1,5 @@
 import { useRouter, useSearchParams } from 'next/navigation';
+import { useCallback } from 'react';
 
 /**
  * Custom hook to manage query parameters in a Next.js application.
@@ -15,10 +16,13 @@ export function useQueryParams() {
    *
    * @returns {Object} An object representing the current query parameters.
    */
-  const getParam = (key: string) => {
-    const params = new URLSearchParams(searchParams);
-    return params.get(key);
-  };
+  const getParam = useCallback(
+    (key: string) => {
+      const params = new URLSearchParams(searchParams);
+      return params.get(key);
+    },
+    [searchParams]
+  );
 
   /**
    * Set the query parameters.
@@ -28,28 +32,51 @@ export function useQueryParams() {
    * @example
    * setParams({ isFlyoutOpen: 'true' });
    */
-  const setParams = (params: Record<string, string>) => {
-    const urlSearchParams = new URLSearchParams(params);
-    Object.entries(params).forEach(([key, value]) => {
-      urlSearchParams.set(key, value);
-    });
-    router.replace(`?${urlSearchParams.toString()}`);
-  };
+  const setParams = useCallback(
+    (params: Record<string, string>) => {
+      const urlSearchParams = new URLSearchParams(params);
+      Object.entries(params).forEach(([key, value]) => {
+        urlSearchParams.set(key, value);
+      });
+      router.replace(`?${urlSearchParams.toString()}`);
+    },
+    [router]
+  );
 
   /**
    * Remove a specific query parameter.
    *
    * @param {string} param - The name of the query parameter to remove.
    */
-  const removeParam = (param: string) => {
-    const urlSearchParams = new URLSearchParams(searchParams);
-    urlSearchParams.delete(param);
-    router.replace(`?${urlSearchParams.toString()}`);
-  };
+  const removeParam = useCallback(
+    (param: string) => {
+      const urlSearchParams = new URLSearchParams(searchParams);
+      urlSearchParams.delete(param);
+      router.replace(`?${urlSearchParams.toString()}`);
+    },
+    [router, searchParams]
+  );
+
+  /**
+   * Remove multiple query parameters.
+   *
+   * @param {string[]} params - An array of query parameters to remove.
+   */
+  const removeParams = useCallback(
+    (params: string[]) => {
+      const urlSearchParams = new URLSearchParams(searchParams);
+      params.forEach((param) => {
+        urlSearchParams.delete(param);
+      });
+      router.replace(`?${urlSearchParams.toString()}`);
+    },
+    [router, searchParams]
+  );
 
   return {
     getParam,
     setParams,
     removeParam,
+    removeParams,
   };
 }

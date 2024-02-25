@@ -262,12 +262,12 @@ export function MediumListTable() {
         condition={mediumListResponse?.data?.length && !isMediumListLoading}
       >
         <Pagination
-          value={limit.toString()}
+          limit={limit.toString()}
           onPageChange={handleOnPageChange}
           pageSize={mediumListResponse?.limit || 0}
           totalRecords={mediumListResponse?.total || 0}
           disabled={isMediumListLoading}
-          onValueChange={(value) => {
+          onLimitChange={(value) => {
             const params = new URLSearchParams(searchParams);
             params.set('limit', value.toString());
 

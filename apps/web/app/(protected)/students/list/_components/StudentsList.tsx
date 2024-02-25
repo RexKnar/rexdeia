@@ -427,12 +427,12 @@ export function StudentsList() {
         }
       >
         <Pagination
-          value={limit.toString()}
+          limit={limit.toString()}
           onPageChange={handleOnPageChange}
           pageSize={getStudentListResponse?.pageSize || 0}
           totalRecords={getStudentListResponse?.total || 0}
           disabled={isStudentListLoading}
-          onValueChange={(value) => {
+          onLimitChange={(value) => {
             const params = new URLSearchParams(searchParams);
             params.set('limit', value.toString());
 

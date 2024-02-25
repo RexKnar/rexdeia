@@ -290,12 +290,12 @@ export function RegulationListTable() {
         }
       >
         <Pagination
-          value={limit.toString()}
+          limit={limit.toString()}
           disabled={isRegulationListLoading}
           onPageChange={handleOnPageChange}
           pageSize={regulationListResponse?.limit || 0}
           totalRecords={regulationListResponse?.total || 0}
-          onValueChange={(value) => {
+          onLimitChange={(value) => {
             const params = new URLSearchParams(searchParams);
             params.set('limit', value.toString());
 

@@ -269,12 +269,12 @@ export function SubjectFormatListTable() {
         }
       >
         <Pagination
-          value={limit.toString()}
+          limit={limit.toString()}
           onPageChange={handleOnPageChange}
           pageSize={subjectFormatListResponse?.limit || 0}
           totalRecords={subjectFormatListResponse?.total || 0}
           disabled={isSubjectFormatListLoading}
-          onValueChange={(value) => {
+          onLimitChange={(value) => {
             const params = new URLSearchParams(searchParams);
             params.set('limit', value.toString());
 

@@ -266,12 +266,12 @@ export function SubjectTypeListTable() {
         }
       >
         <Pagination
-          value={limit.toString()}
+          limit={limit.toString()}
           onPageChange={handleOnPageChange}
           pageSize={subjectTypeListResponse?.limit || 0}
           totalRecords={subjectTypeListResponse?.total || 0}
           disabled={isSubjectTypeListLoading}
-          onValueChange={(value) => {
+          onLimitChange={(value) => {
             const params = new URLSearchParams(searchParams);
             params.set('limit', value.toString());
 

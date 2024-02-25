@@ -264,12 +264,12 @@ export function GroupListTable() {
       </div>
       <When condition={groupListResponse?.data?.length && !isGroupListLoading}>
         <Pagination
-          value={limit.toString()}
+          limit={limit.toString()}
           onPageChange={handleOnPageChange}
           pageSize={groupListResponse?.limit || 0}
           totalRecords={groupListResponse?.total || 0}
           disabled={isGroupListLoading}
-          onValueChange={(value) => {
+          onLimitChange={(value) => {
             const params = new URLSearchParams(searchParams);
             params.set('limit', value.toString());
 

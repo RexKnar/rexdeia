@@ -10,8 +10,7 @@ import {
   useReactTable,
 } from '@tanstack/react-table';
 import { Loader2, Pencil, Trash2 } from 'lucide-react';
-import React, { useEffect, useState } from 'react';
-import { When } from 'react-if';
+import React, { useCallback, useEffect, useState } from 'react';
 import {
   Button,
   Pagination,
@@ -156,6 +155,20 @@ export function AcademicYearListTable() {
     }
   }, [isDeleteSuccess, toast]);
 
+  const handleOnPageChange = useCallback(
+    (page: number) => {
+      setParams({ page: page.toString() });
+    },
+    [setParams]
+  );
+
+  const handleOnLimitChange = useCallback(
+    (limit: number) => {
+      setParams({ limit: limit.toString() });
+    },
+    [setParams]
+  );
+
   const table = useReactTable({
     columns,
     data: batchesList?.data || [],
@@ -286,33 +299,31 @@ export function AcademicYearListTable() {
           </TableBody>
         </Table>
       </div>
-      <When condition={batchesList?.data?.length && !isBatchesListLoading}>
+
+      {!isBatchesListLoading && !batchesList?.data?.length && (
         <Pagination
-          value={limit.toString()}
-          onPageChange={(page) => {
-            setParams({ page: page.toString() });
-          }}
-          pageSize={batchesList?.limit || 0}
-          totalRecords={batchesList?.total || 0}
+          limit={limit.toString()}
           disabled={isBatchesListLoading}
-          onValueChange={(value) => {
-            setParams({ limit: value.toString() });
-          }}
+          onPageChange={handleOnPageChange}
+          pageSize={batchesList?.limit || 0}
+          onLimitChange={handleOnLimitChange}
+          totalRecords={batchesList?.total || 0}
         />
-        <DeleteConfirmationModal
-          open={showDeleteConfirmationModal}
-          description={`Are you sure you want to delete "${selectedBatch?.name}"`}
-          onDeleteClick={async () => {
-            if (selectedBatch) {
-              setShowDeleteConfirmationModal(false);
-              await deleteBatchAsync(selectedBatch.id);
-            }
-          }}
-          onCancelClick={() => {
+      )}
+
+      <DeleteConfirmationModal
+        open={showDeleteConfirmationModal}
+        description={`Are you sure you want to delete "${selectedBatch?.name}"`}
+        onDeleteClick={async () => {
+          if (selectedBatch) {
             setShowDeleteConfirmationModal(false);
-          }}
-        />
-      </When>
+            await deleteBatchAsync(selectedBatch.id);
+          }
+        }}
+        onCancelClick={() => {
+          setShowDeleteConfirmationModal(false);
+        }}
+      />
     </section>
   );
 }
