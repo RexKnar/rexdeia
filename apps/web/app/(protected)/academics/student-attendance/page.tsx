@@ -14,7 +14,7 @@ export default async function Page() {
   return (
     <section className="flex flex-col gap-6">
       <StudentAttendancePageHeader />
-      <section className="space-y-2 rounded-md bg-white p-4">
+      <section className="space-y-2 rounded-md  p-4">
         <StudentAttendanceListTable />
       </section>
     </section>
