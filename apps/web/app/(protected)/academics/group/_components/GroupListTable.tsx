@@ -31,7 +31,8 @@ import {
 } from 'ui/components/ui/Table';
 import { cn } from 'utils';
 
-import { DeleteConfirmationModal } from '../../../../../lib/components/modals/DeleteConfirmationModal';
+import { DeleteConfirmationModal } from '@/components/modals/DeleteConfirmationModal';
+
 import { GroupModel } from '../../../../../lib/domain/group';
 import { useDeleteGroupMutationQuery } from '../../../../../lib/queries/group/useDeleteGroupMutationQuery';
 import { useGetGroupListQuery } from '../../../../../lib/queries/group/useGetGroupListQuery';
@@ -263,12 +264,12 @@ export function GroupListTable() {
       </div>
       <When condition={groupListResponse?.data?.length && !isGroupListLoading}>
         <Pagination
-          value={limit.toString()}
+          limit={limit.toString()}
           onPageChange={handleOnPageChange}
           pageSize={groupListResponse?.limit || 0}
           totalRecords={groupListResponse?.total || 0}
           disabled={isGroupListLoading}
-          onValueChange={(value) => {
+          onLimitChange={(value) => {
             const params = new URLSearchParams(searchParams);
             params.set('limit', value.toString());
 

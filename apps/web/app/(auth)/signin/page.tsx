@@ -5,9 +5,10 @@ import { getServerSession } from 'next-auth';
 import { Suspense } from 'react';
 import { Text } from 'ui';
 
+import { SignInForm } from '@/components/auth/SignInForm';
+import { Footer } from '@/components/Footer';
+
 import { authOptions } from '../../../lib/auth';
-import { SignInForm } from '../../../lib/components/auth/SignInForm';
-import { Footer } from '../../../lib/components/Footer';
 import logo from '../../../public/assets/images/acadx-logo.png';
 
 export const metadata = {

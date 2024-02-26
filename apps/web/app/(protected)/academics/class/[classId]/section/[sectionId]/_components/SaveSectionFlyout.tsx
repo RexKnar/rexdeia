@@ -61,7 +61,7 @@ export function SaveSectionFlyout() {
     ? classIdFromSearchParams
     : classIdFromQueryParams?.classId;
 
-  const closeFlyout = () => {
+  const closeFlyout = async () => {
     setMediumId('');
     const params = new URLSearchParams(searchParams);
     params.set('isSectionFlyoutOpen', 'false');
@@ -124,8 +124,8 @@ export function SaveSectionFlyout() {
         await mutateCreateSectionAsync(addSectionPayload);
       }
 
-      reset();
       await closeFlyout();
+      reset();
     } catch (error) {
       console.error(error);
     } finally {
@@ -145,7 +145,7 @@ export function SaveSectionFlyout() {
           <form onSubmit={handleSubmit(saveSection)}>
             <SheetHeader>
               <SheetTitle>
-                <div className="sm:grid sm:grid-cols-1 sm:gap-4 md:grid md:grid-cols-1 md:gap-4 lg:flex lg:justify-between">
+                <div className="sm:grid sm:grid-cols-1 sm:gap-4 md:grid md:grid-cols-1 md:gap-4 lg:grid  lg:grid-cols-[1fr_100px]">
                   <div className="flex items-center">
                     <PlusCircle size={20} strokeWidth={1.5} />
                     <Text variant="lg-semibold" className="ml-2">

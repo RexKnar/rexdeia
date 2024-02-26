@@ -1,4 +1,5 @@
-import { PageTitle } from '../../../../lib/components/PageTitle';
+import { PageTitle } from '@/components/PageTitle';
+
 import { StaffDetail } from './components/Staffdetail';
 
 export default async function Page() {

@@ -67,7 +67,7 @@ export async function addSubjects(subjects: CreateSubjectModel[]) {
         isActive: subject.isActive,
         description: subject.description,
         subjectTypeId: subject.subjectTypeId,
-        elective: subject.elective,
+        elective: +subject.elective,
         regulationId: subject.regulationId,
       },
     });
@@ -109,7 +109,7 @@ export async function addSubject(createSubject: CreateSubjectModel) {
       description: createSubject.description,
       isActive: createSubject.isActive,
       subjectTypeId: createSubject.subjectTypeId,
-      elective: createSubject.elective,
+      elective: +createSubject.elective,
       regulationId: createSubject.regulationId,
     },
   });

@@ -3,7 +3,8 @@ import 'configs/tailwind/styles.css';
 import Image from 'next/image';
 import { Text } from 'ui';
 
-import { LinkButton } from '../lib/components/LinkButton';
+import { LinkButton } from '@/components/LinkButton';
+
 import image from '../public/assets/images/ErrorImage.gif';
 
 export default async function NotFoundPage() {

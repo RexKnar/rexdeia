@@ -7,12 +7,6 @@ import { useForm } from 'react-hook-form';
 import {
   Button,
   Input,
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
   Sheet,
   SheetContent,
   SheetHeader,
@@ -26,7 +20,13 @@ export function ExamConfigureFlyout() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const isOpen = searchParams.get('isExamConfigureFlyoutOpen') === 'true';
-  const { reset, setValue } = useForm();
+  const {
+    reset,
+    setValue,
+    register,
+    handleSubmit,
+    formState: { errors: fieldErrors },
+  } = useForm();
   const [practical, setPractical] = useState(false);
   const [theory, setTheory] = useState(true);
 
@@ -38,6 +38,9 @@ export function ExamConfigureFlyout() {
     router.replace(pathname + '?' + params.toString());
   };
 
+  async function saveExamConfigure() {
+    closeFlyout();
+  }
   return (
     <section>
       <Sheet open={isOpen}>
@@ -48,7 +51,7 @@ export function ExamConfigureFlyout() {
           onCloseClick={() => closeFlyout()}
         >
           <div className="max-h-[95vh] overflow-y-auto">
-            <form>
+            <form onSubmit={handleSubmit(saveExamConfigure)}>
               <SheetHeader>
                 <SheetTitle className="mb-5">
                   <div className="sm:grid sm:grid-cols-1 sm:gap-4 md:grid md:grid-cols-1 md:gap-4 lg:flex lg:justify-between">
@@ -62,74 +65,70 @@ export function ExamConfigureFlyout() {
                 </SheetTitle>
                 <hr className="border-t border-gray-300"></hr>
               </SheetHeader>
-              <div className="mt-5">
+              <div className="mt-5 p-1">
                 <div>
                   <label htmlFor="name" className="text-sm font-semibold">
                     Subject Name
                   </label>
                 </div>
                 <label
-                  htmlFor="totalmark"
+                  htmlFor="name"
                   className="text-sm font-semibold text-gray-700"
                 >
                   Total mark
                 </label>
                 <Input
+                  {...register('totalmark', {
+                    required: 'Total mark is Required',
+                  })}
                   id="name"
                   autoFocus
                   type="text"
                   className="mt-2"
                   placeholder="Total mark"
+                  errorMessage={fieldErrors?.totalmark?.message.toString()}
                 />
-                <label
-                  htmlFor="marktoconduct"
-                  className="text-sm font-semibold text-gray-700"
-                >
-                  Mark to Conduct
-                </label>
-                <Input
-                  id="name"
-                  type="text"
-                  className="mt-2"
-                  placeholder="Mark to Conduct"
-                />
-                <label
-                  htmlFor="minpassMark"
-                  className="text-sm font-semibold text-gray-700"
-                >
-                  Min Pass Mark
-                </label>
-                <Input
-                  id="name"
-                  type="text"
-                  className="mt-2"
-                  placeholder="Min Pass Mark"
-                />
+                <div className="mt-2">
+                  <label
+                    htmlFor="name"
+                    className="text-sm font-semibold text-gray-700"
+                  >
+                    Mark to Conduct
+                  </label>
+                  <Input
+                    {...register('markToConduct', {
+                      required: 'Mark to Conduct is Required',
+                    })}
+                    id="name"
+                    type="text"
+                    className="mt-2"
+                    placeholder="Mark to Conduct"
+                    errorMessage={fieldErrors?.markToConduct?.message.toString()}
+                  />
+                </div>
+                <div className="mt-2">
+                  <label
+                    htmlFor="name"
+                    className="text-sm font-semibold text-gray-700"
+                  >
+                    Min Pass Mark
+                  </label>
+                  <Input
+                    {...register('minPassMark', {
+                      required: 'Min Pass Mark is Required',
+                    })}
+                    id="name"
+                    type="text"
+                    className="mt-2"
+                    placeholder="Min Pass Mark"
+                    errorMessage={fieldErrors?.minPassMark?.message.toString()}
+                  />
+                </div>
                 <div className="mt-1 flex justify-end">
                   <label className="text-sm font-medium text-gray-600">
                     From conducting mark
                   </label>
                 </div>
-                <label
-                  htmlFor="minpassMark"
-                  className="text-sm font-semibold text-gray-700"
-                >
-                  Grade
-                </label>
-                <Select>
-                  <SelectTrigger className="mt-2 w-full">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectGroup>
-                      <SelectItem value="O">O</SelectItem>
-                      <SelectItem value="A+">A+</SelectItem>
-                      <SelectItem value="A">A</SelectItem>
-                      <SelectItem value="B+">B+</SelectItem>
-                      <SelectItem value="B">B</SelectItem>
-                    </SelectGroup>
-                  </SelectContent>
-                </Select>
               </div>
               <div className="mt-5 flex items-center justify-around">
                 <div className="flex items-center">
@@ -165,49 +164,67 @@ export function ExamConfigureFlyout() {
                 </div>
               </div>
               {theory && (
-                <div className="mt-5">
+                <div className="mt-5 p-1">
                   <div>
                     <label htmlFor="name" className="text-sm font-semibold">
                       Theory
                     </label>
                   </div>
-                  <label
-                    htmlFor="name"
-                    className="text-sm font-semibold text-gray-700"
-                  >
-                    Marks to conduct
-                  </label>
-                  <Input
-                    id="name"
-                    autoFocus
-                    type="text"
-                    className="mt-2"
-                    placeholder="Marks to conduct"
-                  />
-                  <label
-                    htmlFor="name"
-                    className="text-sm font-semibold text-gray-700"
-                  >
-                    Convert Mark to
-                  </label>
-                  <Input
-                    id="name"
-                    type="text"
-                    className="mt-2"
-                    placeholder="Convert Mark to"
-                  />
-                  <label
-                    htmlFor="name"
-                    className="text-sm font-semibold text-gray-700"
-                  >
-                    Min Pass Mark
-                  </label>
-                  <Input
-                    id="name"
-                    type="text"
-                    className="mt-2"
-                    placeholder="Min Pass Mark"
-                  />
+                  <div className="mt-2">
+                    <label
+                      htmlFor="name"
+                      className="text-sm font-semibold text-gray-700"
+                    >
+                      Marks to conduct
+                    </label>
+                    <Input
+                      {...register('markInTheory', {
+                        required: 'Mark to Conduct is Required',
+                      })}
+                      id="name"
+                      autoFocus
+                      type="text"
+                      className="mt-2"
+                      placeholder="Marks to conduct"
+                      errorMessage={fieldErrors?.markInTheory?.message.toString()}
+                    />
+                  </div>
+                  <div className="mt-2">
+                    <label
+                      htmlFor="name"
+                      className="text-sm font-semibold text-gray-700"
+                    >
+                      Convert Mark to
+                    </label>
+                    <Input
+                      {...register('convertMarkInTheory', {
+                        required: 'Convert Mark to is Required',
+                      })}
+                      id="name"
+                      type="text"
+                      className="mt-2"
+                      placeholder="Convert Mark to"
+                      errorMessage={fieldErrors?.convertMarkInTheory?.message.toString()}
+                    />
+                  </div>
+                  <div className="mt-2">
+                    <label
+                      htmlFor="name"
+                      className="text-sm font-semibold text-gray-700"
+                    >
+                      Min Pass Mark
+                    </label>
+                    <Input
+                      {...register('passMarkInThory', {
+                        required: 'Min Pass Mark is Required',
+                      })}
+                      id="name"
+                      type="text"
+                      className="mt-2"
+                      placeholder="Min Pass Mark"
+                      errorMessage={fieldErrors?.passMarkInThory?.message.toString()}
+                    />
+                  </div>
                   <div className="mt-1 flex justify-end">
                     <label className="text-sm font-medium text-gray-600">
                       From conducting mark
@@ -216,49 +233,67 @@ export function ExamConfigureFlyout() {
                 </div>
               )}
               {practical && (
-                <div className="mt-5">
+                <div className="mt-5 p-1">
                   <div>
                     <label htmlFor="name" className="text-sm font-semibold">
                       Practical
                     </label>
                   </div>
-                  <label
-                    htmlFor="name"
-                    className="text-sm font-semibold text-gray-700"
-                  >
-                    Marks to conduct
-                  </label>
-                  <Input
-                    id="name"
-                    autoFocus
-                    type="text"
-                    className="mt-2"
-                    placeholder="Marks to conduct"
-                  />
-                  <label
-                    htmlFor="name"
-                    className="text-sm font-semibold text-gray-700"
-                  >
-                    Convert Mark to
-                  </label>
-                  <Input
-                    id="name"
-                    type="text"
-                    className="mt-2"
-                    placeholder="Convert Mark to"
-                  />
-                  <label
-                    htmlFor="name"
-                    className="text-sm font-semibold text-gray-700"
-                  >
-                    Min Pass Mark
-                  </label>
-                  <Input
-                    id="name"
-                    type="text"
-                    className="mt-2"
-                    placeholder="Min Pass Mark"
-                  />
+                  <div className="mt-2">
+                    <label
+                      htmlFor="name"
+                      className="text-sm font-semibold text-gray-700"
+                    >
+                      Marks to conduct
+                    </label>
+                    <Input
+                      {...register('markInPractical', {
+                        required: 'Mark to Conduct is Required',
+                      })}
+                      id="name"
+                      autoFocus
+                      type="text"
+                      className="mt-2"
+                      placeholder="Marks to conduct"
+                      errorMessage={fieldErrors?.markInPractical?.message.toString()}
+                    />
+                  </div>
+                  <div className="mt-2">
+                    <label
+                      htmlFor="name"
+                      className="text-sm font-semibold text-gray-700"
+                    >
+                      Convert Mark to
+                    </label>
+                    <Input
+                      {...register('convertMarkInPractical', {
+                        required: 'Convert Mark to is Required',
+                      })}
+                      id="name"
+                      type="text"
+                      className="mt-2"
+                      placeholder="Convert Mark to"
+                      errorMessage={fieldErrors?.convertMarkInPractical?.message.toString()}
+                    />
+                  </div>
+                  <div className="mt-2">
+                    <label
+                      htmlFor="name"
+                      className="text-sm font-semibold text-gray-700"
+                    >
+                      Min Pass Mark
+                    </label>
+                    <Input
+                      {...register('passMarkInPractical', {
+                        required: 'Min Pass Mark is Required',
+                      })}
+                      id="name"
+                      type="text"
+                      className="mt-2"
+                      placeholder="Min Pass Mark"
+                      errorMessage={fieldErrors?.passMarkInPractical?.message.toString()}
+                    />
+                  </div>
                   <div className="mt-1 flex justify-end">
                     <label className="text-sm font-medium text-gray-600">
                       From conducting mark
@@ -271,7 +306,6 @@ export function ExamConfigureFlyout() {
                   size="lg"
                   variant="default"
                   className="mx-auto flex justify-center px-12 py-4"
-                  onClick={() => closeFlyout()}
                 >
                   Save & Close
                 </Button>

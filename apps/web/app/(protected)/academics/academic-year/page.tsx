@@ -2,14 +2,14 @@ import { redirect } from 'next/navigation';
 import { getServerSession } from 'next-auth';
 
 import { authOptions } from '../../../../lib/auth';
+import { isAuthenticated } from '../../../../lib/utils/auth';
+import { SaveAcademicYearFlyout } from './_components/_modals/SaveAcademicYearFlyout';
 import { AcademicYearListTable } from './_components/AcademicYearListTable';
 import { AcademicYearPageHeader } from './_components/AcademicYearPageHeader';
-import { SaveAcademicYearFlyout } from './_components/modals/SaveAcademicYearFlyout';
 
 export default async function Page() {
-  const session = await getServerSession(authOptions);
-  if (!session.branchId || !session.organizationId) {
-    return redirect('/signin?callbackUrl=/academics/batches');
+  if (!isAuthenticated(await getServerSession(authOptions))) {
+    return redirect('/signin?callbackUrl=/academics/academic-year');
   }
 
   return (

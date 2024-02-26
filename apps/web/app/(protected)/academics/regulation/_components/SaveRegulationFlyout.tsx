@@ -55,7 +55,7 @@ export function SaveRegulationFlyout() {
     mutateAsync: mutateCreateRegulationsAsync,
   } = useCreateRegulationsMutationQuery(page, limit);
 
-  const closeFlyout = () => {
+  const closeFlyout = async () => {
     const params = new URLSearchParams(searchParams);
     params.set('isFlyoutOpen', 'false');
     params.delete('regulationId');
@@ -101,20 +101,20 @@ export function SaveRegulationFlyout() {
           ...payload,
           id: regulationId,
         };
-        mutateUpdateRegulationAsync(updateBatchRequestPayload);
+        await mutateUpdateRegulationAsync(updateBatchRequestPayload);
       } else {
         const requestPayload = {
           ...payload,
         };
-        mutateCreateRegulationsAsync(requestPayload);
+        await mutateCreateRegulationsAsync(requestPayload);
       }
     } catch (error) {
       console.error(error);
     } finally {
       setValue('isActive', false);
       setValue('announcedYear', new Date());
+      await closeFlyout();
       reset();
-      closeFlyout();
       setAnnouncedYear(null);
     }
   }

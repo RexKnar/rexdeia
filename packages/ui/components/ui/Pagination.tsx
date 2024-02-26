@@ -15,19 +15,19 @@ import {
 type PaginationProps = {
   pageSize: number;
   totalRecords: number;
-  value: string;
+  limit: string;
   disabled: boolean;
   onPageChange: (page: number) => void;
-  onValueChange: (value: any) => void;
+  onLimitChange: (limit: any) => void;
 };
 
 export function Pagination({
   pageSize,
   totalRecords,
-  value,
+  limit,
   disabled,
   onPageChange,
-  onValueChange,
+  onLimitChange,
 }: Readonly<PaginationProps>) {
   const [currentPage, setCurrentPage] = useState(1);
   const totalPages = Math.ceil(totalRecords / pageSize);
@@ -84,9 +84,9 @@ export function Pagination({
         </label>
         <div className="w-1/3">
           <Select
-            value={value}
+            value={limit}
             disabled={disabled}
-            onValueChange={onValueChange}
+            onValueChange={onLimitChange}
           >
             <SelectTrigger className="w-auto">
               <SelectValue />

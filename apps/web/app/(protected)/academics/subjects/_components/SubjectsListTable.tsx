@@ -31,7 +31,8 @@ import {
 } from 'ui/components/ui/Table';
 import { cn } from 'utils';
 
-import { DeleteConfirmationModal } from '../../../../../lib/components/modals/DeleteConfirmationModal';
+import { DeleteConfirmationModal } from '@/components/modals/DeleteConfirmationModal';
+
 import {
   SubjectFormatModel,
   SubjectModel,
@@ -320,12 +321,12 @@ export function SubjectsListTable() {
         condition={subjectListResponse?.data?.length && !isSubjectListLoading}
       >
         <Pagination
-          value={limit.toString()}
+          limit={limit.toString()}
           onPageChange={handleOnPageChange}
           pageSize={subjectListResponse?.limit || 0}
           totalRecords={subjectListResponse?.total || 0}
           disabled={isSubjectListLoading}
-          onValueChange={(value) => {
+          onLimitChange={(value) => {
             const params = new URLSearchParams(searchParams);
             params.set('limit', value.toString());
 

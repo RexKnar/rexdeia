@@ -9,8 +9,9 @@ import {
   TabsTrigger,
 } from 'ui/components/ui/Tabs';
 
+import { PageTitle } from '@/components/PageTitle';
+
 import { authOptions } from '../../../../lib/auth';
-import { PageTitle } from '../../../../lib/components/PageTitle';
 import { getStudentById } from '../../../api/student/service';
 import { StudentDetail } from './_components/StudentDetail';
 

@@ -2,8 +2,9 @@ import Image from 'next/image';
 import { redirect } from 'next/navigation';
 import { getServerSession } from 'next-auth';
 
+import { SetupForm } from '@/components/auth/SetupForm';
+
 import { authOptions } from '../../../lib/auth';
-import { SetupForm } from '../../../lib/components/auth/SetupForm';
 import logo from '../../../public/assets/images/acadx-logo.png';
 
 export const metadata = {

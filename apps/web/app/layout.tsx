@@ -7,14 +7,16 @@ import type { ReactNode } from 'react';
 import Providers from '../lib/Providers';
 
 const inter = Inter({
-  subsets: ['latin'],
+  preload: true,
   display: 'swap',
+  subsets: ['latin'],
   variable: '--font-inter',
 });
 
 const roboto_mono = Roboto_Mono({
-  subsets: ['latin'],
+  preload: true,
   display: 'swap',
+  subsets: ['latin'],
   variable: '--font-roboto-mono',
 });
 
@@ -45,7 +47,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         <link rel="manifest" href="/site.webmanifest" />
         <title>acadx.io | Elevate your academic experience</title>
       </head>
-      <body className="h-screen">
+      <body className="h-screen bg-gray-50">
         <Providers>{children}</Providers>
       </body>
     </html>

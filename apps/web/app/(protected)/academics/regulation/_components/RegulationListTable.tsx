@@ -31,7 +31,8 @@ import {
 } from 'ui/components/ui/Table';
 import { cn } from 'utils';
 
-import { DeleteConfirmationModal } from '../../../../../lib/components/modals/DeleteConfirmationModal';
+import { DeleteConfirmationModal } from '@/components/modals/DeleteConfirmationModal';
+
 import { RegulationModel } from '../../../../../lib/domain/regulation';
 import { useDeleteRegulationMutationQuery } from '../../../../../lib/queries/regulations/useDeleteRegulationMutationQuery';
 import { useGetRegulationListQuery } from '../../../../../lib/queries/regulations/useGetRegulationListQuery';
@@ -289,12 +290,12 @@ export function RegulationListTable() {
         }
       >
         <Pagination
-          value={limit.toString()}
+          limit={limit.toString()}
           disabled={isRegulationListLoading}
           onPageChange={handleOnPageChange}
           pageSize={regulationListResponse?.limit || 0}
           totalRecords={regulationListResponse?.total || 0}
-          onValueChange={(value) => {
+          onLimitChange={(value) => {
             const params = new URLSearchParams(searchParams);
             params.set('limit', value.toString());
 

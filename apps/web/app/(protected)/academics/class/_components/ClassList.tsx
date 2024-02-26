@@ -1,6 +1,5 @@
 'use client';
 
-import { Loader2 } from 'lucide-react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { Button } from 'ui';
@@ -23,10 +22,25 @@ export function ClassList() {
 
   if (isClassListLoading) {
     return (
-      <div className="flex items-center justify-center">
-        <Loader2 className="mr-2 h-6 w-6 animate-spin text-black" />
-        <p className=" text-black">Fetching Classes...</p>
-      </div>
+      <section className="p-3">
+        <section className="grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+          <div className="flex animate-pulse flex-wrap content-start items-start gap-6 self-stretch md:gap-24 md:space-x-24">
+            <div className="widget h-full w-full rounded-xl border border-primary-200 bg-white p-4 shadow-md shadow-primary-200">
+              <div className="widget-title flex items-center justify-between text-lg font-semibold">
+                <div className="h-6 w-1/2 rounded bg-gray-300"></div>
+                <div>
+                  <div className="w-18 ml-2 inline-block h-5 rounded bg-gray-300"></div>
+                  <div className="w-18 ml-2 inline-block h-5 rounded bg-gray-300"></div>
+                </div>
+              </div>
+              <div className="mb-2 mt-4 flex flex-wrap content-center items-center gap-2 self-stretch">
+                <div className="h-7 w-7 rounded bg-gray-300"></div>
+                <div className="h-7 w-7 rounded bg-gray-300 p-1"></div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </section>
     );
   }
 
