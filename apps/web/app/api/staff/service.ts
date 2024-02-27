@@ -197,3 +197,17 @@ export async function getAllStaffsBySectionIds(ids: string[]) {
   });
   return [...staffs.map((data) => data.staff)];
 }
+
+export async function getAllStaffsBySectionsId(ids: string[]) {
+  const staffs = await db.academicSubjectForStaff.findMany({
+    where: {
+      sectionId: {
+        in: ids,
+      },
+    },
+    select: {
+      staff: true,
+    },
+  });
+  return [...staffs.map((data) => data.staff)];
+}
