@@ -218,12 +218,10 @@ export async function getAllStaffsBySectionsIdWithSubjects(ids: string[]) {
     },
   });
 
-  const result = staffs.map(
-    ({ academicSubjectForStaff, sectionIds, ...rest }) => ({
-      ...rest,
-      subjects: academicSubjectForStaff.map((subject) => subject.subject),
-    })
-  );
+  const result = staffs.map(({ academicSubjectForStaff, ...rest }) => ({
+    ...rest,
+    subjects: academicSubjectForStaff.map((subject) => subject.subject),
+  }));
 
   return result;
 }
