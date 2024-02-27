@@ -44,6 +44,10 @@ export function StudentAttendanceListTable() {
       id: 2,
       name: 'rakes',
     },
+    {
+      id: 3,
+      name: 'rakes',
+    },
   ];
   const columns: ColumnDef<Students>[] = [
     {
@@ -51,7 +55,7 @@ export function StudentAttendanceListTable() {
 
       cell: () => (
         <div className="mb-2 flex items-center">
-          <div>01</div>
+          <div className="mt-2 font-semibold text-gray-700">01</div>
           <Avatar className="ml-3  mt-2 h-8 w-8 cursor-pointer ">
             <AvatarImage src="https://png.pngtree.com/thumb_back/fh260/background/20230612/pngtree-man-wearing-glasses-is-wearing-colorful-background-image_2905240.jpg" />
           </Avatar>
@@ -92,7 +96,7 @@ export function StudentAttendanceListTable() {
     setIsToggled(!isToggled);
   };
   return (
-    <section>
+    <section className="py-0">
       <div className="mb-4">
         <h6>All Students</h6>
       </div>
@@ -100,29 +104,29 @@ export function StudentAttendanceListTable() {
         <section className="w-1/4">
           <section
             className={cn(
-              'flex w-full cursor-pointer flex-col gap-4 rounded-md border-[1.5px] bg-white p-4 shadow-sm'
+              'flex w-full cursor-pointer flex-col gap-2 rounded-md border-[1.5px] bg-white p-4 shadow-sm'
             )}
           >
             <div className="text-sm font-normal text-gray-700">
               Total Students
             </div>
-            <div className="flex items-center justify-between gap-6">
+            <div className="flex items-center justify-between gap-2">
               <div className="text-md font-semibold">32</div>
             </div>
           </section>
           <section
             className={cn(
-              'flex w-full cursor-pointer flex-col gap-4 rounded-md border-[1.5px] bg-white p-4 shadow-sm'
+              'mt-1 flex w-full cursor-pointer flex-col gap-4 rounded-md border-[1.5px] bg-white p-4 shadow-sm'
             )}
           >
             <div className="flex justify-between">
-              <section className="flex w-1/2 flex-col ">
+              <section className="flex w-1/2 flex-col gap-2">
                 <div className="text-sm font-normal text-gray-700">
                   Absenties
                 </div>
                 <div className="text-sm font-semibold">6</div>
               </section>
-              <section className="flex w-1/2 flex-col items-center">
+              <section className="flex w-1/2 flex-col gap-2">
                 <div className="text-sm font-normal text-gray-700">OnLeave</div>
                 <div className="text-sm font-semibold">2</div>
               </section>
@@ -134,7 +138,7 @@ export function StudentAttendanceListTable() {
             )}
           >
             <div className="flex items-center">
-              <Button variant="outline" className="h-9 text-xs ">
+              <Button variant="outline" className="h-8 text-xs ">
                 <MessageSquare className="p-1" />
                 Contact Parents
               </Button>
@@ -142,11 +146,11 @@ export function StudentAttendanceListTable() {
           </section>
           <section
             className={cn(
-              'flex w-full cursor-pointer flex-col gap-4 rounded-md border-[1.5px] bg-white p-4 shadow-sm '
+              'mt-1 flex w-full cursor-pointer flex-col gap-4 rounded-md border-[1.5px] bg-white p-2 shadow-sm '
             )}
           >
             <section>
-              <Input type="date" />
+              <Input type="date" className="h-12" />
             </section>
             <section>
               <Select>
@@ -171,7 +175,7 @@ export function StudentAttendanceListTable() {
               <Select>
                 <SelectTrigger>
                   <SelectValue
-                    className="placeholder-gray-300"
+                    className=" placeholder-gray-300"
                     placeholder="Section"
                   />{' '}
                   <ChevronDown className="text-gray-400" />
@@ -250,6 +254,7 @@ export function StudentAttendanceListTable() {
                   <TableRow
                     key={row.id}
                     data-state={row.getIsSelected() && 'selected'}
+                    className="py-0"
                   >
                     {row.getVisibleCells().map((cell) => (
                       <TableCell key={cell.id} className="py-0">
@@ -259,10 +264,10 @@ export function StudentAttendanceListTable() {
                         )}
                       </TableCell>
                     ))}
-                    <TableCell className="flex items-center justify-end">
+                    <TableCell className="flex items-center justify-end p-1">
                       <div className="flex">
                         <Toggle
-                          className={`ml-2 h-10 w-10 rounded-full px-3 py-1 text-center ${
+                          className={`ml-2 h-8 w-8 rounded-full px-3 py-1 text-center ${
                             isToggled ? 'bg-blue-400 text-white' : 'bg-gray-400'
                           }`}
                           variant="outline"
@@ -271,7 +276,7 @@ export function StudentAttendanceListTable() {
                           <p>P</p>
                         </Toggle>
                         <Toggle
-                          className={`ml-2 h-10 w-10 rounded-full px-3 py-1 text-center ${
+                          className={`ml-2 h-8 w-8 rounded-full px-3 py-1 text-center ${
                             isToggled ? 'bg-red-400 text-white' : 'bg-gray-400'
                           }`}
                           variant="outline"
@@ -280,7 +285,7 @@ export function StudentAttendanceListTable() {
                           <p>A</p>
                         </Toggle>
                         <Toggle
-                          className={`ml-2 h-10 w-10 rounded-full px-3 py-1 text-center ${
+                          className={`ml-2 h-8 w-8 rounded-full px-3 py-1 text-center ${
                             isToggled
                               ? 'bg-orange-400 text-white'
                               : 'bg-gray-400'
@@ -291,7 +296,7 @@ export function StudentAttendanceListTable() {
                           <p>L</p>
                         </Toggle>
                       </div>
-                      <Button variant="outline" className="ml-2 h-9 text-xs">
+                      <Button variant="outline" className="ml-4 h-8 text-xs">
                         <MessageSquare className="p-1" />
                         Contact Parents
                       </Button>
