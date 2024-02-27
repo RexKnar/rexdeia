@@ -7,6 +7,7 @@ import {
   CreateClassModel,
   MapEntitiesToClassModel,
   UpdateClassModel,
+  mapStaffToClassModel,
 } from '../../../lib/domain/class';
 import { CreateSectionModel } from '../../../lib/domain/section';
 import {
@@ -212,6 +213,30 @@ export async function mapStaffsToClass(
       mapStaffsToSection(section, staffSubjects);
     });
   }
+}
+
+export async function assignStaffToClassWithSubject(
+  staffPayload: mapStaffToClassModel
+) {
+  const assignStaff = await Promise.all(
+    staffPayload.sectionIds.map(async (sectionId) => {
+      return await db.section.update({
+        where: { id: sectionId },
+        data: {
+          academicSubjectForStaff: {
+            create: [
+              {
+                subjectId: staffPayload.subjectId,
+                staffId: staffPayload.staffId,
+                academicYearId: staffPayload.academicYearId,
+              },
+            ],
+          },
+        },
+      });
+    })
+  );
+  return assignStaff;
 }
 
 export async function unMapStaffsFromClass(

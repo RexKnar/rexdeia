@@ -4,8 +4,13 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 
 import { authOptions } from '../../../../../lib/auth';
-import { MapEntitiesToClassModel } from '../../../../../lib/domain/class';
 import {
+  MapEntitiesToClassModel,
+  mapStaffToClassModel,
+  mapStaffToClassModelEntity,
+} from '../../../../../lib/domain/class';
+import {
+  assignStaffToClassWithSubject,
   getAllStaffsByClassId,
   mapStaffsToClass,
   unMapStaffsFromClass,
@@ -106,12 +111,19 @@ export async function POST(request: NextRequest, { params: { id } }) {
     });
   }
 
-  const payload: MapEntitiesToClassModel = await request.json();
+  const payload: mapStaffToClassModelEntity = await request.json();
 
   try {
-    const response = await mapStaffsToClass(id, payload);
+    // const response = await mapStaffsToClass(id, payload);
 
-    return new NextResponse(JSON.stringify(response), {
+    const assignedStaffToClassWithSubject = payload.data.map(
+      async (staffDetail) => {
+        console.log(staffDetail);
+        await assignStaffToClassWithSubject(staffDetail);
+      }
+    );
+
+    return new NextResponse(JSON.stringify(assignedStaffToClassWithSubject), {
       status: StatusCodes.CREATED,
     });
   } catch (e) {
