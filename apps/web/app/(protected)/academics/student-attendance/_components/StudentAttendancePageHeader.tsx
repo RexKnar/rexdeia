@@ -1,5 +1,3 @@
-'use client';
-
 import { PageTitle } from '../../../../../lib/components/PageTitle';
 
 export function StudentAttendancePageHeader() {

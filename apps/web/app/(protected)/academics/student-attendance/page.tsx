@@ -8,7 +8,7 @@ import { StudentAttendancePageHeader } from './_components/StudentAttendancePage
 export default async function Page() {
   const session = await getServerSession(authOptions);
   if (!session.branchId || !session.organizationId) {
-    return redirect('/signin?callbackUrl=/academics/batches');
+    return redirect('/signin?callbackUrl=/academics/student-attendance');
   }
 
   return (

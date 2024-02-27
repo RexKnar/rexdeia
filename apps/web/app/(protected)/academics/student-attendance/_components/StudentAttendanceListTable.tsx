@@ -14,11 +14,12 @@ import {
 } from '@tanstack/react-table';
 import { ChevronDown, MessageSquare } from 'lucide-react';
 import React, { useState } from 'react';
+import { useForm } from 'react-hook-form';
 import {
   Avatar,
   AvatarImage,
   Button,
-  Input,
+  DateSelector,
   Select,
   SelectContent,
   SelectGroup,
@@ -30,6 +31,65 @@ import {
 import { Table, TableBody, TableCell, TableRow } from 'ui/components/ui/Table';
 import { cn } from 'utils';
 
+function AttendanceTableCell() {
+  const [isToggled, setIsToggled] = useState(false);
+  const [isButtonDisabled, setIsButtonDisabled] = useState(false);
+
+  const handleOnToggleChange = () => {
+    setIsToggled(!isToggled);
+    setIsButtonDisabled(!isToggled);
+  };
+  const [isClicked, setIsClicked] = useState(false);
+  const handleOnClick = () => {
+    setIsClicked(!isClicked);
+  };
+  const [isPressed, setIsPressed] = useState(false);
+  const handleOnPressed = () => {
+    setIsPressed(!isPressed);
+  };
+
+  return (
+    <>
+      <div className="flex">
+        <Toggle
+          className={`ml-2 h-8 w-8 rounded-full px-3 py-1 text-center ${
+            isToggled ? 'bg-primary text-white' : 'bg-gray-400'
+          }`}
+          variant="outline"
+          onClick={handleOnToggleChange}
+        >
+          <p>P</p>
+        </Toggle>
+        <Toggle
+          className={`ml-2 h-8 w-8 rounded-full px-3 py-1 text-center ${
+            isClicked ? 'bg-red-500 text-white' : 'bg-gray-400'
+          }`}
+          variant="outline"
+          onClick={handleOnClick}
+        >
+          <p>A</p>
+        </Toggle>
+        <Toggle
+          className={`ml-2 h-8 w-8 rounded-full px-3 py-1 text-center ${
+            isPressed ? 'bg-orange-300' : 'bg-gray-400'
+          }`}
+          variant="outline"
+          onClick={handleOnPressed}
+        >
+          <p>L</p>
+        </Toggle>
+      </div>
+      <Button
+        variant="outline"
+        className="ml-4 h-8 text-xs"
+        disabled={isButtonDisabled}
+      >
+        <MessageSquare className="p-1" />
+        Contact Parents
+      </Button>
+    </>
+  );
+}
 export function StudentAttendanceListTable() {
   type Students = {
     id: number;
@@ -66,6 +126,9 @@ export function StudentAttendanceListTable() {
       ),
     },
   ];
+  const { setValue } = useForm();
+  const [announcedYear, setAnnouncedYear] = useState(null);
+
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
@@ -91,13 +154,10 @@ export function StudentAttendanceListTable() {
       rowSelection,
     },
   });
-  const [isToggled, setIsToggled] = useState(false);
-  const handleOnToggleChange = () => {
-    setIsToggled(!isToggled);
-  };
+
   return (
-    <section className="py-0">
-      <div className="mb-4">
+    <section className="rounded-lg bg-zinc-50 py-0">
+      <div className="p-4">
         <h6>All Students</h6>
       </div>
       <section className="flex">
@@ -150,7 +210,19 @@ export function StudentAttendanceListTable() {
             )}
           >
             <section>
-              <Input type="date" className="h-12" />
+              <DateSelector
+                id="announcedYear"
+                required
+                autoComplete="off"
+                placeholderText="27/02/2024"
+                onChange={(value) => {
+                  setValue('announcedYear', value);
+                  setAnnouncedYear(value);
+                }}
+                dateFormat="dd/MM/yyyy"
+                selected={announcedYear}
+                isClearable={false}
+              />
             </section>
             <section>
               <Select>
@@ -246,7 +318,7 @@ export function StudentAttendanceListTable() {
             </section>
           </section>
         </section>
-        <section className="ml-4 w-3/4">
+        <section className="ml-4 w-3/4 p-2">
           <Table>
             <TableBody>
               {table.getRowModel().rows?.length ? (
@@ -265,41 +337,7 @@ export function StudentAttendanceListTable() {
                       </TableCell>
                     ))}
                     <TableCell className="flex items-center justify-end p-1">
-                      <div className="flex">
-                        <Toggle
-                          className={`ml-2 h-8 w-8 rounded-full px-3 py-1 text-center ${
-                            isToggled ? 'bg-blue-400 text-white' : 'bg-gray-400'
-                          }`}
-                          variant="outline"
-                          onClick={handleOnToggleChange}
-                        >
-                          <p>P</p>
-                        </Toggle>
-                        <Toggle
-                          className={`ml-2 h-8 w-8 rounded-full px-3 py-1 text-center ${
-                            isToggled ? 'bg-red-400 text-white' : 'bg-gray-400'
-                          }`}
-                          variant="outline"
-                          onClick={handleOnToggleChange}
-                        >
-                          <p>A</p>
-                        </Toggle>
-                        <Toggle
-                          className={`ml-2 h-8 w-8 rounded-full px-3 py-1 text-center ${
-                            isToggled
-                              ? 'bg-orange-400 text-white'
-                              : 'bg-gray-400'
-                          }`}
-                          variant="outline"
-                          onClick={handleOnToggleChange}
-                        >
-                          <p>L</p>
-                        </Toggle>
-                      </div>
-                      <Button variant="outline" className="ml-4 h-8 text-xs">
-                        <MessageSquare className="p-1" />
-                        Contact Parents
-                      </Button>
+                      <AttendanceTableCell />
                     </TableCell>
                   </TableRow>
                 ))
