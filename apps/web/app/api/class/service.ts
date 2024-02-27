@@ -239,6 +239,27 @@ export async function assignStaffToClassWithSubject(
   return assignStaff;
 }
 
+export async function assignClassInCharge(staffPayload: mapStaffToClassModel) {
+  const assignSectionInCharge = await Promise.all(
+    staffPayload.sectionInCharge.map(async (sectionId) => {
+      return await db.section.update({
+        where: { id: sectionId },
+        data: {
+          classInCharge: {
+            create: [
+              {
+                staffId: staffPayload.staffId,
+                academicYearId: staffPayload.academicYearId,
+              },
+            ],
+          },
+        },
+      });
+    })
+  );
+  return assignSectionInCharge;
+}
+
 export async function unMapStaffsFromClass(
   classId: string,
   staffIds: string[],
