@@ -198,16 +198,32 @@ export async function getAllStaffsBySectionIds(ids: string[]) {
   return [...staffs.map((data) => data.staff)];
 }
 
-export async function getAllStaffsBySectionsId(ids: string[]) {
-  const staffs = await db.academicSubjectForStaff.findMany({
+export async function getAllStaffsBySectionsIdWithSubjects(ids: string[]) {
+  const staffs = await db.staff.findMany({
     where: {
-      sectionId: {
-        in: ids,
+      academicSubjectForStaff: {
+        some: {
+          sectionId: {
+            in: ids,
+          },
+        },
       },
     },
-    select: {
-      staff: true,
+    include: {
+      academicSubjectForStaff: {
+        include: {
+          subject: true,
+        },
+      },
     },
   });
-  return [...staffs.map((data) => data.staff)];
+
+  const result = staffs.map(
+    ({ academicSubjectForStaff, sectionIds, ...rest }) => ({
+      ...rest,
+      subjects: academicSubjectForStaff.map((subject) => subject.subject),
+    })
+  );
+
+  return result;
 }

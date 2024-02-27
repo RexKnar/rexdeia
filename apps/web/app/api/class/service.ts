@@ -18,7 +18,7 @@ import {
   unMapStaffsFromSection,
   unMapSubjectsFromSection,
 } from '../section/service';
-import { getAllStaffsBySectionsId } from '../staff/service';
+import { getAllStaffsBySectionsIdWithSubjects } from '../staff/service';
 import { getAllStudentsBySectionIds } from '../student/service';
 import { getAllSubjectBySectionIds } from '../subject/service';
 
@@ -291,6 +291,8 @@ export async function getAllStudentsByClassId(id: string) {
 
 export async function getAllStaffsByClassId(id: string) {
   const sections = await getAllSectionsByClassId(id);
-  const staffs = await getAllStaffsBySectionsId(sections.map((x) => x.id));
-  return uniqBy(staffs, (staff) => staff.id);
+  const staffs = await getAllStaffsBySectionsIdWithSubjects(
+    sections.map((x) => x.id)
+  );
+  return staffs;
 }
