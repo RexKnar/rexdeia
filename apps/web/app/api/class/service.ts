@@ -6,8 +6,8 @@ import { db } from '../../../lib/db';
 import {
   CreateClassModel,
   MapEntitiesToClassModel,
-  UpdateClassModel,
   mapStaffToClassModel,
+  UpdateClassModel,
 } from '../../../lib/domain/class';
 import { CreateSectionModel } from '../../../lib/domain/section';
 import {

@@ -4,15 +4,10 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 
 import { authOptions } from '../../../../../lib/auth';
-import {
-  MapEntitiesToClassModel,
-  mapStaffToClassModel,
-  mapStaffToClassModelEntity,
-} from '../../../../../lib/domain/class';
+import { mapStaffToClassModelEntity } from '../../../../../lib/domain/class';
 import {
   assignStaffToClassWithSubject,
   getAllStaffsByClassId,
-  mapStaffsToClass,
   unMapStaffsFromClass,
 } from '../../service';
 
@@ -102,7 +97,7 @@ export async function GET(request: Request, { params: { id } }) {
  *         '400':
  *           description: Bad request due to an error in processing the request.
  */
-export async function POST(request: NextRequest, { params: { id } }) {
+export async function POST(request: NextRequest) {
   const session = await getServerSession(authOptions);
 
   if (!session) {
@@ -114,11 +109,8 @@ export async function POST(request: NextRequest, { params: { id } }) {
   const payload: mapStaffToClassModelEntity = await request.json();
 
   try {
-    // const response = await mapStaffsToClass(id, payload);
-
     const assignedStaffToClassWithSubject = payload.data.map(
       async (staffDetail) => {
-        console.log(staffDetail);
         await assignStaffToClassWithSubject(staffDetail);
       }
     );
