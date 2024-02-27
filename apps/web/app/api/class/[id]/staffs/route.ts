@@ -116,9 +116,12 @@ export async function POST(request: NextRequest) {
         await assignClassInCharge(staffDetail);
       }
     );
-    return new NextResponse('Assigned  Staff To Class Successfully', {
-      status: StatusCodes.CREATED,
-    });
+    return new NextResponse(
+      assignedStaffToClassWithSubject + 'Assigned  Staff To Class Successfully',
+      {
+        status: StatusCodes.CREATED,
+      }
+    );
   } catch (e) {
     captureException(e);
     return new NextResponse(e, {
