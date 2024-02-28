@@ -343,9 +343,9 @@ model Student {
   form           Form             @relation(fields: [formId], references: [id])
   AdmissionForm  AdmissionForm[]
   formId         String           @db.Uuid
-  studentmapping StudentMapping[]
-  sectionId      String           @db.Uuid
-  section        Section          @relation(fields: [sectionId], references: [id])
+  studentMapping StudentMapping[]
+  sectionId      String?          @db.Uuid
+  section        Section?         @relation(fields: [sectionId], references: [id])
 
   isDeleted Boolean @default(false)
 }

@@ -227,7 +227,7 @@ export async function mapStudentToClass(
         },
         data: {
           batchId: studentPayload.academicYear,
-          studentmapping: {
+          studentMapping: {
             create: [
               {
                 groupId: studentPayload.groupId,
