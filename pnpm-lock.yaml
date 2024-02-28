@@ -360,7 +360,7 @@ importers:
         version: 1.0.7(@types/react-dom@18.2.7)(@types/react@18.2.21)(react-dom@18.2.0)(react@18.2.0)
       autoprefixer:
         specifier: ^10.4.15
-        version: 10.4.15(postcss@8.4.31)
+        version: 10.4.15(postcss@8.4.35)
       class-variance-authority:
         specifier: ^0.7.0
         version: 0.7.0
@@ -378,7 +378,7 @@ importers:
         version: 0.338.0(react@18.2.0)
       postcss:
         specifier: ^8.4.29
-        version: 8.4.31
+        version: 8.4.35
       react-datepicker:
         specifier: ^5.0.0
         version: 5.0.0(react-dom@18.2.0)(react@18.2.0)
@@ -4068,7 +4068,7 @@ packages:
       tslib: 2.6.2
     dev: false
 
-  /autoprefixer@10.4.15(postcss@8.4.31):
+  /autoprefixer@10.4.15(postcss@8.4.35):
     resolution: {integrity: sha512-KCuPB8ZCIqFdA4HwKXsvz7j6gvSDNhDP7WnUjBleRkKjPdvCmHFuQ77ocavI8FT6NdvlBnE2UFr2H4Mycn8Vew==}
     engines: {node: ^10 || ^12 || >=14}
     hasBin: true
@@ -4080,7 +4080,7 @@ packages:
       fraction.js: 4.3.6
       normalize-range: 0.1.2
       picocolors: 1.0.0
-      postcss: 8.4.31
+      postcss: 8.4.35
       postcss-value-parser: 4.2.0
     dev: false
 
