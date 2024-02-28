@@ -6,7 +6,7 @@ import { db } from '../../../lib/db';
 import {
   CreateClassModel,
   MapEntitiesToClassModel,
-  mapStaffToClassModel,
+  MapStaffToClassModel,
   UpdateClassModel,
 } from '../../../lib/domain/class';
 import { CreateSectionModel } from '../../../lib/domain/section';
@@ -216,7 +216,7 @@ export async function mapStaffsToClass(
 }
 
 export async function assignStaffToClassWithSubject(
-  staffPayload: mapStaffToClassModel
+  staffPayload: MapStaffToClassModel
 ) {
   const assignStaff = await Promise.all(
     staffPayload.sectionIds.map(async (sectionId) => {
@@ -239,7 +239,7 @@ export async function assignStaffToClassWithSubject(
   return assignStaff;
 }
 
-export async function assignClassInCharge(staffPayload: mapStaffToClassModel) {
+export async function assignClassInCharge(staffPayload: MapStaffToClassModel) {
   const assignSectionInCharge = await Promise.all(
     staffPayload.sectionInCharge.map(async (sectionId) => {
       return await db.section.update({
