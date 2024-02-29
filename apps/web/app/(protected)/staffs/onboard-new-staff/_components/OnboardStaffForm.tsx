@@ -1,10 +1,11 @@
 'use client';
 
 import { motion } from 'framer-motion';
+import { AlertTriangle, Check } from 'lucide-react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { Else, If, Then } from 'react-if';
+import { Else, If, Then, When } from 'react-if';
 import { Button, Input, RadioGroup, RadioGroupItem } from 'ui';
 import { cn } from 'utils';
 
@@ -15,7 +16,6 @@ import { useGetCountryListQuery } from '../../../../../lib/queries/common/useGet
 import { useGetStateByCountryCodeQuery } from '../../../../../lib/queries/common/useGetStateListQuery';
 import staffForm from '../data/onboard-staff-fields';
 import { StaffPreviewModal } from '../models/staffPreviewModel';
-import { OnboardStaffSidebar } from './OnboardStaffSidebar';
 
 export function OnboardStaffForm() {
   const searchParams = useSearchParams();
@@ -27,6 +27,7 @@ export function OnboardStaffForm() {
   const {
     trigger,
     register,
+    getValues,
     handleSubmit,
     formState: { errors, isValid },
   } = useForm({
@@ -62,6 +63,31 @@ export function OnboardStaffForm() {
     ) {
       return `${field.label} must be a valid email address`;
     }
+  };
+  const isSectionCompleted = (section: any) => {
+    const totalRequiredFields = section.sectionFields.filter(
+      (field) => field.validationRules?.required.value
+    ).length;
+
+    const totalFilledFields = section.sectionFields.filter((field) =>
+      getValues(field.name)
+    ).length;
+
+    const noErrors = section.sectionFields.every(
+      (field) => !errors[field.name]
+    );
+
+    return totalRequiredFields <= totalFilledFields && noErrors;
+  };
+
+  const isSectionError = (section: any, sectionIndex: number) => {
+    const hasErrors = section.sectionFields.some((field) => errors[field.name]);
+
+    const isVisitedOrLast =
+      visitedSteps.includes(sectionIndex) ||
+      sectionIndex === staffForm.length - 1;
+
+    return hasErrors && isVisitedOrLast;
   };
 
   const { data: getCurrentStateByCountryIdResponse } =
@@ -106,7 +132,50 @@ export function OnboardStaffForm() {
       onSubmit={handleSubmit(handleOnFormSubmit)}
     >
       <section className="flex gap-4">
-        <OnboardStaffSidebar />
+        <ul className="h-fit w-[215px] shrink-0 rounded-lg bg-white py-3">
+          <li>
+            {staffForm.map((section, index: number) => (
+              <Button
+                type="button"
+                variant="link"
+                key={section.sectionTitle}
+                onClick={() => {
+                  if (!visitedSteps.includes(currentStep)) {
+                    setVisitedSteps([...visitedSteps, currentStep]);
+                  }
+                  const params = new URLSearchParams(searchParams);
+                  params.set('step', index.toString());
+
+                  router.replace(pathname + '?' + params.toString());
+                }}
+                className="grid cursor-pointer grid-cols-[4px_minmax(170px,_1fr)_10px] px-4 py-1 hover:no-underline"
+              >
+                <motion.div
+                  initial={false}
+                  animate={{
+                    opacity: currentStep === index ? 1 : 0,
+                  }}
+                  className="h-6 border-l-2 border-primary"
+                />
+                <h2
+                  className={`px-2 text-left text-sm font-semibold ${
+                    currentStep === index ? 'text-primary' : 'text-gray-800'
+                  }`}
+                >
+                  {section.sectionTitle}
+                </h2>
+                <section>
+                  <When condition={isSectionCompleted(section)}>
+                    <Check className="h-4 w-4 text-green-500 transition-opacity duration-500" />
+                  </When>
+                  <When condition={isSectionError(section, index)}>
+                    <AlertTriangle className="h-4 w-4 text-red-500 transition-opacity duration-500" />
+                  </When>
+                </section>
+              </Button>
+            ))}
+          </li>
+        </ul>
 
         <section className="w-full rounded-lg bg-white p-2">
           {staffForm.map((section, index) => (
@@ -137,7 +206,7 @@ export function OnboardStaffForm() {
                             <label className="mt-1 block text-sm text-gray-700">
                               {field.label}
                               {field.validationRules.required && (
-                                <span className="text-red-300"> *</span>
+                                <span className="text-red-500"> *</span>
                               )}
                             </label>
                             <Input
@@ -153,7 +222,7 @@ export function OnboardStaffForm() {
                                 opacity: errors[field.name] ? 1 : 0,
                               }}
                               transition={{ duration: 0.5 }}
-                              className="h-3 pb-2 pt-0.5 text-sm text-red-300"
+                              className="h-3 pb-2 pt-0.5 text-sm text-red-500"
                             >
                               {errors[field.name]?.message as string}
                             </motion.p>
@@ -178,7 +247,7 @@ export function OnboardStaffForm() {
                               className="mt-1"
                             />
                             {errors[field.name] && (
-                              <p className="h-2 p-1 text-sm text-red-600">
+                              <p className="h-2 p-1 text-sm text-red-500">
                                 {errors[field.name].message as string}
                               </p>
                             )}
@@ -190,7 +259,7 @@ export function OnboardStaffForm() {
                             <label className="block text-gray-700">
                               {field.label}
                               {field.validationRules.required && (
-                                <span className="text-red-300"> *</span>
+                                <span className="text-red-500"> *</span>
                               )}
                             </label>
                             <textarea
@@ -205,7 +274,7 @@ export function OnboardStaffForm() {
                                 opacity: errors[field.name] ? 1 : 0,
                               }}
                               transition={{ duration: 0.5 }}
-                              className="h-3 pb-2 pt-0.5 text-sm text-red-300"
+                              className="h-3 pb-2 pt-0.5 text-sm text-red-500"
                             >
                               {errors[field.name]?.message as string}
                             </motion.p>
@@ -218,7 +287,7 @@ export function OnboardStaffForm() {
                               <label className="mb-2 mt-1 block text-sm text-gray-700">
                                 {field.label}
                                 {field.validationRules.required && (
-                                  <span className="text-red-300"> *</span>
+                                  <span className="text-red-500"> *</span>
                                 )}
                               </label>
                               {field.options.map((option, index) => (
@@ -241,7 +310,7 @@ export function OnboardStaffForm() {
                                   opacity: errors[field.name] ? 1 : 0,
                                 }}
                                 transition={{ duration: 0.5 }}
-                                className="h-3 pb-2 pt-0.5 text-sm text-red-300"
+                                className="h-3 pb-2 pt-0.5 text-sm text-red-500"
                               >
                                 {errors[field.name]?.message as string}
                               </motion.p>
@@ -254,7 +323,7 @@ export function OnboardStaffForm() {
                             <label className="mb-2 mt-1 block text-sm text-gray-700">
                               {field.label}
                               {field.validationRules.required && (
-                                <span className="text-red-300"> *</span>
+                                <span className="text-red-500"> *</span>
                               )}
                             </label>
                             <select
@@ -272,7 +341,7 @@ export function OnboardStaffForm() {
                                 }
                               }}
                               placeholder={field.placeholder}
-                              className="ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring mt-1 flex h-10 w-full rounded-md border border-gray-300 bg-transparent px-3 py-2 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                              className="ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring mt-1 flex h-10 w-full rounded-md border border-gray-500 bg-transparent px-3 py-2 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
                             >
                               {(field.options && field.options.length > 0
                                 ? field.options
@@ -292,7 +361,7 @@ export function OnboardStaffForm() {
                                 opacity: errors[field.name] ? 1 : 0,
                               }}
                               transition={{ duration: 0.5 }}
-                              className="h-3 pb-2 pt-0.5 text-sm text-red-300"
+                              className="h-3 pb-2 pt-0.5 text-sm text-red-500"
                             >
                               {errors[field.name]?.message as string}
                             </motion.p>
@@ -372,9 +441,6 @@ export function OnboardStaffForm() {
               </section>
             </motion.section>
           ))}
-          <Button variant="default" type="submit">
-            save
-          </Button>
         </section>
       </section>
     </form>
