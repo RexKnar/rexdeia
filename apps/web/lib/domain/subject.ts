@@ -39,6 +39,7 @@ export type UpdateSubjectModel = Pick<
 export type SubjectTypeModel = {
   id: string;
   name: string;
+  parentId?: string;
   isActive: boolean;
   branchId: string;
   isDeleting?: boolean;
@@ -48,12 +49,12 @@ export type SubjectTypeModel = {
 
 export type CreateSubjectTypeModel = Pick<
   SubjectTypeModel,
-  'name' | 'isActive'
+  'name' | 'isActive' | 'parentId'
 >;
 
-export type UpdateSubjectTypeModel = Pick<
+export type UpdateSubjectTypeMode = Pick<
   SubjectTypeModel,
-  'name' | 'isActive' | 'id'
+  'id' | 'name' | 'isActive' | 'parentId'
 >;
 
 export type SubjectFormatModel = {
