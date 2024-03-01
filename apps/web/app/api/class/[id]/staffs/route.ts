@@ -6,7 +6,6 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from '../../../../../lib/auth';
 import { MapStaffToClassModelEntity } from '../../../../../lib/domain/class';
 import {
-  assignClassInCharge,
   assignStaffToClassWithSubject,
   getAllStaffsByClassId,
   unMapStaffsFromClass,
@@ -113,7 +112,6 @@ export async function POST(request: NextRequest) {
     const assignedStaffToClassWithSubject = payload.data.map(
       async (staffDetail) => {
         await assignStaffToClassWithSubject(staffDetail);
-        await assignClassInCharge(staffDetail);
       }
     );
     return new NextResponse(JSON.stringify(assignedStaffToClassWithSubject), {

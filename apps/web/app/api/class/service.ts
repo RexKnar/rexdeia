@@ -10,6 +10,7 @@ import {
   UpdateClassModel,
 } from '../../../lib/domain/class';
 import { CreateSectionModel } from '../../../lib/domain/section';
+import { AssignStudentsToClassModel } from '../../../lib/domain/student';
 import {
   addSection,
   getAllSectionsByClassId,
