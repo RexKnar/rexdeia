@@ -127,6 +127,12 @@ export const menuItems: SidebarMenuItem[] = [
         icon: null,
         path: '/academics/category',
       },
+      {
+        id: 'academics-student-attendance',
+        label: 'Student Attendance',
+        icon: null,
+        path: '/academics/student-attendance',
+      },
     ],
   },
   {
