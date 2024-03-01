@@ -105,9 +105,9 @@ export async function POST(request: NextRequest, { params: { id } }) {
   const payload: AssignStudentsToClassModel = await request.json();
 
   try {
-    await mapStudentToClass(id, payload);
+    const mappedStudentResponse = await mapStudentToClass(id, payload);
 
-    return new NextResponse(JSON.stringify({ message: 'SUCCESSFULLY  ' }), {
+    return new NextResponse(JSON.stringify(mappedStudentResponse), {
       status: StatusCodes.CREATED,
     });
   } catch (e) {
