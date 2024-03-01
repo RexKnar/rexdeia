@@ -1,8 +1,9 @@
 import { redirect } from 'next/navigation';
 import { getServerSession } from 'next-auth';
 
+import { CourseForm } from '@/components/course/courseForm';
+
 import { authOptions } from '../../../../../lib/auth';
-import { CourseForm } from '../../../../../lib/components/course/courseForm';
 
 export default async function Page() {
   const session = await getServerSession(authOptions);

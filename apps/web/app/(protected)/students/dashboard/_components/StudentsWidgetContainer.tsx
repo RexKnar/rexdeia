@@ -7,7 +7,7 @@ import {
   UserCircle2,
 } from 'lucide-react';
 
-import { DashboardWidget } from '../../../../../lib/components/DashboardWidget';
+import { DashboardWidget } from '@/components/DashboardWidget';
 
 const widgetList = [
   {

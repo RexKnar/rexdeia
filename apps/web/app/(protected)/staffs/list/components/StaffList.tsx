@@ -346,12 +346,12 @@ export function StaffList() {
         condition={getStaffListResponse?.data?.length && !isStaffListLoading}
       >
         <Pagination
-          value={limit.toString()}
+          limit={limit.toString()}
           onPageChange={handleOnPageChange}
           pageSize={getStaffListResponse?.limit || 0}
           totalRecords={getStaffListResponse?.total || 0}
           disabled={isStaffListLoading}
-          onValueChange={(value) => {
+          onLimitChange={(value) => {
             const params = new URLSearchParams(searchParams);
             params.set('limit', value.toString());
 

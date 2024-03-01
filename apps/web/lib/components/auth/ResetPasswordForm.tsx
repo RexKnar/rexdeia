@@ -4,7 +4,7 @@ import { Eye, EyeOff } from 'lucide-react';
 import { useState } from 'react';
 import { Button, Input } from 'ui';
 
-import { Footer } from '../../../lib/components/Footer';
+import { Footer } from '@/components/Footer';
 
 export function ResetPasswordForm() {
   const [showPassword, setShowPassword] = useState(false);

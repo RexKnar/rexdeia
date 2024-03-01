@@ -34,7 +34,7 @@ export function AssignStudentFlyout() {
 
   const { reset } = useForm();
 
-  const closeFlyout = () => {
+  const closeFlyout = async () => {
     const params = new URLSearchParams(searchParams.toString());
     params.set('isAssignStudentFlyoutOpen', 'false');
     params.delete('sectionId');

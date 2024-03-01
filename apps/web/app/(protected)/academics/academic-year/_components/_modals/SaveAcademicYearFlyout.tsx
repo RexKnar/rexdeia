@@ -1,7 +1,6 @@
 'use client';
 
 import { Loader2, PlusCircle } from 'lucide-react';
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import {
@@ -17,24 +16,24 @@ import {
   Text,
 } from 'ui';
 
+import { useQueryParams } from '@/hooks/useQueryParams';
+
 import { CreateBatchModel } from '../../../../../../lib/domain/batch';
 import { useCreateBatchMutationQuery } from '../../../../../../lib/queries/batches/useCreateBatchMutationQuery';
 import { useGetBatchByIdQuery } from '../../../../../../lib/queries/batches/useGetBatchByIdQuery';
 import { useUpdateBatchMutationQuery } from '../../../../../../lib/queries/batches/useUpdateBatchMutationQuery';
 
 export function SaveAcademicYearFlyout() {
-  const pathname = usePathname();
-  const router = useRouter();
-  const searchParams = useSearchParams();
+  const { getParam, removeParams } = useQueryParams();
 
   const [endYear, setEndYear] = useState(null);
   const [startYear, setStartYear] = useState(null);
 
-  const batchId = searchParams.get('batchId');
-  const isOpen = searchParams.get('isFlyoutOpen') === 'true';
+  const batchId = getParam('batchId');
+  const isOpen = getParam('isFlyoutOpen') === 'true';
 
-  const page = parseInt(searchParams.get('page')) || 1;
-  const limit = parseInt(searchParams.get('limit')) || 10;
+  const page = parseInt(getParam('page')) || 1;
+  const limit = parseInt(getParam('limit')) || 10;
 
   const {
     register,
@@ -91,11 +90,7 @@ export function SaveAcademicYearFlyout() {
   }, [currentBatch, setValue]);
 
   const closeFlyout = () => {
-    const params = new URLSearchParams(searchParams);
-    params.set('isFlyoutOpen', 'false');
-    params.delete('batchId');
-
-    router.replace(pathname + '?' + params.toString());
+    removeParams(['batchId', 'isFlyoutOpen']);
   };
 
   const saveBatch = async (payload: CreateBatchModel) => {
@@ -107,20 +102,20 @@ export function SaveAcademicYearFlyout() {
           endYear: endYear.getFullYear().toString(),
           startYear: startYear.getFullYear().toString(),
         };
-        mutateUpdateBatchesAsync(updateBatchRequestPayload);
+        await mutateUpdateBatchesAsync(updateBatchRequestPayload);
       } else {
         const addBatchRequestPayload = {
           ...payload,
           endYear: endYear.getFullYear().toString(),
           startYear: startYear.getFullYear().toString(),
         };
-        mutateCreateBatchesAsync(addBatchRequestPayload);
+        await mutateCreateBatchesAsync(addBatchRequestPayload);
       }
     } catch (error) {
       console.error(error);
     } finally {
+      closeFlyout();
       reset();
-      await closeFlyout();
       setEndYear(null);
       setStartYear(null);
     }
@@ -144,7 +139,7 @@ export function SaveAcademicYearFlyout() {
             <form onSubmit={handleSubmit(saveBatch)}>
               <SheetHeader>
                 <SheetTitle className="mb-5">
-                  <div className="sm:grid sm:grid-cols-1 sm:gap-4 md:grid md:grid-cols-1 md:gap-4 lg:flex lg:justify-between">
+                  <div className="sm:grid sm:grid-cols-1 sm:gap-4 md:grid md:grid-cols-1 md:gap-4 lg:grid  lg:grid-cols-[1fr_100px]">
                     <div className="flex items-center">
                       <PlusCircle size={20} strokeWidth={1.5} />
                       <Text variant="lg-semibold" className="ml-2">
@@ -248,7 +243,7 @@ export function SaveAcademicYearFlyout() {
                     {isPendingCreateBatches || isPendingUpdateBatches ? (
                       <div className="flex items-center justify-center">
                         <Loader2 className="mr-2 h-6 w-6 animate-spin text-white" />
-                        Saving
+                        {batchId ? 'Updating' : 'Saving'}
                       </div>
                     ) : (
                       `${batchId ? 'Update' : 'Save'}`
@@ -258,7 +253,6 @@ export function SaveAcademicYearFlyout() {
               </div>
             </form>
           )}
-          {/* </If> */}
         </SheetContent>
       </Sheet>
     </section>

@@ -4,9 +4,10 @@ import { redirect } from 'next/navigation';
 import { getServerSession } from 'next-auth';
 import { Text } from 'ui';
 
+import { SignUpForm } from '@/components/auth/SignUpForm';
+import { Footer } from '@/components/Footer';
+
 import { authOptions } from '../../../lib/auth';
-import { SignUpForm } from '../../../lib/components/auth/SignUpForm';
-import { Footer } from '../../../lib/components/Footer';
 import logo from '../../../public/assets/images/acadx-logo.png';
 
 export const metadata = {

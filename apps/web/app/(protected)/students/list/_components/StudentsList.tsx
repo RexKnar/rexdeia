@@ -46,7 +46,8 @@ import {
 } from 'ui/components/ui/Table';
 import { titilize } from 'utils';
 
-import { DeleteConfirmationModal } from '../../../../../lib/components/modals/DeleteConfirmationModal';
+import { DeleteConfirmationModal } from '@/components/modals/DeleteConfirmationModal';
+
 import { Student } from '../../../../../lib/domain';
 import { useDeleteStudentMutationQuery } from '../../../../../lib/queries/students/useDeleteStudentMutationQuery';
 import { useGetStudentListQuery } from '../../../../../lib/queries/useGetStudentListQuery';
@@ -426,12 +427,12 @@ export function StudentsList() {
         }
       >
         <Pagination
-          value={limit.toString()}
+          limit={limit.toString()}
           onPageChange={handleOnPageChange}
           pageSize={getStudentListResponse?.pageSize || 0}
           totalRecords={getStudentListResponse?.total || 0}
           disabled={isStudentListLoading}
-          onValueChange={(value) => {
+          onLimitChange={(value) => {
             const params = new URLSearchParams(searchParams);
             params.set('limit', value.toString());
 

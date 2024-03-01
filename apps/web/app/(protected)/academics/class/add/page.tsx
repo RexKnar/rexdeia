@@ -7,7 +7,7 @@ import AddClass from './_components/AddClass';
 export default async function Page() {
   const session = await getServerSession(authOptions);
 
-  if (!session.branchId || !session.organizationId) {
+  if (!session || !session.branchId || !session.organizationId) {
     return redirect('/signIn?callbackUrl=/academics/class/add');
   }
 

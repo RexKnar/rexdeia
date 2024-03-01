@@ -88,19 +88,19 @@ export function SubjectTypeFlyout() {
           ...payload,
           id: subjectTypeId,
         };
-        mutateUpdateSubjectTypeAsync(updateSubjectTypeRequestPayload);
+        await mutateUpdateSubjectTypeAsync(updateSubjectTypeRequestPayload);
       } else {
         const requestPayload = {
           ...payload,
         };
-        mutateCreateSubjectTypeAsync(requestPayload);
+        await mutateCreateSubjectTypeAsync(requestPayload);
       }
     } catch (error) {
       console.error(error);
     } finally {
       setValue('isActive', false);
+      await closeSubjectTypeFlyout();
       reset();
-      closeSubjectTypeFlyout();
     }
   }
 
@@ -116,7 +116,7 @@ export function SubjectTypeFlyout() {
           <form onSubmit={handleSubmit(saveSubjectType)}>
             <SheetHeader>
               <SheetTitle className="mb-5">
-                <div className="sm:grid sm:grid-cols-1 sm:gap-4 md:grid md:grid-cols-1 md:gap-4 lg:flex lg:justify-between">
+                <div className="sm:grid sm:grid-cols-1 sm:gap-4 md:grid md:grid-cols-1 md:gap-4 lg:grid  lg:grid-cols-[1fr_100px]">
                   <div className="flex items-center">
                     <PlusCircle size={20} strokeWidth={1.5} />
                     <Text variant="lg-semibold" className="ml-2">

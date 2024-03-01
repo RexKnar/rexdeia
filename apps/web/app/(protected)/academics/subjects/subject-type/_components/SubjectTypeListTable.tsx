@@ -31,7 +31,8 @@ import {
 } from 'ui/components/ui/Table';
 import { cn } from 'utils';
 
-import { DeleteConfirmationModal } from '../../../../../../lib/components/modals/DeleteConfirmationModal';
+import { DeleteConfirmationModal } from '@/components/modals/DeleteConfirmationModal';
+
 import { SubjectTypeModel } from '../../../../../../lib/domain/subject';
 import { useDeleteSubjectTypeMutationQuery } from '../../../../../../lib/queries/subject-type/useDeleteSubjectTypeMutationQuery';
 import { useGetSubjectTypeList } from '../../../../../../lib/queries/subject-type/useGetSubjectTypeQuery';
@@ -265,12 +266,12 @@ export function SubjectTypeListTable() {
         }
       >
         <Pagination
-          value={limit.toString()}
+          limit={limit.toString()}
           onPageChange={handleOnPageChange}
           pageSize={subjectTypeListResponse?.limit || 0}
           totalRecords={subjectTypeListResponse?.total || 0}
           disabled={isSubjectTypeListLoading}
-          onValueChange={(value) => {
+          onLimitChange={(value) => {
             const params = new URLSearchParams(searchParams);
             params.set('limit', value.toString());
 

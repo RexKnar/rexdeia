@@ -3,17 +3,19 @@ import 'configs/tailwind/styles.css';
 import { Inter, Roboto_Mono } from 'next/font/google';
 import { ReactNode } from 'react';
 
-import { ZohoSalesIQ } from '../../lib/components/ZohoSalesIQ';
+import { ZohoSalesIQ } from '@/components/ZohoSalesIQ';
 
 const inter = Inter({
-  subsets: ['latin'],
+  preload: true,
   display: 'swap',
+  subsets: ['latin'],
   variable: '--font-inter',
 });
 
 const roboto_mono = Roboto_Mono({
-  subsets: ['latin'],
+  preload: true,
   display: 'swap',
+  subsets: ['latin'],
   variable: '--font-roboto-mono',
 });
 

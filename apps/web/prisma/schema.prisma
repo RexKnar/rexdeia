@@ -135,6 +135,7 @@ model Branch {
   subjectFormat  SubjectFormat[]
   Subject        Subject[]
   Category       Category[]
+  grade          Grade[]
 }
 
 model Organization {
@@ -633,6 +634,31 @@ model Category {
   updatedAt       DateTime            @default(now())
   deletedAt       DateTime?
   subjects        SubjectToCategory[]
+}
+
+model Grade {
+  id          String        @id @default(uuid()) @map("_id") @db.Uuid
+  name        String
+  isActive    Boolean
+  branch      Branch        @relation(fields: [branchId], references: [id])
+  branchId    String        @db.Uuid
+  createdAt   DateTime?     @default(now())
+  updatedAt   DateTime?     @default(now())
+  isDeleted   Boolean       @default(false)
+  gradeScales GradeScales[]
+}
+
+model GradeScales {
+  id         String    @id @default(uuid()) @map("_id") @db.Uuid
+  startValue String
+  endValue   String
+  gradeName  String
+  remark     String
+  grade      Grade?    @relation(fields: [gradeId], references: [id])
+  gradeId    String?   @db.Uuid
+  createdAt  DateTime? @default(now())
+  updatedAt  DateTime? @default(now())
+  isDeleted  Boolean   @default(false)
 }
 
 model Test {

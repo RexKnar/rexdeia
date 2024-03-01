@@ -10,7 +10,7 @@ import {
 import { Button } from 'ui';
 
 import { useGetSubjectListBySectionIdQuery } from '../../../../../../../../lib/queries/subjects/useGetSubjectListBySectionIdQuery';
-import { AddSubjectFlyout } from './AddSubjectFlyout';
+import { AddSubjectFlyout } from '../../../_modals/AddSubjectFlyout';
 import { SubjectCard } from './SubjectCard';
 
 export function SubjectList() {

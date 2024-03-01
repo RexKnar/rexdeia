@@ -50,7 +50,7 @@ export default function SaveGroupFlyout() {
     mutateAsync: mutateCreateGroupAsync,
   } = useCreateGroupMutationQuery(page, limit);
 
-  const closeFlyout = () => {
+  const closeFlyout = async () => {
     const params = new URLSearchParams(searchParams);
     params.set('isGroupFlyoutOpen', 'false');
     params.delete('groupId');
@@ -86,19 +86,19 @@ export default function SaveGroupFlyout() {
           ...payload,
           id: groupId,
         };
-        mutateUpdateGroupAsync(updateBatchRequestPayload);
+        await mutateUpdateGroupAsync(updateBatchRequestPayload);
       } else {
         const requestPayload = {
           ...payload,
         };
-        mutateCreateGroupAsync(requestPayload);
+        await mutateCreateGroupAsync(requestPayload);
       }
     } catch (error) {
       console.error(error);
     } finally {
       setValue('isActive', false);
+      await closeFlyout();
       reset();
-      closeFlyout();
     }
   }
 
@@ -114,7 +114,7 @@ export default function SaveGroupFlyout() {
           <form onSubmit={handleSubmit(saveGroup)}>
             <SheetHeader>
               <SheetTitle className="mb-5">
-                <div className="sm:grid sm:grid-cols-1 sm:gap-4 md:grid md:grid-cols-1 md:gap-4 lg:flex lg:justify-between">
+                <div className="sm:grid sm:grid-cols-1 sm:gap-4 md:grid md:grid-cols-1 md:gap-4 lg:grid  lg:grid-cols-[1fr_100px]">
                   <div className="flex items-center">
                     <PlusCircle size={20} strokeWidth={1.5} />
                     <Text variant="lg-semibold" className="ml-2">

@@ -5,20 +5,23 @@ import NextTopLoader from 'nextjs-toploader';
 import { ReactNode } from 'react';
 import { primaryColor, Toaster } from 'ui';
 
-import { PageHeader } from '../../lib/components/PageHeader';
-import { Sidebar } from '../../lib/components/sidebar/Sidebar';
-import { ZohoSalesIQ } from '../../lib/components/ZohoSalesIQ';
+import { PageHeader } from '@/components/PageHeader';
+import { Sidebar } from '@/components/sidebar/Sidebar';
+import { ZohoSalesIQ } from '@/components/ZohoSalesIQ';
+
 import Providers from '../../lib/Providers';
 
 const inter = Inter({
-  subsets: ['latin'],
+  preload: true,
   display: 'swap',
+  subsets: ['latin'],
   variable: '--font-inter',
 });
 
 const roboto_mono = Roboto_Mono({
-  subsets: ['latin'],
+  preload: true,
   display: 'swap',
+  subsets: ['latin'],
   variable: '--font-roboto-mono',
 });
 
@@ -38,9 +41,11 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           <NextTopLoader color={primaryColor} showSpinner={false} />
           <section className="flex">
             <Sidebar />
-            <main className="ml-72 h-full flex-1">
+            <main className="ml-72 h-full flex-1 bg-gray-50">
               <PageHeader />
-              <section className="container mx-auto py-6">{children}</section>
+              <section className="container mx-auto bg-gray-50 py-6">
+                {children}
+              </section>
             </main>
           </section>
           <Toaster />

@@ -1,4 +1,5 @@
-import { Form } from '../../../../lib/components/shared/Form';
+import { Form } from '@/components/shared/Form';
+
 import { getFormByCriteria } from '../../../api/forms/service';
 
 export default async function Page({ params }: { params: { id: string } }) {

@@ -1,8 +1,9 @@
 import { FileText } from 'lucide-react';
 import { formatNumberWithSuffix } from 'utils';
 
-import { LinkButton } from '../../../../lib/components/LinkButton';
-import { PageTitle } from '../../../../lib/components/PageTitle';
+import { LinkButton } from '@/components/LinkButton';
+import { PageTitle } from '@/components/PageTitle';
+
 import admissionRequestIcon from '../../../../public/assets/images/admission-request.svg';
 import inProgressIcon from '../../../../public/assets/images/in-progress.svg';
 import rejectedIcon from '../../../../public/assets/images/rejected.svg';

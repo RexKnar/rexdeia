@@ -1,8 +1,9 @@
 import { redirect } from 'next/navigation';
 import { getServerSession } from 'next-auth';
 
+import { DepartmentList } from '@/components/department/departmentList';
+
 import { authOptions } from '../../../../lib/auth';
-import { DepartmentList } from '../../../../lib/components/department/departmentList';
 import { getDepartmentList } from '../../../api/department/service';
 
 export default async function Page() {

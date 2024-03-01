@@ -10,9 +10,7 @@ import {
   useReactTable,
 } from '@tanstack/react-table';
 import { Loader2, Pencil, Trash2 } from 'lucide-react';
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import React, { useCallback, useEffect, useState } from 'react';
-import { When } from 'react-if';
 import {
   Button,
   Pagination,
@@ -31,7 +29,9 @@ import {
 } from 'ui/components/ui/Table';
 import { cn } from 'utils';
 
-import { DeleteConfirmationModal } from '../../../../../lib/components/modals/DeleteConfirmationModal';
+import { DeleteConfirmationModal } from '@/components/modals/DeleteConfirmationModal';
+import { useQueryParams } from '@/hooks/useQueryParams';
+
 import { BatchModel } from '../../../../../lib/domain/batch';
 import { useDeleteBatchMutationQuery } from '../../../../../lib/queries/batches/useDeleteBatchMutationQuery';
 import { usePrefetchBatch } from '../../../../../lib/queries/batches/useGetBatchByIdQuery';
@@ -111,16 +111,14 @@ const columns: ColumnDef<BatchModel>[] = [
 export function AcademicYearListTable() {
   const { toast } = useToast();
 
-  const pathname = usePathname();
-  const router = useRouter();
-  const searchParams = useSearchParams();
+  const { getParam, setParams } = useQueryParams();
 
   const [showDeleteConfirmationModal, setShowDeleteConfirmationModal] =
     useState(false);
   const [selectedBatch, setSelectedBatch] = useState<BatchModel | null>(null);
 
-  const page = parseInt(searchParams.get('page')) || 1;
-  const limit = parseInt(searchParams.get('limit')) || 10;
+  const page = parseInt(getParam('page')) || 1;
+  const limit = parseInt(getParam('limit')) || 10;
 
   const {
     isError: isDeleteBatchError,
@@ -135,16 +133,6 @@ export function AcademicYearListTable() {
       page,
       limit,
     });
-
-  const handleOnPageChange = useCallback(
-    (page: number) => {
-      const params = new URLSearchParams(searchParams);
-      params.set('page', page.toString());
-
-      router.push(pathname + '?' + params.toString());
-    },
-    [searchParams, pathname, router]
-  );
 
   useEffect(() => {
     if (isDeleteBatchError) {
@@ -166,6 +154,20 @@ export function AcademicYearListTable() {
       setSelectedBatch(null);
     }
   }, [isDeleteSuccess, toast]);
+
+  const handleOnPageChange = useCallback(
+    (page: number) => {
+      setParams({ page: page.toString() });
+    },
+    [setParams]
+  );
+
+  const handleOnLimitChange = useCallback(
+    (limit: number) => {
+      setParams({ limit: limit.toString() });
+    },
+    [setParams]
+  );
 
   const table = useReactTable({
     columns,
@@ -229,12 +231,11 @@ export function AcademicYearListTable() {
                     <Tooltip>
                       <TooltipTrigger asChild>
                         <Button
-                          onClick={async () => {
-                            const params = new URLSearchParams(searchParams);
-                            params.set('isFlyoutOpen', 'true');
-                            params.set('batchId', row.original.id);
-
-                            router.replace(pathname + '?' + params.toString());
+                          onClick={() => {
+                            setParams({
+                              isFlyoutOpen: 'true',
+                              batchId: row.original.id,
+                            });
                           }}
                           className="mr-3 h-auto px-3 py-2"
                           variant="mild"
@@ -298,34 +299,33 @@ export function AcademicYearListTable() {
           </TableBody>
         </Table>
       </div>
-      <When condition={batchesList?.data?.length && !isBatchesListLoading}>
-        <Pagination
-          value={limit.toString()}
-          onPageChange={handleOnPageChange}
-          pageSize={batchesList?.limit || 0}
-          totalRecords={batchesList?.total || 0}
-          disabled={isBatchesListLoading}
-          onValueChange={(value) => {
-            const params = new URLSearchParams(searchParams);
-            params.set('limit', value.toString());
 
-            router.push(pathname + '?' + params.toString());
-          }}
-        />
-        <DeleteConfirmationModal
-          open={showDeleteConfirmationModal}
-          description={`Are you sure you want to delete "${selectedBatch?.name}"`}
-          onDeleteClick={async () => {
-            if (selectedBatch) {
-              setShowDeleteConfirmationModal(false);
-              await deleteBatchAsync(selectedBatch.id);
-            }
-          }}
-          onCancelClick={() => {
+      {!isBatchesListLoading &&
+        batchesList.total > limit &&
+        !batchesList?.data?.length && (
+          <Pagination
+            limit={limit.toString()}
+            disabled={isBatchesListLoading}
+            onPageChange={handleOnPageChange}
+            pageSize={batchesList?.limit || 0}
+            onLimitChange={handleOnLimitChange}
+            totalRecords={batchesList?.total || 0}
+          />
+        )}
+
+      <DeleteConfirmationModal
+        open={showDeleteConfirmationModal}
+        description={`Are you sure you want to delete "${selectedBatch?.name}"`}
+        onDeleteClick={async () => {
+          if (selectedBatch) {
+            await deleteBatchAsync(selectedBatch.id);
             setShowDeleteConfirmationModal(false);
-          }}
-        />
-      </When>
+          }
+        }}
+        onCancelClick={() => {
+          setShowDeleteConfirmationModal(false);
+        }}
+      />
     </section>
   );
 }
