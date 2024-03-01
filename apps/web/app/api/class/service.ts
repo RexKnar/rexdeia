@@ -10,7 +10,6 @@ import {
   UpdateClassModel,
 } from '../../../lib/domain/class';
 import { CreateSectionModel } from '../../../lib/domain/section';
-import { AssignStudentsToClassModel } from '../../../lib/domain/student';
 import {
   addSection,
   getAllSectionsByClassId,
@@ -219,9 +218,9 @@ export async function mapStaffsToClass(
 export async function assignStaffToClassWithSubject(
   staffPayload: MapStaffToClassModel
 ) {
-  const assignStaff = await Promise.all(
-    staffPayload.sectionIds.map(async (sectionId) => {
-      return await db.section.update({
+  await db.$transaction(async (prisma) => {
+    staffPayload.sectionIds.map((sectionId) => {
+      prisma.section.update({
         where: { id: sectionId },
         data: {
           academicSubjectForStaff: {
@@ -235,13 +234,7 @@ export async function assignStaffToClassWithSubject(
           },
         },
       });
-    })
-  );
-  return assignStaff;
-}
-
-export async function assignClassInCharge(staffPayload: MapStaffToClassModel) {
-  const assignSectionInCharge = await Promise.all(
+    });
     staffPayload.sectionInCharge.map(async (sectionId) => {
       return await db.section.update({
         where: { id: sectionId },
@@ -256,9 +249,8 @@ export async function assignClassInCharge(staffPayload: MapStaffToClassModel) {
           },
         },
       });
-    })
-  );
-  return assignSectionInCharge;
+    });
+  });
 }
 
 export async function unMapStaffsFromClass(
