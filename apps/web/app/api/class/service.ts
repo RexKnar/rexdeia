@@ -1,3 +1,4 @@
+import { AssignStudentsToClassModel } from 'lib/domain/student';
 import uniqBy from 'lodash/uniqBy';
 import { getServerSession } from 'next-auth';
 
@@ -215,6 +216,31 @@ export async function mapStaffsToClass(
   }
 }
 
+export async function mapStudentToClass(
+  classId: string,
+  studentPayload: AssignStudentsToClassModel
+) {
+  await db.$transaction(
+    studentPayload.studentIds.map((studentId) => {
+      return db.student.update({
+        where: {
+          id: studentId,
+        },
+        data: {
+          batchId: studentPayload.academicYear,
+          studentMapping: {
+            create: [
+              {
+                groupId: studentPayload.groupId,
+                classId: classId,
+              },
+            ],
+          },
+        },
+      });
+    })
+  );
+}
 export async function assignStaffToClassWithSubject(
   staffPayload: MapStaffToClassModel
 ) {
