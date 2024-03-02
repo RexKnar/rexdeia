@@ -77,7 +77,7 @@ export async function addSubjects(subjects: CreateSubjectModel[]) {
     );
 
     await mapSubjectToGroup(createdSubject.id, subject.groupIds);
-    await mapSubjectToSubjectType(createdSubject.id, subject.subjectTypeId);
+    await mapSubjectToSubjectType(createdSubject.id, subject.subjectTypeIds);
   }
 
   return db.subject.findMany({
@@ -260,6 +260,21 @@ export async function getAllSubjectsWithFilter(
   };
 }
 
+export async function getSubjectTypeBySubjectId(subjectId: string) {
+  const response = await db.subjectToSubjectType.findMany({
+    where: {
+      subjectId: subjectId,
+      subjectType: {
+        hasMarkEntry: true,
+      },
+    },
+    include: {
+      subjectType: true,
+    },
+  });
+  return [...response.map((data) => data.subjectType)];
+}
+
 export async function mapSubjectFormatsToSubject(
   subjectId: string,
   subjectFormatIds: string[]
@@ -299,16 +314,20 @@ export async function mapSubjectToGroup(subjectId: string, groupIds: string[]) {
 
 export async function mapSubjectToSubjectType(
   subjectId: string,
-  subjectTypeId: string
+  subjectTypeIds: string[]
 ) {
-  return db.subject.update({
-    where: {
-      id: subjectId,
-    },
-    data: {
-      subjectToSubjectTypes: {
-        create: [{ subjectTypeId: subjectTypeId }],
-      },
-    },
-  });
+  await db.$transaction(
+    subjectTypeIds.map((subjectTypeId) => {
+      return db.subject.update({
+        where: {
+          id: subjectId,
+        },
+        data: {
+          subjectToSubjectTypes: {
+            create: [{ subjectTypeId: subjectTypeId }],
+          },
+        },
+      });
+    })
+  );
 }
