@@ -3,6 +3,7 @@
 // eslint-disable-next-line import/no-namespace
 import * as Dialog from '@radix-ui/react-dialog';
 import { Contact, Edit, Loader2, Save, X } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 import React, { useEffect } from 'react';
 import { Else, If, Then } from 'react-if';
 import { Button, Text } from 'ui';
@@ -24,7 +25,9 @@ export function StaffPreviewModal({
   formSections,
   onOpenChange,
 }: AddStaffPreviewModalProps) {
-  const { isPending: isCreatingStaff, mutateAsync: createStaffMutationAsync } =
+  const router = useRouter();
+
+  const { mutateAsync: createStaffMutationAsync, isPending: isCreatingStaff } =
     useCreateStaffMutationQuery();
 
   useEffect(() => {
@@ -38,12 +41,19 @@ export function StaffPreviewModal({
 
   const handleOnSaveClick = async () => {
     try {
-      await createStaffMutationAsync({
+      const addStaffResponse = await createStaffMutationAsync({
         ...formData,
         differentlyAbled: Boolean(formData.differentlyAbled),
         dateOfJoining: new Date(formData.dateOfJoining),
+        dateOfDetainment: new Date(formData.dateOfDetainment),
+        dateOfRegularization: new Date(formData.dateOfRegularization),
+        passOutYear: new Date(formData.passOutYear),
         dateOfBirth: new Date(formData.dateOfBirth),
       });
+
+      if (addStaffResponse) {
+        router.push(`/staffs/list`);
+      }
     } catch (error) {
       console.error(error);
     }
