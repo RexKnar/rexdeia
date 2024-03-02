@@ -39,6 +39,20 @@ import { useGetSubjectTypeList } from '../../../../../../lib/queries/subject-typ
 
 const columns: ColumnDef<SubjectTypeModel>[] = [
   {
+    accessorKey: 'parentSubjectType.name',
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          className="px-0"
+          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+        >
+          Parent Name
+        </Button>
+      );
+    },
+  },
+  {
     accessorKey: 'name',
     header: ({ column }) => {
       return (
@@ -69,11 +83,37 @@ const columns: ColumnDef<SubjectTypeModel>[] = [
       return (
         <span
           className={cn(
-            'ml-1 rounded px-2 py-1 text-center text-sm font-medium text-gray-100',
-            row.original.isActive ? 'bg-green-600' : 'bg-red-600'
+            'ml-1 rounded px-2 py-1 text-center text-sm font-medium text-white',
+            row.original.isActive ? 'bg-green-500' : 'bg-red-500'
           )}
         >
           {row.original.isActive ? 'Active' : 'Inactive'}
+        </span>
+      );
+    },
+  },
+  {
+    accessorKey: 'hasMarkEntry',
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          className="px-0"
+          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+        >
+          Has Mark Entry
+        </Button>
+      );
+    },
+    cell: ({ row }) => {
+      return (
+        <span
+          className={cn(
+            'ml-1 rounded px-2 py-1 text-center text-sm font-medium text-white',
+            row.original.isActive ? 'bg-green-500' : 'bg-red-500'
+          )}
+        >
+          {row.original.isActive ? 'yes' : 'no'}
         </span>
       );
     },

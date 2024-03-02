@@ -8,8 +8,7 @@ import {
 } from '../../../lib/domain/subject';
 
 type SubjectFilter = {
-  subjectTypeIds: string[];
-  categoryIds: string[];
+  subjectTypeId: string;
 };
 export async function deleteSubjectById(id: string) {
   return db.subject.update({
@@ -31,7 +30,7 @@ export async function getSubjectById(id: string) {
       branchId: session.branchId,
     },
     include: {
-      SubjectType: true,
+      subjectToSubjectTypes: true,
       subjectToSubjectFormat: {
         include: {
           subjectFormat: true,
@@ -66,7 +65,6 @@ export async function addSubjects(subjects: CreateSubjectModel[]) {
         branchId: session.branchId,
         isActive: subject.isActive,
         description: subject.description,
-        subjectTypeId: subject.subjectTypeId,
         elective: +subject.elective,
         regulationId: subject.regulationId,
       },
@@ -79,7 +77,7 @@ export async function addSubjects(subjects: CreateSubjectModel[]) {
     );
 
     await mapSubjectToGroup(createdSubject.id, subject.groupIds);
-    await mapSubjectToCategory(createdSubject.id, subject.categoryIds);
+    await mapSubjectToSubjectType(createdSubject.id, subject.subjectTypeId);
   }
 
   return db.subject.findMany({
@@ -89,7 +87,7 @@ export async function addSubjects(subjects: CreateSubjectModel[]) {
       },
     },
     include: {
-      SubjectType: true,
+      subjectToSubjectTypes: true,
       subjectToSubjectFormat: {
         include: {
           subjectFormat: true,
@@ -108,7 +106,6 @@ export async function addSubject(createSubject: CreateSubjectModel) {
       branchId: session.branchId,
       description: createSubject.description,
       isActive: createSubject.isActive,
-      subjectTypeId: createSubject.subjectTypeId,
       elective: +createSubject.elective,
       regulationId: createSubject.regulationId,
     },
@@ -127,7 +124,16 @@ export async function getAllSubjectBySectionId(id: string) {
     select: {
       subject: {
         include: {
-          SubjectType: true,
+          subjectToSubjectTypes: {
+            include: {
+              subjectType: true,
+            },
+          },
+          subjectToGroup: {
+            include: {
+              group: true,
+            },
+          },
           subjectToSubjectFormat: {
             include: {
               subjectFormat: true,
@@ -151,10 +157,23 @@ export async function getAllSubjectBySectionIds(ids: string[]) {
     select: {
       subject: {
         include: {
-          SubjectType: true,
-          subjectToSubjectFormat: {
+          subjectToSubjectTypes: {
             include: {
+              subjectType: {
+                select: {
+                  name: true,
+                },
+              },
+            },
+          },
+          subjectToSubjectFormat: {
+            select: {
               subjectFormat: true,
+            },
+          },
+          subjectToGroup: {
+            include: {
+              group: true,
             },
           },
         },
@@ -179,7 +198,7 @@ export async function getSubjectList(page: number, limit: number) {
         branchId: session.branchId,
       },
       include: {
-        SubjectType: true,
+        subjectToSubjectTypes: true,
         subjectToSubjectFormat: {
           include: {
             subjectFormat: true,
@@ -213,7 +232,6 @@ export async function getAllSubjectsWithFilter(
     db.subject.count({
       where: {
         branchId: session.branchId,
-        subjectTypeId: { in: filter.subjectTypeIds },
       },
     }),
     db.subject.findMany({
@@ -221,18 +239,15 @@ export async function getAllSubjectsWithFilter(
       skip: (page - 1) * limit,
       where: {
         branchId: session.branchId,
-        subjectTypeId: { in: filter.subjectTypeIds },
         isDeleted: false,
-        categories: {
+        subjectToSubjectTypes: {
           some: {
-            categoryId: {
-              in: filter.categoryIds,
-            },
+            subjectTypeId: filter.subjectTypeId,
           },
         },
       },
       include: {
-        categories: true,
+        subjectToSubjectTypes: true,
       },
     }),
   ]);
@@ -282,22 +297,18 @@ export async function mapSubjectToGroup(subjectId: string, groupIds: string[]) {
   );
 }
 
-export async function mapSubjectToCategory(
+export async function mapSubjectToSubjectType(
   subjectId: string,
-  categoryIds: string[]
+  subjectTypeId: string
 ) {
-  await db.$transaction(
-    categoryIds.map((categoryId) => {
-      return db.subject.update({
-        where: {
-          id: subjectId,
-        },
-        data: {
-          categories: {
-            create: [{ categoryId: categoryId }],
-          },
-        },
-      });
-    })
-  );
+  return db.subject.update({
+    where: {
+      id: subjectId,
+    },
+    data: {
+      subjectToSubjectTypes: {
+        create: [{ subjectTypeId: subjectTypeId }],
+      },
+    },
+  });
 }

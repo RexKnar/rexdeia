@@ -9,13 +9,13 @@ export type SubjectModel = {
   subjectTypeId: string;
   subjectFormatIds: string[];
   groupIds: string[];
-  categoryIds: string[];
   regulationId: string;
   isDeleting?: boolean;
   isUpdating?: boolean;
   isNewlyAdded?: boolean;
   SubjectType?: SubjectTypeModel;
   SubjectFormat: SubjectFormatModel[];
+  subjectToSubjectFormat: string[];
 };
 
 export type CreateSubjectModel = Pick<
@@ -27,7 +27,6 @@ export type CreateSubjectModel = Pick<
   | 'subjectFormatIds'
   | 'groupIds'
   | 'elective'
-  | 'categoryIds'
   | 'regulationId'
 >;
 
@@ -39,7 +38,9 @@ export type UpdateSubjectModel = Pick<
 export type SubjectTypeModel = {
   id: string;
   name: string;
+  parentId?: string;
   isActive: boolean;
+  hasMarkEntry: boolean;
   branchId: string;
   isDeleting?: boolean;
   isUpdating?: boolean;
@@ -48,12 +49,12 @@ export type SubjectTypeModel = {
 
 export type CreateSubjectTypeModel = Pick<
   SubjectTypeModel,
-  'name' | 'isActive'
+  'name' | 'isActive' | 'parentId' | 'hasMarkEntry'
 >;
 
 export type UpdateSubjectTypeModel = Pick<
   SubjectTypeModel,
-  'name' | 'isActive' | 'id'
+  'id' | 'name' | 'isActive' | 'parentId' | 'hasMarkEntry'
 >;
 
 export type SubjectFormatModel = {

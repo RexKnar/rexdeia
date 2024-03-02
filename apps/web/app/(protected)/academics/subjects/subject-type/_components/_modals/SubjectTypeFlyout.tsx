@@ -1,12 +1,21 @@
 'use client';
 
+import { useCreateSubjectTypeWithParentMutationQuery } from 'lib/queries/subject-type/useCreateSubjectTypeWithParent';
+import { useGetSubjectTypeList } from 'lib/queries/subject-type/useGetSubjectTypeQuery';
 import { Loader2, PlusCircle } from 'lucide-react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import {
   Button,
+  Checkbox,
   Input,
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
   Sheet,
   SheetContent,
   SheetHeader,
@@ -42,6 +51,8 @@ export function SubjectTypeFlyout() {
     defaultValues: {
       name: null,
       isActive: false,
+      parentId: null,
+      hasMarkEntry: false,
     },
   });
 
@@ -50,6 +61,16 @@ export function SubjectTypeFlyout() {
     mutateAsync: mutateCreateSubjectTypeAsync,
   } = useCreateSubjectTypeMutationQuery();
 
+  const {
+    isPending: isPendingCreateSubjectTypeWithParent,
+    mutateAsync: mutateCreateSubjectTypeWithParentAsync,
+  } = useCreateSubjectTypeWithParentMutationQuery();
+
+  const { data: subjectTypeListResponse } = useGetSubjectTypeList({
+    page,
+    limit,
+  });
+
   const closeSubjectTypeFlyout = () => {
     const params = new URLSearchParams(searchParams);
     params.set('isSubjectTypeFlyoutOpen', 'false');
@@ -57,7 +78,7 @@ export function SubjectTypeFlyout() {
     router.replace(pathname + '?' + params.toString());
   };
 
-  const { data: getSubjectTypeByIdRespone } = useGetSubjectTypeByIdQuery(
+  const { data: getSubjectTypeByIdResponse } = useGetSubjectTypeByIdQuery(
     subjectTypeId,
     {
       enabled: !!subjectTypeId,
@@ -65,16 +86,21 @@ export function SubjectTypeFlyout() {
   );
 
   useEffect(() => {
-    if (getSubjectTypeByIdRespone) {
-      const { name, isActive } = getSubjectTypeByIdRespone;
+    if (getSubjectTypeByIdResponse) {
+      const { name, isActive, parentId, hasMarkEntry } =
+        getSubjectTypeByIdResponse;
 
       setValue('name', name);
       setValue('isActive', isActive);
+      setValue('parentId', parentId);
+      setValue('hasMarkEntry', hasMarkEntry);
     } else {
       setValue('name', null);
       setValue('isActive', false);
+      setValue('parentId', null);
+      setValue('hasMarkEntry', false);
     }
-  }, [getSubjectTypeByIdRespone, setValue]);
+  }, [getSubjectTypeByIdResponse, setValue]);
 
   const {
     isPending: isPendingUpdateSubjectType,
@@ -89,11 +115,16 @@ export function SubjectTypeFlyout() {
           id: subjectTypeId,
         };
         await mutateUpdateSubjectTypeAsync(updateSubjectTypeRequestPayload);
-      } else {
+      } else if (!payload.parentId) {
         const requestPayload = {
           ...payload,
         };
         await mutateCreateSubjectTypeAsync(requestPayload);
+      } else {
+        const requestPayload = {
+          ...payload,
+        };
+        await mutateCreateSubjectTypeWithParentAsync(requestPayload);
       }
     } catch (error) {
       console.error(error);
@@ -150,6 +181,37 @@ export function SubjectTypeFlyout() {
                   htmlFor="name"
                   className="text-sm font-semibold text-gray-700"
                 >
+                  Parent Name
+                </label>
+                <Select
+                  autoComplete="off"
+                  {...register('parentId')}
+                  value={watch('parentId')}
+                  onValueChange={(value) => {
+                    if (value) {
+                      setValue('parentId', value);
+                    }
+                  }}
+                >
+                  <SelectTrigger className="w-full">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectGroup>
+                      {subjectTypeListResponse?.data?.map((item) => (
+                        <SelectItem key={item.id} value={item.id}>
+                          {item.name}
+                        </SelectItem>
+                      ))}
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div>
+                <label
+                  htmlFor="name"
+                  className="text-sm font-semibold text-gray-700"
+                >
                   Subject Type Name
                 </label>
                 <Input
@@ -164,19 +226,33 @@ export function SubjectTypeFlyout() {
                   errorMessage={fieldErrors?.name?.message.toString()}
                 />
               </div>
+              <div className="mt-3">
+                <Checkbox
+                  {...register('hasMarkEntry')}
+                  onCheckedChange={() => setValue('hasMarkEntry', true)}
+                />
+                <label className="ml-2 text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+                  Has Mark Entry
+                </label>
+              </div>
               <div className="mt-10">
                 <Button
                   size="lg"
                   variant="default"
                   disabled={
-                    isPendingCreateSubjectType || isPendingUpdateSubjectType
+                    isPendingCreateSubjectType ||
+                    isPendingUpdateSubjectType ||
+                    isPendingCreateSubjectTypeWithParent
                   }
                   aria-disabled={
-                    isPendingCreateSubjectType || isPendingUpdateSubjectType
+                    isPendingCreateSubjectType ||
+                    isPendingUpdateSubjectType ||
+                    isPendingCreateSubjectTypeWithParent
                   }
                   className="mx-auto flex justify-center px-12 py-4"
                 >
-                  {isPendingCreateSubjectType ? (
+                  {isPendingCreateSubjectType ||
+                  isPendingCreateSubjectTypeWithParent ? (
                     <div className="flex items-center justify-center">
                       <Loader2 className="mr-2 h-6 w-6 animate-spin text-white" />
                       Saving
