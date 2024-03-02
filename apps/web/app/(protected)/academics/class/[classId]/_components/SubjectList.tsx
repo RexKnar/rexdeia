@@ -35,12 +35,7 @@ export function SubjectList() {
       <div className="flex flex-wrap gap-4">
         {subjectListResponse.map((subjectItem) => (
           <div key={subjectItem.id} className="w-[275px]">
-            <SubjectCard
-              id={subjectItem.id}
-              name={subjectItem.name}
-              format=""
-              type={subjectItem.SubjectType.name}
-            />
+            <SubjectCard id={subjectItem.id} name={subjectItem.name} />
           </div>
         ))}
       </div>

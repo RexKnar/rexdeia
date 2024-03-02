@@ -52,6 +52,7 @@ CREATE TABLE "subjectType" (
     "_id" UUID NOT NULL,
     "name" TEXT NOT NULL,
     "parentId" UUID,
+    "hasMarkEntry" BOOLEAN,
     "isActive" BOOLEAN NOT NULL,
     "isDeleted" BOOLEAN NOT NULL DEFAULT false,
     "branchId" UUID NOT NULL,

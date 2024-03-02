@@ -31,7 +31,6 @@ import {
 import * as z from 'zod';
 
 import { CreateSubjectModel } from '../../../../../../lib/domain/subject';
-import { useGetCategoryList } from '../../../../../../lib/queries/category/useCategoryList';
 import { useGetGroupListQuery } from '../../../../../../lib/queries/group/useGetGroupListQuery';
 import { useGetRegulationListQuery } from '../../../../../../lib/queries/regulations/useGetRegulationListQuery';
 import { useGetAllSectionByClassIdQuery } from '../../../../../../lib/queries/section/useGetAllSectionsByClassIdQuery';
@@ -68,11 +67,6 @@ const schema = z.object({
     .refine((value) => value.some((item) => item), {
       message: 'Section is required',
     }),
-  categoryIds: z
-    .array(z.string())
-    .refine((value) => value.some((item) => item), {
-      message: 'Category is required',
-    }),
   elective: z
     .string({
       required_error: 'elective is required',
@@ -105,7 +99,6 @@ export function AddSubjectFlyout() {
       subjectFormatIds: [],
       groupIds: [],
       sectionIds: [],
-      categoryIds: [],
     },
   });
 
@@ -124,10 +117,6 @@ export function AddSubjectFlyout() {
   const { data: groupList } = useGetGroupListQuery({
     page: 1,
     limit: 999,
-  });
-  const { data: categoryListResponse } = useGetCategoryList({
-    page,
-    limit,
   });
 
   const params = useParams<{ classId: string }>();
@@ -388,39 +377,6 @@ export function AddSubjectFlyout() {
                       }}
                     />
                   ))}
-                </div>
-                <div className="mt-4">
-                  <label
-                    htmlFor="description"
-                    className="text-sm font-semibold text-gray-700"
-                  >
-                    Category
-                  </label>
-                  <div className="mt-2 flex flex-wrap" id="categoryId">
-                    {categoryListResponse?.data?.map((item) => (
-                      <label className="me-5" key={item.id}>
-                        <Checkbox
-                          className="me-2 items-center space-x-2 rounded border border-primary-500"
-                          onCheckedChange={(checked) => {
-                            if (checked) {
-                              setValue('categoryIds', [
-                                ...watch('categoryIds'),
-                                item.id,
-                              ]);
-                            } else {
-                              setValue(
-                                'categoryIds',
-                                watch('categoryIds').filter(
-                                  (value) => value !== item.id
-                                )
-                              );
-                            }
-                          }}
-                        />
-                        <span>{item.name}</span>
-                      </label>
-                    ))}
-                  </div>
                 </div>
                 <div className="mt-7">
                   <RadioGroup defaultValue="0">

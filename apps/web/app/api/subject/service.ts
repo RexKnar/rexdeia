@@ -30,7 +30,7 @@ export async function getSubjectById(id: string) {
       branchId: session.branchId,
     },
     include: {
-      subjectTypes: true,
+      subjectToSubjectTypes: true,
       subjectToSubjectFormat: {
         include: {
           subjectFormat: true,
@@ -87,7 +87,7 @@ export async function addSubjects(subjects: CreateSubjectModel[]) {
       },
     },
     include: {
-      subjectTypes: true,
+      subjectToSubjectTypes: true,
       subjectToSubjectFormat: {
         include: {
           subjectFormat: true,
@@ -124,7 +124,16 @@ export async function getAllSubjectBySectionId(id: string) {
     select: {
       subject: {
         include: {
-          subjectTypes: true,
+          subjectToSubjectTypes: {
+            include: {
+              subjectType: true,
+            },
+          },
+          subjectToGroup: {
+            include: {
+              group: true,
+            },
+          },
           subjectToSubjectFormat: {
             include: {
               subjectFormat: true,
@@ -148,10 +157,23 @@ export async function getAllSubjectBySectionIds(ids: string[]) {
     select: {
       subject: {
         include: {
-          subjectTypes: true,
-          subjectToSubjectFormat: {
+          subjectToSubjectTypes: {
             include: {
+              subjectType: {
+                select: {
+                  name: true,
+                },
+              },
+            },
+          },
+          subjectToSubjectFormat: {
+            select: {
               subjectFormat: true,
+            },
+          },
+          subjectToGroup: {
+            include: {
+              group: true,
             },
           },
         },
@@ -176,7 +198,7 @@ export async function getSubjectList(page: number, limit: number) {
         branchId: session.branchId,
       },
       include: {
-        subjectTypes: true,
+        subjectToSubjectTypes: true,
         subjectToSubjectFormat: {
           include: {
             subjectFormat: true,
@@ -218,14 +240,14 @@ export async function getAllSubjectsWithFilter(
       where: {
         branchId: session.branchId,
         isDeleted: false,
-        subjectTypes: {
+        subjectToSubjectTypes: {
           some: {
             subjectTypeId: filter.subjectTypeId,
           },
         },
       },
       include: {
-        subjectTypes: true,
+        subjectToSubjectTypes: true,
       },
     }),
   ]);
@@ -284,7 +306,7 @@ export async function mapSubjectToSubjectType(
       id: subjectId,
     },
     data: {
-      subjectTypes: {
+      subjectToSubjectTypes: {
         create: [{ subjectTypeId: subjectTypeId }],
       },
     },

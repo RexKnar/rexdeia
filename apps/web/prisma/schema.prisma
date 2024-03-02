@@ -518,20 +518,8 @@ model Subject {
   branch                 Branch?                  @relation(fields: [branchId], references: [id])
   subjectToSubjectFormat SubjectToSubjectFormat[]
   subjectToGroup         SubjectToGroup[]
-  subjectTypes           SubjectToSubjectType[]
+  subjectToSubjectTypes  SubjectToSubjectType[]
 }
-
-// model SubjectType {
-//   id        String    @id @default(uuid()) @map("_id") @db.Uuid
-//   name      String
-//   isActive  Boolean
-//   subject   Subject[]
-//   branch    Branch    @relation(fields: [branchId], references: [id])
-//   branchId  String    @db.Uuid
-//   isDeleted Boolean   @default(false)
-//   createdAt DateTime? @default(now())
-//   updatedAt DateTime? @default(now())
-// }
 
 model SubjectFormat {
   id                     String                   @id @default(uuid()) @map("_id") @db.Uuid
@@ -604,19 +592,20 @@ model Medium {
 }
 
 model subjectType {
-  id                String                 @id @default(uuid()) @map("_id") @db.Uuid
-  name              String
-  parentId          String?                @db.Uuid
-  parentSubjectType subjectType?           @relation("ParentChild", fields: [parentId], references: [id])
-  childSubjectTypes subjectType[]          @relation("ParentChild")
-  isActive          Boolean
-  isDeleted         Boolean                @default(false)
-  branch            Branch                 @relation(fields: [branchId], references: [id])
-  branchId          String                 @db.Uuid
-  createdAt         DateTime               @default(now())
-  updatedAt         DateTime               @default(now())
-  deletedAt         DateTime?
-  subjects          SubjectToSubjectType[]
+  id                    String                 @id @default(uuid()) @map("_id") @db.Uuid
+  name                  String
+  parentId              String?                @db.Uuid
+  hasMarkEntry          Boolean?
+  parentSubjectType     subjectType?           @relation("ParentChild", fields: [parentId], references: [id])
+  childSubjectTypes     subjectType[]          @relation("ParentChild")
+  isActive              Boolean
+  isDeleted             Boolean                @default(false)
+  branch                Branch                 @relation(fields: [branchId], references: [id])
+  branchId              String                 @db.Uuid
+  createdAt             DateTime               @default(now())
+  updatedAt             DateTime               @default(now())
+  deletedAt             DateTime?
+  subjectToSubjectTypes SubjectToSubjectType[]
 }
 
 model Grade {

@@ -16,6 +16,7 @@ export type SubjectModel = {
   isNewlyAdded?: boolean;
   SubjectType?: SubjectTypeModel;
   SubjectFormat: SubjectFormatModel[];
+  subjectToSubjectFormat: string[];
 };
 
 export type CreateSubjectModel = Pick<
@@ -41,6 +42,7 @@ export type SubjectTypeModel = {
   name: string;
   parentId?: string;
   isActive: boolean;
+  hasMarkEntry: boolean;
   branchId: string;
   isDeleting?: boolean;
   isUpdating?: boolean;
@@ -49,12 +51,12 @@ export type SubjectTypeModel = {
 
 export type CreateSubjectTypeModel = Pick<
   SubjectTypeModel,
-  'name' | 'isActive' | 'parentId'
+  'name' | 'isActive' | 'parentId' | 'hasMarkEntry'
 >;
 
 export type UpdateSubjectTypeMode = Pick<
   SubjectTypeModel,
-  'id' | 'name' | 'isActive' | 'parentId'
+  'id' | 'name' | 'isActive' | 'parentId' | 'hasMarkEntry'
 >;
 
 export type SubjectFormatModel = {

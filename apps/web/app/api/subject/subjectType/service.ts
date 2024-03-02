@@ -57,6 +57,7 @@ export async function addSubjectType(
   const data = {
     name: subjectType.name,
     isActive: subjectType.isActive,
+    hasMarkEntry: subjectType.hasMarkEntry,
     branch: {
       connect: {
         id: session.branchId,
