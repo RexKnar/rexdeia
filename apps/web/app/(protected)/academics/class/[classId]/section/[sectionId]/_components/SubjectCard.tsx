@@ -12,8 +12,8 @@ import {
 type SubjectCardProps = {
   id: string;
   name: string;
-  type: string;
-  format: string;
+  type?: string;
+  format?: string;
 };
 export function SubjectCard(props: SubjectCardProps) {
   return (

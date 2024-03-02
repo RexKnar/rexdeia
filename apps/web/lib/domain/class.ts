@@ -35,9 +35,11 @@ export type AddSubjectsToClassRequestModel =
 
 export type MapEntitiesToClassModel = {
   sectionIds: string[];
+  classInCharge: string[];
   entities: {
     subjectId?: string;
     staffId?: string;
+    academicYearId: string;
   }[];
 };
 
@@ -48,4 +50,16 @@ export type LinkStaffToSectionModel = {
 };
 export type LinkStaffModel = {
   data: LinkStaffToSectionModel[];
+};
+
+export type MapStaffToClassModel = {
+  staffId: string;
+  subjectId: string;
+  academicYearId: string;
+  sectionIds: string[];
+  sectionInCharge: string[];
+};
+
+export type MapStaffToClassModelEntity = {
+  data: MapStaffToClassModel[];
 };

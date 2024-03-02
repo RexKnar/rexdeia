@@ -86,6 +86,7 @@ export const GET_STAFF_LIST_BY_CLASS_ID = `GET_STAFF_LIST_BY_CLASS_ID`;
 export const GET_STUDENT_LIST_BY_CLASS_ID = `GET_STUDENT_LIST_BY_CLASS_ID`;
 export const ASSIGN_STAFF_BY_CLASS_ID = `ASSIGN_STAFF_BY_CLASS_ID`;
 export const ADD_SUBJECT_BY_CLASS_ID = `ADD_SUBJECT_BY_CLASS_ID`;
+export const ADD_SUBJECT_TYPE_WITH_PARENT_ID = `ADD_SUBJECT_TYPE_WITH_PARENT_ID`;
 
 export default <EndpointDetails>{
   [REGISTER_USER]: {
@@ -323,6 +324,10 @@ export default <EndpointDetails>{
   [ADD_SUBJECT_TYPE]: {
     requestType: `POST`,
     endpoint: `/api/subject/subjectType`,
+  },
+  [ADD_SUBJECT_TYPE_WITH_PARENT_ID]: {
+    requestType: `POST`,
+    endpoint: `/api/subject/subjectType/[id]`,
   },
   [ADD_SUBJECT_FORMAT]: {
     requestType: `POST`,

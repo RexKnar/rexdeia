@@ -47,5 +47,6 @@ export type MapEntitiesToSectionModel = {
   entities: {
     subjectId?: string;
     staffId?: string;
+    academicYearId: string;
   }[];
 };

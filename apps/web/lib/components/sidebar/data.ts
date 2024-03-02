@@ -122,12 +122,6 @@ export const menuItems: SidebarMenuItem[] = [
         path: '/academics/subjects/subject-format',
       },
       {
-        id: 'academics-category',
-        label: 'Category',
-        icon: null,
-        path: '/academics/category',
-      },
-      {
         id: 'academics-student-attendance',
         label: 'Student Attendance',
         icon: null,
