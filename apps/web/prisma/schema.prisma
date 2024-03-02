@@ -416,7 +416,15 @@ model Staff {
   degreeMarksCard              String?
   pgMarksCard                  String?
   otherCertificate             String?
-  type                         StaffType                 @default(Teaching)
+  dateOfDetainment             DateTime?
+  dateOfRegularization         DateTime?
+  employmentType               String?
+  category                     String?
+  subjectHandling              String?
+  collegeName                  String?
+  passOutYear                  DateTime?
+  marksObtained                String?
+  designation                  String?
   dateOfJoining                DateTime                  @default(now())
   status                       StaffStatus               @default(Active)
   userId                       String                    @unique @db.Uuid
@@ -698,13 +706,6 @@ model Test {
   testNumber   Int
   studentMarks Json
   outOfMark    String
-}
-
-enum StaffType {
-  Teaching
-  NonTeaching
-  Principal
-  Correspondent
 }
 
 enum TestType {
