@@ -1,10 +1,11 @@
 import { captureException } from '@sentry/nextjs';
 import { StatusCodes } from 'http-status-codes';
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 
 import { authOptions } from '../../../../../lib/auth';
-import { getAllStudentsByClassId } from '../../service';
+import { AssignStudentsToClassModel } from '../../../../../lib/domain/student';
+import { getAllStudentsByClassId, mapStudentToClass } from '../../service';
 
 /**
  * @swagger
@@ -54,6 +55,65 @@ export async function GET(request: Request, { params: { id } }) {
         e.message === 'VALIDATION_ERROR'
           ? StatusCodes.BAD_REQUEST
           : StatusCodes.INTERNAL_SERVER_ERROR,
+    });
+  }
+}
+
+/**
+ * @swagger
+ *   /api/class/{id}/students:
+ *     post:
+ *       summary: map students to a class
+ *       description: map students to a class
+ *       parameters:
+ *         - name: id
+ *           in: path
+ *           required: true
+ *           description: Unique identifier of the class.
+ *           schema:
+ *             type: string
+ *       requestBody:
+ *         required: true
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *       responses:
+ *         '200':
+ *           description: Successfully mapped students to a class
+ *           content:
+ *             application/json:
+ *               schema:
+ *                 type: array
+ *                 items:
+ *                   # Define the schema for a single class here
+ *         '401':
+ *           description: Unauthorized access.
+ *         '400':
+ *           description: Bad request due to an error in processing the request.
+ */
+export async function POST(request: NextRequest, { params: { id } }) {
+  const session = await getServerSession(authOptions);
+
+  if (!session) {
+    return new NextResponse(JSON.stringify({ error: 'UNAUTHORIZED' }), {
+      status: StatusCodes.UNAUTHORIZED,
+    });
+  }
+
+  const payload: AssignStudentsToClassModel = await request.json();
+
+  try {
+    const mappedStudentResponse = await mapStudentToClass(id, payload);
+
+    return new NextResponse(JSON.stringify(mappedStudentResponse), {
+      status: StatusCodes.CREATED,
+    });
+  } catch (e) {
+    captureException(e);
+    return new NextResponse(e, {
+      status: StatusCodes.BAD_REQUEST,
     });
   }
 }
