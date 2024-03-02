@@ -1,3 +1,4 @@
+import { AssignStudentsToClassModel } from 'lib/domain/student';
 import uniqBy from 'lodash/uniqBy';
 import { getServerSession } from 'next-auth';
 
@@ -6,6 +7,7 @@ import { db } from '../../../lib/db';
 import {
   CreateClassModel,
   MapEntitiesToClassModel,
+  MapStaffToClassModel,
   UpdateClassModel,
 } from '../../../lib/domain/class';
 import { CreateSectionModel } from '../../../lib/domain/section';
@@ -17,7 +19,7 @@ import {
   unMapStaffsFromSection,
   unMapSubjectsFromSection,
 } from '../section/service';
-import { getAllStaffsBySectionIds } from '../staff/service';
+import { getAllStaffsBySectionsIdWithSubjects } from '../staff/service';
 import { getAllStudentsBySectionIds } from '../student/service';
 import { getAllSubjectBySectionIds } from '../subject/service';
 
@@ -214,6 +216,69 @@ export async function mapStaffsToClass(
   }
 }
 
+export async function mapStudentToClass(
+  classId: string,
+  studentPayload: AssignStudentsToClassModel
+) {
+  await db.$transaction(
+    studentPayload.studentIds.map((studentId) => {
+      return db.student.update({
+        where: {
+          id: studentId,
+        },
+        data: {
+          batchId: studentPayload.academicYear,
+          studentMapping: {
+            create: [
+              {
+                groupId: studentPayload.groupId,
+                classId: classId,
+              },
+            ],
+          },
+        },
+      });
+    })
+  );
+}
+export async function assignStaffToClassWithSubject(
+  staffPayload: MapStaffToClassModel
+) {
+  await db.$transaction(async (prisma) => {
+    staffPayload.sectionIds.map((sectionId) => {
+      prisma.section.update({
+        where: { id: sectionId },
+        data: {
+          academicSubjectForStaff: {
+            create: [
+              {
+                subjectId: staffPayload.subjectId,
+                staffId: staffPayload.staffId,
+                academicYearId: staffPayload.academicYearId,
+              },
+            ],
+          },
+        },
+      });
+    });
+    staffPayload.sectionInCharge.map(async (sectionId) => {
+      return await db.section.update({
+        where: { id: sectionId },
+        data: {
+          classInCharge: {
+            create: [
+              {
+                staffId: staffPayload.staffId,
+                academicYearId: staffPayload.academicYearId,
+              },
+            ],
+          },
+        },
+      });
+    });
+  });
+}
+
 export async function unMapStaffsFromClass(
   classId: string,
   staffIds: string[],
@@ -245,6 +310,8 @@ export async function getAllStudentsByClassId(id: string) {
 
 export async function getAllStaffsByClassId(id: string) {
   const sections = await getAllSectionsByClassId(id);
-  const staffs = await getAllStaffsBySectionIds(sections.map((x) => x.id));
-  return uniqBy(staffs, (staff) => staff.id);
+  const staffs = await getAllStaffsBySectionsIdWithSubjects(
+    sections.map((x) => x.id)
+  );
+  return staffs;
 }
