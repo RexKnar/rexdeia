@@ -2,7 +2,7 @@ import { authOptions } from 'lib/auth';
 import { db } from 'lib/db';
 import {
   CreateSubjectTypeModel,
-  UpdateSubjectTypeMode,
+  UpdateSubjectTypeModel,
 } from 'lib/domain/subject';
 import { getServerSession } from 'next-auth';
 
@@ -80,7 +80,7 @@ export async function addSubjectType(
 
 export async function updateSubjectTypeById(
   subjectId: string,
-  subjectType: UpdateSubjectTypeMode
+  subjectType: UpdateSubjectTypeModel
 ) {
   const session = await getServerSession(authOptions);
 

@@ -52,7 +52,7 @@ export type CreateSubjectTypeModel = Pick<
   'name' | 'isActive' | 'parentId' | 'hasMarkEntry'
 >;
 
-export type UpdateSubjectTypeMode = Pick<
+export type UpdateSubjectTypeModel = Pick<
   SubjectTypeModel,
   'id' | 'name' | 'isActive' | 'parentId' | 'hasMarkEntry'
 >;
