@@ -4,10 +4,10 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 
 import { authOptions } from '../../../../../lib/auth';
-import { MapEntitiesToClassModel } from '../../../../../lib/domain/class';
+import { MapStaffToClassModelEntity } from '../../../../../lib/domain/class';
 import {
+  assignStaffToClassWithSubject,
   getAllStaffsByClassId,
-  mapStaffsToClass,
   unMapStaffsFromClass,
 } from '../../service';
 
@@ -97,7 +97,7 @@ export async function GET(request: Request, { params: { id } }) {
  *         '400':
  *           description: Bad request due to an error in processing the request.
  */
-export async function POST(request: NextRequest, { params: { id } }) {
+export async function POST(request: NextRequest) {
   const session = await getServerSession(authOptions);
 
   if (!session) {
@@ -106,12 +106,15 @@ export async function POST(request: NextRequest, { params: { id } }) {
     });
   }
 
-  const payload: MapEntitiesToClassModel = await request.json();
+  const payload: MapStaffToClassModelEntity = await request.json();
 
   try {
-    const response = await mapStaffsToClass(id, payload);
-
-    return new NextResponse(JSON.stringify(response), {
+    const assignedStaffToClassWithSubject = payload.data.map(
+      async (staffDetail) => {
+        await assignStaffToClassWithSubject(staffDetail);
+      }
+    );
+    return new NextResponse(JSON.stringify(assignedStaffToClassWithSubject), {
       status: StatusCodes.CREATED,
     });
   } catch (e) {
