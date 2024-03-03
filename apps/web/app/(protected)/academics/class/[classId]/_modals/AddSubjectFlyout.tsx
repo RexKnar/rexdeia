@@ -44,11 +44,11 @@ const schema = z.object({
       required_error: 'Name is required',
     })
     .min(1),
-  subjectTypeIds: z
-    .array(z.string())
-    .refine((value) => value.some((item) => item), {
-      message: 'Subject type is required',
-    }),
+  subjectTypeId: z
+    .string({
+      required_error: 'Subject Type is required',
+    })
+    .min(1),
   subjectFormatIds: z
     .array(z.string())
     .refine((value) => value.some((item) => item), {
@@ -283,37 +283,29 @@ export function AddSubjectFlyout() {
                 >
                   Subject Type
                 </label>
-                <div className="mt-2 flex flex-wrap">
-                  {subjectTypeList?.data?.map((item) => (
-                    <Controller
-                      key={item.id}
-                      control={control}
-                      name="subjectTypeIds"
-                      render={({ field }) => {
-                        return (
-                          <label className="me-5">
-                            <Checkbox
-                              className="me-2 items-center space-x-2 rounded border border-primary-500"
-                              onCheckedChange={(checked) => {
-                                return checked
-                                  ? field.onChange([
-                                      ...(field.value || []),
-                                      item.id,
-                                    ])
-                                  : field.onChange(
-                                      field.value?.filter(
-                                        (value) => value !== item.id
-                                      )
-                                    );
-                              }}
-                            />
-                            <span>{item.name}</span>
-                          </label>
-                        );
-                      }}
-                    />
-                  ))}
-                </div>
+                <Select
+                  autoComplete="off"
+                  {...register('subjectTypeId', { required: true })}
+                  value={watch('subjectTypeId')}
+                  onValueChange={(value) => {
+                    if (value) {
+                      setValue('subjectTypeId', value);
+                    }
+                  }}
+                >
+                  <SelectTrigger className="mt-2 w-full">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectGroup>
+                      {subjectTypeList?.data?.map((item) => (
+                        <SelectItem key={item.id} value={item.id}>
+                          {item.name}
+                        </SelectItem>
+                      ))}
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
               </div>
               <div className="py-4">
                 <label
