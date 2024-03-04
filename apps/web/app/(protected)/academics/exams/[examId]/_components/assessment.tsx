@@ -74,22 +74,35 @@ const data: Marks[] = [
 
 function AssessmentTableCell() {
   const [isToggled, setIsToggled] = useState(false);
+  const [inputsDisabled, setInputsDisabled] = useState(false);
+
   const handleOnToggleChange = () => {
     setIsToggled(!isToggled);
+    setInputsDisabled(!inputsDisabled); // Toggle inputsDisabled state
   };
+
   return (
     <div className="lex m-1 flex items-center justify-between lowercase">
       <Input
-        className=" ml-2 h-8 w-14 rounded-lg border-gray-600 px-3 py-1 text-center placeholder-gray-600 shadow-sm"
+        className={`ml-2 h-8 w-14 rounded-lg border-gray-600 px-3 py-1 text-center placeholder-gray-600 shadow-sm ${
+          inputsDisabled ? 'disabled' : ''
+        }`}
         placeholder="FA1"
+        disabled={inputsDisabled}
       />
       <Input
-        className=" ml-2 h-8 w-14 rounded-lg border-gray-600 px-3 py-1 text-center placeholder-gray-600 shadow-sm"
+        className={`ml-2 h-8 w-14 rounded-lg border-gray-600 px-3 py-1 text-center placeholder-gray-600 shadow-sm ${
+          inputsDisabled ? 'disabled' : ''
+        }`}
         placeholder="FA1"
+        disabled={inputsDisabled}
       />
       <Input
-        className=" ml-2 h-8 w-14 rounded-lg border-gray-600 px-3 py-1 text-center placeholder-gray-600 shadow-sm"
+        className={`ml-2 h-8 w-14 rounded-lg border-gray-600 px-3 py-1 text-center placeholder-gray-600 shadow-sm ${
+          inputsDisabled ? 'disabled' : ''
+        }`}
         placeholder="FA1"
+        disabled={inputsDisabled}
       />
       <Toggle
         className={`ml-2 h-10 w-10 rounded-full px-3 py-1 text-center ${
@@ -121,7 +134,7 @@ export function Assessment() {
       },
       cell: () => (
         <div className="mb-2 flex items-center">
-          <Avatar className="ml-3 h-12 w-12 cursor-pointer ">
+          <Avatar className="ml-3  mt-2 h-8 w-8 cursor-pointer ">
             <AvatarImage src="https://png.pngtree.com/thumb_back/fh260/background/20230612/pngtree-man-wearing-glasses-is-wearing-colorful-background-image_2905240.jpg" />
           </Avatar>
           <div className="ml-4">
