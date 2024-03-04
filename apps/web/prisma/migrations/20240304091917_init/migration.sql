@@ -2,9 +2,6 @@
 CREATE TYPE "UserRole" AS ENUM ('Admin', 'TeachingStaff', 'NonTeachingStaff', 'Student', 'User');
 
 -- CreateEnum
-CREATE TYPE "StaffType" AS ENUM ('Teaching', 'NonTeaching', 'Principal', 'Correspondent');
-
--- CreateEnum
 CREATE TYPE "TestType" AS ENUM ('UnitTest', 'TermTest', 'ClassTest');
 
 -- CreateEnum
@@ -32,6 +29,53 @@ CREATE TABLE "Account" (
     "session_state" TEXT,
 
     CONSTRAINT "Account_pkey" PRIMARY KEY ("_id")
+);
+
+-- CreateTable
+CREATE TABLE "Exam" (
+    "_id" UUID NOT NULL,
+    "name" TEXT NOT NULL,
+    "type" TEXT NOT NULL,
+    "sectionId" UUID,
+    "totalMarks" INTEGER NOT NULL,
+    "convertToPercentage" INTEGER NOT NULL,
+
+    CONSTRAINT "Exam_pkey" PRIMARY KEY ("_id")
+);
+
+-- CreateTable
+CREATE TABLE "ExamGroup" (
+    "_id" UUID NOT NULL,
+    "name" TEXT NOT NULL,
+    "totalMarks" INTEGER NOT NULL,
+    "convertToPercentage" INTEGER NOT NULL,
+    "exam1Id" UUID,
+
+    CONSTRAINT "ExamGroup_pkey" PRIMARY KEY ("_id")
+);
+
+-- CreateTable
+CREATE TABLE "ExamSubject" (
+    "_id" UUID NOT NULL,
+    "subjectId" UUID NOT NULL,
+    "totalMarks" INTEGER NOT NULL,
+    "convertToPercentage" INTEGER NOT NULL,
+    "examGroupId" UUID,
+
+    CONSTRAINT "ExamSubject_pkey" PRIMARY KEY ("_id")
+);
+
+-- CreateTable
+CREATE TABLE "ExamSubjectPartition" (
+    "_id" UUID NOT NULL,
+    "subjectId" UUID NOT NULL,
+    "minMark" INTEGER NOT NULL,
+    "totalMarks" INTEGER NOT NULL,
+    "convertToPercentage" INTEGER NOT NULL,
+    "partitionName" TEXT NOT NULL,
+    "examSubjectId" UUID,
+
+    CONSTRAINT "ExamSubjectPartition_pkey" PRIMARY KEY ("_id")
 );
 
 -- CreateTable
@@ -273,33 +317,99 @@ CREATE TABLE "Student" (
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "additionalAttributes" JSONB NOT NULL,
-    "sectionId" UUID,
     "userId" UUID NOT NULL,
     "branchId" UUID NOT NULL,
     "batchId" UUID,
     "organizationId" UUID NOT NULL,
     "formId" UUID NOT NULL,
+    "sectionId" UUID,
+    "isDeleted" BOOLEAN NOT NULL DEFAULT false,
 
     CONSTRAINT "Student_pkey" PRIMARY KEY ("_id")
 );
 
 -- CreateTable
+CREATE TABLE "StudentMapping" (
+    "studentId" UUID NOT NULL,
+    "classId" UUID NOT NULL,
+    "sectionId" UUID NOT NULL,
+    "groupId" UUID NOT NULL,
+
+    CONSTRAINT "StudentMapping_pkey" PRIMARY KEY ("studentId","sectionId","groupId")
+);
+
+-- CreateTable
 CREATE TABLE "Staff" (
     "_id" UUID NOT NULL,
-    "type" "StaffType" NOT NULL,
-    "aadharCardNumber" TEXT NOT NULL,
-    "annualIncome" TEXT NOT NULL,
-    "bloodGroup" TEXT NOT NULL,
-    "dob" TEXT NOT NULL,
-    "address" TEXT NOT NULL,
-    "dateOfJoining" TEXT NOT NULL,
-    "status" "StaffStatus" NOT NULL,
+    "image" TEXT,
+    "aadharCardNumber" TEXT,
+    "firstName" TEXT NOT NULL DEFAULT '',
+    "middleName" TEXT DEFAULT '',
+    "lastName" TEXT NOT NULL DEFAULT '',
+    "dateOfBirth" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "gender" TEXT NOT NULL DEFAULT '',
+    "mobile" TEXT NOT NULL DEFAULT '',
+    "email" TEXT NOT NULL DEFAULT '',
+    "bloodGroup" TEXT,
+    "religion" TEXT,
+    "caste" TEXT,
+    "nationality" TEXT,
+    "motherTongue" TEXT,
+    "enrollmentNumber" TEXT,
+    "specialCategory" TEXT,
+    "differentlyAbled" BOOLEAN NOT NULL DEFAULT false,
+    "epfNumber" TEXT,
+    "fatherName" TEXT,
+    "fatherOccupation" TEXT,
+    "motherName" TEXT,
+    "motherOccupation" TEXT,
+    "spouseName" TEXT,
+    "spouseOccupation" TEXT,
+    "currentAddressLine1" TEXT,
+    "currentAddressLine2" TEXT,
+    "currentCity" TEXT,
+    "currentState" TEXT,
+    "currentCountry" TEXT,
+    "currentPincode" TEXT,
+    "permanentAddress1" TEXT,
+    "permanentAddress2" TEXT,
+    "permanentCity" TEXT,
+    "permanentState" TEXT,
+    "permanentPincode" TEXT,
+    "permanentCountry" TEXT,
+    "birthCertificate" TEXT,
+    "communityCertificate" TEXT,
+    "childImmunicationCertificate" TEXT,
+    "medicalCertificate" TEXT,
+    "covidVaccinationCertificate" TEXT,
+    "characterCertificate" TEXT,
+    "fathersPhoto" TEXT,
+    "mothersPhoto" TEXT,
+    "spousePhoto" TEXT,
+    "incomeCertificate" TEXT,
+    "transferCertificate" TEXT,
+    "sslcMarksCard" TEXT,
+    "pucMarksCard" TEXT,
+    "degreeMarksCard" TEXT,
+    "pgMarksCard" TEXT,
+    "otherCertificate" TEXT,
+    "dateOfDetainment" TIMESTAMP(3),
+    "dateOfRegularization" TIMESTAMP(3),
+    "employmentType" TEXT,
+    "category" TEXT,
+    "subjectHandling" TEXT,
+    "collegeName" TEXT,
+    "passOutYear" TIMESTAMP(3),
+    "marksObtained" TEXT,
+    "designation" TEXT,
+    "dateOfJoining" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "status" "StaffStatus" NOT NULL DEFAULT 'Active',
     "userId" UUID NOT NULL,
     "createdAt" TIMESTAMP(3) DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) DEFAULT CURRENT_TIMESTAMP,
     "organizationId" UUID,
     "branchId" UUID,
-    "sectionId" UUID,
+    "sectionIds" UUID[],
 
     CONSTRAINT "Staff_pkey" PRIMARY KEY ("_id")
 );
@@ -326,6 +436,7 @@ CREATE TABLE "Class" (
     "name" TEXT NOT NULL,
     "description" TEXT,
     "isActive" BOOLEAN NOT NULL,
+    "isDeleted" BOOLEAN NOT NULL DEFAULT false,
     "batchId" UUID,
     "branchId" UUID NOT NULL,
     "regulationId" UUID,
@@ -339,8 +450,39 @@ CREATE TABLE "Class" (
 CREATE TABLE "SectionSubject" (
     "sectionId" UUID NOT NULL,
     "subjectId" UUID NOT NULL,
+    "createdAt" TIMESTAMP(3) DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT "SectionSubject_pkey" PRIMARY KEY ("sectionId","subjectId")
+);
+
+-- CreateTable
+CREATE TABLE "StaffSection" (
+    "sectionId" UUID NOT NULL,
+    "staffId" UUID NOT NULL,
+    "createdAt" TIMESTAMP(3) DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "StaffSection_pkey" PRIMARY KEY ("sectionId","staffId")
+);
+
+-- CreateTable
+CREATE TABLE "AcademicSubjectForStaff" (
+    "staffId" UUID NOT NULL,
+    "subjectId" UUID NOT NULL,
+    "academicYearId" UUID NOT NULL,
+    "sectionId" UUID NOT NULL,
+
+    CONSTRAINT "AcademicSubjectForStaff_pkey" PRIMARY KEY ("academicYearId","staffId","sectionId","subjectId")
+);
+
+-- CreateTable
+CREATE TABLE "ClassInCharge" (
+    "staffId" UUID NOT NULL,
+    "sectionId" UUID NOT NULL,
+    "academicYearId" UUID NOT NULL,
+
+    CONSTRAINT "ClassInCharge_pkey" PRIMARY KEY ("staffId","sectionId","academicYearId")
 );
 
 -- CreateTable
@@ -354,8 +496,8 @@ CREATE TABLE "Section" (
     "classId" UUID NOT NULL,
     "createdAt" TIMESTAMP(3) DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) DEFAULT CURRENT_TIMESTAMP,
-    "subjectIds" UUID[],
     "subjectId" UUID,
+    "staffId" UUID,
 
     CONSTRAINT "Section_pkey" PRIMARY KEY ("_id")
 );
@@ -365,13 +507,60 @@ CREATE TABLE "Subject" (
     "_id" UUID NOT NULL,
     "description" TEXT,
     "name" TEXT NOT NULL,
-    "type" TEXT NOT NULL,
     "isActive" BOOLEAN NOT NULL,
+    "elective" INTEGER NOT NULL,
+    "subjectFormatId" UUID,
     "createdAt" TIMESTAMP(3) DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) DEFAULT CURRENT_TIMESTAMP,
+    "isDeleted" BOOLEAN NOT NULL DEFAULT false,
+    "regulationId" UUID NOT NULL,
     "sectionId" UUID[],
+    "branchId" UUID,
 
     CONSTRAINT "Subject_pkey" PRIMARY KEY ("_id")
+);
+
+-- CreateTable
+CREATE TABLE "SubjectFormat" (
+    "_id" UUID NOT NULL,
+    "name" TEXT NOT NULL,
+    "isActive" BOOLEAN NOT NULL,
+    "branchId" UUID NOT NULL,
+    "isDeleted" BOOLEAN NOT NULL DEFAULT false,
+    "createdAt" TIMESTAMP(3) DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "SubjectFormat_pkey" PRIMARY KEY ("_id")
+);
+
+-- CreateTable
+CREATE TABLE "SubjectToSubjectFormat" (
+    "subjectFormatId" UUID NOT NULL,
+    "subjectId" UUID NOT NULL,
+    "createdAt" TIMESTAMP(3) DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "SubjectToSubjectFormat_pkey" PRIMARY KEY ("subjectFormatId","subjectId")
+);
+
+-- CreateTable
+CREATE TABLE "SubjectToGroup" (
+    "subjectId" UUID NOT NULL,
+    "groupId" UUID NOT NULL,
+    "createdAt" TIMESTAMP(3) DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "SubjectToGroup_pkey" PRIMARY KEY ("groupId","subjectId")
+);
+
+-- CreateTable
+CREATE TABLE "SubjectToSubjectType" (
+    "subjectId" UUID NOT NULL,
+    "subjectTypeId" UUID NOT NULL,
+    "createdAt" TIMESTAMP(3) DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "SubjectToSubjectType_pkey" PRIMARY KEY ("subjectTypeId","subjectId")
 );
 
 -- CreateTable
@@ -398,6 +587,50 @@ CREATE TABLE "Medium" (
     "updatedAt" TIMESTAMP(3) DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT "Medium_pkey" PRIMARY KEY ("_id")
+);
+
+-- CreateTable
+CREATE TABLE "subjectType" (
+    "_id" UUID NOT NULL,
+    "name" TEXT NOT NULL,
+    "parentId" UUID,
+    "hasMarkEntry" BOOLEAN,
+    "isActive" BOOLEAN NOT NULL,
+    "isDeleted" BOOLEAN NOT NULL DEFAULT false,
+    "branchId" UUID NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "deletedAt" TIMESTAMP(3),
+
+    CONSTRAINT "subjectType_pkey" PRIMARY KEY ("_id")
+);
+
+-- CreateTable
+CREATE TABLE "Grade" (
+    "_id" UUID NOT NULL,
+    "name" TEXT NOT NULL,
+    "isActive" BOOLEAN NOT NULL,
+    "branchId" UUID NOT NULL,
+    "createdAt" TIMESTAMP(3) DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) DEFAULT CURRENT_TIMESTAMP,
+    "isDeleted" BOOLEAN NOT NULL DEFAULT false,
+
+    CONSTRAINT "Grade_pkey" PRIMARY KEY ("_id")
+);
+
+-- CreateTable
+CREATE TABLE "GradeScales" (
+    "_id" UUID NOT NULL,
+    "startValue" TEXT NOT NULL,
+    "endValue" TEXT NOT NULL,
+    "gradeName" TEXT NOT NULL,
+    "remark" TEXT NOT NULL,
+    "gradeId" UUID,
+    "createdAt" TIMESTAMP(3) DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) DEFAULT CURRENT_TIMESTAMP,
+    "isDeleted" BOOLEAN NOT NULL DEFAULT false,
+
+    CONSTRAINT "GradeScales_pkey" PRIMARY KEY ("_id")
 );
 
 -- CreateTable
@@ -431,6 +664,24 @@ CREATE UNIQUE INDEX "Staff_userId_key" ON "Staff"("userId");
 
 -- AddForeignKey
 ALTER TABLE "Account" ADD CONSTRAINT "Account_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("_id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Exam" ADD CONSTRAINT "Exam_sectionId_fkey" FOREIGN KEY ("sectionId") REFERENCES "Section"("_id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "ExamGroup" ADD CONSTRAINT "ExamGroup_exam1Id_fkey" FOREIGN KEY ("exam1Id") REFERENCES "Exam"("_id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "ExamSubject" ADD CONSTRAINT "ExamSubject_subjectId_fkey" FOREIGN KEY ("subjectId") REFERENCES "Subject"("_id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "ExamSubject" ADD CONSTRAINT "ExamSubject_examGroupId_fkey" FOREIGN KEY ("examGroupId") REFERENCES "ExamGroup"("_id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "ExamSubjectPartition" ADD CONSTRAINT "ExamSubjectPartition_subjectId_fkey" FOREIGN KEY ("subjectId") REFERENCES "Subject"("_id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "ExamSubjectPartition" ADD CONSTRAINT "ExamSubjectPartition_examSubjectId_fkey" FOREIGN KEY ("examSubjectId") REFERENCES "ExamSubject"("_id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Session" ADD CONSTRAINT "Session_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("_id") ON DELETE RESTRICT ON UPDATE CASCADE;
@@ -487,9 +738,6 @@ ALTER TABLE "PaymentAssociations" ADD CONSTRAINT "PaymentAssociations_paymentId_
 ALTER TABLE "Share" ADD CONSTRAINT "Share_formId_fkey" FOREIGN KEY ("formId") REFERENCES "Form"("_id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Student" ADD CONSTRAINT "Student_sectionId_fkey" FOREIGN KEY ("sectionId") REFERENCES "Section"("_id") ON DELETE SET NULL ON UPDATE CASCADE;
-
--- AddForeignKey
 ALTER TABLE "Student" ADD CONSTRAINT "Student_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("_id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
@@ -505,6 +753,21 @@ ALTER TABLE "Student" ADD CONSTRAINT "Student_organizationId_fkey" FOREIGN KEY (
 ALTER TABLE "Student" ADD CONSTRAINT "Student_formId_fkey" FOREIGN KEY ("formId") REFERENCES "Form"("_id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
+ALTER TABLE "Student" ADD CONSTRAINT "Student_sectionId_fkey" FOREIGN KEY ("sectionId") REFERENCES "Section"("_id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "StudentMapping" ADD CONSTRAINT "StudentMapping_studentId_fkey" FOREIGN KEY ("studentId") REFERENCES "Student"("_id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "StudentMapping" ADD CONSTRAINT "StudentMapping_classId_fkey" FOREIGN KEY ("classId") REFERENCES "Class"("_id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "StudentMapping" ADD CONSTRAINT "StudentMapping_sectionId_fkey" FOREIGN KEY ("sectionId") REFERENCES "Section"("_id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "StudentMapping" ADD CONSTRAINT "StudentMapping_groupId_fkey" FOREIGN KEY ("groupId") REFERENCES "Group"("_id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
 ALTER TABLE "Staff" ADD CONSTRAINT "Staff_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("_id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
@@ -512,9 +775,6 @@ ALTER TABLE "Staff" ADD CONSTRAINT "Staff_organizationId_fkey" FOREIGN KEY ("org
 
 -- AddForeignKey
 ALTER TABLE "Staff" ADD CONSTRAINT "Staff_branchId_fkey" FOREIGN KEY ("branchId") REFERENCES "Branch"("_id") ON DELETE SET NULL ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "Staff" ADD CONSTRAINT "Staff_sectionId_fkey" FOREIGN KEY ("sectionId") REFERENCES "Section"("_id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Batch" ADD CONSTRAINT "Batch_branchId_fkey" FOREIGN KEY ("branchId") REFERENCES "Branch"("_id") ON DELETE RESTRICT ON UPDATE CASCADE;
@@ -535,16 +795,88 @@ ALTER TABLE "SectionSubject" ADD CONSTRAINT "SectionSubject_sectionId_fkey" FORE
 ALTER TABLE "SectionSubject" ADD CONSTRAINT "SectionSubject_subjectId_fkey" FOREIGN KEY ("subjectId") REFERENCES "Subject"("_id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
+ALTER TABLE "StaffSection" ADD CONSTRAINT "StaffSection_sectionId_fkey" FOREIGN KEY ("sectionId") REFERENCES "Section"("_id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "StaffSection" ADD CONSTRAINT "StaffSection_staffId_fkey" FOREIGN KEY ("staffId") REFERENCES "Staff"("_id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "AcademicSubjectForStaff" ADD CONSTRAINT "AcademicSubjectForStaff_staffId_fkey" FOREIGN KEY ("staffId") REFERENCES "Staff"("_id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "AcademicSubjectForStaff" ADD CONSTRAINT "AcademicSubjectForStaff_subjectId_fkey" FOREIGN KEY ("subjectId") REFERENCES "Subject"("_id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "AcademicSubjectForStaff" ADD CONSTRAINT "AcademicSubjectForStaff_academicYearId_fkey" FOREIGN KEY ("academicYearId") REFERENCES "Batch"("_id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "AcademicSubjectForStaff" ADD CONSTRAINT "AcademicSubjectForStaff_sectionId_fkey" FOREIGN KEY ("sectionId") REFERENCES "Section"("_id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "ClassInCharge" ADD CONSTRAINT "ClassInCharge_staffId_fkey" FOREIGN KEY ("staffId") REFERENCES "Staff"("_id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "ClassInCharge" ADD CONSTRAINT "ClassInCharge_sectionId_fkey" FOREIGN KEY ("sectionId") REFERENCES "Section"("_id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "ClassInCharge" ADD CONSTRAINT "ClassInCharge_academicYearId_fkey" FOREIGN KEY ("academicYearId") REFERENCES "Batch"("_id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
 ALTER TABLE "Section" ADD CONSTRAINT "Section_mediumId_fkey" FOREIGN KEY ("mediumId") REFERENCES "Medium"("_id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Section" ADD CONSTRAINT "Section_classId_fkey" FOREIGN KEY ("classId") REFERENCES "Class"("_id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
+ALTER TABLE "Section" ADD CONSTRAINT "Section_staffId_fkey" FOREIGN KEY ("staffId") REFERENCES "Staff"("_id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
 ALTER TABLE "Section" ADD CONSTRAINT "Section_subjectId_fkey" FOREIGN KEY ("subjectId") REFERENCES "Subject"("_id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Subject" ADD CONSTRAINT "Subject_subjectFormatId_fkey" FOREIGN KEY ("subjectFormatId") REFERENCES "SubjectFormat"("_id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Subject" ADD CONSTRAINT "Subject_regulationId_fkey" FOREIGN KEY ("regulationId") REFERENCES "Regulation"("_id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Subject" ADD CONSTRAINT "Subject_branchId_fkey" FOREIGN KEY ("branchId") REFERENCES "Branch"("_id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "SubjectFormat" ADD CONSTRAINT "SubjectFormat_branchId_fkey" FOREIGN KEY ("branchId") REFERENCES "Branch"("_id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "SubjectToSubjectFormat" ADD CONSTRAINT "SubjectToSubjectFormat_subjectFormatId_fkey" FOREIGN KEY ("subjectFormatId") REFERENCES "SubjectFormat"("_id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "SubjectToSubjectFormat" ADD CONSTRAINT "SubjectToSubjectFormat_subjectId_fkey" FOREIGN KEY ("subjectId") REFERENCES "Subject"("_id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "SubjectToGroup" ADD CONSTRAINT "SubjectToGroup_subjectId_fkey" FOREIGN KEY ("subjectId") REFERENCES "Subject"("_id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "SubjectToGroup" ADD CONSTRAINT "SubjectToGroup_groupId_fkey" FOREIGN KEY ("groupId") REFERENCES "Group"("_id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "SubjectToSubjectType" ADD CONSTRAINT "SubjectToSubjectType_subjectId_fkey" FOREIGN KEY ("subjectId") REFERENCES "Subject"("_id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "SubjectToSubjectType" ADD CONSTRAINT "SubjectToSubjectType_subjectTypeId_fkey" FOREIGN KEY ("subjectTypeId") REFERENCES "subjectType"("_id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Group" ADD CONSTRAINT "Group_branchId_fkey" FOREIGN KEY ("branchId") REFERENCES "Branch"("_id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Medium" ADD CONSTRAINT "Medium_branchId_fkey" FOREIGN KEY ("branchId") REFERENCES "Branch"("_id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "subjectType" ADD CONSTRAINT "subjectType_parentId_fkey" FOREIGN KEY ("parentId") REFERENCES "subjectType"("_id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "subjectType" ADD CONSTRAINT "subjectType_branchId_fkey" FOREIGN KEY ("branchId") REFERENCES "Branch"("_id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Grade" ADD CONSTRAINT "Grade_branchId_fkey" FOREIGN KEY ("branchId") REFERENCES "Branch"("_id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "GradeScales" ADD CONSTRAINT "GradeScales_gradeId_fkey" FOREIGN KEY ("gradeId") REFERENCES "Grade"("_id") ON DELETE SET NULL ON UPDATE CASCADE;
