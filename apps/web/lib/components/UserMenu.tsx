@@ -1,4 +1,5 @@
 import { ChevronDown, ChevronRight } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 import { signOut } from 'next-auth/react';
 import {
   Avatar,
@@ -14,6 +15,7 @@ import {
 import { useGetUserDetailsQuery } from '../queries/useGetUserDetailsQuery';
 
 export function UserMenu() {
+  const router = useRouter();
   const { data, isLoading } = useGetUserDetailsQuery();
   return (
     <DropdownMenu>
@@ -27,7 +29,10 @@ export function UserMenu() {
         <ChevronDown className="h-5 w-5 cursor-pointer" />
       </DropdownMenuTrigger>
       <DropdownMenuContent className="bg-white" align="end" sideOffset={15}>
-        <DropdownMenuItem className="flex cursor-pointer items-center">
+        <DropdownMenuItem
+          onClick={() => router.push('/users/profile')}
+          className="flex cursor-pointer items-center"
+        >
           <Text variant="sm-medium" className="flex-1">
             Profile
           </Text>
