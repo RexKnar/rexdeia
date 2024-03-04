@@ -1,6 +1,6 @@
 'use client';
 
-import { Loader2, PencilLine, PlusCircle } from 'lucide-react';
+import { Loader2, PencilLine } from 'lucide-react';
 import {
   useParams,
   usePathname,
@@ -66,26 +66,10 @@ export function ClassDetail() {
               </div>
             </div>
             <div className="my-auto flex gap-4 px-5">
+              <div className="relative my-auto"></div>
               <div className="relative my-auto">
                 <Button
-                  className="text-primary"
-                  onClick={() => {
-                    const params = new URLSearchParams(searchParams);
-                    params.set('isSectionFlyoutOpen', 'true');
-                    router.replace(pathname + '?' + params.toString());
-                  }}
-                >
-                  <PlusCircle
-                    size={20}
-                    strokeWidth={1.5}
-                    className="text-white"
-                  />
-                  <span className="pl-2 text-white">Add Section</span>
-                </Button>
-              </div>
-              <div className="relative my-auto">
-                <Button
-                  className="text-primary"
+                  variant="outline"
                   onClick={() => {
                     const params = new URLSearchParams(searchParams);
                     params.set('isUpdateClassFlyoutOpen', 'true');
@@ -96,14 +80,14 @@ export function ClassDetail() {
                   <PencilLine
                     size={18}
                     strokeWidth={2}
-                    className="text-white"
+                    className="text-primary"
                   />
-                  <span className="pl-2 text-white">Edit</span>
+                  <span className="pl-2">Edit</span>
                 </Button>
               </div>
             </div>
           </div>
-          <Tabs defaultValue="Students" className="mt-4">
+          <Tabs defaultValue="Students" className="relative mt-4 p-2">
             <TabsList className="w-full justify-start border-b-2 border-gray-400">
               <TabsTrigger
                 value="Subjects"
@@ -146,6 +130,7 @@ export function ClassDetail() {
                     params.set('isAddSubjectFlyoutOpen', 'true');
                     router.replace(pathname + '?' + params.toString());
                   }}
+                  className="absolute right-0 top-0"
                 >
                   Add Subject
                 </Button>
@@ -160,6 +145,7 @@ export function ClassDetail() {
                   params.set('isAssignStudentFlyoutOpen', 'true');
                   router.replace(pathname + '?' + params.toString());
                 }}
+                className="absolute right-0 top-0"
               >
                 Assign Student
               </Button>
@@ -180,6 +166,7 @@ export function ClassDetail() {
                     );
                     router.replace(pathname + '?' + params.toString());
                   }}
+                  className="absolute right-0 top-0"
                 >
                   Assign Staff
                 </Button>
@@ -189,6 +176,16 @@ export function ClassDetail() {
               <section className="pt-5">
                 <SectionList />
               </section>
+              <Button
+                onClick={() => {
+                  const params = new URLSearchParams(searchParams);
+                  params.set('isSectionFlyoutOpen', 'true');
+                  router.replace(pathname + '?' + params.toString());
+                }}
+                className="absolute right-0 top-0"
+              >
+                Add Section
+              </Button>
             </TabsContent>
             <TabsContent value="Assessments">
               <ExamLists />

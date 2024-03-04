@@ -1,23 +1,12 @@
 'use client';
 
 import { Loader2 } from 'lucide-react';
-import {
-  useParams,
-  usePathname,
-  useRouter,
-  useSearchParams,
-} from 'next/navigation';
-import { Button } from 'ui';
+import { useParams } from 'next/navigation';
 
 import { useGetSubjectListBySectionIdQuery } from '../../../../../../../../lib/queries/subjects/useGetSubjectListBySectionIdQuery';
-import { AddSubjectFlyout } from '../../../_modals/AddSubjectFlyout';
 import { SubjectCard } from './SubjectCard';
 
 export function SubjectList() {
-  const pathname = usePathname();
-  const router = useRouter();
-  const searchParams = useSearchParams();
-
   const params = useParams<{ sectionId: string }>();
   const { data: subjectListResponse, isLoading: isSubjectListLoading } =
     useGetSubjectListBySectionIdQuery(params.sectionId, {
@@ -43,17 +32,6 @@ export function SubjectList() {
 
   return (
     <section className="flex w-full justify-between">
-      <Button
-        variant="default"
-        onClick={async () => {
-          const params = new URLSearchParams(searchParams);
-          params.set('isAddSubjectFlyoutOpen', 'true');
-          router.replace(pathname + '?' + params.toString());
-        }}
-      >
-        Add Subject
-      </Button>
-      <AddSubjectFlyout />
       <div className="flex flex-wrap gap-4">
         {subjectListResponse.map((subjectItem) => (
           <div key={subjectItem.id} className="w-[275px]">

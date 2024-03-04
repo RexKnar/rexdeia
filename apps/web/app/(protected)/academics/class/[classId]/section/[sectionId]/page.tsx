@@ -12,7 +12,9 @@ import { Button, Tabs, TabsContent, TabsList, TabsTrigger, Text } from 'ui';
 import { PageTitle } from '@/components/PageTitle';
 
 import { useGetSectionByIdQuery } from '../../../../../../../lib/queries/section/useGetSectionByIdQuery';
+import { AddSubjectFlyout } from '../../_modals/AddSubjectFlyout';
 import { AssignStudentFlyout } from '../../_modals/AssignStudentFlyout';
+import { SaveAssignStaffFlyout } from './_components/SaveAssignStaffFlyout';
 import { SaveSectionFlyout } from './_components/SaveSectionFlyout';
 import { StaffList } from './_components/StaffList';
 import { StudentList } from './_components/StudentList';
@@ -71,14 +73,15 @@ export default function Page() {
 
                 router.replace(pathname + '?' + params.toString());
               }}
+              variant="outline"
             >
-              <PencilLine size={18} strokeWidth={2} className="text-white" />
-              <span className="pl-2 text-white">Edit</span>
+              <PencilLine size={18} strokeWidth={2} />
+              <span className="pl-2">Edit</span>
             </Button>
           </div>
         </div>
       </div>
-      <Tabs defaultValue="Students" className="mt-4">
+      <Tabs defaultValue="Students" className="relative mt-4 p-2">
         <TabsList className="w-full justify-start border-b-2 border-gray-400">
           <TabsTrigger
             value="Subjects"
@@ -106,9 +109,20 @@ export default function Page() {
           </TabsTrigger>
         </TabsList>
         <TabsContent className="w-full" value="Subjects">
-          <section className="pt-5">
+          <div className="mb-4 flex items-center justify-between">
             <SubjectList />
-          </section>
+            <Button
+              variant="default"
+              onClick={async () => {
+                const params = new URLSearchParams(searchParams);
+                params.set('isAddSubjectFlyoutOpen', 'true');
+                router.replace(pathname + '?' + params.toString());
+              }}
+              className="absolute right-0 top-0"
+            >
+              Add Subject
+            </Button>
+          </div>
         </TabsContent>
         <TabsContent value="Students">
           <section className="pt-5">
@@ -119,6 +133,7 @@ export default function Page() {
                 params.set('isAssignStudentFlyoutOpen', 'true');
                 router.replace(pathname + '?' + params.toString());
               }}
+              className="absolute right-0 top-0"
             >
               Assign Student
             </Button>
@@ -128,14 +143,28 @@ export default function Page() {
         <TabsContent value="Staffs">
           <section className="pt-5">
             <StaffList />
+            <Button
+              variant="default"
+              onClick={async () => {
+                const params = new URLSearchParams(searchParams);
+                params.set('isSaveAssignStaffFlyoutOpen', 'true');
+
+                router.replace(pathname + '?' + params.toString());
+              }}
+              className="absolute right-0 top-0"
+            >
+              Assign staff
+            </Button>
           </section>
         </TabsContent>
         <TabsContent value="Assessments">
           <h1>Page 4</h1>
         </TabsContent>
       </Tabs>
+      <AddSubjectFlyout />
       <SaveSectionFlyout />
       <AssignStudentFlyout />
+      <SaveAssignStaffFlyout />
     </section>
   );
 }
