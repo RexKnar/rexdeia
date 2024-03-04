@@ -48,6 +48,7 @@ export type GetStudentListModel = {
 
 export type AssignStudentsToClassModel = {
   studentIds: string[];
+  sectionId: string;
   groupId: string;
   academicYear: string;
 };

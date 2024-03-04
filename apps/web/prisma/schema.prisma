@@ -355,10 +355,12 @@ model StudentMapping {
   student   Student @relation(fields: [studentId], references: [id])
   classId   String  @db.Uuid
   class     Class   @relation(fields: [classId], references: [id])
+  sectionId String  @db.Uuid
+  section   Section @relation(fields: [sectionId], references: [id])
   groupId   String  @db.Uuid
   group     Group   @relation(fields: [groupId], references: [id])
 
-  @@id([studentId, classId, groupId])
+  @@id([studentId, sectionId, groupId])
 }
 
 model Staff {
@@ -545,6 +547,7 @@ model Section {
   staffId                 String?                   @db.Uuid
   academicSubjectForStaff AcademicSubjectForStaff[]
   classInCharge           ClassInCharge[]
+  studentMapping          StudentMapping[]
 }
 
 model Subject {

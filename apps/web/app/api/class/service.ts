@@ -233,6 +233,7 @@ export async function mapStudentToClass(
               {
                 groupId: studentPayload.groupId,
                 classId: classId,
+                sectionId: studentPayload.sectionId,
               },
             ],
           },
