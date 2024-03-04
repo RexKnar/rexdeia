@@ -15,7 +15,7 @@ import { useGetCityByStateCodeQuery } from '../../../../../lib/queries/common/us
 import { useGetCountryListQuery } from '../../../../../lib/queries/common/useGetCountryListQuery';
 import { useGetStateByCountryCodeQuery } from '../../../../../lib/queries/common/useGetStateListQuery';
 import staffForm from '../data/onboard-staff-fields';
-import { StaffPreviewModal } from '../models/staffPreviewModel';
+import { StaffPreviewModal } from '../models/StaffPreviewModel';
 
 export function OnboardStaffForm() {
   const searchParams = useSearchParams();

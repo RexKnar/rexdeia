@@ -2,7 +2,6 @@ import { redirect } from 'next/navigation';
 import { getServerSession } from 'next-auth';
 
 import { authOptions } from '../../../../lib/auth';
-import { SaveSubjectFlyout } from './_components/SaveSubjectFlyout';
 import { SubjectsListTable } from './_components/SubjectsListTable';
 import { SubjectsPageHeader } from './_components/SubjectsPageHeader';
 
@@ -18,7 +17,6 @@ export default async function Page() {
       <section className="space-y-2 rounded-md bg-white p-4">
         <SubjectsListTable />
       </section>
-      <SaveSubjectFlyout />
     </section>
   );
 }

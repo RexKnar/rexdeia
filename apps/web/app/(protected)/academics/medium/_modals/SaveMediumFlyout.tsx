@@ -15,15 +15,21 @@ import {
   Text,
 } from 'ui';
 
-import { CreateGroupModel } from '../../../../../../lib/domain/group';
-import { useCreateGroupMutationQuery } from '../../../../../../lib/queries/group/useCreateGroupMutationQuery';
-import { useGetGroupByIdQuery } from '../../../../../../lib/queries/group/useGetGroupByIdQuery';
-import { useUpdateGroupMutationQuery } from '../../../../../../lib/queries/group/useUpdateGroupMutationQuery';
+import { CreateMediumModel } from '../../../../../lib/domain/medium';
+import { useCreateMediumMutationQuery } from '../../../../../lib/queries/medium/useCreateMediumMutationQuery';
+import { useGetMediumByIdQuery } from '../../../../../lib/queries/medium/useGetMediumByIdQuery';
+import { useUpdateMediumMutationQuery } from '../../../../../lib/queries/medium/useUpdateMediumMutationQuery';
 
-export default function SaveGroupFlyout() {
+export function SaveMediumFlyout() {
   const pathname = usePathname();
   const router = useRouter();
   const searchParams = useSearchParams();
+
+  const mediumId = searchParams.get('mediumId');
+  const isOpen = searchParams.get('isMediumFlyoutOpen') === 'true';
+
+  const page = parseInt(searchParams.get('page')) || 1;
+  const limit = parseInt(searchParams.get('limit')) || 10;
 
   const {
     register,
@@ -39,32 +45,26 @@ export default function SaveGroupFlyout() {
     },
   });
 
-  const isOpen = searchParams.get('isGroupFlyoutOpen') === 'true';
-  const groupId = searchParams.get('groupId');
-
-  const page = parseInt(searchParams.get('page')) || 1;
-  const limit = parseInt(searchParams.get('limit')) || 10;
-
   const {
-    isPending: isPendingCreateGroup,
-    mutateAsync: mutateCreateGroupAsync,
-  } = useCreateGroupMutationQuery(page, limit);
+    isPending: isPendingCreateMedium,
+    mutateAsync: mutateCreateMediumAsync,
+  } = useCreateMediumMutationQuery(page, limit);
 
-  const closeFlyout = async () => {
+  const closeMediumFlyout = async () => {
     const params = new URLSearchParams(searchParams);
-    params.set('isGroupFlyoutOpen', 'false');
-    params.delete('groupId');
-
+    params.set('isMediumFlyoutOpen', 'false');
+    params.delete('mediumId');
+    reset();
     router.replace(pathname + '?' + params.toString());
   };
 
-  const { data: getGroupByIdResponse } = useGetGroupByIdQuery(groupId, {
-    enabled: !!groupId,
+  const { data: getMediumByIdResponse } = useGetMediumByIdQuery(mediumId, {
+    enabled: !!mediumId,
   });
 
   useEffect(() => {
-    if (getGroupByIdResponse) {
-      const { name, isActive } = getGroupByIdResponse;
+    if (getMediumByIdResponse) {
+      const { name, isActive } = getMediumByIdResponse;
 
       setValue('name', name);
       setValue('isActive', isActive);
@@ -72,32 +72,32 @@ export default function SaveGroupFlyout() {
       setValue('name', null);
       setValue('isActive', false);
     }
-  }, [getGroupByIdResponse, setValue]);
+  }, [getMediumByIdResponse, setValue]);
 
   const {
-    isPending: isPendingUpdateGroup,
-    mutateAsync: mutateUpdateGroupAsync,
-  } = useUpdateGroupMutationQuery(page, limit);
+    isPending: isPendingUpdateMedium,
+    mutateAsync: mutateUpdateMediumAsync,
+  } = useUpdateMediumMutationQuery(page, limit);
 
-  async function saveGroup(payload: CreateGroupModel) {
+  async function saveMedium(payload: CreateMediumModel) {
     try {
-      if (groupId) {
+      if (mediumId) {
         const updateBatchRequestPayload = {
           ...payload,
-          id: groupId,
+          id: mediumId,
         };
-        await mutateUpdateGroupAsync(updateBatchRequestPayload);
+        await mutateUpdateMediumAsync(updateBatchRequestPayload);
       } else {
         const requestPayload = {
           ...payload,
         };
-        await mutateCreateGroupAsync(requestPayload);
+        await mutateCreateMediumAsync(requestPayload);
       }
     } catch (error) {
       console.error(error);
     } finally {
       setValue('isActive', false);
-      await closeFlyout();
+      await closeMediumFlyout();
       reset();
     }
   }
@@ -109,16 +109,16 @@ export default function SaveGroupFlyout() {
           side="right"
           widthSize="sm"
           className="bg-white p-10"
-          onCloseClick={() => closeFlyout()}
+          onCloseClick={() => closeMediumFlyout()}
         >
-          <form onSubmit={handleSubmit(saveGroup)}>
+          <form onSubmit={handleSubmit(saveMedium)}>
             <SheetHeader>
               <SheetTitle className="mb-5">
                 <div className="sm:grid sm:grid-cols-1 sm:gap-4 md:grid md:grid-cols-1 md:gap-4 lg:grid  lg:grid-cols-[1fr_100px]">
                   <div className="flex items-center">
                     <PlusCircle size={20} strokeWidth={1.5} />
                     <Text variant="lg-semibold" className="ml-2">
-                      {groupId ? 'Update Group' : 'Add Group'}
+                      {mediumId ? 'Update Medium' : 'Add Medium'}
                     </Text>
                   </div>
                   <div className="flex items-center">
@@ -146,7 +146,7 @@ export default function SaveGroupFlyout() {
                   htmlFor="name"
                   className="text-sm font-semibold text-gray-700"
                 >
-                  Group Name
+                  Medium Name
                 </label>
                 <Input
                   {...register('name', {
@@ -162,17 +162,17 @@ export default function SaveGroupFlyout() {
                 <Button
                   size="lg"
                   variant="default"
-                  disabled={isPendingCreateGroup || isPendingUpdateGroup}
-                  aria-disabled={isPendingCreateGroup || isPendingUpdateGroup}
+                  disabled={isPendingCreateMedium || isPendingUpdateMedium}
+                  aria-disabled={isPendingCreateMedium || isPendingUpdateMedium}
                   className="mx-auto flex justify-center px-12 py-4"
                 >
-                  {isPendingCreateGroup ? (
+                  {isPendingCreateMedium ? (
                     <div className="flex items-center justify-center">
                       <Loader2 className="mr-2 h-6 w-6 animate-spin text-white" />
                       Saving
                     </div>
                   ) : (
-                    `${groupId ? 'Update' : 'Save'}`
+                    `${mediumId ? 'Update' : 'Save'}`
                   )}
                 </Button>
               </div>
