@@ -16,6 +16,7 @@ import { useGetClassByIdQuery } from '../../../../../../lib/queries/class/useGet
 import { AddSubjectFlyout } from '../_modals/AddSubjectFlyout';
 import { AssignStudentFlyout } from '../_modals/AssignStudentFlyout';
 import { UpdateClassFlyout } from '../_modals/UpdateClassFlyout';
+import { ExamLists } from './ExamLists';
 import { SectionList } from './SectionList';
 import { StaffList } from './StaffList';
 import { StudentList } from './StudentList';
@@ -190,7 +191,7 @@ export function ClassDetail() {
               </section>
             </TabsContent>
             <TabsContent value="Assessments">
-              <h1>Page 5</h1>
+              <ExamLists />
             </TabsContent>
           </Tabs>
           <UpdateClassFlyout />

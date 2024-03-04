@@ -71,7 +71,7 @@ export default function AddClass() {
 
   return (
     <section className="relative mt-[20px] w-full">
-      <div className="sm:grid sm:grid-cols-1 sm:gap-4 md:grid md:grid-cols-1 md:gap-4 lg:flex lg:justify-between">
+      <div className="sm:grid sm:grid-cols-1 sm:gap-4 md:grid md:grid-cols-1 md:gap-4 lg:grid  lg:grid-cols-[1fr_100px]">
         <div className="flex items-center">
           <Text variant="lg-semibold" className="ml-2 text-2xl">
             New Class
