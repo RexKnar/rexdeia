@@ -75,6 +75,7 @@ export function SubjectTypeFlyout() {
     const params = new URLSearchParams(searchParams);
     params.set('isSubjectTypeFlyoutOpen', 'false');
     params.delete('subjectTypeId');
+    reset();
     router.replace(pathname + '?' + params.toString());
   };
 
@@ -229,7 +230,10 @@ export function SubjectTypeFlyout() {
               <div className="mt-3">
                 <Checkbox
                   {...register('hasMarkEntry')}
-                  onCheckedChange={() => setValue('hasMarkEntry', true)}
+                  checked={watch('hasMarkEntry')}
+                  onCheckedChange={(isChecked) =>
+                    setValue('hasMarkEntry', isChecked === true)
+                  }
                 />
                 <label className="ml-2 text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
                   Has Mark Entry
