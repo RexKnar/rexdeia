@@ -6,12 +6,6 @@ import { useFieldArray, useForm } from 'react-hook-form';
 import {
   Button,
   Input,
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
   Sheet,
   SheetContent,
   SheetHeader,
@@ -20,6 +14,8 @@ import {
   Text,
 } from 'ui';
 
+import { useCreateGradeMutationQuery } from '../../../../../../lib/queries/grade/useCreateGradeMutationQuery';
+
 export function GradeFlyout() {
   const pathname = usePathname();
   const router = useRouter();
@@ -27,9 +23,17 @@ export function GradeFlyout() {
   const isOpen = searchParams.get('isGradeFlyoutOpen') === 'true';
   const [sliderValues, setSliderValues] = useState([[0, 100]]);
 
-  const { control, handleSubmit, register } = useForm({
+  const {
+    control,
+    handleSubmit,
+    watch,
+    reset,
+    register,
+    formState: { errors: fieldErrors },
+  } = useForm({
     defaultValues: {
-      grade: [{ name: '' }],
+      name: '',
+      grade: [{ name: '', slider: [] }],
     },
   });
 
@@ -46,13 +50,39 @@ export function GradeFlyout() {
     name: 'grade' as never,
   });
 
+  const {
+    isPending: isPendingCreateGrade,
+    mutateAsync: mutateCreateGradeAsync,
+  } = useCreateGradeMutationQuery();
+
   const closeFlyout = async () => {
     const params = new URLSearchParams(searchParams);
     params.set('isGradeFlyoutOpen', 'false');
     router.replace(pathname + '?' + params.toString());
+    reset();
+    setSliderValues([[0, 100]]);
   };
 
-  const SaveGrade = async () => {};
+  const SaveGrade = async () => {
+    try {
+      const requestPayload = {
+        name: watch('name'),
+        isActive: true,
+        gradeScales: fields.map((field, index) => ({
+          startValue: sliderValues[index][0].toString(),
+          endValue: sliderValues[index][1].toString(),
+          gradeName: watch(`grade.${index}.name`),
+          remark: 'testing',
+        })),
+      };
+      await mutateCreateGradeAsync(requestPayload);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      await closeFlyout();
+      reset();
+    }
+  };
 
   return (
     <section>
@@ -64,7 +94,7 @@ export function GradeFlyout() {
           onCloseClick={() => closeFlyout()}
         >
           <div className="max-h-[90vh] overflow-y-auto">
-            <form onSubmit={handleSubmit(SaveGrade)} className="">
+            <form onSubmit={handleSubmit(SaveGrade)}>
               <SheetHeader>
                 <SheetTitle className="mb-5">
                   <div className="sm:grid sm:grid-cols-1 sm:gap-4 md:grid md:grid-cols-1 md:gap-4 lg:flex lg:justify-between">
@@ -86,20 +116,17 @@ export function GradeFlyout() {
                   >
                     Grade System Name
                   </label>
-                  <Select>
-                    <SelectTrigger className="w-full">
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectGroup>
-                        <SelectItem value="Numerical Grade">
-                          Numerical Grade
-                        </SelectItem>
-                      </SelectGroup>
-                    </SelectContent>
-                  </Select>
+                  <Input
+                    {...register('name', {
+                      required: 'Grade Name is Required',
+                    })}
+                    autoFocus
+                    className="mt-2"
+                    id="name"
+                    errorMessage={fieldErrors?.name?.message.toString()}
+                  />
                 </div>
-                <div className="mt-6">
+                <div className="mt-8">
                   {fields.length === 0 && (
                     <Button
                       className="border-transparent px-2"
@@ -107,6 +134,7 @@ export function GradeFlyout() {
                       size="sm"
                       onClick={() => {
                         append({ grade: 'grade' });
+                        setSliderValues([...sliderValues, [0, 100]]);
                       }}
                     >
                       <Plus size={20} className="text-center text-white" />
@@ -124,25 +152,23 @@ export function GradeFlyout() {
                           className="text-sm font-semibold text-gray-700"
                         >
                           Grade Levels(
-                          {sliderValues[index]?.[0] !== undefined
-                            ? sliderValues[index][0]
-                            : '25'}{' '}
-                          to{' '}
-                          {sliderValues[index]?.[1] !== undefined
-                            ? sliderValues[index][1]
-                            : '75'}
-                          )
+                          {sliderValues[index]?.[0]} to{' '}
+                          {sliderValues[index]?.[1]})
                         </label>
-                        <Slider
-                          sliderValues={sliderValues[index]}
-                          onValueChange={(value) =>
-                            handleValueChange(index, value)
-                          }
-                          defaultValue={[0, 100]}
-                          max={100}
-                          step={1}
-                          className="mt-4"
-                        />
+                        {sliderValues[index] && (
+                          <Slider
+                            sliderValues={
+                              sliderValues[index] || watch['grade'].slider
+                            }
+                            onValueChange={(value) =>
+                              handleValueChange(index, value)
+                            }
+                            defaultValue={[0, 100]}
+                            max={100}
+                            step={1}
+                            className="mt-4"
+                          />
+                        )}
                       </div>
                       <div className="w-3/12">
                         <label
@@ -152,10 +178,15 @@ export function GradeFlyout() {
                           Grade
                         </label>
                         <Input
-                          {...register(`grade.${index}.name`)}
+                          {...register(`grade.${index}.name`, {
+                            required: 'Name is Required',
+                          })}
                           autoFocus
                           className="mt-2"
                           id="name"
+                          errorMessage={
+                            fieldErrors?.grade?.[index]?.name?.message
+                          }
                         />
                       </div>
                       <div className="mt-8">
@@ -199,6 +230,7 @@ export function GradeFlyout() {
                   size="lg"
                   variant="default"
                   className="mx-auto flex justify-center px-12 py-4"
+                  disabled={isPendingCreateGrade}
                 >
                   Save
                 </Button>

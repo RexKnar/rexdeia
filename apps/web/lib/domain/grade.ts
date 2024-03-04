@@ -2,8 +2,14 @@ export type GradeModel = {
   id: string;
   name: string;
   isActive: boolean;
-  gradeScales: gradeScales[];
+  gradeScales: AddGradeScalesModel[];
   isDeleting?: boolean;
+};
+
+export type GetGrade = {
+  name: string;
+  isActive: boolean;
+  gradeScales: AddGradeScalesModel[];
 };
 
 export type AddGradeModel = Pick<
@@ -16,11 +22,12 @@ export type UpdateGradeModel = Pick<GradeModel, 'id' | 'name' | 'isActive'> & {
 };
 
 export type gradeScales = {
+  name: string;
   id: string;
   startValue: string;
   endValue: string;
   gradeName: string;
-  gradeId: string;
+  gradeId?: string;
   remark: string;
   isDeleting?: boolean;
 };

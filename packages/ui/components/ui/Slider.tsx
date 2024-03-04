@@ -16,7 +16,7 @@ const Slider = React.forwardRef<
   React.ComponentPropsWithoutRef<typeof SliderPrimitive.Root> & {
     sliderValues: number[];
   }
->(({ className, sliderValues, ...props }, ref) => (
+>(({ className, sliderValues = [0, 100], ...props }, ref) => (
   <SliderPrimitive.Root
     ref={ref}
     className={cn(

@@ -134,6 +134,7 @@ export default function AddClass() {
                       key={index}
                       className="border-primary-200 p-1"
                       id="sectionName"
+                      errorMessage={fieldErrors?.section?.message.toString()}
                     />
                   </div>
                   <div>
