@@ -1,4 +1,5 @@
 'use client';
+
 import { Plus, PlusCircle, Trash } from 'lucide-react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import React, { useState } from 'react';
@@ -14,7 +15,7 @@ import {
   Text,
 } from 'ui';
 
-import { useCreateGradeMutationQuery } from '../../../../../../lib/queries/grade/useCreateGradeMutationQuery';
+import { useCreateGradeMutationQuery } from '../../../../../lib/queries/grade/useCreateGradeMutationQuery';
 
 export function GradeFlyout() {
   const pathname = usePathname();

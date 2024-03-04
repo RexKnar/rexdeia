@@ -1,6 +1,7 @@
 'use client';
 
 import { Loader2, PencilLine } from 'lucide-react';
+import dynamic from 'next/dynamic';
 import {
   useParams,
   usePathname,
@@ -13,14 +14,37 @@ import { cn } from 'utils';
 import { PageTitle } from '@/components/PageTitle';
 
 import { useGetClassByIdQuery } from '../../../../../../lib/queries/class/useGetClassByIdQuery';
-import { AddSubjectFlyout } from '../_modals/AddSubjectFlyout';
-import { AssignStudentFlyout } from '../_modals/AssignStudentFlyout';
-import { UpdateClassFlyout } from '../_modals/UpdateClassFlyout';
 import { ExamLists } from './ExamLists';
 import { SectionList } from './SectionList';
 import { StaffList } from './StaffList';
 import { StudentList } from './StudentList';
 import { SubjectList } from './SubjectList';
+
+const AddSubjectFlyout = dynamic(() =>
+  import('../_modals/AddSubjectFlyout').then((mod) => mod.AddSubjectFlyout)
+);
+
+const AssignStudentFlyout = dynamic(() =>
+  import('../_modals/AssignStudentFlyout').then(
+    (mod) => mod.AssignStudentFlyout
+  )
+);
+
+const UpdateClassFlyout = dynamic(() =>
+  import('../_modals/UpdateClassFlyout').then((mod) => mod.UpdateClassFlyout)
+);
+
+const AssignStaffClassDetailPageFlyout = dynamic(() =>
+  import('../_modals/AssignStaffClassDetailPageFlyout').then(
+    (mod) => mod.AssignStaffClassDetailPageFlyout
+  )
+);
+
+const SaveSectionFlyout = dynamic(() =>
+  import('../section/[sectionId]/_modals/SaveSectionFlyout').then(
+    (mod) => mod.SaveSectionFlyout
+  )
+);
 
 export function ClassDetail() {
   const pathname = usePathname();
@@ -194,6 +218,8 @@ export function ClassDetail() {
           <UpdateClassFlyout />
           <AssignStudentFlyout />
           <AddSubjectFlyout />
+          <SaveSectionFlyout />
+          <AssignStaffClassDetailPageFlyout />
         </>
       ) : (
         ' Details Not Found'

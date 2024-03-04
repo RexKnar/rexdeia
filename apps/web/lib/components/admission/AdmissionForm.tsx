@@ -1,12 +1,11 @@
 'use client';
 
 import { Loader2, XCircle } from 'lucide-react';
+import dynamic from 'next/dynamic';
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Button, Input, RadioGroup, RadioGroupItem } from 'ui';
 
-import { AdmissionPreviewFlyout } from '../../../app/(protected)/admission/add/_components/AdmissionPreviewFlyout';
-import { AdmissionShareFlyout } from '../../../app/(protected)/admission/add/_components/AdmissionShareFlyout';
 import { makeAPICall } from '../../api';
 import { ADD_ADMISSION } from '../../endpoints';
 import { useGetAdmissionFormShareDetailsQuery } from '../../queries/useGetAdmissionFormShareDetailsQuery';
@@ -16,6 +15,18 @@ type AdmissionFormProps = {
   formId: string;
   formConfig: Record<string, any>;
 };
+
+const AdmissionPreviewFlyout = dynamic(() =>
+  import(
+    '../../../app/(protected)/admission/add/_models/AdmissionPreviewFlyout'
+  ).then((mod) => mod.AdmissionPreviewFlyout)
+);
+
+const AdmissionShareFlyout = dynamic(() =>
+  import(
+    '../../../app/(protected)/admission/add/_models/AdmissionShareFlyout'
+  ).then((mod) => mod.AdmissionShareFlyout)
+);
 
 export function AdmissionForm({ formId, formConfig }: AdmissionFormProps) {
   const {

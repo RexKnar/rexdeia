@@ -22,8 +22,8 @@ import {
   Text,
   useToast,
 } from 'ui';
-import { copyToClipboard } from 'utils';
 
+import { copyToClipboard } from '../../../../../../../packages/utils';
 import { useCreateShareDetailsMutationQuery } from '../../../../../lib/queries/share-form/useCreateShareDetailsMutationQuery';
 import { useUpdateShareDetailsMutationQuery } from '../../../../../lib/queries/share-form/useUpdateShareDetailsMutationQuery';
 import { useGetAdmissionFormShareDetailsQuery } from '../../../../../lib/queries/useGetAdmissionFormShareDetailsQuery';

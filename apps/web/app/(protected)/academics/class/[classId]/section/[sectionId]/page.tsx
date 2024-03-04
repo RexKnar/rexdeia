@@ -1,6 +1,7 @@
 'use client';
 
 import { Loader2, PencilLine } from 'lucide-react';
+import dynamic from 'next/dynamic';
 import {
   useParams,
   usePathname,
@@ -13,12 +14,25 @@ import { PageTitle } from '@/components/PageTitle';
 
 import { useGetSectionByIdQuery } from '../../../../../../../lib/queries/section/useGetSectionByIdQuery';
 import { AddSubjectFlyout } from '../../_modals/AddSubjectFlyout';
-import { AssignStudentFlyout } from '../../_modals/AssignStudentFlyout';
-import { SaveAssignStaffFlyout } from './_components/SaveAssignStaffFlyout';
-import { SaveSectionFlyout } from './_components/SaveSectionFlyout';
 import { StaffList } from './_components/StaffList';
 import { StudentList } from './_components/StudentList';
 import { SubjectList } from './_components/SubjectList';
+
+const AssignStudentFlyout = dynamic(() =>
+  import('../../_modals/AssignStudentFlyout').then(
+    (mod) => mod.AssignStudentFlyout
+  )
+);
+
+const SaveAssignStaffFlyout = dynamic(() =>
+  import('./_modals/SaveAssignStaffFlyout').then(
+    (mod) => mod.SaveAssignStaffFlyout
+  )
+);
+
+const SaveSectionFlyout = dynamic(() =>
+  import('./_modals/SaveSectionFlyout').then((mod) => mod.SaveSectionFlyout)
+);
 
 export default function Page() {
   const pathname = usePathname();

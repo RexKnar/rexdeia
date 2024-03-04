@@ -2,7 +2,6 @@ import { redirect } from 'next/navigation';
 import { getServerSession } from 'next-auth';
 
 import { authOptions } from '../../../../../lib/auth';
-import { ExamConfigureFlyout } from './_components/_modals/ExamConfigureFlyout';
 import { AddExamLayout } from './_components/AddExam-layout';
 import { PageHeader } from './_components/PageHeader';
 
@@ -18,7 +17,6 @@ export default async function Page() {
       <section className="space-y-2 rounded-md p-4">
         <AddExamLayout />
       </section>
-      <ExamConfigureFlyout />
     </section>
   );
 }

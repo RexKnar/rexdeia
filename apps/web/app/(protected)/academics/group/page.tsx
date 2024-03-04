@@ -3,7 +3,6 @@ import { getServerSession } from 'next-auth';
 import { Suspense } from 'react';
 
 import { authOptions } from '../../../../lib/auth';
-import SaveGroupFlyout from './_components/_modals/SaveGroupFlyout';
 import { GroupListTable } from './_components/GroupListTable';
 import { GroupPageHeader } from './_components/GroupPageHeader';
 
@@ -22,7 +21,6 @@ export default async function Page() {
         <Suspense>
           <GroupListTable />
         </Suspense>
-        <SaveGroupFlyout />
       </section>
     </section>
   );
