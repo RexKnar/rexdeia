@@ -110,10 +110,10 @@ const columns: ColumnDef<SubjectTypeModel>[] = [
         <span
           className={cn(
             'ml-1 rounded px-2 py-1 text-center text-sm font-medium text-white',
-            row.original.hasMarkEntry === true ? 'bg-green-500' : 'bg-red-500'
+            row.original.hasMarkEntry ? 'bg-green-500' : 'bg-red-500'
           )}
         >
-          {row.original.hasMarkEntry === true ? 'yes' : 'no'}
+          {row.original.hasMarkEntry ? 'yes' : 'no'}
         </span>
       );
     },
