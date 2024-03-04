@@ -65,6 +65,8 @@ export const DELETE_SUBJECT_TYPE_BY_ID = `DELETE_SUBJECT_TYPE_BY_ID`;
 export const DELETE_SUBJECT_FORMAT_BY_ID = `DELETE_SUBJECT_FORMAT_BY_ID`;
 export const GET_SUBJECT_LIST_BY_SECTION_ID = `GET_SUBJECT_LIST_BY_SECTION_ID`;
 export const DELETE_STUDENT_BY_ID = `DELETE_STUDENT_BY_ID`;
+export const ADD_GRADE = `ADD_GRADE`;
+export const GET_GRADE_LIST = `GET_GRADE_LIST`;
 export const ADD_STAFF = `ADD_STAFF`;
 export const GET_STAFF_LIST = `GET_STAFF_LIST`;
 export const GET_STAFF_BY_ID = `GET_STAFF_BY_ID`;
@@ -186,6 +188,14 @@ export default <EndpointDetails>{
   [ADD_CLASS]: {
     requestType: `POST`,
     endpoint: `/api/class`,
+  },
+  [ADD_GRADE]: {
+    requestType: 'POST',
+    endpoint: `/api/grade`,
+  },
+  [GET_GRADE_LIST]: {
+    requestType: `GET`,
+    endpoint: `/api/grade`,
   },
   [GET_CLASS_LIST]: {
     requestType: `GET`,

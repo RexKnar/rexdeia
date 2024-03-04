@@ -1,5 +1,6 @@
 'use client';
 
+import { useGetBatchesListQuery } from 'lib/queries/batches/useGetBatchesListQuery';
 import { PlusCircle, Search, Trash } from 'lucide-react';
 import {
   useParams,
@@ -73,6 +74,10 @@ export function AssignStaffClassDetailPageFlyout() {
     page,
     limit,
   });
+  const { data: batchesList } = useGetBatchesListQuery({
+    page,
+    limit,
+  });
   const params = useParams<{ classId: string }>();
 
   const { data: sectionListResponse } = useGetAllSectionByClassIdQuery(
@@ -95,9 +100,7 @@ export function AssignStaffClassDetailPageFlyout() {
         data: formValues,
         classId: params.classId,
       };
-      await mutateCreateStaffsAsync(
-        payload as LinkStaffModel & { classId: string }
-      );
+      mutateCreateStaffsAsync(payload as LinkStaffModel & { classId: string });
     } finally {
       await closeFlyout();
       reset();
@@ -287,7 +290,7 @@ export function AssignStaffClassDetailPageFlyout() {
                             <Controller
                               key={item.id}
                               control={control}
-                              name={`${index}.inCharge`}
+                              name={`${index}.sectionInCharge`}
                               render={({ field }) => {
                                 return (
                                   <label className="me-5">
@@ -311,14 +314,58 @@ export function AssignStaffClassDetailPageFlyout() {
                                 );
                               }}
                             />
-
-                            <span>{item.name}</span>
                           </label>
                         ))}
                       </div>
-                      {errors[`${index}.inCharge`] && (
-                        <p>{errors[`${index}.inCharge`]?.message.toString()}</p>
+                      {errors[`${index}.sectionInCharge`] && (
+                        <p>
+                          {errors[
+                            `${index}.sectionInCharge`
+                          ]?.message.toString()}
+                        </p>
                       )}
+                    </div>
+                    <div className="w-full">
+                      <label
+                        htmlFor="AcademicYear"
+                        className="text-sm font-semibold text-gray-700"
+                      >
+                        AcademicYear
+                      </label>
+                      <div className="relative w-full">
+                        <Select
+                          autoComplete="off"
+                          {...register(`${index}.academicYearId`, {
+                            required: true,
+                          })}
+                          value={watch(`${index}.academicYearId`)}
+                          onValueChange={(value) => {
+                            if (value) {
+                              setValue(`${index}.academicYearId`, value);
+                            }
+                          }}
+                        >
+                          <SelectTrigger className="mt-2 w-full">
+                            <SelectValue />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectGroup>
+                              {batchesList?.data?.map((item) => (
+                                <SelectItem key={item.id} value={item.id}>
+                                  {item.name}
+                                </SelectItem>
+                              ))}
+                            </SelectGroup>
+                          </SelectContent>
+                        </Select>
+                        <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
+                          <Search className="text-primary-200" size={20} />
+                        </div>
+                      </div>
+
+                      <p>
+                        {errors[`${index}.academicYearId`]?.message.toString()}
+                      </p>
                     </div>
                   </section>
                 ))}
