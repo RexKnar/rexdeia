@@ -96,7 +96,7 @@ importers:
         version: 7.103.0(next@14.1.0)(react@18.2.0)
       '@sentry/utils':
         specifier: ^7.93.0
-        version: 7.93.0
+        version: 7.105.0
       '@tanstack/react-query':
         specifier: ^5.13.4
         version: 5.24.8(react@18.2.0)
@@ -2751,8 +2751,8 @@ packages:
     engines: {node: '>=8'}
     dev: false
 
-  /@sentry/types@7.93.0:
-    resolution: {integrity: sha512-UnzUccNakhFRA/esWBWP+0v7cjNg+RilFBQC03Mv9OEMaZaS29zSbcOGtRzuFOXXLBdbr44BWADqpz3VW0XaNw==}
+  /@sentry/types@7.105.0:
+    resolution: {integrity: sha512-80o0KMVM+X2Ym9hoQxvJetkJJwkpCg7o6tHHFXI+Rp7fawc2iCMTa0IRQMUiSkFvntQLYIdDoNNuKdzz2PbQGA==}
     engines: {node: '>=8'}
     dev: false
 
@@ -2763,11 +2763,11 @@ packages:
       '@sentry/types': 7.103.0
     dev: false
 
-  /@sentry/utils@7.93.0:
-    resolution: {integrity: sha512-Iovj7tUnbgSkh/WrAaMrd5UuYjW7AzyzZlFDIUrwidsyIdUficjCG2OIxYzh76H6nYIx9SxewW0R54Q6XoB4uA==}
+  /@sentry/utils@7.105.0:
+    resolution: {integrity: sha512-YVAV0c2KLM8+VZCicQ/E/P2+J9Vs0hGhrXwV7w6ZEAtvxrg4oF270toL1WRhvcaf8JO4J1v4V+LuU6Txs4uEeQ==}
     engines: {node: '>=8'}
     dependencies:
-      '@sentry/types': 7.93.0
+      '@sentry/types': 7.105.0
     dev: false
 
   /@sentry/vercel-edge@7.103.0:
