@@ -52,7 +52,7 @@ export type LinkStaffModel = {
   data: LinkStaffToSectionModel[];
 };
 
-export type MapStaffToClassModel = {
+export type AssignStaffToClassRequestModel = {
   staffId: string;
   subjectId: string;
   academicYearId: string;
@@ -61,5 +61,5 @@ export type MapStaffToClassModel = {
 };
 
 export type MapStaffToClassModelEntity = {
-  data: MapStaffToClassModel[];
+  data: AssignStaffToClassRequestModel[];
 };

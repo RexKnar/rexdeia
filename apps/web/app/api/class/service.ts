@@ -5,9 +5,9 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from '../../../lib/auth';
 import { db } from '../../../lib/db';
 import {
+  AssignStaffToClassRequestModel,
   CreateClassModel,
   MapEntitiesToClassModel,
-  MapStaffToClassModel,
   UpdateClassModel,
 } from '../../../lib/domain/class';
 import { CreateSectionModel } from '../../../lib/domain/section';
@@ -243,41 +243,45 @@ export async function mapStudentToClass(
   );
 }
 export async function assignStaffToClassWithSubject(
-  staffPayload: MapStaffToClassModel
+  payload: AssignStaffToClassRequestModel
 ) {
-  await db.$transaction(async (prisma) => {
-    staffPayload.sectionIds.map((sectionId) => {
-      prisma.section.update({
-        where: { id: sectionId },
-        data: {
-          academicSubjectForStaff: {
-            create: [
-              {
-                subjectId: staffPayload.subjectId,
-                staffId: staffPayload.staffId,
-                academicYearId: staffPayload.academicYearId,
-              },
-            ],
+  const mappedStaffResponse = await db.$transaction(async (prisma) => {
+    const updatedResponse = await Promise.all([
+      ...payload.sectionIds.map((sectionId) =>
+        prisma.section.update({
+          where: { id: sectionId },
+          data: {
+            academicSubjectForStaff: {
+              create: [
+                {
+                  subjectId: payload.subjectId,
+                  staffId: payload.staffId,
+                  academicYearId: payload.academicYearId,
+                },
+              ],
+            },
           },
-        },
-      });
-    });
-    staffPayload.sectionInCharge.map(async (sectionId) => {
-      return await db.section.update({
-        where: { id: sectionId },
-        data: {
-          classInCharge: {
-            create: [
-              {
-                staffId: staffPayload.staffId,
-                academicYearId: staffPayload.academicYearId,
-              },
-            ],
+        })
+      ),
+      ...payload.sectionInCharge.map((sectionId) =>
+        prisma.section.update({
+          where: { id: sectionId },
+          data: {
+            classInCharge: {
+              create: [
+                {
+                  staffId: payload.staffId,
+                  academicYearId: payload.academicYearId,
+                },
+              ],
+            },
           },
-        },
-      });
-    });
+        })
+      ),
+    ]);
+    return updatedResponse;
   });
+  return mappedStaffResponse;
 }
 
 export async function unMapStaffsFromClass(
