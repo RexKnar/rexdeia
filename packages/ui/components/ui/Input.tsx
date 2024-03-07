@@ -19,18 +19,16 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
           ref={ref}
           {...props}
         />
-        {errorMessage ? (
-          <p
-            className={cn(
-              'h-2 p-1 text-sm text-red-600',
-              Boolean(errorMessage)
-                ? 'opacity-1 transition-opacity duration-300'
-                : 'opacity-0 transition-opacity duration-300',
-            )}
-          >
-            {errorMessage}
-          </p>
-        ) : null}
+        <p
+          className={cn(
+            'h-2 p-1 text-sm text-red-600',
+            Boolean(errorMessage)
+              ? 'opacity-1 transition-opacity duration-300'
+              : 'opacity-0 transition-opacity duration-300',
+          )}
+        >
+          {errorMessage}
+        </p>
       </>
     );
   },
