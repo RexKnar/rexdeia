@@ -24,12 +24,6 @@ const AddSubjectFlyout = dynamic(() =>
   import('../_modals/AddSubjectFlyout').then((mod) => mod.AddSubjectFlyout)
 );
 
-const AssignStudentFlyout = dynamic(() =>
-  import('../_modals/AssignStudentFlyout').then(
-    (mod) => mod.AssignStudentFlyout
-  )
-);
-
 const UpdateClassFlyout = dynamic(() =>
   import('../_modals/UpdateClassFlyout').then((mod) => mod.UpdateClassFlyout)
 );
@@ -163,15 +157,10 @@ export function ClassDetail() {
 
             <TabsContent value="Students">
               <Button
-                variant="default"
-                onClick={async () => {
-                  const params = new URLSearchParams(searchParams);
-                  params.set('isAssignStudentFlyoutOpen', 'true');
-                  router.replace(pathname + '?' + params.toString());
-                }}
-                className="absolute right-0 top-0"
+                variant="outline"
+                onClick={() => router.push(`${params.classId}/assign/student`)}
               >
-                Assign Student
+                Assign Students
               </Button>
               <StudentList />
             </TabsContent>
@@ -216,7 +205,7 @@ export function ClassDetail() {
             </TabsContent>
           </Tabs>
           <UpdateClassFlyout />
-          <AssignStudentFlyout />
+
           <AddSubjectFlyout />
           <SaveSectionFlyout />
           <AssignStaffClassDetailPageFlyout />
