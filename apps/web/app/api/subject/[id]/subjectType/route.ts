@@ -4,7 +4,7 @@ import { authOptions } from 'lib/auth';
 import { NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 
-import { getSubjectTypeBySubjectId } from '../../service';
+import { getAssessmentFormatBySubjectId } from '../../service';
 
 /**
  * @swagger
@@ -42,9 +42,10 @@ export async function GET(request: Request, { params: { id } }) {
   }
 
   try {
-    const subjectTypeBySubjectId = await getSubjectTypeBySubjectId(id);
+    const assessmentFormatBySubjectId =
+      await getAssessmentFormatBySubjectId(id);
 
-    return new NextResponse(JSON.stringify(subjectTypeBySubjectId), {
+    return new NextResponse(JSON.stringify(assessmentFormatBySubjectId), {
       status: StatusCodes.OK,
     });
   } catch (e) {

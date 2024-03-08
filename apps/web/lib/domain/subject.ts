@@ -7,15 +7,15 @@ export type SubjectModel = {
   elective: string;
   sectionIds: string[];
   subjectTypeId: string;
-  subjectFormatIds: string[];
+  assessmentFormatIds: string[];
   groupIds: string[];
   regulationId: string;
   isDeleting?: boolean;
   isUpdating?: boolean;
   isNewlyAdded?: boolean;
   SubjectType?: SubjectTypeModel;
-  SubjectFormat: SubjectFormatModel[];
-  subjectToSubjectFormat: string[];
+  assessmentFormat: AssessmentFormatModel[];
+  subjectToAssessmentFormat: string[];
 };
 
 export type CreateSubjectModel = Pick<
@@ -24,7 +24,7 @@ export type CreateSubjectModel = Pick<
   | 'isActive'
   | 'description'
   | 'subjectTypeId'
-  | 'subjectFormatIds'
+  | 'assessmentFormatIds'
   | 'groupIds'
   | 'elective'
   | 'regulationId'
@@ -35,7 +35,7 @@ export type UpdateSubjectModel = Pick<
   'name' | 'isActive' | 'description' | 'subjectTypeId' | 'id'
 >;
 
-export type SubjectTypeModel = {
+export type AssessmentFormatModel = {
   id: string;
   name: string;
   parentId?: string;
@@ -47,17 +47,17 @@ export type SubjectTypeModel = {
   isNewlyAdded?: boolean;
 };
 
-export type CreateSubjectTypeModel = Pick<
-  SubjectTypeModel,
+export type CreateAssessmentFormatModel = Pick<
+  AssessmentFormatModel,
   'name' | 'isActive' | 'parentId' | 'hasMarkEntry'
 >;
 
-export type UpdateSubjectTypeModel = Pick<
-  SubjectTypeModel,
+export type UpdateAssessmentFormatModel = Pick<
+  AssessmentFormatModel,
   'id' | 'name' | 'isActive' | 'parentId' | 'hasMarkEntry'
 >;
 
-export type SubjectFormatModel = {
+export type SubjectTypeModel = {
   id: string;
   name: string;
   isActive: boolean;
@@ -67,12 +67,12 @@ export type SubjectFormatModel = {
   isNewlyAdded?: boolean;
 };
 
-export type CreateSubjectFormatModel = Pick<
-  SubjectFormatModel,
+export type CreateSubjectTypeModel = Pick<
+  SubjectTypeModel,
   'name' | 'isActive'
 >;
 
-export type UpdateSubjectFormatModel = Pick<
-  SubjectFormatModel,
+export type UpdateSubjectTypeModel = Pick<
+  SubjectTypeModel,
   'name' | 'isActive' | 'id'
 >;

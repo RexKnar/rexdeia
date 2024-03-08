@@ -31,7 +31,7 @@ export const UPDATE_CLASS_BY_ID = `UPDATE_CLASS_BY_ID`;
 export const GET_REGULATION_LIST = `GET_REGULATION_LIST`;
 export const GET_REGULATION_BY_ID = `GET_REGULATION_BY_ID`;
 export const GET_MEDIUM_BY_ID = `GET_MEDIUM_BY_ID`;
-export const GET_SUBJECT_TYPE_BY_ID = `GET_SUBJECT_TYPE_BY_ID`;
+export const GET_ASSESSMENT_FORMAT_BY_ID = `GET_ASSESSMENT_FORMAT_BY_ID`;
 export const UPDATE_REGULATION_BY_ID = `UPDATE_REGULATION_BY_ID`;
 export const UPDATE_MEDIUM_BY_ID = `UPDATE_MEDIUM_BY_ID`;
 export const GET_GROUP_LIST = `GET_GROUP_LIST`;
@@ -51,18 +51,18 @@ export const GET_SECTION_BY_ID = `GET_SECTION_BY_ID`;
 export const DELETE_SUBJECT_BY_ID = `DELETE_SUBJECT_BY_ID`;
 export const UPDATE_SUBJECT_BY_ID = `UPDATE_SUBJECT_BY_ID`;
 export const GET_SUBJECT_BY_ID = `GET_SUBJECT_BY_ID`;
-export const GET_SUBJECT_TYPE_LIST = `GET_SUBJECT_TYPE_LIST`;
+export const GET_ASSESSMENT_FORMAT_LIST = `GET_ASSESSMENT_FORMAT_LIST`;
+export const ADD_ASSESSMENT_FORMAT = 'ADD_ASSESSMENT_FORMAT';
 export const ADD_SUBJECT_TYPE = 'ADD_SUBJECT_TYPE';
-export const ADD_SUBJECT_FORMAT = 'ADD_SUBJECT_FORMAT';
+export const UPDATE_ASSESSMENT_FORMAT_BY_ID = `UPDATE_ASSESSMENT_FORMAT_BY_ID`;
 export const UPDATE_SUBJECT_TYPE_BY_ID = `UPDATE_SUBJECT_TYPE_BY_ID`;
-export const UPDATE_SUBJECT_FORMAT_BY_ID = `UPDATE_SUBJECT_FORMAT_BY_ID`;
-export const GET_SUBJECT_FORMAT_BY_ID = `GET_SUBJECT_FORMAT_BY_ID`;
-export const GET_SUBJECT_FORMAT_LIST = `GET_SUBJECT_FORMAT_LIST`;
+export const GET_SUBJECT_TYPE_BY_ID = `GET_SUBJECT_TYPE_BY_ID`;
+export const GET_SUBJECT_TYPE_LIST = `GET_SUBJECT_TYPE_LIST`;
 export const UPDATE_SECTION_BY_ID = `UPDATE_SECTION_BY_ID`;
 export const DELETE_GROUP_BY_ID = `DELETE_GROUP_BY_ID`;
 export const DELETE_MEDIUM_BY_ID = `DELETE_MEDIUM_BY_ID`;
+export const DELETE_ASSESSMENT_FORMAT_BY_ID = `DELETE_ASSESSMENT_FORMAT_BY_ID`;
 export const DELETE_SUBJECT_TYPE_BY_ID = `DELETE_SUBJECT_TYPE_BY_ID`;
-export const DELETE_SUBJECT_FORMAT_BY_ID = `DELETE_SUBJECT_FORMAT_BY_ID`;
 export const GET_SUBJECT_LIST_BY_SECTION_ID = `GET_SUBJECT_LIST_BY_SECTION_ID`;
 export const DELETE_STUDENT_BY_ID = `DELETE_STUDENT_BY_ID`;
 export const ADD_GRADE = `ADD_GRADE`;
@@ -82,7 +82,7 @@ export const GET_STAFF_LIST_BY_CLASS_ID = `GET_STAFF_LIST_BY_CLASS_ID`;
 export const GET_STUDENT_LIST_BY_CLASS_ID = `GET_STUDENT_LIST_BY_CLASS_ID`;
 export const ASSIGN_STAFF_BY_CLASS_ID = `ASSIGN_STAFF_BY_CLASS_ID`;
 export const ADD_SUBJECT_BY_CLASS_ID = `ADD_SUBJECT_BY_CLASS_ID`;
-export const ADD_SUBJECT_TYPE_WITH_PARENT_ID = `ADD_SUBJECT_TYPE_WITH_PARENT_ID`;
+export const ADD_ASSESSMENT_FORMAT_WITH_PARENT_ID = `ADD_ASSESSMENT_FORMAT_WITH_PARENT_ID`;
 
 export default <EndpointDetails>{
   [REGISTER_USER]: {
@@ -245,13 +245,13 @@ export default <EndpointDetails>{
     requestType: `PUT`,
     endpoint: `/api/group/[id]`,
   },
-  [GET_SUBJECT_TYPE_BY_ID]: {
+  [GET_ASSESSMENT_FORMAT_BY_ID]: {
     requestType: `GET`,
-    endpoint: `/api/subject/subjectType/[id]`,
+    endpoint: `/api/subject/assessment-format/[id]`,
   },
-  [UPDATE_SUBJECT_TYPE_BY_ID]: {
+  [UPDATE_ASSESSMENT_FORMAT_BY_ID]: {
     requestType: `PUT`,
-    endpoint: `/api/subject/subjectType/[id]`,
+    endpoint: `/api/subject/assessment-format/[id]`,
   },
   [GET_BATCHES_LIST]: {
     requestType: `GET`,
@@ -313,33 +313,33 @@ export default <EndpointDetails>{
     requestType: `DELETE`,
     endpoint: `/api/medium/[id]`,
   },
+  [DELETE_ASSESSMENT_FORMAT_BY_ID]: {
+    requestType: `DELETE`,
+    endpoint: `/api/subject/assessment-format/[id]`,
+  },
   [DELETE_SUBJECT_TYPE_BY_ID]: {
     requestType: `DELETE`,
     endpoint: `/api/subject/subjectType/[id]`,
   },
-  [DELETE_SUBJECT_FORMAT_BY_ID]: {
-    requestType: `DELETE`,
-    endpoint: `/api/subject/subjectFormat/[id]`,
-  },
-  [GET_SUBJECT_TYPE_LIST]: {
+  [GET_ASSESSMENT_FORMAT_LIST]: {
     requestType: `GET`,
-    endpoint: `/api/subject/subjectType`,
+    endpoint: `/api/subject/assessment-format`,
+  },
+  [ADD_ASSESSMENT_FORMAT]: {
+    requestType: `POST`,
+    endpoint: `/api/subject/assessment-format`,
+  },
+  [ADD_ASSESSMENT_FORMAT_WITH_PARENT_ID]: {
+    requestType: `POST`,
+    endpoint: `/api/subject/assessment-format/[id]`,
   },
   [ADD_SUBJECT_TYPE]: {
     requestType: `POST`,
     endpoint: `/api/subject/subjectType`,
   },
-  [ADD_SUBJECT_TYPE_WITH_PARENT_ID]: {
-    requestType: `POST`,
-    endpoint: `/api/subject/subjectType/[id]`,
-  },
-  [ADD_SUBJECT_FORMAT]: {
-    requestType: `POST`,
-    endpoint: `/api/subject/subjectFormat`,
-  },
-  [GET_SUBJECT_FORMAT_LIST]: {
+  [GET_SUBJECT_TYPE_LIST]: {
     requestType: `GET`,
-    endpoint: `/api/subject/subjectFormat`,
+    endpoint: `/api/subject/subjectType`,
   },
   [GET_SUBJECT_LIST_BY_SECTION_ID]: {
     requestType: `GET`,
@@ -365,13 +365,13 @@ export default <EndpointDetails>{
     requestType: `GET`,
     endpoint: `/api/class/[id]/subjects`,
   },
-  [UPDATE_SUBJECT_FORMAT_BY_ID]: {
+  [UPDATE_SUBJECT_TYPE_BY_ID]: {
     requestType: `PUT`,
-    endpoint: `/api/subject/subjectFormat/[id]`,
+    endpoint: `/api/subject/subjectType/[id]`,
   },
-  [GET_SUBJECT_FORMAT_BY_ID]: {
+  [GET_SUBJECT_TYPE_BY_ID]: {
     requestType: `GET`,
-    endpoint: `/api/subject/subjectFormat/[id]`,
+    endpoint: `/api/subject/subjectType/[id]`,
   },
   [GET_ALL_SECTIONS_BY_CLASS_ID]: {
     requestType: `GET`,

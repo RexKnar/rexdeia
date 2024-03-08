@@ -1,26 +1,27 @@
 import { captureException } from '@sentry/nextjs';
 import { StatusCodes } from 'http-status-codes';
+import { authOptions } from 'lib/auth';
 import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 
-import { authOptions } from '../../../../../lib/auth';
 import {
-  deleteSubjectFormatById,
-  getSubjectFormatById,
-  updateSubjectFormatById,
+  addAssessmentFormat,
+  deleteAssessmentFormat,
+  getAssessmentFormatById,
+  updateAssessmentFormatById,
 } from '../service';
 
 /**
  * @swagger
- * /api/subject/subjectFormat/{id}:
+ * /api/subject/assessmentFormat/{id}:
  *     put:
- *       summary: update subjectFormat by Id
- *       description: update subjectFormat by Id
+ *       summary: update AssessmentFormat by Id
+ *       description: update AssessmentFormat by Id
  *       parameters:
  *         - name: id
  *           in: path
  *           required: true
- *           description: Unique identifier of the subjectFormat.
+ *           description: Unique identifier of the AssessmentFormat.
  *           schema:
  *             type: string
  *       requestBody:
@@ -31,11 +32,11 @@ import {
  *               type: object
  *       responses:
  *         '200':
- *           description: SubjectFormat updated successfully.
+ *           description: AssessmentFormat updated successfully.
  *           content:
  *             application/json:
  *               schema:
- *                 # Define the schema of your subjectFormat object here
+ *                 # Define the schema of your AssessmentFormat object here
  *         '400':
  *           description: Bad request due to validation error.
  *         '401':
@@ -54,9 +55,9 @@ export async function PUT(request: Request, { params: { id } }) {
   try {
     const payload = await request.json();
 
-    const subjectFormat = await updateSubjectFormatById(id, payload);
+    const assessmentFormatById = await updateAssessmentFormatById(id, payload);
 
-    return new NextResponse(JSON.stringify(subjectFormat), {
+    return new NextResponse(JSON.stringify(assessmentFormatById), {
       status: StatusCodes.OK,
     });
   } catch (e) {
@@ -72,24 +73,24 @@ export async function PUT(request: Request, { params: { id } }) {
 
 /**
  * @swagger
- * /api/subject/subjectFormat/{id}:
+ * /api/subject/assessmentFormat/{id}:
  *     get:
- *       summary: Fetch subjectFormat By Id
- *       description: Fetch subjectFormat By Id
+ *       summary: Fetch AssessmentFormat By Id
+ *       description: Fetch AssessmentFormat By Id
  *       parameters:
  *         - name: id
  *           in: path
  *           required: true
- *           description: Unique identifier of the subjectFormat.
+ *           description: Unique identifier of the Subject Type.
  *           schema:
  *             type: string
  *       responses:
  *         '200':
- *           description: SubjectType are fetched successfully.
+ *           description: AssessmentFormat are fetched successfully.
  *           content:
  *             application/json:
  *               schema:
- *                 # Define the schema of your subjectFormat object here
+ *                 # Define the schema of your AssessmentFormat object here
  *         '400':
  *           description: Bad request due to validation error.
  *         '401':
@@ -106,9 +107,9 @@ export async function GET(request: Request, { params: { id } }) {
   }
 
   try {
-    const subjectFormat = await getSubjectFormatById(id);
+    const AssessmentFormatById = await getAssessmentFormatById(id);
 
-    return new NextResponse(JSON.stringify(subjectFormat), {
+    return new NextResponse(JSON.stringify(AssessmentFormatById), {
       status: StatusCodes.OK,
     });
   } catch (e) {
@@ -124,24 +125,24 @@ export async function GET(request: Request, { params: { id } }) {
 
 /**
  * @swagger
- * /api/subject/subjectFormat/{id}:
+ * /api/subject/assessmentFormat/{id}:
  *     delete:
- *       summary: Delete subjectFormat by Id
- *       description: Delete subjectFormat by Id
+ *       summary: Delete assessmentFormat by Id
+ *       description: Delete assessmentFormat by Id
  *       parameters:
  *         - name: id
  *           in: path
  *           required: true
- *           description: Unique identifier of the subjectFormat.
+ *           description: Unique identifier of the AssessmentFormat.
  *           schema:
  *             type: string
  *       responses:
  *         '200':
- *           description: SubjectType deleted successfully.
+ *           description: AssessmentFormat deleted successfully.
  *           content:
  *             application/json:
  *               schema:
- *                 # Define the schema of your subjectFormat object here
+ *                 # Define the schema of your assessmentFormat object here
  *         '400':
  *           description: Bad request due to validation error.
  *         '401':
@@ -158,25 +159,71 @@ export async function DELETE(request: NextRequest, { params: { id } }) {
       });
     }
 
-    const subjectFormat = await getSubjectFormatById(id);
+    const assessmentFormatById = await getAssessmentFormatById(id);
 
-    if (subjectFormat) {
-      const deleteSubjectType = await deleteSubjectFormatById(id);
-      return new Response(JSON.stringify(deleteSubjectType), {
+    if (assessmentFormatById) {
+      const deletedAssessmentFormat = await deleteAssessmentFormat(id);
+
+      return new Response(JSON.stringify(deletedAssessmentFormat), {
         status: StatusCodes.OK,
       });
     } else {
-      return new Response(
-        JSON.stringify({ error: 'SUBJECT_FORMAT_NOT_FOUND' }),
-        {
-          status: StatusCodes.NOT_FOUND,
-        }
-      );
+      return new Response(JSON.stringify({ error: 'SUBJECT_TYPE_NOT_FOUND' }), {
+        status: StatusCodes.NOT_FOUND,
+      });
     }
   } catch (e) {
     captureException(e);
     return new Response(JSON.stringify({ error: e.message }), {
       status: StatusCodes.INTERNAL_SERVER_ERROR,
+    });
+  }
+}
+
+/**
+ * @swagger
+ * /api/subject/assessmentFormat/{id}:
+ *     post:
+ *       summary: Add new assessmentFormat with Parent
+ *       description: Add New assessmentFormat with Parent
+ *       requestBody:
+ *         required: true
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *       responses:
+ *         '200':
+ *           description: New assessmentFormat added successfully.
+ *           content:
+ *             application/json:
+ *               schema:
+ *                 # Define the schema of your assessmentFormat  object here
+ *         '400':
+ *           description: Bad request due to validation error.
+ *         '401':
+ *           description: Unauthorized access.
+ *         '500':
+ *           description: Internal server error.
+ */
+export async function POST(request: NextRequest, { params: { id } }) {
+  const session = await getServerSession(authOptions);
+  if (!session) {
+    return new NextResponse(JSON.stringify({ error: 'UNAUTHORIZED' }), {
+      status: StatusCodes.UNAUTHORIZED,
+    });
+  }
+  const payload = await request.json();
+
+  try {
+    const newAssessmentFormat = await addAssessmentFormat(id, payload);
+    return new NextResponse(JSON.stringify(newAssessmentFormat), {
+      status: StatusCodes.CREATED,
+    });
+  } catch (e) {
+    captureException(e);
+    return new NextResponse(e, {
+      status: StatusCodes.BAD_REQUEST,
     });
   }
 }

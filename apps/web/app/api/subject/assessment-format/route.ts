@@ -1,17 +1,17 @@
 import { captureException } from '@sentry/nextjs';
 import { StatusCodes } from 'http-status-codes';
+import { authOptions } from 'lib/auth';
 import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 
-import { authOptions } from '../../../../lib/auth';
-import { addSubjectFormat, getSubjectFormatList } from './service';
+import { addAssessmentFormat, getAssessmentFormatList } from './service';
 
 /**
  * @swagger
- * /api/subject/subjectFormat:
+ * /api/subject/assessmentFormat:
  *     post:
- *       summary: Add new subjectFormat
- *       description: Add New subjectFormat
+ *       summary: Add new AssessmentFormat W/O Parent
+ *       description: Add New AssessmentFormat W/O Parent
  *       requestBody:
  *         required: true
  *         content:
@@ -20,11 +20,11 @@ import { addSubjectFormat, getSubjectFormatList } from './service';
  *               type: object
  *       responses:
  *         '200':
- *           description: New subjectFormat added successfully.
+ *           description: New AssessmentFormat added successfully.
  *           content:
  *             application/json:
  *               schema:
- *                 # Define the schema of your Subject format object here
+ *                 # Define the schema of your AssessmentFormat  object here
  *         '400':
  *           description: Bad request due to validation error.
  *         '401':
@@ -42,8 +42,8 @@ export async function POST(request: NextRequest) {
   const payload = await request.json();
 
   try {
-    const subjectFormat = await addSubjectFormat(payload);
-    return new NextResponse(JSON.stringify(subjectFormat), {
+    const newAssessmentFormat = await addAssessmentFormat(null, payload);
+    return new NextResponse(JSON.stringify(newAssessmentFormat), {
       status: StatusCodes.CREATED,
     });
   } catch (e) {
@@ -56,39 +56,23 @@ export async function POST(request: NextRequest) {
 
 /**
  * @swagger
- * /api/subject/subjectFormat:
+ * /api/subject/assessmentFormat:
  *     get:
- *       summary: Retrieve a paginated list of subjectFormat
- *       description: >
- *         This endpoint allows for retrieving a list of subjectFormat in a paginated format.
- *         It requires user authentication and allows clients to specify the page number
- *         and page size for the results.
- *       parameters:
- *         - in: query
- *           name: page
- *           required: false
- *           schema:
- *             type: integer
- *             default: 1
- *           description: The page number of the paginated results.
- *         - in: query
- *           name: pageSize
- *           required: false
- *           schema:
- *             type: integer
- *             default: 10
- *           description: The number of items to display per page.
+ *       summary: Get All AssessmentFormat
+ *       description: Get All AssessmentFormat
  *       responses:
  *         '200':
- *           description: A successful response with the paginated list of subjectFormat.
+ *           description: AssessmentFormat details are s fetched Successfully.
  *           content:
  *             application/json:
  *               schema:
- *                 $ref: '#/components/schemas/PaginatedSubjectFormatResult'
+ *                 # Define the schema of your AssessmentFormat object here
  *         '400':
- *           description: Bad request, usually due to a problem with the request parameters.
+ *           description: Bad request due to validation error.
  *         '401':
- *           description: Unauthorized access, returned when the user is not authenticated.
+ *           description: Unauthorized access.
+ *         '500':
+ *           description: Internal server error.
  */
 export async function GET(request: NextRequest) {
   const session = await getServerSession(authOptions);
@@ -102,8 +86,11 @@ export async function GET(request: NextRequest) {
     const page = parseInt(request.nextUrl.searchParams.get('page')) || 1;
     const limit = parseInt(request.nextUrl.searchParams.get('limit')) || 10;
 
-    const paginatedSubjectFormatList = await getSubjectFormatList(page, limit);
-    return new NextResponse(JSON.stringify(paginatedSubjectFormatList), {
+    const paginatedAssessmentFormatList = await getAssessmentFormatList(
+      page,
+      limit
+    );
+    return new NextResponse(JSON.stringify(paginatedAssessmentFormatList), {
       status: StatusCodes.OK,
     });
   } catch (e) {
