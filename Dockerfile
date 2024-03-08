@@ -32,7 +32,7 @@ ENV NODE_ENV=production
 ENV NEXTAUTH_URL=https://acadx-io-t2n3p6jkhq-el.a.run.app
 ENV NEXT_PUBLIC_API_URL=https://acadx-io-t2n3p6jkhq-el.a.run.app
 ENV NEXTAUTH_SECRET=2b7e151628aed2a6abf7158809cf4f3c762e7160f38b4da56a784d9045190cba
-ENV DATABASE_URL=postgresql://postgres:^%*f8pKbsnWvGs3!@35.200.189.125:5432/acadx
+ENV DATABASE_URL=postgresql://postgres:^%*f8pKbsnWvGs3!@35.200.189.125:5432/acadx_dev
 ENV NEXT_SITE_NAME=acadx.io
 ENV NEXT_RAZORPAY_KEY_ID=rzp_test_FgPdhSoHy5q9CO
 ENV NEXT_RAZORPAY_KEY_SECRET=xt6nQmfxv4bjKZdC0xEU14ei
@@ -43,7 +43,7 @@ ENV NEXT_GCLOUD_PROJECT_ID=darkcore-blog
 ENV NEXT_GCLOUD_STORAGE_BUCKET=acadx
 
 # Deploy Database migrations
-RUN npx prisma migrate deploy
+RUN pnpx prisma migrate deploy
 
 # Expose the port the app runs on
 EXPOSE 3000

@@ -1,3 +1,4 @@
+import { Plus } from 'lucide-react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { Button } from 'ui';
 import { cn } from 'utils';
@@ -44,7 +45,12 @@ export function ClassWidget(props) {
           {props.classDetails.Section.map((section, index) => (
             <Button
               key={index}
-              className="h-7 w-7 bg-primary-200 text-center text-black"
+              className={cn(
+                'h-7 w-7 text-center',
+                section.isActive
+                  ? 'bg-primary text-white hover:bg-primary'
+                  : 'bg-gray-400 text-black hover:bg-gray-400'
+              )}
               onClick={() => {
                 router.push(
                   `/academics/class/${props.classDetails.id}/section/${section.id}`
@@ -65,26 +71,7 @@ export function ClassWidget(props) {
               router.replace(pathname + '?' + params.toString());
             }}
           >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-            >
-              <path
-                fill-rule="evenodd"
-                clip-rule="evenodd"
-                d="M4 12C4 11.4477 4.44772 11 5 11H19C19.5523 11 20 11.4477 20 12C20 12.5523 19.5523 13 19 13H5C4.44772 13 4 12.5523 4 12Z"
-                fill="#6559FC"
-              />
-              <path
-                fill-rule="evenodd"
-                clip-rule="evenodd"
-                d="M12 4C12.5523 4 13 4.44772 13 5V19C13 19.5523 12.5523 20 12 20C11.4477 20 11 19.5523 11 19V5C11 4.44772 11.4477 4 12 4Z"
-                fill="#6559FC"
-              />
-            </svg>
+            <Plus height={24} width={24} />
           </Button>
         </div>
       </div>
