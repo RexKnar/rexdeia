@@ -8,10 +8,10 @@ import { getAssessmentFormatBySubjectId } from '../../service';
 
 /**
  * @swagger
- * /api/subject/{id}/subjectType:
+ * /api/subject/{id}/assessment-format:
  *     get:
- *       summary: Fetch subjecttype By subjectId
- *       description: Fetch subjecttype By subjectId
+ *       summary: Fetch assessment-format By subjectId
+ *       description: Fetch assessment-format By subjectId
  *       parameters:
  *         - name: id
  *           in: path
@@ -21,7 +21,7 @@ import { getAssessmentFormatBySubjectId } from '../../service';
  *             type: string
  *       responses:
  *         '200':
- *           description: Subject details are fetched successfully.
+ *           description: Assessment Format are fetched successfully.
  *           content:
  *             application/json:
  *               schema:
