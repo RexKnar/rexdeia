@@ -26,8 +26,8 @@ import {
 import * as z from 'zod';
 
 import { CreateSubjectModel } from '../../../../../lib/domain/subject';
+import { useGetAssessmentFormatList } from '../../../../../lib/queries/assessment-format/useGetAssessmentFormatList';
 import { useGetGroupListQuery } from '../../../../../lib/queries/group/useGetGroupListQuery';
-import { useGetSubjectFormatList } from '../../../../../lib/queries/subject-format/useGetSubjectFormatList';
 import { useGetSubjectTypeList } from '../../../../../lib/queries/subject-type/useGetSubjectTypeQuery';
 import { useCreateSubjectMutationQuery } from '../../../../../lib/queries/subjects/useCreateSubjectMutationQuery';
 import { useGetSubjectByIdQuery } from '../../../../../lib/queries/subjects/useGetSubjectByIdQuery';
@@ -44,10 +44,10 @@ const schema = z.object({
       required_error: 'Subject Type is required',
     })
     .min(1),
-  subjectFormatIds: z
+  assessmentFormatIds: z
     .array(z.string())
     .refine((value) => value.some((item) => item), {
-      message: 'Subject Format is required',
+      message: 'Assessment Format is required',
     }),
   groupId: z.array(z.string()).refine((value) => value.some((item) => item), {
     message: 'Group is required',
@@ -76,7 +76,7 @@ export function SaveSubjectFlyout() {
   } = useForm<SchemaType>({
     resolver: zodResolver(schema),
     defaultValues: {
-      subjectFormatIds: [],
+      assessmentFormatIds: [],
       groupId: [],
     },
   });
@@ -91,10 +91,10 @@ export function SaveSubjectFlyout() {
   });
 
   const {
-    data: subjectFormatList,
-    isLoading: isSubjectFormatLoading,
-    isFetching: isSubjectFormatFetching,
-  } = useGetSubjectFormatList({
+    data: assessmentFormatList,
+    isLoading: isAssessmentFormatLoading,
+    isFetching: isAssessmentFormatFetching,
+  } = useGetAssessmentFormatList({
     page: 1,
     limit: 999,
   });
@@ -126,8 +126,8 @@ export function SaveSubjectFlyout() {
   } = useUpdateSubjectMutationQuery();
 
   const isLoading =
-    isSubjectFormatLoading ||
-    isSubjectFormatFetching ||
+    isAssessmentFormatLoading ||
+    isAssessmentFormatFetching ||
     isCurrentSubjectLoading ||
     isCurrentSubjectFetching ||
     isSubjectTypeListLoading ||
@@ -141,13 +141,13 @@ export function SaveSubjectFlyout() {
 
     reset();
     if (currentSubject) {
-      const { name, isActive, subjectTypeId, subjectFormatIds } =
+      const { name, isActive, subjectTypeId, assessmentFormatIds } =
         currentSubject;
 
       setValue('name', name);
       setValue('isActive', isActive);
       setValue('subjectTypeId', subjectTypeId);
-      setValue('subjectFormatIds', subjectFormatIds);
+      setValue('assessmentFormatIds', assessmentFormatIds);
     } else {
       setValue('name', null);
       setValue('isActive', false);
@@ -165,7 +165,7 @@ export function SaveSubjectFlyout() {
     isLoading,
     currentSubject,
     subjectTypeList,
-    subjectFormatList,
+    assessmentFormatList,
   ]);
 
   const closeFlyout = async () => {
@@ -301,11 +301,11 @@ export function SaveSubjectFlyout() {
                     Subject Format
                   </label>
                   <div className="mt-2 flex flex-wrap">
-                    {subjectFormatList?.data?.map((item) => (
+                    {assessmentFormatList?.data?.map((item) => (
                       <Controller
                         key={item.id}
                         control={control}
-                        name="subjectFormatIds"
+                        name="assessmentFormatIds"
                         render={({ field }) => {
                           return (
                             <label className="me-5">

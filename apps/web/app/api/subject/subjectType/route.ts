@@ -1,17 +1,17 @@
 import { captureException } from '@sentry/nextjs';
 import { StatusCodes } from 'http-status-codes';
-import { authOptions } from 'lib/auth';
 import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 
+import { authOptions } from '../../../../lib/auth';
 import { addSubjectType, getSubjectTypeList } from './service';
 
 /**
  * @swagger
  * /api/subject/subjectType:
  *     post:
- *       summary: Add new SubjectType W/O Parent
- *       description: Add New SubjectType W/O Parent
+ *       summary: Add new subjectType
+ *       description: Add New subjectType
  *       requestBody:
  *         required: true
  *         content:
@@ -20,11 +20,11 @@ import { addSubjectType, getSubjectTypeList } from './service';
  *               type: object
  *       responses:
  *         '200':
- *           description: New SubjectType added successfully.
+ *           description: New subjectType added successfully.
  *           content:
  *             application/json:
  *               schema:
- *                 # Define the schema of your SubjectType  object here
+ *                 # Define the schema of your Subject format object here
  *         '400':
  *           description: Bad request due to validation error.
  *         '401':
@@ -42,8 +42,8 @@ export async function POST(request: NextRequest) {
   const payload = await request.json();
 
   try {
-    const newSubjectType = await addSubjectType(null, payload);
-    return new NextResponse(JSON.stringify(newSubjectType), {
+    const subjectType = await addSubjectType(payload);
+    return new NextResponse(JSON.stringify(subjectType), {
       status: StatusCodes.CREATED,
     });
   } catch (e) {
@@ -58,21 +58,37 @@ export async function POST(request: NextRequest) {
  * @swagger
  * /api/subject/subjectType:
  *     get:
- *       summary: Get All SubjectType
- *       description: Get All SubjectType
+ *       summary: Retrieve a paginated list of subjectType
+ *       description: >
+ *         This endpoint allows for retrieving a list of subjectType in a paginated format.
+ *         It requires user authentication and allows clients to specify the page number
+ *         and page size for the results.
+ *       parameters:
+ *         - in: query
+ *           name: page
+ *           required: false
+ *           schema:
+ *             type: integer
+ *             default: 1
+ *           description: The page number of the paginated results.
+ *         - in: query
+ *           name: pageSize
+ *           required: false
+ *           schema:
+ *             type: integer
+ *             default: 10
+ *           description: The number of items to display per page.
  *       responses:
  *         '200':
- *           description: SubjectType details are s fetched Successfully.
+ *           description: A successful response with the paginated list of subjectType.
  *           content:
  *             application/json:
  *               schema:
- *                 # Define the schema of your SubjectType object here
+ *                 $ref: '#/components/schemas/PaginatedSubjectTypeResult'
  *         '400':
- *           description: Bad request due to validation error.
+ *           description: Bad request, usually due to a problem with the request parameters.
  *         '401':
- *           description: Unauthorized access.
- *         '500':
- *           description: Internal server error.
+ *           description: Unauthorized access, returned when the user is not authenticated.
  */
 export async function GET(request: NextRequest) {
   const session = await getServerSession(authOptions);

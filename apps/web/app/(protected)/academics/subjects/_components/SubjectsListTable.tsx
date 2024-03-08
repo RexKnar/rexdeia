@@ -34,7 +34,7 @@ import { cn } from 'utils';
 import { DeleteConfirmationModal } from '@/components/modals/DeleteConfirmationModal';
 
 import {
-  SubjectFormatModel,
+  AssessmentFormatModel,
   SubjectModel,
   SubjectTypeModel,
 } from '../../../../../lib/domain/subject';
@@ -79,7 +79,7 @@ const columns: ColumnDef<SubjectModel>[] = [
     },
   },
   {
-    accessorKey: 'SubjectFormat',
+    accessorKey: 'assessmentFormat',
     header: ({ column }) => {
       return (
         <Button
@@ -92,11 +92,11 @@ const columns: ColumnDef<SubjectModel>[] = [
       );
     },
     cell: ({ row }) => {
-      const subjectFormat = row.getValue('SubjectFormat');
-      if (!subjectFormat) {
+      const assessmentFormat = row.getValue('assessmentFormat');
+      if (!assessmentFormat) {
         return <div>N/A</div>;
       } else {
-        return <div>{(subjectFormat as SubjectFormatModel).name}</div>;
+        return <div>{(assessmentFormat as AssessmentFormatModel).name}</div>;
       }
     },
   },
