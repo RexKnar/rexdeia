@@ -111,30 +111,30 @@ enum UserRole {
 }
 
 model Branch {
-  id             String             @id @default(uuid()) @map("_id") @db.Uuid
-  name           String
-  address        String
-  organization   Organization       @relation(fields: [organizationId], references: [id])
-  organizationId String             @db.Uuid
-  users          UserOrganization[]
-  forms          Form[]
-  department     Department[]
-  regulation     Regulation[]
-  isActivated    Boolean            @default(false)
-  createdAt      DateTime?          @default(now())
-  updatedAt      DateTime?          @default(now())
-  createdBy      User               @relation(fields: [createdById], references: [id])
-  createdById    String             @db.Uuid
-  Batch          Batch[]
-  Student        Student[]
-  class          Class[]
-  staff          Staff[]
-  group          Group[]
-  medium         Medium[]
-  subjectType    subjectType[]
-  subjectFormat  SubjectFormat[]
-  Subject        Subject[]
-  grade          Grade[]
+  id               String             @id @default(uuid()) @map("_id") @db.Uuid
+  name             String
+  address          String
+  organization     Organization       @relation(fields: [organizationId], references: [id])
+  organizationId   String             @db.Uuid
+  users            UserOrganization[]
+  forms            Form[]
+  department       Department[]
+  regulation       Regulation[]
+  isActivated      Boolean            @default(false)
+  createdAt        DateTime?          @default(now())
+  updatedAt        DateTime?          @default(now())
+  createdBy        User               @relation(fields: [createdById], references: [id])
+  createdById      String             @db.Uuid
+  Batch            Batch[]
+  Student          Student[]
+  class            Class[]
+  staff            Staff[]
+  group            Group[]
+  medium           Medium[]
+  subjectType      subjectType[]
+  assessmentFormat AssessmentFormat[]
+  Subject          Subject[]
+  grade            Grade[]
 }
 
 model Organization {
@@ -551,53 +551,54 @@ model Section {
 }
 
 model Subject {
-  id                      String                    @id @default(uuid()) @map("_id") @db.Uuid
-  description             String?
-  name                    String
-  isActive                Boolean
-  SubjectFormat           SubjectFormat?            @relation(fields: [subjectFormatId], references: [id])
-  elective                Int
-  subjectFormatId         String?                   @db.Uuid
-  createdAt               DateTime?                 @default(now())
-  updatedAt               DateTime?                 @default(now())
-  isDeleted               Boolean                   @default(false)
-  Section                 Section[]
-  regulation              Regulation                @relation(fields: [regulationId], references: [id])
-  regulationId            String                    @db.Uuid
-  sectionId               String[]                  @db.Uuid
-  SectionSubject          SectionSubject[]
-  ExamSubject             ExamSubject[]
-  ExamSubjectPartition    ExamSubjectPartition[]
-  branchId                String?                   @db.Uuid
-  branch                  Branch?                   @relation(fields: [branchId], references: [id])
-  subjectToSubjectFormat  SubjectToSubjectFormat[]
-  subjectToGroup          SubjectToGroup[]
-  subjectToSubjectTypes   SubjectToSubjectType[]
-  academicSubjectForStaff AcademicSubjectForStaff[]
+  id                        String                      @id @default(uuid()) @map("_id") @db.Uuid
+  description               String?
+  name                      String
+  isActive                  Boolean
+  elective                  Int
+  createdAt                 DateTime?                   @default(now())
+  updatedAt                 DateTime?                   @default(now())
+  isDeleted                 Boolean                     @default(false)
+  Section                   Section[]
+  regulation                Regulation                  @relation(fields: [regulationId], references: [id])
+  regulationId              String                      @db.Uuid
+  sectionId                 String[]                    @db.Uuid
+  SectionSubject            SectionSubject[]
+  ExamSubject               ExamSubject[]
+  ExamSubjectPartition      ExamSubjectPartition[]
+  branchId                  String?                     @db.Uuid
+  branch                    Branch?                     @relation(fields: [branchId], references: [id])
+  subjectToAssessmentFormat SubjectToAssessmentFormat[]
+  subjectToGroup            SubjectToGroup[]
+  subjectToSubjectTypes     SubjectToSubjectType[]
+  academicSubjectForStaff   AcademicSubjectForStaff[]
 }
 
-model SubjectFormat {
-  id                     String                   @id @default(uuid()) @map("_id") @db.Uuid
-  name                   String
-  isActive               Boolean
-  subject                Subject[]
-  branch                 Branch                   @relation(fields: [branchId], references: [id])
-  branchId               String                   @db.Uuid
-  isDeleted              Boolean                  @default(false)
-  createdAt              DateTime?                @default(now())
-  updatedAt              DateTime?                @default(now())
-  subjectToSubjectFormat SubjectToSubjectFormat[]
+model AssessmentFormat {
+  id                        String                      @id @default(uuid()) @map("_id") @db.Uuid
+  name                      String
+  isActive                  Boolean
+  hasMarkEntry              Boolean?
+  parentId                  String?                     @db.Uuid
+  parentAssessmentFormat    AssessmentFormat?           @relation("ParentChild", fields: [parentId], references: [id])
+  childAssessmentFormats    AssessmentFormat[]          @relation("ParentChild")
+  branch                    Branch                      @relation(fields: [branchId], references: [id])
+  branchId                  String                      @db.Uuid
+  isDeleted                 Boolean                     @default(false)
+  createdAt                 DateTime?                   @default(now())
+  updatedAt                 DateTime?                   @default(now())
+  subjectToAssessmentFormat SubjectToAssessmentFormat[]
 }
 
-model SubjectToSubjectFormat {
-  subjectFormatId String        @db.Uuid
-  subjectId       String        @db.Uuid
-  subjectFormat   SubjectFormat @relation(fields: [subjectFormatId], references: [id])
-  subject         Subject       @relation(fields: [subjectId], references: [id])
-  createdAt       DateTime?     @default(now())
-  updatedAt       DateTime?     @default(now())
+model SubjectToAssessmentFormat {
+  assessmentFormatId String           @db.Uuid
+  subjectId          String           @db.Uuid
+  assessmentFormat   AssessmentFormat @relation(fields: [assessmentFormatId], references: [id])
+  subject            Subject          @relation(fields: [subjectId], references: [id])
+  createdAt          DateTime?        @default(now())
+  updatedAt          DateTime?        @default(now())
 
-  @@id([subjectFormatId, subjectId])
+  @@id([assessmentFormatId, subjectId])
 }
 
 model SubjectToGroup {
@@ -650,10 +651,6 @@ model Medium {
 model subjectType {
   id                    String                 @id @default(uuid()) @map("_id") @db.Uuid
   name                  String
-  parentId              String?                @db.Uuid
-  hasMarkEntry          Boolean?
-  parentSubjectType     subjectType?           @relation("ParentChild", fields: [parentId], references: [id])
-  childSubjectTypes     subjectType[]          @relation("ParentChild")
   isActive              Boolean
   isDeleted             Boolean                @default(false)
   branch                Branch                 @relation(fields: [branchId], references: [id])

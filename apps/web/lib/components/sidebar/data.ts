@@ -116,10 +116,10 @@ export const menuItems: SidebarMenuItem[] = [
         path: '/academics/subjects/subject-type',
       },
       {
-        id: 'academics-subjects-format',
-        label: 'Subject Format',
+        id: 'academics-assessment-format',
+        label: 'Assessment Format',
         icon: null,
-        path: '/academics/subjects/subject-format',
+        path: '/academics/subjects/assessment-format',
       },
       {
         id: 'academics-student-attendance',

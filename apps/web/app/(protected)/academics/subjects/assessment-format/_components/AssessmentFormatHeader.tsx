@@ -5,24 +5,24 @@ import { Button } from 'ui';
 
 import { PageTitle } from '@/components/PageTitle';
 
-export function SubjectFormatHeader() {
+export function AssessmentFormatHeader() {
   const pathname = usePathname();
   const router = useRouter();
   const searchParams = useSearchParams();
 
   return (
     <section className="flex justify-between px-2">
-      <PageTitle title="Subject Format" />
+      <PageTitle title="Assessment Format" />
       <Button
         variant="default"
         onClick={async () => {
           const params = new URLSearchParams(searchParams);
-          params.set('isSubjectFormatFlyoutOpen', 'true');
+          params.set('isAssessmentFormatFlyoutOpen', 'true');
 
           router.replace(pathname + '?' + params.toString());
         }}
       >
-        Add Subject Format
+        Add Assessment Format
       </Button>
     </section>
   );

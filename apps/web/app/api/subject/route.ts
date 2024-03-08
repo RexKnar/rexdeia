@@ -5,7 +5,7 @@ import { getServerSession } from 'next-auth';
 
 import { authOptions } from '../../../lib/auth';
 import {
-  addSubject,
+  addSubjects,
   getAllSubjectsWithFilter,
   getSubjectList,
 } from './service';
@@ -46,7 +46,7 @@ export async function POST(request: NextRequest) {
   const payload = await request.json();
 
   try {
-    const subject = await addSubject(payload);
+    const subject = await addSubjects(payload);
     return new NextResponse(JSON.stringify(subject), {
       status: StatusCodes.CREATED,
     });
