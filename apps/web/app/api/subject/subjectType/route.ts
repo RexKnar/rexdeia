@@ -92,9 +92,6 @@ export async function POST(request: NextRequest) {
  */
 export async function GET(request: NextRequest) {
   const session = await getServerSession(authOptions);
-  return new NextResponse(JSON.stringify({ error: 'UNAUTHORIZED' }), {
-    status: StatusCodes.UNAUTHORIZED,
-  });
   if (!session) {
     return new NextResponse(JSON.stringify({ error: 'UNAUTHORIZED' }), {
       status: StatusCodes.UNAUTHORIZED,
