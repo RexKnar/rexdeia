@@ -28,7 +28,7 @@ type ClassFilter = {
 };
 export async function getClassList(page: number, limit: number) {
   const session = await getServerSession(authOptions);
-  const [ClassList, totalClasses] = await Promise.all([
+  const [data, total] = await Promise.all([
     db.class.findMany({
       take: limit,
       skip: (page - 1) * limit,
@@ -48,9 +48,9 @@ export async function getClassList(page: number, limit: number) {
 
   return {
     page,
+    data,
     limit,
-    data: ClassList,
-    total: totalClasses,
+    total,
   };
 }
 
@@ -245,8 +245,8 @@ export async function mapStudentToClass(
 export async function assignStaffToClassWithSubject(
   payload: AssignStaffToClassRequestModel
 ) {
-  const mappedStaffResponse = await db.$transaction(async (prisma) => {
-    const updatedResponse = await Promise.all([
+  return await db.$transaction(async (prisma) => {
+    return await Promise.all([
       ...payload.sectionIds.map((sectionId) =>
         prisma.section.update({
           where: { id: sectionId },
@@ -279,9 +279,7 @@ export async function assignStaffToClassWithSubject(
         })
       ),
     ]);
-    return updatedResponse;
   });
-  return mappedStaffResponse;
 }
 
 export async function unMapStaffsFromClass(
@@ -315,8 +313,5 @@ export async function getAllStudentsByClassId(id: string) {
 
 export async function getAllStaffsByClassId(id: string) {
   const sections = await getAllSectionsByClassId(id);
-  const staffs = await getAllStaffsBySectionsIdWithSubjects(
-    sections.map((x) => x.id)
-  );
-  return staffs;
+  return await getAllStaffsBySectionsIdWithSubjects(sections.map((x) => x.id));
 }

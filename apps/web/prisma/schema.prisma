@@ -32,18 +32,21 @@ model Account {
 model Exam {
   id                String              @id @default(uuid()) @map("_id") @db.Uuid
   name              String
+  branch            Branch              @relation(fields: [branchId], references: [id])
+  branchId          String              @db.Uuid
   batchId           String              @db.Uuid
   batch             Batch               @relation(fields: [batchId], references: [id])
   examTypeId        String              @db.Uuid
   examType          ExamType            @relation(fields: [examTypeId], references: [id])
   termId            String              @db.Uuid
   term              Term                @relation(fields: [termId], references: [id])
+  examConfiguration ExamConfiguration[]
+  examGroup         ExamGroup[]
+  section           Section?            @relation(fields: [sectionId], references: [id])
+  sectionId         String?             @db.Uuid
   createdAt         DateTime            @default(now())
   updatedAt         DateTime            @default(now())
-  examConfiguration ExamConfiguration[]
-  ExamGroup         ExamGroup[]
-  Section           Section?            @relation(fields: [sectionId], references: [id])
-  sectionId         String?             @db.Uuid
+  isDeleted         Boolean             @default(false)
 }
 
 model ExamType {
@@ -176,6 +179,7 @@ model Branch {
   assessmentFormat AssessmentFormat[]
   Subject          Subject[]
   grade            Grade[]
+  Exam             Exam[]
 }
 
 model Organization {
