@@ -11,7 +11,7 @@ import {
 } from '@tanstack/react-table';
 import { Loader2, Pencil, Trash2 } from 'lucide-react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { When } from 'react-if';
 import {
   Button,
@@ -132,6 +132,7 @@ export function SubjectsListTable() {
 
   const [showDeleteConfirmationModal, setShowDeleteConfirmationModal] =
     useState(false);
+
   const [selectedSubject, setSelectedSubject] = useState<SubjectModel | null>(
     null
   );
@@ -142,11 +143,15 @@ export function SubjectsListTable() {
 
   const page = parseInt(searchParams.get('page')) || 1;
   const limit = parseInt(searchParams.get('limit')) || 10;
-  const { data: subjectListResponse, isLoading: isSubjectListLoading } =
-    useGetSubjectListQuery({
-      page,
-      limit,
-    });
+
+  const {
+    data: subjectListResponse,
+    isLoading: isSubjectListLoading,
+    isError: isSubjectLoadingListError,
+  } = useGetSubjectListQuery({
+    page,
+    limit,
+  });
 
   const {
     isError: isDeleteSubjectError,
@@ -187,12 +192,16 @@ export function SubjectsListTable() {
 
   const table = useReactTable({
     columns,
-    data: subjectListResponse?.data || [],
     getCoreRowModel: getCoreRowModel(),
+    data: subjectListResponse?.data || [],
     getSortedRowModel: getSortedRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
   });
+
+  if (isSubjectLoadingListError) {
+    return <div>Error while fetching subject types</div>;
+  }
 
   return (
     <section>
@@ -318,7 +327,11 @@ export function SubjectsListTable() {
         </Table>
       </div>
       <When
-        condition={subjectListResponse?.data?.length && !isSubjectListLoading}
+        condition={
+          !isSubjectListLoading &&
+          !isSubjectLoadingListError &&
+          subjectListResponse?.data?.length
+        }
       >
         <Pagination
           limit={limit.toString()}

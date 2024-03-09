@@ -2,7 +2,6 @@ import { redirect } from 'next/navigation';
 import { getServerSession } from 'next-auth';
 
 import { authOptions } from '../../../../../lib/auth';
-import { AssessmentFormatFlyout } from './_components/_modals/AssessmentFormatFlyout';
 import { AssessmentFormatHeader } from './_components/AssessmentFormatHeader';
 import { AssessmentFormatListTable } from './_components/AssessmentFormatListTable';
 
@@ -20,7 +19,6 @@ export default async function Page() {
       <section className="space-y-2 rounded-md bg-white p-4">
         <AssessmentFormatListTable />
       </section>
-      <AssessmentFormatFlyout />
     </section>
   );
 }
