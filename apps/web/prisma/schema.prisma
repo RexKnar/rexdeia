@@ -30,14 +30,55 @@ model Account {
 }
 
 model Exam {
-  id                  String      @id @default(uuid()) @map("_id") @db.Uuid
-  name                String
-  type                String
-  Section             Section?    @relation(fields: [sectionId], references: [id])
-  sectionId           String?     @db.Uuid
-  totalMarks          Int
-  convertToPercentage Int
-  examgroup           ExamGroup[]
+  id                String              @id @default(uuid()) @map("_id") @db.Uuid
+  name              String
+  batchId           String              @db.Uuid
+  batch             Batch               @relation(fields: [batchId], references: [id])
+  examTypeId        String              @db.Uuid
+  examType          ExamType            @relation(fields: [examTypeId], references: [id])
+  termId            String              @db.Uuid
+  term              Term                @relation(fields: [termId], references: [id])
+  createdAt         DateTime            @default(now())
+  updatedAt         DateTime            @default(now())
+  examConfiguration ExamConfiguration[]
+  ExamGroup         ExamGroup[]
+  Section           Section?            @relation(fields: [sectionId], references: [id])
+  sectionId         String?             @db.Uuid
+}
+
+model ExamType {
+  id        String   @id @default(uuid()) @map("_id") @db.Uuid
+  name      String
+  isActive  Boolean
+  exam      Exam[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+}
+
+model Term {
+  id        String   @id @default(uuid()) @map("_id") @db.Uuid
+  name      String
+  isActive  Boolean
+  exam      Exam[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+}
+
+model ExamConfiguration {
+  minMark       Int
+  maxMark       Int
+  markToConduct Int
+  dateToConduct DateTime
+  examId        String   @db.Uuid
+  exam          Exam     @relation(fields: [examId], references: [id])
+  classId       String   @db.Uuid
+  class         Class    @relation(fields: [classId], references: [id])
+  sectionId     String   @db.Uuid
+  section       Section  @relation(fields: [sectionId], references: [id])
+  subjectId     String   @db.Uuid
+  subject       Subject  @relation(fields: [subjectId], references: [id])
+
+  @@id([examId, classId, sectionId, subjectId])
 }
 
 model ExamGroup {
@@ -459,24 +500,26 @@ model Batch {
   classInCharge           ClassInCharge[]
   createdAt               DateTime?                 @default(now())
   updatedAt               DateTime?                 @default(now())
+  exam                    Exam[]
 }
 
 model Class {
-  id             String           @id @default(uuid()) @map("_id") @db.Uuid
-  name           String
-  description    String?
-  isActive       Boolean
-  isDeleted      Boolean          @default(false)
-  Section        Section[]
-  batch          Batch?           @relation(fields: [batchId], references: [id])
-  batchId        String?          @db.Uuid
-  branch         Branch           @relation(fields: [branchId], references: [id])
-  branchId       String           @db.Uuid
-  regulation     Regulation?      @relation(fields: [regulationId], references: [id])
-  regulationId   String?          @db.Uuid
-  studentmapping StudentMapping[]
-  createdAt      DateTime?        @default(now())
-  updatedAt      DateTime?        @default(now())
+  id                String              @id @default(uuid()) @map("_id") @db.Uuid
+  name              String
+  description       String?
+  isActive          Boolean
+  isDeleted         Boolean             @default(false)
+  Section           Section[]
+  batch             Batch?              @relation(fields: [batchId], references: [id])
+  batchId           String?             @db.Uuid
+  branch            Branch              @relation(fields: [branchId], references: [id])
+  branchId          String              @db.Uuid
+  regulation        Regulation?         @relation(fields: [regulationId], references: [id])
+  regulationId      String?             @db.Uuid
+  studentmapping    StudentMapping[]
+  createdAt         DateTime?           @default(now())
+  updatedAt         DateTime?           @default(now())
+  examConfiguration ExamConfiguration[]
 }
 
 model SectionSubject {
@@ -542,12 +585,13 @@ model Section {
   sectionSubjects         SectionSubject[]
   Subject                 Subject?                  @relation(fields: [subjectId], references: [id])
   subjectId               String?                   @db.Uuid
-  Exam                    Exam[]
+  exam                    Exam[]
   staffSections           StaffSection[]
   staffId                 String?                   @db.Uuid
   academicSubjectForStaff AcademicSubjectForStaff[]
   classInCharge           ClassInCharge[]
   studentMapping          StudentMapping[]
+  examConfiguration       ExamConfiguration[]
 }
 
 model Subject {
@@ -572,6 +616,7 @@ model Subject {
   subjectToGroup            SubjectToGroup[]
   subjectToSubjectTypes     SubjectToSubjectType[]
   academicSubjectForStaff   AcademicSubjectForStaff[]
+  examConfiguration         ExamConfiguration[]
 }
 
 model AssessmentFormat {
