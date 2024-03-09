@@ -3,7 +3,10 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { makeAPICall } from '../../api';
 import { AddSubjectsToClassRequestModel } from '../../domain/class';
 import { SubjectModel } from '../../domain/subject';
-import { ADD_SUBJECT_BY_CLASS_ID, GET_SUBJECT_LIST } from '../../endpoints';
+import {
+  ADD_SUBJECT_BY_CLASS_ID,
+  GET_SUBJECT_LIST_BY_CLASS_ID,
+} from '../../endpoints';
 
 export function useCreateSubjectMutationByClassIdQuery() {
   const queryClient = useQueryClient();
@@ -18,7 +21,12 @@ export function useCreateSubjectMutationByClassIdQuery() {
         { id: payload.classId }
       );
       await queryClient.invalidateQueries({
-        queryKey: [GET_SUBJECT_LIST],
+        queryKey: [GET_SUBJECT_LIST_BY_CLASS_ID],
+      });
+    },
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({
+        queryKey: [GET_SUBJECT_LIST_BY_CLASS_ID],
       });
     },
   });

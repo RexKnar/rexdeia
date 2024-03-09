@@ -188,17 +188,17 @@ export function ClassDetail() {
             <TabsContent value="Sections">
               <section className="pt-5">
                 <SectionList />
+                <Button
+                  onClick={() => {
+                    const params = new URLSearchParams(searchParams);
+                    params.set('isSectionFlyoutOpen', 'true');
+                    router.replace(pathname + '?' + params.toString());
+                  }}
+                  className="absolute right-0 top-0"
+                >
+                  Add Section
+                </Button>
               </section>
-              <Button
-                onClick={() => {
-                  const params = new URLSearchParams(searchParams);
-                  params.set('isSectionFlyoutOpen', 'true');
-                  router.replace(pathname + '?' + params.toString());
-                }}
-                className="absolute right-0 top-0"
-              >
-                Add Section
-              </Button>
             </TabsContent>
             <TabsContent value="Assessments">
               <ExamLists />
