@@ -12,6 +12,7 @@ import {
   SheetHeader,
   SheetTitle,
   Slider,
+  Switch,
   Text,
 } from 'ui';
 
@@ -28,6 +29,7 @@ export function GradeFlyout() {
     control,
     handleSubmit,
     watch,
+    setValue,
     reset,
     register,
     formState: { errors: fieldErrors },
@@ -35,6 +37,7 @@ export function GradeFlyout() {
     defaultValues: {
       name: '',
       grade: [{ name: '', slider: [] }],
+      isActive: false,
     },
   });
 
@@ -68,18 +71,19 @@ export function GradeFlyout() {
     try {
       const requestPayload = {
         name: watch('name'),
-        isActive: true,
+        isActive: watch('isActive'),
         gradeScales: fields.map((field, index) => ({
           startValue: sliderValues[index][0].toString(),
           endValue: sliderValues[index][1].toString(),
           gradeName: watch(`grade.${index}.name`),
-          remark: 'testing',
+          remark: '',
         })),
       };
       await mutateCreateGradeAsync(requestPayload);
     } catch (error) {
       console.error(error);
     } finally {
+      setValue('isActive', false);
       await closeFlyout();
       reset();
     }
@@ -98,12 +102,26 @@ export function GradeFlyout() {
             <form onSubmit={handleSubmit(SaveGrade)}>
               <SheetHeader>
                 <SheetTitle className="mb-5">
-                  <div className="sm:grid sm:grid-cols-1 sm:gap-4 md:grid md:grid-cols-1 md:gap-4 lg:flex lg:justify-between">
+                  <div className="sm:grid sm:grid-cols-1 sm:gap-4 md:grid md:grid-cols-1 md:gap-4 lg:grid lg:grid-cols-[1fr_100px]">
                     <div className="flex items-center">
                       <PlusCircle size={20} strokeWidth={1.5} />
                       <Text variant="lg-semibold" className="ml-2">
                         New Grade System
                       </Text>
+                    </div>
+                    <div className="flex items-center">
+                      <Switch
+                        id="isActive"
+                        {...register('isActive')}
+                        onCheckedChange={(value) => setValue('isActive', value)}
+                        checked={watch('isActive')}
+                      />
+                      <label
+                        htmlFor="isActive"
+                        className="ml-2 text-sm font-semibold"
+                      >
+                        {watch('isActive') ? 'Active' : 'Inactive'}
+                      </label>
                     </div>
                   </div>
                 </SheetTitle>
