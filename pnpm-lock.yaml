@@ -14,7 +14,7 @@ importers:
     devDependencies:
       '@turbo/gen':
         specifier: 1.11.1
-        version: 1.11.1(@types/node@20.11.25)(typescript@5.4.2)
+        version: 1.11.1(@types/node@20.11.26)(typescript@5.4.2)
       eslint:
         specifier: 8.57.0
         version: 8.57.0
@@ -99,10 +99,10 @@ importers:
         version: 7.106.0
       '@tanstack/react-query':
         specifier: ^5.13.4
-        version: 5.25.0(react@18.2.0)
+        version: 5.26.3(react@18.2.0)
       '@tanstack/react-query-devtools':
         specifier: ^5.13.5
-        version: 5.26.3(@tanstack/react-query@5.25.0)(react@18.2.0)
+        version: 5.26.3(@tanstack/react-query@5.26.3)(react@18.2.0)
       '@tanstack/react-table':
         specifier: ^8.10.7
         version: 8.13.2(react-dom@18.2.0)(react@18.2.0)
@@ -2580,31 +2580,31 @@ packages:
       tslib: 2.6.2
     dev: false
 
-  /@tanstack/query-core@5.25.0:
-    resolution: {integrity: sha512-vlobHP64HTuSE68lWF1mEhwSRC5Q7gaT+a/m9S+ItuN+ruSOxe1rFnR9j0ACWQ314BPhBEVKfBQ6mHL0OWfdbQ==}
+  /@tanstack/query-core@5.26.3:
+    resolution: {integrity: sha512-kKv7VHIleC7cwpMS3M63mWUFFbdiRo7JZMVUyZ4z/79RZoAi7/vGTVkCrnNqyKl+zwBRkumYL+eiYtyShGZd0A==}
     dev: false
 
   /@tanstack/query-devtools@5.24.0:
     resolution: {integrity: sha512-pThim455t69zrZaQKa7IRkEIK8UBTS+gHVAdNfhO72Xh4rWpMc63ovRje5/n6iw63+d6QiJzVadsJVdPoodSeQ==}
     dev: false
 
-  /@tanstack/react-query-devtools@5.26.3(@tanstack/react-query@5.25.0)(react@18.2.0):
+  /@tanstack/react-query-devtools@5.26.3(@tanstack/react-query@5.26.3)(react@18.2.0):
     resolution: {integrity: sha512-byhbST7CDC8cH1tPLPYG/lNMr/QcYMMqxG9+jayiz7H//QScp9+B7cpSItp9QPaN30fCj7pIAlbCifWDcLC4/A==}
     peerDependencies:
       '@tanstack/react-query': ^5.26.3
       react: ^18.0.0
     dependencies:
       '@tanstack/query-devtools': 5.24.0
-      '@tanstack/react-query': 5.25.0(react@18.2.0)
+      '@tanstack/react-query': 5.26.3(react@18.2.0)
       react: 18.2.0
     dev: false
 
-  /@tanstack/react-query@5.25.0(react@18.2.0):
-    resolution: {integrity: sha512-u+n5R7mLO7RmeiIonpaCRVXNRWtZEef/aVZ/XGWRPa7trBIvGtzlfo0Ah7ZtnTYfrKEVwnZ/tzRCBcoiqJ/tFw==}
+  /@tanstack/react-query@5.26.3(react@18.2.0):
+    resolution: {integrity: sha512-fP/kEu8aVLb6ln0ySazaeyivVkSQ9EnFfA5kQ7yIQNklx5JCW7otHVY6GVjZtd/3wK6QU99yvdSH0rN0LV2vmA==}
     peerDependencies:
       react: ^18.0.0
     dependencies:
-      '@tanstack/query-core': 5.25.0
+      '@tanstack/query-core': 5.26.3
       react: 18.2.0
     dev: false
 
@@ -2650,7 +2650,7 @@ packages:
     resolution: {integrity: sha512-vxhUy4J8lyeyinH7Azl1pdd43GJhZH/tP2weN8TntQblOY+A0XbT8DJk1/oCPuOOyg/Ja757rG0CgHcWC8OfMA==}
     dev: true
 
-  /@turbo/gen@1.11.1(@types/node@20.11.25)(typescript@5.4.2):
+  /@turbo/gen@1.11.1(@types/node@20.11.26)(typescript@5.4.2):
     resolution: {integrity: sha512-+IxFelmvEG/YnJ2/K8FFfe3X/DAFASvLxz5snfZpJWUBhYu6oUR+b4k/6EbKgqWTOLUgyca9IN+Tog4od+S0Qg==}
     hasBin: true
     dependencies:
@@ -2662,7 +2662,7 @@ packages:
       minimatch: 9.0.3
       node-plop: 0.26.3
       proxy-agent: 6.4.0
-      ts-node: 10.9.2(@types/node@20.11.25)(typescript@5.4.2)
+      ts-node: 10.9.2(@types/node@20.11.26)(typescript@5.4.2)
       update-check: 1.5.4
       validate-npm-package-name: 5.0.0
     transitivePeerDependencies:
@@ -2789,6 +2789,12 @@ packages:
 
   /@types/node@20.11.25:
     resolution: {integrity: sha512-TBHyJxk2b7HceLVGFcpAUjsa5zIdsPWlR6XHfyGzd0SFu+/NFgQgMAl96MSDZgQDvJAvV6BKsFOrt6zIL09JDw==}
+    dependencies:
+      undici-types: 5.26.5
+    dev: true
+
+  /@types/node@20.11.26:
+    resolution: {integrity: sha512-YwOMmyhNnAWijOBQweOJnQPl068Oqd4K3OFbTc6AHJwzweUwwWG3GIFY74OKks2PJUDkQPeddOQES9mLn1CTEQ==}
     dependencies:
       undici-types: 5.26.5
     dev: true
@@ -9257,7 +9263,7 @@ packages:
     resolution: {integrity: sha512-ufKpbmrugz5Aou4wcr5Wc1UUFWOLhq+Fm6qa6P0w0K5Qw2yhaUoiWszhCVuNQyNwrlGiscHOmqYoAox1PtvgjA==}
     dev: false
 
-  /ts-node@10.9.2(@types/node@20.11.25)(typescript@5.4.2):
+  /ts-node@10.9.2(@types/node@20.11.26)(typescript@5.4.2):
     resolution: {integrity: sha512-f0FFpIdcHgn8zcPSbf1dRevwt047YMnaiJM3u2w2RewrB+fob/zePZcrOyQoLMMO7aBIddLcQIEK5dYjkLnGrQ==}
     hasBin: true
     peerDependencies:
@@ -9276,7 +9282,7 @@ packages:
       '@tsconfig/node12': 1.0.11
       '@tsconfig/node14': 1.0.3
       '@tsconfig/node16': 1.0.4
-      '@types/node': 20.11.25
+      '@types/node': 20.11.26
       acorn: 8.11.3
       acorn-walk: 8.3.2
       arg: 4.1.3
