@@ -4,6 +4,9 @@ import {
   ColumnDef,
   flexRender,
   getCoreRowModel,
+  getFilteredRowModel,
+  getPaginationRowModel,
+  getSortedRowModel,
   useReactTable,
 } from '@tanstack/react-table';
 import { Pencil, Trash2 } from 'lucide-react';
@@ -111,10 +114,14 @@ export function GradeListTable() {
 
   const { data: getGradeListResponse, isLoading: isGradeListLoading } =
     useGetGradeList({ page, limit });
+
   const table = useReactTable({
     columns,
     data: getGradeListResponse?.data || [],
     getCoreRowModel: getCoreRowModel(),
+    getSortedRowModel: getSortedRowModel(),
+    getFilteredRowModel: getFilteredRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
   });
 
   const handleOnPageChange = useCallback(
