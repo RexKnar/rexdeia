@@ -100,7 +100,7 @@ export function SubjectTypeFlyout() {
       console.error(error);
     } finally {
       setValue('isActive', false);
-      await closeSubjectTypeFlyout();
+      closeSubjectTypeFlyout();
       reset();
     }
   }

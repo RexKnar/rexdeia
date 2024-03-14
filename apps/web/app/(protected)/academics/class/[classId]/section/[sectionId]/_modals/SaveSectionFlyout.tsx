@@ -67,6 +67,7 @@ export function SaveSectionFlyout() {
     params.set('isSectionFlyoutOpen', 'false');
     params.delete('sectionId');
     router.push(pathname + '?' + params.toString());
+    reset();
   };
 
   const { data: getSectionResponse } = useGetSectionByIdQuery(
@@ -124,7 +125,7 @@ export function SaveSectionFlyout() {
         await mutateCreateSectionAsync(addSectionPayload);
       }
 
-      await closeFlyout();
+      closeFlyout();
       reset();
     } catch (error) {
       console.error(error);

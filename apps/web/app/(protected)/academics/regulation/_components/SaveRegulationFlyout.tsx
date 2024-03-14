@@ -61,6 +61,8 @@ export function SaveRegulationFlyout() {
     params.delete('regulationId');
 
     router.replace(pathname + '?' + params.toString());
+    reset();
+    setAnnouncedYear(null);
   };
 
   const {
@@ -113,7 +115,7 @@ export function SaveRegulationFlyout() {
     } finally {
       setValue('isActive', false);
       setValue('announcedYear', new Date());
-      await closeFlyout();
+      closeFlyout();
       reset();
       setAnnouncedYear(null);
     }

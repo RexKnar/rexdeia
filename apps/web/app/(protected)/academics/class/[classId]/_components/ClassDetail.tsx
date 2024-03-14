@@ -167,9 +167,7 @@ export function ClassDetail() {
             </TabsContent>
             <TabsContent value="Staffs">
               <section className="pt-5">
-                <div>
-                  <StaffList />
-                </div>
+                <StaffList />
                 <Button
                   variant="default"
                   onClick={async () => {
