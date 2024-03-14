@@ -89,6 +89,7 @@ export const GET_STUDENT_LIST_BY_CLASS_ID = `GET_STUDENT_LIST_BY_CLASS_ID`;
 export const ASSIGN_STAFF_BY_CLASS_ID = `ASSIGN_STAFF_BY_CLASS_ID`;
 export const ADD_SUBJECT_BY_CLASS_ID = `ADD_SUBJECT_BY_CLASS_ID`;
 export const ADD_ASSESSMENT_FORMAT_WITH_PARENT_ID = `ADD_ASSESSMENT_FORMAT_WITH_PARENT_ID`;
+export const ASSIGN_STUDENT_BY_CLASS_ID = `ASSIGN_STUDENT_BY_CLASS_ID`;
 
 export default <EndpointDetails>{
   [REGISTER_USER]: {
@@ -446,5 +447,9 @@ export default <EndpointDetails>{
   [ADD_SUBJECT_BY_CLASS_ID]: {
     requestType: `POST`,
     endpoint: `/api/class/[id]/subjects`,
+  },
+  [ASSIGN_STUDENT_BY_CLASS_ID]: {
+    requestType: `POST`,
+    endpoint: `/api/class/[id]/students`,
   },
 };

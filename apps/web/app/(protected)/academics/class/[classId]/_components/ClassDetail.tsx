@@ -1,5 +1,4 @@
 'use client';
-
 import { Loader2, PencilLine } from 'lucide-react';
 import dynamic from 'next/dynamic';
 import {
@@ -45,7 +44,7 @@ export function ClassDetail() {
   const router = useRouter();
   const params = useParams<{ classId: string }>();
   const searchParams = useSearchParams();
-
+  const { classId } = useParams();
   const { data: getClassByIdResponse, isLoading: isLoadingGetClassById } =
     useGetClassByIdQuery(params.classId, {
       enabled: !!params.classId,
@@ -84,7 +83,6 @@ export function ClassDetail() {
               </div>
             </div>
             <div className="my-auto flex gap-4 px-5">
-              <div className="relative my-auto"></div>
               <div className="relative my-auto">
                 <Button
                   variant="outline"
@@ -100,7 +98,7 @@ export function ClassDetail() {
                     strokeWidth={2}
                     className="text-primary"
                   />
-                  <span className="pl-2">Edit</span>
+                  <span className="pl-2 text-primary">Edit</span>
                 </Button>
               </div>
             </div>
@@ -157,8 +155,11 @@ export function ClassDetail() {
 
             <TabsContent value="Students">
               <Button
-                variant="outline"
-                onClick={() => router.push(`${params.classId}/assign/student`)}
+                variant="default"
+                onClick={() =>
+                  router.push(`/academics/class/${[classId]}/assign/student`)
+                }
+                className="absolute right-0 top-0"
               >
                 Assign Students
               </Button>
@@ -166,7 +167,7 @@ export function ClassDetail() {
             </TabsContent>
             <TabsContent value="Staffs">
               <section className="pt-5">
-                <div className="w-3/12">
+                <div>
                   <StaffList />
                 </div>
                 <Button
@@ -204,11 +205,10 @@ export function ClassDetail() {
               <ExamLists />
             </TabsContent>
           </Tabs>
-          <UpdateClassFlyout />
-
-          <AddSubjectFlyout />
-          <SaveSectionFlyout />
           <AssignStaffClassDetailPageFlyout />
+          <UpdateClassFlyout />
+          <SaveSectionFlyout />
+          <AddSubjectFlyout />
         </>
       ) : (
         ' Details Not Found'
