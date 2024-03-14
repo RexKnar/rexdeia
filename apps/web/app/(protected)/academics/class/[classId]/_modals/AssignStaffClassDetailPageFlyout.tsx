@@ -26,7 +26,7 @@ import {
   Text,
 } from 'ui';
 
-import { LinkStaffModel } from '../../../../../../lib/domain/class';
+import { AssignStaffToClassRequestModel } from '../../../../../../lib/domain/class';
 import { useGetAllSectionByClassIdQuery } from '../../../../../../lib/queries/section/useGetAllSectionsByClassIdQuery';
 import { useCreateStaffMutationByClassIdQuery } from '../../../../../../lib/queries/staff/useCreateStaffMutationByClassIdQuery';
 import { useGetAllStaffListQuery } from '../../../../../../lib/queries/staff/useGetAllStaffListQuery';
@@ -37,26 +37,32 @@ export function AssignStaffClassDetailPageFlyout() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const {
-    control,
-    watch,
-    reset,
-    setValue,
     register,
     handleSubmit,
+    setValue,
+    reset,
+    control,
     formState: { errors },
-  } = useForm();
+  } = useForm({
+    mode: 'onChange',
+  });
 
   const isOpen =
     searchParams.get('isAssignStaffClassDetailPageFlyoutOpen') === 'true';
 
   const { fields, append, remove } = useFieldArray({
     control,
-    name: 'section' as never,
+    name: 'sections' as never,
   });
+  const classIdFromQueryParams = useParams<{ classId: string }>();
+  const classIdFromSearchParams = searchParams.get('classId');
+  const classId = classIdFromSearchParams
+    ? classIdFromSearchParams
+    : classIdFromQueryParams?.classId;
 
   useEffect(() => {
     if (isOpen && fields.length === 0) {
-      append({ section: 'section' });
+      append({ sections: 'sections' });
     }
   }, [isOpen, fields, append]);
 
@@ -64,7 +70,7 @@ export function AssignStaffClassDetailPageFlyout() {
   const limit = parseInt(searchParams.get('limit')) || 10;
 
   const { mutateAsync: mutateCreateStaffsAsync } =
-    useCreateStaffMutationByClassIdQuery();
+    useCreateStaffMutationByClassIdQuery(classId);
 
   const { data: getStaffListResponse } = useGetAllStaffListQuery({
     page,
@@ -78,12 +84,11 @@ export function AssignStaffClassDetailPageFlyout() {
     page,
     limit,
   });
-  const params = useParams<{ classId: string }>();
 
   const { data: sectionListResponse } = useGetAllSectionByClassIdQuery(
-    params.classId,
+    classId,
     {
-      enabled: !!params.classId,
+      enabled: !!classId,
     }
   );
   const closeFlyout = async () => {
@@ -94,13 +99,15 @@ export function AssignStaffClassDetailPageFlyout() {
     router.replace(pathname + '?' + params.toString());
   };
 
-  const assignStaff = async (formValues: any) => {
+  const assignStaff = async (payload: {
+    sections: AssignStaffToClassRequestModel[];
+  }) => {
     try {
-      const payload = {
-        data: formValues,
-        classId: params.classId,
+      const AssignStaffPayload = {
+        data: [...payload.sections],
       };
-      mutateCreateStaffsAsync(payload as LinkStaffModel & { classId: string });
+
+      await mutateCreateStaffsAsync(AssignStaffPayload);
     } finally {
       await closeFlyout();
       reset();
@@ -143,13 +150,15 @@ export function AssignStaffClassDetailPageFlyout() {
                         <div className="relative w-full">
                           <Select
                             autoComplete="off"
-                            {...register(`${index}.staffId`, {
+                            {...register(`sections.${index}.staffId` as any, {
                               required: true,
                             })}
-                            value={watch(`${index}.staffId`)}
                             onValueChange={(value) => {
                               if (value) {
-                                setValue(`${index}.staffId`, value);
+                                setValue(
+                                  `sections.${index}.staffId` as any,
+                                  value
+                                );
                               }
                             }}
                           >
@@ -171,7 +180,11 @@ export function AssignStaffClassDetailPageFlyout() {
                           </div>
                         </div>
 
-                        <p>{errors[`${index}.staffId`]?.message.toString()}</p>
+                        <p>
+                          {errors[
+                            `sections.${index}.staffId`
+                          ]?.message.toString()}
+                        </p>
                       </div>
                       <div className="w-full">
                         <label
@@ -183,13 +196,15 @@ export function AssignStaffClassDetailPageFlyout() {
                         <div className="relative w-full">
                           <Select
                             autoComplete="off"
-                            {...register(`${index}.subjectId`, {
+                            {...register(`sections.${index}.subjectId` as any, {
                               required: true,
                             })}
-                            value={watch(`${index}.subjectId`)}
                             onValueChange={(value) => {
                               if (value) {
-                                setValue(`${index}.subjectId`, value);
+                                setValue(
+                                  `sections.${index}.subjectId` as any,
+                                  value
+                                );
                               }
                             }}
                           >
@@ -212,7 +227,9 @@ export function AssignStaffClassDetailPageFlyout() {
                         </div>
 
                         <p>
-                          {errors[`${index}.subjectId`]?.message.toString()}
+                          {errors[
+                            `sections.${index}.subjectId`
+                          ]?.message.toString()}
                         </p>
                       </div>
                       {fields.length > 1 ? (
@@ -246,7 +263,7 @@ export function AssignStaffClassDetailPageFlyout() {
                             <Controller
                               key={item.id}
                               control={control}
-                              name={`${index}.sections`}
+                              name={`sections.${index}.sectionIds` as any}
                               render={({ field }) => {
                                 return (
                                   <label className="me-5">
@@ -273,8 +290,12 @@ export function AssignStaffClassDetailPageFlyout() {
                           </label>
                         ))}
                       </div>
-                      {errors[`${index}.sections`] && (
-                        <p>{errors[`${index}.sections`]?.message.toString()}</p>
+                      {errors[`sections.${index}.sections`] && (
+                        <p>
+                          {errors[
+                            `sections.${index}.sections`
+                          ]?.message.toString()}
+                        </p>
                       )}
                     </div>
                     <div className="mt-1">
@@ -290,7 +311,7 @@ export function AssignStaffClassDetailPageFlyout() {
                             <Controller
                               key={item.id}
                               control={control}
-                              name={`${index}.sectionInCharge`}
+                              name={`sections.${index}.sectionInCharge` as any}
                               render={({ field }) => {
                                 return (
                                   <label className="me-5">
@@ -317,10 +338,10 @@ export function AssignStaffClassDetailPageFlyout() {
                           </label>
                         ))}
                       </div>
-                      {errors[`${index}.sectionInCharge`] && (
+                      {errors[`sections.${index}.sectionInCharge`] && (
                         <p>
                           {errors[
-                            `${index}.sectionInCharge`
+                            `sections.${index}.sectionInCharge`
                           ]?.message.toString()}
                         </p>
                       )}
@@ -335,13 +356,18 @@ export function AssignStaffClassDetailPageFlyout() {
                       <div className="relative w-full">
                         <Select
                           autoComplete="off"
-                          {...register(`${index}.academicYearId`, {
-                            required: true,
-                          })}
-                          value={watch(`${index}.academicYearId`)}
+                          {...register(
+                            `sections.${index}.academicYearId` as any,
+                            {
+                              required: true,
+                            }
+                          )}
                           onValueChange={(value) => {
                             if (value) {
-                              setValue(`${index}.academicYearId`, value);
+                              setValue(
+                                `sections.${index}.academicYearId` as any,
+                                value
+                              );
                             }
                           }}
                         >
@@ -364,7 +390,9 @@ export function AssignStaffClassDetailPageFlyout() {
                       </div>
 
                       <p>
-                        {errors[`${index}.academicYearId`]?.message.toString()}
+                        {errors[
+                          `sections.${index}.academicYearId`
+                        ]?.message.toString()}
                       </p>
                     </div>
                   </section>
