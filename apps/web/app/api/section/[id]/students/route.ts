@@ -4,7 +4,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 
 import { authOptions } from '../../../../../lib/auth';
-import { getAllStudentsBySectionId } from '../../../student/service';
+import { getAllStudentsBySectionIdWithGroup } from '../../../student/service';
 import { addStudentsToSection, removeStudentsFromSection } from '../../service';
 
 /**
@@ -98,7 +98,7 @@ export async function GET(request: Request, { params: { id } }) {
   }
 
   try {
-    const sections = await getAllStudentsBySectionId(id);
+    const sections = await getAllStudentsBySectionIdWithGroup(id);
 
     return new NextResponse(JSON.stringify(sections), {
       status: StatusCodes.OK,

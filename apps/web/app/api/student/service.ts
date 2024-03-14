@@ -238,17 +238,33 @@ export async function getRecentlyAddedStudentsList({
     },
   });
 }
-
-export async function getAllStudentsBySectionId(sectionId: string) {
+export async function getAllStudentsBySectionIdWithGroup(sectionId: string) {
   const session = await getServerSession(authOptions);
-  return await db.student.findMany({
+  const students = await db.student.findMany({
     where: {
       branchId: session.branchId,
       organizationId: session.organizationId,
-      sectionId: sectionId,
-      status: 'Active',
+      studentMapping: {
+        some: {
+          sectionId: sectionId,
+        },
+      },
+    },
+    include: {
+      studentMapping: {
+        include: {
+          group: true,
+        },
+      },
     },
   });
+
+  const result = students.map(({ studentMapping, ...rest }) => ({
+    ...rest,
+    group: studentMapping.map((group) => group.group),
+  }));
+
+  return result;
 }
 
 export async function getAllStudentsBySectionIds(ids: string[]) {
