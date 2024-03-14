@@ -15,7 +15,7 @@ import {
   Text,
 } from 'ui';
 
-import { CreateMediumModel } from '../../../../../lib/domain/medium';
+import { CreateMediumRequestModel } from '../../../../../lib/domain/medium';
 import { useCreateMediumMutationQuery } from '../../../../../lib/queries/medium/useCreateMediumMutationQuery';
 import { useGetMediumByIdQuery } from '../../../../../lib/queries/medium/useGetMediumByIdQuery';
 import { useUpdateMediumMutationQuery } from '../../../../../lib/queries/medium/useUpdateMediumMutationQuery';
@@ -27,9 +27,6 @@ export function SaveMediumFlyout() {
 
   const mediumId = searchParams.get('mediumId');
   const isOpen = searchParams.get('isMediumFlyoutOpen') === 'true';
-
-  const page = parseInt(searchParams.get('page')) || 1;
-  const limit = parseInt(searchParams.get('limit')) || 10;
 
   const {
     register,
@@ -48,7 +45,7 @@ export function SaveMediumFlyout() {
   const {
     isPending: isPendingCreateMedium,
     mutateAsync: mutateCreateMediumAsync,
-  } = useCreateMediumMutationQuery(page, limit);
+  } = useCreateMediumMutationQuery();
 
   const closeMediumFlyout = async () => {
     const params = new URLSearchParams(searchParams);
@@ -77,9 +74,9 @@ export function SaveMediumFlyout() {
   const {
     isPending: isPendingUpdateMedium,
     mutateAsync: mutateUpdateMediumAsync,
-  } = useUpdateMediumMutationQuery(page, limit);
+  } = useUpdateMediumMutationQuery();
 
-  async function saveMedium(payload: CreateMediumModel) {
+  async function saveMedium(payload: CreateMediumRequestModel) {
     try {
       if (mediumId) {
         const updateBatchRequestPayload = {

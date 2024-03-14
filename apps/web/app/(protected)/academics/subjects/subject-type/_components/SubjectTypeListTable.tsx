@@ -95,11 +95,14 @@ export function SubjectTypeListTable() {
   const page = parseInt(searchParams.get('page')) || 1;
   const limit = parseInt(searchParams.get('limit')) || 10;
 
-  const { data: subjectTypeListResponse, isLoading: isSubjectTypeListLoading } =
-    useGetSubjectTypeList({
-      page,
-      limit,
-    });
+  const {
+    isError: isSubjectTypeError,
+    data: subjectTypeListResponse,
+    isLoading: isSubjectTypeListLoading,
+  } = useGetSubjectTypeList({
+    page,
+    limit,
+  });
 
   const {
     isError: isDeleteSubjectTypeError,
@@ -138,12 +141,17 @@ export function SubjectTypeListTable() {
   );
   const table = useReactTable({
     columns,
-    data: subjectTypeListResponse?.data || [],
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
+    data: subjectTypeListResponse?.data || [],
     getFilteredRowModel: getFilteredRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
   });
+
+  if (isSubjectTypeError) {
+    return <div>Error while fetching subject types</div>;
+  }
+
   return (
     <section>
       <div>

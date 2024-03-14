@@ -8,6 +8,7 @@ import { getServerSession } from 'next-auth';
 
 export async function getAssessmentFormatList(page: number, limit: number) {
   const session = await getServerSession(authOptions);
+
   const [assessmentFormat, totalAssessmentFormat] = await db.$transaction([
     db.assessmentFormat.findMany({
       take: limit,
@@ -25,6 +26,7 @@ export async function getAssessmentFormatList(page: number, limit: number) {
       },
     }),
   ]);
+
   return {
     page,
     limit,

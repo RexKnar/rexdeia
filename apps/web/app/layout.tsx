@@ -4,6 +4,8 @@ import '../public/assets/css/styles.css';
 import { Inter, Roboto_Mono } from 'next/font/google';
 import type { ReactNode } from 'react';
 
+import { AcadXConsole } from '@/components/AcadXConsole';
+
 import Providers from '../lib/Providers';
 
 const inter = Inter({
@@ -46,6 +48,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       </head>
       <body className="h-screen">
         <Providers>{children}</Providers>
+        <AcadXConsole />
       </body>
     </html>
   );

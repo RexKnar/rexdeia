@@ -154,11 +154,11 @@ export async function DELETE(_: NextRequest, { params: { id } }) {
       });
     }
 
-    const getMedium = await getMediumById(id);
+    const medium = await getMediumById(id);
 
-    if (getMedium) {
-      const deleteMedium = await deleteMediumById(id);
-      return new Response(JSON.stringify(deleteMedium), {
+    if (medium) {
+      await deleteMediumById(id);
+      return new Response(JSON.stringify({}), {
         status: StatusCodes.OK,
       });
     } else {

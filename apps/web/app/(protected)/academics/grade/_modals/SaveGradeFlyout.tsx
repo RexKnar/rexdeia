@@ -12,6 +12,7 @@ import {
   SheetHeader,
   SheetTitle,
   Slider,
+  Switch,
   Text,
 } from 'ui';
 
@@ -23,11 +24,13 @@ export function GradeFlyout() {
   const searchParams = useSearchParams();
   const isOpen = searchParams.get('isGradeFlyoutOpen') === 'true';
   const [sliderValues, setSliderValues] = useState([[0, 100]]);
+  const [errorMessages, setErrorMessages] = useState([false]);
 
   const {
     control,
     handleSubmit,
     watch,
+    setValue,
     reset,
     register,
     formState: { errors: fieldErrors },
@@ -35,10 +38,25 @@ export function GradeFlyout() {
     defaultValues: {
       name: '',
       grade: [{ name: '', slider: [] }],
+      isActive: false,
     },
   });
 
   const handleValueChange = (index, newValue) => {
+    const isOverlapping = sliderValues.some((existingRange, existingIndex) => {
+      if (existingIndex === index) return false;
+      return (
+        (newValue[0] >= existingRange[0] && newValue[0] <= existingRange[1]) ||
+        (newValue[1] >= existingRange[0] && newValue[1] <= existingRange[1])
+      );
+    });
+
+    setErrorMessages((prevErrorMessages) => {
+      const newErrorMessages = [...prevErrorMessages];
+      newErrorMessages[index] = isOverlapping;
+      return newErrorMessages;
+    });
+
     setSliderValues((prevValues) => {
       const newValues = [...prevValues];
       newValues[index] = newValue;
@@ -62,24 +80,32 @@ export function GradeFlyout() {
     router.replace(pathname + '?' + params.toString());
     reset();
     setSliderValues([[0, 100]]);
+    setErrorMessages([false]);
   };
 
   const SaveGrade = async () => {
+    const hasDefaultValues = sliderValues.some(
+      (value) => value[0] === 0 && value[1] === 100
+    );
+    if (hasDefaultValues || errorMessages.some(Boolean)) {
+      return;
+    }
     try {
       const requestPayload = {
         name: watch('name'),
-        isActive: true,
+        isActive: watch('isActive'),
         gradeScales: fields.map((field, index) => ({
           startValue: sliderValues[index][0].toString(),
           endValue: sliderValues[index][1].toString(),
           gradeName: watch(`grade.${index}.name`),
-          remark: 'testing',
+          remark: '',
         })),
       };
       await mutateCreateGradeAsync(requestPayload);
     } catch (error) {
       console.error(error);
     } finally {
+      setValue('isActive', false);
       await closeFlyout();
       reset();
     }
@@ -98,12 +124,26 @@ export function GradeFlyout() {
             <form onSubmit={handleSubmit(SaveGrade)}>
               <SheetHeader>
                 <SheetTitle className="mb-5">
-                  <div className="sm:grid sm:grid-cols-1 sm:gap-4 md:grid md:grid-cols-1 md:gap-4 lg:flex lg:justify-between">
+                  <div className="sm:grid sm:grid-cols-1 sm:gap-4 md:grid md:grid-cols-1 md:gap-4 lg:grid lg:grid-cols-[1fr_100px]">
                     <div className="flex items-center">
                       <PlusCircle size={20} strokeWidth={1.5} />
                       <Text variant="lg-semibold" className="ml-2">
                         New Grade System
                       </Text>
+                    </div>
+                    <div className="flex items-center">
+                      <Switch
+                        id="isActive"
+                        {...register('isActive')}
+                        onCheckedChange={(value) => setValue('isActive', value)}
+                        checked={watch('isActive')}
+                      />
+                      <label
+                        htmlFor="isActive"
+                        className="ml-2 text-sm font-semibold"
+                      >
+                        {watch('isActive') ? 'Active' : 'Inactive'}
+                      </label>
                     </div>
                   </div>
                 </SheetTitle>
@@ -136,6 +176,7 @@ export function GradeFlyout() {
                       onClick={() => {
                         append({ grade: 'grade' });
                         setSliderValues([...sliderValues, [0, 100]]);
+                        setErrorMessages([...errorMessages, false]);
                       }}
                     >
                       <Plus size={20} className="text-center text-white" />
@@ -157,18 +198,25 @@ export function GradeFlyout() {
                           {sliderValues[index]?.[1]})
                         </label>
                         {sliderValues[index] && (
-                          <Slider
-                            sliderValues={
-                              sliderValues[index] || watch['grade'].slider
-                            }
-                            onValueChange={(value) =>
-                              handleValueChange(index, value)
-                            }
-                            defaultValue={[0, 100]}
-                            max={100}
-                            step={1}
-                            className="mt-4"
-                          />
+                          <>
+                            <Slider
+                              sliderValues={
+                                sliderValues[index] || watch['grade'].slider
+                              }
+                              onValueChange={(value) =>
+                                handleValueChange(index, value)
+                              }
+                              defaultValue={[0, 100]}
+                              max={100}
+                              step={1}
+                              className="mt-4"
+                            />
+                            {errorMessages[index] && (
+                              <span className="text-red-500">
+                                The grade is already exists
+                              </span>
+                            )}
+                          </>
                         )}
                       </div>
                       <div className="w-3/12">
@@ -198,6 +246,9 @@ export function GradeFlyout() {
                             size="sm"
                             onClick={() => {
                               remove(index);
+                              setErrorMessages(
+                                errorMessages.filter((_, i) => i !== index)
+                              );
                             }}
                           >
                             <Trash
@@ -217,6 +268,7 @@ export function GradeFlyout() {
                           onClick={() => {
                             append({ grade: 'grade' });
                             setSliderValues([...sliderValues, [0, 100]]);
+                            setErrorMessages([...errorMessages, false]);
                           }}
                         >
                           <Plus size={20} className="text-center text-white" />
@@ -231,7 +283,7 @@ export function GradeFlyout() {
                   size="lg"
                   variant="default"
                   className="mx-auto flex justify-center px-12 py-4"
-                  disabled={isPendingCreateGrade}
+                  disabled={isPendingCreateGrade || errorMessages.some(Boolean)}
                 >
                   Save
                 </Button>

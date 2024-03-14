@@ -44,6 +44,7 @@ ENV NEXT_GCLOUD_STORAGE_BUCKET=acadx
 
 # Deploy Database migrations
 RUN pnpx prisma migrate deploy
+RUN pnpx prisma generate
 
 # Expose the port the app runs on
 EXPOSE 3000

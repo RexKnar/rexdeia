@@ -405,7 +405,7 @@ model StudentMapping {
   groupId   String  @db.Uuid
   group     Group   @relation(fields: [groupId], references: [id])
 
-  @@id([studentId, sectionId, groupId])
+  @@id([studentId, classId, sectionId, groupId])
 }
 
 model Staff {

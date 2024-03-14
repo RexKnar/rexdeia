@@ -4,7 +4,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 
 import { authOptions } from '../../../lib/auth';
-import { addMedium, getAllMediums, getAllMediumsWithFilter } from './service';
+import { addMedium, getAllMediums, getMediumsWithFilter } from './service';
 
 /**
  * @swagger
@@ -35,10 +35,12 @@ export async function GET(request: NextRequest) {
   }
 
   try {
-    const page = parseInt(request.nextUrl.searchParams.get('page')) || 1;
-    const limit = parseInt(request.nextUrl.searchParams.get('limit')) || 10;
+    const { searchParams } = request.nextUrl;
+    const page = parseInt(searchParams.get('page')) || 1;
+    const limit = parseInt(searchParams.get('limit')) || 10;
 
     const paginatedMediumList = await getAllMediums(page, limit);
+
     return new NextResponse(JSON.stringify(paginatedMediumList), {
       status: StatusCodes.OK,
     });
@@ -86,14 +88,16 @@ export async function PUT(request: NextRequest) {
 
   try {
     const payload = await request.json();
-    const page = parseInt(request.nextUrl.searchParams.get('page')) || 1;
-    const limit = parseInt(request.nextUrl.searchParams.get('limit')) || 10;
+    const { searchParams } = request.nextUrl;
+    const page = parseInt(searchParams.get('page')) || 1;
+    const limit = parseInt(searchParams.get('limit')) || 10;
 
-    const paginatedMediumList = await getAllMediumsWithFilter(
+    const paginatedMediumList = await getMediumsWithFilter(
       page,
       limit,
       payload
     );
+
     return new NextResponse(JSON.stringify(paginatedMediumList), {
       status: StatusCodes.OK,
     });
@@ -138,11 +142,12 @@ export async function POST(request: NextRequest) {
       status: StatusCodes.UNAUTHORIZED,
     });
   }
+
   const payload = await request.json();
 
   try {
-    const medium = await addMedium(payload);
-    return new NextResponse(JSON.stringify(medium), {
+    await addMedium(payload);
+    return new NextResponse(JSON.stringify({}), {
       status: StatusCodes.CREATED,
     });
   } catch (e) {

@@ -4,6 +4,9 @@ import {
   ColumnDef,
   flexRender,
   getCoreRowModel,
+  getFilteredRowModel,
+  getPaginationRowModel,
+  getSortedRowModel,
   useReactTable,
 } from '@tanstack/react-table';
 import { Pencil, Trash2 } from 'lucide-react';
@@ -25,6 +28,7 @@ import {
   TableHeader,
   TableRow,
 } from 'ui/components/ui/Table';
+import { cn } from 'utils';
 
 import { GradeModel } from '../../../../../lib/domain/grade';
 import { useGetGradeList } from '../../../../../lib/queries/grade/useGetGradeListMutationQuery';
@@ -58,12 +62,12 @@ export function GradeListTable() {
       },
       cell: ({ row }) => {
         return (
-          <div className="flex flex-wrap gap-2">
+          <div className="grid grid-cols-6 gap-2">
             {row.original.gradeScales.map((gradeScale, index) => (
               <div key={index}>
-                <p className="mt-1 rounded-full bg-blue-100 px-2 py-1 text-center text-sm font-medium text-indigo-700">
-                  <span>{gradeScale.gradeName}</span>
+                <p className="mt-1 rounded-full bg-blue-100 px-1 py-1 text-center text-sm font-medium text-indigo-700">
                   <span>
+                    {gradeScale.gradeName}
                     {' (' +
                       gradeScale.startValue +
                       ' to ' +
@@ -77,6 +81,32 @@ export function GradeListTable() {
         );
       },
     },
+    {
+      accessorKey: 'isActive',
+      header: ({ column }) => {
+        return (
+          <Button
+            variant="ghost"
+            className="px-0"
+            onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+          >
+            Status
+          </Button>
+        );
+      },
+      cell: ({ row }) => {
+        return (
+          <span
+            className={cn(
+              'ml-1 rounded px-2 py-1 text-center text-sm font-medium text-gray-100',
+              row.original.isActive ? 'bg-green-600' : 'bg-red-600'
+            )}
+          >
+            {row.original.isActive ? 'Active' : 'Inactive'}
+          </span>
+        );
+      },
+    },
   ];
 
   const page = parseInt(searchParams.get('page')) || 1;
@@ -84,10 +114,14 @@ export function GradeListTable() {
 
   const { data: getGradeListResponse, isLoading: isGradeListLoading } =
     useGetGradeList({ page, limit });
+
   const table = useReactTable({
     columns,
     data: getGradeListResponse?.data || [],
     getCoreRowModel: getCoreRowModel(),
+    getSortedRowModel: getSortedRowModel(),
+    getFilteredRowModel: getFilteredRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
   });
 
   const handleOnPageChange = useCallback(

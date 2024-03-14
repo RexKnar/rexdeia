@@ -296,7 +296,7 @@ export function AssessmentFormatListTable() {
                 <TableCell colSpan={5} className="h-24 text-center">
                   {isAssessmentFormatListLoading
                     ? 'Loading...'
-                    : 'No Subject Format Found'}
+                    : 'No Assessment Format Found'}
                 </TableCell>
               </TableRow>
             )}
