@@ -56,6 +56,7 @@ export function SaveGroupFlyout() {
     params.delete('groupId');
 
     router.replace(pathname + '?' + params.toString());
+    reset();
   };
 
   const { data: getGroupByIdResponse } = useGetGroupByIdQuery(groupId, {
@@ -97,7 +98,7 @@ export function SaveGroupFlyout() {
       console.error(error);
     } finally {
       setValue('isActive', false);
-      await closeFlyout();
+      closeFlyout();
       reset();
     }
   }
