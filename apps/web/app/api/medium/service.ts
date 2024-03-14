@@ -3,28 +3,35 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from '../../../lib/auth';
 import { db } from '../../../lib/db';
 import {
-  CreateMediumModel,
-  UpdateMediumModel,
+  CreateMediumRequestModel,
+  UpdateMediumRequestModel,
 } from '../../../lib/domain/medium';
 
 type MediumFilter = {
-  status: boolean;
+  isActive?: boolean;
 };
-export async function getAllMediums(page: number, limit: number) {
-  const session = await getServerSession(authOptions);
 
-  const [total, mediumList] = await Promise.all([
+export async function getAllMediums(page: number, limit: number) {
+  const { branchId } = await getServerSession(authOptions);
+
+  const whereClause = {
+    isDeleted: false,
+    branchId,
+  };
+
+  const [total, data] = await db.$transaction([
     db.medium.count({
-      where: {
-        branchId: session.branchId,
-      },
+      where: whereClause,
     }),
     db.medium.findMany({
       take: limit,
       skip: (page - 1) * limit,
-      where: {
-        branchId: session.branchId,
-        isDeleted: false,
+      where: whereClause,
+      select: {
+        id: true,
+        name: true,
+        isActive: true,
+        createdAt: true,
       },
     }),
   ]);
@@ -33,30 +40,41 @@ export async function getAllMediums(page: number, limit: number) {
     page,
     total,
     limit,
-    data: mediumList,
+    data,
   };
 }
 
-export async function getAllMediumsWithFilter(
+export async function getMediumsWithFilter(
   page: number,
   limit: number,
   filter: MediumFilter
 ) {
-  const session = await getServerSession(authOptions);
+  const { isActive } = filter;
+  const { branchId } = await getServerSession(authOptions);
 
-  const [total, mediumList] = await Promise.all([
+  const whereClause = {
+    branchId,
+    isDeleted: false,
+  };
+
+  if (isActive !== undefined) {
+    whereClause['isActive'] = isActive;
+  }
+
+  const [total, data] = await db.$transaction([
     db.medium.count({
-      where: {
-        branchId: session.branchId,
-      },
+      where: whereClause,
     }),
     db.medium.findMany({
       take: limit,
+      where: whereClause,
       skip: (page - 1) * limit,
-      where: {
-        branchId: session.branchId,
-        isDeleted: false,
-        ...filter,
+      select: {
+        id: true,
+        name: true,
+        isActive: true,
+        updatedAt: true,
+        createdAt: true,
       },
     }),
   ]);
@@ -65,16 +83,18 @@ export async function getAllMediumsWithFilter(
     page,
     total,
     limit,
-    data: mediumList,
+    data,
   };
 }
 
-export async function addMedium(createMediumPayload: CreateMediumModel) {
+export async function addMedium(payload: CreateMediumRequestModel) {
   const session = await getServerSession(authOptions);
+  const { name, isActive } = payload;
+
   return db.medium.create({
     data: {
-      name: createMediumPayload.name,
-      isActive: createMediumPayload.isActive,
+      name,
+      isActive,
       branch: {
         connect: {
           id: session.branchId,
@@ -86,16 +106,18 @@ export async function addMedium(createMediumPayload: CreateMediumModel) {
 
 export async function updateMediumById(
   id: string,
-  updateMediumPayload: UpdateMediumModel
+  payload: UpdateMediumRequestModel
 ) {
   const session = await getServerSession(authOptions);
+  const { name, isActive } = payload;
+
   return db.medium.update({
     where: {
       id: id,
     },
     data: {
-      name: updateMediumPayload.name,
-      isActive: updateMediumPayload.isActive,
+      name,
+      isActive,
       branch: {
         connect: {
           id: session.branchId,
@@ -107,17 +129,26 @@ export async function updateMediumById(
 
 export async function getMediumById(id: string) {
   const session = await getServerSession(authOptions);
+
   return db.medium.findFirst({
     where: {
       id: id,
       isDeleted: false,
       branchId: session.branchId,
     },
+    select: {
+      id: true,
+      name: true,
+      isActive: true,
+      createdAt: true,
+      updatedAt: true,
+    },
   });
 }
 
 export async function deleteMediumById(id: string) {
   const session = await getServerSession(authOptions);
+
   return db.medium.update({
     where: {
       id: id,

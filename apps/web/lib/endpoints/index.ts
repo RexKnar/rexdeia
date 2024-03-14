@@ -236,7 +236,7 @@ export default <EndpointDetails>{
     endpoint: `/api/group`,
   },
   [GET_MEDIUM_LIST]: {
-    requestType: `PUT`,
+    requestType: `GET`,
     endpoint: `/api/medium`,
   },
   [UPDATE_REGULATION_BY_ID]: {
