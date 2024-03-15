@@ -13,7 +13,7 @@ type SubjectCardProps = {
   id: string;
   name: string;
   type?: string;
-  format?: string;
+  assessmentFormat?: string;
 };
 export function SubjectCard(props: SubjectCardProps) {
   return (
@@ -61,7 +61,7 @@ export function SubjectCard(props: SubjectCardProps) {
               {props.type}
             </div>
             <div className="rounded-md bg-sky-100 p-1 text-sm">
-              {props.format}
+              {props.assessmentFormat}
             </div>
           </li>
         </ul>

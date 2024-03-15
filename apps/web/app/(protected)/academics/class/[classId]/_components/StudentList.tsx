@@ -31,12 +31,12 @@ export function StudentList() {
   }
 
   return (
-    <div className="flex flex-wrap gap-4">
+    <section className="grid w-full grid-cols-4 justify-between gap-4 px-0">
       {studentListResponse.map((studentItem) => (
-        <div key={studentItem.id} className="w-[272px]">
+        <div key={studentItem.id}>
           <StudentCard id={studentItem.id} name={studentItem.firstName} />
         </div>
       ))}
-    </div>
+    </section>
   );
 }
