@@ -29,9 +29,9 @@ export function SectionList() {
   }
 
   return (
-    <div className="flex flex-wrap gap-4">
+    <section className="grid w-full grid-cols-6 justify-between gap-4 px-0">
       {sectionListResponse.map((sectionItem) => (
-        <div key={sectionItem.id} className="w-[275px]">
+        <div key={sectionItem.id}>
           <SectionCard
             id={sectionItem.id}
             name={sectionItem.name}
@@ -39,6 +39,6 @@ export function SectionList() {
           />
         </div>
       ))}
-    </div>
+    </section>
   );
 }

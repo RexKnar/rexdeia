@@ -95,7 +95,7 @@ export default function Page() {
           </div>
         </div>
       </div>
-      <Tabs defaultValue="Students" className="relative mt-4 p-2">
+      <Tabs defaultValue="Students" className="relative mt-4 px-0 py-2">
         <TabsList className="w-full justify-start border-b-2 border-gray-400">
           <TabsTrigger
             value="Subjects"

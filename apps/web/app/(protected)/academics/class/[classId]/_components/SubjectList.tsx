@@ -31,14 +31,12 @@ export function SubjectList() {
   }
 
   return (
-    <section className="flex w-full justify-between">
-      <div className="flex flex-wrap gap-4">
-        {subjectListResponse.map((subjectItem) => (
-          <div key={subjectItem.id} className="w-[275px]">
-            <SubjectCard id={subjectItem.id} name={subjectItem.name} />
-          </div>
-        ))}
-      </div>
+    <section className="grid w-full grid-cols-4 justify-between gap-4 px-0">
+      {subjectListResponse.map((subjectItem) => (
+        <div key={subjectItem.id}>
+          <SubjectCard id={subjectItem.id} name={subjectItem.name} />
+        </div>
+      ))}
     </section>
   );
 }
