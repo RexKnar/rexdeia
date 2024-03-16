@@ -211,8 +211,17 @@ export async function getAllStaffsBySectionsIdWithSubjects(ids: string[]) {
     },
     include: {
       academicSubjectForStaff: {
-        include: {
-          subject: true,
+        where: {
+          sectionId: {
+            in: ids,
+          },
+        },
+        select: {
+          subject: {
+            select: {
+              name: true,
+            },
+          },
         },
       },
     },
