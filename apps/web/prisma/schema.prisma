@@ -40,7 +40,6 @@ model Exam {
   examTypeId        String              @db.Uuid
   examType          ExamType            @relation(fields: [examTypeId], references: [id])
   examConfiguration ExamConfiguration[]
-  examGroup         ExamGroup[]
   section           Section?            @relation(fields: [sectionId], references: [id])
   sectionId         String?             @db.Uuid
   class             Class               @relation(fields: [classId], references: [id])
@@ -56,6 +55,8 @@ model ExamType {
   id        String   @id @default(uuid()) @map("_id") @db.Uuid
   name      String
   isActive  Boolean
+  branch    Branch   @relation(fields: [branchId], references: [id])
+  branchId  String   @db.Uuid
   termId    String   @db.Uuid
   term      Term     @relation(fields: [termId], references: [id])
   exam      Exam[]
@@ -73,8 +74,8 @@ model Term {
 }
 
 model ExamConfiguration {
-  minMark            Int
-  maxMark            Int
+  minPassMark        Int
+  markToConvert      Int
   markToConduct      Int
   dateToConduct      DateTime
   examId             String           @db.Uuid
@@ -91,7 +92,6 @@ model ExamGroup {
   totalMarks          Int
   convertToPercentage Int
   examSubject         ExamSubject[]
-  Exam1               Exam?         @relation(fields: [exam1Id], references: [id])
   exam1Id             String?       @db.Uuid
 }
 
@@ -181,6 +181,7 @@ model Branch {
   Subject          Subject[]
   grade            Grade[]
   Exam             Exam[]
+  examType         ExamType[]
 }
 
 model Organization {
