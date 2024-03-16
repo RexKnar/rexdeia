@@ -106,18 +106,32 @@ export async function getAllSubjectBySectionId(id: string) {
       subject: {
         include: {
           subjectToAssessmentFormat: {
-            include: {
+            select: {
               assessmentFormat: true,
             },
           },
           subjectToGroup: {
-            include: {
+            select: {
               group: true,
             },
           },
           subjectToSubjectTypes: {
-            include: {
+            select: {
               subjectType: true,
+            },
+          },
+          academicSubjectForStaff: {
+            where: {
+              sectionId: id,
+            },
+            select: {
+              staff: {
+                select: {
+                  firstName: true,
+                  middleName: true,
+                  lastName: true,
+                },
+              },
             },
           },
         },
@@ -139,7 +153,7 @@ export async function getAllSubjectBySectionIds(ids: string[]) {
       subject: {
         include: {
           subjectToAssessmentFormat: {
-            include: {
+            select: {
               assessmentFormat: {
                 select: {
                   name: true,
@@ -149,12 +163,36 @@ export async function getAllSubjectBySectionIds(ids: string[]) {
           },
           subjectToSubjectTypes: {
             select: {
-              subjectType: true,
+              subjectType: {
+                select: {
+                  name: true,
+                },
+              },
             },
           },
           subjectToGroup: {
-            include: {
-              group: true,
+            select: {
+              group: {
+                select: {
+                  name: true,
+                },
+              },
+            },
+          },
+          academicSubjectForStaff: {
+            where: {
+              sectionId: {
+                in: ids,
+              },
+            },
+            select: {
+              staff: {
+                select: {
+                  firstName: true,
+                  middleName: true,
+                  lastName: true,
+                },
+              },
             },
           },
         },
