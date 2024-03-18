@@ -74,16 +74,15 @@ model Term {
 }
 
 model ExamConfiguration {
+  id                 String            @id @default(uuid()) @map("_id") @db.Uuid
   minPassMark        Int
   markToConvert      Int
   markToConduct      Int
   dateToConduct      DateTime
-  examId             String           @db.Uuid
-  exam               Exam             @relation(fields: [examId], references: [id])
-  assessmentFormatId String           @db.Uuid
-  assessmentFormat   AssessmentFormat @relation(fields: [assessmentFormatId], references: [id])
-
-  @@id([examId, assessmentFormatId])
+  examId             String            @db.Uuid
+  exam               Exam              @relation(fields: [examId], references: [id])
+  assessmentFormatId String?           @db.Uuid
+  assessmentFormat   AssessmentFormat? @relation(fields: [assessmentFormatId], references: [id])
 }
 
 model ExamGroup {

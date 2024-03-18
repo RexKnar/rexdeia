@@ -48,55 +48,59 @@ export async function createExamConfigurationForExam(
     throw new Error(`ACADEMIC_YEAR_NOT_FOUND`);
   }
 
-  await db.$transaction(
-    assessmentFormatConfiguration.map((assessmentFormatData) => {
-      return db.exam.create({
-        data: {
-          name: name,
-          isActive: true,
-          branch: {
-            connect: {
-              id: session.branchId,
-            },
-          },
-          examType: {
-            connect: {
-              id: examTypeId,
-            },
-          },
-          class: {
-            connect: {
-              id: classId,
-            },
-          },
-          section: {
-            connect: {
-              id: sectionId,
-            },
-          },
-          subject: {
-            connect: {
-              id: subjectId,
-            },
-          },
-          batch: {
-            connect: {
-              id: academicYearId,
-            },
-          },
-          examConfiguration: {
-            create: [
-              {
-                assessmentFormatId: assessmentFormatData.assessmentFormatId,
-                minPassMark: assessmentFormatData.minPassMark,
-                markToConvert: assessmentFormatData.markToConvert,
-                dateToConduct: assessmentFormatData.dateToConduct,
-                markToConduct: assessmentFormatData.markToConduct,
-              },
-            ],
+  return await db.$transaction(async (prisma) => {
+    const createdExam = await prisma.exam.create({
+      data: {
+        name: name,
+        isActive: true,
+        branch: {
+          connect: {
+            id: session.branchId,
           },
         },
-      });
-    })
-  );
+        examType: {
+          connect: {
+            id: examTypeId,
+          },
+        },
+        class: {
+          connect: {
+            id: classId,
+          },
+        },
+        section: {
+          connect: {
+            id: sectionId,
+          },
+        },
+        subject: {
+          connect: {
+            id: subjectId,
+          },
+        },
+        batch: {
+          connect: {
+            id: academicYearId,
+          },
+        },
+      },
+    });
+
+    await Promise.all(
+      assessmentFormatConfiguration.map(async (assessmentFormatData) => {
+        await prisma.examConfiguration.create({
+          data: {
+            assessmentFormatId: assessmentFormatData.assessmentFormatId,
+            minPassMark: assessmentFormatData.minPassMark,
+            markToConvert: assessmentFormatData.markToConvert,
+            examId: createdExam.id,
+            dateToConduct: assessmentFormatData.dateToConduct,
+            markToConduct: assessmentFormatData.markToConduct,
+          },
+        });
+      })
+    );
+
+    return createdExam;
+  });
 }

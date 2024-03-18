@@ -10,8 +10,8 @@ import { createExamType, getExamsList } from './service';
  * @swagger
  * /api/exam:
  *     post:
- *       summary: Add new Exam
- *       description: Add New Exam
+ *       summary: Add new ExamType
+ *       description: Add New ExamType
  *       requestBody:
  *         required: true
  *         content:
@@ -20,7 +20,7 @@ import { createExamType, getExamsList } from './service';
  *               type: object
  *       responses:
  *         '200':
- *           description: Exam's details added successfully.
+ *           description: ExamTypes's details added successfully.
  *           content:
  *             application/json:
  *               schema:
@@ -42,8 +42,8 @@ export async function POST(request: NextRequest) {
   const payload = await request.json();
 
   try {
-    const createdExam = await createExamType(payload);
-    return new NextResponse(JSON.stringify(createdExam), {
+    const createdExamType = await createExamType(payload);
+    return new NextResponse(JSON.stringify(createdExamType), {
       status: StatusCodes.CREATED,
     });
   } catch (e) {
