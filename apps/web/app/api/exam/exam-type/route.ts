@@ -4,37 +4,14 @@ import { authOptions } from 'lib/auth';
 import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 
-import { createExamConfigurationForExam, getExamsList } from './service';
-
-export async function GET(request: NextRequest) {
-  const session = await getServerSession(authOptions);
-  if (!session) {
-    return new NextResponse(JSON.stringify({ error: 'UNAUTHORIZED' }), {
-      status: StatusCodes.UNAUTHORIZED,
-    });
-  }
-  try {
-    const page = parseInt(request.nextUrl.searchParams.get('page')) || 1;
-    const limit = parseInt(request.nextUrl.searchParams.get('limit')) || 10;
-
-    const classList = await getExamsList(page, limit);
-    return new NextResponse(JSON.stringify(classList), {
-      status: StatusCodes.OK,
-    });
-  } catch (e) {
-    captureException(e);
-    return new NextResponse(e, {
-      status: StatusCodes.BAD_REQUEST,
-    });
-  }
-}
+import { createExamType } from './service';
 
 /**
  * @swagger
- * /api/exam:
+ * /api/exam/examType:
  *     post:
- *       summary: Add new Exam
- *       description: Add New Exam
+ *       summary: Add new ExamType
+ *       description: Add New ExamType
  *       requestBody:
  *         required: true
  *         content:
@@ -43,7 +20,7 @@ export async function GET(request: NextRequest) {
  *               type: object
  *       responses:
  *         '200':
- *           description: Exam's details added successfully.
+ *           description: ExamTypes's details added successfully.
  *           content:
  *             application/json:
  *               schema:
@@ -55,7 +32,7 @@ export async function GET(request: NextRequest) {
  *         '500':
  *           description: Internal server error.
  */
-export async function POST(request: Request) {
+export async function POST(request: NextRequest) {
   const session = await getServerSession(authOptions);
   if (!session) {
     return new NextResponse(JSON.stringify({ error: 'UNAUTHORIZED' }), {
@@ -65,8 +42,8 @@ export async function POST(request: Request) {
   const payload = await request.json();
 
   try {
-    const createdExam = await createExamConfigurationForExam(payload);
-    return new NextResponse(JSON.stringify(createdExam), {
+    const createdExamType = await createExamType(payload);
+    return new NextResponse(JSON.stringify(createdExamType), {
       status: StatusCodes.CREATED,
     });
   } catch (e) {
