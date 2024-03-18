@@ -14,14 +14,38 @@ export async function getExamsList(page: number, limit: number) {
         branchId: session.branchId,
       },
       include: {
-        class: true,
-        subject: true,
-        examType: true,
-        section: true,
-        batch: true,
+        class: {
+          select: {
+            name: true,
+          },
+        },
+        subject: {
+          select: {
+            name: true,
+          },
+        },
+        examType: {
+          select: {
+            name: true,
+          },
+        },
+        section: {
+          select: {
+            name: true,
+          },
+        },
+        batch: {
+          select: {
+            name: true,
+          },
+        },
         examConfiguration: {
           include: {
-            assessmentFormat: true,
+            assessmentFormat: {
+              select: {
+                name: true,
+              },
+            },
           },
         },
       },

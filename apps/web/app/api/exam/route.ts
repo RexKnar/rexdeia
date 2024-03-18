@@ -6,6 +6,26 @@ import { getServerSession } from 'next-auth';
 
 import { createExamConfigurationForExam, getExamsList } from './service';
 
+/**
+ * @swagger
+ * /api/exam:
+ *     get:
+ *       summary: Get All exams list
+ *       description: Get All exams list
+ *       responses:
+ *         '200':
+ *           description: exams details are  fetched Successfully.
+ *           content:
+ *             application/json:
+ *               schema:
+ *                 # Define the schema of your exam object here
+ *         '400':
+ *           description: Bad request due to validation error.
+ *         '401':
+ *           description: Unauthorized access.
+ *         '500':
+ *           description: Internal server error.
+ */
 export async function GET(request: NextRequest) {
   const session = await getServerSession(authOptions);
   if (!session) {
