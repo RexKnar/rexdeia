@@ -9,9 +9,17 @@ export function ExamCard(props) {
       className="cursor-pointer border-b-2 border-white p-2 font-medium"
       onClick={() => {
         const params = new URLSearchParams(searchParams);
-        params.set('classId', props.examProps.id);
-
-        router.push(pathname + '?' + params.toString());
+        if (props.examProps.Section) {
+          params.set('classId', props.examProps.id);
+        } else if (props.examProps.classId) {
+          params.set('sectionId', props.examProps.id);
+        } else if (props.examProps.regulationId) {
+          params.set('subjectId', props.examProps.id);
+          params.set('isExamConfigureFlyoutOpen', 'true');
+        } else {
+          params.set('subjectTypeId', props.examProps.id);
+        }
+        router.replace(pathname + '?' + params.toString());
       }}
     >
       {props.examProps.name}

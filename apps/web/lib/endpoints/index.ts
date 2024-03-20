@@ -90,6 +90,9 @@ export const ASSIGN_STAFF_BY_CLASS_ID = `ASSIGN_STAFF_BY_CLASS_ID`;
 export const ADD_SUBJECT_BY_CLASS_ID = `ADD_SUBJECT_BY_CLASS_ID`;
 export const ADD_ASSESSMENT_FORMAT_WITH_PARENT_ID = `ADD_ASSESSMENT_FORMAT_WITH_PARENT_ID`;
 export const ASSIGN_STUDENT_BY_CLASS_ID = `ASSIGN_STUDENT_BY_CLASS_ID`;
+export const GET_SUBJECT_LIST_BY_FILTER = `GET_SUBJECT_LIST_BY_FILTER`;
+export const GET_EXAM_TYPE_LIST = `GET_EXAM_TYPE_LIST`;
+export const GET_TERM_LIST = `GET_TERM_LIST`;
 
 export default <EndpointDetails>{
   [REGISTER_USER]: {
@@ -451,5 +454,17 @@ export default <EndpointDetails>{
   [ASSIGN_STUDENT_BY_CLASS_ID]: {
     requestType: `POST`,
     endpoint: `/api/class/[id]/students`,
+  },
+  [GET_SUBJECT_LIST_BY_FILTER]: {
+    requestType: `PUT`,
+    endpoint: `/api/exam/subject`,
+  },
+  [GET_EXAM_TYPE_LIST]: {
+    requestType: `GET`,
+    endpoint: `/api/exam/exam-type`,
+  },
+  [GET_TERM_LIST]: {
+    requestType: `GET`,
+    endpoint: `/api/exam/term`,
   },
 };

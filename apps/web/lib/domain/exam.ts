@@ -42,3 +42,13 @@ export type CreateExamModel = Pick<
   ExamTypeModel,
   'name' | 'termId' | 'isActive'
 >;
+
+export type TermModel = {
+  id: string;
+  name: string;
+  isActive: boolean;
+  createdAt: string;
+  updatedAt: string;
+};
+
+export type CreateTermModel = Pick<TermModel, 'name' | 'isActive'>;

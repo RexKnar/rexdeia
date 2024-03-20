@@ -156,6 +156,7 @@ export async function getAllSubjectBySectionIds(ids: string[]) {
             select: {
               assessmentFormat: {
                 select: {
+                  id: true,
                   name: true,
                 },
               },
@@ -165,6 +166,7 @@ export async function getAllSubjectBySectionIds(ids: string[]) {
             select: {
               subjectType: {
                 select: {
+                  id: true,
                   name: true,
                 },
               },
@@ -174,6 +176,7 @@ export async function getAllSubjectBySectionIds(ids: string[]) {
             select: {
               group: {
                 select: {
+                  id: true,
                   name: true,
                 },
               },
@@ -188,6 +191,7 @@ export async function getAllSubjectBySectionIds(ids: string[]) {
             select: {
               staff: {
                 select: {
+                  id: true,
                   firstName: true,
                   middleName: true,
                   lastName: true,

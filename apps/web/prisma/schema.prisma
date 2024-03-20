@@ -69,6 +69,8 @@ model Term {
   name      String
   isActive  Boolean
   examType  ExamType[]
+  branch    Branch     @relation(fields: [branchId], references: [id])
+  branchId  String     @db.Uuid
   createdAt DateTime   @default(now())
   updatedAt DateTime   @default(now())
 }
@@ -181,6 +183,7 @@ model Branch {
   grade            Grade[]
   Exam             Exam[]
   examType         ExamType[]
+  term             Term[]
 }
 
 model Organization {
