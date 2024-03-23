@@ -283,6 +283,41 @@ export async function getAllSubjectsWithFilter(
   };
 }
 
+export async function getAssessmentFormatBySubjectId(subjectId: string) {
+  const response = await db.subjectToAssessmentFormat.findMany({
+    where: {
+      subjectId: subjectId,
+      assessmentFormat: {
+        hasMarkEntry: true,
+      },
+    },
+    include: {
+      assessmentFormat: true,
+    },
+  });
+  return [...response.map((data) => data.assessmentFormat)];
+}
+
+export async function mapAssessmentFormatsToSubject(
+  subjectId: string,
+  assessmentFormatIds: string[]
+) {
+  await db.$transaction(
+    assessmentFormatIds.map((assessmentFormatId) => {
+      return db.subject.update({
+        where: {
+          id: subjectId,
+        },
+        data: {
+          subjectToAssessmentFormat: {
+            create: [{ assessmentFormatId: assessmentFormatId }],
+          },
+        },
+      });
+    })
+  );
+}
+
 export async function mapSubjectToGroup(subjectId: string, groupIds: string[]) {
   await db.$transaction(
     groupIds.map((groupId) => {
