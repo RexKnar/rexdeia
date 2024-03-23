@@ -1,5 +1,5 @@
 import { authOptions } from 'lib/auth';
-import { CreateExamConfigurationModel } from 'lib/domain/exam';
+import { CreateExamModel } from 'lib/domain/exam';
 import { getServerSession } from 'next-auth';
 
 import { db } from '../../../lib/db';
@@ -14,38 +14,16 @@ export async function getExamsList(page: number, limit: number) {
         branchId: session.branchId,
       },
       include: {
-        class: {
-          select: {
-            name: true,
-          },
-        },
-        subject: {
-          select: {
-            name: true,
-          },
-        },
         examType: {
           select: {
+            id: true,
             name: true,
           },
         },
-        section: {
+        term: {
           select: {
+            id: true,
             name: true,
-          },
-        },
-        batch: {
-          select: {
-            name: true,
-          },
-        },
-        examConfiguration: {
-          include: {
-            assessmentFormat: {
-              select: {
-                name: true,
-              },
-            },
           },
         },
       },
@@ -65,48 +43,20 @@ export async function getExamsList(page: number, limit: number) {
   };
 }
 
-export async function createExamConfigurationForExam(
-  configuration: CreateExamConfigurationModel
-) {
+export async function createExam(examPayload: CreateExamModel) {
   const session = await getServerSession(authOptions);
-  const {
-    assessmentFormatConfiguration,
-    name,
-    classId,
-    sectionId,
-    subjectId,
-    subjectTypeId,
-    academicYearId,
-    examTypeId,
-  } = configuration;
+  const { name, examTypeId, termId } = examPayload;
 
-  const [examType, classData, subject, subjectType, section, academicYear] =
-    await db.$transaction([
-      db.examType.findUnique({ where: { id: examTypeId } }),
-      db.class.findUnique({ where: { id: classId } }),
-      db.subject.findUnique({ where: { id: subjectId } }),
-      db.subjectType.findUnique({ where: { id: subjectTypeId } }),
-      db.section.findUnique({ where: { id: sectionId } }),
-      db.batch.findUnique({ where: { id: academicYearId } }),
-    ]);
+  const [examType, term] = await db.$transaction([
+    db.examType.findUnique({ where: { id: examTypeId } }),
+    db.term.findUnique({ where: { id: termId } }),
+  ]);
 
   if (!examType) {
-    throw new Error(`EXAM_NOT_FOUND`);
+    throw new Error(`EXAM_TYPE_NOT_FOUND`);
   }
-  if (!classData) {
-    throw new Error(`CLASS_NOT_MATCHED`);
-  }
-  if (!subject) {
-    throw new Error(`SUBJECT_NOT_FOUND`);
-  }
-  if (!section) {
-    throw new Error(`SECTION_NOT_FOUND`);
-  }
-  if (!subjectType) {
-    throw new Error(`SUBJECT_TYPE_NOT_FOUND`);
-  }
-  if (!academicYear) {
-    throw new Error(`ACADEMIC_YEAR_NOT_FOUND`);
+  if (!term) {
+    throw new Error(`TERM_NOT_FOUND`);
   }
 
   return await db.$transaction(async (prisma) => {
@@ -124,44 +74,13 @@ export async function createExamConfigurationForExam(
             id: examTypeId,
           },
         },
-        class: {
+        term: {
           connect: {
-            id: classId,
-          },
-        },
-        section: {
-          connect: {
-            id: sectionId,
-          },
-        },
-        subject: {
-          connect: {
-            id: subjectId,
-          },
-        },
-        batch: {
-          connect: {
-            id: academicYearId,
+            id: term.id,
           },
         },
       },
     });
-
-    await Promise.all(
-      assessmentFormatConfiguration.map(async (assessmentFormatData) => {
-        await prisma.examConfiguration.create({
-          data: {
-            assessmentFormatId: assessmentFormatData.assessmentFormatId,
-            minPassMark: assessmentFormatData.minPassMark,
-            markToConvert: assessmentFormatData.markToConvert,
-            examId: createdExam.id,
-            dateToConduct: assessmentFormatData.dateToConduct,
-            markToConduct: assessmentFormatData.markToConduct,
-          },
-        });
-      })
-    );
-
     return createdExam;
   });
 }

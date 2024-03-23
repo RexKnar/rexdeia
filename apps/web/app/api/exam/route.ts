@@ -4,7 +4,7 @@ import { authOptions } from 'lib/auth';
 import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 
-import { createExamConfigurationForExam, getExamsList } from './service';
+import { createExam, getExamsList } from './service';
 
 /**
  * @swagger
@@ -85,7 +85,7 @@ export async function POST(request: Request) {
   const payload = await request.json();
 
   try {
-    const createdExam = await createExamConfigurationForExam(payload);
+    const createdExam = await createExam(payload);
     return new NextResponse(JSON.stringify(createdExam), {
       status: StatusCodes.CREATED,
     });
