@@ -8,7 +8,7 @@ import { getAssessmentFormatBySubjectId } from '../../service';
 
 /**
  * @swagger
- * /api/subject/{id}/assessment-format:
+ * /api/exam/subject/{id}/assessment-format:
  *     get:
  *       summary: Fetch assessment-format By subjectId
  *       description: Fetch assessment-format By subjectId

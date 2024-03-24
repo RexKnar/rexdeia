@@ -1,5 +1,6 @@
 'use client';
 
+import { useGetAssessmentFormatBySubjectIdQuery } from 'lib/queries/exams/usegetAssessmentFormatbySubjectIdQuery';
 import { PlusCircle } from 'lucide-react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useState } from 'react';
@@ -19,6 +20,7 @@ export function ExamConfigureFlyout() {
   const pathname = usePathname();
   const router = useRouter();
   const searchParams = useSearchParams();
+  const subjectId = searchParams.get('subjectId');
   const isOpen = searchParams.get('isExamConfigureFlyoutOpen') === 'true';
   const {
     reset,
@@ -27,6 +29,11 @@ export function ExamConfigureFlyout() {
     handleSubmit,
     formState: { errors: fieldErrors },
   } = useForm();
+  const { data: assessmentFormatResponse } =
+    useGetAssessmentFormatBySubjectIdQuery(subjectId, {
+      enabled: !!subjectId,
+    });
+
   const [practical, setPractical] = useState(false);
   const [theory, setTheory] = useState(true);
 
@@ -39,6 +46,7 @@ export function ExamConfigureFlyout() {
   };
 
   async function saveExamConfigure() {
+    assessmentFormatResponse;
     closeFlyout();
   }
   return (
@@ -47,7 +55,7 @@ export function ExamConfigureFlyout() {
         <SheetContent
           side="right"
           widthSize="sm"
-          className="bg-white p-10"
+          className="p-10 bg-white"
           onCloseClick={() => closeFlyout()}
         >
           <div className="max-h-[95vh] overflow-y-auto">
@@ -65,7 +73,7 @@ export function ExamConfigureFlyout() {
                 </SheetTitle>
                 <hr className="border-t border-gray-300"></hr>
               </SheetHeader>
-              <div className="mt-5 p-1">
+              <div className="p-1 mt-5">
                 <div>
                   <label htmlFor="name" className="text-sm font-semibold">
                     Subject Name
@@ -124,13 +132,13 @@ export function ExamConfigureFlyout() {
                     errorMessage={fieldErrors?.minPassMark?.message.toString()}
                   />
                 </div>
-                <div className="mt-1 flex justify-end">
+                <div className="flex justify-end mt-1">
                   <label className="text-sm font-medium text-gray-600">
                     From conducting mark
                   </label>
                 </div>
               </div>
-              <div className="mt-5 flex items-center justify-around">
+              <div className="flex items-center justify-around mt-5">
                 <div className="flex items-center">
                   <Switch
                     id="theory"
@@ -164,7 +172,7 @@ export function ExamConfigureFlyout() {
                 </div>
               </div>
               {theory && (
-                <div className="mt-5 p-1">
+                <div className="p-1 mt-5">
                   <div>
                     <label htmlFor="name" className="text-sm font-semibold">
                       Theory
@@ -225,7 +233,7 @@ export function ExamConfigureFlyout() {
                       errorMessage={fieldErrors?.passMarkInThory?.message.toString()}
                     />
                   </div>
-                  <div className="mt-1 flex justify-end">
+                  <div className="flex justify-end mt-1">
                     <label className="text-sm font-medium text-gray-600">
                       From conducting mark
                     </label>
@@ -233,7 +241,7 @@ export function ExamConfigureFlyout() {
                 </div>
               )}
               {practical && (
-                <div className="mt-5 p-1">
+                <div className="p-1 mt-5">
                   <div>
                     <label htmlFor="name" className="text-sm font-semibold">
                       Practical
@@ -294,7 +302,7 @@ export function ExamConfigureFlyout() {
                       errorMessage={fieldErrors?.passMarkInPractical?.message.toString()}
                     />
                   </div>
-                  <div className="mt-1 flex justify-end">
+                  <div className="flex justify-end mt-1">
                     <label className="text-sm font-medium text-gray-600">
                       From conducting mark
                     </label>
@@ -305,7 +313,7 @@ export function ExamConfigureFlyout() {
                 <Button
                   size="lg"
                   variant="default"
-                  className="mx-auto flex justify-center px-12 py-4"
+                  className="flex justify-center px-12 py-4 mx-auto"
                 >
                   Save & Close
                 </Button>

@@ -87,6 +87,7 @@ export const ASSIGN_STUDENT_BY_CLASS_ID = `ASSIGN_STUDENT_BY_CLASS_ID`;
 export const GET_SUBJECT_LIST_BY_FILTER = `GET_SUBJECT_LIST_BY_FILTER`;
 export const GET_EXAM_TYPE_LIST = `GET_EXAM_TYPE_LIST`;
 export const GET_TERM_LIST = `GET_TERM_LIST`;
+export const GET_ASSESSMENT_FORMAT_BY_SUBJECT_ID = `GET_ASSESSMENT_FORMAT_BY_SUBJECT_ID`;
 
 export default <EndpointDetails>{
   [REGISTER_USER]: {
@@ -436,5 +437,9 @@ export default <EndpointDetails>{
   [GET_TERM_LIST]: {
     requestType: `GET`,
     endpoint: `/api/exam/term`,
+  },
+  [GET_ASSESSMENT_FORMAT_BY_SUBJECT_ID]: {
+    requestType: `GET`,
+    endpoint: `/api/exam/subject/[id]/assessment-format`,
   },
 };
