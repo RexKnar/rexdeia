@@ -1,22 +1,24 @@
 export type ExamModel = {
+  id: string;
   name: string;
   isActive: boolean;
   examTypeId: string;
   termId: string;
+  academicYearId: string;
 };
 
 export type CreateExamModel = Pick<
   ExamModel,
-  'name' | 'termId' | 'isActive' | 'examTypeId'
+  'name' | 'termId' | 'isActive' | 'examTypeId' | 'academicYearId'
 >;
 
 export type ExamConfigurationModel = {
   assessmentFormatConfiguration: assessmentFormatConfiguration[];
+  examId: string;
   sectionId: string;
   classId: string;
   subjectId: string;
   subjectTypeId: string;
-  academicYearId: string;
 };
 
 export type assessmentFormatConfiguration = {
@@ -33,7 +35,6 @@ export type CreateExamConfigurationModel = Pick<
   | 'subjectTypeId'
   | 'classId'
   | 'sectionId'
-  | 'academicYearId'
   | 'assessmentFormatConfiguration'
 >;
 

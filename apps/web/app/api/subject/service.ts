@@ -283,21 +283,6 @@ export async function getAllSubjectsWithFilter(
   };
 }
 
-export async function getAssessmentFormatBySubjectId(subjectId: string) {
-  const response = await db.subjectToAssessmentFormat.findMany({
-    where: {
-      subjectId: subjectId,
-      assessmentFormat: {
-        hasMarkEntry: true,
-      },
-    },
-    include: {
-      assessmentFormat: true,
-    },
-  });
-  return [...response.map((data) => data.assessmentFormat)];
-}
-
 export async function mapAssessmentFormatsToSubject(
   subjectId: string,
   assessmentFormatIds: string[]

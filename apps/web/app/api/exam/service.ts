@@ -26,6 +26,12 @@ export async function getExamsList(page: number, limit: number) {
             name: true,
           },
         },
+        batch: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
       },
     }),
     db.exam.count({
@@ -45,11 +51,12 @@ export async function getExamsList(page: number, limit: number) {
 
 export async function createExam(examPayload: CreateExamModel) {
   const session = await getServerSession(authOptions);
-  const { name, examTypeId, termId } = examPayload;
+  const { name, examTypeId, termId, academicYearId } = examPayload;
 
-  const [examType, term] = await db.$transaction([
+  const [examType, term, academicYear] = await db.$transaction([
     db.examType.findUnique({ where: { id: examTypeId } }),
     db.term.findUnique({ where: { id: termId } }),
+    db.batch.findUnique({ where: { id: academicYearId } }),
   ]);
 
   if (!examType) {
@@ -57,6 +64,9 @@ export async function createExam(examPayload: CreateExamModel) {
   }
   if (!term) {
     throw new Error(`TERM_NOT_FOUND`);
+  }
+  if (!academicYear) {
+    throw new Error(`ACADEMIC_YEAR_NOT_FOUND`);
   }
 
   return await db.$transaction(async (prisma) => {
@@ -77,6 +87,11 @@ export async function createExam(examPayload: CreateExamModel) {
         term: {
           connect: {
             id: term.id,
+          },
+        },
+        batch: {
+          connect: {
+            id: academicYearId,
           },
         },
       },
