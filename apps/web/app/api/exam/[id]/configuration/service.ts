@@ -5,7 +5,7 @@ import { getServerSession } from 'next-auth';
 
 export async function createExamConfigurationForExam(
   configuration: CreateExamConfigurationModel,
-  examId: string
+  examId: string = 'a0a1055d-e607-46e9-b977-3d036b5435ce'
 ) {
   const {
     assessmentFormatConfiguration,
@@ -13,18 +13,14 @@ export async function createExamConfigurationForExam(
     sectionId,
     subjectId,
     subjectTypeId,
-    academicYearId,
   } = configuration;
 
-  const [classData, subject, subjectType, section, academicYear] =
-    await db.$transaction([
-      db.class.findUnique({ where: { id: classId } }),
-      db.subject.findUnique({ where: { id: subjectId } }),
-      db.subjectType.findUnique({ where: { id: subjectTypeId } }),
-      db.section.findUnique({ where: { id: sectionId } }),
-      db.batch.findUnique({ where: { id: academicYearId } }),
-    ]);
-
+  const [classData, subject, subjectType, section] = await db.$transaction([
+    db.class.findUnique({ where: { id: classId } }),
+    db.subject.findUnique({ where: { id: subjectId } }),
+    db.subjectType.findUnique({ where: { id: subjectTypeId } }),
+    db.section.findUnique({ where: { id: sectionId } }),
+  ]);
   if (!classData) {
     throw new Error(`CLASS_NOT_MATCHED`);
   }
@@ -37,9 +33,6 @@ export async function createExamConfigurationForExam(
   if (!subjectType) {
     throw new Error(`SUBJECT_TYPE_NOT_FOUND`);
   }
-  if (!academicYear) {
-    throw new Error(`ACADEMIC_YEAR_NOT_FOUND`);
-  }
 
   return await db.$transaction(async (prisma) => {
     const createdAcademicExam = await prisma.academicExams.create({
@@ -48,8 +41,7 @@ export async function createExamConfigurationForExam(
         examId: examId,
         sectionId: sectionId,
         subjectId: subjectId,
-        subjectTypeId: subjectType.id,
-        batchId: academicYearId,
+        subjectTypeId: subjectTypeId,
       },
     });
 
@@ -58,12 +50,11 @@ export async function createExamConfigurationForExam(
         await prisma.examConfiguration.create({
           data: {
             assessmentFormatId: assessmentFormatData.assessmentFormatId,
-            minPassMark: assessmentFormatData.minPassMark,
-            markToConvert: assessmentFormatData.markToConvert,
+            minPassMark: +assessmentFormatData.minPassMark,
+            markToConvert: +assessmentFormatData.markToConvert,
             academicExamId: createdAcademicExam.id,
-            // dateToConduct: assessmentFormatData.dateToConduct,
-            dateToConduct: new Date(),
-            markToConduct: assessmentFormatData.markToConduct,
+            dateToConduct: new Date(assessmentFormatData.dateToConduct),
+            markToConduct: +assessmentFormatData.markToConduct,
           },
         });
       })
@@ -101,12 +92,6 @@ export async function getExamConfigurationList(
           },
         },
         section: {
-          select: {
-            id: true,
-            name: true,
-          },
-        },
-        batch: {
           select: {
             id: true,
             name: true,
