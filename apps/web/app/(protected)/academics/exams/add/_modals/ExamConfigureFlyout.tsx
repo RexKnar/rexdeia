@@ -1,10 +1,10 @@
 'use client';
 
+import { useCreateExamConfigurationQuery } from 'lib/queries/exams/useCreateExamConfigurationMutationQuery';
 import { useGetAssessmentFormatBySubjectIdQuery } from 'lib/queries/exams/usegetAssessmentFormatbySubjectIdQuery';
 import { PlusCircle } from 'lucide-react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import { useState } from 'react';
-import { useForm } from 'react-hook-form';
+import { useFieldArray, useForm } from 'react-hook-form';
 import {
   Button,
   Input,
@@ -21,32 +21,63 @@ export function ExamConfigureFlyout() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const subjectId = searchParams.get('subjectId');
+  const classId = searchParams.get('classId');
+  const examId = searchParams.get('examId');
+  const sectionId = searchParams.get('sectionId');
+  const subjectTypeId = searchParams.get('subjectTypeId');
+  const keysToDelete = [
+    'markToConduct',
+    'markToConvert',
+    'minPassMark',
+    'dateToConduct',
+  ];
   const isOpen = searchParams.get('isExamConfigureFlyoutOpen') === 'true';
   const {
+    control,
     reset,
-    setValue,
     register,
     handleSubmit,
     formState: { errors: fieldErrors },
   } = useForm();
+
+  const { fields, append, remove } = useFieldArray({
+    control,
+    name: 'assessmentFormatConfiguration',
+  });
+
   const { data: assessmentFormatResponse } =
     useGetAssessmentFormatBySubjectIdQuery(subjectId, {
       enabled: !!subjectId,
     });
 
-  const [practical, setPractical] = useState(false);
-  const [theory, setTheory] = useState(true);
+  const { mutateAsync: mutateCreateExamConfigurationAsync } =
+    useCreateExamConfigurationQuery(examId);
 
   const closeFlyout = async () => {
     const params = new URLSearchParams(searchParams);
     params.set('isExamConfigureFlyoutOpen', 'false');
     reset();
+    fields.splice(0, fields.length);
 
     router.replace(pathname + '?' + params.toString());
   };
 
-  async function saveExamConfigure() {
-    assessmentFormatResponse;
+  async function saveExamConfigure(payload) {
+    const additionalValues = {
+      markToConduct: payload.markToConduct,
+      dateToConduct: new Date(payload.dateToConduct),
+      markToConvert: payload.markToConvert,
+      minPassMark: payload.minPassMark,
+      assessmentFormatId: null,
+    };
+    keysToDelete.forEach((key) => delete payload[key]);
+
+    payload.assessmentFormatConfiguration.push(additionalValues);
+    payload.subjectId = subjectId;
+    payload.classId = classId;
+    payload.sectionId = sectionId;
+    payload.subjectTypeId = subjectTypeId;
+    await mutateCreateExamConfigurationAsync(payload);
     closeFlyout();
   }
   return (
@@ -55,7 +86,7 @@ export function ExamConfigureFlyout() {
         <SheetContent
           side="right"
           widthSize="sm"
-          className="p-10 bg-white"
+          className="bg-white p-10"
           onCloseClick={() => closeFlyout()}
         >
           <div className="max-h-[95vh] overflow-y-auto">
@@ -73,44 +104,58 @@ export function ExamConfigureFlyout() {
                 </SheetTitle>
                 <hr className="border-t border-gray-300"></hr>
               </SheetHeader>
-              <div className="p-1 mt-5">
+              <div className="mt-5 p-1">
                 <div>
                   <label htmlFor="name" className="text-sm font-semibold">
                     Subject Name
                   </label>
                 </div>
+                <div className="mt-4">
+                  <label
+                    htmlFor="dateToConduct"
+                    className="text-sm font-semibold text-gray-700"
+                  >
+                    Date to Conduct
+                  </label>
+                  <Input
+                    type={'date'}
+                    {...register('dateToConduct', {
+                      required: 'date to Conduct is Required',
+                    })}
+                  />
+                </div>
                 <label
                   htmlFor="name"
                   className="text-sm font-semibold text-gray-700"
                 >
-                  Total mark
+                  mark To Conduct
                 </label>
                 <Input
-                  {...register('totalmark', {
-                    required: 'Total mark is Required',
+                  {...register('markToConduct', {
+                    required: ' Conduct mark is Required',
                   })}
-                  id="name"
+                  id="markToConduct"
                   autoFocus
                   type="text"
                   className="mt-2"
-                  placeholder="Total mark"
-                  errorMessage={fieldErrors?.totalmark?.message.toString()}
+                  placeholder="Mark To Conduct"
+                  errorMessage={fieldErrors?.markToConduct?.message.toString()}
                 />
                 <div className="mt-2">
                   <label
                     htmlFor="name"
                     className="text-sm font-semibold text-gray-700"
                   >
-                    Mark to Conduct
+                    Mark to Convert
                   </label>
                   <Input
-                    {...register('markToConduct', {
-                      required: 'Mark to Conduct is Required',
+                    {...register('markToConvert', {
+                      required: 'Mark to Convert is Required',
                     })}
-                    id="name"
+                    id="markToConvert"
                     type="text"
                     className="mt-2"
-                    placeholder="Mark to Conduct"
+                    placeholder="Mark to Convert"
                     errorMessage={fieldErrors?.markToConduct?.message.toString()}
                   />
                 </div>
@@ -125,195 +170,138 @@ export function ExamConfigureFlyout() {
                     {...register('minPassMark', {
                       required: 'Min Pass Mark is Required',
                     })}
-                    id="name"
+                    id="minPassMark"
                     type="text"
                     className="mt-2"
                     placeholder="Min Pass Mark"
                     errorMessage={fieldErrors?.minPassMark?.message.toString()}
                   />
                 </div>
-                <div className="flex justify-end mt-1">
+                <div className="mt-1 flex justify-end">
                   <label className="text-sm font-medium text-gray-600">
                     From conducting mark
                   </label>
                 </div>
               </div>
-              <div className="flex items-center justify-around mt-5">
-                <div className="flex items-center">
-                  <Switch
-                    id="theory"
-                    checked={theory}
-                    onCheckedChange={(value) => {
-                      setTheory(value);
-                      setValue('theory', value);
-                    }}
-                  />
-                  <label
-                    htmlFor="theory"
-                    className="ml-2 text-sm font-semibold"
-                  >
-                    Theory
-                  </label>
-                </div>
-                <div className="flex items-center">
-                  <Switch
-                    id="practical"
-                    onCheckedChange={(value) => {
-                      setPractical(value);
-                      setValue('practical', value);
-                    }}
-                  />
-                  <label
-                    htmlFor="practical"
-                    className="ml-2 text-sm font-semibold"
-                  >
-                    Practical
-                  </label>
-                </div>
+              <div className="mt-5 flex flex-wrap">
+                {assessmentFormatResponse?.map((assessmentFormat, index) => (
+                  <div className="w-1/2" key={assessmentFormat.id}>
+                    <Switch
+                      id={`assessmentFormatConfiguration.${index}.${assessmentFormat.name}`}
+                      key={index}
+                      checked={assessmentFormat[index]}
+                      onCheckedChange={(value) => {
+                        value
+                          ? append({
+                              assessmentFormatId: assessmentFormat.id,
+                            })
+                          : remove(index);
+                      }}
+                    />
+                    <label
+                      htmlFor={assessmentFormat.name}
+                      className="ml-2 text-sm font-semibold"
+                    >
+                      {assessmentFormat.name}
+                    </label>
+                  </div>
+                ))}
               </div>
-              {theory && (
-                <div className="p-1 mt-5">
+
+              {fields.map((row, index) => (
+                <div key={row.id} className="mt-5 p-1">
                   <div>
                     <label htmlFor="name" className="text-sm font-semibold">
                       Theory
                     </label>
                   </div>
-                  <div className="mt-2">
+                  <div className="mt-4">
                     <label
-                      htmlFor="name"
+                      htmlFor="dateToConduct"
                       className="text-sm font-semibold text-gray-700"
                     >
+                      Date to Conduct
+                    </label>
+                    <Input
+                      type={'date'}
+                      {...register(
+                        `assessmentFormatConfiguration.${index}.dateToConduct`,
+                        {
+                          required: 'date to Conduct is Required',
+                        }
+                      )}
+                    />
+                  </div>
+                  <div className="mt-2">
+                    <label className="text-sm font-semibold text-gray-700">
                       Marks to conduct
                     </label>
                     <Input
-                      {...register('markInTheory', {
-                        required: 'Mark to Conduct is Required',
-                      })}
-                      id="name"
+                      {...register(
+                        `assessmentFormatConfiguration.${index}.markToConduct`,
+                        {
+                          required: 'Mark to Conduct is Required',
+                        }
+                      )}
+                      id={`assessmentFormatConfiguration.${index}.markToConduct`}
+                      key={index}
                       autoFocus
                       type="text"
                       className="mt-2"
                       placeholder="Marks to conduct"
-                      errorMessage={fieldErrors?.markInTheory?.message.toString()}
+                      errorMessage={fieldErrors?.markToConduct?.message.toString()}
                     />
                   </div>
                   <div className="mt-2">
-                    <label
-                      htmlFor="name"
-                      className="text-sm font-semibold text-gray-700"
-                    >
-                      Convert Mark to
+                    <label className="text-sm font-semibold text-gray-700">
+                      Mark to Convert
                     </label>
                     <Input
-                      {...register('convertMarkInTheory', {
-                        required: 'Convert Mark to is Required',
-                      })}
-                      id="name"
+                      {...register(
+                        `assessmentFormatConfiguration.${index}.markToConvert`,
+                        {
+                          required: 'Convert Mark to is Required',
+                        }
+                      )}
+                      id={`assessmentFormatConfiguration.${index}.markToConvert`}
+                      key={index}
                       type="text"
                       className="mt-2"
-                      placeholder="Convert Mark to"
-                      errorMessage={fieldErrors?.convertMarkInTheory?.message.toString()}
+                      placeholder="Mark to Convert"
+                      errorMessage={fieldErrors?.markToConvert?.message.toString()}
                     />
                   </div>
                   <div className="mt-2">
-                    <label
-                      htmlFor="name"
-                      className="text-sm font-semibold text-gray-700"
-                    >
+                    <label className="text-sm font-semibold text-gray-700">
                       Min Pass Mark
                     </label>
                     <Input
-                      {...register('passMarkInThory', {
-                        required: 'Min Pass Mark is Required',
-                      })}
-                      id="name"
+                      {...register(
+                        `assessmentFormatConfiguration.${index}.minPassMark`,
+                        {
+                          required: 'Min Pass Mark is Required',
+                        }
+                      )}
+                      id={`assessmentFormatConfiguration.${index}.minPassMark`}
+                      key={index}
                       type="text"
                       className="mt-2"
                       placeholder="Min Pass Mark"
-                      errorMessage={fieldErrors?.passMarkInThory?.message.toString()}
+                      errorMessage={fieldErrors?.minPassMark?.message.toString()}
                     />
                   </div>
-                  <div className="flex justify-end mt-1">
+                  <div className="mt-1 flex justify-end">
                     <label className="text-sm font-medium text-gray-600">
                       From conducting mark
                     </label>
                   </div>
                 </div>
-              )}
-              {practical && (
-                <div className="p-1 mt-5">
-                  <div>
-                    <label htmlFor="name" className="text-sm font-semibold">
-                      Practical
-                    </label>
-                  </div>
-                  <div className="mt-2">
-                    <label
-                      htmlFor="name"
-                      className="text-sm font-semibold text-gray-700"
-                    >
-                      Marks to conduct
-                    </label>
-                    <Input
-                      {...register('markInPractical', {
-                        required: 'Mark to Conduct is Required',
-                      })}
-                      id="name"
-                      autoFocus
-                      type="text"
-                      className="mt-2"
-                      placeholder="Marks to conduct"
-                      errorMessage={fieldErrors?.markInPractical?.message.toString()}
-                    />
-                  </div>
-                  <div className="mt-2">
-                    <label
-                      htmlFor="name"
-                      className="text-sm font-semibold text-gray-700"
-                    >
-                      Convert Mark to
-                    </label>
-                    <Input
-                      {...register('convertMarkInPractical', {
-                        required: 'Convert Mark to is Required',
-                      })}
-                      id="name"
-                      type="text"
-                      className="mt-2"
-                      placeholder="Convert Mark to"
-                      errorMessage={fieldErrors?.convertMarkInPractical?.message.toString()}
-                    />
-                  </div>
-                  <div className="mt-2">
-                    <label
-                      htmlFor="name"
-                      className="text-sm font-semibold text-gray-700"
-                    >
-                      Min Pass Mark
-                    </label>
-                    <Input
-                      {...register('passMarkInPractical', {
-                        required: 'Min Pass Mark is Required',
-                      })}
-                      id="name"
-                      type="text"
-                      className="mt-2"
-                      placeholder="Min Pass Mark"
-                      errorMessage={fieldErrors?.passMarkInPractical?.message.toString()}
-                    />
-                  </div>
-                  <div className="flex justify-end mt-1">
-                    <label className="text-sm font-medium text-gray-600">
-                      From conducting mark
-                    </label>
-                  </div>
-                </div>
-              )}
+              ))}
               <div className="mt-10">
                 <Button
                   size="lg"
                   variant="default"
-                  className="flex justify-center px-12 py-4 mx-auto"
+                  className="mx-auto flex justify-center px-12 py-4"
                 >
                   Save & Close
                 </Button>
