@@ -445,8 +445,6 @@ export default <EndpointDetails>{
     requestType: `GET`,
     endpoint: `/api/exam/subject/[id]/assessment-format`,
   },
-<<<<<<< HEAD
-=======
   [ADD_EXAM_CONFIGURATION_BY_EXAM_ID]: {
     requestType: `POST`,
     endpoint: `/api/exam/[id]/configuration`,
@@ -455,5 +453,4 @@ export default <EndpointDetails>{
     requestType: `GET`,
     endpoint: `/api/exam`,
   },
->>>>>>> eb8629fd7dbf18bb7918457c1a2c8a1e15dc597f
 };
