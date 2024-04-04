@@ -56,16 +56,21 @@ export function SaveExamFlyout() {
     },
   });
 
-  const { data: termListResponse } = useGetTermsListQuery({
-    page,
-    limit,
-  });
-  const { data: examTypeListResponse } = useGetExamTypeListQuery({
-    page,
-    limit,
-  });
+  const { data: termListResponse, isLoading: isTermListLoading } =
+    useGetTermsListQuery({
+      page,
+      limit,
+    });
+  const { data: examTypeListResponse, isLoading: isExamTypeListLoading } =
+    useGetExamTypeListQuery({
+      page,
+      limit,
+    });
 
-  const { data: academicYearListResponse } = useGetBatchesListQuery({
+  const {
+    data: academicYearListResponse,
+    isLoading: isAcademicYearListLoading,
+  } = useGetBatchesListQuery({
     page,
     limit,
   });
@@ -139,10 +144,12 @@ export function SaveExamFlyout() {
             removeParams(['examId', 'isSaveExamFlyoutOpen']);
           }}
         >
-          {!termListResponse ? (
+          {!termListResponse &&
+          !examTypeListResponse &&
+          !academicYearListResponse ? (
             <section className="flex h-96 w-full flex-col items-center justify-center gap-4">
               <Spinner />
-              <p>Fetching Data</p>
+              <p>No data found</p>
             </section>
           ) : (
             <form onSubmit={handleSubmit(saveExam)}>
@@ -195,7 +202,7 @@ export function SaveExamFlyout() {
                   />
                 </div>
                 <div>
-                  {termListResponse?.data?.length ? (
+                  {!isTermListLoading ? (
                     <div className="mt-2">
                       <label
                         htmlFor="term"
@@ -235,7 +242,7 @@ export function SaveExamFlyout() {
                   )}
                 </div>
                 <div>
-                  {examTypeListResponse?.data?.length ? (
+                  {!isExamTypeListLoading ? (
                     <div className="mt-2">
                       <label
                         htmlFor="examType"
@@ -275,7 +282,7 @@ export function SaveExamFlyout() {
                   )}
                 </div>
                 <div>
-                  {academicYearListResponse?.data?.length ? (
+                  {!isAcademicYearListLoading ? (
                     <div className="mt-2">
                       <label
                         htmlFor="academicYear"
