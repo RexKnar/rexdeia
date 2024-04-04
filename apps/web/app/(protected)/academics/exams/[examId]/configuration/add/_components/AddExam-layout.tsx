@@ -1,6 +1,8 @@
 'use client';
+import { useGetClassListQuery } from 'lib/queries/class/useGetClassListQuery';
 import { useGetExamListQuery } from 'lib/queries/exams/useGetExamListQuery';
 import { useGetSubjectListByFilter } from 'lib/queries/exams/useGetSubjectByFilterQuery';
+import { useGetAllSectionByClassIdQuery } from 'lib/queries/section/useGetAllSectionsByClassIdQuery';
 import { useGetSubjectTypeList } from 'lib/queries/subject-type/useGetSubjectTypeQuery';
 import { Loader2 } from 'lucide-react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
@@ -14,8 +16,6 @@ import {
   SelectValue,
 } from 'ui';
 
-import { useGetClassListQuery } from '../../../../../../lib/queries/class/useGetClassListQuery';
-import { useGetAllSectionByClassIdQuery } from '../../../../../../lib/queries/section/useGetAllSectionsByClassIdQuery';
 import { ExamCard } from './ExamCard';
 
 export function AddExamLayout() {
@@ -89,8 +89,12 @@ export function AddExamLayout() {
             <SelectContent>
               <SelectGroup>
                 {examsList?.data?.map((exam) => (
-                  <SelectItem key={exam.id} value={exam.id}>
-                    {exam.name}
+                  <SelectItem
+                    key={exam.id}
+                    defaultChecked={exam.id === examId ? true : false}
+                    value={exam.id}
+                  >
+                    {exam.name + examId + '>>>>' + exam.id}
                   </SelectItem>
                 ))}
               </SelectGroup>

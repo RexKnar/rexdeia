@@ -91,6 +91,7 @@ export const GET_ASSESSMENT_FORMAT_BY_SUBJECT_ID = `GET_ASSESSMENT_FORMAT_BY_SUB
 
 export const ADD_EXAM_CONFIGURATION_BY_EXAM_ID = `ADD_EXAM_CONFIGURATION_BY_EXAM_ID`;
 export const GET_EXAM_LIST = `GET_EXAM_LIST`;
+export const ADD_EXAM = `ADD_EXAM`;
 
 export default <EndpointDetails>{
   [REGISTER_USER]: {
@@ -451,6 +452,10 @@ export default <EndpointDetails>{
   },
   [GET_EXAM_LIST]: {
     requestType: `GET`,
+    endpoint: `/api/exam`,
+  },
+  [ADD_EXAM]: {
+    requestType: `POST`,
     endpoint: `/api/exam`,
   },
 };
