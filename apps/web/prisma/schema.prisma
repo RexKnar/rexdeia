@@ -60,6 +60,7 @@ model AcademicExams {
   subjectId         String              @db.Uuid
   subjectType       subjectType         @relation(fields: [subjectTypeId], references: [id])
   subjectTypeId     String              @db.Uuid
+  markEntry         MarkEntry[]
   createdAt         DateTime            @default(now())
   updatedAt         DateTime            @default(now())
   isDeleted         Boolean             @default(false)
@@ -117,6 +118,18 @@ model ExamSubject {
   examSubjectPartition ExamSubjectPartition[]
   ExamGroup            ExamGroup?             @relation(fields: [examGroupId], references: [id])
   examGroupId          String?                @db.Uuid
+}
+
+model MarkEntry {
+  id                 String           @id @default(uuid()) @map("_id") @db.Uuid
+  mark               Int?
+  absent             Int?
+  studentId          String           @db.Uuid
+  student            Student          @relation(fields: [studentId], references: [id])
+  academicExamId     String           @db.Uuid
+  academicExams      AcademicExams    @relation(fields: [academicExamId], references: [id])
+  assessmentFormatId String           @db.Uuid
+  assessmentFormat   AssessmentFormat @relation(fields: [assessmentFormatId], references: [id])
 }
 
 model ExamSubjectPartition {
@@ -407,6 +420,7 @@ model Student {
   studentMapping StudentMapping[]
   sectionId      String?          @db.Uuid
   section        Section?         @relation(fields: [sectionId], references: [id])
+  markEntry      MarkEntry[]
 
   isDeleted Boolean @default(false)
 }
@@ -653,6 +667,7 @@ model AssessmentFormat {
   updatedAt                 DateTime?                   @default(now())
   subjectToAssessmentFormat SubjectToAssessmentFormat[]
   examConfiguration         ExamConfiguration[]
+  markEntry                 MarkEntry[]
 }
 
 model SubjectToAssessmentFormat {
