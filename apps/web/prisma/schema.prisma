@@ -123,9 +123,11 @@ model ExamSubject {
 model MarkEntry {
   id                 String           @id @default(uuid()) @map("_id") @db.Uuid
   mark               Int?
-  absent             Int?
+  attandance         Int?
   studentId          String           @db.Uuid
   student            Student          @relation(fields: [studentId], references: [id])
+  staffId            String           @db.Uuid
+  staff              Staff            @relation(fields: [staffId], references: [id])
   academicExamId     String           @db.Uuid
   academicExams      AcademicExams    @relation(fields: [academicExamId], references: [id])
   assessmentFormatId String           @db.Uuid
@@ -426,6 +428,7 @@ model Student {
 }
 
 model StudentMapping {
+  id        String  @id @default(uuid()) @map("_id") @db.Uuid
   studentId String  @db.Uuid
   student   Student @relation(fields: [studentId], references: [id])
   classId   String  @db.Uuid
@@ -434,8 +437,6 @@ model StudentMapping {
   section   Section @relation(fields: [sectionId], references: [id])
   groupId   String  @db.Uuid
   group     Group   @relation(fields: [groupId], references: [id])
-
-  @@id([studentId, classId, sectionId, groupId])
 }
 
 model Staff {
@@ -516,6 +517,7 @@ model Staff {
   staffSections                StaffSection[]
   academicSubjectForStaff      AcademicSubjectForStaff[]
   classInCharge                ClassInCharge[]
+  markEntry                    MarkEntry[]
 }
 
 model Batch {

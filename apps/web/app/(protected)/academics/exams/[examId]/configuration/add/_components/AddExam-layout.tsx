@@ -69,7 +69,7 @@ export function AddExamLayout() {
 
   return (
     <>
-      <section className="mb-4 flex flex-row gap-5 rounded-md bg-white p-4">
+      <section className="flex flex-row gap-5 p-4 mb-4 bg-white rounded-md">
         <div className=" basis-1/4">
           <label htmlFor="Term" className="text-sm font-semibold text-gray-700">
             Exam Name
@@ -94,7 +94,7 @@ export function AddExamLayout() {
                     defaultChecked={exam.id === examId ? true : false}
                     value={exam.id}
                   >
-                    {exam.name + examId + '>>>>' + exam.id}
+                    {exam.name}
                   </SelectItem>
                 ))}
               </SelectGroup>
@@ -102,8 +102,8 @@ export function AddExamLayout() {
           </Select>
         </div>
       </section>
-      <section className="flex h-screen flex-row gap-1 rounded-xl bg-white p-1">
-        <div className="basis-1/4 rounded-l-lg bg-gray-50 text-center">
+      <section className="flex flex-row h-screen gap-1 p-1 bg-white rounded-xl">
+        <div className="text-center rounded-l-lg basis-1/4 bg-gray-50">
           <div className="p-2">Class</div>
           <div>
             {examId ? (
@@ -116,7 +116,7 @@ export function AddExamLayout() {
                   </div>
                 ) : (
                   <div className="flex justify-center pt-36 ">
-                    <Loader2 className="mr-2 h-6 w-6 animate-spin text-black" />
+                    <Loader2 className="w-6 h-6 mr-2 text-black animate-spin" />
                     <p className="text-black ">Fetching Classes...</p>
                   </div>
                 )}
@@ -126,7 +126,7 @@ export function AddExamLayout() {
             )}
           </div>
         </div>
-        <div className="basis-1/4 bg-red-50 text-center">
+        <div className="text-center basis-1/4 bg-red-50">
           <div className="p-2">Section</div>
           {!isSectionListLoading ? (
             <div>
@@ -136,12 +136,12 @@ export function AddExamLayout() {
             </div>
           ) : (
             <div className="flex justify-center pt-36">
-              <Loader2 className="mr-2 h-6 w-6 animate-spin text-black" />
+              <Loader2 className="w-6 h-6 mr-2 text-black animate-spin" />
               <p className="text-black ">Fetching Sections...</p>
             </div>
           )}
         </div>
-        <div className="basis-1/4 bg-blue-50 text-center">
+        <div className="text-center basis-1/4 bg-blue-50">
           <div className="p-2">Subject Type</div>
           <div>
             {sectionId ? (
@@ -154,7 +154,7 @@ export function AddExamLayout() {
                   </div>
                 ) : (
                   <div className="flex justify-center pt-36">
-                    <Loader2 className="mr-2 h-6 w-6 animate-spin text-black" />
+                    <Loader2 className="w-6 h-6 mr-2 text-black animate-spin" />
                     <p className="text-black ">Fetching Sections...</p>
                   </div>
                 )}
@@ -162,7 +162,7 @@ export function AddExamLayout() {
             ) : null}
           </div>
         </div>
-        <div className="basis-1/4 bg-slate-200 text-center">
+        <div className="text-center basis-1/4 bg-slate-200">
           <div className="p-2">Subject</div>
           <div>
             {!isPendingSubjectListResponse ? (
@@ -173,7 +173,7 @@ export function AddExamLayout() {
               </div>
             ) : (
               <div className="flex justify-center pt-36">
-                <Loader2 className="mr-2 h-6 w-6 animate-spin text-black" />
+                <Loader2 className="w-6 h-6 mr-2 text-black animate-spin" />
                 <p className="text-black ">Fetching Subjects...</p>
               </div>
             )}
