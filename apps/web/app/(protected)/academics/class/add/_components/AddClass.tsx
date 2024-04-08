@@ -1,11 +1,13 @@
 'use client';
 
+import { useGetGroupListQuery } from 'lib/queries/group/useGetGroupListQuery';
 import { Loader2, Plus, Trash } from 'lucide-react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { Controller, useFieldArray, useForm } from 'react-hook-form';
 import {
   Button,
+  Checkbox,
   Input,
   Select,
   SelectContent,
@@ -29,6 +31,7 @@ export default function AddClass() {
 
   const {
     control,
+    watch,
     register,
     setValue,
     handleSubmit,
@@ -41,6 +44,11 @@ export default function AddClass() {
   });
 
   const [activeToggleFlag, setActiveToggleFlag] = useState(false);
+
+  const { data: groupListResponse } = useGetGroupListQuery({
+    page: 1,
+    limit: 999,
+  });
 
   const {
     mutateAsync: mutateCreateClassAsync,
@@ -118,7 +126,7 @@ export default function AddClass() {
               {fields.map((row, index) => (
                 <div
                   key={row.id}
-                  className="grid grid-cols-1 flex-wrap justify-between gap-4 md:grid md:grid-cols-1 lg:grid lg:grid-cols-4 "
+                  className="grid grid-cols-1 flex-wrap justify-between gap-4 md:grid md:grid-cols-1 lg:grid lg:grid-cols-4"
                 >
                   <div className="">
                     <label
@@ -154,7 +162,7 @@ export default function AddClass() {
                             {...field}
                             disabled={isMediumListLoading}
                           >
-                            <SelectTrigger className="w-52">
+                            <SelectTrigger className="w-full">
                               <SelectValue />
                             </SelectTrigger>
                             <SelectContent>
@@ -170,6 +178,48 @@ export default function AddClass() {
                         );
                       }}
                     ></Controller>
+                  </div>
+                  <div>
+                    <label
+                      htmlFor={`group-${index}`}
+                      className="text-sm font-semibold text-gray-700"
+                    >
+                      Group
+                    </label>
+                    <div className="flex flex-wrap">
+                      {groupListResponse?.data?.map((item) => (
+                        <div
+                          key={item.id}
+                          className="flex items-center space-x-2"
+                        >
+                          <Checkbox
+                            id={`group-${index}`}
+                            className="ml-2 items-center space-x-2 rounded border border-primary-500"
+                            checked={watch(
+                              `section.${index}.groupIds`
+                            )?.includes(item.id)}
+                            onCheckedChange={(checked) => {
+                              const currentGroupIds =
+                                watch(`section.${index}.groupIds`) || [];
+                              if (checked) {
+                                setValue(`section.${index}.groupIds`, [
+                                  ...currentGroupIds,
+                                  item.id,
+                                ]);
+                              } else {
+                                setValue(
+                                  `section.${index}.groupIds`,
+                                  currentGroupIds.filter(
+                                    (value) => value !== item.id
+                                  )
+                                );
+                              }
+                            }}
+                          />
+                          <span className="mr-2">{item.name}</span>
+                        </div>
+                      ))}
+                    </div>
                   </div>
                   <div className="flex items-center justify-center">
                     <Button
