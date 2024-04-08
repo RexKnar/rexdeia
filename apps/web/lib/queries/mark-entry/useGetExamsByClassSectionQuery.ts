@@ -1,8 +1,4 @@
-import {
-  useQuery,
-  UseQueryOptions,
-  UseQueryResult,
-} from '@tanstack/react-query';
+import { useQuery, UseQueryOptions } from '@tanstack/react-query';
 
 import { makeAPICall } from '../../api';
 import { ExamModel } from '../../domain/exam';
@@ -15,13 +11,13 @@ type GetExamsByClassSectionFilter = {
 
 function getExamsByClassSection(
   filter: GetExamsByClassSectionFilter,
-  options?: UseQueryOptions<ExamModel>
-): UseQueryOptions<ExamModel> {
+  options?: Partial<UseQueryOptions<ExamModel[]>>
+) {
   return {
     ...options,
     queryKey: [GET_EXAM_BY_CLASS_SECTION, filter.sectionId],
     queryFn: async () => {
-      return await makeAPICall<ExamModel>(
+      return await makeAPICall<ExamModel[]>(
         GET_EXAM_BY_CLASS_SECTION,
         { ...filter },
         {},
@@ -33,7 +29,7 @@ function getExamsByClassSection(
 
 export function useGetExamsByClassSectionQuery(
   filter: GetExamsByClassSectionFilter,
-  options?: UseQueryOptions<ExamModel>
-): UseQueryResult<ExamModel> {
+  options?: Partial<UseQueryOptions<ExamModel[]>>
+) {
   return useQuery(getExamsByClassSection(filter, options));
 }

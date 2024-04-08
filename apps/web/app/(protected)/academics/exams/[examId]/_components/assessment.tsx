@@ -1,7 +1,7 @@
 'use client';
 import { useGetClassListQuery } from 'lib/queries/class/useGetClassListQuery';
 import { useGetExamsByClassSectionQuery } from 'lib/queries/mark-entry/useGetExamsByClassSectionQuery';
-import { useGetStaffsBySectionQuery } from 'lib/queries/mark-entry/useGetStaffsBySectionQuery';
+// import { useGetStaffsBySectionQuery } from 'lib/queries/mark-entry/useGetStaffsBySectionQuery';
 import { useGetStudentsByClassSectionQuery } from 'lib/queries/mark-entry/useGetStudentsByClassSectionQuery';
 import { useGetSubjectsWithFormatsQuery } from 'lib/queries/mark-entry/useGetSubjectsWithFormatsQuery';
 import { useGetAllSectionByClassIdQuery } from 'lib/queries/section/useGetAllSectionsByClassIdQuery';
@@ -43,6 +43,8 @@ export function Assessment() {
       queryKey: [],
     }
   );
+
+  console.log(examList);
   const { data: subjectsWithFormats } = useGetSubjectsWithFormatsQuery(
     { classId, sectionId, examId },
     {
@@ -57,13 +59,13 @@ export function Assessment() {
       queryKey: [],
     }
   );
-  const { data: staffsList } = useGetStaffsBySectionQuery(
-    { sectionId },
-    {
-      enabled: !!sectionId,
-      queryKey: [],
-    }
-  );
+  // const { data: staffsList } = useGetStaffsBySectionQuery(
+  //   { sectionId },
+  //   {
+  //     enabled: !!sectionId,
+  //     queryKey: [],
+  //   }
+  // );
 
   function saveMarkEntry(payload) {
     // eslint-disable-next-line no-console
@@ -83,7 +85,7 @@ export function Assessment() {
           }}
         >
           <SelectTrigger className="ml-0 basis-1/5">
-            <SelectValue className="text-gray-400" placeholder="Class Name" />{' '}
+            <SelectValue className="text-gray-400" placeholder="Class Name" />
             <ChevronDown className="text-primary-400" />
           </SelectTrigger>
           <SelectContent className="border border-primary-200">
@@ -107,11 +109,10 @@ export function Assessment() {
           }}
         >
           <SelectTrigger className="ml-4 basis-1/5">
-            <SelectValue className="text-gray-400" placeholder="Section" />{' '}
+            <SelectValue className="text-gray-400" placeholder="Section" />
             <ChevronDown className="text-primary-400" />
           </SelectTrigger>
           <SelectContent className="border border-primary-200">
-            {' '}
             <SelectGroup>
               {sectionList?.map((section) => (
                 <SelectItem key={section.id} value={section.id}>
@@ -132,11 +133,10 @@ export function Assessment() {
           }}
         >
           <SelectTrigger className="ml-4 basis-1/5">
-            <SelectValue className="text-gray-400" placeholder="Exam" />{' '}
+            <SelectValue className="text-gray-400" placeholder="Exam" />
             <ChevronDown className="text-primary-400" />
           </SelectTrigger>
           <SelectContent className="border border-primary-200">
-            {' '}
             <SelectGroup>
               {examList?.map((exam) => (
                 <SelectItem key={exam.id} value={exam.id}>
@@ -146,13 +146,12 @@ export function Assessment() {
             </SelectGroup>
           </SelectContent>
         </Select>
-        <Select>
+        {/* <Select>
           <SelectTrigger className="ml-4 basis-1/5">
-            <SelectValue className="text-gray-400" placeholder="Staff Name" />{' '}
+            <SelectValue className="text-gray-400" placeholder="Staff Name" />
             <ChevronDown className="text-primary-400" />
           </SelectTrigger>
           <SelectContent className="border border-primary-200">
-            {' '}
             <SelectGroup>
               {staffsList?.map((staff) => (
                 <SelectItem key={staff.id} value={staff.id}>
@@ -161,15 +160,15 @@ export function Assessment() {
               ))}
             </SelectGroup>
           </SelectContent>
-        </Select>
+        </Select> */}
 
         {/* <Select>
           <SelectTrigger className="ml-4 basis-1/5">
-            <SelectValue className="text-gray-400" placeholder="Subject" />{' '}
+            <SelectValue className="text-gray-400" placeholder="Subject" />
             <ChevronDown className="text-primary-400" />
           </SelectTrigger>
           <SelectContent className="border border-primary-200">
-            {' '}
+            
             <SelectGroup>
               <SelectItem value={'Value1'}>Value1</SelectItem>
               <SelectItem value={'Value2'}>Value2</SelectItem>
@@ -184,7 +183,7 @@ export function Assessment() {
           <div className="flex w-3/4 items-center justify-between space-x-4">
             {subjectsWithFormats?.map((subject, index) => (
               <div key={index} className="flex-1 bg-green-100 p-4">
-                {subject.subject.name}
+                {subject.name}
               </div>
             ))}
           </div>
