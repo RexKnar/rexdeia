@@ -2,7 +2,7 @@ import { redirect } from 'next/navigation';
 import { getServerSession } from 'next-auth';
 
 import { authOptions } from '../../../../../lib/auth';
-import { Assessment } from './_components/assessment';
+import { Assessment } from './_components/Assessment';
 import { AssessmentPageHeader } from './_components/AssessmentpageHeader';
 
 export default async function Page() {
