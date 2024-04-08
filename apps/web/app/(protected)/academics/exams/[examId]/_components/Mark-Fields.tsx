@@ -16,6 +16,7 @@ export function MarkFields({
   });
   console.log(assessmentFormats[subjectIndex]);
   console.log(subjectIndex);
+  const page = 999;
 
   useEffect(() => {
     if (assessmentFormats) {
@@ -31,7 +32,7 @@ export function MarkFields({
         }
       });
     }
-  }, []);
+  }, [page]);
 
   return (
     <div key={nestIndex} className="flex bg-green-100 p-1">
