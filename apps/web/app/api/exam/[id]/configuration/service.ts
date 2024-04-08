@@ -5,7 +5,7 @@ import { getServerSession } from 'next-auth';
 
 export async function createExamConfigurationForExam(
   configuration: CreateExamConfigurationModel,
-  examId: string = 'a0a1055d-e607-46e9-b977-3d036b5435ce'
+  examId: string
 ) {
   const {
     assessmentFormatConfiguration,
