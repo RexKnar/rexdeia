@@ -44,7 +44,6 @@ export function Assessment() {
     }
   );
 
-  console.log(examList);
   const { data: subjectsWithFormats } = useGetSubjectsWithFormatsQuery(
     { classId, sectionId, examId },
     {
