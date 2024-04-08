@@ -28,54 +28,45 @@ export function Assessment() {
   const classId = searchParams.get('classId');
   const sectionId = searchParams.get('sectionId');
   const examId = searchParams.get('examId');
-  const {
-    register,
-    handleSubmit,
-    formState: { errors: fieldErrors },
-  } = useForm();
-  const { data: classList, isLoading: isClassListLoading } =
-    useGetClassListQuery({
-      page,
-      limit,
-    });
-  const { data: sectionList, isLoading: isSectionLoading } =
-    useGetAllSectionByClassIdQuery(classId, {
-      enabled: !!classId,
-    });
-  const { data: examList, isLoading: isExamLoading } =
-    useGetExamsByClassSectionQuery(
-      { classId, sectionId },
-      {
-        enabled: !!sectionId,
-        queryKey: [],
-      }
-    );
-  const { data: subjectsWithFormats, isPending: isSubjectsWithFormatsLoading } =
-    useGetSubjectsWithFormatsQuery(
-      { classId, sectionId, examId },
-      {
-        enabled: !!examId,
-        queryKey: [],
-      }
-    );
-  const { data: studentsList, isPending: isStudentListPending } =
-    useGetStudentsByClassSectionQuery(
-      { classId, sectionId },
-      {
-        enabled: !!sectionId,
-        queryKey: [],
-      }
-    );
-  const { data: staffsList, isLoading: isStaffListLoading } =
-    useGetStaffsBySectionQuery(
-      { sectionId },
-      {
-        enabled: !!sectionId,
-        queryKey: [],
-      }
-    );
-  console.log(staffsList);
+  const { register, handleSubmit } = useForm();
+  const { data: classList } = useGetClassListQuery({
+    page,
+    limit,
+  });
+  const { data: sectionList } = useGetAllSectionByClassIdQuery(classId, {
+    enabled: !!classId,
+  });
+  const { data: examList } = useGetExamsByClassSectionQuery(
+    { classId, sectionId },
+    {
+      enabled: !!sectionId,
+      queryKey: [],
+    }
+  );
+  const { data: subjectsWithFormats } = useGetSubjectsWithFormatsQuery(
+    { classId, sectionId, examId },
+    {
+      enabled: !!examId,
+      queryKey: [],
+    }
+  );
+  const { data: studentsList } = useGetStudentsByClassSectionQuery(
+    { classId, sectionId },
+    {
+      enabled: !!sectionId,
+      queryKey: [],
+    }
+  );
+  const { data: staffsList } = useGetStaffsBySectionQuery(
+    { sectionId },
+    {
+      enabled: !!sectionId,
+      queryKey: [],
+    }
+  );
+
   function saveMarkEntry(payload) {
+    // eslint-disable-next-line no-console
     console.log(payload);
   }
 
@@ -148,8 +139,8 @@ export function Assessment() {
             {' '}
             <SelectGroup>
               {examList?.map((exam) => (
-                <SelectItem key={exam.exam.id} value={exam.exam.id}>
-                  {exam.exam.name}
+                <SelectItem key={exam.id} value={exam.id}>
+                  {exam.name}
                 </SelectItem>
               ))}
             </SelectGroup>
@@ -163,14 +154,16 @@ export function Assessment() {
           <SelectContent className="border border-primary-200">
             {' '}
             <SelectGroup>
-              <SelectItem value={'Value1'}>Value1</SelectItem>
-              <SelectItem value={'Value2'}>Value2</SelectItem>
-              <SelectItem value={'Value3'}>Value3</SelectItem>
+              {staffsList?.map((staff) => (
+                <SelectItem key={staff.id} value={staff.id}>
+                  {staff.name}
+                </SelectItem>
+              ))}
             </SelectGroup>
           </SelectContent>
         </Select>
 
-        <Select>
+        {/* <Select>
           <SelectTrigger className="ml-4 basis-1/5">
             <SelectValue className="text-gray-400" placeholder="Subject" />{' '}
             <ChevronDown className="text-primary-400" />
@@ -183,7 +176,7 @@ export function Assessment() {
               <SelectItem value={'Value3'}>Value3</SelectItem>
             </SelectGroup>
           </SelectContent>
-        </Select>
+        </Select> */}
       </div>
       <div className="overflow-x-hidden">
         <div className="flex items-center justify-between bg-green-100 p-4 font-bold">
@@ -199,15 +192,15 @@ export function Assessment() {
 
         {studentsList?.map((student, index) => (
           <div
-            key={student.student.id}
+            key={student.id}
             className="flex items-center justify-between bg-green-100 p-4"
           >
             <div className="w-1/4">
-              {student.student.firstName} {student.student.middleName}
-              {student.student.lastName}
+              {student.firstName} {student.middleName}
+              {student.lastName}
               <input
                 type="hidden"
-                defaultValue={student.student.id}
+                defaultValue={student.id}
                 {...register(`studentIds[${index}].id`)}
               />
             </div>

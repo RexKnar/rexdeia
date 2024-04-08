@@ -627,6 +627,16 @@ model Section {
   academicSubjectForStaff AcademicSubjectForStaff[]
   classInCharge           ClassInCharge[]
   studentMapping          StudentMapping[]
+  sectionToGroups         SectionToGroups[]
+}
+
+model SectionToGroups {
+  sectionId String  @db.Uuid
+  groupId   String  @db.Uuid
+  section   Section @relation(fields: [sectionId], references: [id])
+  group     Group   @relation(fields: [groupId], references: [id])
+
+  @@id([sectionId, groupId])
 }
 
 model Subject {
@@ -706,16 +716,17 @@ model SubjectToSubjectType {
 }
 
 model Group {
-  id             String           @id @default(uuid()) @map("_id") @db.Uuid
-  name           String
-  isActive       Boolean
-  isDeleted      Boolean          @default(false)
-  branch         Branch           @relation(fields: [branchId], references: [id])
-  branchId       String           @db.Uuid
-  createdAt      DateTime?        @default(now())
-  updatedAt      DateTime?        @default(now())
-  subjectToGroup SubjectToGroup[]
-  studentMapping StudentMapping[]
+  id              String            @id @default(uuid()) @map("_id") @db.Uuid
+  name            String
+  isActive        Boolean
+  isDeleted       Boolean           @default(false)
+  branch          Branch            @relation(fields: [branchId], references: [id])
+  branchId        String            @db.Uuid
+  createdAt       DateTime?         @default(now())
+  updatedAt       DateTime?         @default(now())
+  subjectToGroup  SubjectToGroup[]
+  studentMapping  StudentMapping[]
+  sectionToGroups SectionToGroups[]
 }
 
 model Medium {

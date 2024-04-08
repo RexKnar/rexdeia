@@ -76,11 +76,15 @@ export async function getStudentsByClassSection(filter: GetStudentsFilter) {
       },
     },
   });
-  return uniqBy(students, (students) => students.student.id);
+  let studentList = students.map((item) => {
+    return item.student;
+  });
+
+  return uniqBy(studentList, (student) => student.id);
 }
 
 export async function getStaffsBySection(filter: GetStaffsFilter) {
-  return await db.academicSubjectForStaff.findMany({
+  const staffs = await db.academicSubjectForStaff.findMany({
     where: {
       ...filter,
     },
@@ -95,4 +99,9 @@ export async function getStaffsBySection(filter: GetStaffsFilter) {
       },
     },
   });
+  let staffsList = staffs.map((item) => {
+    return item.staff;
+  });
+
+  return uniqBy(staffsList, (staff) => staff.id);
 }

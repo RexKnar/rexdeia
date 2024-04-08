@@ -10,6 +10,7 @@ export type SectionModel = {
   mediumId: string;
   classId: string;
   faculty: string;
+  groupIds: string[];
   subjects: string[];
   staffs: string[];
   students: string[];
@@ -19,7 +20,7 @@ export type GetMediumModel = Pick<MediumModel, 'name' | 'isActive' | 'id'>;
 
 export type CreateSectionModel = Pick<
   SectionModel,
-  'name' | 'isActive' | 'mediumId' | 'classId'
+  'name' | 'isActive' | 'mediumId' | 'classId' | 'groupIds'
 >;
 
 export type UpdateSectionModel = Pick<

@@ -12,7 +12,10 @@ export type ClassModel = {
   Section: CreateSectionModel[];
 };
 
-export type CreateSectionModel = Pick<SectionModel, 'name' | 'mediumId'>;
+export type CreateSectionModel = Pick<
+  SectionModel,
+  'name' | 'mediumId' | 'groupIds'
+>;
 export type CreateClassModel = Pick<
   ClassModel,
   'name' | 'isActive' | 'branchId'
