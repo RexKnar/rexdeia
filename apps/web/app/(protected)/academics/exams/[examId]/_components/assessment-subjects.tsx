@@ -1,5 +1,6 @@
 'use client';
 
+import { useSearchParams } from 'next/navigation';
 import { useEffect } from 'react';
 import { useFieldArray } from 'react-hook-form';
 
@@ -10,6 +11,17 @@ export function AssessmentSubjects({ nestIndex, control, register }) {
     control,
     name: `studentsMarkDetails.${nestIndex}.subjects`,
   });
+  const searchParams = useSearchParams();
+  const classId = searchParams.get('classId');
+  const sectionId = searchParams.get('sectionId');
+  const examId = searchParams.get('examId');
+  const { data: subjectsWithFormats } = useGetSubjectsWithFormatsQuery(
+    { classId, sectionId, examId },
+    {
+      enabled: !!examId,
+      queryKey: [],
+    }
+  );
 
   const subjects = [
     {

@@ -297,9 +297,9 @@ export function StudentRecords({ control, register }) {
         return (
           <div
             key={index}
-            className="flex items-center justify-between bg-green-100 p-4"
+            className="flex items-center justify-between p-4 bg-green-100"
           >
-            <div className="w-1/5 flex-none">
+            <div className="flex-none w-1/5">
               {studentList[index]?.student.firstName}{' '}
               {studentList[index]?.student.middleName}
               {studentList[index]?.student.lastName}
