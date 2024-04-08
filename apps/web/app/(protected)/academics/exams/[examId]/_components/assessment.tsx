@@ -1,6 +1,7 @@
 'use client';
 import { useGetClassListQuery } from 'lib/queries/class/useGetClassListQuery';
 import { useGetExamsByClassSectionQuery } from 'lib/queries/mark-entry/useGetExamsByClassSectionQuery';
+import { useGetStaffsBySectionQuery } from 'lib/queries/mark-entry/useGetStaffsBySectionQuery';
 import { useGetStudentsByClassSectionQuery } from 'lib/queries/mark-entry/useGetStudentsByClassSectionQuery';
 import { useGetSubjectsWithFormatsQuery } from 'lib/queries/mark-entry/useGetSubjectsWithFormatsQuery';
 import { useGetAllSectionByClassIdQuery } from 'lib/queries/section/useGetAllSectionsByClassIdQuery';
@@ -65,6 +66,15 @@ export function Assessment() {
         queryKey: [],
       }
     );
+  const { data: staffsList, isLoading: isStaffListLoading } =
+    useGetStaffsBySectionQuery(
+      { sectionId },
+      {
+        enabled: !!sectionId,
+        queryKey: [],
+      }
+    );
+  console.log(staffsList);
   function saveMarkEntry(payload) {
     console.log(payload);
   }
