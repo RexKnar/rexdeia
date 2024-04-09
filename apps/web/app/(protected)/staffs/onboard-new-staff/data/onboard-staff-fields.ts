@@ -127,7 +127,8 @@ const staffForm: staffFormSectionType[] = [
         visible: true,
         options: [],
         validationRules: {
-          required: 'Please Select Blood Group',
+          // required: 'Please Select Blood Group',
+          required: false,
         },
       },
       {
@@ -154,7 +155,8 @@ const staffForm: staffFormSectionType[] = [
           },
         ],
         validationRules: {
-          required: 'Please select your religion',
+          // required: 'Please select your religion',
+          required: false,
         },
       },
       {
@@ -181,7 +183,8 @@ const staffForm: staffFormSectionType[] = [
           },
         ],
         validationRules: {
-          required: 'Please Select Caste',
+          // required: 'Please Select Caste',
+          required: false,
         },
       },
       {
@@ -208,7 +211,8 @@ const staffForm: staffFormSectionType[] = [
           },
         ],
         validationRules: {
-          required: 'Please select Nationality',
+          // required: 'Please select Nationality',
+          required: false,
         },
       },
       {
@@ -235,7 +239,8 @@ const staffForm: staffFormSectionType[] = [
           },
         ],
         validationRules: {
-          required: 'Please select Mother Tongue',
+          // required: 'Please select Mother Tongue',
+          required: false,
         },
       },
       {
@@ -268,7 +273,8 @@ const staffForm: staffFormSectionType[] = [
           },
         ],
         validationRules: {
-          required: 'Please select Differently Able',
+          // required: 'Please select Differently Able',
+          required: false,
         },
       },
       {
@@ -280,7 +286,8 @@ const staffForm: staffFormSectionType[] = [
         visible: true,
         options: [],
         validationRules: {
-          required: 'Please Enter  special category',
+          // required: 'Please Enter  special category',
+          required: false,
         },
       },
       {
@@ -292,7 +299,8 @@ const staffForm: staffFormSectionType[] = [
         visible: true,
         options: [],
         validationRules: {
-          required: 'Please enter ESI/EPF Number',
+          // required: 'Please enter ESI/EPF Number',
+          required: false,
         },
       },
     ],
@@ -352,7 +360,8 @@ const staffForm: staffFormSectionType[] = [
         visible: true,
         options: [],
         validationRules: {
-          required: 'Current address line1 is Required',
+          // required: 'Current address line1 is Required',
+          required: false,
         },
       },
       {
@@ -364,7 +373,8 @@ const staffForm: staffFormSectionType[] = [
         visible: true,
         options: [],
         validationRules: {
-          required: 'Current address1 is Required',
+          // required: 'Current address1 is Required',
+          required: false,
         },
       },
       {
@@ -376,7 +386,8 @@ const staffForm: staffFormSectionType[] = [
         visible: true,
         options: [],
         validationRules: {
-          required: 'Current pin code is Required',
+          // required: 'Current pin code is Required',
+          required: false,
         },
       },
       {
@@ -390,7 +401,8 @@ const staffForm: staffFormSectionType[] = [
         visible: true,
         options: [],
         validationRules: {
-          required: 'Current Country is Required',
+          // required: 'Current Country is Required',
+          required: false,
         },
       },
       {
@@ -404,7 +416,8 @@ const staffForm: staffFormSectionType[] = [
         visible: true,
         options: [],
         validationRules: {
-          required: 'Current state is Required',
+          // required: 'Current state is Required',
+          required: false,
         },
       },
       {
@@ -418,7 +431,8 @@ const staffForm: staffFormSectionType[] = [
         visible: true,
         options: [],
         validationRules: {
-          required: 'Current city is Required',
+          // required: 'Current city is Required',
+          required: false,
         },
       },
       {
@@ -430,7 +444,8 @@ const staffForm: staffFormSectionType[] = [
         visible: true,
         options: [],
         validationRules: {
-          required: 'Permanent Address1 is Required',
+          // required: 'Permanent Address1 is Required',
+          required: false,
         },
       },
       {
@@ -442,7 +457,8 @@ const staffForm: staffFormSectionType[] = [
         visible: true,
         options: [],
         validationRules: {
-          required: 'Permanent Address2 is Required',
+          // required: 'Permanent Address2 is Required',
+          required: false,
         },
       },
       {
@@ -454,7 +470,8 @@ const staffForm: staffFormSectionType[] = [
         visible: true,
         options: [],
         validationRules: {
-          required: 'Permanent Pincode is Required',
+          // required: 'Permanent Pincode is Required',
+          required: false,
         },
       },
       {
@@ -468,7 +485,8 @@ const staffForm: staffFormSectionType[] = [
         visible: true,
         options: [],
         validationRules: {
-          required: 'Permanent Country is Required',
+          // required: 'Permanent Country is Required',
+          required: false,
         },
       },
       {
@@ -482,7 +500,8 @@ const staffForm: staffFormSectionType[] = [
         optionValue: 'isoCode',
         options: [],
         validationRules: {
-          required: 'Permanent State is Required',
+          // required: 'Permanent State is Required',
+          required: false,
         },
       },
       {
@@ -496,7 +515,8 @@ const staffForm: staffFormSectionType[] = [
         visible: true,
         options: [],
         validationRules: {
-          required: 'Permanent City is Required',
+          // required: 'Permanent City is Required',
+          required: false,
         },
       },
     ],
@@ -596,7 +616,8 @@ const staffForm: staffFormSectionType[] = [
         visible: true,
         options: [],
         validationRules: {
-          required: 'Regularization date is Required',
+          // required: 'Regularization date is Required',
+          required: false,
         },
       },
       {
@@ -608,7 +629,8 @@ const staffForm: staffFormSectionType[] = [
         visible: true,
         options: [],
         validationRules: {
-          required: 'Please provide subject handling details.',
+          // required: 'Please provide subject handling details.',
+          required: false,
         },
       },
     ],
@@ -626,7 +648,8 @@ const staffForm: staffFormSectionType[] = [
         visible: true,
         options: [],
         validationRules: {
-          required: 'Please enter college name.',
+          // required: 'Please enter college name.',
+          required: false,
         },
       },
       {
@@ -638,7 +661,8 @@ const staffForm: staffFormSectionType[] = [
         visible: true,
         options: [],
         validationRules: {
-          required: 'Please select pass out year.',
+          // required: 'Please select pass out year.',
+          required: false,
         },
       },
       {
@@ -650,7 +674,8 @@ const staffForm: staffFormSectionType[] = [
         visible: true,
         options: [],
         validationRules: {
-          required: 'Please enter marks obtained.',
+          // required: 'Please enter marks obtained.',
+          required: false,
         },
       },
     ],

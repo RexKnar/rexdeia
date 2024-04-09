@@ -175,14 +175,29 @@ export async function updateSectionById(
   });
 }
 
-export async function addSection(createSection: CreateSectionModel) {
-  return db.section.create({
-    data: {
-      name: createSection.name,
-      isActive: createSection.isActive,
-      classId: createSection.classId,
-      mediumId: createSection.mediumId,
-    },
+export async function addSection(sectionDetails: CreateSectionModel) {
+  await db.$transaction(async (prisma) => {
+    const createdSection = await prisma.section.create({
+      data: {
+        name: sectionDetails.name,
+        isActive: sectionDetails.isActive,
+        classId: sectionDetails.classId,
+        mediumId: sectionDetails.mediumId,
+      },
+    });
+
+    sectionDetails.groupIds.map((groupId) => {
+      return db.section.update({
+        where: {
+          id: createdSection.id,
+        },
+        data: {
+          sectionToGroups: {
+            create: [{ groupId: groupId }],
+          },
+        },
+      });
+    });
   });
 }
 

@@ -117,6 +117,7 @@ export async function addClass(classPayload: CreateClassModel) {
       isActive: true,
       classId: createdClass.id,
       mediumId: section.mediumId,
+      groupIds: section.groupIds,
     };
     addSection(createSectionModel);
   });

@@ -22,8 +22,10 @@ export async function getExamsByClassSection(
       },
     },
   });
+
   let examList = exams.map((item) => {
     return item.exam;
   });
+
   return uniqBy(examList, (exam: ExamModel) => exam.id);
 }

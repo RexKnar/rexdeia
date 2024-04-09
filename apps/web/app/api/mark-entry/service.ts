@@ -11,6 +11,9 @@ type GetStudentsFilter = {
   classId: string;
   sectionId: string;
 };
+type GetStaffsFilter = {
+  sectionId: string;
+};
 
 export async function getSubjectsWithFormat(filter: SubjectsWithFormatFilter) {
   return db.academicExams.findMany({
@@ -96,4 +99,27 @@ export async function getStudentsByClassSection(filter: GetStudentsFilter) {
   });
 
   return uniqBy(studentList, (student) => student.id);
+}
+
+export async function getStaffsBySection(filter: GetStaffsFilter) {
+  const staffs = await db.academicSubjectForStaff.findMany({
+    where: {
+      ...filter,
+    },
+    select: {
+      staff: {
+        select: {
+          id: true,
+          firstName: true,
+          middleName: true,
+          lastName: true,
+        },
+      },
+    },
+  });
+  let staffsList = staffs.map((item) => {
+    return item.staff;
+  });
+
+  return uniqBy(staffsList, (staff) => staff.id);
 }
