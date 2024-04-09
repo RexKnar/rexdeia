@@ -5,7 +5,6 @@ import { Input } from 'ui';
 
 export function MarkFields({
   nestIndex,
-  register,
   control,
   assessmentFormats,
   assessmentId,
@@ -24,7 +23,7 @@ export function MarkFields({
       assessmentFormats === prevAssessmentFormats.current &&
       assessmentId === prevAssessmentId.current
     ) {
-      return; // No need to execute the effect again
+      return;
     }
 
     if (assessmentFormats) {
@@ -45,10 +44,8 @@ export function MarkFields({
   }, [assessmentFormats, assessmentId, append]);
 
   return (
-    // <div key={nestIndex} className="flex-none w-1/5 p-1 bg-green-100">
     <div className="flex w-full">
       {fields.map((field, formatIndex) => (
-        // <div key={field.id} className="p-4 p-5 bg-green-100 ">
         <Input
           key={formatIndex}
           type="text"
@@ -57,9 +54,7 @@ export function MarkFields({
             `studentsMarkDetails.${nestIndex}.subjects.${subjectIndex}.marks.${formatIndex}.mark`
           )}
         />
-        // </div>
       ))}
     </div>
-    // </div>
   );
 }

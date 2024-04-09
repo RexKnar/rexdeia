@@ -24,7 +24,6 @@ export function StudentRecords({ control, register }) {
       queryKey: [],
     }
   );
-  // const studentList = [
   //   {
   //     student: {
   //       id: '655fe8a4-9280-44a7-8e31-197857fbfa4a',
@@ -86,7 +85,6 @@ export function StudentRecords({ control, register }) {
 
             <AssessmentSubjects nestIndex={index} {...{ control, register }} />
           </div>
-          // </div>
         );
       })}
     </div>

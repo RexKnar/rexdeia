@@ -8,7 +8,7 @@ import { cn } from 'utils';
 
 import { MarkFields } from './Mark-Fields';
 
-export function AssessmentSubjects({ nestIndex, control, register }) {
+export function AssessmentSubjects({ nestIndex, control }) {
   const { fields, append } = useFieldArray({
     control,
     name: `studentsMarkDetails.${nestIndex}.subjects`,
@@ -52,7 +52,7 @@ export function AssessmentSubjects({ nestIndex, control, register }) {
     <>
       {fields.map((subject, subjectIndex) => (
         <div
-          key={subjectIndex} // Unique key for each iteration
+          key={subjectIndex}
           className={cn(
             'w-2/5 flex-none border-l-2 border-black bg-green-100 p-1 p-4',
             columnColor[subjectIndex % 10]
@@ -62,9 +62,8 @@ export function AssessmentSubjects({ nestIndex, control, register }) {
             nestIndex={nestIndex}
             subjectIndex={subjectIndex}
             control={control}
-            register={register}
             assessmentFormats={subjectsWithFormats[subjectIndex]}
-            assessmentId={subjectsWithFormats[subjectIndex].id}
+            assessmentId={subjectsWithFormats[subjectIndex]?.id}
           />
         </div>
       ))}

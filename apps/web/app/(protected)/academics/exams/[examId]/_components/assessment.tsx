@@ -4,7 +4,7 @@ import { useCreateMarkEntryQuery } from 'lib/queries/mark-entry/useCreateMarkEnt
 import { useGetExamsByClassSectionQuery } from 'lib/queries/mark-entry/useGetExamsByClassSectionQuery';
 import { useGetSubjectsWithFormatsQuery } from 'lib/queries/mark-entry/useGetSubjectsWithFormatsQuery';
 import { useGetAllSectionByClassIdQuery } from 'lib/queries/section/useGetAllSectionsByClassIdQuery';
-import { ChevronDown } from 'lucide-react';
+import { ChevronDown, Loader2 } from 'lucide-react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import {
@@ -46,29 +46,25 @@ export function Assessment() {
 
   const { control, register, handleSubmit } = useForm();
 
-  const { data: classList, isLoading: isClassListLoading } =
-    useGetClassListQuery({
-      page,
-      limit,
-    });
-  const { data: sectionList, isLoading: isSectionLoading } =
-    useGetAllSectionByClassIdQuery(classId, {
-      enabled: !!classId,
-    });
-  const { data: examList, isLoading: isExamLoading } =
-    useGetExamsByClassSectionQuery(
-      { classId, sectionId },
-      {
-        enabled: !!sectionId,
-      }
-    );
-  const { data: subjectsWithFormats, isPending: isSubjectsWithFormatsLoading } =
-    useGetSubjectsWithFormatsQuery(
-      { classId, sectionId, examId },
-      {
-        enabled: !!examId,
-      }
-    );
+  const { data: classList } = useGetClassListQuery({
+    page,
+    limit,
+  });
+  const { data: sectionList } = useGetAllSectionByClassIdQuery(classId, {
+    enabled: !!classId,
+  });
+  const { data: examList } = useGetExamsByClassSectionQuery(
+    { classId, sectionId },
+    {
+      enabled: !!sectionId,
+    }
+  );
+  const { data: subjectsWithFormats } = useGetSubjectsWithFormatsQuery(
+    { classId, sectionId, examId },
+    {
+      enabled: !!examId,
+    }
+  );
   const {
     isPending: isPendingCreateMarkEntry,
     mutateAsync: mutateCreateMarkEntryAsync,
@@ -208,7 +204,14 @@ export function Assessment() {
       </div>
 
       <Button className="text-center" type="submit">
-        Submit
+        {isPendingCreateMarkEntry ? (
+          <div className="flex items-center justify-center">
+            <Loader2 className="mr-2 h-6 w-6 animate-spin text-white" />
+            Saving
+          </div>
+        ) : (
+          'Submit'
+        )}
       </Button>
     </form>
   );
