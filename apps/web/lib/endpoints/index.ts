@@ -91,6 +91,10 @@ export const GET_ASSESSMENT_FORMAT_BY_SUBJECT_ID = `GET_ASSESSMENT_FORMAT_BY_SUB
 
 export const ADD_EXAM_CONFIGURATION_BY_EXAM_ID = `ADD_EXAM_CONFIGURATION_BY_EXAM_ID`;
 export const GET_EXAM_LIST = `GET_EXAM_LIST`;
+export const ADD_TERM = `ADD_TERM`;
+export const GET_TERM_BY_ID = `GET_TERM_BY_ID`;
+export const UPDATE_TERM_BY_ID = `UPDATE_TERM_BY_ID`;
+export const DELETE_TERM_BY_ID = `DELETE_TERM_BY_ID`;
 
 export default <EndpointDetails>{
   [REGISTER_USER]: {
@@ -452,5 +456,21 @@ export default <EndpointDetails>{
   [GET_EXAM_LIST]: {
     requestType: `GET`,
     endpoint: `/api/exam`,
+  },
+  [ADD_TERM]: {
+    requestType: `POST`,
+    endpoint: `/api/term`,
+  },
+  [GET_TERM_BY_ID]: {
+    requestType: `GET`,
+    endpoint: `/api/term/[id]`,
+  },
+  [UPDATE_TERM_BY_ID]: {
+    requestType: `PUT`,
+    endpoint: `/api/term/[id]`,
+  },
+  [DELETE_TERM_BY_ID]: {
+    requestType: `DELETE`,
+    endpoint: `/api/term/[id]`,
   },
 };
