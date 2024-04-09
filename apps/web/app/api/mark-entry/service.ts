@@ -38,23 +38,41 @@ export async function getSubjectsWithFormat(filter: SubjectsWithFormatFilter) {
   });
 }
 
-export async function createMarkEntry(examPayload: AddMarkEntryModel) {
-  return await db.$transaction(async (prisma) => {
-    await Promise.all(
-      examPayload.studentsMarkDetails.map(async (studentMark) => {
-        return prisma.markEntry.create({
-          data: {
-            studentId: studentMark.studentId,
-            mark: studentMark.mark,
-            attandance: studentMark.attendance,
-            staffId: examPayload.staffId,
-            academicExamId: studentMark.academicExamId,
-            assessmentFormatId: studentMark.assessmentFormatId,
-          },
-        });
-      })
-    );
-  });
+export async function createMarkEntry(
+  assessmentMarksPayload: AddMarkEntryModel
+) {
+  try {
+    const createdMarkEntries = [];
+
+    await db.$transaction(async (prisma) => {
+      for (const entry of assessmentMarksPayload.studentsMarkDetails) {
+        const { studentId, subjects } = entry;
+        for (const studentMark of subjects) {
+          const { marks } = studentMark;
+          for (const mark of marks) {
+            if (mark.mark) {
+              const createdMarkEntry = await prisma.markEntry.create({
+                data: {
+                  studentId,
+                  staffId: assessmentMarksPayload.staffId,
+                  academicExamId: mark.academicExamId,
+                  assessmentFormatId: mark.assessmentFormatId,
+                  mark: +mark.mark,
+                  attandance: +mark.attendance,
+                },
+              });
+              createdMarkEntries.push(createdMarkEntry);
+            }
+          }
+        }
+      }
+    });
+
+    return createdMarkEntries;
+  } catch (error) {
+    console.error('Error creating mark entry:', error);
+    throw error;
+  }
 }
 
 export async function getStudentsByClassSection(filter: GetStudentsFilter) {
@@ -73,5 +91,9 @@ export async function getStudentsByClassSection(filter: GetStudentsFilter) {
       },
     },
   });
-  return uniqBy(students, (students) => students.student.id);
+  let studentList = students.map((item) => {
+    return item.student;
+  });
+
+  return uniqBy(studentList, (student) => student.id);
 }

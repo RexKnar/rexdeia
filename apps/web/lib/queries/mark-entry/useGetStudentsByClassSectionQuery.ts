@@ -1,8 +1,4 @@
-import {
-  useQuery,
-  UseQueryOptions,
-  UseQueryResult,
-} from '@tanstack/react-query';
+import { useQuery, UseQueryOptions } from '@tanstack/react-query';
 
 import { makeAPICall } from '../../api';
 import { Student } from '../../domain/student';
@@ -15,13 +11,13 @@ type GetStudentsByClassSectionFilter = {
 
 function getStudentsByClassSection(
   filter: GetStudentsByClassSectionFilter,
-  options?: UseQueryOptions<Student>
-): UseQueryOptions<Student> {
+  options?: Partial<UseQueryOptions<Student[]>>
+) {
   return {
     ...options,
     queryKey: [GET_STUDENTS_BY_CLASS_SECTION, filter.sectionId],
     queryFn: async () => {
-      return await makeAPICall<Student>(
+      return await makeAPICall<Student[]>(
         GET_STUDENTS_BY_CLASS_SECTION,
         { ...filter },
         {},
@@ -33,7 +29,7 @@ function getStudentsByClassSection(
 
 export function useGetStudentsByClassSectionQuery(
   filter: GetStudentsByClassSectionFilter,
-  options?: UseQueryOptions<Student>
-): UseQueryResult<Student> {
+  options?: Partial<UseQueryOptions<Student[]>>
+) {
   return useQuery(getStudentsByClassSection(filter, options));
 }

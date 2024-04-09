@@ -1,6 +1,7 @@
 'use client';
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { useFieldArray } from 'react-hook-form';
+import { Input } from 'ui';
 
 export function MarkFields({
   nestIndex,
@@ -12,49 +13,53 @@ export function MarkFields({
 }) {
   const { fields, append } = useFieldArray({
     control,
-    name: `studentsMarkDetails.${nestIndex}.subjects.${subjectIndex}.marks`,
+    name: `studentsMarkDetails.${nestIndex}].subjects.${subjectIndex}.marks`,
   });
-  console.log(assessmentFormats[subjectIndex]);
-  console.log(subjectIndex);
-  const page = 999;
+
+  const prevAssessmentFormats = useRef(null);
+  const prevAssessmentId = useRef(null);
 
   useEffect(() => {
-    if (assessmentFormats) {
-      assessmentFormats.examConfiguration.forEach((config) => {
-        if (config.assessmentFormat != null) {
-          append({
-            academicExamId: assessmentId,
-            attendance: '',
-            mark: '',
-            assessmentFormatId: config.assessmentFormat.id || '',
-            assessmentFormatName: config.assessmentFormat.name || '',
-          });
-        }
-      });
+    if (
+      assessmentFormats === prevAssessmentFormats.current &&
+      assessmentId === prevAssessmentId.current
+    ) {
+      return; // No need to execute the effect again
     }
-  }, [page]);
+
+    if (assessmentFormats) {
+      const newFields = assessmentFormats.examConfiguration
+        .filter((config) => config.assessmentFormat != null)
+        .map((config) => ({
+          academicExamId: assessmentId,
+          attendance: '',
+          mark: '',
+          assessmentFormatId: config.assessmentFormat.id || '',
+          assessmentFormatName: config.assessmentFormat.name || '',
+        }));
+      append(newFields);
+    }
+
+    prevAssessmentFormats.current = assessmentFormats;
+    prevAssessmentId.current = assessmentId;
+  }, [assessmentFormats, assessmentId, append]);
 
   return (
-    <div key={nestIndex} className="flex bg-green-100 p-1">
-      {fields.map((field, formatIndex) => {
-        return (
-          <div key={field.id} className="bg-green-100 p-4 p-5 ">
-            <input
-              type="text"
-              placeholder={field?.[`assessmentFormatName`]}
-              {...register(
-                `studentsMarkDetails.${nestIndex}.marks[${formatIndex}].mark`
-              )}
-            />
-            <input
-              type="hidden"
-              {...register(
-                `studentsMarkDetails.${nestIndex}.marks[${formatIndex}].assessmentFormatId`
-              )}
-            />
-          </div>
-        );
-      })}
+    // <div key={nestIndex} className="flex-none w-1/5 p-1 bg-green-100">
+    <div className="flex w-full">
+      {fields.map((field, formatIndex) => (
+        // <div key={field.id} className="p-4 p-5 bg-green-100 ">
+        <Input
+          key={formatIndex}
+          type="text"
+          placeholder={field?.assessmentFormatName}
+          {...control.register(
+            `studentsMarkDetails.${nestIndex}.subjects.${subjectIndex}.marks.${formatIndex}.mark`
+          )}
+        />
+        // </div>
+      ))}
     </div>
+    // </div>
   );
 }
