@@ -95,11 +95,13 @@ export function MediumListTable() {
 
   const page = parseInt(searchParams.get('page')) || 1;
   const limit = parseInt(searchParams.get('limit')) || 10;
+  const filter = {};
 
   const { data: mediumListResponse, isLoading: isMediumListLoading } =
     useGetMediumListQuery({
       page,
       limit,
+      filter,
     });
 
   const {

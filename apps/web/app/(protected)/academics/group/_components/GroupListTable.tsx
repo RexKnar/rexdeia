@@ -92,11 +92,13 @@ export function GroupListTable() {
 
   const page = parseInt(searchParams.get('page')) || 1;
   const limit = parseInt(searchParams.get('limit')) || 10;
+  const filter = {};
 
   const { data: groupListResponse, isLoading: isGroupListLoading } =
     useGetGroupListQuery({
       page,
       limit,
+      filter,
     });
 
   const {
