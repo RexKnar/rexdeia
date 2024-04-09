@@ -49,7 +49,7 @@ export function SaveAssignStaffFlyout() {
   return (
     <section>
       <Sheet open={isOpen}>
-        <SheetContent 
+        <SheetContent
           side="right"
           widthSize="sm"
           className="bg-white p-10"
