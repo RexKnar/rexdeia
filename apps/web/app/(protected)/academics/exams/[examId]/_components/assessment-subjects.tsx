@@ -21,7 +21,6 @@ export function AssessmentSubjects({ nestIndex, control }) {
     { classId, sectionId, examId },
     {
       enabled: !!examId,
-      queryKey: [],
     }
   );
   const columnColor = [
