@@ -10,7 +10,11 @@ import { GroupModel } from '../../domain/group';
 import { GET_GROUP_LIST } from '../../endpoints';
 
 function getGroupList(
-  { page, limit, filter }: { page: number; limit: number; filter: { isActive?: boolean } },
+  {
+    page,
+    limit,
+    filter,
+  }: { page: number; limit: number; filter: { isActive?: boolean } },
   options?: UseQueryOptions<PaginatedResponse<GroupModel>>
 ): UseQueryOptions<PaginatedResponse<GroupModel>> {
   return {
@@ -31,7 +35,11 @@ function getGroupList(
 }
 
 export function useGetGroupListQuery(
-  { page, limit, filter }: { page: number; limit: number; filter: { isActive?: boolean } },
+  {
+    page,
+    limit,
+    filter,
+  }: { page: number; limit: number; filter: { isActive?: boolean } },
   options?: UseQueryOptions<PaginatedResponse<GroupModel>>
 ): UseQueryResult<PaginatedResponse<GroupModel>> {
   return useQuery(getGroupList({ page, limit, filter }, options));

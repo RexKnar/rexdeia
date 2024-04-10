@@ -10,10 +10,16 @@ import { MediumModel } from '../../domain/medium';
 import { GET_MEDIUM_LIST } from '../../endpoints';
 
 function getMediumList(
-  { page, limit, filter }: {
-    page: number; limit: number, filter: {
+  {
+    page,
+    limit,
+    filter,
+  }: {
+    page: number;
+    limit: number;
+    filter: {
       isActive?: boolean;
-    }
+    };
   },
   options?: UseQueryOptions<PaginatedResponse<MediumModel>>
 ): UseQueryOptions<PaginatedResponse<MediumModel>> {
@@ -27,7 +33,7 @@ function getMediumList(
         filter,
         {
           page: page,
-          limit: limit
+          limit: limit,
         },
         {}
       );
@@ -36,10 +42,16 @@ function getMediumList(
 }
 
 export function useGetMediumListQuery(
-  { page, limit, filter }: {
-    page: number; limit: number; filter: {
+  {
+    page,
+    limit,
+    filter,
+  }: {
+    page: number;
+    limit: number;
+    filter: {
       isActive?: boolean;
-    }
+    };
   },
   options?: UseQueryOptions<PaginatedResponse<MediumModel>>
 ): UseQueryResult<PaginatedResponse<MediumModel>> {
