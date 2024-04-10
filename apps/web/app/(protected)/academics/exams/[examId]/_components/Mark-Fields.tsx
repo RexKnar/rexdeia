@@ -49,7 +49,7 @@ export function MarkFields({
         <Input
           key={formatIndex}
           type="text"
-          placeholder={field?.assessmentFormatName}
+          placeholder={field['assessmentFormatName']}
           {...control.register(
             `studentsMarkDetails.${nestIndex}.subjects.${subjectIndex}.marks.${formatIndex}.mark`
           )}
