@@ -10,21 +10,21 @@ export type MarkEntryModel = {
   subjectTypeId: string;
 };
 
-// export type StudentsMarkInExamModel = {
-//   studentId: string;
-//   attendance: number;
-//   marks: MarksWithAssessmentFormatModel[];
-// };
-
-export type MarksWithAssessmentFormatModel = {
+export type StudentsMarkInExamModel = {
   studentId: string;
-  attendance: number;
+  subjects: Marks[];
+};
+export type Marks = {
+  marks: MarksWithAssessmentFormatModel[];
+};
+export type MarksWithAssessmentFormatModel = {
   academicExamId: string;
   assessmentFormatId: string;
-  mark: number;
+  mark: string;
+  attendance?: string;
 };
 
 export type AddMarkEntryModel = {
   staffId: string;
-  studentsMarkDetails: MarksWithAssessmentFormatModel[];
+  studentsMarkDetails: StudentsMarkInExamModel[];
 };

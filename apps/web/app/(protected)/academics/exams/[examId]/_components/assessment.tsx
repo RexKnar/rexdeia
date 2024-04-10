@@ -1,16 +1,15 @@
 'use client';
 import { useGetClassListQuery } from 'lib/queries/class/useGetClassListQuery';
+import { useCreateMarkEntryQuery } from 'lib/queries/mark-entry/useCreateMarkEntryMutationQuery';
 import { useGetExamsByClassSectionQuery } from 'lib/queries/mark-entry/useGetExamsByClassSectionQuery';
-// import { useGetStaffsBySectionQuery } from 'lib/queries/mark-entry/useGetStaffsBySectionQuery';
-import { useGetStudentsByClassSectionQuery } from 'lib/queries/mark-entry/useGetStudentsByClassSectionQuery';
+import { useGetStaffsBySectionQuery } from 'lib/queries/mark-entry/useGetStaffsBySectionQuery';
 import { useGetSubjectsWithFormatsQuery } from 'lib/queries/mark-entry/useGetSubjectsWithFormatsQuery';
 import { useGetAllSectionByClassIdQuery } from 'lib/queries/section/useGetAllSectionsByClassIdQuery';
-import { ChevronDown } from 'lucide-react';
+import { ChevronDown, Loader2 } from 'lucide-react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import {
   Button,
-  Input,
   Select,
   SelectContent,
   SelectGroup,
@@ -18,6 +17,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from 'ui';
+import { cn } from 'utils';
+
+import { StudentRecords } from './SudentRecords';
 
 export function Assessment() {
   const page = 1;
@@ -28,7 +30,22 @@ export function Assessment() {
   const classId = searchParams.get('classId');
   const sectionId = searchParams.get('sectionId');
   const examId = searchParams.get('examId');
-  const { register, handleSubmit } = useForm();
+  const staffId = searchParams.get('staffId');
+  const columnColor = [
+    'bg-green-100',
+    'bg-red-100 ',
+    'bg-primary-100 ',
+    'bg-yellow-100 ',
+    'bg-purple-100 ',
+    'bg-green-100',
+    'bg-red-100 ',
+    'bg-primary-100 ',
+    'bg-yellow-100 ',
+    'bg-purple-100 ',
+  ];
+
+  const { control, register, handleSubmit } = useForm();
+
   const { data: classList } = useGetClassListQuery({
     page,
     limit,
@@ -40,40 +57,35 @@ export function Assessment() {
     { classId, sectionId },
     {
       enabled: !!sectionId,
-      queryKey: [],
     }
   );
-
   const { data: subjectsWithFormats } = useGetSubjectsWithFormatsQuery(
     { classId, sectionId, examId },
     {
       enabled: !!examId,
-      queryKey: [],
     }
   );
-  const { data: studentsList } = useGetStudentsByClassSectionQuery(
-    { classId, sectionId },
+  const { data: staffList } = useGetStaffsBySectionQuery(
+    { sectionId },
     {
       enabled: !!sectionId,
-      queryKey: [],
     }
   );
-  // const { data: staffsList } = useGetStaffsBySectionQuery(
-  //   { sectionId },
-  //   {
-  //     enabled: !!sectionId,
-  //     queryKey: [],
-  //   }
-  // );
-
-  function saveMarkEntry(payload) {
-    // eslint-disable-next-line no-console
-    console.log(payload);
+  const {
+    isPending: isPendingCreateMarkEntry,
+    mutateAsync: mutateCreateMarkEntryAsync,
+  } = useCreateMarkEntryQuery();
+  async function saveMarkEntry(payload) {
+    const markEntryPayload = {
+      staffId: staffId,
+      ...payload,
+    };
+    mutateCreateMarkEntryAsync(markEntryPayload);
   }
 
   return (
     <form onSubmit={handleSubmit(saveMarkEntry)}>
-      <div className="mb-4 flex justify-between overflow-x-auto rounded-md bg-white">
+      <div className="mb-4 flex justify-between rounded-md bg-white">
         <Select
           onValueChange={(value) => {
             if (value) {
@@ -145,92 +157,58 @@ export function Assessment() {
             </SelectGroup>
           </SelectContent>
         </Select>
-        {/* <Select>
+        <Select
+          onValueChange={(value) => {
+            if (value) {
+              const params = new URLSearchParams(searchParams);
+              params.set('staffId', value);
+              router.replace(pathname + '?' + params.toString());
+            }
+          }}
+        >
           <SelectTrigger className="ml-4 basis-1/5">
             <SelectValue className="text-gray-400" placeholder="Staff Name" />
             <ChevronDown className="text-primary-400" />
           </SelectTrigger>
           <SelectContent className="border border-primary-200">
             <SelectGroup>
-              {staffsList?.map((staff) => (
+              {staffList?.map((staff) => (
                 <SelectItem key={staff.id} value={staff.id}>
-                  {staff.name}
+                  {staff.firstName} + {staff.lastName}
                 </SelectItem>
               ))}
             </SelectGroup>
           </SelectContent>
-        </Select> */}
-
-        {/* <Select>
-          <SelectTrigger className="ml-4 basis-1/5">
-            <SelectValue className="text-gray-400" placeholder="Subject" />
-            <ChevronDown className="text-primary-400" />
-          </SelectTrigger>
-          <SelectContent className="border border-primary-200">
-            
-            <SelectGroup>
-              <SelectItem value={'Value1'}>Value1</SelectItem>
-              <SelectItem value={'Value2'}>Value2</SelectItem>
-              <SelectItem value={'Value3'}>Value3</SelectItem>
-            </SelectGroup>
-          </SelectContent>
-        </Select> */}
+        </Select>
       </div>
-      <div className="overflow-x-hidden">
-        <div className="flex items-center justify-between bg-green-100 p-4 font-bold">
-          <div className="w-1/4">Student</div>
-          <div className="flex w-3/4 items-center justify-between space-x-4">
-            {subjectsWithFormats?.map((subject, index) => (
-              <div key={index} className="flex-1 bg-green-100 p-4">
-                {subject.name}
-              </div>
-            ))}
-          </div>
+      <div className="w-auto overflow-x-scroll bg-green-100">
+        <div className="flex items-center justify-between bg-green-100 p-4 font-bold ">
+          <div className="w-1/5 flex-none">Student</div>
+          {subjectsWithFormats?.map((subject, index) => (
+            <div
+              key={index}
+              className={cn(
+                'w-2/5 flex-none border-l-2 border-black bg-green-100 p-1 p-4',
+                columnColor[index % 10]
+              )}
+            >
+              {subject.subject.name}
+            </div>
+          ))}
         </div>
 
-        {studentsList?.map((student, index) => (
-          <div
-            key={student.id}
-            className="flex items-center justify-between bg-green-100 p-4"
-          >
-            <div className="w-1/4">
-              {student.firstName} {student.middleName}
-              {student.lastName}
-              <input
-                type="hidden"
-                defaultValue={student.id}
-                {...register(`studentIds[${index}].id`)}
-              />
-            </div>
-
-            <div className="flex w-3/4 items-center justify-between space-x-4">
-              {subjectsWithFormats?.map((subject, index) => (
-                <div key={index} className="flex bg-green-100 p-1">
-                  {subject.examConfiguration.map((format, formatIndex) => (
-                    <div
-                      key={format?.assessmentFormat?.id}
-                      className="bl-1 bg-gray-100"
-                    >
-                      {format?.assessmentFormat?.name ? (
-                        <Input
-                          // key={format?.assessmentFormat?.id}
-                          type="text"
-                          placeholder={format?.assessmentFormat?.name}
-                          {...register(
-                            `assessmentFormatMarks[${index}].[${formatIndex + format?.assessmentFormat?.name}]`
-                          )}
-                        />
-                      ) : null}
-                    </div>
-                  ))}
-                </div>
-              ))}
-            </div>
-          </div>
-        ))}
+        <StudentRecords {...{ control, register }} />
       </div>
+
       <Button className="text-center" type="submit">
-        Submit
+        {isPendingCreateMarkEntry ? (
+          <div className="flex items-center justify-center">
+            <Loader2 className="mr-2 h-6 w-6 animate-spin text-white" />
+            Saving
+          </div>
+        ) : (
+          'Submit'
+        )}
       </Button>
     </form>
   );

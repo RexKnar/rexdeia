@@ -1,7 +1,6 @@
 import { useQuery, UseQueryOptions } from '@tanstack/react-query';
 
 import { makeAPICall } from '../../api';
-// import { SubjectModel } from '../../domain/subject';
 import { GET_SUBJECTS_WITH_FORMATS_BY_EXAM } from '../../endpoints';
 
 type SubjectsWithFormatsFilter = {
