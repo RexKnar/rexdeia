@@ -24,39 +24,6 @@ export function StudentRecords({ control, register }) {
       queryKey: [],
     }
   );
-  //   {
-  //     student: {
-  //       id: '655fe8a4-9280-44a7-8e31-197857fbfa4a',
-  //       firstName: 'Gopi',
-  //       middleName: 'etyu',
-  //       lastName: 'Kumar',
-  //     },
-  //   },
-  //   {
-  //     student: {
-  //       id: 'bf429840-545c-42b7-ba2c-9fe9045d5c02',
-  //       firstName: 'sasi',
-  //       middleName: 'tit',
-  //       lastName: 'Kumar',
-  //     },
-  //   },
-  //   {
-  //     student: {
-  //       id: '9b79c5b0-37e5-47d7-a43f-531f655d5f5b',
-  //       firstName: 'sasi',
-  //       middleName: 'tit',
-  //       lastName: 'Kumar',
-  //     },
-  //   },
-  //   {
-  //     student: {
-  //       id: 'c9db8c6f-d6e4-4ea9-99ce-a6be44206a2a',
-  //       firstName: 'Gopi',
-  //       middleName: 'r4fr',
-  //       lastName: 'Kumar',
-  //     },
-  //   },
-  // ];
   useEffect(() => {
     if (fields.length === 0 && studentList) {
       studentList?.forEach((studentDetail) => {
