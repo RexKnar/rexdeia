@@ -14,6 +14,9 @@ type GetStudentsFilter = {
 type GetStaffsFilter = {
   sectionId: string;
 };
+type GetMarksByStudentAndAcademicExams = {
+  examId: string;
+};
 
 export async function getSubjectsWithFormat(filter: SubjectsWithFormatFilter) {
   return db.academicExams.findMany({
@@ -41,23 +44,43 @@ export async function getSubjectsWithFormat(filter: SubjectsWithFormatFilter) {
   });
 }
 
-export async function createMarkEntry(examPayload: AddMarkEntryModel) {
-  return await db.$transaction(async (prisma) => {
-    await Promise.all(
-      examPayload.studentsMarkDetails.map(async (studentMark) => {
-        return prisma.markEntry.create({
-          data: {
-            studentId: studentMark.studentId,
-            mark: studentMark.mark,
-            attandance: studentMark.attendance,
-            staffId: examPayload.staffId,
-            academicExamId: studentMark.academicExamId,
-            assessmentFormatId: studentMark.assessmentFormatId,
-          },
-        });
-      })
-    );
-  });
+export async function createMarkEntry(
+  assessmentMarksPayload: AddMarkEntryModel
+) {
+  try {
+    const createdMarkEntries = [];
+
+    await db.$transaction(async (prisma) => {
+      for (const entry of assessmentMarksPayload.studentsMarkDetails) {
+        const { studentId, subjects } = entry;
+        for (const studentMark of subjects) {
+          const { marks } = studentMark;
+          for (const mark of marks) {
+            if (mark.mark) {
+              const createdMarkEntry = await prisma.markEntry.create({
+                data: {
+                  studentId,
+                  staffId:
+                    assessmentMarksPayload.staffId ||
+                    '49294599-b381-4e62-9436-3e1aed6cf5b8',
+                  academicExamId: mark.academicExamId,
+                  assessmentFormatId: mark.assessmentFormatId,
+                  mark: +mark.mark,
+                  attandance: +mark.attendance,
+                },
+              });
+              createdMarkEntries.push(createdMarkEntry);
+            }
+          }
+        }
+      }
+    });
+
+    return createdMarkEntries;
+  } catch (error) {
+    console.error('Error creating mark entry:', error);
+    throw error;
+  }
 }
 
 export async function getStudentsByClassSection(filter: GetStudentsFilter) {
@@ -104,4 +127,20 @@ export async function getStaffsBySection(filter: GetStaffsFilter) {
   });
 
   return uniqBy(staffsList, (staff) => staff.id);
+}
+
+export async function getMarksByStudentAndAcademicExams(
+  filter: GetMarksByStudentAndAcademicExams
+) {
+  const marks = await db.markEntry.findMany({
+    where: {
+      academicExams: {
+        examId: filter.examId,
+      },
+    },
+    include: {
+      academicExams: true,
+    },
+  });
+  return marks;
 }

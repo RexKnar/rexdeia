@@ -1,8 +1,4 @@
-import {
-  useQuery,
-  UseQueryOptions,
-  UseQueryResult,
-} from '@tanstack/react-query';
+import { useQuery, UseQueryOptions } from '@tanstack/react-query';
 
 import { makeAPICall } from '../../api';
 import { Staff } from '../../domain/staff';
@@ -14,13 +10,13 @@ type GetStaffsBySectionFilter = {
 
 function getStaffsBySection(
   filter: GetStaffsBySectionFilter,
-  options?: UseQueryOptions<Staff>
-): UseQueryOptions<Staff> {
+  options?: Partial<UseQueryOptions<Staff[]>>
+) {
   return {
     ...options,
     queryKey: [GET_STAFFS_BY_SECTION, filter.sectionId],
     queryFn: async () => {
-      return await makeAPICall<Staff>(
+      return await makeAPICall<Staff[]>(
         GET_STAFFS_BY_SECTION,
         { ...filter },
         {},
@@ -32,7 +28,7 @@ function getStaffsBySection(
 
 export function useGetStaffsBySectionQuery(
   filter: GetStaffsBySectionFilter,
-  options?: UseQueryOptions<Staff>
-): UseQueryResult<Staff> {
+  options?: Partial<UseQueryOptions<Staff[]>>
+) {
   return useQuery(getStaffsBySection(filter, options));
 }
