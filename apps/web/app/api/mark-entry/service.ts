@@ -14,6 +14,9 @@ type GetStudentsFilter = {
 type GetStaffsFilter = {
   sectionId: string;
 };
+type GetMarksByStudentAndAcademicExams = {
+  examId: string;
+};
 
 export async function getSubjectsWithFormat(filter: SubjectsWithFormatFilter) {
   return db.academicExams.findMany({
@@ -57,7 +60,9 @@ export async function createMarkEntry(
               const createdMarkEntry = await prisma.markEntry.create({
                 data: {
                   studentId,
-                  staffId: assessmentMarksPayload.staffId,
+                  staffId:
+                    assessmentMarksPayload.staffId ||
+                    '49294599-b381-4e62-9436-3e1aed6cf5b8',
                   academicExamId: mark.academicExamId,
                   assessmentFormatId: mark.assessmentFormatId,
                   mark: +mark.mark,
@@ -122,4 +127,20 @@ export async function getStaffsBySection(filter: GetStaffsFilter) {
   });
 
   return uniqBy(staffsList, (staff) => staff.id);
+}
+
+export async function getMarksByStudentAndAcademicExams(
+  filter: GetMarksByStudentAndAcademicExams
+) {
+  const marks = await db.markEntry.findMany({
+    where: {
+      academicExams: {
+        examId: filter.examId,
+      },
+    },
+    include: {
+      academicExams: true,
+    },
+  });
+  return marks;
 }

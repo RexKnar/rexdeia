@@ -133,7 +133,7 @@ model MarkEntry {
   assessmentFormatId String           @db.Uuid
   assessmentFormat   AssessmentFormat @relation(fields: [assessmentFormatId], references: [id])
 
-  @@unique([studentId, academicExamId])
+  @@unique([studentId, academicExamId, assessmentFormatId])
 }
 
 model ExamSubjectPartition {
