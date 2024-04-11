@@ -16,6 +16,7 @@ export const saveBatchSchema = z
     }),
     refine: z.string().nullable().optional(),
     isActive: z.boolean().default(false),
+    currentAcademicYear: z.boolean().default(false),
     description: z.string().default('').nullable().optional(),
   })
   .refine(
