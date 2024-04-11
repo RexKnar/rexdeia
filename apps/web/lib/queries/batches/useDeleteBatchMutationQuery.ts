@@ -7,21 +7,22 @@ import { DELETE_BATCH_BY_ID, GET_BATCHES_LIST } from '../../endpoints';
 
 export function useDeleteBatchMutationQuery(page: number, limit: number) {
   const queryClient = useQueryClient();
+  const filter = {};
   return useMutation({
     mutationFn: async (id) => {
       return await makeAPICall<unknown>(DELETE_BATCH_BY_ID, {}, {}, { id });
     },
     onMutate: async (id: string) => {
       await queryClient.cancelQueries({
-        queryKey: [GET_BATCHES_LIST, page, limit],
+        queryKey: [GET_BATCHES_LIST, page, limit, filter],
       });
 
       const previousBatches = queryClient.getQueryData<
         PaginatedResponse<BatchModel>
-      >([GET_BATCHES_LIST, page, limit]);
+      >([GET_BATCHES_LIST, page, limit, filter]);
 
       queryClient.setQueryData(
-        [GET_BATCHES_LIST, page, limit],
+        [GET_BATCHES_LIST, page, limit, filter],
         (currentPaginatedBatches: PaginatedResponse<BatchModel>) => {
           return {
             ...currentPaginatedBatches,
@@ -43,13 +44,13 @@ export function useDeleteBatchMutationQuery(page: number, limit: number) {
     },
     onError: (error, _, context) => {
       queryClient.setQueryData(
-        [GET_BATCHES_LIST, page, limit],
+        [GET_BATCHES_LIST, page, limit, filter],
         context.previousBatches
       );
     },
     onSuccess: async () => {
       await queryClient.refetchQueries({
-        queryKey: [GET_BATCHES_LIST, page, limit],
+        queryKey: [GET_BATCHES_LIST, page, limit, filter],
       });
     },
   });
