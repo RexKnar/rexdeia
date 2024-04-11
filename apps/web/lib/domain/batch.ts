@@ -3,6 +3,7 @@ export type BatchModel = {
   name: string;
   endYear: string;
   isActive: boolean;
+  currentAcademicYear: boolean;
   classes: string[];
   startYear: string;
   students?: string[];
@@ -14,7 +15,12 @@ export type BatchModel = {
 
 export type CreateBatchModel = Pick<
   BatchModel,
-  'name' | 'isActive' | 'description' | 'startYear' | 'endYear'
+  | 'name'
+  | 'isActive'
+  | 'description'
+  | 'startYear'
+  | 'endYear'
+  | 'currentAcademicYear'
 >;
 
 export type UpdateBatchModel = Pick<
@@ -26,4 +32,5 @@ export type UpdateBatchModel = Pick<
   | 'startYear'
   | 'endYear'
   | 'students'
+  | 'currentAcademicYear'
 >;

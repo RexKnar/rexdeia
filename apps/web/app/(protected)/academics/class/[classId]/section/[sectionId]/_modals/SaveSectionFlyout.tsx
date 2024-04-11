@@ -1,5 +1,6 @@
 'use client';
 
+import { useGetGroupListQuery } from 'lib/queries/group/useGetGroupListQuery';
 import { Loader2, PlusCircle } from 'lucide-react';
 import {
   useParams,
@@ -8,9 +9,10 @@ import {
   useSearchParams,
 } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import { useForm } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 import {
   Button,
+  Checkbox,
   Input,
   Select,
   SelectContent,
@@ -38,6 +40,7 @@ export function SaveSectionFlyout() {
   const searchParams = useSearchParams();
 
   const {
+    control,
     register,
     handleSubmit,
     setValue,
@@ -49,6 +52,7 @@ export function SaveSectionFlyout() {
     defaultValues: {
       name: null,
       mediumId: null,
+      groupIds: null,
       isActive: false,
     },
   });
@@ -60,6 +64,7 @@ export function SaveSectionFlyout() {
   const classId = classIdFromSearchParams
     ? classIdFromSearchParams
     : classIdFromQueryParams?.classId;
+  const filter = {};
 
   const closeFlyout = async () => {
     setMediumId('');
@@ -67,7 +72,6 @@ export function SaveSectionFlyout() {
     params.set('isSectionFlyoutOpen', 'false');
     params.delete('sectionId');
     router.push(pathname + '?' + params.toString());
-    reset();
   };
 
   const { data: getSectionResponse } = useGetSectionByIdQuery(
@@ -76,6 +80,12 @@ export function SaveSectionFlyout() {
       enabled: !!params.sectionId,
     }
   );
+
+  const { data: groupListResponse } = useGetGroupListQuery({
+    page: 1,
+    limit: 999,
+    filter,
+  });
 
   const [mediumId, setMediumId] = useState('');
   useEffect(() => {
@@ -101,6 +111,7 @@ export function SaveSectionFlyout() {
     useGetMediumListQuery({
       page: 1,
       limit: 999,
+      filter,
     });
 
   const {
@@ -125,7 +136,7 @@ export function SaveSectionFlyout() {
         await mutateCreateSectionAsync(addSectionPayload);
       }
 
-      closeFlyout();
+      await closeFlyout();
       reset();
     } catch (error) {
       console.error(error);
@@ -219,6 +230,47 @@ export function SaveSectionFlyout() {
                       </SelectGroup>
                     </SelectContent>
                   </Select>
+                </div>
+              </div>
+              <div className="pt-3">
+                <label
+                  htmlFor="group"
+                  className="text-sm font-semibold text-gray-700"
+                >
+                  Group
+                </label>
+                <div className="mt-2 flex flex-wrap">
+                  {groupListResponse?.data?.map((item) => (
+                    <label className="me-5" key={item.id}>
+                      <Controller
+                        key={item.id}
+                        control={control}
+                        name={`groupIds`}
+                        render={({ field }) => {
+                          return (
+                            <label className="me-5">
+                              <Checkbox
+                                className="me-2 items-center space-x-2 rounded border border-primary-500"
+                                onCheckedChange={(checked) => {
+                                  return checked
+                                    ? field.onChange([
+                                        ...(field.value || []),
+                                        item.id,
+                                      ])
+                                    : field.onChange(
+                                        field.value?.filter(
+                                          (value) => value !== item.id
+                                        )
+                                      );
+                                }}
+                              />
+                              <span>{item.name}</span>
+                            </label>
+                          );
+                        }}
+                      />
+                    </label>
+                  ))}
                 </div>
               </div>
               <div className="mt-16">

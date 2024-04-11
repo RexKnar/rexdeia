@@ -1,7 +1,7 @@
+import { authOptions } from 'lib/auth';
 import { redirect } from 'next/navigation';
 import { getServerSession } from 'next-auth';
 
-import { authOptions } from '../../../../../lib/auth';
 import { AddExamLayout } from './_components/AddExam-layout';
 import { PageHeader } from './_components/PageHeader';
 

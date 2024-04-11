@@ -1,15 +1,20 @@
+import { BatchModel } from './batch';
+
 export type ExamModel = {
   id: string;
   name: string;
   isActive: boolean;
+  term: TermModel;
+  examType: ExamTypeModel;
   examTypeId: string;
   termId: string;
+  batch: BatchModel;
   academicYearId: string;
 };
 
 export type CreateExamModel = Pick<
   ExamModel,
-  'name' | 'termId' | 'isActive' | 'examTypeId' | 'academicYearId'
+  'name' | 'termId' | 'isActive' | 'examTypeId' | 'academicYearId' | 'id' // here id for navigation purpose only
 >;
 
 export type ExamConfigurationModel = {

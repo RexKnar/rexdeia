@@ -94,7 +94,7 @@ export function SaveMediumFlyout() {
       console.error(error);
     } finally {
       setValue('isActive', false);
-      await closeMediumFlyout();
+      closeMediumFlyout();
       reset();
     }
   }
