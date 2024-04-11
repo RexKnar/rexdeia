@@ -64,6 +64,7 @@ export function SaveSubjectFlyout() {
 
   const subjectId = searchParams.get('subjectId');
   const isOpen = searchParams.get('isFlyoutOpen') === 'true';
+  const filter = {};
 
   const {
     control,
@@ -105,6 +106,7 @@ export function SaveSubjectFlyout() {
   } = useGetGroupListQuery({
     page: 1,
     limit: 999,
+    filter,
   });
 
   const {

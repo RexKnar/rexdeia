@@ -64,6 +64,7 @@ export function SaveSectionFlyout() {
   const classId = classIdFromSearchParams
     ? classIdFromSearchParams
     : classIdFromQueryParams?.classId;
+  const filter = {};
 
   const closeFlyout = async () => {
     setMediumId('');
@@ -83,6 +84,7 @@ export function SaveSectionFlyout() {
   const { data: groupListResponse } = useGetGroupListQuery({
     page: 1,
     limit: 999,
+    filter,
   });
 
   const [mediumId, setMediumId] = useState('');
@@ -109,6 +111,7 @@ export function SaveSectionFlyout() {
     useGetMediumListQuery({
       page: 1,
       limit: 999,
+      filter,
     });
 
   const {

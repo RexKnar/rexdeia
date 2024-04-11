@@ -34,6 +34,7 @@ export function AssignStudents() {
   const page = parseInt(searchParams.get('page')) || 1;
   const limit = parseInt(searchParams.get('limit')) || 10;
   const pageSize = parseInt(searchParams.get('limit')) || 10;
+  const filter = {};
   const {
     mutateAsync: mutateCreateStudentsAsync,
     isPending: isPendingAssignStudents,
@@ -49,6 +50,7 @@ export function AssignStudents() {
   const { data: groupListResponse } = useGetGroupListQuery({
     page,
     limit,
+    filter,
   });
 
   const { data: getStudentListResponse } = useGetStudentListQuery({
