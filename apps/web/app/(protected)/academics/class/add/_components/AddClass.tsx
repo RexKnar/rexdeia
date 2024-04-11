@@ -28,6 +28,7 @@ export default function AddClass() {
 
   const page = parseInt(searchParams.get('page')) || 1;
   const limit = parseInt(searchParams.get('limit')) || 10;
+  const filter = { isActive: true };
 
   const {
     control,
@@ -48,6 +49,7 @@ export default function AddClass() {
   const { data: groupListResponse } = useGetGroupListQuery({
     page: 1,
     limit: 999,
+    filter,
   });
 
   const {
@@ -59,6 +61,7 @@ export default function AddClass() {
     useGetMediumListQuery({
       page: 1,
       limit: 999,
+      filter,
     });
 
   useEffect(() => {
