@@ -4,7 +4,11 @@ import { authOptions } from 'lib/auth';
 import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 
-import { addAssessmentFormat, getAssessmentFormatList } from './service';
+import {
+  addAssessmentFormat,
+  getAssessmentFormatList,
+  getAssessmentFormatsWithFilter,
+} from './service';
 
 /**
  * @swagger
@@ -93,6 +97,63 @@ export async function GET(request: NextRequest) {
     return new NextResponse(JSON.stringify(paginatedAssessmentFormatList), {
       status: StatusCodes.OK,
     });
+  } catch (e) {
+    captureException(e);
+    return new NextResponse(e, {
+      status: StatusCodes.BAD_REQUEST,
+    });
+  }
+}
+
+/**
+ * @swagger
+ * /api/subject/assessmentFormat:
+ *     put:
+ *       summary: Get All assessment-format with Filter
+ *       description: Get All assessment-format with Filter
+ *       requestBody:
+ *         required: true
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *       responses:
+ *         '200':
+ *           description: Data Found.
+ *           content:
+ *             application/json:
+ *               schema:
+ *                 # Define the schema of your assessment-format object here
+ *         '400':
+ *           description: Bad request due to validation error.
+ *         '401':
+ *           description: Unauthorized access.
+ *         '500':
+ *           description: Internal server error.
+ */
+export async function PUT(request: NextRequest) {
+  const session = await getServerSession(authOptions);
+  if (!session) {
+    return new NextResponse(JSON.stringify({ error: 'UNAUTHORIZED' }), {
+      status: StatusCodes.UNAUTHORIZED,
+    });
+  }
+
+  try {
+    const payload = await request.json();
+    const { searchParams } = request.nextUrl;
+    const page = parseInt(searchParams.get('page')) || 1;
+    const limit = parseInt(searchParams.get('limit')) || 10;
+
+    const paginatedAssessmentFormatsWithFilter =
+      await getAssessmentFormatsWithFilter(page, limit, payload);
+
+    return new NextResponse(
+      JSON.stringify(paginatedAssessmentFormatsWithFilter),
+      {
+        status: StatusCodes.OK,
+      }
+    );
   } catch (e) {
     captureException(e);
     return new NextResponse(e, {

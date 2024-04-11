@@ -7,6 +7,10 @@ import {
   UpdateSubjectTypeModel,
 } from '../../../../lib/domain/subject';
 
+type SubjectTypeFilter = {
+  isActive?: boolean;
+};
+
 export async function deleteSubjectTypeById(id: string) {
   return db.subjectType.update({
     where: {
@@ -85,5 +89,48 @@ export async function getSubjectTypeList(page: number, limit: number) {
     page,
     limit,
     data: subjectTypeList,
+  };
+}
+
+export async function getSubjectTypesWithFilter(
+  page: number,
+  limit: number,
+  filter: SubjectTypeFilter
+) {
+  const { isActive } = filter;
+  const { branchId } = await getServerSession(authOptions);
+
+  const whereClause = {
+    branchId,
+    isDeleted: false,
+  };
+
+  if (isActive !== undefined) {
+    whereClause['isActive'] = isActive;
+  }
+
+  const [total, data] = await db.$transaction([
+    db.subjectType.count({
+      where: whereClause,
+    }),
+    db.subjectType.findMany({
+      take: limit,
+      where: whereClause,
+      skip: (page - 1) * limit,
+      select: {
+        id: true,
+        name: true,
+        isActive: true,
+        updatedAt: true,
+        createdAt: true,
+      },
+    }),
+  ]);
+
+  return {
+    page,
+    total,
+    limit,
+    data,
   };
 }

@@ -4,7 +4,11 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 
 import { authOptions } from '../../../../lib/auth';
-import { addSubjectType, getSubjectTypeList } from './service';
+import {
+  addSubjectType,
+  getSubjectTypeList,
+  getSubjectTypesWithFilter,
+} from './service';
 
 /**
  * @swagger
@@ -104,6 +108,63 @@ export async function GET(request: NextRequest) {
 
     const paginatedSubjectTypeList = await getSubjectTypeList(page, limit);
     return new NextResponse(JSON.stringify(paginatedSubjectTypeList), {
+      status: StatusCodes.OK,
+    });
+  } catch (e) {
+    captureException(e);
+    return new NextResponse(e, {
+      status: StatusCodes.BAD_REQUEST,
+    });
+  }
+}
+
+/**
+ * @swagger
+ * /api/subjectType:
+ *     put:
+ *       summary: Get All SubjectType with Filter
+ *       description: Get All SubjectType with Filter
+ *       requestBody:
+ *         required: true
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *       responses:
+ *         '200':
+ *           description: Data Found.
+ *           content:
+ *             application/json:
+ *               schema:
+ *                 # Define the schema of your SubjectType object here
+ *         '400':
+ *           description: Bad request due to validation error.
+ *         '401':
+ *           description: Unauthorized access.
+ *         '500':
+ *           description: Internal server error.
+ */
+export async function PUT(request: NextRequest) {
+  const session = await getServerSession(authOptions);
+  if (!session) {
+    return new NextResponse(JSON.stringify({ error: 'UNAUTHORIZED' }), {
+      status: StatusCodes.UNAUTHORIZED,
+    });
+  }
+
+  try {
+    const payload = await request.json();
+    const { searchParams } = request.nextUrl;
+    const page = parseInt(searchParams.get('page')) || 1;
+    const limit = parseInt(searchParams.get('limit')) || 10;
+
+    const paginatedSubjectTypesWithFilter = await getSubjectTypesWithFilter(
+      page,
+      limit,
+      payload
+    );
+
+    return new NextResponse(JSON.stringify(paginatedSubjectTypesWithFilter), {
       status: StatusCodes.OK,
     });
   } catch (e) {

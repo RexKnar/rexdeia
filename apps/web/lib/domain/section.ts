@@ -29,6 +29,7 @@ export type UpdateSectionModel = Pick<
   | 'isActive'
   | 'mediumId'
   | 'classId'
+  | 'groupIds'
   | 'faculty'
   | 'subjects'
   | 'staffs'
