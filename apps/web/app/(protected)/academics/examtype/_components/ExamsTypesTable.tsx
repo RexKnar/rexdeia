@@ -19,7 +19,7 @@ const columns = [
     ),
   },
   {
-    accessorKey: 'additionalColumn',
+    accessorKey: 'frequency',
     header: () => (
       <Button variant="ghost" className="px-0 ">
         Frequency
@@ -47,31 +47,29 @@ const columns = [
 export function ExamTypeListTable() {
   return (
     <section>
-      <div>
-        <Table>
-          <TableHeader>
-            <TableRow>
-              {columns.map((column, index) => (
-                <TableHead className="py-1" key={index}>
-                  {column.header()}
-                </TableHead>
-              ))}
-              <TableHead>
-                <Button variant="ghost" className="px-0">
-                  Actions
-                </Button>
+      <Table>
+        <TableHeader>
+          <TableRow>
+            {columns.map((column, index) => (
+              <TableHead className="py-1" key={index}>
+                {column.header()}
               </TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            <TableRow>
-              <TableCell colSpan={6} className="h-24 text-center">
-                No Exam Type Found
-              </TableCell>
-            </TableRow>
-          </TableBody>
-        </Table>
-      </div>
+            ))}
+            <TableHead>
+              <Button variant="ghost" className="px-0">
+                Actions
+              </Button>
+            </TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          <TableRow>
+            <TableCell colSpan={6} className="h-24 text-center">
+              No Exam Type Found
+            </TableCell>
+          </TableRow>
+        </TableBody>
+      </Table>
     </section>
   );
 }
