@@ -1,7 +1,6 @@
 import { useQuery, UseQueryOptions } from '@tanstack/react-query';
 
 import { makeAPICall } from '../../api';
-import { Staff } from '../../domain/staff';
 import { GET_MARKS_WITH_FORMAT_BY_EXAM } from '../../endpoints';
 
 type GetMarksWithFormatByExamFilter = {
@@ -10,13 +9,13 @@ type GetMarksWithFormatByExamFilter = {
 
 function getMarksWithFormatByExam(
   filter: GetMarksWithFormatByExamFilter,
-  options?: Partial<UseQueryOptions<Staff[]>>
+  options?: Partial<UseQueryOptions<any[]>>
 ) {
   return {
     ...options,
     queryKey: [GET_MARKS_WITH_FORMAT_BY_EXAM, filter.examId],
     queryFn: async () => {
-      return await makeAPICall<Staff[]>(
+      return await makeAPICall<any[]>(
         GET_MARKS_WITH_FORMAT_BY_EXAM,
         { ...filter },
         {},
@@ -28,7 +27,7 @@ function getMarksWithFormatByExam(
 
 export function useGetMarksWithFormatByExamQuery(
   filter: GetMarksWithFormatByExamFilter,
-  options?: Partial<UseQueryOptions<Staff[]>>
+  options?: Partial<UseQueryOptions<any[]>>
 ) {
   return useQuery(getMarksWithFormatByExam(filter, options));
 }

@@ -21,7 +21,6 @@ export function StudentRecords({ control, register }) {
     { classId, sectionId },
     {
       enabled: !!sectionId,
-      queryKey: [],
     }
   );
   useEffect(() => {

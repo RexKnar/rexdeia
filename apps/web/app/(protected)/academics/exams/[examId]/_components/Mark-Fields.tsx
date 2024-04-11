@@ -1,4 +1,6 @@
 'use client';
+import { useGetMarksWithFormatByExamQuery } from 'lib/queries/mark-entry/useGetMarkswithFormatbyExamQuery';
+import { useSearchParams } from 'next/navigation';
 import { useEffect, useRef } from 'react';
 import { useFieldArray } from 'react-hook-form';
 import { Input } from 'ui';
@@ -10,6 +12,14 @@ export function MarkFields({
   assessmentId,
   subjectIndex,
 }) {
+  const searchParams = useSearchParams();
+  const examId = searchParams.get('examId');
+
+  const { data: marksWithFormat, isPending: loadingMarks } =
+    useGetMarksWithFormatByExamQuery({ examId });
+  // eslint-disable-next-line no-console
+  console.log(marksWithFormat);
+
   const { fields, append } = useFieldArray({
     control,
     name: `studentsMarkDetails.${nestIndex}].subjects.${subjectIndex}.marks`,
@@ -26,22 +36,24 @@ export function MarkFields({
       return;
     }
 
-    if (assessmentFormats) {
+    if (assessmentFormats && !loadingMarks) {
       const newFields = assessmentFormats.examConfiguration
         .filter((config) => config.assessmentFormat != null)
-        .map((config) => ({
-          academicExamId: assessmentId,
-          attendance: '',
-          mark: '',
-          assessmentFormatId: config.assessmentFormat.id || '',
-          assessmentFormatName: config.assessmentFormat.name || '',
-        }));
+        .map((config) => {
+          return {
+            academicExamId: assessmentId,
+            attendance: '',
+            mark: '',
+            assessmentFormatId: config.assessmentFormat.id || '',
+            assessmentFormatName: config.assessmentFormat.name || '',
+          };
+        });
       append(newFields);
     }
 
     prevAssessmentFormats.current = assessmentFormats;
     prevAssessmentId.current = assessmentId;
-  }, [assessmentFormats, assessmentId, append]);
+  }, [assessmentFormats, assessmentId]);
 
   return (
     <div className="flex w-full">
