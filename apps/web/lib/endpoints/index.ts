@@ -91,6 +91,13 @@ export const GET_ASSESSMENT_FORMAT_BY_SUBJECT_ID = `GET_ASSESSMENT_FORMAT_BY_SUB
 
 export const ADD_EXAM_CONFIGURATION_BY_EXAM_ID = `ADD_EXAM_CONFIGURATION_BY_EXAM_ID`;
 export const GET_EXAM_LIST = `GET_EXAM_LIST`;
+export const ADD_EXAM = `ADD_EXAM`;
+export const GET_EXAM_BY_CLASS_SECTION = `GET_EXAM_BY_CLASS_SECTION`;
+export const GET_SUBJECTS_WITH_FORMATS_BY_EXAM = `GET_SUBJECTS_WITH_FORMATS_BY_EXAM`;
+export const GET_STUDENTS_BY_CLASS_SECTION = `GET_STUDENTS_BY_CLASS_SECTION`;
+export const ADD_MARK_ENTRY = `ADD_MARK_ENTRY`;
+export const GET_STAFFS_BY_SECTION = `GET_STAFFS_BY_SECTION`;
+export const GET_MARKS_WITH_FORMAT_BY_EXAM = `GET_MARKS_WITH_FORMAT_BY_EXAM`;
 
 export default <EndpointDetails>{
   [REGISTER_USER]: {
@@ -238,7 +245,7 @@ export default <EndpointDetails>{
     endpoint: `/api/group`,
   },
   [GET_MEDIUM_LIST]: {
-    requestType: `GET`,
+    requestType: `PUT`,
     endpoint: `/api/medium`,
   },
   [UPDATE_REGULATION_BY_ID]: {
@@ -452,5 +459,33 @@ export default <EndpointDetails>{
   [GET_EXAM_LIST]: {
     requestType: `GET`,
     endpoint: `/api/exam`,
+  },
+  [ADD_EXAM]: {
+    requestType: `POST`,
+    endpoint: `/api/exam`,
+  },
+  [GET_EXAM_BY_CLASS_SECTION]: {
+    requestType: `PUT`,
+    endpoint: `/api/exam/mark-entry`,
+  },
+  [GET_SUBJECTS_WITH_FORMATS_BY_EXAM]: {
+    requestType: `PUT`,
+    endpoint: `/api/mark-entry/subjects`,
+  },
+  [GET_STUDENTS_BY_CLASS_SECTION]: {
+    requestType: `PUT`,
+    endpoint: `/api/mark-entry/students`,
+  },
+  [ADD_MARK_ENTRY]: {
+    requestType: `POST`,
+    endpoint: `/api/mark-entry`,
+  },
+  [GET_STAFFS_BY_SECTION]: {
+    requestType: `PUT`,
+    endpoint: `/api/mark-entry/staffs`,
+  },
+  [GET_MARKS_WITH_FORMAT_BY_EXAM]: {
+    requestType: `PUT`,
+    endpoint: `/api/mark-entry`,
   },
 };

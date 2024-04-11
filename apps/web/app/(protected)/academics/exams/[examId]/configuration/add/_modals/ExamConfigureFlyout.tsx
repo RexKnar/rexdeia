@@ -3,7 +3,12 @@
 import { useCreateExamConfigurationQuery } from 'lib/queries/exams/useCreateExamConfigurationMutationQuery';
 import { useGetAssessmentFormatBySubjectIdQuery } from 'lib/queries/exams/usegetAssessmentFormatbySubjectIdQuery';
 import { PlusCircle } from 'lucide-react';
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import {
+  useParams,
+  usePathname,
+  useRouter,
+  useSearchParams,
+} from 'next/navigation';
 import { useFieldArray, useForm } from 'react-hook-form';
 import {
   Button,
@@ -22,7 +27,7 @@ export function ExamConfigureFlyout() {
   const searchParams = useSearchParams();
   const subjectId = searchParams.get('subjectId');
   const classId = searchParams.get('classId');
-  const examId = searchParams.get('examId');
+  const examId = useParams<{ examId: string }>().examId;
   const sectionId = searchParams.get('sectionId');
   const subjectTypeId = searchParams.get('subjectTypeId');
   const keysToDelete = [

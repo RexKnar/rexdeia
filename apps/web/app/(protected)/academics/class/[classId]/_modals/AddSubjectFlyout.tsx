@@ -84,7 +84,7 @@ export function AddSubjectFlyout() {
   const isOpen = searchParams.get('isAddSubjectFlyoutOpen') === 'true';
   const page = parseInt(searchParams.get('page')) || 1;
   const limit = parseInt(searchParams.get('limit')) || 10;
-
+  const filter = {};
   const {
     control,
     watch,
@@ -117,6 +117,7 @@ export function AddSubjectFlyout() {
   const { data: groupList } = useGetGroupListQuery({
     page: 1,
     limit: 999,
+    filter,
   });
 
   const params = useParams<{ classId: string }>();

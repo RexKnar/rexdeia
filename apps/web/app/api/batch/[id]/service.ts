@@ -8,7 +8,7 @@ import {
 } from '../../../../lib/domain/batch';
 
 type BatchFilter = {
-  status: boolean;
+  isActive?: boolean;
 };
 export async function deleteBatchById(id: string) {
   const session = await getServerSession(authOptions);
@@ -68,22 +68,26 @@ export async function getAllBatchesWithFilter(
   limit: number,
   filter: BatchFilter
 ) {
-  const session = await getServerSession(authOptions);
+  const { isActive } = filter;
+  const { branchId } = await getServerSession(authOptions);
+
+  const whereClause = {
+    branchId,
+    isDeleted: false,
+  };
+
+  if (isActive !== undefined) {
+    whereClause['isActive'] = isActive;
+  }
 
   const [total, batchList] = await Promise.all([
     db.batch.count({
-      where: {
-        branchId: session.branchId,
-      },
+      where: whereClause,
     }),
     db.batch.findMany({
       take: limit,
       skip: (page - 1) * limit,
-      where: {
-        branchId: session.branchId,
-        isDeleted: false,
-        ...filter,
-      },
+      where: whereClause,
     }),
   ]);
 
@@ -110,6 +114,7 @@ export async function updateBatchById(
       startYear: updateBatch.startYear,
       endYear: updateBatch.endYear,
       isActive: updateBatch.isActive,
+      currentAcademicYear: updateBatch.currentAcademicYear,
       branch: {
         connect: {
           id: session.branchId,
@@ -128,6 +133,7 @@ export async function addBatch(createBatch: CreateBatchModel) {
       isActive: createBatch.isActive,
       startYear: createBatch.startYear,
       description: createBatch.description,
+      currentAcademicYear: createBatch.currentAcademicYear,
       branch: {
         connect: {
           id: session.branchId,

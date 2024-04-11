@@ -22,7 +22,7 @@ export function useCreateExamConfigurationQuery(examId: string) {
       });
     },
     onSuccess: async () => {
-      await queryClient.invalidateQueries({
+      await queryClient.refetchQueries({
         queryKey: [GET_EXAM_LIST],
       });
     },
