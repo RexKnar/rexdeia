@@ -24,7 +24,7 @@ import { getAllStudentsBySectionIds } from '../student/service';
 import { getAllSubjectBySectionIds } from '../subject/service';
 
 type ClassFilter = {
-  status: boolean;
+  isActive?: boolean;
 };
 export async function getClassList(page: number, limit: number) {
   const session = await getServerSession(authOptions);
@@ -59,22 +59,26 @@ export async function getAllClassesWithFilter(
   limit: number,
   filter: ClassFilter
 ) {
-  const session = await getServerSession(authOptions);
+  const { isActive } = filter;
+  const { branchId } = await getServerSession(authOptions);
+
+  const whereClause = {
+    branchId,
+    isDeleted: false,
+  };
+
+  if (isActive !== undefined) {
+    whereClause['isActive'] = isActive;
+  }
 
   const [total, classList] = await Promise.all([
     db.class.count({
-      where: {
-        branchId: session.branchId,
-      },
+      where: whereClause,
     }),
     db.class.findMany({
       take: limit,
       skip: (page - 1) * limit,
-      where: {
-        branchId: session.branchId,
-        isDeleted: false,
-        ...filter,
-      },
+      where: whereClause,
     }),
   ]);
 
