@@ -97,9 +97,9 @@ export async function PUT(request: NextRequest, { params: { id } }) {
   }
 
   try {
-    const payload = await request.json();
+    const filter = await request.json();
 
-    const sectionsWithFilter = await getSectionsWithFilter(id, payload);
+    const sectionsWithFilter = await getSectionsWithFilter(id, filter);
 
     return new NextResponse(JSON.stringify(sectionsWithFilter), {
       status: StatusCodes.OK,

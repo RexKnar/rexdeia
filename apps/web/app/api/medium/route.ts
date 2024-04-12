@@ -87,16 +87,12 @@ export async function PUT(request: NextRequest) {
   }
 
   try {
-    const payload = await request.json();
+    const filter = await request.json();
     const { searchParams } = request.nextUrl;
     const page = parseInt(searchParams.get('page')) || 1;
     const limit = parseInt(searchParams.get('limit')) || 10;
 
-    const paginatedMediumList = await getMediumsWithFilter(
-      page,
-      limit,
-      payload
-    );
+    const paginatedMediumList = await getMediumsWithFilter(page, limit, filter);
 
     return new NextResponse(JSON.stringify(paginatedMediumList), {
       status: StatusCodes.OK,
