@@ -119,6 +119,7 @@ export function AcademicYearListTable() {
 
   const page = parseInt(getParam('page')) || 1;
   const limit = parseInt(getParam('limit')) || 10;
+  const filter = {};
 
   const {
     isError: isDeleteBatchError,
@@ -132,6 +133,7 @@ export function AcademicYearListTable() {
     useGetBatchesListQuery({
       page,
       limit,
+      filter,
     });
 
   useEffect(() => {

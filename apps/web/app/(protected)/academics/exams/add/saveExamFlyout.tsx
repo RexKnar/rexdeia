@@ -38,6 +38,7 @@ export function SaveExamFlyout() {
 
   const page = parseInt(getParam('page')) || 1;
   const limit = parseInt(getParam('limit')) || 999;
+  const filter = {};
 
   const {
     reset,
@@ -73,6 +74,7 @@ export function SaveExamFlyout() {
   } = useGetBatchesListQuery({
     page,
     limit,
+    filter,
   });
 
   const {

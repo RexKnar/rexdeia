@@ -9,6 +9,7 @@ import {
   Alert,
   AlertDescription,
   Button,
+  Checkbox,
   DateSelector,
   Input,
   Sheet,
@@ -46,9 +47,9 @@ export function SaveAcademicYearFlyout() {
 
   const {
     reset,
+    setValue,
     watch,
     register,
-    setValue,
     handleSubmit,
     formState: { errors: fieldErrors },
   } = useForm<SaveBatchSchemaType>({
@@ -61,6 +62,7 @@ export function SaveAcademicYearFlyout() {
       isActive: false,
       startYear: null,
       description: null,
+      currentAcademicYear: false,
     },
   });
 
@@ -84,10 +86,12 @@ export function SaveAcademicYearFlyout() {
 
   useEffect(() => {
     if (currentBatch) {
-      const { name, endYear, isActive, startYear } = currentBatch;
+      const { name, endYear, isActive, startYear, currentAcademicYear } =
+        currentBatch;
 
       setValue('name', name);
       setValue('isActive', isActive);
+      setValue('currentAcademicYear', currentAcademicYear);
       setValue('endYear', new Date(endYear).toString());
       setValue('startYear', new Date(startYear).toString());
 
@@ -97,6 +101,7 @@ export function SaveAcademicYearFlyout() {
       setValue('name', null);
       setValue('endYear', null);
       setValue('isActive', false);
+      setValue('currentAcademicYear', false);
       setValue('startYear', null);
     }
   }, [currentBatch, setValue]);
@@ -210,6 +215,19 @@ export function SaveAcademicYearFlyout() {
                     errorMessage={fieldErrors?.name?.message.toString()}
                   />
                 </div>
+                <div className="mt-4">
+                  <Checkbox
+                    {...register('currentAcademicYear')}
+                    checked={watch('currentAcademicYear')}
+                    onCheckedChange={(isChecked) =>
+                      setValue('currentAcademicYear', isChecked === true)
+                    }
+                  />
+                  <label className="ml-2 text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+                    Current Academic year
+                  </label>
+                </div>
+
                 <div className="mt-4 flex space-x-4">
                   <div className="w-1/2">
                     <label
