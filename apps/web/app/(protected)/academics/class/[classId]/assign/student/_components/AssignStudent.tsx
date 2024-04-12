@@ -61,6 +61,7 @@ export function AssignStudents() {
   const { data: batchesList } = useGetBatchesListQuery({
     page,
     limit,
+    filter,
   });
 
   const { data: getClassByIdResponse } = useGetClassByIdQuery(params.classId, {

@@ -7,16 +7,20 @@ import { BatchModel } from '../../domain/batch';
 import { GET_BATCHES_LIST } from '../../endpoints';
 
 function getBatchesList(
-  { page, limit }: { page: number; limit: number },
+  {
+    page,
+    limit,
+    filter,
+  }: { page: number; limit: number; filter: { isActive?: boolean } },
   options?: UseQueryOptions<PaginatedResponse<BatchModel>>
 ): UseQueryOptions<PaginatedResponse<BatchModel>> {
   return {
     ...options,
-    queryKey: [GET_BATCHES_LIST, page, limit],
+    queryKey: [GET_BATCHES_LIST, page, limit, filter],
     queryFn: async () => {
       return await makeAPICall<PaginatedResponse<BatchModel>>(
         GET_BATCHES_LIST,
-        {},
+        filter,
         {
           page: page,
           limit: limit,
@@ -28,10 +32,14 @@ function getBatchesList(
 }
 
 export function useGetBatchesListQuery(
-  { page, limit }: { page: number; limit: number },
+  {
+    page,
+    limit,
+    filter,
+  }: { page: number; limit: number; filter: { isActive?: boolean } },
   options?: UseQueryOptions<PaginatedResponse<BatchModel>>
 ) {
-  const response = useQuery(getBatchesList({ page, limit }, options));
+  const response = useQuery(getBatchesList({ page, limit, filter }, options));
 
   const batches = response.data?.data.flatMap((batch) => batch) ?? [];
 
