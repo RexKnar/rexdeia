@@ -33,9 +33,42 @@ export async function getAllSectionsByClassId(classId: string) {
   return db.section.findMany({
     where: {
       classId: classId,
-      isActive: true,
     },
   });
+}
+type SectionFilter = {
+  isActive?: boolean;
+};
+export async function getSectionsWithFilter(
+  classId: string,
+  filter: SectionFilter
+) {
+  const { isActive } = filter;
+
+  const whereClause = {
+    classId: classId,
+    isDeleted: false,
+  };
+
+  if (isActive !== undefined) {
+    whereClause['isActive'] = isActive;
+  }
+
+  return await db.$transaction([
+    db.subjectType.count({
+      where: whereClause,
+    }),
+    db.subjectType.findMany({
+      where: whereClause,
+      select: {
+        id: true,
+        name: true,
+        isActive: true,
+        updatedAt: true,
+        createdAt: true,
+      },
+    }),
+  ]);
 }
 
 export async function mapSubjectsToSection(
@@ -160,18 +193,39 @@ export async function updateSectionById(
   id: string,
   updateSection: UpdateSectionModel
 ) {
-  return db.section.update({
-    where: {
-      id: id,
-    },
-    data: {
-      name: updateSection.name,
-      description: updateSection.description,
-      faculty: updateSection.faculty,
-      isActive: updateSection.isActive,
-      classId: updateSection.classId,
-      mediumId: updateSection.mediumId,
-    },
+  return db.$transaction(async (prisma) => {
+    const updatedSection = await prisma.section.update({
+      where: {
+        id: id,
+      },
+      data: {
+        name: updateSection.name,
+        description: updateSection.description,
+        faculty: updateSection.faculty,
+        isActive: updateSection.isActive,
+        classId: updateSection.classId,
+        mediumId: updateSection.mediumId,
+      },
+    });
+
+    await prisma.sectionToGroups.deleteMany({
+      where: {
+        sectionId: id,
+      },
+    });
+
+    await Promise.all(
+      updateSection.groupIds.map(async (groupId) => {
+        await prisma.sectionToGroups.create({
+          data: {
+            groupId: groupId,
+            sectionId: updatedSection.id,
+          },
+        });
+      })
+    );
+
+    return updatedSection;
   });
 }
 

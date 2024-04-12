@@ -6,6 +6,10 @@ import {
 } from 'lib/domain/subject';
 import { getServerSession } from 'next-auth';
 
+type AssessmentFormatFilter = {
+  isActive?: boolean;
+};
+
 export async function getAssessmentFormatList(page: number, limit: number) {
   const session = await getServerSession(authOptions);
 
@@ -112,4 +116,44 @@ export async function deleteAssessmentFormat(assessmentFormatId: string) {
       isDeleted: true,
     },
   });
+}
+
+export async function getAssessmentFormatsWithFilter(
+  page: number,
+  limit: number,
+  filter: AssessmentFormatFilter
+) {
+  const { isActive } = filter;
+  const { branchId } = await getServerSession(authOptions);
+
+  const whereClause = {
+    branchId,
+    isDeleted: false,
+  };
+
+  if (isActive !== undefined) {
+    whereClause['isActive'] = isActive;
+  }
+
+  const [total, data] = await db.$transaction([
+    db.assessmentFormat.count({
+      where: whereClause,
+    }),
+    db.assessmentFormat.findMany({
+      take: limit,
+      where: whereClause,
+      skip: (page - 1) * limit,
+      include: {
+        parentAssessmentFormat: true,
+        childAssessmentFormats: true,
+      },
+    }),
+  ]);
+
+  return {
+    page,
+    total,
+    limit,
+    data,
+  };
 }
