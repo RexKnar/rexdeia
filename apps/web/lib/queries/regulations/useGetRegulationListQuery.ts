@@ -7,7 +7,17 @@ import { RegulationModel } from '../../domain/regulation';
 import { GET_REGULATION_LIST } from '../../endpoints';
 
 function getRegulationList(
-  { page, limit }: { page: number; limit: number },
+  {
+    page,
+    limit,
+    filter,
+  }: {
+    page: number;
+    limit: number;
+    filter: {
+      isActive?: boolean;
+    };
+  },
   options?: UseQueryOptions<PaginatedResponse<RegulationModel>>
 ): UseQueryOptions<PaginatedResponse<RegulationModel>> {
   return {
@@ -16,7 +26,7 @@ function getRegulationList(
     queryFn: async () => {
       return await makeAPICall<PaginatedResponse<RegulationModel>>(
         GET_REGULATION_LIST,
-        {},
+        filter,
         {
           page: page,
           limit: limit,
@@ -28,8 +38,18 @@ function getRegulationList(
 }
 
 export function useGetRegulationListQuery(
-  { page, limit }: { page: number; limit: number },
+  {
+    page,
+    limit,
+    filter,
+  }: {
+    page: number;
+    limit: number;
+    filter: {
+      isActive?: boolean;
+    };
+  },
   options?: UseQueryOptions<PaginatedResponse<RegulationModel>>
 ): UseQueryResult<PaginatedResponse<RegulationModel>> {
-  return useQuery(getRegulationList({ page, limit }, options));
+  return useQuery(getRegulationList({ page, limit, filter }, options));
 }

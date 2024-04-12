@@ -7,11 +7,15 @@ import { useGetAllSectionByClassIdQuery } from '../../../../../../lib/queries/se
 import { SectionCard } from '../section/[sectionId]/_components/SectionCard';
 
 export function SectionList() {
-  const params = useParams<{ classId: string }>();
+  const classId = useParams<{ classId: string }>().classId;
+  const filter = {};
   const { data: sectionListResponse, isLoading: isSectionListLoading } =
-    useGetAllSectionByClassIdQuery(params.classId, {
-      enabled: !!params.classId,
-    });
+    useGetAllSectionByClassIdQuery(
+      { classId, filter },
+      {
+        enabled: !!classId,
+      }
+    );
   if (isSectionListLoading) {
     return (
       <div className="flex items-center justify-center">
@@ -35,7 +39,7 @@ export function SectionList() {
           <SectionCard
             id={sectionItem.id}
             name={sectionItem.name}
-            classId={params.classId}
+            classId={classId}
           />
         </div>
       ))}

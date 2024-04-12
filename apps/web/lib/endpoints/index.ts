@@ -225,7 +225,7 @@ export default <EndpointDetails>{
     endpoint: `/api/class/[id]`,
   },
   [GET_REGULATION_LIST]: {
-    requestType: `GET`,
+    requestType: `PUT`,
     endpoint: `/api/regulation`,
   },
   [GET_REGULATION_BY_ID]: {
@@ -337,7 +337,7 @@ export default <EndpointDetails>{
     endpoint: `/api/subject/subjectType/[id]`,
   },
   [GET_ASSESSMENT_FORMAT_LIST]: {
-    requestType: `GET`,
+    requestType: `PUT`,
     endpoint: `/api/subject/assessment-format`,
   },
   [ADD_ASSESSMENT_FORMAT]: {
@@ -353,7 +353,7 @@ export default <EndpointDetails>{
     endpoint: `/api/subject/subjectType`,
   },
   [GET_SUBJECT_TYPE_LIST]: {
-    requestType: `GET`,
+    requestType: `PUT`,
     endpoint: `/api/subject/subjectType`,
   },
   [GET_SUBJECT_LIST_BY_SECTION_ID]: {
@@ -389,7 +389,7 @@ export default <EndpointDetails>{
     endpoint: `/api/subject/subjectType/[id]`,
   },
   [GET_ALL_SECTIONS_BY_CLASS_ID]: {
-    requestType: `GET`,
+    requestType: `PUT`,
     endpoint: `/api/class/[id]/sections`,
   },
   [GET_STATE_BY_COUNTRY_CODE]: {
