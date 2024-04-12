@@ -14,7 +14,7 @@ const columns = [
     accessorKey: 'name',
     header: () => (
       <Button variant="ghost" className="px-0 ">
-         Name
+        Name
       </Button>
     ),
   },
