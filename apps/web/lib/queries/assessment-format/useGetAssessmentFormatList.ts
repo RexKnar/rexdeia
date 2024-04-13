@@ -10,7 +10,11 @@ import { AssessmentFormatModel } from '../../domain/subject';
 import { GET_ASSESSMENT_FORMAT_LIST } from '../../endpoints';
 
 function getAssessmentFormatList(
-  { page, limit }: { page: number; limit: number },
+  {
+    page,
+    limit,
+    filter,
+  }: { page: number; limit: number; filter: { isActive?: boolean } },
   options?: UseQueryOptions<PaginatedResponse<AssessmentFormatModel>>
 ): UseQueryOptions<PaginatedResponse<AssessmentFormatModel>> {
   return {
@@ -19,7 +23,7 @@ function getAssessmentFormatList(
     queryFn: async () => {
       return await makeAPICall<PaginatedResponse<AssessmentFormatModel>>(
         GET_ASSESSMENT_FORMAT_LIST,
-        {},
+        filter,
         {
           page: page,
           limit: limit,
@@ -31,8 +35,12 @@ function getAssessmentFormatList(
 }
 
 export function useGetAssessmentFormatList(
-  { page, limit }: { page: number; limit: number },
+  {
+    page,
+    limit,
+    filter,
+  }: { page: number; limit: number; filter: { isActive?: boolean } },
   options?: UseQueryOptions<PaginatedResponse<AssessmentFormatModel>>
 ): UseQueryResult<PaginatedResponse<AssessmentFormatModel>> {
-  return useQuery(getAssessmentFormatList({ page, limit }, options));
+  return useQuery(getAssessmentFormatList({ page, limit, filter }, options));
 }

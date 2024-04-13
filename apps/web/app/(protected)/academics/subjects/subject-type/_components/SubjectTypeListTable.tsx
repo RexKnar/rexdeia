@@ -94,6 +94,7 @@ export function SubjectTypeListTable() {
 
   const page = parseInt(searchParams.get('page')) || 1;
   const limit = parseInt(searchParams.get('limit')) || 10;
+  const filter = {};
 
   const {
     isError: isSubjectTypeError,
@@ -102,6 +103,7 @@ export function SubjectTypeListTable() {
   } = useGetSubjectTypeList({
     page,
     limit,
+    filter,
   });
 
   const {

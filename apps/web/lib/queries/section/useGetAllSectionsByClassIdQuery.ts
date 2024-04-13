@@ -5,26 +5,26 @@ import { SectionModel } from '../../domain/section';
 import { GET_ALL_SECTIONS_BY_CLASS_ID } from '../../endpoints';
 
 function getAllSectionByClassId(
-  id: string,
+  { classId, filter }: { classId: string; filter: { isActive?: boolean } },
   options?: Partial<UseQueryOptions<SectionModel[]>>
 ) {
   return {
     ...options,
-    queryKey: [GET_ALL_SECTIONS_BY_CLASS_ID, id],
+    queryKey: [GET_ALL_SECTIONS_BY_CLASS_ID, classId],
     queryFn: async () => {
       return await makeAPICall<SectionModel[]>(
         GET_ALL_SECTIONS_BY_CLASS_ID,
+        filter,
         {},
-        {},
-        { id }
+        { classId }
       );
     },
   };
 }
 
 export function useGetAllSectionByClassIdQuery(
-  id: string,
+  { classId, filter }: { classId: string; filter: { isActive?: boolean } },
   options?: Partial<UseQueryOptions<SectionModel[]>>
 ) {
-  return useQuery(getAllSectionByClassId(id, options));
+  return useQuery(getAllSectionByClassId({ classId, filter }, options));
 }

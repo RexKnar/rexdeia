@@ -40,6 +40,7 @@ export function SaveAssessmentFormatFlyout() {
 
   const page = parseInt(getParam('page')) || 1;
   const limit = parseInt(getParam('limit')) || 999;
+  const filter = {};
 
   const {
     reset,
@@ -63,6 +64,7 @@ export function SaveAssessmentFormatFlyout() {
   } = useGetAssessmentFormatList({
     page,
     limit,
+    filter,
   });
 
   const {
