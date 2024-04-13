@@ -161,13 +161,13 @@ export function AdmissionShareFlyout({ formId }: AdmissionShareFlyoutProps) {
               id="url"
               type="text"
               className="mt-1 w-full p-3 text-xs font-normal"
-              value={`https://www.acadx.io/forms/${shareDetailsList[0].id}`}
+              value={`https://www.rexdeia.com/forms/${shareDetailsList[0].id}`}
             />
             <Files
               size={28}
               onClick={async () => {
                 await copyToClipboard(
-                  `https://www.acadx.io/forms/${shareDetailsList[0].id}`
+                  `https://www.rexdeia.com/forms/${shareDetailsList[0].id}`
                 );
 
                 toast({

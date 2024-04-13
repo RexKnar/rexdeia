@@ -213,6 +213,7 @@ model Branch {
   Exam             Exam[]
   examType         ExamType[]
   term             Term[]
+  SsbjectMaster    SubjectMaster[]
 }
 
 model Organization {
@@ -642,6 +643,18 @@ model SectionToGroups {
   @@id([sectionId, groupId])
 }
 
+model SubjectMaster {
+  id        String    @id @default(uuid()) @map("_id") @db.Uuid
+  name      String
+  isActive  Boolean
+  subject   Subject[]
+  branchId  String?   @db.Uuid
+  branch    Branch?   @relation(fields: [branchId], references: [id])
+  isDeleted Boolean   @default(false)
+  createdAt DateTime? @default(now())
+  updatedAt DateTime? @default(now())
+}
+
 model Subject {
   id                        String                      @id @default(uuid()) @map("_id") @db.Uuid
   description               String?
@@ -660,6 +673,8 @@ model Subject {
   ExamSubjectPartition      ExamSubjectPartition[]
   branchId                  String?                     @db.Uuid
   branch                    Branch?                     @relation(fields: [branchId], references: [id])
+  subjectMasterId           String                      @db.Uuid
+  subjectMaster             SubjectMaster               @relation(fields: [subjectMasterId], references: [id])
   subjectToAssessmentFormat SubjectToAssessmentFormat[]
   subjectToGroup            SubjectToGroup[]
   subjectToSubjectTypes     SubjectToSubjectType[]

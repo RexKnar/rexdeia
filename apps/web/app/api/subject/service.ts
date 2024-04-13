@@ -67,6 +67,7 @@ export async function addSubjects(subjects: CreateSubjectModel[]) {
         description: subject.description,
         elective: +subject.elective,
         regulationId: subject.regulationId,
+        subjectMasterId: subject.subjectMasterId,
       },
     });
     createdSubjectsIds.push(createdSubject.id);
