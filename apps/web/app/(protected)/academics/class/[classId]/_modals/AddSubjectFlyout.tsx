@@ -122,7 +122,7 @@ export function AddSubjectFlyout() {
     filter,
   });
 
-  const classId = useParams<{ classId: string }>().classId;
+  const { classId } = useParams<{ classId: string }>();
   const { data: sectionListResponse } = useGetAllSectionByClassIdQuery(
     { classId, filter },
     {

@@ -27,7 +27,7 @@ import { Table, TableBody, TableCell, TableRow } from 'ui/components/ui/Table';
 
 export function AssignStudents() {
   const searchParams = useSearchParams();
-  const classId = useParams<{ classId: string }>().classId;
+  const { classId } = useParams<{ classId: string }>();
 
   const { watch, setValue, register, handleSubmit } = useForm();
 

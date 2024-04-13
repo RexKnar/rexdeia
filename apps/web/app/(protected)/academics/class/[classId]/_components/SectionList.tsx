@@ -7,7 +7,7 @@ import { useGetAllSectionByClassIdQuery } from '../../../../../../lib/queries/se
 import { SectionCard } from '../section/[sectionId]/_components/SectionCard';
 
 export function SectionList() {
-  const classId = useParams<{ classId: string }>().classId;
+  const { classId } = useParams<{ classId: string }>();
   const filter = {};
   const { data: sectionListResponse, isLoading: isSectionListLoading } =
     useGetAllSectionByClassIdQuery(
