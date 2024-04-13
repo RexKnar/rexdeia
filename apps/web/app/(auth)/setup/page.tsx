@@ -5,10 +5,10 @@ import { getServerSession } from 'next-auth';
 import { SetupForm } from '@/components/auth/SetupForm';
 
 import { authOptions } from '../../../lib/auth';
-import logo from '../../../public/assets/images/acadx-logo.png';
+import logo from '../../../public/assets/images/rexdeia-logo.png';
 
 export const metadata = {
-  title: 'acadx.io | Sign up',
+  title: 'Rexdeia | Sign up',
   description:
     'Your step to streamline every aspect of education management starts here.',
 };

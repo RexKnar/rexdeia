@@ -1,7 +1,7 @@
 'use client';
 
 /* eslint-disable no-console */
-export function AcadXConsole() {
+export function RexdeiaConsole() {
   console.log(
     `
 ██████╗ ███████╗██╗  ██╗██████╗ ███████╗██╗ █████╗ 

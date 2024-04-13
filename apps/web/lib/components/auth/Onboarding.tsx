@@ -5,7 +5,7 @@ import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { startTransition, useEffect, useState } from 'react';
 
-import logo from '../../../public/assets/images/acadx-logo.png';
+import logo from '../../../public/assets/images/rexdeia-logo.png';
 import loadingPlane from '../../../public/assets/images/loading-paperplane.png';
 import { makeAPICall } from '../../api';
 import { ONBOARD_ACCOUNT } from '../../endpoints';
