@@ -29,7 +29,7 @@ export function AssignStudentFlyout() {
   const pathname = usePathname();
   const router = useRouter();
   const searchParams = useSearchParams();
-  const params = useParams<{ sectionId: string }>();
+  const { sectionId } = useParams<{ sectionId: string }>();
   const isOpen = searchParams.get('isAssignStudentFlyoutOpen') === 'true';
 
   const { reset } = useForm();
@@ -84,7 +84,7 @@ export function AssignStudentFlyout() {
                 </SelectContent>
               </Select>
             </div>
-            {!params.sectionId && (
+            {!sectionId && (
               <div className="mt-5">
                 <label
                   htmlFor="name"

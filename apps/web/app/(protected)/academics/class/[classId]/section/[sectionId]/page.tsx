@@ -38,10 +38,10 @@ export default function Page() {
   const pathname = usePathname();
   const router = useRouter();
   const searchParams = useSearchParams();
-  const params = useParams<{ sectionId: string }>();
+  const { sectionId } = useParams<{ sectionId: string }>();
 
   const { data: getSectionResponse, isLoading: isGetSectionResponseLoading } =
-    useGetSectionByIdQuery(params.sectionId);
+    useGetSectionByIdQuery(sectionId);
 
   if (isGetSectionResponseLoading) {
     return (
