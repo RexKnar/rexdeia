@@ -1,21 +1,21 @@
-"use client";
+'use client';
 
-import { MailCheck, Smartphone } from "lucide-react";
-import Link from "next/link";
-import { useSearchParams } from "next/navigation";
-import { useState } from "react";
-import { Button, Input } from "ui";
+import { MailCheck, Smartphone } from 'lucide-react';
+import Link from 'next/link';
+import { useSearchParams } from 'next/navigation';
+import { useState } from 'react';
+import { Button, Input } from 'ui';
 
-import { Footer } from "../Footer";
-import { OtpVerifyForm } from "./OtpVerifyForm";
-import { ResetPasswordForm } from "./ResetPasswordForm";
+import { Footer } from '../Footer';
+import { OtpVerifyForm } from './OtpVerifyForm';
+import { ResetPasswordForm } from './ResetPasswordForm';
 
 export function RecoveryPasswordForm() {
   const [isOtp, setIsOtp] = useState(false);
   const [isEmailInput, setIsEmailInput] = useState(true);
   const [isNumberInput, setIsNumberInput] = useState(false);
   const searchParams = useSearchParams();
-  const isResetPassword = searchParams.get("token");
+  const isResetPassword = searchParams.get('token');
 
   const handleEmailVerificationClick = () => {
     setIsEmailInput(true);
@@ -39,7 +39,7 @@ export function RecoveryPasswordForm() {
                 Recover Your Account
               </span>
               <p className="mt-2 text-sm font-normal text-gray-800">
-                Select option to recover your account with{" "}
+                Select option to recover your account with{' '}
                 <span className="mr-2 text-blue-600">rexdeia</span>
               </p>
             </div>
@@ -48,8 +48,8 @@ export function RecoveryPasswordForm() {
                 type="button"
                 className={`mt-3 h-20 w-full rounded-xl bg-transparent p-2 text-base text-gray-800 outline  hover:text-white ${
                   isEmailInput
-                    ? "text-primary outline-primary-500"
-                    : "outline-gray-300"
+                    ? 'text-primary outline-primary-500'
+                    : 'outline-gray-300'
                 }`}
                 onClick={handleEmailVerificationClick}
               >
@@ -62,8 +62,8 @@ export function RecoveryPasswordForm() {
                 type="button"
                 className={`mt-3 h-20 w-full rounded-xl bg-transparent text-base text-gray-800 outline hover:text-white  ${
                   !isEmailInput
-                    ? "text-primary outline-primary-500"
-                    : "outline-gray-300"
+                    ? 'text-primary outline-primary-500'
+                    : 'outline-gray-300'
                 }`}
                 onClick={handleNumberVerificationClick}
               >
@@ -92,7 +92,7 @@ export function RecoveryPasswordForm() {
               </div>
             )}
             <Button type="submit" className="mt-8 w-full text-white">
-              {" "}
+              {' '}
               Send link
             </Button>
           </form>
