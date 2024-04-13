@@ -3,7 +3,7 @@ import { Suspense } from 'react';
 
 import { RecoveryPasswordForm } from '@/components/auth/RecoveryPasswordForm';
 
-import logo from '../../../public/assets/images/acadx-logo.png';
+import logo from '../../../public/assets/images/rexdeia-logo.png';
 
 export default async function Page() {
   return (

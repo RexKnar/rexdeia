@@ -8,10 +8,10 @@ import { SignUpForm } from '@/components/auth/SignUpForm';
 import { Footer } from '@/components/Footer';
 
 import { authOptions } from '../../../lib/auth';
-import logo from '../../../public/assets/images/acadx-logo.png';
+import logo from '../../../public/assets/images/rexdeia-logo.png';
 
 export const metadata = {
-  title: 'acadx.io | Sign up',
+  title: 'Rexdeia | Sign up',
   description:
     'Your step to streamline every aspect of education management starts here.',
 };
@@ -38,7 +38,7 @@ export default async function Page() {
               Create Your Account
             </Text>
             <Text variant="sm-regular" className="text-gray-800">
-              Join acadx and embark on a seamless academic experience.
+              Join rexdeia and embark on a seamless academic experience.
             </Text>
             <SignUpForm />
             <Text
