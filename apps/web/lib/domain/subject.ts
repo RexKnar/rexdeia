@@ -3,6 +3,7 @@ export type SubjectModel = {
   name?: string;
   isActive?: boolean;
   description?: string;
+  subjectMasterId: string;
   sectionId: string[];
   elective: string;
   sectionIds: string[];
@@ -28,6 +29,7 @@ export type CreateSubjectModel = Pick<
   | 'groupIds'
   | 'elective'
   | 'regulationId'
+  | 'subjectMasterId'
 >;
 
 export type UpdateSubjectModel = Pick<
@@ -75,4 +77,25 @@ export type CreateSubjectTypeModel = Pick<
 export type UpdateSubjectTypeModel = Pick<
   SubjectTypeModel,
   'name' | 'isActive' | 'id'
+>;
+
+export type SubjectMasterModel = {
+  id: string;
+  name: string;
+  isActive: boolean;
+  subject: SubjectModel[];
+  branchId: string;
+  isDeleting?: boolean;
+  isUpdating?: boolean;
+  isNewlyAdded?: boolean;
+};
+
+export type CreateSubjectMasterModel = Pick<
+  SubjectMasterModel,
+  'name' | 'isActive'
+>;
+
+export type UpdateSubjectMasterModel = Pick<
+  SubjectMasterModel,
+  'id' | 'name' | 'isActive'
 >;

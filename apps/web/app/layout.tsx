@@ -4,7 +4,7 @@ import '../public/assets/css/styles.css';
 import { Inter, Roboto_Mono } from 'next/font/google';
 import type { ReactNode } from 'react';
 
-import { AcadXConsole } from '@/components/AcadXConsole';
+import { RexdeiaConsole } from '@/components/RexdeiaConsole';
 
 import Providers from '../lib/Providers';
 
@@ -44,11 +44,11 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           href="/favicon-16x16.png"
         />
         <link rel="manifest" href="/site.webmanifest" />
-        <title>acadx.io | Elevate your academic experience</title>
+        <title>Rexdeia | Elevate your academic experience</title>
       </head>
       <body className="h-screen">
         <Providers>{children}</Providers>
-        <AcadXConsole />
+        <RexdeiaConsole />
       </body>
     </html>
   );

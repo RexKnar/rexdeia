@@ -9,10 +9,10 @@ import { SignInForm } from '@/components/auth/SignInForm';
 import { Footer } from '@/components/Footer';
 
 import { authOptions } from '../../../lib/auth';
-import logo from '../../../public/assets/images/acadx-logo.png';
+import logo from '../../../public/assets/images/rexdeia-logo.png';
 
 export const metadata = {
-  title: 'acadx.io | Sign in',
+  title: 'Rexdeia | Sign in',
   description:
     'A one-stop platform to streamline every aspect of education management.',
 };

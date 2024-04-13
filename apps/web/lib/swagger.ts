@@ -8,7 +8,7 @@ export const getApiDocs = async () => {
     definition: {
       openapi: '3.0.0',
       info: {
-        title: 'Acadx Swagger APIs',
+        title: 'Rexdeia Swagger APIs',
         version: '1.0',
       },
       security: [],
