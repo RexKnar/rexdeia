@@ -74,7 +74,7 @@ export function SaveSectionFlyout() {
     router.push(pathname + '?' + params.toString());
   };
 
-  const { data: getSectionResponse } = useGetSectionByIdQuery(sectionId, {
+  const { data: SectionDetailsResponse } = useGetSectionByIdQuery(sectionId, {
     enabled: !!sectionId,
   });
 
@@ -86,8 +86,8 @@ export function SaveSectionFlyout() {
 
   const [mediumId, setMediumId] = useState('');
   useEffect(() => {
-    if (getSectionResponse) {
-      const { name, isActive, mediumId } = getSectionResponse;
+    if (SectionDetailsResponse) {
+      const { name, isActive, mediumId } = SectionDetailsResponse;
       setValue('name', name);
       setValue('isActive', isActive);
       setValue('mediumId', mediumId);
@@ -97,7 +97,7 @@ export function SaveSectionFlyout() {
       setValue('isActive', false);
       setValue('mediumId', null);
     }
-  }, [getSectionResponse, setValue]);
+  }, [SectionDetailsResponse, setValue]);
 
   const {
     isPending: isPendingCreateSection,
