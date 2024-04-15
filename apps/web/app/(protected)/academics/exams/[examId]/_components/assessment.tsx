@@ -28,6 +28,7 @@ export function Assessment() {
   const pathname = usePathname();
   const router = useRouter();
   const classId = searchParams.get('classId');
+  const filter = {};
   const sectionId = searchParams.get('sectionId');
   const examId = searchParams.get('examId');
   const staffId = searchParams.get('staffId');
@@ -50,9 +51,12 @@ export function Assessment() {
     page,
     limit,
   });
-  const { data: sectionList } = useGetAllSectionByClassIdQuery(classId, {
-    enabled: !!classId,
-  });
+  const { data: sectionList } = useGetAllSectionByClassIdQuery(
+    { classId, filter },
+    {
+      enabled: !!classId,
+    }
+  );
   const { data: examList } = useGetExamsByClassSectionQuery(
     { classId, sectionId },
     {

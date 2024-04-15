@@ -10,7 +10,11 @@ import { SubjectTypeModel } from '../../domain/subject';
 import { GET_SUBJECT_TYPE_LIST } from '../../endpoints';
 
 function getSubjectTypeList(
-  { page, limit }: { page: number; limit: number },
+  {
+    page,
+    limit,
+    filter,
+  }: { page: number; limit: number; filter: { isActive?: boolean } },
   options?: UseQueryOptions<PaginatedResponse<SubjectTypeModel>>
 ): UseQueryOptions<PaginatedResponse<SubjectTypeModel>> {
   return {
@@ -19,7 +23,7 @@ function getSubjectTypeList(
     queryFn: async () => {
       return await makeAPICall<PaginatedResponse<SubjectTypeModel>>(
         GET_SUBJECT_TYPE_LIST,
-        {},
+        filter,
         {
           page: page,
           limit: limit,
@@ -31,8 +35,12 @@ function getSubjectTypeList(
 }
 
 export function useGetSubjectTypeList(
-  { page, limit }: { page: number; limit: number },
+  {
+    page,
+    limit,
+    filter,
+  }: { page: number; limit: number; filter: { isActive?: boolean } },
   options?: UseQueryOptions<PaginatedResponse<SubjectTypeModel>>
 ): UseQueryResult<PaginatedResponse<SubjectTypeModel>> {
-  return useQuery(getSubjectTypeList({ page, limit }, options));
+  return useQuery(getSubjectTypeList({ page, limit, filter }, options));
 }

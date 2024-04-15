@@ -113,7 +113,7 @@ export function RegulationListTable() {
 
   const page = parseInt(searchParams.get('page')) || 1;
   const limit = parseInt(searchParams.get('limit')) || 10;
-
+  const filter = {};
   const {
     isError: isDeleteRegulationError,
     isSuccess: isDeleteRegulationSuccess,
@@ -124,6 +124,7 @@ export function RegulationListTable() {
     useGetRegulationListQuery({
       page,
       limit,
+      filter,
     });
 
   useEffect(() => {

@@ -7,7 +7,7 @@ import { authOptions } from '../../../lib/auth';
 import { getOrganisationsByUserId } from '../../api/user/organization/service';
 
 export const metadata = {
-  title: 'acadx.io | Workspace Selector',
+  title: 'Rexdeia | Workspace Selector',
   description:
     'Your step to streamline every aspect of education management starts here.',
 };

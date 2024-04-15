@@ -1,5 +1,5 @@
 {
-  "name": "acadx",
+  "name": "rexdeia",
   "private": true,
   "scripts": {
     "build": "turbo run build",

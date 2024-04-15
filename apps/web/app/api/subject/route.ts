@@ -153,14 +153,14 @@ export async function PUT(request: NextRequest) {
   }
 
   try {
-    const payload = await request.json();
+    const filter = await request.json();
     const page = parseInt(request.nextUrl.searchParams.get('page')) || 1;
     const limit = parseInt(request.nextUrl.searchParams.get('limit')) || 10;
 
     const paginatedSubjectsList = await getAllSubjectsWithFilter(
       page,
       limit,
-      payload
+      filter
     );
     return new NextResponse(JSON.stringify(paginatedSubjectsList), {
       status: StatusCodes.OK,

@@ -125,6 +125,7 @@ export async function getRegulationsWithFilter(
         id: true,
         regulationName: true,
         isActive: true,
+        announcedYear: true,
       },
     }),
   ]);

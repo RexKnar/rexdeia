@@ -88,7 +88,7 @@ export function AssignStaffClassDetailPageFlyout() {
   });
 
   const { data: sectionListResponse } = useGetAllSectionByClassIdQuery(
-    classId,
+    { classId, filter },
     {
       enabled: !!classId,
     }
