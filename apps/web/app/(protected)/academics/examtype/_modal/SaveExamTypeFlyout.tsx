@@ -35,12 +35,12 @@ export function SaveExamTypeFlyout() {
     },
   });
 
-  const isOpen = searchParams.get('isMediumFlyoutOpen') === 'true';
+  const isOpen = searchParams.get('isExamTypeFlyoutOpen') === 'true';
 
-  const closeMediumFlyout = async () => {
+  const closeExamTypeFlyout = async () => {
     const params = new URLSearchParams(searchParams);
-    params.set('isMediumFlyoutOpen', 'false');
-    params.delete('mediumId');
+    params.set('isExamTypeFlyoutOpen', 'false');
+    params.delete('examtypeId');
     router.replace(pathname + '?' + params.toString());
   };
   return (
@@ -50,7 +50,7 @@ export function SaveExamTypeFlyout() {
           side="right"
           widthSize="sm"
           className="bg-white p-10"
-          onCloseClick={() => closeMediumFlyout()}
+          onCloseClick={() => closeExamTypeFlyout()}
         >
           <SheetHeader>
             <SheetTitle className="mb-5">
@@ -100,7 +100,7 @@ export function SaveExamTypeFlyout() {
           </div>
           <div className="mt-2">
             <label
-              htmlFor="term"
+              htmlFor="examType"
               className="text-sm font-semibold text-gray-700"
             >
               Frequency

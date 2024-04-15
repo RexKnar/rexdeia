@@ -22,7 +22,7 @@ export function ExamTypePageHeader() {
           variant="default"
           onClick={async () => {
             const params = new URLSearchParams(searchParams);
-            params.set('isMediumFlyoutOpen', 'true');
+            params.set('isExamTypeFlyoutOpen', 'true');
 
             router.replace(pathname + '?' + params.toString());
           }}
