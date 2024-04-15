@@ -133,7 +133,7 @@ export function AssessmentFormatListTable() {
   const searchParams = useSearchParams();
 
   const page = parseInt(searchParams.get('page')) || 1;
-  const limit = parseInt(searchParams.get('limit')) || 10;
+  const limit = parseInt(searchParams.get('limit')) || 999;
   const filter = {};
 
   const {
