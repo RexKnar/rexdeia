@@ -57,7 +57,7 @@ export function SaveSectionFlyout() {
     },
   });
 
-  const params = useParams<{ sectionId: string }>();
+  const { sectionId } = useParams<{ sectionId: string }>();
   const classIdFromQueryParams = useParams<{ classId: string }>();
   const isOpen = searchParams.get('isSectionFlyoutOpen') === 'true';
   const classIdFromSearchParams = searchParams.get('classId');
@@ -74,12 +74,9 @@ export function SaveSectionFlyout() {
     router.push(pathname + '?' + params.toString());
   };
 
-  const { data: getSectionResponse } = useGetSectionByIdQuery(
-    params.sectionId,
-    {
-      enabled: !!params.sectionId,
-    }
-  );
+  const { data: SectionDetailsResponse } = useGetSectionByIdQuery(sectionId, {
+    enabled: !!sectionId,
+  });
 
   const { data: groupListResponse } = useGetGroupListQuery({
     page: 1,
@@ -89,8 +86,8 @@ export function SaveSectionFlyout() {
 
   const [mediumId, setMediumId] = useState('');
   useEffect(() => {
-    if (getSectionResponse) {
-      const { name, isActive, mediumId } = getSectionResponse;
+    if (SectionDetailsResponse) {
+      const { name, isActive, mediumId } = SectionDetailsResponse;
       setValue('name', name);
       setValue('isActive', isActive);
       setValue('mediumId', mediumId);
@@ -100,7 +97,7 @@ export function SaveSectionFlyout() {
       setValue('isActive', false);
       setValue('mediumId', null);
     }
-  }, [getSectionResponse, setValue]);
+  }, [SectionDetailsResponse, setValue]);
 
   const {
     isPending: isPendingCreateSection,
@@ -117,9 +114,9 @@ export function SaveSectionFlyout() {
   const {
     isPending: isPendingUpdateSection,
     mutateAsync: mutateUpdateSectionAsync,
-  } = useUpdateSectionMutationQuery(params.sectionId);
+  } = useUpdateSectionMutationQuery(sectionId);
 
-  const isEditing = !!params.sectionId;
+  const isEditing = !!sectionId;
 
   const saveSection = async (payload: SectionModel) => {
     try {
@@ -161,7 +158,7 @@ export function SaveSectionFlyout() {
                   <div className="flex items-center">
                     <PlusCircle size={20} strokeWidth={1.5} />
                     <Text variant="lg-semibold" className="ml-2">
-                      {params.sectionId ? 'Update Section' : 'New Section'}
+                      {sectionId ? 'Update Section' : 'New Section'}
                     </Text>
                   </div>
                   <div className="flex items-center">

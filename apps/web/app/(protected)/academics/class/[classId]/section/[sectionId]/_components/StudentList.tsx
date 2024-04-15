@@ -7,10 +7,10 @@ import { useGetStudentListBySectionIdQuery } from '../../../../../../../../lib/q
 import { StudentCard } from './StudentCard';
 
 export function StudentList() {
-  const params = useParams<{ sectionId: string }>();
+  const { sectionId } = useParams<{ sectionId: string }>();
   const { data: studentListResponse, isLoading: isStudentListLoading } =
-    useGetStudentListBySectionIdQuery(params.sectionId, {
-      enabled: !!params.sectionId,
+    useGetStudentListBySectionIdQuery(sectionId, {
+      enabled: !!sectionId,
     });
 
   if (isStudentListLoading) {
