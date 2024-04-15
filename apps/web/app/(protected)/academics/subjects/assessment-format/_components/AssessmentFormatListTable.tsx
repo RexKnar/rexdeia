@@ -134,6 +134,7 @@ export function AssessmentFormatListTable() {
 
   const page = parseInt(searchParams.get('page')) || 1;
   const limit = parseInt(searchParams.get('limit')) || 10;
+  const filter = {};
 
   const {
     data: assessmentFormatListResponse,
@@ -141,6 +142,7 @@ export function AssessmentFormatListTable() {
   } = useGetAssessmentFormatList({
     page,
     limit,
+    filter,
   });
 
   const {

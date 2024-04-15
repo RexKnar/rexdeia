@@ -7,10 +7,10 @@ import { useGetStaffListBySectionIdQuery } from '../../../../../../../../lib/que
 import { StaffCard } from './StaffCard';
 
 export function StaffList() {
-  const params = useParams<{ sectionId: string }>();
+  const { sectionId } = useParams<{ sectionId: string }>();
   const { data: staffListResponse, isLoading: isStaffListLoading } =
-    useGetStaffListBySectionIdQuery(params.sectionId, {
-      enabled: !!params.sectionId,
+    useGetStaffListBySectionIdQuery(sectionId, {
+      enabled: !!sectionId,
     });
 
   if (isStaffListLoading) {

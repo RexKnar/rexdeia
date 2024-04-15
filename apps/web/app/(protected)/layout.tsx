@@ -9,7 +9,7 @@ import { Sidebar } from '@/components/sidebar/Sidebar';
 import { ZohoSalesIQ } from '@/components/ZohoSalesIQ';
 
 export const metadata = {
-  title: 'acadx.io | Elevate your academic experience',
+  title: 'Rexdeia | Elevate your academic experience',
   description: 'Your one stop platform for all your academic needs',
 };
 

@@ -40,7 +40,7 @@ export function RecoveryPasswordForm() {
               </span>
               <p className="mt-2 text-sm font-normal text-gray-800">
                 Select option to recover your account with{' '}
-                <span className="mr-2 text-blue-600">acadx</span>
+                <span className="mr-2 text-blue-600">rexdeia</span>
               </p>
             </div>
             <div className="mt-4 flex flex-col sm:gap-4 lg:flex-row">

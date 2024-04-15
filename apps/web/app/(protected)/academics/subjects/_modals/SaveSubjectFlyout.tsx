@@ -89,6 +89,7 @@ export function SaveSubjectFlyout() {
   } = useGetSubjectTypeList({
     page: 1,
     limit: 999,
+    filter,
   });
 
   const {
@@ -98,6 +99,7 @@ export function SaveSubjectFlyout() {
   } = useGetAssessmentFormatList({
     page: 1,
     limit: 999,
+    filter,
   });
   const {
     data: groupList,
