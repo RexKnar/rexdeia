@@ -39,7 +39,6 @@ export async function getAssessmentFormatById(id: string) {
   return db.assessmentFormat.findUnique({
     where: {
       id: id,
-      isActive: true,
     },
     include: {
       childAssessmentFormats: true,
