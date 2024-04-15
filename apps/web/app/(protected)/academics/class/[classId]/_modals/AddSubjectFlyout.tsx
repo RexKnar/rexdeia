@@ -84,7 +84,7 @@ export function AddSubjectFlyout() {
   const isOpen = searchParams.get('isAddSubjectFlyoutOpen') === 'true';
   const page = parseInt(searchParams.get('page')) || 1;
   const limit = parseInt(searchParams.get('limit')) || 10;
-
+  const filter = {};
   const {
     control,
     watch,
@@ -108,28 +108,32 @@ export function AddSubjectFlyout() {
   const { data: subjectTypeList } = useGetSubjectTypeList({
     page: 1,
     limit: 999,
+    filter,
   });
 
   const { data: assessmentFormatList } = useGetAssessmentFormatList({
     page: 1,
     limit: 999,
+    filter,
   });
   const { data: groupList } = useGetGroupListQuery({
     page: 1,
     limit: 999,
+    filter,
   });
 
-  const params = useParams<{ classId: string }>();
+  const { classId } = useParams<{ classId: string }>();
   const { data: sectionListResponse } = useGetAllSectionByClassIdQuery(
-    params.classId,
+    { classId, filter },
     {
-      enabled: !!params.classId,
+      enabled: !!classId,
     }
   );
 
   const { data: regulationListResponse } = useGetRegulationListQuery({
     page,
     limit,
+    filter,
   });
 
   const closeFlyout = () => {
@@ -154,7 +158,7 @@ export function AddSubjectFlyout() {
             isActive: true,
           },
         ],
-        classId: params.classId,
+        classId: classId,
       };
 
       await mutateCreateSubjectsAsync(requestPayload);

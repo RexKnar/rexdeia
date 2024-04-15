@@ -7,6 +7,10 @@ import {
   UpdateRegulationModel,
 } from '../../../lib/domain/regulation';
 
+type RegulationFilter = {
+  isActive?: boolean;
+};
+
 export async function getRegulationList(page: number, limit: number) {
   const session = await getServerSession(authOptions);
   const [regulationsList, totalRegulations] = await Promise.all([
@@ -90,4 +94,46 @@ export async function deleteRegulation(regulationId: string) {
       deletedAt: new Date(),
     },
   });
+}
+
+export async function getRegulationsWithFilter(
+  page: number,
+  limit: number,
+  filter: RegulationFilter
+) {
+  const { isActive } = filter;
+  const { branchId } = await getServerSession(authOptions);
+
+  const whereClause = {
+    branchId,
+    isDeleted: false,
+  };
+
+  if (isActive !== undefined) {
+    whereClause['isActive'] = isActive;
+  }
+
+  const [total, data] = await db.$transaction([
+    db.regulation.count({
+      where: whereClause,
+    }),
+    db.regulation.findMany({
+      take: limit,
+      where: whereClause,
+      skip: (page - 1) * limit,
+      select: {
+        id: true,
+        regulationName: true,
+        isActive: true,
+        announcedYear: true,
+      },
+    }),
+  ]);
+
+  return {
+    page,
+    total,
+    limit,
+    data,
+  };
 }

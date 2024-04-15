@@ -10,6 +10,86 @@ import { SidebarMenuItem } from './types';
 
 export const menuItems: SidebarMenuItem[] = [
   {
+    id: 'academics',
+    label: 'Academics',
+    icon: GraduationCap,
+    path: '',
+    children: [
+      {
+        id: 'academics-regulation-student',
+        label: 'Regulations',
+        icon: null,
+        path: '/academics/regulation',
+      },
+      {
+        id: 'academics-year',
+        label: 'Academic Year',
+        icon: null,
+        path: '/academics/academic-year',
+      },
+      {
+        id: 'academics-medium',
+        label: 'Medium',
+        icon: null,
+        path: '/academics/medium',
+      },
+      {
+        id: 'academics-group',
+        label: 'Group',
+        icon: null,
+        path: '/academics/group',
+      },
+      {
+        id: 'academics-subjects-student',
+        label: 'Subjects',
+        icon: null,
+        path: '/academics/subjects',
+      },
+      {
+        id: 'academics-subjects-type',
+        label: 'Subject Type',
+        icon: null,
+        path: '/academics/subjects/subject-type',
+      },
+      {
+        id: 'academics-assessment-format',
+        label: 'Assessment Format',
+        icon: null,
+        path: '/academics/subjects/assessment-format',
+      },
+      {
+        id: 'academics-class-student',
+        label: 'Class',
+        icon: null,
+        path: '/academics/class',
+      },
+      {
+        id: 'academics-exams',
+        label: 'Exams',
+        icon: null,
+        path: '/academics/exams',
+      },
+      {
+        id: 'academics-term',
+        label: 'Term',
+        icon: null,
+        path: '/academics/term',
+      },
+      {
+        id: 'academics-grade',
+        label: 'Grade',
+        icon: null,
+        path: '/academics/grade',
+      },
+      {
+        id: 'academics-student-attendance',
+        label: 'Student Attendance',
+        icon: null,
+        path: '/academics/student-attendance',
+      },
+    ],
+  },
+  {
     id: 'students',
     label: 'Students',
     icon: SquareUserRound,
@@ -98,17 +178,23 @@ export const menuItems: SidebarMenuItem[] = [
         path: '/academics/exams',
       },
       {
+        id: 'academics-exam-type',
+        label: 'Exam Type',
+        icon: null,
+        path: '/academics/examtype',
+      },
+      {
         id: 'academics-grade',
         label: 'Grade',
         icon: null,
         path: '/academics/grade',
       },
-      {
-        id: 'academics-subjects-student',
-        label: 'Subjects',
-        icon: null,
-        path: '/academics/subjects',
-      },
+      // {
+      //   id: 'academics-subjects-student',
+      //   label: 'Subjects',
+      //   icon: null,
+      //   path: '/academics/subjects',
+      // },
       {
         id: 'academics-subjects-type',
         label: 'Subject Type',

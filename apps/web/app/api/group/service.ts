@@ -5,7 +5,7 @@ import { db } from '../../../lib/db';
 import { CreateGroupModel, UpdateGroupModel } from '../../../lib/domain/group';
 
 type GroupFilter = {
-  status: boolean;
+  isActive?: boolean;
 };
 export async function getAllGroups(
   page: number,
@@ -45,22 +45,26 @@ export async function getAllGroupsWithFilter(
   limit: number,
   filter: GroupFilter
 ) {
-  const session = await getServerSession(authOptions);
+  const { isActive } = filter;
+  const { branchId } = await getServerSession(authOptions);
+
+  const whereClause = {
+    branchId,
+    isDeleted: false,
+  };
+
+  if (isActive !== undefined) {
+    whereClause['isActive'] = isActive;
+  }
 
   const [total, groupList] = await Promise.all([
     db.group.count({
-      where: {
-        branchId: session.branchId,
-      },
+      where: whereClause,
     }),
     db.group.findMany({
       take: limit,
       skip: (page - 1) * limit,
-      where: {
-        branchId: session.branchId,
-        isDeleted: false,
-        ...filter,
-      },
+      where: whereClause,
     }),
   ]);
 

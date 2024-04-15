@@ -119,6 +119,7 @@ export function AcademicYearListTable() {
 
   const page = parseInt(getParam('page')) || 1;
   const limit = parseInt(getParam('limit')) || 10;
+  const filter = {};
 
   const {
     isError: isDeleteBatchError,
@@ -132,6 +133,7 @@ export function AcademicYearListTable() {
     useGetBatchesListQuery({
       page,
       limit,
+      filter,
     });
 
   useEffect(() => {
@@ -149,7 +151,7 @@ export function AcademicYearListTable() {
       toast({
         title: 'Success',
         variant: 'default',
-        description: 'Batch deleted successfully',
+        description: 'Academic Year deleted successfully',
       });
       setSelectedBatch(null);
     }
@@ -292,7 +294,9 @@ export function AcademicYearListTable() {
             ) : (
               <TableRow>
                 <TableCell colSpan={5} className="h-24 text-center">
-                  {isBatchesListLoading ? 'Loading...' : 'No Batches Found'}
+                  {isBatchesListLoading
+                    ? 'Loading...'
+                    : 'No Academic Year Found'}
                 </TableCell>
               </TableRow>
             )}

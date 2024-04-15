@@ -68,6 +68,7 @@ export function AssignStaffClassDetailPageFlyout() {
 
   const page = parseInt(searchParams.get('page')) || 1;
   const limit = parseInt(searchParams.get('limit')) || 10;
+  const filter = {};
 
   const { mutateAsync: mutateCreateStaffsAsync } =
     useCreateStaffMutationByClassIdQuery(classId);
@@ -83,10 +84,11 @@ export function AssignStaffClassDetailPageFlyout() {
   const { data: batchesList } = useGetBatchesListQuery({
     page,
     limit,
+    filter,
   });
 
   const { data: sectionListResponse } = useGetAllSectionByClassIdQuery(
-    classId,
+    { classId, filter },
     {
       enabled: !!classId,
     }

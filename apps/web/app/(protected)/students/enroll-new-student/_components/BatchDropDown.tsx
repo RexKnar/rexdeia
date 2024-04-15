@@ -12,12 +12,14 @@ export function BatchDropDown() {
   const pathname = usePathname();
   const router = useRouter();
   const searchParams = useSearchParams();
+  const filter = {};
 
   const [open, setOpen] = useState(false);
 
   const { batches } = useGetBatchesListQuery({
     page: 1,
     limit: 999,
+    filter,
   });
 
   const batchId = searchParams.get('batchId');

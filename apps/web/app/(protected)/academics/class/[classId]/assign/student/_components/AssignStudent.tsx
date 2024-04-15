@@ -27,28 +27,30 @@ import { Table, TableBody, TableCell, TableRow } from 'ui/components/ui/Table';
 
 export function AssignStudents() {
   const searchParams = useSearchParams();
-  const params = useParams<{ classId: string }>();
+  const { classId } = useParams<{ classId: string }>();
 
   const { watch, setValue, register, handleSubmit } = useForm();
 
   const page = parseInt(searchParams.get('page')) || 1;
   const limit = parseInt(searchParams.get('limit')) || 10;
   const pageSize = parseInt(searchParams.get('limit')) || 10;
+  const filter = {};
   const {
     mutateAsync: mutateCreateStudentsAsync,
     isPending: isPendingAssignStudents,
   } = useCreateStudentMutationByClassIdQuery();
 
   const { data: sectionListResponse } = useGetAllSectionByClassIdQuery(
-    params.classId,
+    { classId, filter },
     {
-      enabled: !!params.classId,
+      enabled: !!classId,
     }
   );
 
   const { data: groupListResponse } = useGetGroupListQuery({
     page,
     limit,
+    filter,
   });
 
   const { data: getStudentListResponse } = useGetStudentListQuery({
@@ -59,10 +61,11 @@ export function AssignStudents() {
   const { data: batchesList } = useGetBatchesListQuery({
     page,
     limit,
+    filter,
   });
 
-  const { data: getClassByIdResponse } = useGetClassByIdQuery(params.classId, {
-    enabled: !!params.classId,
+  const { data: getClassByIdResponse } = useGetClassByIdQuery(classId, {
+    enabled: !!classId,
   });
   const handleCheckboxChange = (studentId) => {
     setSelectedStudentIds((prevSelectedStudentIds) => {
@@ -158,15 +161,15 @@ export function AssignStudents() {
   const assignStudent = async (payload: AssignStudentsToClassModel) => {
     const assignStudentPayload = {
       ...payload,
-      classId: params.classId,
+      classId: classId,
       studentIds: selectedStudents.map((x) => x.id),
     };
     await mutateCreateStudentsAsync(assignStudentPayload);
   };
 
   useEffect(() => {
-    setValue('classId', params.classId);
-  }, [params.classId, setValue]);
+    setValue('classId', classId);
+  }, [classId, setValue]);
   return (
     <form onSubmit={handleSubmit(assignStudent)}>
       <section className="flex flex-col">
@@ -177,7 +180,7 @@ export function AssignStudents() {
                 <Select
                   autoComplete="off"
                   {...register('classId', { required: true })}
-                  value={params.classId}
+                  value={classId}
                   onValueChange={(value) => {
                     if (value) {
                       setValue('classId', value);
@@ -196,7 +199,7 @@ export function AssignStudents() {
                   <SelectContent className="border border-primary-200">
                     {' '}
                     <SelectGroup>
-                      <SelectItem key={params.classId} value={params.classId}>
+                      <SelectItem key={classId} value={classId}>
                         {getClassByIdResponse?.name || 'Loading...'}
                       </SelectItem>
                     </SelectGroup>

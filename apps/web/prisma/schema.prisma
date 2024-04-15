@@ -60,6 +60,7 @@ model AcademicExams {
   subjectId         String              @db.Uuid
   subjectType       subjectType         @relation(fields: [subjectTypeId], references: [id])
   subjectTypeId     String              @db.Uuid
+  markEntry         MarkEntry[]
   createdAt         DateTime            @default(now())
   updatedAt         DateTime            @default(now())
   isDeleted         Boolean             @default(false)
@@ -117,6 +118,22 @@ model ExamSubject {
   examSubjectPartition ExamSubjectPartition[]
   ExamGroup            ExamGroup?             @relation(fields: [examGroupId], references: [id])
   examGroupId          String?                @db.Uuid
+}
+
+model MarkEntry {
+  id                 String           @id @default(uuid()) @map("_id") @db.Uuid
+  mark               Int?
+  attandance         Int?
+  studentId          String           @db.Uuid
+  student            Student          @relation(fields: [studentId], references: [id])
+  staffId            String           @db.Uuid
+  staff              Staff            @relation(fields: [staffId], references: [id])
+  academicExamId     String           @db.Uuid
+  academicExams      AcademicExams    @relation(fields: [academicExamId], references: [id])
+  assessmentFormatId String           @db.Uuid
+  assessmentFormat   AssessmentFormat @relation(fields: [assessmentFormatId], references: [id])
+
+  @@unique([studentId, academicExamId, assessmentFormatId])
 }
 
 model ExamSubjectPartition {
@@ -196,6 +213,7 @@ model Branch {
   Exam             Exam[]
   examType         ExamType[]
   term             Term[]
+  SsbjectMaster    SubjectMaster[]
 }
 
 model Organization {
@@ -407,11 +425,13 @@ model Student {
   studentMapping StudentMapping[]
   sectionId      String?          @db.Uuid
   section        Section?         @relation(fields: [sectionId], references: [id])
+  markEntry      MarkEntry[]
 
   isDeleted Boolean @default(false)
 }
 
 model StudentMapping {
+  id        String  @id @default(uuid()) @map("_id") @db.Uuid
   studentId String  @db.Uuid
   student   Student @relation(fields: [studentId], references: [id])
   classId   String  @db.Uuid
@@ -420,8 +440,6 @@ model StudentMapping {
   section   Section @relation(fields: [sectionId], references: [id])
   groupId   String  @db.Uuid
   group     Group   @relation(fields: [groupId], references: [id])
-
-  @@id([studentId, classId, sectionId, groupId])
 }
 
 model Staff {
@@ -502,6 +520,7 @@ model Staff {
   staffSections                StaffSection[]
   academicSubjectForStaff      AcademicSubjectForStaff[]
   classInCharge                ClassInCharge[]
+  markEntry                    MarkEntry[]
 }
 
 model Batch {
@@ -511,6 +530,7 @@ model Batch {
   startYear               String
   endYear                 String
   isActive                Boolean
+  currentAcademicYear     Boolean                   @default(false)
   isDeleted               Boolean                   @default(false)
   class                   Class[]
   branch                  Branch                    @relation(fields: [branchId], references: [id])
@@ -611,6 +631,28 @@ model Section {
   academicSubjectForStaff AcademicSubjectForStaff[]
   classInCharge           ClassInCharge[]
   studentMapping          StudentMapping[]
+  sectionToGroups         SectionToGroups[]
+}
+
+model SectionToGroups {
+  sectionId String  @db.Uuid
+  groupId   String  @db.Uuid
+  section   Section @relation(fields: [sectionId], references: [id])
+  group     Group   @relation(fields: [groupId], references: [id])
+
+  @@id([sectionId, groupId])
+}
+
+model SubjectMaster {
+  id        String    @id @default(uuid()) @map("_id") @db.Uuid
+  name      String
+  isActive  Boolean
+  subject   Subject[]
+  branchId  String?   @db.Uuid
+  branch    Branch?   @relation(fields: [branchId], references: [id])
+  isDeleted Boolean   @default(false)
+  createdAt DateTime? @default(now())
+  updatedAt DateTime? @default(now())
 }
 
 model Subject {
@@ -631,6 +673,8 @@ model Subject {
   ExamSubjectPartition      ExamSubjectPartition[]
   branchId                  String?                     @db.Uuid
   branch                    Branch?                     @relation(fields: [branchId], references: [id])
+  subjectMasterId           String                      @db.Uuid
+  subjectMaster             SubjectMaster               @relation(fields: [subjectMasterId], references: [id])
   subjectToAssessmentFormat SubjectToAssessmentFormat[]
   subjectToGroup            SubjectToGroup[]
   subjectToSubjectTypes     SubjectToSubjectType[]
@@ -653,6 +697,7 @@ model AssessmentFormat {
   updatedAt                 DateTime?                   @default(now())
   subjectToAssessmentFormat SubjectToAssessmentFormat[]
   examConfiguration         ExamConfiguration[]
+  markEntry                 MarkEntry[]
 }
 
 model SubjectToAssessmentFormat {
@@ -689,16 +734,17 @@ model SubjectToSubjectType {
 }
 
 model Group {
-  id             String           @id @default(uuid()) @map("_id") @db.Uuid
-  name           String
-  isActive       Boolean
-  isDeleted      Boolean          @default(false)
-  branch         Branch           @relation(fields: [branchId], references: [id])
-  branchId       String           @db.Uuid
-  createdAt      DateTime?        @default(now())
-  updatedAt      DateTime?        @default(now())
-  subjectToGroup SubjectToGroup[]
-  studentMapping StudentMapping[]
+  id              String            @id @default(uuid()) @map("_id") @db.Uuid
+  name            String
+  isActive        Boolean
+  isDeleted       Boolean           @default(false)
+  branch          Branch            @relation(fields: [branchId], references: [id])
+  branchId        String            @db.Uuid
+  createdAt       DateTime?         @default(now())
+  updatedAt       DateTime?         @default(now())
+  subjectToGroup  SubjectToGroup[]
+  studentMapping  StudentMapping[]
+  sectionToGroups SectionToGroups[]
 }
 
 model Medium {

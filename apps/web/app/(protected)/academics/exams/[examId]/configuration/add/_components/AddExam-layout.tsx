@@ -1,6 +1,8 @@
 'use client';
+import { useGetClassListQuery } from 'lib/queries/class/useGetClassListQuery';
 import { useGetExamListQuery } from 'lib/queries/exams/useGetExamListQuery';
 import { useGetSubjectListByFilter } from 'lib/queries/exams/useGetSubjectByFilterQuery';
+import { useGetAllSectionByClassIdQuery } from 'lib/queries/section/useGetAllSectionsByClassIdQuery';
 import { useGetSubjectTypeList } from 'lib/queries/subject-type/useGetSubjectTypeQuery';
 import { Loader2 } from 'lucide-react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
@@ -14,8 +16,6 @@ import {
   SelectValue,
 } from 'ui';
 
-import { useGetClassListQuery } from '../../../../../../lib/queries/class/useGetClassListQuery';
-import { useGetAllSectionByClassIdQuery } from '../../../../../../lib/queries/section/useGetAllSectionsByClassIdQuery';
 import { ExamCard } from './ExamCard';
 
 export function AddExamLayout() {
@@ -28,6 +28,7 @@ export function AddExamLayout() {
   const examId = searchParams.get('examId');
   const sectionId = searchParams.get('sectionId');
   const subjectTypeId = searchParams.get('subjectTypeId');
+  const filter = {};
 
   const { data: examsList } = useGetExamListQuery({
     page,
@@ -40,14 +41,18 @@ export function AddExamLayout() {
       limit,
     });
   const { data: sectionListResponse, isLoading: isSectionListLoading } =
-    useGetAllSectionByClassIdQuery(classId, {
-      enabled: !!classId,
-    });
+    useGetAllSectionByClassIdQuery(
+      { classId, filter },
+      {
+        enabled: !!classId,
+      }
+    );
 
   const { data: subjectTypeListResponse, isLoading: isSubjectTypeListLoading } =
     useGetSubjectTypeList({
       page,
       limit,
+      filter,
     });
   const {
     data: getSubjectByFilterResponse,
@@ -89,7 +94,11 @@ export function AddExamLayout() {
             <SelectContent>
               <SelectGroup>
                 {examsList?.data?.map((exam) => (
-                  <SelectItem key={exam.id} value={exam.id}>
+                  <SelectItem
+                    key={exam.id}
+                    defaultChecked={exam.id === examId ? true : false}
+                    value={exam.id}
+                  >
                     {exam.name}
                   </SelectItem>
                 ))}

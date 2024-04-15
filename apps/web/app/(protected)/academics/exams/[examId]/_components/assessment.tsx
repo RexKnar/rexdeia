@@ -1,455 +1,219 @@
 'use client';
+import { useGetClassListQuery } from 'lib/queries/class/useGetClassListQuery';
+import { useCreateMarkEntryQuery } from 'lib/queries/mark-entry/useCreateMarkEntryMutationQuery';
+import { useGetExamsByClassSectionQuery } from 'lib/queries/mark-entry/useGetExamsByClassSectionQuery';
+import { useGetStaffsBySectionQuery } from 'lib/queries/mark-entry/useGetStaffsBySectionQuery';
+import { useGetSubjectsWithFormatsQuery } from 'lib/queries/mark-entry/useGetSubjectsWithFormatsQuery';
+import { useGetAllSectionByClassIdQuery } from 'lib/queries/section/useGetAllSectionsByClassIdQuery';
+import { ChevronDown, Loader2 } from 'lucide-react';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { useForm } from 'react-hook-form';
 import {
-  ColumnDef,
-  ColumnFiltersState,
-  flexRender,
-  getCoreRowModel,
-  getFilteredRowModel,
-  getPaginationRowModel,
-  getSortedRowModel,
-  SortingState,
-  useReactTable,
-  VisibilityState,
-} from '@tanstack/react-table';
-import { ChevronDown } from 'lucide-react';
-import React, { useState } from 'react';
-import {
-  Avatar,
-  AvatarImage,
   Button,
-  Input,
   Select,
   SelectContent,
   SelectGroup,
   SelectItem,
   SelectTrigger,
   SelectValue,
-  Toggle,
 } from 'ui';
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from 'ui/components/ui/Table';
 import { cn } from 'utils';
 
-type Marks = {
-  id: number;
-  student: string;
-  Tamil: string;
-  Maths: string;
-  English: string;
-  Chemistry: string;
-  Physics: string;
-  Botany: string;
-  Zoology: string;
-};
-const data: Marks[] = [
-  {
-    id: 1,
-    student: 'Rakesh',
-    Tamil: 'zx',
-    Maths: 'as',
-    English: 'zc',
-    Chemistry: 'df',
-    Physics: 'ess',
-    Botany: 'ke',
-    Zoology: 'as',
-  },
-  {
-    id: 2,
-    student: 'rakes',
-    Tamil: 'z',
-    Maths: 'as',
-    English: 'zc',
-    Chemistry: 'df',
-    Physics: 'ess',
-    Botany: 'ke',
-    Zoology: 'as',
-  },
-];
-
-function AssessmentTableCell() {
-  const [isToggled, setIsToggled] = useState(false);
-  const [inputsDisabled, setInputsDisabled] = useState(false);
-
-  const handleOnToggleChange = () => {
-    setIsToggled(!isToggled);
-    setInputsDisabled(!inputsDisabled); // Toggle inputsDisabled state
-  };
-
-  return (
-    <div className="lex m-1 flex items-center justify-between lowercase">
-      <Input
-        className={`ml-2 h-8 w-14 rounded-lg border-gray-600 px-3 py-1 text-center placeholder-gray-600 shadow-sm ${
-          inputsDisabled ? 'disabled' : ''
-        }`}
-        placeholder="FA1"
-        disabled={inputsDisabled}
-      />
-      <Input
-        className={`ml-2 h-8 w-14 rounded-lg border-gray-600 px-3 py-1 text-center placeholder-gray-600 shadow-sm ${
-          inputsDisabled ? 'disabled' : ''
-        }`}
-        placeholder="FA1"
-        disabled={inputsDisabled}
-      />
-      <Input
-        className={`ml-2 h-8 w-14 rounded-lg border-gray-600 px-3 py-1 text-center placeholder-gray-600 shadow-sm ${
-          inputsDisabled ? 'disabled' : ''
-        }`}
-        placeholder="FA1"
-        disabled={inputsDisabled}
-      />
-      <Toggle
-        className={`ml-2 h-10 w-10 rounded-full px-3 py-1 text-center ${
-          isToggled ? 'bg-red-400 text-white' : 'bg-gray-400'
-        }`}
-        variant="outline"
-        onClick={handleOnToggleChange}
-      >
-        <p>A</p>
-      </Toggle>
-    </div>
-  );
-}
+import { StudentRecords } from './SudentRecords';
 
 export function Assessment() {
-  const columns: ColumnDef<Marks>[] = [
-    {
-      accessorKey: 'student',
-      header: ({ column }) => {
-        return (
-          <Button
-            variant="ghost"
-            className="px-0 "
-            onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-          >
-            Students
-          </Button>
-        );
-      },
-      cell: () => (
-        <div className="mb-2 flex items-center">
-          <Avatar className="ml-3  mt-2 h-8 w-8 cursor-pointer ">
-            <AvatarImage src="https://png.pngtree.com/thumb_back/fh260/background/20230612/pngtree-man-wearing-glasses-is-wearing-colorful-background-image_2905240.jpg" />
-          </Avatar>
-          <div className="ml-4">
-            <p className="font-semibold">Rakesh</p>
-          </div>
-        </div>
-      ),
-    },
-    {
-      accessorKey: 'Tamil',
-      header: ({ column }) => {
-        return (
-          <Button
-            variant="ghost"
-            className="px-0"
-            onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-          >
-            Tamil
-          </Button>
-        );
-      },
-      cell: AssessmentTableCell,
-    },
-    {
-      accessorKey: 'Maths',
-      header: ({ column }) => {
-        return (
-          <Button
-            variant="ghost"
-            className="px-0"
-            onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-          >
-            Maths
-          </Button>
-        );
-      },
-      cell: AssessmentTableCell,
-    },
-    {
-      accessorKey: 'English',
-      header: ({ column }) => {
-        return (
-          <Button
-            variant="ghost"
-            className="px-0"
-            onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-          >
-            English
-          </Button>
-        );
-      },
-      cell: AssessmentTableCell,
-    },
-    {
-      accessorKey: 'Chemistry',
-      header: ({ column }) => {
-        return (
-          <Button
-            variant="ghost"
-            className="px-0"
-            onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-          >
-            Chemistry
-          </Button>
-        );
-      },
-      cell: AssessmentTableCell,
-    },
-    {
-      accessorKey: 'Physics',
-      header: ({ column }) => {
-        return (
-          <Button
-            variant="ghost"
-            className="px-0"
-            onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-          >
-            Physics
-          </Button>
-        );
-      },
-      cell: AssessmentTableCell,
-    },
-    {
-      accessorKey: 'Botany',
-      header: ({ column }) => {
-        return (
-          <Button
-            variant="ghost"
-            className="px-0"
-            onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-          >
-            Botany
-          </Button>
-        );
-      },
-      cell: AssessmentTableCell,
-    },
-    {
-      accessorKey: 'Zoology',
-      header: ({ column }) => {
-        return (
-          <Button
-            variant="ghost"
-            className="px-0"
-            onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-          >
-            Zoology
-          </Button>
-        );
-      },
-      cell: AssessmentTableCell,
-    },
+  const page = 1;
+  const limit = 999;
+  const searchParams = useSearchParams();
+  const pathname = usePathname();
+  const router = useRouter();
+  const classId = searchParams.get('classId');
+  const filter = {};
+  const sectionId = searchParams.get('sectionId');
+  const examId = searchParams.get('examId');
+  const staffId = searchParams.get('staffId');
+  const columnColor = [
+    'bg-green-100',
+    'bg-red-100 ',
+    'bg-primary-100 ',
+    'bg-yellow-100 ',
+    'bg-purple-100 ',
+    'bg-green-100',
+    'bg-red-100 ',
+    'bg-primary-100 ',
+    'bg-yellow-100 ',
+    'bg-purple-100 ',
   ];
-  const [sorting, setSorting] = React.useState<SortingState>([]);
-  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
-    []
-  );
-  const [columnVisibility, setColumnVisibility] =
-    React.useState<VisibilityState>({});
-  const [rowSelection, setRowSelection] = React.useState({});
-  const table = useReactTable({
-    data,
-    columns,
-    onSortingChange: setSorting,
-    onColumnFiltersChange: setColumnFilters,
-    getCoreRowModel: getCoreRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
-    getSortedRowModel: getSortedRowModel(),
-    getFilteredRowModel: getFilteredRowModel(),
-    onColumnVisibilityChange: setColumnVisibility,
-    onRowSelectionChange: setRowSelection,
-    state: {
-      sorting,
-      columnFilters,
-      columnVisibility,
-      rowSelection,
-    },
+
+  const { control, register, handleSubmit } = useForm();
+
+  const { data: classList } = useGetClassListQuery({
+    page,
+    limit,
   });
+  const { data: sectionList } = useGetAllSectionByClassIdQuery(
+    { classId, filter },
+    {
+      enabled: !!classId,
+    }
+  );
+  const { data: examList } = useGetExamsByClassSectionQuery(
+    { classId, sectionId },
+    {
+      enabled: !!sectionId,
+    }
+  );
+  const { data: subjectsWithFormats } = useGetSubjectsWithFormatsQuery(
+    { classId, sectionId, examId },
+    {
+      enabled: !!examId,
+    }
+  );
+  const { data: staffList } = useGetStaffsBySectionQuery(
+    { sectionId },
+    {
+      enabled: !!sectionId,
+    }
+  );
+  const {
+    isPending: isPendingCreateMarkEntry,
+    mutateAsync: mutateCreateMarkEntryAsync,
+  } = useCreateMarkEntryQuery();
+  async function saveMarkEntry(payload) {
+    const markEntryPayload = {
+      staffId: staffId,
+      ...payload,
+    };
+    mutateCreateMarkEntryAsync(markEntryPayload);
+  }
 
   return (
-    <>
-      <div className="mb-4 flex justify-between overflow-x-auto rounded-md bg-white">
-        <Select>
+    <form onSubmit={handleSubmit(saveMarkEntry)}>
+      <div className="mb-4 flex justify-between rounded-md bg-white">
+        <Select
+          onValueChange={(value) => {
+            if (value) {
+              const params = new URLSearchParams(searchParams);
+              params.set('classId', value);
+              router.replace(pathname + '?' + params.toString());
+            }
+          }}
+        >
           <SelectTrigger className="ml-0 basis-1/5">
-            <SelectValue className="text-gray-400" placeholder="Class Name" />{' '}
+            <SelectValue className="text-gray-400" placeholder="Class Name" />
             <ChevronDown className="text-primary-400" />
           </SelectTrigger>
           <SelectContent className="border border-primary-200">
             <SelectGroup>
-              <SelectItem value={'Value1'}>Value1</SelectItem>
-              <SelectItem value={'Value2'}>Value2</SelectItem>
-              <SelectItem value={'Value3'}>Value3</SelectItem>
+              {classList?.data?.map((classDetails) => (
+                <SelectItem key={classDetails.id} value={classDetails.id}>
+                  {classDetails.name}
+                </SelectItem>
+              ))}
             </SelectGroup>
           </SelectContent>
         </Select>
 
-        <Select>
+        <Select
+          onValueChange={(value) => {
+            if (value) {
+              const params = new URLSearchParams(searchParams);
+              params.set('sectionId', value);
+              router.replace(pathname + '?' + params.toString());
+            }
+          }}
+        >
           <SelectTrigger className="ml-4 basis-1/5">
-            <SelectValue className="text-gray-400" placeholder="Section" />{' '}
+            <SelectValue className="text-gray-400" placeholder="Section" />
             <ChevronDown className="text-primary-400" />
           </SelectTrigger>
           <SelectContent className="border border-primary-200">
-            {' '}
             <SelectGroup>
-              <SelectItem value={'Value1'}>Value1</SelectItem>
-              <SelectItem value={'Value2'}>Value2</SelectItem>
-              <SelectItem value={'Value3'}>Value3</SelectItem>
+              {sectionList?.map((section) => (
+                <SelectItem key={section.id} value={section.id}>
+                  {section.name}
+                </SelectItem>
+              ))}
             </SelectGroup>
           </SelectContent>
         </Select>
 
-        <Select>
+        <Select
+          onValueChange={(value) => {
+            if (value) {
+              const params = new URLSearchParams(searchParams);
+              params.set('examId', value);
+              router.replace(pathname + '?' + params.toString());
+            }
+          }}
+        >
           <SelectTrigger className="ml-4 basis-1/5">
-            <SelectValue className="text-gray-400" placeholder="Exam" />{' '}
+            <SelectValue className="text-gray-400" placeholder="Exam" />
             <ChevronDown className="text-primary-400" />
           </SelectTrigger>
           <SelectContent className="border border-primary-200">
-            {' '}
             <SelectGroup>
-              <SelectItem value={'Value1'}>Value1</SelectItem>
-              <SelectItem value={'Value2'}>Value2</SelectItem>
-              <SelectItem value={'Value3'}>Value3</SelectItem>
+              {examList?.map((exam) => (
+                <SelectItem key={exam.id} value={exam.id}>
+                  {exam.name}
+                </SelectItem>
+              ))}
             </SelectGroup>
           </SelectContent>
         </Select>
-        <Select>
+        <Select
+          onValueChange={(value) => {
+            if (value) {
+              const params = new URLSearchParams(searchParams);
+              params.set('staffId', value);
+              router.replace(pathname + '?' + params.toString());
+            }
+          }}
+        >
           <SelectTrigger className="ml-4 basis-1/5">
-            <SelectValue className="text-gray-400" placeholder="Staff Name" />{' '}
+            <SelectValue className="text-gray-400" placeholder="Staff Name" />
             <ChevronDown className="text-primary-400" />
           </SelectTrigger>
           <SelectContent className="border border-primary-200">
-            {' '}
             <SelectGroup>
-              <SelectItem value={'Value1'}>Value1</SelectItem>
-              <SelectItem value={'Value2'}>Value2</SelectItem>
-              <SelectItem value={'Value3'}>Value3</SelectItem>
-            </SelectGroup>
-          </SelectContent>
-        </Select>
-
-        <Select>
-          <SelectTrigger className="ml-4 basis-1/5">
-            <SelectValue className="text-gray-400" placeholder="Subject" />{' '}
-            <ChevronDown className="text-primary-400" />
-          </SelectTrigger>
-          <SelectContent className="border border-primary-200">
-            {' '}
-            <SelectGroup>
-              <SelectItem value={'Value1'}>Value1</SelectItem>
-              <SelectItem value={'Value2'}>Value2</SelectItem>
-              <SelectItem value={'Value3'}>Value3</SelectItem>
+              {staffList?.map((staff) => (
+                <SelectItem key={staff.id} value={staff.id}>
+                  {staff.firstName} + {staff.lastName}
+                </SelectItem>
+              ))}
             </SelectGroup>
           </SelectContent>
         </Select>
       </div>
-      <div className="overflow-x-hidden">
-        <Table>
-          <TableHeader>
-            {table.getHeaderGroups().map((headerGroup) => (
-              <TableRow
-                key={headerGroup.id}
-                className="w-56 cursor-pointer bg-gray-200"
-              >
-                {headerGroup.headers.map((header, index) => {
-                  return (
-                    <TableHead
-                      key={header.id}
-                      className={cn(
-                        'text-center',
-                        index === 0
-                          ? 'sticky left-0 bg-purple-50'
-                          : index === 1
-                            ? 'bg-orange-50'
-                            : index === 2
-                              ? 'bg-blue-50'
-                              : index === 3
-                                ? 'bg-green-50'
-                                : index === 4
-                                  ? 'bg-yellow-50'
-                                  : index === 5
-                                    ? 'bg-purple-50'
-                                    : index === 6
-                                      ? 'bg-pink-50'
-                                      : index === 7
-                                        ? 'bg-indigo-50'
-                                        : 'bg-gray-200'
-                      )}
-                    >
-                      {header.isPlaceholder
-                        ? null
-                        : flexRender(
-                            header.column.columnDef.header,
-                            header.getContext()
-                          )}
-                    </TableHead>
-                  );
-                })}
-              </TableRow>
-            ))}
-          </TableHeader>
-          <TableBody>
-            {table.getRowModel().rows?.length ? (
-              table.getRowModel().rows.map((row, rowIndex) => (
-                <TableRow
-                  key={row.id}
-                  data-state={row.getIsSelected() && 'selected'}
-                  className={`${
-                    rowIndex === 0 ? 'sticky left-0 border-b bg-green-50' : ''
-                  }`}
-                >
-                  {row.getVisibleCells().map((cell, index) => (
-                    <TableCell
-                      key={cell.id}
-                      className={`${
-                        index === 0
-                          ? 'sticky left-0 border-b bg-purple-50'
-                          : index === 1
-                            ? 'bg-orange-50'
-                            : index === 2
-                              ? 'bg-blue-50'
-                              : index === 3
-                                ? 'bg-green-50'
-                                : index === 4
-                                  ? 'bg-yellow-50'
-                                  : index === 5
-                                    ? 'bg-purple-50'
-                                    : index === 6
-                                      ? 'bg-pink-50'
-                                      : index === 7
-                                        ? 'bg-indigo-50'
-                                        : 'bg-gray-200'
-                      } w-auto min-w-56 py-0`}
-                    >
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext()
-                      )}
-                    </TableCell>
-                  ))}
-                </TableRow>
-              ))
-            ) : (
-              <TableRow>
-                <TableCell
-                  colSpan={columns.length}
-                  className="h-24 text-center"
-                >
-                  No results.
-                </TableCell>
-              </TableRow>
-            )}
-          </TableBody>
-        </Table>
+      <div className="w-auto overflow-x-scroll bg-green-100">
+        <div className="flex items-center justify-between bg-green-100 p-4 font-bold ">
+          <div className="w-1/5 flex-none">Student</div>
+          {subjectsWithFormats?.map((subject, index) => (
+            <div
+              key={index}
+              className={cn(
+                'w-2/5 flex-none border-l-2 border-black bg-green-100 p-1 p-4',
+                columnColor[index % 10]
+              )}
+            >
+              {subject.subject.name}
+            </div>
+          ))}
+        </div>
+
+        <StudentRecords {...{ control, register }} />
       </div>
-    </>
+
+      <Button className="text-center" type="submit">
+        {isPendingCreateMarkEntry ? (
+          <div className="flex items-center justify-center">
+            <Loader2 className="mr-2 h-6 w-6 animate-spin text-white" />
+            Saving
+          </div>
+        ) : (
+          'Submit'
+        )}
+      </Button>
+    </form>
   );
 }
