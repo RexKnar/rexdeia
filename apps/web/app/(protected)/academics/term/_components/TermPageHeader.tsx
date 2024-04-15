@@ -1,9 +1,14 @@
 'use client';
 
+import dynamic from 'next/dynamic';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { Button } from 'ui';
 
 import { PageTitle } from '@/components/PageTitle';
+
+const SaveTermFlyout = dynamic(() =>
+  import('../_modals/SaveTermFlyout').then((mod) => mod.SaveTermFlyout)
+);
 
 export function TermPageHeader() {
   const pathname = usePathname();
@@ -11,19 +16,22 @@ export function TermPageHeader() {
   const searchParams = useSearchParams();
 
   return (
-    <section className="flex justify-between px-2">
-      <PageTitle title="Term" />
-      <Button
-        variant="default"
-        onClick={async () => {
-          const params = new URLSearchParams(searchParams);
-          params.set('isTermFlyoutOpen', 'true');
+    <>
+      <section className="flex justify-between px-2">
+        <PageTitle title="Term" />
+        <Button
+          variant="default"
+          onClick={async () => {
+            const params = new URLSearchParams(searchParams);
+            params.set('isTermFlyoutOpen', 'true');
 
-          router.replace(pathname + '?' + params.toString());
-        }}
-      >
-        Add Term
-      </Button>
-    </section>
+            router.replace(pathname + '?' + params.toString());
+          }}
+        >
+          Add Term
+        </Button>
+      </section>
+      <SaveTermFlyout />
+    </>
   );
 }
