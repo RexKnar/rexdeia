@@ -1,3 +1,5 @@
+'use client';
+import { useGetExamTypeListQuery } from 'lib/queries/exams/useGetExamTypeListQuery';
 import React from 'react';
 import { Button } from 'ui';
 import {
@@ -8,6 +10,8 @@ import {
   TableHeader,
   TableRow,
 } from 'ui/components/ui/Table';
+
+import { useQueryParams } from '@/hooks/useQueryParams';
 
 const columns = [
   {
@@ -45,6 +49,17 @@ const columns = [
 ];
 
 export function ExamTypeListTable() {
+  const { getParam } = useQueryParams();
+  const page = parseInt(getParam('page')) || 1;
+  const limit = parseInt(getParam('limit')) || 999;
+
+  const { data: examTypeList, isPending: examTypeLoading } =
+    useGetExamTypeListQuery({
+      page,
+      limit,
+    });
+  // eslint-disable-next-line no-console
+  console.log(examTypeList, examTypeLoading);
   return (
     <section>
       <Table>
