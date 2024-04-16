@@ -39,6 +39,7 @@ export function SaveExamTypeFlyout() {
     defaultValues: {
       name: null,
       isActive: false,
+      frequencyId: null,
     },
   });
 
@@ -55,32 +56,6 @@ export function SaveExamTypeFlyout() {
     params.delete('examtypeId');
     router.replace(pathname + '?' + params.toString());
   };
-  // const { data: getMediumByIdResponse } = useGetMediumByIdQuery(examTypeId, {
-  //   enabled: !!examTypeId,
-  // });
-
-  // async function saveExamType(payload: CreateExamTypeModel) {
-  //   try {
-  //     if (examTypeId) {
-  //       const updateBatchRequestPayload = {
-  //         ...payload,
-  //         id: examTypeId,
-  //       };
-  //       await mutateUpdateMediumAsync(updateBatchRequestPayload);
-  //     } else {
-  //       const requestPayload = {
-  //         ...payload,
-  //       };
-  //       await mutateCreateMediumAsync(requestPayload);
-  //     }
-  //   } catch (error) {
-  //     console.error(error);
-  //   } finally {
-  //     setValue('isActive', false);
-  //     closeMediumFlyout();
-  //     reset();
-  //   }
-  // }
   function saveExamType(payload) {
     mutateCreateExamTypeAsync(payload);
   }
@@ -148,14 +123,27 @@ export function SaveExamTypeFlyout() {
                 Frequency
               </label>
               <div className="mt-2">
-                <Select>
+                <Select
+                  autoComplete="off"
+                  value={watch('frequencyId')}
+                  {...register('frequencyId')}
+                  onValueChange={(value) => {
+                    if (value) {
+                      setValue('frequencyId', value);
+                    }
+                  }}
+                >
                   <SelectTrigger className="w-full">
-                    <SelectValue />
+                    <SelectValue
+                      {...register('frequencyId', {
+                        required: 'value is reqired',
+                      })}
+                    />
                   </SelectTrigger>
                   <SelectContent>
                     <SelectGroup>
-                      <SelectItem value={'one'}>Value One</SelectItem>
-                      <SelectItem value={'two'}>Value Two</SelectItem>
+                      <SelectItem value={'Value One'}>Value One</SelectItem>
+                      <SelectItem value={'Value Two'}>Value Two</SelectItem>
                     </SelectGroup>
                   </SelectContent>
                 </Select>

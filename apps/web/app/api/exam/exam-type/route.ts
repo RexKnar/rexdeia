@@ -56,7 +56,7 @@ export async function POST(request: NextRequest) {
 
 /**
  * @swagger
- * /api/exam/examType:
+ * /api/exam/exam-type:
  *     get:
  *       summary: Get All Exam Types
  *       description: Get All Exam Types
