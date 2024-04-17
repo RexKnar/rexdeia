@@ -71,11 +71,6 @@ export async function addAdmission(student: AddStudentModel, formId: string) {
           id: user.id,
         },
       },
-      form: {
-        connect: {
-          id: formId,
-        },
-      },
       batch: {
         connect: {
           id: student.batchId,
