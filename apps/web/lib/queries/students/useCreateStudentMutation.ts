@@ -4,15 +4,10 @@ import { makeAPICall } from '../../api';
 import { AddStudentModel, Student } from '../../domain';
 import { ADD_STUDENT } from '../../endpoints';
 
-export function useCreateStudentMutation(formId: string) {
+export function useCreateStudentMutation() {
   return useMutation({
     mutationFn: async (studentDetails: AddStudentModel) => {
-      return await makeAPICall<Student>(
-        ADD_STUDENT,
-        studentDetails,
-        { formId },
-        {}
-      );
+      return await makeAPICall<Student>(ADD_STUDENT, studentDetails, {}, {});
     },
   });
 }

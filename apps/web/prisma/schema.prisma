@@ -253,8 +253,8 @@ model AdmissionForm {
   createdBy   User            @relation(fields: [createdById], references: [id])
   createdById String          @db.Uuid
   status      AdmissionStatus
-  form        Form            @relation(fields: [formId], references: [id])
-  formId      String          @db.Uuid
+  // form        Form            @relation(fields: [formId], references: [id])
+  // formId      String          @db.Uuid
 }
 
 model EnquiryForm {
@@ -331,20 +331,20 @@ model Course {
 }
 
 model Form {
-  id             String          @id @default(uuid()) @map("_id") @db.Uuid
-  createdAt      DateTime?       @default(now())
-  updatedAt      DateTime?       @default(now())
+  id             String        @id @default(uuid()) @map("_id") @db.Uuid
+  createdAt      DateTime?     @default(now())
+  updatedAt      DateTime?     @default(now())
   type           String
   json           Json
-  isActive       Boolean         @default(false)
-  organization   Organization?   @relation(fields: [organizationId], references: [id])
-  organizationId String?         @db.Uuid
-  branch         Branch?         @relation(fields: [branchId], references: [id])
-  branchId       String?         @db.Uuid
+  isActive       Boolean       @default(false)
+  organization   Organization? @relation(fields: [organizationId], references: [id])
+  organizationId String?       @db.Uuid
+  branch         Branch?       @relation(fields: [branchId], references: [id])
+  branchId       String?       @db.Uuid
   EnquiryForm    EnquiryForm[]
   Share          Share[]
-  Student        Student[]
-  AdmissionForm  AdmissionForm[]
+  // Student        Student[]
+  // AdmissionForm  AdmissionForm[]
 }
 
 model Payment {
@@ -386,25 +386,25 @@ model Share {
 model Student {
   id                   String        @id @default(uuid()) @map("_id") @db.Uuid
   firstName            String
-  middleName           String
+  middleName           String?
   lastName             String
   emailId              String
   phoneNumber          String
   aadharCardNumber     String
   gender               String
-  bloodGroup           String
+  bloodGroup           String?
   dob                  String
-  fatherName           String
-  fatherOccupation     String
+  fatherName           String?
+  fatherOccupation     String?
   fatherPhoneNumber    String?
-  guardiansOccupation  String
-  guardianName         String
+  guardiansOccupation  String?
+  guardianName         String?
   guardianPhoneNumber  String?
-  motherName           String
-  motherOccupation     String
+  motherName           String?
+  motherOccupation     String?
   motherPhoneNumber    String?
-  motherTongue         String
-  nationality          String
+  motherTongue         String?
+  nationality          String?
   religion             String?
   status               StudentStatus
   createdAt            DateTime      @default(now())
@@ -419,9 +419,9 @@ model Student {
   batchId        String?          @db.Uuid
   organization   Organization     @relation(fields: [organizationId], references: [id])
   organizationId String           @db.Uuid
-  form           Form             @relation(fields: [formId], references: [id])
+  // form           Form             @relation(fields: [formId], references: [id])
   AdmissionForm  AdmissionForm[]
-  formId         String           @db.Uuid
+  // formId         String           @db.Uuid
   studentMapping StudentMapping[]
   sectionId      String?          @db.Uuid
   section        Section?         @relation(fields: [sectionId], references: [id])
@@ -431,15 +431,17 @@ model Student {
 }
 
 model StudentMapping {
-  id        String  @id @default(uuid()) @map("_id") @db.Uuid
-  studentId String  @db.Uuid
-  student   Student @relation(fields: [studentId], references: [id])
-  classId   String  @db.Uuid
-  class     Class   @relation(fields: [classId], references: [id])
-  sectionId String  @db.Uuid
-  section   Section @relation(fields: [sectionId], references: [id])
-  groupId   String  @db.Uuid
-  group     Group   @relation(fields: [groupId], references: [id])
+  id        String   @id @default(uuid()) @map("_id") @db.Uuid
+  studentId String   @db.Uuid
+  student   Student  @relation(fields: [studentId], references: [id])
+  classId   String   @db.Uuid
+  class     Class    @relation(fields: [classId], references: [id])
+  sectionId String?  @db.Uuid
+  section   Section? @relation(fields: [sectionId], references: [id])
+  groupId   String   @db.Uuid
+  group     Group    @relation(fields: [groupId], references: [id])
+  mediumId  String?  @db.Uuid
+  medium    Medium?  @relation(fields: [mediumId], references: [id])
 }
 
 model Staff {
@@ -622,6 +624,7 @@ model Section {
   classId                 String                    @db.Uuid
   createdAt               DateTime?                 @default(now())
   updatedAt               DateTime?                 @default(now())
+  isDeleted               Boolean                   @default(false)
   sectionSubjects         SectionSubject[]
   Subject                 Subject?                  @relation(fields: [subjectId], references: [id])
   subjectId               String?                   @db.Uuid
@@ -748,15 +751,16 @@ model Group {
 }
 
 model Medium {
-  id        String    @id @default(uuid()) @map("_id") @db.Uuid
-  name      String
-  isActive  Boolean
-  section   Section[]
-  isDeleted Boolean   @default(false)
-  branch    Branch    @relation(fields: [branchId], references: [id])
-  branchId  String    @db.Uuid
-  createdAt DateTime? @default(now())
-  updatedAt DateTime? @default(now())
+  id             String           @id @default(uuid()) @map("_id") @db.Uuid
+  name           String
+  isActive       Boolean
+  section        Section[]
+  isDeleted      Boolean          @default(false)
+  branch         Branch           @relation(fields: [branchId], references: [id])
+  studentMapping StudentMapping[]
+  branchId       String           @db.Uuid
+  createdAt      DateTime?        @default(now())
+  updatedAt      DateTime?        @default(now())
 }
 
 model subjectType {
