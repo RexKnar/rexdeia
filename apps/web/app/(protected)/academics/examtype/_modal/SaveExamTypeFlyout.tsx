@@ -1,4 +1,5 @@
-// import { CreateExamTypeModel } from 'lib/domain/exam';
+'use client';
+
 import { useCreateExamTypeMutationQuery } from 'lib/queries/examtype/useCreateExamTypeMutationQuery';
 import { PlusCircle } from 'lucide-react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
@@ -59,6 +60,20 @@ export function SaveExamTypeFlyout() {
   function saveExamType(payload) {
     mutateCreateExamTypeAsync(payload);
   }
+  const frequency = [
+    {
+      label: 'Week',
+      value: 'week',
+    },
+    {
+      label: 'Month',
+      value: 'month',
+    },
+    {
+      label: 'Term',
+      value: 'term',
+    },
+  ];
   return (
     <section>
       <Sheet open={isOpen}>
@@ -117,7 +132,7 @@ export function SaveExamTypeFlyout() {
             </div>
             <div className="mt-2">
               <label
-                htmlFor="examType"
+                htmlFor="frequency"
                 className="text-sm font-semibold text-gray-700"
               >
                 Frequency
@@ -142,8 +157,11 @@ export function SaveExamTypeFlyout() {
                   </SelectTrigger>
                   <SelectContent>
                     <SelectGroup>
-                      <SelectItem value={'Value One'}>Value One</SelectItem>
-                      <SelectItem value={'Value Two'}>Value Two</SelectItem>
+                      {frequency.map((item, index) => (
+                        <SelectItem value={item.value} key={index}>
+                          {item.label}
+                        </SelectItem>
+                      ))}
                     </SelectGroup>
                   </SelectContent>
                 </Select>
