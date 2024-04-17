@@ -13,7 +13,6 @@ import { formatStudentPayload } from '../../../../../lib/utils/formatters';
 
 type AddStudentPreviewModalProps = {
   open: boolean;
-  formId: string;
   formData: Record<string, any>;
   onOpenChange(open: boolean): void;
   formSections: Record<string, any>[];
@@ -21,7 +20,6 @@ type AddStudentPreviewModalProps = {
 
 export function AddStudentPreviewModal({
   open,
-  formId,
   formData,
   formSections,
   onOpenChange,
@@ -34,7 +32,7 @@ export function AddStudentPreviewModal({
   const {
     isPending: isCreatingStudent,
     mutateAsync: createStudentMutationAsync,
-  } = useCreateStudentMutation(formId);
+  } = useCreateStudentMutation();
 
   useEffect(() => {
     formSections.forEach((section) => {

@@ -225,7 +225,7 @@ export async function mapStudentToClass(
   classId: string,
   studentPayload: AssignStudentsToClassModel
 ) {
-  await db.$transaction(
+  return await db.$transaction(
     studentPayload.studentIds.map((studentId) => {
       return db.student.update({
         where: {
@@ -234,11 +234,16 @@ export async function mapStudentToClass(
         data: {
           batchId: studentPayload.academicYear,
           studentMapping: {
-            create: [
+            updateMany: [
               {
-                groupId: studentPayload.groupId,
-                classId: classId,
-                sectionId: studentPayload.sectionId,
+                where: {
+                  studentId: studentId,
+                },
+                data: {
+                  groupId: studentPayload.groupId,
+                  classId: classId,
+                  sectionId: studentPayload.sectionId,
+                },
               },
             ],
           },
@@ -247,6 +252,7 @@ export async function mapStudentToClass(
     })
   );
 }
+
 export async function assignStaffToClassWithSubject(
   payload: AssignStaffToClassRequestModel
 ) {

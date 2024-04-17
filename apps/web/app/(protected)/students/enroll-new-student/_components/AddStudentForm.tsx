@@ -1,6 +1,9 @@
 'use client';
 
 import { motion } from 'framer-motion';
+import { useGetClassListQuery } from 'lib/queries/class/useGetClassListQuery';
+import { useGetGroupListQuery } from 'lib/queries/group/useGetGroupListQuery';
+import { useGetMediumListQuery } from 'lib/queries/medium/useGetMediumListQuery';
 import { AlertTriangle, Check } from 'lucide-react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import React, { useState } from 'react';
@@ -9,15 +12,13 @@ import { Else, If, Then, When } from 'react-if';
 import { Button, Input, RadioGroup, RadioGroupItem } from 'ui';
 import { cn } from 'utils';
 
+import { admissionForm } from '../data';
 import { AddStudentPreviewModal } from '../modals/AddStudentPreviewModal';
 import { BatchDropDown } from './BatchDropDown';
 
-type AddStudentFormProps = {
-  readonly formId: string;
-  readonly formConfig: Record<string, any>;
-};
+const formConfig: Record<string, any> = admissionForm;
 
-export function AddStudentForm({ formConfig, formId }: AddStudentFormProps) {
+export function AddStudentForm() {
   const pathname = usePathname();
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -36,11 +37,37 @@ export function AddStudentForm({ formConfig, formId }: AddStudentFormProps) {
     reValidateMode: 'onChange',
   });
 
-  const totalSteps = formConfig.json.formSections.length;
+  const totalSteps = formConfig.formSections.length;
 
   const [formData, setFormData] = useState({} as Record<string, unknown>);
   const [isPreviewModalOpen, setIsPreviewModalOpen] = useState(false);
   const [visitedSteps, setVisitedSteps] = useState([]);
+
+  const page = 1;
+  const limit = 999;
+  const filter = {};
+
+  const { data: mediumList } = useGetMediumListQuery({
+    page,
+    limit,
+    filter,
+  });
+  const { data: classList } = useGetClassListQuery({
+    page,
+    limit,
+  });
+
+  const { data: groupList } = useGetGroupListQuery({
+    page,
+    limit,
+    filter,
+  });
+
+  let customDataList = {
+    joiningMedium: mediumList?.data || [],
+    joiningClass: classList?.data || [],
+    joiningGroup: groupList?.data || [],
+  };
 
   const handleOnFormSubmit = async (data: Record<string, unknown>) => {
     setFormData(data);
@@ -68,7 +95,7 @@ export function AddStudentForm({ formConfig, formId }: AddStudentFormProps) {
 
     const isVisitedOrLast =
       visitedSteps.includes(sectionIndex) ||
-      sectionIndex === formConfig.json.formSections.length - 1;
+      sectionIndex === formConfig.formSections.length - 1;
 
     return hasErrors && isVisitedOrLast;
   };
@@ -101,7 +128,7 @@ export function AddStudentForm({ formConfig, formId }: AddStudentFormProps) {
       <section className="flex gap-4">
         <ul className="h-fit w-[215px] shrink-0 rounded-lg bg-white py-3">
           <li>
-            {formConfig.json.formSections.map((section, index: number) => (
+            {formConfig.formSections.map((section, index: number) => (
               <Button
                 type="button"
                 variant="link"
@@ -144,7 +171,7 @@ export function AddStudentForm({ formConfig, formId }: AddStudentFormProps) {
           </li>
         </ul>
         <section className="w-full rounded-lg bg-white p-2">
-          {formConfig.json.formSections.map((section, index) => (
+          {formConfig.formSections.map((section, index) => (
             <motion.section
               key={section.sectionTitle}
               className={cn(
@@ -172,7 +199,7 @@ export function AddStudentForm({ formConfig, formId }: AddStudentFormProps) {
                           <div key={field.id} className="w-full">
                             <label className="mt-1 block text-sm text-gray-700">
                               {field.label}
-                              {field.validationRules.required && (
+                              {field.validationRules.required.value && (
                                 <span className="text-red-300"> *</span>
                               )}
                             </label>
@@ -200,6 +227,9 @@ export function AddStudentForm({ formConfig, formId }: AddStudentFormProps) {
                           <div key={field.id} className="w-full">
                             <label className="mt-1 block text-sm text-gray-700">
                               {field.label}
+                              {field.validationRules.required.value && (
+                                <span className="text-red-300"> *</span>
+                              )}
                             </label>
                             <Input
                               {...register(field.name, {
@@ -225,7 +255,7 @@ export function AddStudentForm({ formConfig, formId }: AddStudentFormProps) {
                           <div key={field.id} className="w-full">
                             <label className="block text-gray-700">
                               {field.label}
-                              {field.validationRules.required && (
+                              {field.validationRules.required.value && (
                                 <span className="text-red-300"> *</span>
                               )}
                             </label>
@@ -258,7 +288,7 @@ export function AddStudentForm({ formConfig, formId }: AddStudentFormProps) {
                             <div key={field.id}>
                               <label className="mb-2 mt-1 block text-sm text-gray-700">
                                 {field.label}
-                                {field.validationRules.required && (
+                                {field.validationRules.required.value && (
                                   <span className="text-red-300"> *</span>
                                 )}
                               </label>
@@ -294,7 +324,7 @@ export function AddStudentForm({ formConfig, formId }: AddStudentFormProps) {
                           <div key={field.id}>
                             <label className="mb-2 mt-1 block text-sm text-gray-700">
                               {field.label}
-                              {field.validationRules.required && (
+                              {field.validationRules.required.value && (
                                 <span className="text-red-300"> *</span>
                               )}
                             </label>
@@ -303,9 +333,15 @@ export function AddStudentForm({ formConfig, formId }: AddStudentFormProps) {
                               placeholder={field.placeholder}
                               className="ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring mt-1 flex h-10 w-full rounded-md border border-gray-300 bg-transparent px-3 py-2 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
                             >
-                              {field.options.map((option, index) => (
-                                <option key={index} value={option.value}>
-                                  {option.label}
+                              {(field.options && field.options.length > 0
+                                ? field.options
+                                : customDataList[field.name]
+                              ).map((option, index) => (
+                                <option
+                                  key={index}
+                                  value={option[field.optionValue]}
+                                >
+                                  {option[field.optionKey]}
                                 </option>
                               ))}
                             </select>
@@ -364,11 +400,10 @@ export function AddStudentForm({ formConfig, formId }: AddStudentFormProps) {
                       Preview & Submit
                     </Button>
                     <AddStudentPreviewModal
-                      formId={formId}
                       formData={formData}
                       open={isPreviewModalOpen}
                       onOpenChange={setIsPreviewModalOpen}
-                      formSections={formConfig.json.formSections}
+                      formSections={formConfig.formSections}
                     />
                   </Then>
                   <Else>
