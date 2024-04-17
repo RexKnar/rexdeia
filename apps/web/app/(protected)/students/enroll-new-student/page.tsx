@@ -2,7 +2,7 @@ import { redirect } from 'next/navigation';
 import { getServerSession } from 'next-auth';
 
 import { authOptions } from '../../../../lib/auth';
-import { AddStudentPage } from './_components/AddStudentPage';
+import { AddStudentForm } from './_components/AddStudentForm';
 import { EnrollStudentHeader } from './_components/EnrollStudentHeader';
 
 export default async function Page() {
@@ -15,10 +15,7 @@ export default async function Page() {
   return (
     <section>
       <EnrollStudentHeader />
-      <AddStudentPage
-        branchId={session.branchId}
-        organizationId={session.organizationId}
-      />
+      <AddStudentForm />
     </section>
   );
 }

@@ -8,7 +8,9 @@
     "NEXT_SITE_NAME",
     "NEXT_PUBLIC_ZOHO_SALESIQ_WIDGET_CODE",
     "NEXT_GCLOUD_STORAGE_BUCKET",
-    "NEXT_GCLOUD_PROJECT_ID"
+    "NEXT_GCLOUD_PROJECT_ID",
+    "SENTRY_DSN",
+    "NEXT_PUBLIC_SENTRY_DSN"
   ],
   "pipeline": {
     "build": {
@@ -22,4 +24,3 @@
     }
   }
 }
-
