@@ -47,10 +47,10 @@ export function BatchDropDown() {
             variant="outline"
             aria-expanded={open}
             disabled={!batches?.length}
-            className="ring-offset-background placeholder:text-muted-foreground  focus-visible:ring-ring mt-1 flex h-10 w-full justify-between rounded-md border border-gray-300 bg-transparent px-3 py-2 text-sm text-gray-700 file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+            className="ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring mt-1 flex h-10 w-full justify-between rounded-md border border-gray-300 bg-transparent px-3 py-2 text-sm text-gray-700 file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
           >
             {batchId
-              ? batches.find((framework) => framework.id === batchId).name
+              ? batches.find((framework) => framework.id === batchId)?.name
               : 'Select Batch'}
             <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
           </Button>
@@ -75,7 +75,7 @@ export function BatchDropDown() {
                     variant="sm-regular"
                     className="line-clamp-1 truncate break-all"
                   >
-                    {batch.name}
+                    {batch?.name}
                   </Text>
                   <Text variant="xs-regular" className="text-gray-800">
                     {batch.startYear} - {batch.endYear}

@@ -1,3 +1,124 @@
+const caste = [
+  {
+    label: 'No caste',
+    value: 'noCaste',
+  },
+];
+const community = [
+  {
+    label: 'BC',
+    value: 'bc',
+  },
+  {
+    label: ' SC ',
+    value: 'sc',
+  },
+  {
+    label: 'ST',
+    value: 'st',
+  },
+  {
+    label: 'MBC',
+    value: 'mbc',
+  },
+];
+const bloodGroup = [
+  {
+    label: 'O+',
+    value: 'O+',
+  },
+  {
+    label: ' O- ',
+    value: 'O-',
+  },
+  {
+    label: 'A+',
+    value: 'A+',
+  },
+  {
+    label: 'A-',
+    value: 'A-',
+  },
+  {
+    label: 'B+',
+    value: 'B+',
+  },
+  {
+    label: 'B-',
+    value: 'B-',
+  },
+  {
+    label: 'AB+',
+    value: 'AB+',
+  },
+  {
+    label: 'AB-',
+    value: 'AB-',
+  },
+];
+const motherTongue = [
+  {
+    label: 'Tamil',
+    value: 'tamil',
+  },
+  {
+    label: ' Malayalam ',
+    value: 'malayalam',
+  },
+  {
+    label: 'Telugu',
+    value: 'telugu',
+  },
+  {
+    label: 'Hindi',
+    value: 'hindi',
+  },
+];
+const religion = [
+  {
+    label: 'Hindu',
+    value: 'hindu',
+  },
+  {
+    label: ' Christian ',
+    value: 'christian',
+  },
+  {
+    label: 'Muslim',
+    value: 'muslim',
+  },
+  {
+    label: 'others',
+    value: 'others',
+  },
+];
+const noOfSiblings = [
+  {
+    label: '0',
+    value: '0',
+  },
+  {
+    label: '1',
+    value: '1',
+  },
+  {
+    label: '2',
+    value: '2',
+  },
+  {
+    label: '3',
+    value: '3',
+  },
+  {
+    label: '4',
+    value: '4',
+  },
+  {
+    label: '5',
+    value: '5',
+  },
+];
+
 export const admissionForm = {
   title: 'COLLEGE ADMISSION FORM',
   description:
@@ -151,47 +272,14 @@ export const admissionForm = {
           },
         },
         {
-          id: '11',
+          id: '8',
           type: 'dropdown',
           label: 'Blood Group',
           name: 'bloodGroup',
           optionKey: 'value',
           optionValue: 'value',
           visible: true,
-          options: [
-            {
-              label: 'O+',
-              value: 'O+',
-            },
-            {
-              label: ' O- ',
-              value: 'O-',
-            },
-            {
-              label: 'A+',
-              value: 'A+',
-            },
-            {
-              label: 'A-',
-              value: 'A-',
-            },
-            {
-              label: 'B+',
-              value: 'B+',
-            },
-            {
-              label: 'B-',
-              value: 'B-',
-            },
-            {
-              label: 'AB+',
-              value: 'AB+',
-            },
-            {
-              label: 'AB-',
-              value: 'AB-',
-            },
-          ],
+          options: [...bloodGroup],
           validationRules: {
             required: {
               value: false,
@@ -223,24 +311,7 @@ export const admissionForm = {
           optionKey: 'value',
           optionValue: 'value',
           visible: true,
-          options: [
-            {
-              label: 'Tamil',
-              value: 'tamil',
-            },
-            {
-              label: ' Malayalam ',
-              value: 'malayalam',
-            },
-            {
-              label: 'Telugu',
-              value: 'telugu',
-            },
-            {
-              label: 'Hindi',
-              value: 'hindi',
-            },
-          ],
+          options: [...motherTongue],
           validationRules: {
             required: {
               value: false,
@@ -249,31 +320,14 @@ export const admissionForm = {
           },
         },
         {
-          id: '10',
+          id: '11',
           type: 'dropdown',
           label: 'Religion',
           name: 'religion',
           optionKey: 'value',
           optionValue: 'value',
           visible: true,
-          options: [
-            {
-              label: 'Hindu',
-              value: 'hindu',
-            },
-            {
-              label: ' Christian ',
-              value: 'christian',
-            },
-            {
-              label: 'Muslim',
-              value: 'muslim',
-            },
-            {
-              label: 'others',
-              value: 'others',
-            },
-          ],
+          options: [...religion],
           validationRules: {
             required: {
               value: false,
@@ -282,13 +336,14 @@ export const admissionForm = {
           },
         },
         {
-          id: '13',
-          type: 'text',
+          id: '12',
+          type: 'dropdown',
           label: 'Community',
           name: 'community',
-          value: '',
+          optionKey: 'value',
+          optionValue: 'value',
           visible: true,
-          placeholder: 'Enter your community',
+          options: [...community],
           validationRules: {
             required: {
               value: false,
@@ -297,13 +352,14 @@ export const admissionForm = {
           },
         },
         {
-          id: '14',
-          type: 'text',
+          id: '13',
+          type: 'dropdown',
           label: 'Caste',
           name: 'caste',
-          value: '',
+          optionKey: 'value',
+          optionValue: 'value',
           visible: true,
-          placeholder: 'Enter your caste',
+          options: [...caste],
           validationRules: {
             required: {
               value: false,
@@ -312,7 +368,7 @@ export const admissionForm = {
           },
         },
         {
-          id: '15',
+          id: '14',
           type: 'radio',
           label: 'Differently abled',
           name: 'differentlyAbled',
@@ -557,32 +613,7 @@ export const admissionForm = {
           optionKey: 'value',
           optionValue: 'value',
           visible: true,
-          options: [
-            {
-              label: '0',
-              value: '0',
-            },
-            {
-              label: '1',
-              value: '1',
-            },
-            {
-              label: '2',
-              value: '2',
-            },
-            {
-              label: '3',
-              value: '3',
-            },
-            {
-              label: '4',
-              value: '4',
-            },
-            {
-              label: '5',
-              value: '5',
-            },
-          ],
+          options: [...noOfSiblings],
           validationRules: {
             required: {
               value: false,
@@ -639,7 +670,7 @@ export const admissionForm = {
           placeholder: 'Enter your sibling1 class',
           validationRules: {
             required: {
-              value: true,
+              value: false,
               message: 'Sibling Class is required',
             },
           },
@@ -1106,7 +1137,7 @@ export const admissionForm = {
           options: [],
           validationRules: {
             required: {
-              value: false,
+              value: true,
               message: 'Medium is required',
             },
           },
@@ -1123,7 +1154,7 @@ export const admissionForm = {
           options: [],
           validationRules: {
             required: {
-              value: false,
+              value: true,
               message: 'Class is required',
             },
           },
@@ -1140,7 +1171,7 @@ export const admissionForm = {
           options: [],
           validationRules: {
             required: {
-              value: false,
+              value: true,
               message: 'Group is required',
             },
           },
@@ -1171,7 +1202,7 @@ export const admissionForm = {
           ],
           validationRules: {
             required: {
-              value: true,
+              value: false,
               message: 'Admission Type is required',
             },
           },
@@ -1195,7 +1226,7 @@ export const admissionForm = {
           ],
           validationRules: {
             required: {
-              value: true,
+              value: false,
               message: 'Admission Mode is required',
             },
           },
@@ -1219,7 +1250,7 @@ export const admissionForm = {
           ],
           validationRules: {
             required: {
-              value: true,
+              value: false,
               message: 'Scholarship is required',
             },
           },
@@ -1234,452 +1265,9 @@ export const admissionForm = {
           placeholder: 'Enter your first language',
           validationRules: {
             required: {
-              value: true,
+              value: false,
               message: 'First Language is required',
             },
-          },
-        },
-      ],
-    },
-  ],
-};
-
-export const EnquiryForm = {
-  title: 'COLLEGE ENQUIRY FORM',
-  description:
-    "If you'd like to apply to our college, please fill in this College Enquiry Form and we will contact you as soon as possible.",
-  formSections: [
-    {
-      sectionTitle: 'Personal Information',
-      sectionDescription: 'Please fill out your personal information.',
-      sectionFields: [
-        {
-          id: '1',
-          type: 'text',
-          label: 'Name',
-          name: 'name',
-          value: '',
-          visible: true,
-          placeholder: 'Enter your name',
-          validationRules: {
-            required: true,
-            minLength: 1,
-            maxLength: 100,
-          },
-        },
-        {
-          id: '2',
-          type: 'date',
-          label: 'Date',
-          name: 'date',
-          value: '',
-          visible: true,
-          placeholder: 'Select todays date',
-          validationRules: {
-            required: true,
-          },
-        },
-        {
-          id: '3',
-          type: 'email',
-          label: 'Email',
-          name: 'emailId',
-          value: '',
-          visible: true,
-          placeholder: 'Enter your email',
-          validationRules: {
-            required: true,
-            email: true,
-          },
-        },
-        {
-          id: '4',
-          type: 'text',
-          label: 'Contact Number',
-          name: 'contactNumber',
-          value: '',
-          visible: true,
-          placeholder: 'Enter your contact number',
-          validationRules: {
-            required: true,
-          },
-        },
-        {
-          id: '5',
-          type: 'date',
-          label: 'Date of Birth',
-          name: 'dob',
-          value: '',
-          visible: true,
-          placeholder: 'Select your DOB',
-          validationRules: {
-            required: true,
-          },
-        },
-        {
-          id: '6',
-          type: 'text',
-          label: 'Age',
-          name: 'age',
-          value: '',
-          visible: true,
-          placeholder: 'Enter your age',
-          validationRules: {
-            required: true,
-          },
-        },
-        {
-          id: '7',
-          type: 'radio',
-          label: 'Gender',
-          name: 'gender',
-          value: '',
-          visible: true,
-          options: [
-            {
-              label: 'Male',
-              value: 'male',
-            },
-            {
-              label: 'Female',
-              value: 'female',
-            },
-          ],
-          validationRules: {
-            required: true,
-          },
-        },
-        {
-          id: '8',
-          type: 'radio',
-          label: 'Marital Status',
-          name: 'maritalStatus',
-          value: '',
-          visible: true,
-          options: [
-            {
-              label: 'Married',
-              value: 'married',
-            },
-            {
-              label: 'Single',
-              value: 'single',
-            },
-          ],
-          validationRules: {
-            required: true,
-          },
-        },
-        {
-          id: '9',
-          type: 'text',
-          label: "Father's Name",
-          name: 'fatherName',
-          value: '',
-          visible: true,
-          placeholder: 'Enter your father name',
-          validationRules: {
-            required: true,
-          },
-        },
-        {
-          id: '10',
-          type: 'text',
-          label: "Father's Occupation",
-          name: 'fatherOccupation',
-          value: '',
-          visible: true,
-          placeholder: 'Enter your father name',
-          validationRules: {
-            required: true,
-          },
-        },
-        {
-          id: '10-1',
-          type: 'text',
-          label: "Father's Phone Number",
-          name: 'fatherPhoneNumber',
-          value: '',
-          visible: true,
-          placeholder: 'Enter your father phone number',
-          validationRules: {
-            required: true,
-          },
-        },
-        {
-          id: '10-2',
-          type: 'text',
-          label: "Father's Email",
-          name: 'fatherEmailId',
-          value: '',
-          visible: true,
-          placeholder: 'Enter your father email',
-          validationRules: {
-            required: true,
-          },
-        },
-        {
-          id: '11',
-          type: 'text',
-          label: "Mother's Name",
-          name: 'motherName',
-          value: '',
-          visible: true,
-          placeholder: 'Enter your father occupation',
-          validationRules: {
-            required: true,
-          },
-        },
-        {
-          id: '12',
-          type: 'text',
-          label: "Mother's Occupation",
-          name: 'motherOccupation',
-          value: '',
-          visible: true,
-          placeholder: 'Enter your mother occupation',
-          validationRules: {
-            required: true,
-          },
-        },
-        {
-          id: '10-1',
-          type: 'text',
-          label: "Mother's Phone Number",
-          name: 'motherPhoneNumber',
-          value: '',
-          visible: true,
-          placeholder: 'Enter your father phone number',
-          validationRules: {
-            required: true,
-          },
-        },
-        {
-          id: '10-2',
-          type: 'text',
-          label: "Mother's Email",
-          name: 'motherEmailId',
-          value: '',
-          visible: true,
-          placeholder: 'Enter your mother email',
-          validationRules: {
-            required: true,
-          },
-        },
-        {
-          id: '13',
-          type: 'text',
-          label: "Guardian's Name",
-          name: 'guardianName',
-          value: '',
-          visible: true,
-          placeholder: 'Enter your mother name',
-          validationRules: {
-            required: true,
-          },
-        },
-        {
-          id: '14',
-          type: 'text',
-          label: "Guardian's Occupation",
-          name: 'guardianOccupation',
-          value: '',
-          visible: true,
-          placeholder: 'Enter your guardian occupation',
-          validationRules: {
-            required: true,
-          },
-        },
-        {
-          id: '14-1',
-          type: 'text',
-          label: "Guardian's Phone Number",
-          name: 'guardianPhoneNumber',
-          value: '',
-          visible: true,
-          placeholder: 'Enter your Guardian phone number',
-          validationRules: {
-            required: true,
-          },
-        },
-        {
-          id: '14-2',
-          type: 'text',
-          label: "Guardian's Email",
-          name: 'guardianEmailId',
-          value: '',
-          visible: true,
-          placeholder: 'Enter your Guardian email',
-          validationRules: {
-            required: true,
-          },
-        },
-        {
-          id: '15',
-          type: 'text',
-          label: 'Address Line 1',
-          name: 'addressLine1',
-          value: '',
-          visible: true,
-          placeholder: 'address line 1',
-          validationRules: {
-            required: true,
-          },
-        },
-        {
-          id: '16',
-          type: 'text',
-          label: 'Address Line 2',
-          name: 'addressLine2',
-          value: '',
-          visible: true,
-          placeholder: 'address line 2',
-          validationRules: {
-            required: true,
-          },
-        },
-        {
-          id: '17',
-          type: 'text',
-          label: 'Nationality',
-          name: 'nationality',
-          value: '',
-          visible: true,
-          placeholder: 'Enter nationality',
-          validationRules: {
-            required: true,
-          },
-        },
-        {
-          id: '18',
-          type: 'text',
-          label: 'State',
-          name: 'state',
-          value: '',
-          visible: true,
-          placeholder: 'Enter state',
-          validationRules: {
-            required: true,
-          },
-        },
-        {
-          id: '19',
-          type: 'text',
-          label: 'District',
-          name: 'district',
-          value: '',
-          visible: true,
-          placeholder: 'Enter district',
-          validationRules: {
-            required: true,
-          },
-        },
-        {
-          id: '20',
-          type: 'text',
-          label: 'Postal / ZIP Code',
-          name: 'postalCode',
-          value: '',
-          visible: true,
-          placeholder: 'Enter postal/zip code',
-          validationRules: {
-            required: true,
-          },
-        },
-        {
-          id: '21',
-          type: 'text',
-          label: 'School Name (10th std)',
-          name: 'schoolName10th',
-          value: '',
-          visible: true,
-          placeholder: 'Enter your school name',
-          validationRules: {
-            required: true,
-          },
-        },
-        {
-          id: '22',
-          type: 'text',
-          label: 'Year of Passing',
-          name: 'yearOfPassing10th',
-          value: '',
-          visible: true,
-          placeholder: 'Enter year of passing',
-          validationRules: {
-            required: true,
-          },
-        },
-        {
-          id: '23',
-          type: 'text',
-          label: 'Obtained Mark',
-          name: 'obtainedMark10th',
-          value: '',
-          visible: true,
-          placeholder: 'Enter your mark',
-          validationRules: {
-            required: true,
-          },
-        },
-        {
-          id: '24',
-          type: 'text',
-          label: 'Medium of Education',
-          name: 'mediumOfEducation10th',
-          value: '',
-          visible: true,
-          placeholder: 'Enter year medium of education',
-          validationRules: {
-            required: true,
-          },
-        },
-        {
-          id: '25',
-          type: 'text',
-          label: 'School Name (12th std)',
-          name: 'schoolName12th',
-          value: '',
-          visible: true,
-          placeholder: 'Enter your school name',
-          validationRules: {
-            required: true,
-          },
-        },
-        {
-          id: '26',
-          type: 'text',
-          label: 'Year of Passing',
-          name: 'yearOfPassing12th',
-          value: '',
-          visible: true,
-          placeholder: 'Enter year of passing',
-          validationRules: {
-            required: true,
-          },
-        },
-        {
-          id: '27',
-          type: 'text',
-          label: 'Obtained Mark',
-          name: 'obtainedMark12th',
-          value: '',
-          visible: true,
-          placeholder: 'Enter your mark',
-          validationRules: {
-            required: true,
-          },
-        },
-        {
-          id: '28',
-          type: 'text',
-          label: 'Medium of Education',
-          name: 'mediumOfEducation12th',
-          value: '',
-          visible: true,
-          placeholder: 'Enter year medium of education',
-          validationRules: {
-            required: true,
           },
         },
       ],
