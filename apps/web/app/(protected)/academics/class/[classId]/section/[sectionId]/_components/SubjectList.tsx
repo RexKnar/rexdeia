@@ -7,10 +7,10 @@ import { useGetSubjectListBySectionIdQuery } from '../../../../../../../../lib/q
 import { SubjectCard } from './SubjectCard';
 
 export function SubjectList() {
-  const params = useParams<{ sectionId: string }>();
+  const { sectionId } = useParams<{ sectionId: string }>();
   const { data: subjectListResponse, isLoading: isSubjectListLoading } =
-    useGetSubjectListBySectionIdQuery(params.sectionId, {
-      enabled: !!params.sectionId,
+    useGetSubjectListBySectionIdQuery(sectionId, {
+      enabled: !!sectionId,
     });
 
   if (isSubjectListLoading) {

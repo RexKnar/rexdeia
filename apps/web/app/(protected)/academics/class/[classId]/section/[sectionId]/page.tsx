@@ -38,13 +38,10 @@ export default function Page() {
   const pathname = usePathname();
   const router = useRouter();
   const searchParams = useSearchParams();
-  const params = useParams<{ sectionId: string }>();
+  const { sectionId } = useParams<{ sectionId: string }>();
 
-  const {
-    data: getSectionResponse,
-    isError: isGetSectionResponseError,
-    isLoading: isGetSectionResponseLoading,
-  } = useGetSectionByIdQuery(params.sectionId);
+  const { data: getSectionResponse, isLoading: isGetSectionResponseLoading } =
+    useGetSectionByIdQuery(sectionId);
 
   if (isGetSectionResponseLoading) {
     return (
@@ -55,7 +52,7 @@ export default function Page() {
     );
   }
 
-  if (isGetSectionResponseError) {
+  if (!getSectionResponse) {
     return (
       <div className="flex items-center justify-center">
         <p className="text-black ">No Data Found</p>
