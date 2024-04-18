@@ -29,7 +29,7 @@ importers:
         version: 2.4.12(prettier@3.2.5)
       prettier-plugin-tailwindcss:
         specifier: 0.5.12
-        version: 0.5.14(prettier@3.2.5)
+        version: 0.5.12(prettier@3.2.5)
       turbo:
         specifier: 1.12.5
         version: 1.12.5
@@ -105,7 +105,7 @@ importers:
         version: 5.28.4(@tanstack/react-query@5.28.4(react@18.2.0))(react@18.2.0)
       '@tanstack/react-table':
         specifier: ^8.10.7
-        version: 8.13.2(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
+        version: 8.16.0(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
       autoprefixer:
         specifier: ^10.4.16
         version: 10.4.18(postcss@8.4.38)
@@ -1410,15 +1410,15 @@ packages:
     peerDependencies:
       react: ^18.0.0
 
-  '@tanstack/react-table@8.13.2':
-    resolution: {integrity: sha512-b6mR3mYkjRtJ443QZh9sc7CvGTce81J35F/XMr0OoWbx0KIM7TTTdyNP2XKObvkLpYnLpCrYDwI3CZnLezWvpg==}
+  '@tanstack/react-table@8.16.0':
+    resolution: {integrity: sha512-rKRjnt8ostqN2fercRVOIH/dq7MAmOENCMvVlKx6P9Iokhh6woBGnIZEkqsY/vEJf1jN3TqLOb34xQGLVRuhAg==}
     engines: {node: '>=12'}
     peerDependencies:
-      react: '>=16'
-      react-dom: '>=16'
+      react: '>=16.8'
+      react-dom: '>=16.8'
 
-  '@tanstack/table-core@8.13.2':
-    resolution: {integrity: sha512-/2saD1lWBUV6/uNAwrsg2tw58uvMJ07bO2F1IWMxjFRkJiXKQRuc3Oq2aufeobD3873+4oIM/DRySIw7+QsPPw==}
+  '@tanstack/table-core@8.16.0':
+    resolution: {integrity: sha512-dCG8vQGk4js5v88/k83tTedWOwjGnIyONrKpHpfmSJB8jwFHl8GSu1sBBxbtACVAPtAQgwNxl0rw1d3RqRM1Tg==}
     engines: {node: '>=12'}
 
   '@tootallnate/once@2.0.0':
@@ -4103,6 +4103,58 @@ packages:
       prettier:
         optional: true
 
+  prettier-plugin-tailwindcss@0.5.12:
+    resolution: {integrity: sha512-o74kiDBVE73oHW+pdkFSluHBL3cYEvru5YgEqNkBMFF7Cjv+w1vI565lTlfoJT4VLWDe0FMtZ7FkE/7a4pMXSQ==}
+    engines: {node: '>=14.21.3'}
+    peerDependencies:
+      '@ianvs/prettier-plugin-sort-imports': '*'
+      '@prettier/plugin-pug': '*'
+      '@shopify/prettier-plugin-liquid': '*'
+      '@trivago/prettier-plugin-sort-imports': '*'
+      prettier: ^3.0
+      prettier-plugin-astro: '*'
+      prettier-plugin-css-order: '*'
+      prettier-plugin-import-sort: '*'
+      prettier-plugin-jsdoc: '*'
+      prettier-plugin-marko: '*'
+      prettier-plugin-organize-attributes: '*'
+      prettier-plugin-organize-imports: '*'
+      prettier-plugin-sort-imports: '*'
+      prettier-plugin-style-order: '*'
+      prettier-plugin-svelte: '*'
+      prettier-plugin-twig-melody: '*'
+    peerDependenciesMeta:
+      '@ianvs/prettier-plugin-sort-imports':
+        optional: true
+      '@prettier/plugin-pug':
+        optional: true
+      '@shopify/prettier-plugin-liquid':
+        optional: true
+      '@trivago/prettier-plugin-sort-imports':
+        optional: true
+      prettier-plugin-astro:
+        optional: true
+      prettier-plugin-css-order:
+        optional: true
+      prettier-plugin-import-sort:
+        optional: true
+      prettier-plugin-jsdoc:
+        optional: true
+      prettier-plugin-marko:
+        optional: true
+      prettier-plugin-organize-attributes:
+        optional: true
+      prettier-plugin-organize-imports:
+        optional: true
+      prettier-plugin-sort-imports:
+        optional: true
+      prettier-plugin-style-order:
+        optional: true
+      prettier-plugin-svelte:
+        optional: true
+      prettier-plugin-twig-melody:
+        optional: true
+
   prettier-plugin-tailwindcss@0.5.14:
     resolution: {integrity: sha512-Puaz+wPUAhFp8Lo9HuciYKM2Y2XExESjeT+9NQoVFXZsPPnc9VYss2SpxdQ6vbatmt8/4+SN0oe0I1cPDABg9Q==}
     engines: {node: '>=14.21.3'}
@@ -6763,13 +6815,13 @@ snapshots:
       '@tanstack/query-core': 5.28.4
       react: 18.2.0
 
-  '@tanstack/react-table@8.13.2(react-dom@18.2.0(react@18.2.0))(react@18.2.0)':
+  '@tanstack/react-table@8.16.0(react-dom@18.2.0(react@18.2.0))(react@18.2.0)':
     dependencies:
-      '@tanstack/table-core': 8.13.2
+      '@tanstack/table-core': 8.16.0
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
 
-  '@tanstack/table-core@8.13.2': {}
+  '@tanstack/table-core@8.16.0': {}
 
   '@tootallnate/once@2.0.0': {}
 
@@ -10071,6 +10123,10 @@ snapshots:
       sort-package-json: 2.8.0
       synckit: 0.9.0
     optionalDependencies:
+      prettier: 3.2.5
+
+  prettier-plugin-tailwindcss@0.5.12(prettier@3.2.5):
+    dependencies:
       prettier: 3.2.5
 
   prettier-plugin-tailwindcss@0.5.14(prettier@3.2.5):
