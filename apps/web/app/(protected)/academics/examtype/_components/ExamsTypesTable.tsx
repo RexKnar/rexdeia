@@ -1,6 +1,5 @@
 'use client';
 import {
-  // ColumnDef,
   flexRender,
   getCoreRowModel,
   getFilteredRowModel,
@@ -8,16 +7,16 @@ import {
   getSortedRowModel,
   useReactTable,
 } from '@tanstack/react-table';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useGetExamTypeListQuery } from 'lib/queries/exams/useGetExamTypeListQuery';
 import { Loader2, Pencil, Trash2 } from 'lucide-react';
-import React from 'react';
+import React, {useCallback} from 'react';
 import {
   Button,
-  // Pagination,
+  Pagination,
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-  // useToast,
 } from 'ui';
 import {
   Table,
@@ -78,16 +77,32 @@ const columns = [
 ];
 
 export function ExamTypeListTable() {
-  const { getParam } = useQueryParams();
-  const page = parseInt(getParam('page')) || 1;
-  const limit = parseInt(getParam('limit')) || 999;
 
-  const { data: examTypeList, isPending: examTypeLoading } =
+  const { getParam } = useQueryParams();
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+
+  const page = parseInt(searchParams.get('page')) || 1;
+  const limit = parseInt(searchParams.get('limit')) || 10;
+
+  const { data: examTypeList, isPending: isexamTypeLoading } =
     useGetExamTypeListQuery({
       page,
       limit,
     });
-  // eslint-disable-next-line no-console
+    console.log(examTypeList);
+
+    const handleOnPageChange = useCallback(
+    (page: number) => {
+      const params = new URLSearchParams(searchParams);
+      params.set('page', page.toString());
+
+      router.push(pathname + '?' + params.toString());
+    },
+    [searchParams, pathname, router]
+  );
+
   const table = useReactTable({
     columns,
     data: examTypeList?.data || [],
@@ -142,7 +157,7 @@ export function ExamTypeListTable() {
                     <TooltipTrigger asChild>
                       <Button
                         onClick={() => {
-                          const params = new URLSearchParams(searchParams);
+                          const params = new URLSearchParams();
                           params.set('isExamTypeFlyoutOpen', 'true');
                           params.set('examtypeId', row.original.id);
                           router.push(pathname + '?' + params.toString());
@@ -164,19 +179,11 @@ export function ExamTypeListTable() {
                       <Button
                         className="h-auto px-3 py-2"
                         variant="mild"
-                        onClick={() => {
-                          setSelectedMedium(row.original);
-                          setShowDeleteConfirmationModal(true);
-                        }}
                       >
-                        {row.original.isDeleting ? (
-                          <Loader2 className="mr-2 h-4 w-4 animate-spin text-red-600" />
-                        ) : (
                           <Trash2
                             size={12}
                             className="text-center text-red-600 "
                           />
-                        )}
                       </Button>
                     </TooltipTrigger>
                     <TooltipContent>
@@ -192,25 +199,25 @@ export function ExamTypeListTable() {
           ) : (
             <TableRow>
               <TableCell colSpan={5} className="h-24 text-center">
-                {isMediumListLoading ? 'Loading...' : 'No Medium Found'}
+                {isexamTypeLoading ? 'Loading...' : 'No Medium Found'}
               </TableCell>
             </TableRow>
           )}
         </TableBody>
       </Table>
-      {/* <Pagination
+      <Pagination
         limit={limit.toString()}
         onPageChange={handleOnPageChange}
         pageSize={examTypeList?.limit || 0}
         totalRecords={examTypeList?.total || 0}
-        disabled={examTypeLoading}
+        disabled={isexamTypeLoading}
         onLimitChange={(value) => {
           const params = new URLSearchParams(searchParams);
           params.set('limit', value.toString());
 
           router.push(pathname + '?' + params.toString());
         }}
-      /> */}
+      />
     </section>
   );
 }

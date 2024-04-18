@@ -1,6 +1,7 @@
-// import { CreateExamTypeModel } from 'lib/domain/exam';
+'use client';
+
 import { useCreateExamTypeMutationQuery } from 'lib/queries/examtype/useCreateExamTypeMutationQuery';
-import { PlusCircle } from 'lucide-react';
+import { PlusCircle, Loader2 } from 'lucide-react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import {
@@ -23,13 +24,17 @@ import {
 import { useQueryParams } from '@/hooks/useQueryParams';
 
 export function SaveExamTypeFlyout() {
+
   const pathname = usePathname();
   const router = useRouter();
   const searchParams = useSearchParams();
-  const { getParam } = useQueryParams();
+  const { getParam ,removeParams} = useQueryParams();
+  
+  const examtypeId = searchParams.get('examtypeId');
   const page = parseInt(getParam('page')) || 1;
   const limit = parseInt(getParam('limit')) || 999;
   const {
+    reset,
     register,
     setValue,
     watch,
@@ -56,8 +61,18 @@ export function SaveExamTypeFlyout() {
     params.delete('examtypeId');
     router.replace(pathname + '?' + params.toString());
   };
-  function saveExamType(payload) {
-    mutateCreateExamTypeAsync(payload);
+    const closeFlyout = () => {
+    removeParams(['examtypeId', 'isExamTypeFlyoutOpen']);
+    reset();
+  };
+  
+  async function saveExamType(payload) {
+    try {
+       await mutateCreateExamTypeAsync(payload);
+       closeFlyout();
+    }catch (error){
+      console.error(error)
+    }
   }
   return (
     <section>
@@ -150,17 +165,21 @@ export function SaveExamTypeFlyout() {
               </div>
             </div>
             <div className="mt-10">
-              {!isPendingCreateExamType ? (
                 <Button
                   size="lg"
                   variant="default"
                   className="mx-auto flex justify-center px-12 py-4"
                 >
-                  {'Save'}
+                    {isPendingCreateExamType ? (
+                    <div className="flex items-center justify-center">
+                      <Loader2 className="mr-2 h-6 w-6 animate-spin text-white" />
+                      Saving
+                    </div>
+                  ) : (
+                    `${examtypeId ? 'Update' : 'Save'}`
+                  )}
                 </Button>
-              ) : (
-                'saving'
-              )}
+             
             </div>
           </form>
         </SheetContent>
