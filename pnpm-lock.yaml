@@ -168,7 +168,7 @@ importers:
         version: 8.4.38
       razorpay:
         specifier: ^2.9.2
-        version: 2.9.2
+        version: 2.9.3
       react:
         specifier: ^18.2.0
         version: 18.2.0
@@ -4265,8 +4265,8 @@ packages:
     resolution: {integrity: sha512-9esiElv1BrZoI3rCDuOuKCBRbuApGGaDPQfjSflGxdy4oyzqghxu6klEkkVIvBje+FF0BX9coEv8KqW6X/7njw==}
     engines: {node: '>= 0.8'}
 
-  razorpay@2.9.2:
-    resolution: {integrity: sha512-FMtt7FKnwt65WSocGlWGdwTCt7JyeiTK1ej8nHPl78R0BmJ13A57F1DtWVbpnghIfUa++4TD7+bRzq0YbOK8hw==}
+  razorpay@2.9.3:
+    resolution: {integrity: sha512-BkMHVah0MKBsNaZotFXy1a7il1KoPv7k0m2vRmdI9JqkKGY9/l/zEeeel8M/HHigrxbyQpQjxzuwKEZ8ydV68A==}
 
   rc@1.2.8:
     resolution: {integrity: sha512-y3bGgqKj3QBdxLbLkomlohkvsA8gdAiUQlSBJnBhfn+BPxg4bc62d8TcBW15wavDfgexCgccckhcZvywyQYPOw==}
@@ -10184,7 +10184,7 @@ snapshots:
       iconv-lite: 0.4.23
       unpipe: 1.0.0
 
-  razorpay@2.9.2:
+  razorpay@2.9.3:
     dependencies:
       '@types/request-promise': 4.1.51
       promise: 8.3.0
