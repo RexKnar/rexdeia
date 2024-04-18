@@ -29,7 +29,7 @@ importers:
         version: 2.4.12(prettier@3.2.5)
       prettier-plugin-tailwindcss:
         specifier: 0.5.12
-        version: 0.5.12(prettier@3.2.5)
+        version: 0.5.14(prettier@3.2.5)
       turbo:
         specifier: 1.12.5
         version: 1.12.5
@@ -259,7 +259,7 @@ importers:
         version: 2.4.12(prettier@3.2.5)
       prettier-plugin-tailwindcss:
         specifier: ^0.5.9
-        version: 0.5.12(prettier@3.2.5)
+        version: 0.5.14(prettier@3.2.5)
       prisma:
         specifier: 5.11.0
         version: 5.11.0
@@ -4103,14 +4103,15 @@ packages:
       prettier:
         optional: true
 
-  prettier-plugin-tailwindcss@0.5.12:
-    resolution: {integrity: sha512-o74kiDBVE73oHW+pdkFSluHBL3cYEvru5YgEqNkBMFF7Cjv+w1vI565lTlfoJT4VLWDe0FMtZ7FkE/7a4pMXSQ==}
+  prettier-plugin-tailwindcss@0.5.14:
+    resolution: {integrity: sha512-Puaz+wPUAhFp8Lo9HuciYKM2Y2XExESjeT+9NQoVFXZsPPnc9VYss2SpxdQ6vbatmt8/4+SN0oe0I1cPDABg9Q==}
     engines: {node: '>=14.21.3'}
     peerDependencies:
       '@ianvs/prettier-plugin-sort-imports': '*'
       '@prettier/plugin-pug': '*'
       '@shopify/prettier-plugin-liquid': '*'
       '@trivago/prettier-plugin-sort-imports': '*'
+      '@zackad/prettier-plugin-twig-melody': '*'
       prettier: ^3.0
       prettier-plugin-astro: '*'
       prettier-plugin-css-order: '*'
@@ -4122,7 +4123,6 @@ packages:
       prettier-plugin-sort-imports: '*'
       prettier-plugin-style-order: '*'
       prettier-plugin-svelte: '*'
-      prettier-plugin-twig-melody: '*'
     peerDependenciesMeta:
       '@ianvs/prettier-plugin-sort-imports':
         optional: true
@@ -4131,6 +4131,8 @@ packages:
       '@shopify/prettier-plugin-liquid':
         optional: true
       '@trivago/prettier-plugin-sort-imports':
+        optional: true
+      '@zackad/prettier-plugin-twig-melody':
         optional: true
       prettier-plugin-astro:
         optional: true
@@ -4151,8 +4153,6 @@ packages:
       prettier-plugin-style-order:
         optional: true
       prettier-plugin-svelte:
-        optional: true
-      prettier-plugin-twig-melody:
         optional: true
 
   prettier@3.2.5:
@@ -10073,7 +10073,7 @@ snapshots:
     optionalDependencies:
       prettier: 3.2.5
 
-  prettier-plugin-tailwindcss@0.5.12(prettier@3.2.5):
+  prettier-plugin-tailwindcss@0.5.14(prettier@3.2.5):
     dependencies:
       prettier: 3.2.5
 
