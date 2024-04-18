@@ -26,10 +26,10 @@ export function useCreateExamTypeMutationQuery({
 
       return response;
     },
-    // onSuccess: async () => {
-    //   await queryClient.refetchQueries({
-    //     queryKey: [GET_EXAM_TYPE_LIST, page, limit],
-    //   });
-    // },
+    onSuccess: async () => {
+      await queryClient.refetchQueries({
+        queryKey: [GET_EXAM_TYPE_LIST, page, limit],
+      });
+    },
   });
 }
