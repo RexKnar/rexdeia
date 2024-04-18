@@ -7,10 +7,10 @@ import {
   getSortedRowModel,
   useReactTable,
 } from '@tanstack/react-table';
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useGetExamTypeListQuery } from 'lib/queries/exams/useGetExamTypeListQuery';
-import { Loader2, Pencil, Trash2 } from 'lucide-react';
-import React, {useCallback} from 'react';
+import { Pencil, Trash2 } from 'lucide-react';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import React, { useCallback } from 'react';
 import {
   Button,
   Pagination,
@@ -26,8 +26,6 @@ import {
   TableHeader,
   TableRow,
 } from 'ui/components/ui/Table';
-
-import { useQueryParams } from '@/hooks/useQueryParams';
 
 const columns = [
   {
@@ -77,8 +75,6 @@ const columns = [
 ];
 
 export function ExamTypeListTable() {
-
-  const { getParam } = useQueryParams();
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -91,9 +87,8 @@ export function ExamTypeListTable() {
       page,
       limit,
     });
-    console.log(examTypeList);
 
-    const handleOnPageChange = useCallback(
+  const handleOnPageChange = useCallback(
     (page: number) => {
       const params = new URLSearchParams(searchParams);
       params.set('page', page.toString());
@@ -176,14 +171,11 @@ export function ExamTypeListTable() {
                   </Tooltip>
                   <Tooltip>
                     <TooltipTrigger asChild>
-                      <Button
-                        className="h-auto px-3 py-2"
-                        variant="mild"
-                      >
-                          <Trash2
-                            size={12}
-                            className="text-center text-red-600 "
-                          />
+                      <Button className="h-auto px-3 py-2" variant="mild">
+                        <Trash2
+                          size={12}
+                          className="text-center text-red-600 "
+                        />
                       </Button>
                     </TooltipTrigger>
                     <TooltipContent>
