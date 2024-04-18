@@ -73,6 +73,21 @@ export function SaveExamTypeFlyout() {
       console.error(error);
     }
   }
+
+  const frequency = [
+    {
+      label: 'Week',
+      value: 'week',
+    },
+    {
+      label: 'Month',
+      value: 'month',
+    },
+    {
+      label: 'Term',
+      value: 'term',
+    },
+  ];
   return (
     <section>
       <Sheet open={isOpen}>
@@ -156,8 +171,11 @@ export function SaveExamTypeFlyout() {
                   </SelectTrigger>
                   <SelectContent>
                     <SelectGroup>
-                      <SelectItem value={'Value One'}>Value One</SelectItem>
-                      <SelectItem value={'Value Two'}>Value Two</SelectItem>
+                      {frequency.map((item, index) => (
+                        <SelectItem value={item.value} key={index}>
+                          {item.label}
+                        </SelectItem>
+                      ))}
                     </SelectGroup>
                   </SelectContent>
                 </Select>
