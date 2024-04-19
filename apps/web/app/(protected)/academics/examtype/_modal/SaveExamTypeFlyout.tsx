@@ -62,16 +62,24 @@ export function SaveExamTypeFlyout() {
   }
   const frequency = [
     {
-      label: 'Week',
-      value: 'week',
+      id: '1',
+      label: 'Once a Week',
+      value: 'weekly',
     },
     {
-      label: 'Month',
-      value: 'month',
+      id: '2',
+      label: 'Once a Month',
+      value: 'monthly',
     },
     {
-      label: 'Term',
-      value: 'term',
+      id: '3',
+      label: 'Once a Term',
+      value: 'termly',
+    },
+    {
+      id: '4',
+      label: 'Twice a Term',
+      value: 'bi-termly',
     },
   ];
   return (
@@ -121,7 +129,7 @@ export function SaveExamTypeFlyout() {
                 </label>
                 <Input
                   {...register('name', {
-                    required: 'name is Required',
+                    required: 'Name is Required',
                   })}
                   autoFocus
                   className="mt-2"
@@ -151,14 +159,14 @@ export function SaveExamTypeFlyout() {
                   <SelectTrigger className="w-full">
                     <SelectValue
                       {...register('frequencyId', {
-                        required: 'value is reqired',
+                        required: 'Frequency is required',
                       })}
                     />
                   </SelectTrigger>
                   <SelectContent>
                     <SelectGroup>
                       {frequency.map((item, index) => (
-                        <SelectItem value={item.value} key={index}>
+                        <SelectItem value={item.id} key={index}>
                           {item.label}
                         </SelectItem>
                       ))}
@@ -177,7 +185,7 @@ export function SaveExamTypeFlyout() {
                   {'Save'}
                 </Button>
               ) : (
-                'saving'
+                'Saving'
               )}
             </div>
           </form>
