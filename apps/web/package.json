@@ -34,12 +34,12 @@
     "http-status-codes": "^2.3.0",
     "immer": "^10.0.3",
     "lodash": "^4.17.21",
-    "lucide-react": "^0.358.0",
+    "lucide-react": "^0.371.0",
     "multer": "1.4.5-lts.1",
     "nanoid": "^5.0.4",
     "next": "^14.1.0",
     "next-auth": "4.24.7",
-    "next-intl": "3.9.5",
+    "next-intl": "3.11.3",
     "next-swagger-doc": "^0.4.0",
     "nextjs-toploader": "^1.6.4",
     "postcss": "^8.4.32",
@@ -76,7 +76,7 @@
     "prettier": "^3.1.1",
     "prettier-plugin-packagejson": "^2.4.7",
     "prettier-plugin-tailwindcss": "^0.5.9",
-    "prisma": "5.11.0",
+    "prisma": "5.12.1",
     "tsconfig": "workspace:*",
     "typescript": "5.3.3"
   }
