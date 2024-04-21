@@ -98,6 +98,11 @@ export const GET_STUDENTS_BY_CLASS_SECTION = `GET_STUDENTS_BY_CLASS_SECTION`;
 export const ADD_MARK_ENTRY = `ADD_MARK_ENTRY`;
 export const GET_STAFFS_BY_SECTION = `GET_STAFFS_BY_SECTION`;
 export const GET_MARKS_WITH_FORMAT_BY_EXAM = `GET_MARKS_WITH_FORMAT_BY_EXAM`;
+export const GET_SUBJECT_MASTER_LIST = `GET_SUBJECT_MASTER_LIST`;
+export const ADD_SUBJECT_MASTER = `ADD_SUBJECT_MASTER`;
+export const GET_SUBJECT_MASTER_BY_ID = `GET_SUBJECT_MASTER_BY_ID`;
+export const UPDATE_SUBJECT_MASTER_BY_ID = `UPDATE_SUBJECT_MASTER_BY_ID`;
+export const DELETE_SUBJECT_MASTER_BY_ID = `DELETE_SUBJECT_MASTER_BY_ID`;
 
 export default <EndpointDetails>{
   [REGISTER_USER]: {
@@ -487,5 +492,25 @@ export default <EndpointDetails>{
   [GET_MARKS_WITH_FORMAT_BY_EXAM]: {
     requestType: `PUT`,
     endpoint: `/api/mark-entry`,
+  },
+  [GET_SUBJECT_MASTER_LIST]: {
+    requestType: `PUT`,
+    endpoint: `/api/subject-master`,
+  },
+  [ADD_SUBJECT_MASTER]: {
+    requestType: `POST`,
+    endpoint: `/api/subject-master`,
+  },
+  [GET_SUBJECT_MASTER_BY_ID]: {
+    requestType: `GET`,
+    endpoint: `/api/subject-master/[id]`,
+  },
+  [UPDATE_SUBJECT_MASTER_BY_ID]: {
+    requestType: `PUT`,
+    endpoint: `/api/subject-master/[id]`,
+  },
+  [DELETE_SUBJECT_MASTER_BY_ID]: {
+    requestType: `DELETE`,
+    endpoint: `/api/subject-master/[id]`,
   },
 };

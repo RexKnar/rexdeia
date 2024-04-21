@@ -1,6 +1,7 @@
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useGetSubjectMasterListQuery } from 'lib/queries/subject-master/useGetAllSubjectMasterQuery';
 import { PlusCircle } from 'lucide-react';
 import {
   useParams,
@@ -44,6 +45,11 @@ const schema = z.object({
       required_error: 'Name is required',
     })
     .min(1),
+  subjectMasterId: z
+    .string({
+      required_error: 'Subject Master is required',
+    })
+    .min(1),
   subjectTypeId: z
     .string({
       required_error: 'Subject Type is required',
@@ -84,7 +90,7 @@ export function AddSubjectFlyout() {
   const isOpen = searchParams.get('isAddSubjectFlyoutOpen') === 'true';
   const page = parseInt(searchParams.get('page')) || 1;
   const limit = parseInt(searchParams.get('limit')) || 10;
-  const filter = {};
+  const filter = { isActive: true };
   const {
     control,
     watch,
@@ -131,6 +137,12 @@ export function AddSubjectFlyout() {
   );
 
   const { data: regulationListResponse } = useGetRegulationListQuery({
+    page,
+    limit,
+    filter,
+  });
+
+  const { data: subjectMasterList } = useGetSubjectMasterListQuery({
     page,
     limit,
     filter,
@@ -274,6 +286,37 @@ export function AddSubjectFlyout() {
                       {regulationListResponse?.data?.map((item) => (
                         <SelectItem key={item.id} value={item.id}>
                           {item.regulationName}
+                        </SelectItem>
+                      ))}
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="mt-4">
+                <label
+                  htmlFor="master"
+                  className="text-sm font-semibold text-gray-700"
+                >
+                  Subject Master
+                </label>
+                <Select
+                  autoComplete="off"
+                  {...register('subjectMasterId', { required: true })}
+                  value={watch('subjectMasterId')}
+                  onValueChange={(value) => {
+                    if (value) {
+                      setValue('subjectMasterId', value);
+                    }
+                  }}
+                >
+                  <SelectTrigger className="mt-2 w-full">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectGroup>
+                      {subjectMasterList?.data?.map((item) => (
+                        <SelectItem key={item.id} value={item.id}>
+                          {item.name}
                         </SelectItem>
                       ))}
                     </SelectGroup>
