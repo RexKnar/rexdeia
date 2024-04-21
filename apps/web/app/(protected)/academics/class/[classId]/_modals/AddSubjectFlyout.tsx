@@ -236,7 +236,7 @@ export function AddSubjectFlyout() {
                   Sections
                 </label>
                 <div className="mt-2 flex flex-wrap" id="sectionId">
-                  {sectionListResponse?.map((item) => (
+                  {sectionListResponse?.data?.map((item) => (
                     <label className="me-5" key={item.id}>
                       <Checkbox
                         className="me-2 items-center space-x-2 rounded border border-primary-500"
