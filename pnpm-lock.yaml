@@ -246,8 +246,8 @@ importers:
         specifier: 7.34.1
         version: 7.34.1(eslint@8.57.0)
       eslint-plugin-simple-import-sort:
-        specifier: ^10.0.0
-        version: 10.0.0(eslint@8.57.0)
+        specifier: ^12.0.0
+        version: 12.1.0(eslint@8.57.0)
       eslint-plugin-small-import:
         specifier: ^1.0.0
         version: 1.0.0(eslint@8.57.0)
@@ -300,8 +300,8 @@ importers:
         specifier: 7.34.1
         version: 7.34.1(eslint@8.57.0)
       eslint-plugin-simple-import-sort:
-        specifier: ^10.0.0
-        version: 10.0.0(eslint@8.57.0)
+        specifier: ^12.0.0
+        version: 12.1.0(eslint@8.57.0)
       eslint-plugin-small-import:
         specifier: ^1.0.0
         version: 1.0.0(eslint@8.57.0)
@@ -2575,8 +2575,8 @@ packages:
     peerDependencies:
       eslint: ^3 || ^4 || ^5 || ^6 || ^7 || ^8
 
-  eslint-plugin-simple-import-sort@10.0.0:
-    resolution: {integrity: sha512-AeTvO9UCMSNzIHRkg8S6c3RPy5YEwKWSQPx3DYghLedo2ZQxowPFLGDN1AZ2evfg6r6mjBSZSLxLFsWSu3acsw==}
+  eslint-plugin-simple-import-sort@12.1.0:
+    resolution: {integrity: sha512-Y2fqAfC11TcG/WP3TrI1Gi3p3nc8XJyEOJYHyEPEGI/UAgNx6akxxlX74p7SbAQdLcgASKhj8M0GKvH3vq/+ig==}
     peerDependencies:
       eslint: '>=5.0.0'
 
@@ -8466,7 +8466,7 @@ snapshots:
       semver: 6.3.1
       string.prototype.matchall: 4.0.11
 
-  eslint-plugin-simple-import-sort@10.0.0(eslint@8.57.0):
+  eslint-plugin-simple-import-sort@12.1.0(eslint@8.57.0):
     dependencies:
       eslint: 8.57.0
 
