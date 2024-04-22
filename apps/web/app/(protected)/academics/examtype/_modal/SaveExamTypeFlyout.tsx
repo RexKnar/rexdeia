@@ -27,10 +27,12 @@ export function SaveExamTypeFlyout() {
   const pathname = usePathname();
   const router = useRouter();
   const searchParams = useSearchParams();
-  const { getParam } = useQueryParams();
+  const { getParam, removeParams } = useQueryParams();
+
   const page = parseInt(getParam('page')) || 1;
   const limit = parseInt(getParam('limit')) || 999;
   const {
+    reset,
     register,
     setValue,
     watch,
@@ -57,8 +59,18 @@ export function SaveExamTypeFlyout() {
     params.delete('examtypeId');
     router.replace(pathname + '?' + params.toString());
   };
-  function saveExamType(payload) {
-    mutateCreateExamTypeAsync(payload);
+  const closeFlyout = () => {
+    removeParams(['examtypeId', 'isExamTypeFlyoutOpen']);
+    reset();
+  };
+
+  async function saveExamType(payload) {
+    try {
+      await mutateCreateExamTypeAsync(payload);
+      closeFlyout();
+    } catch (error) {
+      console.error(error);
+    }
   }
   const frequency = [
     {

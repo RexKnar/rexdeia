@@ -69,7 +69,12 @@ export const menuItems: SidebarMenuItem[] = [
         icon: null,
         path: '/academics/exams',
       },
-
+      {
+        id: 'academics-examtype',
+        label: 'Exam Type',
+        icon: null,
+        path: '/academics/examtype',
+      },
       {
         id: 'academics-grade',
         label: 'Grade',
