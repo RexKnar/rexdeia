@@ -84,17 +84,18 @@ export async function getSubjectMasterById(id: string) {
     where: {
       id: id,
       branchId: session.branchId,
+      isDeleted: false,
     },
   });
 }
 
 export async function deleteSubjectMasterById(id: string) {
-  return db.subject.update({
+  return db.subjectMaster.update({
     where: {
       id: id,
     },
     data: {
-      isDeleted: false,
+      isDeleted: true,
       updatedAt: new Date(),
     },
   });

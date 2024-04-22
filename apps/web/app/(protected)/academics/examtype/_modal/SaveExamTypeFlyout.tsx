@@ -1,7 +1,7 @@
 'use client';
 
 import { useCreateExamTypeMutationQuery } from 'lib/queries/examtype/useCreateExamTypeMutationQuery';
-import { Loader2, PlusCircle } from 'lucide-react';
+import { PlusCircle } from 'lucide-react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import {
@@ -29,7 +29,6 @@ export function SaveExamTypeFlyout() {
   const searchParams = useSearchParams();
   const { getParam, removeParams } = useQueryParams();
 
-  const examtypeId = searchParams.get('examtypeId');
   const page = parseInt(getParam('page')) || 1;
   const limit = parseInt(getParam('limit')) || 999;
   const {
@@ -73,19 +72,26 @@ export function SaveExamTypeFlyout() {
       console.error(error);
     }
   }
-
   const frequency = [
     {
-      label: 'Week',
-      value: 'week',
+      id: '1',
+      label: 'Once a Week',
+      value: 'weekly',
     },
     {
-      label: 'Month',
-      value: 'month',
+      id: '2',
+      label: 'Once a Month',
+      value: 'monthly',
     },
     {
-      label: 'Term',
-      value: 'term',
+      id: '3',
+      label: 'Once a Term',
+      value: 'termly',
+    },
+    {
+      id: '4',
+      label: 'Twice a Term',
+      value: 'bi-termly',
     },
   ];
   return (
@@ -135,7 +141,7 @@ export function SaveExamTypeFlyout() {
                 </label>
                 <Input
                   {...register('name', {
-                    required: 'name is Required',
+                    required: 'Name is Required',
                   })}
                   autoFocus
                   className="mt-2"
@@ -146,7 +152,7 @@ export function SaveExamTypeFlyout() {
             </div>
             <div className="mt-2">
               <label
-                htmlFor="examType"
+                htmlFor="frequency"
                 className="text-sm font-semibold text-gray-700"
               >
                 Frequency
@@ -165,14 +171,14 @@ export function SaveExamTypeFlyout() {
                   <SelectTrigger className="w-full">
                     <SelectValue
                       {...register('frequencyId', {
-                        required: 'value is reqired',
+                        required: 'Frequency is required',
                       })}
                     />
                   </SelectTrigger>
                   <SelectContent>
                     <SelectGroup>
                       {frequency.map((item, index) => (
-                        <SelectItem value={item.value} key={index}>
+                        <SelectItem value={item.id} key={index}>
                           {item.label}
                         </SelectItem>
                       ))}
@@ -182,20 +188,17 @@ export function SaveExamTypeFlyout() {
               </div>
             </div>
             <div className="mt-10">
-              <Button
-                size="lg"
-                variant="default"
-                className="mx-auto flex justify-center px-12 py-4"
-              >
-                {isPendingCreateExamType ? (
-                  <div className="flex items-center justify-center">
-                    <Loader2 className="mr-2 h-6 w-6 animate-spin text-white" />
-                    Saving
-                  </div>
-                ) : (
-                  `${examtypeId ? 'Update' : 'Save'}`
-                )}
-              </Button>
+              {!isPendingCreateExamType ? (
+                <Button
+                  size="lg"
+                  variant="default"
+                  className="mx-auto flex justify-center px-12 py-4"
+                >
+                  {'Save'}
+                </Button>
+              ) : (
+                'Saving'
+              )}
             </div>
           </form>
         </SheetContent>

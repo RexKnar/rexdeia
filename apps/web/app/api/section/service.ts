@@ -5,6 +5,10 @@ import {
   UpdateSectionModel,
 } from '../../../lib/domain/section';
 
+type SectionFilter = {
+  isActive?: boolean;
+};
+
 export async function deleteSectionById(id: string) {
   return db.section.update({
     where: {
@@ -36,9 +40,7 @@ export async function getAllSectionsByClassId(classId: string) {
     },
   });
 }
-type SectionFilter = {
-  isActive?: boolean;
-};
+
 export async function getSectionsWithFilter(
   classId: string,
   filter: SectionFilter
@@ -54,11 +56,11 @@ export async function getSectionsWithFilter(
     whereClause['isActive'] = isActive;
   }
 
-  return await db.$transaction([
-    db.subjectType.count({
+  const [total, data] = await db.$transaction([
+    db.section.count({
       where: whereClause,
     }),
-    db.subjectType.findMany({
+    db.section.findMany({
       where: whereClause,
       select: {
         id: true,
@@ -69,6 +71,7 @@ export async function getSectionsWithFilter(
       },
     }),
   ]);
+  return { total, data };
 }
 
 export async function mapSubjectsToSection(
