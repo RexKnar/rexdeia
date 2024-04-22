@@ -19,7 +19,6 @@ type SectionCardProps = {
 
 export function SectionCard(props: SectionCardProps) {
   const router = useRouter();
-
   const handleCardClick = (event: React.MouseEvent<HTMLDivElement>) => {
     router.push(`/academics/class/${props.classId}/section/${props.id}`);
     event.stopPropagation();

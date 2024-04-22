@@ -129,7 +129,7 @@ export function Assessment() {
           </SelectTrigger>
           <SelectContent className="border border-primary-200">
             <SelectGroup>
-              {sectionList?.map((section) => (
+              {sectionList?.data?.map((section) => (
                 <SelectItem key={section.id} value={section.id}>
                   {section.name}
                 </SelectItem>
