@@ -1,3 +1,6 @@
+'use client';
+
+import { useCreateExamTypeMutationQuery } from 'lib/queries/examtype/useCreateExamTypeMutationQuery';
 import { PlusCircle } from 'lucide-react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useForm } from 'react-hook-form';
@@ -18,24 +21,37 @@ import {
   Text,
 } from 'ui';
 
+import { useQueryParams } from '@/hooks/useQueryParams';
+
 export function SaveExamTypeFlyout() {
   const pathname = usePathname();
   const router = useRouter();
   const searchParams = useSearchParams();
+  const { getParam, removeParams } = useQueryParams();
 
+  const page = parseInt(getParam('page')) || 1;
+  const limit = parseInt(getParam('limit')) || 999;
   const {
+    reset,
     register,
     setValue,
     watch,
+    handleSubmit,
     formState: { errors: fieldErrors },
   } = useForm({
     defaultValues: {
       name: null,
       isActive: false,
+      frequencyId: null,
     },
   });
 
   const isOpen = searchParams.get('isExamTypeFlyoutOpen') === 'true';
+
+  const {
+    isPending: isPendingCreateExamType,
+    mutateAsync: mutateCreateExamTypeAsync,
+  } = useCreateExamTypeMutationQuery({ page, limit });
 
   const closeExamTypeFlyout = async () => {
     const params = new URLSearchParams(searchParams);
@@ -43,6 +59,41 @@ export function SaveExamTypeFlyout() {
     params.delete('examtypeId');
     router.replace(pathname + '?' + params.toString());
   };
+  const closeFlyout = () => {
+    removeParams(['examtypeId', 'isExamTypeFlyoutOpen']);
+    reset();
+  };
+
+  async function saveExamType(payload) {
+    try {
+      await mutateCreateExamTypeAsync(payload);
+      closeFlyout();
+    } catch (error) {
+      console.error(error);
+    }
+  }
+  const frequency = [
+    {
+      id: '1',
+      label: 'Once a Week',
+      value: 'weekly',
+    },
+    {
+      id: '2',
+      label: 'Once a Month',
+      value: 'monthly',
+    },
+    {
+      id: '3',
+      label: 'Once a Term',
+      value: 'termly',
+    },
+    {
+      id: '4',
+      label: 'Twice a Term',
+      value: 'bi-termly',
+    },
+  ];
   return (
     <section>
       <Sheet open={isOpen}>
@@ -52,82 +103,104 @@ export function SaveExamTypeFlyout() {
           className="bg-white p-10"
           onCloseClick={() => closeExamTypeFlyout()}
         >
-          <SheetHeader>
-            <SheetTitle className="mb-5">
-              <div className="sm:grid sm:grid-cols-1 sm:gap-4 md:grid md:grid-cols-1 md:gap-4 lg:grid  lg:grid-cols-[1fr_100px]">
-                <div className="flex items-center">
-                  <PlusCircle size={20} strokeWidth={1.5} />
-                  <Text variant="lg-semibold" className="ml-2">
-                    {'Add Exam Type'}
-                  </Text>
+          <form onSubmit={handleSubmit(saveExamType)}>
+            <SheetHeader>
+              <SheetTitle className="mb-5">
+                <div className="sm:grid sm:grid-cols-1 sm:gap-4 md:grid md:grid-cols-1 md:gap-4 lg:grid  lg:grid-cols-[1fr_100px]">
+                  <div className="flex items-center">
+                    <PlusCircle size={20} strokeWidth={1.5} />
+                    <Text variant="lg-semibold" className="ml-2">
+                      {'Add Exam Type'}
+                    </Text>
+                  </div>
+                  <div className="flex items-center">
+                    <Switch
+                      id="isActive"
+                      {...register('isActive')}
+                      onCheckedChange={(value) => setValue('isActive', value)}
+                      checked={watch('isActive')}
+                    />
+                    <label
+                      htmlFor="isActive"
+                      className="ml-2 text-sm font-semibold"
+                    >
+                      {watch('isActive') ? 'Active' : 'Inactive'}
+                    </label>
+                  </div>
                 </div>
-                <div className="flex items-center">
-                  <Switch
-                    id="isActive"
-                    {...register('isActive')}
-                    onCheckedChange={(value) => setValue('isActive', value)}
-                    checked={watch('isActive')}
-                  />
-                  <label
-                    htmlFor="isActive"
-                    className="ml-2 text-sm font-semibold"
-                  >
-                    {watch('isActive') ? 'Active' : 'Inactive'}
-                  </label>
-                </div>
+              </SheetTitle>
+              <hr className="border-t border-gray-300"></hr>
+            </SheetHeader>
+            <div className="mt-5">
+              <div>
+                <label
+                  htmlFor="name"
+                  className="text-sm font-semibold text-gray-700"
+                >
+                  Exam Type Name
+                </label>
+                <Input
+                  {...register('name', {
+                    required: 'Name is Required',
+                  })}
+                  autoFocus
+                  className="mt-2"
+                  id="name"
+                  errorMessage={fieldErrors?.name?.message.toString()}
+                />
               </div>
-            </SheetTitle>
-            <hr className="border-t border-gray-300"></hr>
-          </SheetHeader>
-          <div className="mt-5">
-            <div>
+            </div>
+            <div className="mt-2">
               <label
-                htmlFor="name"
+                htmlFor="frequency"
                 className="text-sm font-semibold text-gray-700"
               >
-                Exam Type Name
+                Frequency
               </label>
-              <Input
-                {...register('name', {
-                  required: 'name is Required',
-                })}
-                autoFocus
-                className="mt-2"
-                id="name"
-                errorMessage={fieldErrors?.name?.message.toString()}
-              />
+              <div className="mt-2">
+                <Select
+                  autoComplete="off"
+                  value={watch('frequencyId')}
+                  {...register('frequencyId')}
+                  onValueChange={(value) => {
+                    if (value) {
+                      setValue('frequencyId', value);
+                    }
+                  }}
+                >
+                  <SelectTrigger className="w-full">
+                    <SelectValue
+                      {...register('frequencyId', {
+                        required: 'Frequency is required',
+                      })}
+                    />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectGroup>
+                      {frequency.map((item, index) => (
+                        <SelectItem value={item.id} key={index}>
+                          {item.label}
+                        </SelectItem>
+                      ))}
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
+              </div>
             </div>
-          </div>
-          <div className="mt-2">
-            <label
-              htmlFor="examType"
-              className="text-sm font-semibold text-gray-700"
-            >
-              Frequency
-            </label>
-            <div className="mt-2">
-              <Select>
-                <SelectTrigger className="w-full">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectGroup>
-                    <SelectItem value={'one'}>Value One</SelectItem>
-                    <SelectItem value={'two'}>Value Two</SelectItem>
-                  </SelectGroup>
-                </SelectContent>
-              </Select>
+            <div className="mt-10">
+              {!isPendingCreateExamType ? (
+                <Button
+                  size="lg"
+                  variant="default"
+                  className="mx-auto flex justify-center px-12 py-4"
+                >
+                  {'Save'}
+                </Button>
+              ) : (
+                'Saving'
+              )}
             </div>
-          </div>
-          <div className="mt-10">
-            <Button
-              size="lg"
-              variant="default"
-              className="mx-auto flex justify-center px-12 py-4"
-            >
-              {'Save'}
-            </Button>
-          </div>
+          </form>
         </SheetContent>
       </Sheet>
     </section>

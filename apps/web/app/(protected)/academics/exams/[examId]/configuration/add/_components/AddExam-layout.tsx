@@ -135,7 +135,7 @@ export function AddExamLayout() {
           <div className="p-2">Section</div>
           {!isSectionListLoading ? (
             <div>
-              {sectionListResponse?.map((cardData) => (
+              {sectionListResponse?.data?.map((cardData) => (
                 <ExamCard examProps={cardData} key={cardData.id} />
               ))}
             </div>

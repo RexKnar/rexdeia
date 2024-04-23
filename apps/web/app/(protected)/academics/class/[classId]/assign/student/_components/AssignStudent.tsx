@@ -176,7 +176,7 @@ export function AssignStudents() {
         <section className="flex justify-between gap-8">
           <section className="mr-2 mt-2 w-1/2 rounded-l-lg bg-zinc-50 p-4">
             <section className="p-2">
-              <section className="mb-2 flex  justify-between overflow-x-auto rounded-md bg-white p-2">
+              <section className="mb-2 flex justify-between overflow-x-auto rounded-md bg-white p-2">
                 <Select
                   autoComplete="off"
                   {...register('classId', { required: true })}
@@ -226,7 +226,7 @@ export function AssignStudents() {
                   <SelectContent className="border border-primary-200">
                     {' '}
                     <SelectGroup>
-                      {sectionListResponse?.map((item) => (
+                      {sectionListResponse?.data?.map((item) => (
                         <SelectItem key={item.id} value={item.id}>
                           {item.name}
                         </SelectItem>
@@ -235,7 +235,7 @@ export function AssignStudents() {
                   </SelectContent>
                 </Select>
               </section>
-              <section className="mb-2 flex  justify-between overflow-x-auto rounded-md bg-white p-2">
+              <section className="mb-2 flex justify-between overflow-x-auto rounded-md bg-white p-2">
                 <Select
                   autoComplete="off"
                   {...register('groupId', { required: true })}
@@ -299,7 +299,7 @@ export function AssignStudents() {
               <div className="flex">
                 <Button variant="outline" className="h-8 px-2" type="button">
                   <Checkbox
-                    className="mr-3 h-4 w-4  border-2 border-dashed"
+                    className="mr-3 h-4 w-4 border-2 border-dashed"
                     onCheckedChange={handleSelectAll}
                   />
                   Select All
@@ -331,7 +331,7 @@ export function AssignStudents() {
                               handleCheckboxChange(student.id);
                             }}
                           />
-                          <Avatar className="ml-3  mt-2 h-8 w-8 cursor-pointer ">
+                          <Avatar className="ml-3 mt-2 h-8 w-8 cursor-pointer ">
                             <AvatarImage src="https://png.pngtree.com/thumb_back/fh260/background/20230612/pngtree-man-wearing-glasses-is-wearing-colorful-background-image_2905240.jpg" />
                           </Avatar>
                           <div className="ml-4 mt-2">
