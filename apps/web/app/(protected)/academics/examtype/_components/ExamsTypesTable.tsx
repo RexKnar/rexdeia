@@ -41,7 +41,7 @@ const columns = [
     ),
   },
   {
-    accessorKey: 'frequency',
+    accessorKey: 'frequencyId',
     header: ({ column }) => (
       <Button
         variant="ghost"
@@ -154,7 +154,7 @@ export function ExamTypeListTable() {
                         onClick={() => {
                           const params = new URLSearchParams();
                           params.set('isExamTypeFlyoutOpen', 'true');
-                          params.set('examtypeId', row.original.id);
+                          params.set('examTypeId', row.original.id);
                           router.push(pathname + '?' + params.toString());
                         }}
                         className="mr-2 h-auto px-3 py-2"
@@ -191,7 +191,7 @@ export function ExamTypeListTable() {
           ) : (
             <TableRow>
               <TableCell colSpan={5} className="h-24 text-center">
-                {isexamTypeLoading ? 'Loading...' : 'No Medium Found'}
+                {isexamTypeLoading ? 'Loading...' : 'No Exam Type Found'}
               </TableCell>
             </TableRow>
           )}

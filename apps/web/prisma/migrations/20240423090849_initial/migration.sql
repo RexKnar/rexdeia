@@ -35,12 +35,70 @@ CREATE TABLE "Account" (
 CREATE TABLE "Exam" (
     "_id" UUID NOT NULL,
     "name" TEXT NOT NULL,
-    "type" TEXT NOT NULL,
-    "sectionId" UUID,
-    "totalMarks" INTEGER NOT NULL,
-    "convertToPercentage" INTEGER NOT NULL,
+    "isActive" BOOLEAN NOT NULL,
+    "branchId" UUID NOT NULL,
+    "examTypeId" UUID NOT NULL,
+    "termId" UUID NOT NULL,
+    "batchId" UUID NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "isDeleted" BOOLEAN NOT NULL DEFAULT false,
 
     CONSTRAINT "Exam_pkey" PRIMARY KEY ("_id")
+);
+
+-- CreateTable
+CREATE TABLE "AcademicExams" (
+    "_id" UUID NOT NULL,
+    "examId" UUID NOT NULL,
+    "sectionId" UUID,
+    "classId" UUID NOT NULL,
+    "subjectId" UUID NOT NULL,
+    "subjectTypeId" UUID NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "isDeleted" BOOLEAN NOT NULL DEFAULT false,
+
+    CONSTRAINT "AcademicExams_pkey" PRIMARY KEY ("_id")
+);
+
+-- CreateTable
+CREATE TABLE "ExamType" (
+    "_id" UUID NOT NULL,
+    "name" TEXT NOT NULL,
+    "isActive" BOOLEAN NOT NULL,
+    "frequencyId" TEXT NOT NULL,
+    "branchId" UUID NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "isDeleted" BOOLEAN NOT NULL DEFAULT false,
+
+    CONSTRAINT "ExamType_pkey" PRIMARY KEY ("_id")
+);
+
+-- CreateTable
+CREATE TABLE "Term" (
+    "_id" UUID NOT NULL,
+    "name" TEXT NOT NULL,
+    "isActive" BOOLEAN NOT NULL,
+    "branchId" UUID NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "Term_pkey" PRIMARY KEY ("_id")
+);
+
+-- CreateTable
+CREATE TABLE "ExamConfiguration" (
+    "_id" UUID NOT NULL,
+    "minPassMark" INTEGER NOT NULL,
+    "markToConvert" INTEGER NOT NULL,
+    "markToConduct" INTEGER NOT NULL,
+    "dateToConduct" TIMESTAMP(3) NOT NULL,
+    "academicExamId" UUID NOT NULL,
+    "assessmentFormatId" UUID,
+
+    CONSTRAINT "ExamConfiguration_pkey" PRIMARY KEY ("_id")
 );
 
 -- CreateTable
@@ -63,6 +121,19 @@ CREATE TABLE "ExamSubject" (
     "examGroupId" UUID,
 
     CONSTRAINT "ExamSubject_pkey" PRIMARY KEY ("_id")
+);
+
+-- CreateTable
+CREATE TABLE "MarkEntry" (
+    "_id" UUID NOT NULL,
+    "mark" INTEGER,
+    "attandance" INTEGER,
+    "studentId" UUID NOT NULL,
+    "staffId" UUID NOT NULL,
+    "academicExamId" UUID NOT NULL,
+    "assessmentFormatId" UUID NOT NULL,
+
+    CONSTRAINT "MarkEntry_pkey" PRIMARY KEY ("_id")
 );
 
 -- CreateTable
@@ -150,7 +221,7 @@ CREATE TABLE "AdmissionForm" (
     "updatedAt" TIMESTAMP(3) DEFAULT CURRENT_TIMESTAMP,
     "createdById" UUID NOT NULL,
     "status" "AdmissionStatus" NOT NULL,
-    "formId" UUID NOT NULL,
+    "formId" UUID,
 
     CONSTRAINT "AdmissionForm_pkey" PRIMARY KEY ("_id")
 );
@@ -293,25 +364,25 @@ CREATE TABLE "Share" (
 CREATE TABLE "Student" (
     "_id" UUID NOT NULL,
     "firstName" TEXT NOT NULL,
-    "middleName" TEXT NOT NULL,
+    "middleName" TEXT,
     "lastName" TEXT NOT NULL,
     "emailId" TEXT NOT NULL,
     "phoneNumber" TEXT NOT NULL,
     "aadharCardNumber" TEXT NOT NULL,
     "gender" TEXT NOT NULL,
-    "bloodGroup" TEXT NOT NULL,
+    "bloodGroup" TEXT,
     "dob" TEXT NOT NULL,
-    "fatherName" TEXT NOT NULL,
-    "fatherOccupation" TEXT NOT NULL,
+    "fatherName" TEXT,
+    "fatherOccupation" TEXT,
     "fatherPhoneNumber" TEXT,
-    "guardiansOccupation" TEXT NOT NULL,
-    "guardianName" TEXT NOT NULL,
+    "guardiansOccupation" TEXT,
+    "guardianName" TEXT,
     "guardianPhoneNumber" TEXT,
-    "motherName" TEXT NOT NULL,
-    "motherOccupation" TEXT NOT NULL,
+    "motherName" TEXT,
+    "motherOccupation" TEXT,
     "motherPhoneNumber" TEXT,
-    "motherTongue" TEXT NOT NULL,
-    "nationality" TEXT NOT NULL,
+    "motherTongue" TEXT,
+    "nationality" TEXT,
     "religion" TEXT,
     "status" "StudentStatus" NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -321,7 +392,7 @@ CREATE TABLE "Student" (
     "branchId" UUID NOT NULL,
     "batchId" UUID,
     "organizationId" UUID NOT NULL,
-    "formId" UUID NOT NULL,
+    "formId" UUID,
     "sectionId" UUID,
     "isDeleted" BOOLEAN NOT NULL DEFAULT false,
 
@@ -330,12 +401,14 @@ CREATE TABLE "Student" (
 
 -- CreateTable
 CREATE TABLE "StudentMapping" (
+    "_id" UUID NOT NULL,
     "studentId" UUID NOT NULL,
     "classId" UUID NOT NULL,
-    "sectionId" UUID NOT NULL,
+    "sectionId" UUID,
     "groupId" UUID NOT NULL,
+    "mediumId" UUID,
 
-    CONSTRAINT "StudentMapping_pkey" PRIMARY KEY ("studentId","sectionId","groupId")
+    CONSTRAINT "StudentMapping_pkey" PRIMARY KEY ("_id")
 );
 
 -- CreateTable
@@ -422,6 +495,7 @@ CREATE TABLE "Batch" (
     "startYear" TEXT NOT NULL,
     "endYear" TEXT NOT NULL,
     "isActive" BOOLEAN NOT NULL,
+    "currentAcademicYear" BOOLEAN NOT NULL DEFAULT false,
     "isDeleted" BOOLEAN NOT NULL DEFAULT false,
     "branchId" UUID NOT NULL,
     "createdAt" TIMESTAMP(3) DEFAULT CURRENT_TIMESTAMP,
@@ -496,10 +570,32 @@ CREATE TABLE "Section" (
     "classId" UUID NOT NULL,
     "createdAt" TIMESTAMP(3) DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) DEFAULT CURRENT_TIMESTAMP,
+    "isDeleted" BOOLEAN NOT NULL DEFAULT false,
     "subjectId" UUID,
     "staffId" UUID,
 
     CONSTRAINT "Section_pkey" PRIMARY KEY ("_id")
+);
+
+-- CreateTable
+CREATE TABLE "SectionToGroups" (
+    "sectionId" UUID NOT NULL,
+    "groupId" UUID NOT NULL,
+
+    CONSTRAINT "SectionToGroups_pkey" PRIMARY KEY ("sectionId","groupId")
+);
+
+-- CreateTable
+CREATE TABLE "SubjectMaster" (
+    "_id" UUID NOT NULL,
+    "name" TEXT NOT NULL,
+    "isActive" BOOLEAN NOT NULL,
+    "branchId" UUID,
+    "isDeleted" BOOLEAN NOT NULL DEFAULT false,
+    "createdAt" TIMESTAMP(3) DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "SubjectMaster_pkey" PRIMARY KEY ("_id")
 );
 
 -- CreateTable
@@ -509,38 +605,40 @@ CREATE TABLE "Subject" (
     "name" TEXT NOT NULL,
     "isActive" BOOLEAN NOT NULL,
     "elective" INTEGER NOT NULL,
-    "subjectFormatId" UUID,
     "createdAt" TIMESTAMP(3) DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) DEFAULT CURRENT_TIMESTAMP,
     "isDeleted" BOOLEAN NOT NULL DEFAULT false,
     "regulationId" UUID NOT NULL,
     "sectionId" UUID[],
     "branchId" UUID,
+    "subjectMasterId" UUID NOT NULL,
 
     CONSTRAINT "Subject_pkey" PRIMARY KEY ("_id")
 );
 
 -- CreateTable
-CREATE TABLE "SubjectFormat" (
+CREATE TABLE "AssessmentFormat" (
     "_id" UUID NOT NULL,
     "name" TEXT NOT NULL,
     "isActive" BOOLEAN NOT NULL,
+    "hasMarkEntry" BOOLEAN,
+    "parentId" UUID,
     "branchId" UUID NOT NULL,
     "isDeleted" BOOLEAN NOT NULL DEFAULT false,
     "createdAt" TIMESTAMP(3) DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) DEFAULT CURRENT_TIMESTAMP,
 
-    CONSTRAINT "SubjectFormat_pkey" PRIMARY KEY ("_id")
+    CONSTRAINT "AssessmentFormat_pkey" PRIMARY KEY ("_id")
 );
 
 -- CreateTable
-CREATE TABLE "SubjectToSubjectFormat" (
-    "subjectFormatId" UUID NOT NULL,
+CREATE TABLE "SubjectToAssessmentFormat" (
+    "assessmentFormatId" UUID NOT NULL,
     "subjectId" UUID NOT NULL,
     "createdAt" TIMESTAMP(3) DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) DEFAULT CURRENT_TIMESTAMP,
 
-    CONSTRAINT "SubjectToSubjectFormat_pkey" PRIMARY KEY ("subjectFormatId","subjectId")
+    CONSTRAINT "SubjectToAssessmentFormat_pkey" PRIMARY KEY ("assessmentFormatId","subjectId")
 );
 
 -- CreateTable
@@ -593,8 +691,6 @@ CREATE TABLE "Medium" (
 CREATE TABLE "subjectType" (
     "_id" UUID NOT NULL,
     "name" TEXT NOT NULL,
-    "parentId" UUID,
-    "hasMarkEntry" BOOLEAN,
     "isActive" BOOLEAN NOT NULL,
     "isDeleted" BOOLEAN NOT NULL DEFAULT false,
     "branchId" UUID NOT NULL,
@@ -648,6 +744,9 @@ CREATE TABLE "Test" (
 CREATE UNIQUE INDEX "Account_provider_providerAccountId_key" ON "Account"("provider", "providerAccountId");
 
 -- CreateIndex
+CREATE UNIQUE INDEX "MarkEntry_studentId_academicExamId_assessmentFormatId_key" ON "MarkEntry"("studentId", "academicExamId", "assessmentFormatId");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "Session_sessionToken_key" ON "Session"("sessionToken");
 
 -- CreateIndex
@@ -666,16 +765,61 @@ CREATE UNIQUE INDEX "Staff_userId_key" ON "Staff"("userId");
 ALTER TABLE "Account" ADD CONSTRAINT "Account_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("_id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Exam" ADD CONSTRAINT "Exam_sectionId_fkey" FOREIGN KEY ("sectionId") REFERENCES "Section"("_id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "Exam" ADD CONSTRAINT "Exam_branchId_fkey" FOREIGN KEY ("branchId") REFERENCES "Branch"("_id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "ExamGroup" ADD CONSTRAINT "ExamGroup_exam1Id_fkey" FOREIGN KEY ("exam1Id") REFERENCES "Exam"("_id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "Exam" ADD CONSTRAINT "Exam_examTypeId_fkey" FOREIGN KEY ("examTypeId") REFERENCES "ExamType"("_id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Exam" ADD CONSTRAINT "Exam_termId_fkey" FOREIGN KEY ("termId") REFERENCES "Term"("_id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Exam" ADD CONSTRAINT "Exam_batchId_fkey" FOREIGN KEY ("batchId") REFERENCES "Batch"("_id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "AcademicExams" ADD CONSTRAINT "AcademicExams_examId_fkey" FOREIGN KEY ("examId") REFERENCES "Exam"("_id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "AcademicExams" ADD CONSTRAINT "AcademicExams_sectionId_fkey" FOREIGN KEY ("sectionId") REFERENCES "Section"("_id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "AcademicExams" ADD CONSTRAINT "AcademicExams_classId_fkey" FOREIGN KEY ("classId") REFERENCES "Class"("_id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "AcademicExams" ADD CONSTRAINT "AcademicExams_subjectId_fkey" FOREIGN KEY ("subjectId") REFERENCES "Subject"("_id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "AcademicExams" ADD CONSTRAINT "AcademicExams_subjectTypeId_fkey" FOREIGN KEY ("subjectTypeId") REFERENCES "subjectType"("_id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "ExamType" ADD CONSTRAINT "ExamType_branchId_fkey" FOREIGN KEY ("branchId") REFERENCES "Branch"("_id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Term" ADD CONSTRAINT "Term_branchId_fkey" FOREIGN KEY ("branchId") REFERENCES "Branch"("_id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "ExamConfiguration" ADD CONSTRAINT "ExamConfiguration_academicExamId_fkey" FOREIGN KEY ("academicExamId") REFERENCES "AcademicExams"("_id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "ExamConfiguration" ADD CONSTRAINT "ExamConfiguration_assessmentFormatId_fkey" FOREIGN KEY ("assessmentFormatId") REFERENCES "AssessmentFormat"("_id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "ExamSubject" ADD CONSTRAINT "ExamSubject_subjectId_fkey" FOREIGN KEY ("subjectId") REFERENCES "Subject"("_id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "ExamSubject" ADD CONSTRAINT "ExamSubject_examGroupId_fkey" FOREIGN KEY ("examGroupId") REFERENCES "ExamGroup"("_id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "MarkEntry" ADD CONSTRAINT "MarkEntry_studentId_fkey" FOREIGN KEY ("studentId") REFERENCES "Student"("_id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "MarkEntry" ADD CONSTRAINT "MarkEntry_staffId_fkey" FOREIGN KEY ("staffId") REFERENCES "Staff"("_id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "MarkEntry" ADD CONSTRAINT "MarkEntry_academicExamId_fkey" FOREIGN KEY ("academicExamId") REFERENCES "AcademicExams"("_id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "MarkEntry" ADD CONSTRAINT "MarkEntry_assessmentFormatId_fkey" FOREIGN KEY ("assessmentFormatId") REFERENCES "AssessmentFormat"("_id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "ExamSubjectPartition" ADD CONSTRAINT "ExamSubjectPartition_subjectId_fkey" FOREIGN KEY ("subjectId") REFERENCES "Subject"("_id") ON DELETE RESTRICT ON UPDATE CASCADE;
@@ -711,7 +855,7 @@ ALTER TABLE "AdmissionForm" ADD CONSTRAINT "AdmissionForm_studentId_fkey" FOREIG
 ALTER TABLE "AdmissionForm" ADD CONSTRAINT "AdmissionForm_createdById_fkey" FOREIGN KEY ("createdById") REFERENCES "User"("_id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "AdmissionForm" ADD CONSTRAINT "AdmissionForm_formId_fkey" FOREIGN KEY ("formId") REFERENCES "Form"("_id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "AdmissionForm" ADD CONSTRAINT "AdmissionForm_formId_fkey" FOREIGN KEY ("formId") REFERENCES "Form"("_id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "EnquiryForm" ADD CONSTRAINT "EnquiryForm_formId_fkey" FOREIGN KEY ("formId") REFERENCES "Form"("_id") ON DELETE SET NULL ON UPDATE CASCADE;
@@ -750,7 +894,7 @@ ALTER TABLE "Student" ADD CONSTRAINT "Student_batchId_fkey" FOREIGN KEY ("batchI
 ALTER TABLE "Student" ADD CONSTRAINT "Student_organizationId_fkey" FOREIGN KEY ("organizationId") REFERENCES "Organization"("_id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Student" ADD CONSTRAINT "Student_formId_fkey" FOREIGN KEY ("formId") REFERENCES "Form"("_id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Student" ADD CONSTRAINT "Student_formId_fkey" FOREIGN KEY ("formId") REFERENCES "Form"("_id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Student" ADD CONSTRAINT "Student_sectionId_fkey" FOREIGN KEY ("sectionId") REFERENCES "Section"("_id") ON DELETE SET NULL ON UPDATE CASCADE;
@@ -762,10 +906,13 @@ ALTER TABLE "StudentMapping" ADD CONSTRAINT "StudentMapping_studentId_fkey" FORE
 ALTER TABLE "StudentMapping" ADD CONSTRAINT "StudentMapping_classId_fkey" FOREIGN KEY ("classId") REFERENCES "Class"("_id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "StudentMapping" ADD CONSTRAINT "StudentMapping_sectionId_fkey" FOREIGN KEY ("sectionId") REFERENCES "Section"("_id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "StudentMapping" ADD CONSTRAINT "StudentMapping_sectionId_fkey" FOREIGN KEY ("sectionId") REFERENCES "Section"("_id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "StudentMapping" ADD CONSTRAINT "StudentMapping_groupId_fkey" FOREIGN KEY ("groupId") REFERENCES "Group"("_id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "StudentMapping" ADD CONSTRAINT "StudentMapping_mediumId_fkey" FOREIGN KEY ("mediumId") REFERENCES "Medium"("_id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Staff" ADD CONSTRAINT "Staff_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("_id") ON DELETE RESTRICT ON UPDATE CASCADE;
@@ -834,7 +981,13 @@ ALTER TABLE "Section" ADD CONSTRAINT "Section_staffId_fkey" FOREIGN KEY ("staffI
 ALTER TABLE "Section" ADD CONSTRAINT "Section_subjectId_fkey" FOREIGN KEY ("subjectId") REFERENCES "Subject"("_id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Subject" ADD CONSTRAINT "Subject_subjectFormatId_fkey" FOREIGN KEY ("subjectFormatId") REFERENCES "SubjectFormat"("_id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "SectionToGroups" ADD CONSTRAINT "SectionToGroups_sectionId_fkey" FOREIGN KEY ("sectionId") REFERENCES "Section"("_id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "SectionToGroups" ADD CONSTRAINT "SectionToGroups_groupId_fkey" FOREIGN KEY ("groupId") REFERENCES "Group"("_id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "SubjectMaster" ADD CONSTRAINT "SubjectMaster_branchId_fkey" FOREIGN KEY ("branchId") REFERENCES "Branch"("_id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Subject" ADD CONSTRAINT "Subject_regulationId_fkey" FOREIGN KEY ("regulationId") REFERENCES "Regulation"("_id") ON DELETE RESTRICT ON UPDATE CASCADE;
@@ -843,13 +996,19 @@ ALTER TABLE "Subject" ADD CONSTRAINT "Subject_regulationId_fkey" FOREIGN KEY ("r
 ALTER TABLE "Subject" ADD CONSTRAINT "Subject_branchId_fkey" FOREIGN KEY ("branchId") REFERENCES "Branch"("_id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "SubjectFormat" ADD CONSTRAINT "SubjectFormat_branchId_fkey" FOREIGN KEY ("branchId") REFERENCES "Branch"("_id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Subject" ADD CONSTRAINT "Subject_subjectMasterId_fkey" FOREIGN KEY ("subjectMasterId") REFERENCES "SubjectMaster"("_id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "SubjectToSubjectFormat" ADD CONSTRAINT "SubjectToSubjectFormat_subjectFormatId_fkey" FOREIGN KEY ("subjectFormatId") REFERENCES "SubjectFormat"("_id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "AssessmentFormat" ADD CONSTRAINT "AssessmentFormat_parentId_fkey" FOREIGN KEY ("parentId") REFERENCES "AssessmentFormat"("_id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "SubjectToSubjectFormat" ADD CONSTRAINT "SubjectToSubjectFormat_subjectId_fkey" FOREIGN KEY ("subjectId") REFERENCES "Subject"("_id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "AssessmentFormat" ADD CONSTRAINT "AssessmentFormat_branchId_fkey" FOREIGN KEY ("branchId") REFERENCES "Branch"("_id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "SubjectToAssessmentFormat" ADD CONSTRAINT "SubjectToAssessmentFormat_assessmentFormatId_fkey" FOREIGN KEY ("assessmentFormatId") REFERENCES "AssessmentFormat"("_id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "SubjectToAssessmentFormat" ADD CONSTRAINT "SubjectToAssessmentFormat_subjectId_fkey" FOREIGN KEY ("subjectId") REFERENCES "Subject"("_id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "SubjectToGroup" ADD CONSTRAINT "SubjectToGroup_subjectId_fkey" FOREIGN KEY ("subjectId") REFERENCES "Subject"("_id") ON DELETE RESTRICT ON UPDATE CASCADE;
@@ -868,9 +1027,6 @@ ALTER TABLE "Group" ADD CONSTRAINT "Group_branchId_fkey" FOREIGN KEY ("branchId"
 
 -- AddForeignKey
 ALTER TABLE "Medium" ADD CONSTRAINT "Medium_branchId_fkey" FOREIGN KEY ("branchId") REFERENCES "Branch"("_id") ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "subjectType" ADD CONSTRAINT "subjectType_parentId_fkey" FOREIGN KEY ("parentId") REFERENCES "subjectType"("_id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "subjectType" ADD CONSTRAINT "subjectType_branchId_fkey" FOREIGN KEY ("branchId") REFERENCES "Branch"("_id") ON DELETE RESTRICT ON UPDATE CASCADE;
