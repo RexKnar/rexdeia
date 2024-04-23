@@ -1,21 +1,15 @@
-import { authOptions } from 'lib/auth';
 import { db } from 'lib/db';
-import { getServerSession } from 'next-auth';
 
 export async function getStudentsByFilter(filter: any) {
   const { studentId, classId } = filter;
-  const { branchId } = await getServerSession(authOptions);
 
-  const whereClause = {
-    branchId,
-    isDeleted: false,
-  };
+  const whereClause = {};
 
   if (studentId !== undefined) {
     whereClause['studentId'] = studentId;
   }
   if (classId !== undefined) {
-    whereClause['isActive'] = classId;
+    whereClause['classId'] = classId;
   }
 
   const [studentList] = await Promise.all([
@@ -29,26 +23,25 @@ export async function getStudentsByFilter(filter: any) {
   };
 }
 
-// export async function getMarksByFilter(filter: any) {
-//   const { classId } = filter;
-//   const { branchId } = await getServerSession(authOptions);
+export async function getMarksByFilter(filter: any) {
+  const { academicExams, assessmentFormat } = filter;
 
-//   const whereClause = {
-//     branchId,
-//     isDeleted: false,
-//   };
+  const whereClause = {};
 
-//   if (classId !== undefined) {
-//     whereClause['isActive'] = classId;
-//   }
+  if (academicExams !== undefined) {
+    whereClause['academicExams'] = academicExams;
+  }
+  if (assessmentFormat !== undefined) {
+    whereClause['assessmentFormat'] = assessmentFormat;
+  }
 
-//   const [studentList] = await Promise.all([
-//     db.studentMapping.findMany({
-//       where: whereClause,
-//     }),
-//   ]);
+  const [marks] = await Promise.all([
+    db.examConfiguration.findMany({
+      where: whereClause,
+    }),
+  ]);
 
-//   return {
-//     data: studentList,
-//   };
-// }
+  return {
+    data: marks,
+  };
+}
