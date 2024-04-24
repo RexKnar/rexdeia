@@ -64,6 +64,7 @@ export async function updateExamTypeById(
     data: {
       name: updateExamTypePayload.name,
       isActive: updateExamTypePayload.isActive,
+      frequencyId: updateExamTypePayload.frequencyId,
     },
   });
 }
