@@ -158,15 +158,15 @@ export async function DELETE(_: NextRequest, { params: { id } }) {
       });
     }
 
-    const medium = await getExamTypeById(id);
+    const examType = await getExamTypeById(id);
 
-    if (medium) {
+    if (examType) {
       await deleteExamTypeById(id);
       return new Response(JSON.stringify({}), {
         status: StatusCodes.OK,
       });
     } else {
-      return new Response(JSON.stringify({ error: 'MEDIUM_NOT_FOUND' }), {
+      return new Response(JSON.stringify({ error: 'EXAM_TYPE_NOT_FOUND' }), {
         status: StatusCodes.NOT_FOUND,
       });
     }

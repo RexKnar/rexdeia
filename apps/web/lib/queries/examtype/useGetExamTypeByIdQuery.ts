@@ -6,7 +6,7 @@ import {
 
 import { makeAPICall } from '../../api';
 import { ExamTypeModel } from '../../domain/exam';
-import { GET_EXAM_Type_BY_ID } from '../../endpoints';
+import { GET_EXAM_TYPE_BY_ID } from '../../endpoints';
 
 function getExamTypeById(
   examTypeId: string,
@@ -14,10 +14,10 @@ function getExamTypeById(
 ): UseQueryOptions<ExamTypeModel> {
   return {
     ...options,
-    queryKey: [GET_EXAM_Type_BY_ID, examTypeId],
+    queryKey: [GET_EXAM_TYPE_BY_ID, examTypeId],
     queryFn: async () => {
       return await makeAPICall<ExamTypeModel>(
-        GET_EXAM_Type_BY_ID,
+        GET_EXAM_TYPE_BY_ID,
         {},
         {},
         { id: examTypeId }

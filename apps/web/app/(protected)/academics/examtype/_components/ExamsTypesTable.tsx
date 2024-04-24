@@ -7,7 +7,6 @@ import {
   getSortedRowModel,
   useReactTable,
 } from '@tanstack/react-table';
-import { useGetExamTypeListQuery } from 'lib/queries/exams/useGetExamTypeListQuery';
 import { Loader2, Pencil, Trash2 } from 'lucide-react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import React, { useCallback, useEffect, useState } from 'react';
@@ -32,6 +31,7 @@ import {
 import { DeleteConfirmationModal } from '@/components/modals/DeleteConfirmationModal';
 
 import { ExamTypeModel } from '../../../../../lib/domain/exam';
+import { useGetExamTypeListQuery } from '../../../../../lib/queries/exams/useGetExamTypeListQuery';
 import { useDeleteExamTypeMutationQuery } from '../../../../../lib/queries/examtype/useDeleteExamTypeMutationQuery';
 
 const columns = [
@@ -83,10 +83,13 @@ const columns = [
 
 export function ExamTypeListTable() {
   const { toast } = useToast();
+
   const [showDeleteConfirmationModal, setShowDeleteConfirmationModal] =
     useState(false);
+
   const [selectedExamType, setSelectedExamType] =
     useState<ExamTypeModel | null>(null);
+
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -99,6 +102,7 @@ export function ExamTypeListTable() {
       page,
       limit,
     });
+
   const {
     isError: isDeleteExamTypeError,
     isSuccess: isDeleteSuccess,
@@ -110,7 +114,7 @@ export function ExamTypeListTable() {
       toast({
         title: 'Error',
         variant: 'default',
-        description: 'Error while deleting medium',
+        description: 'Error while deleting exam type',
       });
     }
   }, [isDeleteExamTypeError, toast]);

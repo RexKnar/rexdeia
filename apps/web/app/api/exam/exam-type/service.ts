@@ -25,6 +25,7 @@ export async function createExamType(payload: CreateExamTypeModel) {
 export async function getAllExamTypes(page: number, limit: number) {
   const { branchId } = await getServerSession(authOptions);
   const whereClause = {
+    isDeleted: false,
     branchId,
   };
 
