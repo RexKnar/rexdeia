@@ -77,3 +77,18 @@ export async function getExamTypeById(id: string) {
     },
   });
 }
+
+export async function deleteExamTypeById(id: string) {
+  const session = await getServerSession(authOptions);
+
+  return db.examType.update({
+    where: {
+      id: id,
+      branchId: session.branchId,
+    },
+    data: {
+      isDeleted: true,
+      updatedAt: new Date(),
+    },
+  });
+}

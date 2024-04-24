@@ -8,15 +8,17 @@ import {
   useReactTable,
 } from '@tanstack/react-table';
 import { useGetExamTypeListQuery } from 'lib/queries/exams/useGetExamTypeListQuery';
-import { Pencil, Trash2 } from 'lucide-react';
+import { Loader2, Pencil, Trash2 } from 'lucide-react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import React, { useCallback } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
+import { When } from 'react-if';
 import {
   Button,
   Pagination,
   Tooltip,
   TooltipContent,
   TooltipTrigger,
+  useToast,
 } from 'ui';
 import {
   Table,
@@ -26,6 +28,11 @@ import {
   TableHeader,
   TableRow,
 } from 'ui/components/ui/Table';
+
+import { DeleteConfirmationModal } from '@/components/modals/DeleteConfirmationModal';
+
+import { ExamTypeModel } from '../../../../../lib/domain/exam';
+import { useDeleteExamTypeMutationQuery } from '../../../../../lib/queries/examtype/useDeleteExamTypeMutationQuery';
 
 const columns = [
   {
@@ -75,6 +82,11 @@ const columns = [
 ];
 
 export function ExamTypeListTable() {
+  const { toast } = useToast();
+  const [showDeleteConfirmationModal, setShowDeleteConfirmationModal] =
+    useState(false);
+  const [selectedExamType, setSelectedExamType] =
+    useState<ExamTypeModel | null>(null);
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -87,7 +99,31 @@ export function ExamTypeListTable() {
       page,
       limit,
     });
+  const {
+    isError: isDeleteExamTypeError,
+    isSuccess: isDeleteSuccess,
+    mutateAsync: deleteExamTypeAsync,
+  } = useDeleteExamTypeMutationQuery(page, limit);
 
+  useEffect(() => {
+    if (isDeleteExamTypeError) {
+      toast({
+        title: 'Error',
+        variant: 'default',
+        description: 'Error while deleting medium',
+      });
+    }
+  }, [isDeleteExamTypeError, toast]);
+  useEffect(() => {
+    if (isDeleteSuccess) {
+      toast({
+        title: 'Success',
+        variant: 'default',
+        description: 'Exam Type deleted successfully',
+      });
+      setSelectedExamType(null);
+    }
+  }, [isDeleteSuccess, toast]);
   const handleOnPageChange = useCallback(
     (page: number) => {
       const params = new URLSearchParams(searchParams);
@@ -171,11 +207,22 @@ export function ExamTypeListTable() {
                   </Tooltip>
                   <Tooltip>
                     <TooltipTrigger asChild>
-                      <Button className="h-auto px-3 py-2" variant="mild">
-                        <Trash2
-                          size={12}
-                          className="text-center text-red-600 "
-                        />
+                      <Button
+                        className="h-auto px-3 py-2"
+                        variant="mild"
+                        onClick={() => {
+                          setSelectedExamType(row.original);
+                          setShowDeleteConfirmationModal(true);
+                        }}
+                      >
+                        {row.original.isDeleted ? (
+                          <Loader2 className="mr-2 h-4 w-4 animate-spin text-red-600" />
+                        ) : (
+                          <Trash2
+                            size={12}
+                            className="text-center text-red-600 "
+                          />
+                        )}
                       </Button>
                     </TooltipTrigger>
                     <TooltipContent>
@@ -197,19 +244,34 @@ export function ExamTypeListTable() {
           )}
         </TableBody>
       </Table>
-      <Pagination
-        limit={limit.toString()}
-        onPageChange={handleOnPageChange}
-        pageSize={examTypeList?.limit || 0}
-        totalRecords={examTypeList?.total || 0}
-        disabled={isexamTypeLoading}
-        onLimitChange={(value) => {
-          const params = new URLSearchParams(searchParams);
-          params.set('limit', value.toString());
+      <When condition={examTypeList?.data?.length && !isexamTypeLoading}>
+        <Pagination
+          limit={limit.toString()}
+          onPageChange={handleOnPageChange}
+          pageSize={examTypeList?.limit || 0}
+          totalRecords={examTypeList?.total || 0}
+          disabled={isexamTypeLoading}
+          onLimitChange={(value) => {
+            const params = new URLSearchParams(searchParams);
+            params.set('limit', value.toString());
 
-          router.push(pathname + '?' + params.toString());
-        }}
-      />
+            router.push(pathname + '?' + params.toString());
+          }}
+        />
+        <DeleteConfirmationModal
+          open={showDeleteConfirmationModal}
+          description={`Are you sure you want to delete "${selectedExamType?.name}"`}
+          onDeleteClick={async () => {
+            if (selectedExamType) {
+              setShowDeleteConfirmationModal(false);
+              await deleteExamTypeAsync(selectedExamType.id);
+            }
+          }}
+          onCancelClick={() => {
+            setShowDeleteConfirmationModal(false);
+          }}
+        />
+      </When>
     </section>
   );
 }

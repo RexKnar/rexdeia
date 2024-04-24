@@ -1,10 +1,14 @@
 import { captureException } from '@sentry/nextjs';
 import { StatusCodes } from 'http-status-codes';
 import { authOptions } from 'lib/auth';
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 
-import { getExamTypeById, updateExamTypeById } from '../service';
+import {
+  deleteExamTypeById,
+  getExamTypeById,
+  updateExamTypeById,
+} from '../service';
 
 /**
  * @swagger
@@ -114,6 +118,62 @@ export async function GET(request: Request, { params: { id } }) {
         e.message === 'VALIDATION_ERROR'
           ? StatusCodes.BAD_REQUEST
           : StatusCodes.INTERNAL_SERVER_ERROR,
+    });
+  }
+}
+
+/**
+ * @swagger
+ * /api/exam/exam-type/{id}:
+ *     delete:
+ *       summary: Delete exam-type by Id
+ *       description: Delete exam-type by Id
+ *       parameters:
+ *         - name: id
+ *           in: path
+ *           required: true
+ *           description: Unique identifier of the section.
+ *           schema:
+ *             type: string
+ *       responses:
+ *         '200':
+ *           description: exam-type details deleted successfully.
+ *           content:
+ *             application/json:
+ *               schema:
+ *                 # Define the schema of your exam-type object here
+ *         '400':
+ *           description: Bad request due to validation error.
+ *         '401':
+ *           description: Unauthorized access.
+ *         '500':
+ *           description: Internal server error.
+ */
+export async function DELETE(_: NextRequest, { params: { id } }) {
+  try {
+    const session = await getServerSession(authOptions);
+    if (!session) {
+      return new NextResponse(JSON.stringify({ error: 'UNAUTHORIZED' }), {
+        status: StatusCodes.UNAUTHORIZED,
+      });
+    }
+
+    const medium = await getExamTypeById(id);
+
+    if (medium) {
+      await deleteExamTypeById(id);
+      return new Response(JSON.stringify({}), {
+        status: StatusCodes.OK,
+      });
+    } else {
+      return new Response(JSON.stringify({ error: 'MEDIUM_NOT_FOUND' }), {
+        status: StatusCodes.NOT_FOUND,
+      });
+    }
+  } catch (e) {
+    captureException(e);
+    return new Response(JSON.stringify({ error: e.message }), {
+      status: StatusCodes.INTERNAL_SERVER_ERROR,
     });
   }
 }
