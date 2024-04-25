@@ -66,3 +66,8 @@ export type TermModel = {
 };
 
 export type CreateTermModel = Pick<TermModel, 'name' | 'isActive'>;
+
+export type UpdateTermModel = Pick<
+  TermModel,
+  'id' | 'name' | 'isActive'
+>;

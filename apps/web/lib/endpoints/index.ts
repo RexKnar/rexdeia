@@ -106,6 +106,8 @@ export const DELETE_SUBJECT_MASTER_BY_ID = `DELETE_SUBJECT_MASTER_BY_ID`;
 export const ADD_EXAM_TYPE = `ADD_EXAM_TYPE`;
 export const GET_TERM_BY_ID = `GET_TERM_BY_ID`;
 export const ADD_TERM = `ADD_TERM`;
+export const UPDATE_TERM_BY_ID = `UPDATE_TERM_BY_ID`;
+
 
 export default <EndpointDetails>{
   [REGISTER_USER]: {
@@ -528,4 +530,8 @@ export default <EndpointDetails>{
     requestType: `GET`,
     endpoint: `/api/exam/term/[id]`,
   },
+  [UPDATE_TERM_BY_ID]: {
+    requestType: `POST`,
+    endpoint: `/api/exam/term/[id]`,
+  }
 };
