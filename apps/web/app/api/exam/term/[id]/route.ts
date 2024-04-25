@@ -117,6 +117,7 @@ export async function PUT(request: Request, { params: { id } }) {
     });
   }
 }
+
 /**
  * @swagger
  * /api/exam/term/{id}:

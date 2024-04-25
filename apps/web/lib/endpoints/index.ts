@@ -536,6 +536,6 @@ export default <EndpointDetails>{
   },
   [DELETE_TERM_BY_ID]: {
     requestType: `DELETE`,
-    endpoint: `/api/exam/term/[id]`
-  }
+    endpoint: `/api/exam/term/[id]`,
+  },
 };
