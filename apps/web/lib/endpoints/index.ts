@@ -521,7 +521,7 @@ export default <EndpointDetails>{
     endpoint: `/api/exam/exam-type`,
   },
   [ADD_TERM]: {
-    requestType: `GET`,
+    requestType: `POST`,
     endpoint: `/api/exam/term`,
   },
   [GET_TERM_BY_ID]: {

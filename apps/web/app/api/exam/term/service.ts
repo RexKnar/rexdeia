@@ -53,13 +53,12 @@ export async function createTerm(payload: CreateTermModel) {
 }
 
 export async function getTermById(id: string) {
-
   const session = await getServerSession(authOptions);
   return db.term.findFirst({
     where: {
       id: id,
       isDeleted: false,
       branchId: session.branchId,
-    }
+    },
   });
 }
