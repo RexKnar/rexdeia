@@ -102,9 +102,9 @@ export async function PUT(request: Request, { params: { id } }) {
   try {
     const payload = await request.json();
 
-    const medium = await updateTermById(id, payload);
+    const term = await updateTermById(id, payload);
 
-    return new NextResponse(JSON.stringify(medium), {
+    return new NextResponse(JSON.stringify(term), {
       status: StatusCodes.OK,
     });
   } catch (e) {
