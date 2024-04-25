@@ -4,7 +4,7 @@ import { NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 
 import { authOptions } from '../../../../../lib/auth';
-import { getTermById, updateTermById } from '../service';
+import { getTermById, updateTermById, deleteTermById } from '../service';
 
 /**
  * @swagger
@@ -102,9 +102,9 @@ export async function PUT(request: Request, { params: { id } }) {
   try {
     const payload = await request.json();
 
-    const medium = await updateTermById(id, payload);
+    const term = await updateTermById(id, payload);
 
-    return new NextResponse(JSON.stringify(medium), {
+    return new NextResponse(JSON.stringify(term), {
       status: StatusCodes.OK,
     });
   } catch (e) {
@@ -114,6 +114,61 @@ export async function PUT(request: Request, { params: { id } }) {
         e.message === 'VALIDATION_ERROR'
           ? StatusCodes.BAD_REQUEST
           : StatusCodes.INTERNAL_SERVER_ERROR,
+    });
+  }
+}
+/**
+ * @swagger
+ * /api/exam/term/{id}:
+ *     delete:
+ *       summary: Delete term by Id
+ *       description: Delete term by Id
+ *       parameters:
+ *         - name: id
+ *           in: path
+ *           required: true
+ *           description: Unique identifier of the section.
+ *           schema:
+ *             type: string
+ *       responses:
+ *         '200':
+ *           description: term details deleted successfully.
+ *           content:
+ *             application/json:
+ *               schema:
+ *                 # Define the schema of your class object here
+ *         '400':
+ *           description: Bad request due to validation error.
+ *         '401':
+ *           description: Unauthorized access.
+ *         '500':
+ *           description: Internal server error.
+ */
+export async function DELETE(_: Request, { params: { id } }) {
+  try {
+    const session = await getServerSession(authOptions);
+    if (!session) {
+      return new NextResponse(JSON.stringify({ error: 'UNAUTHORIZED' }), {
+        status: StatusCodes.UNAUTHORIZED,
+      });
+    }
+
+    const term = await getTermById(id);
+
+    if (term) {
+      await deleteTermById(id);
+      return new Response(JSON.stringify({}), {
+        status: StatusCodes.OK,
+      });
+    } else {
+      return new Response(JSON.stringify({ error: 'TERM_NOT_FOUND' }), {
+        status: StatusCodes.NOT_FOUND,
+      });
+    }
+  } catch (e) {
+    captureException(e);
+    return new Response(JSON.stringify({ error: e.message }), {
+      status: StatusCodes.INTERNAL_SERVER_ERROR,
     });
   }
 }
