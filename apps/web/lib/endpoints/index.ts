@@ -98,6 +98,7 @@ export const GET_STUDENTS_BY_CLASS_SECTION = `GET_STUDENTS_BY_CLASS_SECTION`;
 export const ADD_MARK_ENTRY = `ADD_MARK_ENTRY`;
 export const GET_STAFFS_BY_SECTION = `GET_STAFFS_BY_SECTION`;
 export const GET_MARKS_WITH_FORMAT_BY_EXAM = `GET_MARKS_WITH_FORMAT_BY_EXAM`;
+export const ADD_TERM = 'ADD_TERM';
 
 export default <EndpointDetails>{
   [REGISTER_USER]: {
@@ -487,5 +488,9 @@ export default <EndpointDetails>{
   [GET_MARKS_WITH_FORMAT_BY_EXAM]: {
     requestType: `PUT`,
     endpoint: `/api/mark-entry`,
+  },
+  [ADD_TERM]: {
+    requestType: 'POST',
+    endpoint: '/api/exam/term',
   },
 };
