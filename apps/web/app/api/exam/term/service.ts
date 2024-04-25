@@ -7,6 +7,7 @@ export async function getAllTerms(page: number, limit: number) {
   const { branchId } = await getServerSession(authOptions);
   const whereClause = {
     branchId,
+    isDeleted: false,
   };
 
   const [total, data] = await db.$transaction([
@@ -48,5 +49,17 @@ export async function createTerm(payload: CreateTermModel) {
         },
       },
     },
+  });
+}
+
+export async function getTermById(id: string) {
+
+  const session = await getServerSession(authOptions);
+  return db.term.findFirst({
+    where: {
+      id: id,
+      isDeleted: false,
+      branchId: session.branchId,
+    }
   });
 }
