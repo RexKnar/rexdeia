@@ -63,11 +63,9 @@ export async function getTermById(id: string) {
   });
 }
 
-export async function updateTermById(
-  id: string,
-  payload: UpdateTermModel) {
+export async function updateTermById(id: string, payload: UpdateTermModel) {
   const session = await getServerSession(authOptions);
-  const { name, isActive } = payload
+  const { name, isActive } = payload;
   return db.term.update({
     where: {
       id: id,
