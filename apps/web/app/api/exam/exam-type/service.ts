@@ -25,6 +25,7 @@ export async function createExamType(payload: CreateExamTypeModel) {
 export async function getAllExamTypes(page: number, limit: number) {
   const { branchId } = await getServerSession(authOptions);
   const whereClause = {
+    isDeleted: false,
     branchId,
   };
 
@@ -75,6 +76,21 @@ export async function getExamTypeById(id: string) {
     where: {
       id: id,
       branchId: session.branchId,
+    },
+  });
+}
+
+export async function deleteExamTypeById(id: string) {
+  const session = await getServerSession(authOptions);
+
+  return db.examType.update({
+    where: {
+      id: id,
+      branchId: session.branchId,
+    },
+    data: {
+      isDeleted: true,
+      updatedAt: new Date(),
     },
   });
 }

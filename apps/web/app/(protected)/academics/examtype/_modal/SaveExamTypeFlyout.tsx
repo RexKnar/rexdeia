@@ -34,7 +34,7 @@ export function SaveExamTypeFlyout() {
   const searchParams = useSearchParams();
   const { getParam } = useQueryParams();
   const page = parseInt(getParam('page')) || 1;
-  const limit = parseInt(getParam('limit')) || 999;
+  const limit = parseInt(getParam('limit')) || 10;
 
   const examTypeId = searchParams.get('examTypeId');
   const isOpen = searchParams.get('isExamTypeFlyoutOpen') === 'true';

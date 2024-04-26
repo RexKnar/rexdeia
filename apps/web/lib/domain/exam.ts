@@ -50,6 +50,7 @@ export type ExamTypeModel = {
   frequencyId: string;
   createdAt: string;
   updatedAt: string;
+  isDeleted: boolean;
 };
 
 export type CreateExamTypeModel = Pick<
@@ -60,7 +61,7 @@ export type UpdateExamTypeModel = Pick<
   ExamTypeModel,
   'name' | 'isActive' | 'id' | 'frequencyId'
 >;
-
+export type DeletExamTypeModel = Pick<ExamTypeModel, 'id' | 'isDeleted'>;
 export type TermModel = {
   id: string;
   name: string;
