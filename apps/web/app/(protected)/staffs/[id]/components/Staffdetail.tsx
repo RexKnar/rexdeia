@@ -1,9 +1,12 @@
 'use client';
+
 import { Loader2 } from 'lucide-react';
 import { useParams } from 'next/navigation';
 import {
   Avatar,
   AvatarImage,
+  Card,
+  CardContent,
   Tabs,
   TabsContent,
   TabsList,
@@ -28,8 +31,8 @@ export function StaffDetail() {
     );
   }
   return (
-    <section className="flex w-full bg-gray-50   p-3">
-      <div className="space-between mx-auto my-5  mr-4 justify-between rounded-md bg-white p-6">
+    <section className=" grid w-full grid-cols-3 gap-2  bg-gray-50">
+      <div className="  mx-auto my-5 mr-4 max-w-80 justify-between rounded-md bg-white p-6">
         <div className="">
           <div className="flex justify-center">
             <Avatar className="h-20 w-20 cursor-pointer border-2 border-violet-200">
@@ -39,7 +42,7 @@ export function StaffDetail() {
           <div className="my-auto flex justify-center px-5 pb-2 pt-3">
             <Text variant="base-bold">{getStaffByIdResponse.firstName}</Text>
           </div>
-          <div className="flex">
+          <div className="flex justify-center">
             <Text
               variant="base-regular"
               className="mx-2 rounded-lg border bg-violet-100 px-2"
@@ -94,7 +97,7 @@ export function StaffDetail() {
           </div>
         </div>
       </div>
-      <div>
+      <div className="col-span-2">
         <Tabs defaultValue="profile" className="mt-4">
           <TabsList className="w-full justify-start border-b-2 border-gray-400">
             <TabsTrigger
@@ -136,8 +139,83 @@ export function StaffDetail() {
               ))}
             </section>
           </TabsContent>
-          <TabsContent value="document">
-            <h1>Page 2</h1>
+          <TabsContent className="w-full" value="document">
+            <section className=" bg-white p-5">
+              <div>
+                <label>Document</label>
+              </div>
+              <div className=" max-h-[60vh]overflow-y-auto flex gap-4">
+                <div className="mt-4 rounded-md bg-white">
+                  <Card className="max-w-60 p-0">
+                    <CardContent className="p-0 ">
+                      <div className="flex justify-center bg-indigo-100 pb-3 pt-3">
+                        <img className="" src="/pdf.png" alt="" />
+                      </div>
+                      <div className="grid grid-cols-2 bg-white p-2">
+                        <Text>{'Document'}</Text>
+                        <img
+                          className="justify-self-end"
+                          src="/dots.png"
+                          alt=""
+                        />
+                      </div>
+                    </CardContent>
+                  </Card>
+                </div>
+                <div className="mt-4 rounded-md bg-white">
+                  <Card className="max-w-60 p-0">
+                    <CardContent className="p-0 ">
+                      <div className="flex justify-center bg-indigo-100 pb-3 pt-3">
+                        <img className="" src="/pdf.png" alt="" />
+                      </div>
+                      <div className="grid grid-cols-2 bg-white p-2">
+                        <Text>{'Document'}</Text>
+                        <img
+                          className="justify-self-end"
+                          src="/dots.png"
+                          alt=""
+                        />
+                      </div>
+                    </CardContent>
+                  </Card>
+                </div>
+
+                <div className="mt-4 rounded-md bg-white">
+                  <Card className="max-w-60 p-0">
+                    <CardContent className="p-0 ">
+                      <div className="flex justify-center bg-indigo-100 pb-3 pt-3">
+                        <img className="" src="/pdf.png" alt="" />
+                      </div>
+                      <div className="grid grid-cols-2 bg-white p-2">
+                        <Text>{'Document'}</Text>
+                        <img
+                          className="justify-self-end"
+                          src="/dots.png"
+                          alt=""
+                        />
+                      </div>
+                    </CardContent>
+                  </Card>
+                </div>
+                <div className="mt-4 rounded-md bg-white">
+                  <Card className="max-w-60 p-0">
+                    <CardContent className="p-0 ">
+                      <div className="flex justify-center bg-indigo-100 pb-3 pt-3">
+                        <img className="" src="/pdf.png" alt="" />
+                      </div>
+                      <div className="grid grid-cols-2 bg-white p-2">
+                        <Text>{'Document'}</Text>
+                        <img
+                          className="justify-self-end"
+                          src="/dots.png"
+                          alt=""
+                        />
+                      </div>
+                    </CardContent>
+                  </Card>
+                </div>
+              </div>
+            </section>
           </TabsContent>
         </Tabs>
       </div>
