@@ -186,7 +186,7 @@ importers:
         version: 0.0.1
       swagger-ui-react:
         specifier: ^5.10.3
-        version: 5.17.1(@types/react@18.2.21)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
+        version: 5.17.2(@types/react@18.2.21)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
       tailwindcss:
         specifier: 3.4.3
         version: 3.4.3(ts-node@10.9.2(@types/node@20.12.7)(typescript@5.4.5))
@@ -4848,8 +4848,8 @@ packages:
     resolution: {integrity: sha512-nF7oMeL4KypldrQhac8RyHerJeGPD1p2xDh900GPvc+Nk7nWP6jX2FcC7WmkinMoAmoO774+AFXcWsW8gMWEIg==}
     engines: {node: '>=10'}
 
-  swagger-ui-react@5.17.1:
-    resolution: {integrity: sha512-lMYrQz2vvxwYQ9Q8adMKQtvDtCB86clFadNxJxIrasNTNYeL/cj9+yv2s48bzb5Yg0ka2AdNAIpkaBIpZ0mqpw==}
+  swagger-ui-react@5.17.2:
+    resolution: {integrity: sha512-jwhKQ0IdM1t77clbJ9EorL7+6B5Sr1mG+ryqSELxT5MaG4y3yOIyFbZ0Xn/EnSyRuww/V8FTK/0KIX3gf41taw==}
     peerDependencies:
       react: '>=16.8.0 <19'
       react-dom: '>=16.8.0 <19'
@@ -5177,8 +5177,8 @@ packages:
       '@types/react':
         optional: true
 
-  use-sync-external-store@1.2.0:
-    resolution: {integrity: sha512-eEgnFxGQ1Ife9bzYs6VLi8/4X6CObHMw9Qr9tPY43iKwsPw8xE8+EFsf/2cFZ5S3esXgpWgtSCtLNS41F+sKPA==}
+  use-sync-external-store@1.2.1:
+    resolution: {integrity: sha512-6MCBDr76UJmRpbF8pzP27uIoTocf3tITaMJ52mccgAhMJycuh5A/RL6mDZCTwTisj0Qfeq69FtjMCUX27U78oA==}
     peerDependencies:
       react: ^16.8.0 || ^17.0.0 || ^18.0.0
 
@@ -10191,7 +10191,7 @@ snapshots:
     dependencies:
       '@types/use-sync-external-store': 0.0.3
       react: 18.2.0
-      use-sync-external-store: 1.2.0(react@18.2.0)
+      use-sync-external-store: 1.2.1(react@18.2.0)
     optionalDependencies:
       '@types/react': 18.2.21
       redux: 5.0.1
@@ -10792,7 +10792,7 @@ snapshots:
     transitivePeerDependencies:
       - openapi-types
 
-  swagger-ui-react@5.17.1(@types/react@18.2.21)(react-dom@18.2.0(react@18.2.0))(react@18.2.0):
+  swagger-ui-react@5.17.2(@types/react@18.2.21)(react-dom@18.2.0(react@18.2.0))(react@18.2.0):
     dependencies:
       '@babel/runtime-corejs3': 7.24.4
       '@braintree/sanitize-url': 7.0.1
@@ -11226,7 +11226,7 @@ snapshots:
     optionalDependencies:
       '@types/react': 18.2.21
 
-  use-sync-external-store@1.2.0(react@18.2.0):
+  use-sync-external-store@1.2.1(react@18.2.0):
     dependencies:
       react: 18.2.0
 
