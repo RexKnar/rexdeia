@@ -9,6 +9,9 @@ import {
   getSortedRowModel,
   useReactTable,
 } from '@tanstack/react-table';
+import { SubjectMasterModel } from 'lib/domain/subject-master';
+import { useDeleteSubjectMasterMutationQuery } from 'lib/queries/subject-master/useDeleteSubjectmasterMutationQuery';
+import { useGetSubjectMasterListQuery } from 'lib/queries/subject-master/useGetAllSubjectMasterQuery';
 import { Loader2, Pencil, Trash2 } from 'lucide-react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import React, { useCallback, useEffect, useState } from 'react';
@@ -33,25 +36,7 @@ import { cn } from 'utils';
 
 import { DeleteConfirmationModal } from '@/components/modals/DeleteConfirmationModal';
 
-import { AssessmentFormatModel } from '../../../../../../lib/domain/subject';
-import { useDeleteAssessmentFormatMutationQuery } from '../../../../../../lib/queries/assessment-format/useDeleteAssessmentFormatMutationQuery';
-import { useGetAssessmentFormatList } from '../../../../../../lib/queries/assessment-format/useGetAssessmentFormatList';
-
-const columns: ColumnDef<AssessmentFormatModel>[] = [
-  {
-    accessorKey: 'parentAssessmentFormat.name',
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          className="px-0"
-          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-        >
-          Parent Name
-        </Button>
-      );
-    },
-  },
+const columns: ColumnDef<SubjectMasterModel>[] = [
   {
     accessorKey: 'name',
     header: ({ column }) => {
@@ -61,7 +46,7 @@ const columns: ColumnDef<AssessmentFormatModel>[] = [
           className="px-0"
           onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
         >
-          Format Name
+          Name
         </Button>
       );
     },
@@ -92,83 +77,61 @@ const columns: ColumnDef<AssessmentFormatModel>[] = [
       );
     },
   },
-  {
-    accessorKey: 'hasMarkEntry',
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          className="px-0"
-          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-        >
-          Has Mark Entry
-        </Button>
-      );
-    },
-    cell: ({ row }) => {
-      return (
-        <span
-          className={cn(
-            'ml-1 rounded px-2 py-1 text-center text-sm font-medium text-white',
-            row.original.hasMarkEntry ? 'bg-green-500' : 'bg-red-500'
-          )}
-        >
-          {row.original.hasMarkEntry ? 'Yes' : 'No'}
-        </span>
-      );
-    },
-  },
 ];
 
-export function AssessmentFormatListTable() {
+export function SubjectMasterListTable() {
   const { toast } = useToast();
 
   const [showDeleteConfirmationModal, setShowDeleteConfirmationModal] =
     useState(false);
-  const [selectedAssessmentFormat, setSelectedAssessmentFormat] =
-    useState<AssessmentFormatModel | null>(null);
+  const [selectedSubjectMaster, setSelectedSubjectMaster] =
+    useState<SubjectMasterModel | null>(null);
 
   const pathname = usePathname();
   const router = useRouter();
   const searchParams = useSearchParams();
 
   const page = parseInt(searchParams.get('page')) || 1;
-  const limit = parseInt(searchParams.get('limit')) || 999;
+  const limit = parseInt(searchParams.get('limit')) || 10;
   const filter = {};
 
   const {
-    data: assessmentFormatListResponse,
-    isLoading: isAssessmentFormatListLoading,
-  } = useGetAssessmentFormatList({
+    data: subjectMasterListResponse,
+    isLoading: isSubjectMasterListLoading,
+  } = useGetSubjectMasterListQuery({
     page,
     limit,
     filter,
   });
 
   const {
-    isError: isDeleteAssessmentFormatError,
+    isError: isDeleteSubjectMasterError,
     isSuccess: isDeleteSuccess,
-    mutateAsync: deleteAssessmentFormatAsync,
-  } = useDeleteAssessmentFormatMutationQuery(page, limit);
+    mutateAsync: deleteSubjectMasterAsync,
+  } = useDeleteSubjectMasterMutationQuery({
+    page,
+    limit,
+    filter,
+  });
 
   useEffect(() => {
-    if (isDeleteAssessmentFormatError) {
+    if (isDeleteSubjectMasterError) {
       toast({
         title: 'Error',
-        variant: 'default',
-        description: 'Error while deleting subject format',
+        variant: 'error',
+        description: 'Error while deleting Subject Master',
       });
     }
-  }, [isDeleteAssessmentFormatError, toast]);
+  }, [isDeleteSubjectMasterError, toast]);
 
   useEffect(() => {
     if (isDeleteSuccess) {
       toast({
         title: 'Success',
-        variant: 'default',
-        description: 'Subject Format deleted successfully',
+        variant: 'success',
+        description: 'Subject Master deleted successfully',
       });
-      setSelectedAssessmentFormat(null);
+      setSelectedSubjectMaster(null);
     }
   }, [isDeleteSuccess, toast]);
   const handleOnPageChange = useCallback(
@@ -180,10 +143,9 @@ export function AssessmentFormatListTable() {
     },
     [searchParams, pathname, router]
   );
-
   const table = useReactTable({
     columns,
-    data: assessmentFormatListResponse?.data || [],
+    data: subjectMasterListResponse?.data || [],
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
@@ -191,7 +153,7 @@ export function AssessmentFormatListTable() {
   });
   return (
     <section>
-      <div className="rounded-md">
+      <div>
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
@@ -240,8 +202,8 @@ export function AssessmentFormatListTable() {
                         <Button
                           onClick={() => {
                             const params = new URLSearchParams(searchParams);
-                            params.set('isAssessmentFormatFlyoutOpen', 'true');
-                            params.set('assessmentFormatId', row.original.id);
+                            params.set('isSubjectMasterFlyoutOpen', 'true');
+                            params.set('subjectMasterId', row.original.id);
                             router.push(pathname + '?' + params.toString());
                           }}
                           className="mr-2 h-auto px-3 py-2"
@@ -256,7 +218,6 @@ export function AssessmentFormatListTable() {
                       <TooltipContent>
                         <p>
                           <span>Edit</span>
-                          <span className="mx-1 font-semibold">{`${row.original.name}`}</span>
                         </p>
                       </TooltipContent>
                     </Tooltip>
@@ -266,7 +227,7 @@ export function AssessmentFormatListTable() {
                           className="h-auto px-3 py-2"
                           variant="mild"
                           onClick={() => {
-                            setSelectedAssessmentFormat(row.original);
+                            setSelectedSubjectMaster(row.original);
                             setShowDeleteConfirmationModal(true);
                           }}
                           disabled={
@@ -296,9 +257,9 @@ export function AssessmentFormatListTable() {
             ) : (
               <TableRow>
                 <TableCell colSpan={5} className="h-24 text-center">
-                  {isAssessmentFormatListLoading
+                  {isSubjectMasterListLoading
                     ? 'Loading...'
-                    : 'No Assessment Format Found'}
+                    : 'No Subject Master Found'}
                 </TableCell>
               </TableRow>
             )}
@@ -307,16 +268,15 @@ export function AssessmentFormatListTable() {
       </div>
       <When
         condition={
-          assessmentFormatListResponse?.data?.length &&
-          !isAssessmentFormatListLoading
+          subjectMasterListResponse?.data?.length && !isSubjectMasterListLoading
         }
       >
         <Pagination
           limit={limit.toString()}
           onPageChange={handleOnPageChange}
-          pageSize={assessmentFormatListResponse?.limit || 0}
-          totalRecords={assessmentFormatListResponse?.total || 0}
-          disabled={isAssessmentFormatListLoading}
+          pageSize={subjectMasterListResponse?.limit || 0}
+          totalRecords={subjectMasterListResponse?.total || 0}
+          disabled={isSubjectMasterListLoading}
           onLimitChange={(value) => {
             const params = new URLSearchParams(searchParams);
             params.set('limit', value.toString());
@@ -326,11 +286,11 @@ export function AssessmentFormatListTable() {
         />
         <DeleteConfirmationModal
           open={showDeleteConfirmationModal}
-          description={`Are you sure you want to delete "${selectedAssessmentFormat?.name}"`}
+          description={`Are you sure you want to delete "${selectedSubjectMaster?.name}"`}
           onDeleteClick={async () => {
-            if (selectedAssessmentFormat) {
+            if (selectedSubjectMaster) {
               setShowDeleteConfirmationModal(false);
-              await deleteAssessmentFormatAsync(selectedAssessmentFormat.id);
+              await deleteSubjectMasterAsync(selectedSubjectMaster.id);
             }
           }}
           onCancelClick={() => {

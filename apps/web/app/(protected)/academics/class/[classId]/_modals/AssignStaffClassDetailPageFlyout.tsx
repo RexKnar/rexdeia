@@ -260,7 +260,7 @@ export function AssignStaffClassDetailPageFlyout() {
                         Sections
                       </label>
                       <div className="mt-2 flex flex-wrap" id="sectionId">
-                        {sectionListResponse?.map((item) => (
+                        {sectionListResponse?.data?.map((item) => (
                           <label className="me-5" key={item.id}>
                             <Controller
                               key={item.id}
@@ -308,7 +308,7 @@ export function AssignStaffClassDetailPageFlyout() {
                         Class InCharge
                       </label>
                       <div className="mt-2 flex flex-wrap" id="sectionId">
-                        {sectionListResponse?.map((item) => (
+                        {sectionListResponse?.data?.map((item) => (
                           <label className="me-5" key={item.id}>
                             <Controller
                               key={item.id}

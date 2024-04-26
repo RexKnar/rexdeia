@@ -5,7 +5,7 @@ import { authOptions } from '../../../lib/auth';
 import { db } from '../../../lib/db';
 import { AddStudentModel } from '../../../lib/domain';
 
-export async function getStudentById(id: string, format: string) {
+export async function getStudentById(id: string) {
   const session = await getServerSession(authOptions);
 
   const student = await db.student.findFirst({
@@ -17,37 +17,37 @@ export async function getStudentById(id: string, format: string) {
     },
   });
 
-  if (!student) {
-    return null;
-  }
+  // if (!student) {
+  //   return null;
+  // }
 
-  if (format === 'form') {
-    const studentDefaultPropsMap = new Map(Object.entries(student));
-    const additionalPropsMap = new Map(
-      Object.entries(student.additionalAttributes)
-    );
+  // if (format === 'form') {
+  //   const studentDefaultPropsMap = new Map(Object.entries(student));
+  //   const additionalPropsMap = new Map(
+  //     Object.entries(student.additionalAttributes)
+  //   );
 
-    const form = await db.form.findFirst({
-      where: {
-        id: student.formId,
-      },
-    });
+  //   const form = await db.form.findFirst({
+  //     where: {
+  //       id: student.formId,
+  //     },
+  //   });
 
-    // @ts-ignore
-    form.json.formSections.forEach((section) => {
-      section.sectionFields.forEach((field) => {
-        field.value =
-          studentDefaultPropsMap.get(field.name) == undefined
-            ? additionalPropsMap.get(field.name)
-            : studentDefaultPropsMap.get(field.name);
-      });
-    });
-    return form.json;
-  }
+  //   // @ts-ignore
+  //   form.json.formSections.forEach((section) => {
+  //     section.sectionFields.forEach((field) => {
+  //       field.value =
+  //         studentDefaultPropsMap.get(field.name) == undefined
+  //           ? additionalPropsMap.get(field.name)
+  //           : studentDefaultPropsMap.get(field.name);
+  //     });
+  //   });
+  //   return form.json;
+  // }
   return student;
 }
 
-export async function addStudent(student: AddStudentModel, formId: string) {
+export async function addStudent(student: AddStudentModel) {
   const session = await getServerSession(authOptions);
 
   let user = await db.user.findFirst({
@@ -55,7 +55,6 @@ export async function addStudent(student: AddStudentModel, formId: string) {
       email: student.emailId,
     },
   });
-
   if (!user) {
     user = await db.user.create({
       data: {
@@ -100,6 +99,15 @@ export async function addStudent(student: AddStudentModel, formId: string) {
       status: 'Active',
       createdAt: new Date(),
       updatedAt: new Date(),
+      studentMapping: {
+        create: [
+          {
+            groupId: student.additionalAttributes.joiningGroup,
+            classId: student.additionalAttributes.joiningClass,
+            mediumId: student.additionalAttributes.joiningMedium,
+          },
+        ],
+      },
       organization: {
         connect: {
           id: session.organizationId,
@@ -113,11 +121,6 @@ export async function addStudent(student: AddStudentModel, formId: string) {
       user: {
         connect: {
           id: user.id,
-        },
-      },
-      form: {
-        connect: {
-          id: formId,
         },
       },
       batch: {
@@ -135,11 +138,6 @@ export async function addStudent(student: AddStudentModel, formId: string) {
       student: {
         connect: {
           id: createdStudent.id,
-        },
-      },
-      form: {
-        connect: {
-          id: formId,
         },
       },
       createdBy: {

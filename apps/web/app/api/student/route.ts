@@ -50,14 +50,12 @@ export async function POST(request: NextRequest) {
     });
   }
 
-  const formId = request.nextUrl.searchParams.get('formId');
-
   const payload = await request.json();
 
   try {
     await validateAddUser(payload);
 
-    const admission = await addStudent(payload, formId);
+    const admission = await addStudent(payload);
     return new NextResponse(JSON.stringify(admission), {
       status: StatusCodes.CREATED,
     });

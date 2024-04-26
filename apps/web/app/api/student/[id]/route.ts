@@ -42,9 +42,7 @@ export async function GET(request: NextRequest, { params: { id } }) {
       });
     }
 
-    const format = request.nextUrl.searchParams.get('format');
-
-    const student = await getStudentById(id, format);
+    const student = await getStudentById(id);
 
     if (student) {
       return new Response(JSON.stringify(student), {
@@ -99,7 +97,7 @@ export async function DELETE(_: NextRequest, { params: { id } }) {
       });
     }
 
-    const student = await getStudentById(id, '');
+    const student = await getStudentById(id);
 
     if (student) {
       await deleteStudentById(id);

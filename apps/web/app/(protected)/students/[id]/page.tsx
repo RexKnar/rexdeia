@@ -22,7 +22,7 @@ export default async function Page({ params }: { params: { id: string } }) {
     return redirect(`/signin?callbackUrl=/students/${params.id}`);
   }
 
-  const studentDetails: any = await getStudentById(params.id, 'form');
+  const studentDetails: any = await getStudentById(params.id);
   const userDetails: any = studentDetails.formSections[0].sectionFields;
 
   const firstName = userDetails.filter((x) => x.name === 'firstName')[0].value;
