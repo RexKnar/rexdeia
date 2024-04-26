@@ -59,7 +59,7 @@ export const admissionForm = {
           isReadOnly: true,
           placeholder: 'Enter your last name',
           validationRules: {
-            required: { value: true, message: 'Last Name is required' },
+            required: { value: false, message: 'Last Name is required' },
             minLength: {
               value: 1,
               message: 'First Name must be at least 1 character',
@@ -86,43 +86,14 @@ export const admissionForm = {
         {
           id: '5',
           type: 'text',
-          label: 'Phone Number',
-          name: 'phoneNumber',
+          label: 'Age',
+          name: 'age',
           value: '',
           visible: true,
           isReadOnly: true,
-          placeholder: 'Enter your phone number',
+          placeholder: 'Enter your Age',
           validationRules: {
-            required: { value: true, message: 'Phone Number is required' },
-          },
-        },
-        {
-          id: '6',
-          type: 'text',
-          label: 'Mobile Number',
-          name: 'mobileNumber',
-          value: '',
-          visible: true,
-          placeholder: 'Enter your mobile number',
-          validationRules: {
-            required: { value: true, message: 'Mobile Number is required' },
-          },
-        },
-        {
-          id: '7',
-          type: 'email',
-          label: 'Email',
-          name: 'emailId',
-          value: '',
-          visible: true,
-          isReadOnly: true,
-          placeholder: 'Enter your email',
-          validationRules: {
-            required: { value: true, message: 'Email is required' },
-            pattern: {
-              value: /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/,
-              message: 'Invalid email format',
-            },
+            required: { value: false, message: 'Age is required' },
           },
         },
         {
@@ -145,12 +116,89 @@ export const admissionForm = {
           ],
           validationRules: {
             required: {
-              value: true,
+              value: false,
               message: 'Gender is required',
             },
           },
         },
-
+        {
+          id: '6',
+          type: 'text',
+          label: 'Phone Number',
+          name: 'phoneNumber',
+          value: '',
+          visible: true,
+          placeholder: 'Enter your phone number',
+          validationRules: {
+            required: { value: false, message: 'phone Number is required' },
+          },
+        },
+        {
+          id: '7',
+          type: 'email',
+          label: 'Email',
+          name: 'emailId',
+          value: '',
+          visible: true,
+          isReadOnly: true,
+          placeholder: 'Enter your email',
+          validationRules: {
+            required: { value: true, message: 'Email is required' },
+            pattern: {
+              value: /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/,
+              message: 'Invalid email format',
+            },
+          },
+        },
+        {
+          id: '11',
+          type: 'dropdown',
+          label: 'Blood Group',
+          name: 'bloodGroup',
+          optionKey: 'value',
+          optionValue: 'value',
+          visible: true,
+          options: [
+            {
+              label: 'O+',
+              value: 'O+',
+            },
+            {
+              label: ' O- ',
+              value: 'O-',
+            },
+            {
+              label: 'A+',
+              value: 'A+',
+            },
+            {
+              label: 'A-',
+              value: 'A-',
+            },
+            {
+              label: 'B+',
+              value: 'B+',
+            },
+            {
+              label: 'B-',
+              value: 'B-',
+            },
+            {
+              label: 'AB+',
+              value: 'AB+',
+            },
+            {
+              label: 'AB-',
+              value: 'AB-',
+            },
+          ],
+          validationRules: {
+            required: {
+              value: false,
+              message: 'Blood Group is required',
+            },
+          },
+        },
         {
           id: '9',
           type: 'text',
@@ -162,55 +210,73 @@ export const admissionForm = {
           placeholder: 'Enter your aadhar card number',
           validationRules: {
             required: {
-              value: true,
+              value: false,
               message: 'Aadhar Card Number is required',
             },
           },
         },
         {
           id: '10',
-          type: 'text',
+          type: 'dropdown',
           label: 'Mother Tongue',
           name: 'motherTongue',
-          value: '',
+          optionKey: 'value',
+          optionValue: 'value',
           visible: true,
-          isReadOnly: true,
-          placeholder: 'Enter your mother tongue',
+          options: [
+            {
+              label: 'Tamil',
+              value: 'tamil',
+            },
+            {
+              label: ' Malayalam ',
+              value: 'malayalam',
+            },
+            {
+              label: 'Telugu',
+              value: 'telugu',
+            },
+            {
+              label: 'Hindi',
+              value: 'hindi',
+            },
+          ],
           validationRules: {
             required: {
-              value: true,
+              value: false,
               message: 'Mother Tongue is required',
             },
           },
         },
         {
-          id: '11',
-          type: 'text',
-          label: 'Blood Group',
-          name: 'bloodGroup',
-          value: '',
-          visible: true,
-          isReadOnly: true,
-          placeholder: 'Enter your blood group',
-          validationRules: {
-            required: {
-              value: true,
-              message: 'Blood Group is required',
-            },
-          },
-        },
-        {
-          id: '12',
-          type: 'text',
+          id: '10',
+          type: 'dropdown',
           label: 'Religion',
           name: 'religion',
-          value: '',
+          optionKey: 'value',
+          optionValue: 'value',
           visible: true,
-          isReadOnly: true,
-          placeholder: 'Enter your religion',
+          options: [
+            {
+              label: 'Hindu',
+              value: 'hindu',
+            },
+            {
+              label: ' Christian ',
+              value: 'christian',
+            },
+            {
+              label: 'Muslim',
+              value: 'muslim',
+            },
+            {
+              label: 'others',
+              value: 'others',
+            },
+          ],
           validationRules: {
             required: {
-              value: true,
+              value: false,
               message: 'Religion is required',
             },
           },
@@ -225,7 +291,7 @@ export const admissionForm = {
           placeholder: 'Enter your community',
           validationRules: {
             required: {
-              value: true,
+              value: false,
               message: 'Community is required',
             },
           },
@@ -240,7 +306,7 @@ export const admissionForm = {
           placeholder: 'Enter your caste',
           validationRules: {
             required: {
-              value: true,
+              value: false,
               message: 'Caste is required',
             },
           },
@@ -248,29 +314,30 @@ export const admissionForm = {
         {
           id: '15',
           type: 'radio',
-          label: 'Marital Status',
-          name: 'maritalStatus',
+          label: 'Differently abled',
+          name: 'differentlyAbled',
           value: '',
           visible: true,
           options: [
             {
-              label: 'Married',
-              value: 'married',
+              label: 'Yes',
+              value: 'yes',
             },
             {
-              label: 'Single',
-              value: 'single',
+              label: 'No',
+              value: 'no',
             },
           ],
           validationRules: {
             required: {
-              value: true,
-              message: 'Marital Status is required',
+              value: false,
+              message: 'Differently abled is required',
             },
           },
         },
       ],
     },
+
     {
       sectionTitle: 'Parent’s Details',
       sectionDescription: 'Please fill out your parents details.',
@@ -286,7 +353,7 @@ export const admissionForm = {
           placeholder: 'Enter your father name',
           validationRules: {
             required: {
-              value: true,
+              value: false,
               message: "Father's Name is required",
             },
           },
@@ -302,7 +369,7 @@ export const admissionForm = {
           placeholder: 'Enter your father occupation',
           validationRules: {
             required: {
-              value: true,
+              value: false,
               message: "Father's Occupation is required",
             },
           },
@@ -310,21 +377,69 @@ export const admissionForm = {
         {
           id: '3',
           type: 'text',
-          label: "Mother's Name",
-          name: 'motherName',
+          label: "Father's Phone Number",
+          name: 'fatherPhoneNumber',
           value: '',
           visible: true,
           isReadOnly: true,
-          placeholder: 'Enter your mother name',
+          placeholder: "Enter your Father's Phone Number",
           validationRules: {
             required: {
-              value: true,
-              message: "Mother's Name is required",
+              value: false,
+              message: "Father's Phone Number is required",
             },
           },
         },
         {
           id: '4',
+          type: 'text',
+          label: "Father's Education",
+          name: 'fatherEducation',
+          value: '',
+          visible: true,
+          isReadOnly: true,
+          placeholder: "Enter your Father's Education",
+          validationRules: {
+            required: {
+              value: false,
+              message: "Father's Education is required",
+            },
+          },
+        },
+        {
+          id: '5',
+          type: 'text',
+          label: " Father's Aadhar Card Number",
+          name: 'fatherAadharCardNumber',
+          value: '',
+          visible: true,
+          isReadOnly: true,
+          placeholder: "Enter your Father's aadhar card number",
+          validationRules: {
+            required: {
+              value: false,
+              message: "Father's Aadhar Card Number is required",
+            },
+          },
+        },
+        {
+          id: '6',
+          type: 'text',
+          label: "Mother's Name",
+          name: 'motherName',
+          value: '',
+          visible: true,
+          isReadOnly: true,
+          placeholder: 'Enter your Mother name',
+          validationRules: {
+            required: {
+              value: false,
+              message: "Mother's Name is required",
+            },
+          },
+        },
+        {
+          id: '7',
           type: 'text',
           label: "Mother's Occupation",
           name: 'motherOccupation',
@@ -334,13 +449,61 @@ export const admissionForm = {
           placeholder: 'Enter your mother occupation',
           validationRules: {
             required: {
-              value: true,
+              value: false,
               message: "Mother's Occupation is required",
             },
           },
         },
         {
-          id: '5',
+          id: '8',
+          type: 'text',
+          label: "Mother's Phone Number",
+          name: 'motherPhoneNumber',
+          value: '',
+          visible: true,
+          isReadOnly: true,
+          placeholder: "Enter your Mother's Phone Number",
+          validationRules: {
+            required: {
+              value: false,
+              message: "Mother's Phone Number is required",
+            },
+          },
+        },
+        {
+          id: '9',
+          type: 'text',
+          label: "Mother's Education",
+          name: 'motherEducation',
+          value: '',
+          visible: true,
+          isReadOnly: true,
+          placeholder: "Enter your Mother's Education",
+          validationRules: {
+            required: {
+              value: false,
+              message: "Mother's Education is required",
+            },
+          },
+        },
+        {
+          id: '10',
+          type: 'text',
+          label: " Mother's Aadhar Card Number",
+          name: 'motherAadharCardNumber',
+          value: '',
+          visible: true,
+          isReadOnly: true,
+          placeholder: "Enter your Mother's aadhar card number",
+          validationRules: {
+            required: {
+              value: false,
+              message: "Mother's Aadhar Card Number is required",
+            },
+          },
+        },
+        {
+          id: '11',
           type: 'text',
           label: 'Annual Income',
           name: 'annualIncome',
@@ -349,13 +512,13 @@ export const admissionForm = {
           placeholder: 'Enter annual income',
           validationRules: {
             required: {
-              value: true,
+              value: false,
               message: 'Annual Income is required',
             },
           },
         },
         {
-          id: '6',
+          id: '12',
           type: 'radio',
           label: 'Parents Separated',
           name: 'parentsSeparated',
@@ -373,19 +536,32 @@ export const admissionForm = {
           ],
           validationRules: {
             required: {
-              value: true,
+              value: false,
               message: 'Parents Separated is required',
             },
           },
         },
+      ],
+    },
+
+    {
+      sectionTitle: 'Information of Siblings',
+      sectionDescription:
+        'Please fill out the Information of Siblings studying in this institution.',
+      sectionFields: [
         {
-          id: '7',
+          id: '1',
           type: 'dropdown',
           label: 'No of Siblings',
           name: 'noOfSiblings',
-          value: '',
+          optionKey: 'value',
+          optionValue: 'value',
           visible: true,
           options: [
+            {
+              label: '0',
+              value: '0',
+            },
             {
               label: '1',
               value: '1',
@@ -394,83 +570,43 @@ export const admissionForm = {
               label: '2',
               value: '2',
             },
+            {
+              label: '3',
+              value: '3',
+            },
+            {
+              label: '4',
+              value: '4',
+            },
+            {
+              label: '5',
+              value: '5',
+            },
           ],
           validationRules: {
             required: {
-              value: true,
+              value: false,
               message: 'No of Siblings is required',
-            },
-          },
-        },
-      ],
-    },
-    {
-      sectionTitle: 'Information of Siblings',
-      sectionDescription:
-        'Please fill out the Information of Siblings studying in this institution.',
-      sectionFields: [
-        {
-          id: '1',
-          type: 'text',
-          label: 'Sibling Name 1',
-          name: 'siblingName1',
-          value: '',
-          visible: true,
-          placeholder: 'Enter your sibling name',
-          validationRules: {
-            required: {
-              value: true,
-              message: 'Sibling Name is required',
             },
           },
         },
         {
           id: '2',
           type: 'text',
-          label: 'Sibling Name 2',
-          name: 'siblingName2',
+          label: 'Sibling Name 1',
+          name: 'siblingName1',
           value: '',
           visible: true,
-          placeholder: 'Enter your sibling name',
+          placeholder: 'Enter your sibling name1',
           validationRules: {
             required: {
-              value: true,
+              value: false,
               message: 'Sibling Name is required',
             },
           },
         },
         {
           id: '3',
-          type: 'text',
-          label: 'Class',
-          name: 'siblingClass1',
-          value: '',
-          visible: true,
-          placeholder: 'Enter your sibling class',
-          validationRules: {
-            required: {
-              value: true,
-              message: 'Sibling Class is required',
-            },
-          },
-        },
-        {
-          id: '4',
-          type: 'text',
-          label: 'Class',
-          name: 'siblingClass2',
-          value: '',
-          visible: true,
-          placeholder: 'Enter your sibling name',
-          validationRules: {
-            required: {
-              value: true,
-              message: 'Sibling Class is required',
-            },
-          },
-        },
-        {
-          id: '5',
           type: 'radio',
           label: 'Relation',
           name: 'siblingRelation1',
@@ -488,8 +624,38 @@ export const admissionForm = {
           ],
           validationRules: {
             required: {
-              value: true,
+              value: false,
               message: 'Sibling Relation is required',
+            },
+          },
+        },
+        {
+          id: '4',
+          type: 'text',
+          label: 'Class for sibling1',
+          name: 'siblingClass1',
+          value: '',
+          visible: true,
+          placeholder: 'Enter your sibling1 class',
+          validationRules: {
+            required: {
+              value: true,
+              message: 'Sibling Class is required',
+            },
+          },
+        },
+        {
+          id: '5',
+          type: 'text',
+          label: 'Sibling Name 2',
+          name: 'siblingName2',
+          value: '',
+          visible: true,
+          placeholder: 'Enter your sibling name2',
+          validationRules: {
+            required: {
+              value: false,
+              message: 'Sibling Name is required',
             },
           },
         },
@@ -512,13 +678,29 @@ export const admissionForm = {
           ],
           validationRules: {
             required: {
-              value: true,
+              value: false,
               message: 'Sibling Relation is required',
+            },
+          },
+        },
+        {
+          id: '7',
+          type: 'text',
+          label: 'Class for sibling2',
+          name: 'siblingClass2',
+          value: '',
+          visible: true,
+          placeholder: 'Enter your sibling2 class',
+          validationRules: {
+            required: {
+              value: false,
+              message: 'Sibling Class is required',
             },
           },
         },
       ],
     },
+
     {
       sectionTitle: 'Gurdian’s Details',
       sectionDescription: 'Please fill out the Gurdian’s Details',
@@ -533,7 +715,7 @@ export const admissionForm = {
           placeholder: 'Enter your guardian name',
           validationRules: {
             required: {
-              value: true,
+              value: false,
               message: "Guardian's Name is required",
             },
           },
@@ -548,7 +730,7 @@ export const admissionForm = {
           placeholder: 'Enter guardian oocupation',
           validationRules: {
             required: {
-              value: true,
+              value: false,
               message: "Guardian's Occupation is required",
             },
           },
@@ -563,7 +745,7 @@ export const admissionForm = {
           placeholder: 'Enter relationship type',
           validationRules: {
             required: {
-              value: true,
+              value: false,
               message: 'Relationship Type is required',
             },
           },
@@ -578,13 +760,30 @@ export const admissionForm = {
           placeholder: 'Enter guardian phone number',
           validationRules: {
             required: {
-              value: true,
+              value: false,
               message: "Guardian's Phone Number is required",
+            },
+          },
+        },
+        {
+          id: '5',
+          type: 'text',
+          label: "Guardian's Aadhar Card Number",
+          name: 'guardianAadharCardNumber',
+          value: '',
+          visible: true,
+          isReadOnly: true,
+          placeholder: "Enter Guardian's Aadhar Card Number",
+          validationRules: {
+            required: {
+              value: false,
+              message: "Enter Guardian's Aadhar Card Number",
             },
           },
         },
       ],
     },
+
     {
       sectionTitle: 'Address Details',
       sectionDescription: 'Please fill out the Address Details',
@@ -599,7 +798,7 @@ export const admissionForm = {
           placeholder: 'Enter residential address',
           validationRules: {
             required: {
-              value: true,
+              value: false,
               message: 'Residential Address is required',
             },
           },
@@ -614,7 +813,7 @@ export const admissionForm = {
           placeholder: 'Enter district',
           validationRules: {
             required: {
-              value: true,
+              value: false,
               message: 'District is required',
             },
           },
@@ -629,7 +828,7 @@ export const admissionForm = {
           placeholder: 'Enter state',
           validationRules: {
             required: {
-              value: true,
+              value: false,
               message: 'State is required',
             },
           },
@@ -644,7 +843,7 @@ export const admissionForm = {
           placeholder: 'Enter postal code',
           validationRules: {
             required: {
-              value: true,
+              value: false,
               message: 'Postal / ZIP Code is required',
             },
           },
@@ -659,7 +858,7 @@ export const admissionForm = {
           placeholder: 'Enter permonent address',
           validationRules: {
             required: {
-              value: true,
+              value: false,
               message: 'Permanent Address is required',
             },
           },
@@ -674,7 +873,7 @@ export const admissionForm = {
           placeholder: 'Enter district',
           validationRules: {
             required: {
-              value: true,
+              value: false,
               message: 'District is required',
             },
           },
@@ -689,7 +888,7 @@ export const admissionForm = {
           placeholder: 'Enter state',
           validationRules: {
             required: {
-              value: true,
+              value: false,
               message: 'State is required',
             },
           },
@@ -704,7 +903,7 @@ export const admissionForm = {
           placeholder: 'Enter postal code',
           validationRules: {
             required: {
-              value: true,
+              value: false,
               message: 'Postal / ZIP Code is required',
             },
           },
@@ -720,13 +919,14 @@ export const admissionForm = {
           placeholder: 'Enter nationality',
           validationRules: {
             required: {
-              value: true,
+              value: false,
               message: 'Nationality is required',
             },
           },
         },
       ],
     },
+
     {
       sectionTitle: 'Educational Details',
       sectionDescription: 'Please fill out the Educational Details',
@@ -741,7 +941,7 @@ export const admissionForm = {
           placeholder: 'Enter your school name',
           validationRules: {
             required: {
-              value: true,
+              value: false,
               message: 'School Name is required',
             },
           },
@@ -756,7 +956,7 @@ export const admissionForm = {
           placeholder: 'Enter year of passing',
           validationRules: {
             required: {
-              value: true,
+              value: false,
               message: 'Year of Passing is required',
             },
           },
@@ -771,7 +971,7 @@ export const admissionForm = {
           placeholder: 'Enter your mark',
           validationRules: {
             required: {
-              value: true,
+              value: false,
               message: 'Obtained Mark is required',
             },
           },
@@ -779,14 +979,14 @@ export const admissionForm = {
         {
           id: '4',
           type: 'text',
-          label: 'Medium of Education',
+          label: 'Medium of Education 10th',
           name: 'mediumOfEducation10th',
           value: '',
           visible: true,
           placeholder: 'Enter year medium of education',
           validationRules: {
             required: {
-              value: true,
+              value: false,
               message: 'Medium of Education is required',
             },
           },
@@ -794,14 +994,14 @@ export const admissionForm = {
         {
           id: '5',
           type: 'text',
-          label: 'School Name (12th std)',
-          name: 'schoolName12th',
+          label: 'School Name (11th std)',
+          name: 'schoolName11th',
           value: '',
           visible: true,
           placeholder: 'Enter your school name',
           validationRules: {
             required: {
-              value: true,
+              value: false,
               message: 'School Name is required',
             },
           },
@@ -810,13 +1010,13 @@ export const admissionForm = {
           id: '6',
           type: 'text',
           label: 'Year of Passing',
-          name: 'yearOfPassing12th',
+          name: 'yearOfPassing11th',
           value: '',
           visible: true,
           placeholder: 'Enter year of passing',
           validationRules: {
             required: {
-              value: true,
+              value: false,
               message: 'Year of Passing is required',
             },
           },
@@ -825,13 +1025,13 @@ export const admissionForm = {
           id: '7',
           type: 'text',
           label: 'Obtained Mark',
-          name: 'obtainedMark12th',
+          name: 'obtainedMark11th',
           value: '',
           visible: true,
           placeholder: 'Enter your mark',
           validationRules: {
             required: {
-              value: true,
+              value: false,
               message: 'Obtained Mark is required',
             },
           },
@@ -839,74 +1039,121 @@ export const admissionForm = {
         {
           id: '8',
           type: 'text',
-          label: 'Medium of Education',
-          name: 'mediumOfEducation12th',
+          label: 'Medium of Education 11th',
+          name: 'mediumOfEducation11th',
           value: '',
           visible: true,
           placeholder: 'Enter year medium of education',
           validationRules: {
             required: {
-              value: true,
+              value: false,
               message: 'Medium of Education is required',
+            },
+          },
+        },
+        {
+          id: '9',
+          type: 'text',
+          label: 'EMIS Number',
+          name: 'emisNumber',
+          value: '',
+          visible: true,
+          placeholder: 'Enter your EMIS Number',
+          validationRules: {
+            required: {
+              value: false,
+              message: 'EMIS Number is required',
+            },
+          },
+        },
+        {
+          id: '10',
+          type: 'text',
+          label: 'Admission Number',
+          name: 'admissionNumber',
+          value: '',
+          visible: true,
+          placeholder: 'Enter your Admission Number',
+          validationRules: {
+            required: {
+              value: false,
+              message: 'Admission Number is required',
+            },
+          },
+        },
+        {
+          id: '11',
+          type: 'date',
+          label: 'dateOfJoining',
+          name: 'Date Of Joining',
+          value: '',
+          visible: true,
+          isReadOnly: true,
+          placeholder: 'Date Of Joining',
+          validationRules: {
+            required: { value: false, message: 'Joining Date is Required' },
+          },
+        },
+        {
+          id: '12',
+          type: 'dropdown',
+          label: 'Medium',
+          name: 'joiningMedium',
+          value: '',
+          optionKey: 'name',
+          optionValue: 'id',
+          visible: true,
+          options: [],
+          validationRules: {
+            required: {
+              value: false,
+              message: 'Medium is required',
+            },
+          },
+        },
+        {
+          id: '13',
+          type: 'dropdown',
+          label: 'Class',
+          name: 'joiningClass',
+          value: '',
+          optionKey: 'name',
+          optionValue: 'id',
+          visible: true,
+          options: [],
+          validationRules: {
+            required: {
+              value: false,
+              message: 'Class is required',
+            },
+          },
+        },
+        {
+          id: '14',
+          type: 'dropdown',
+          label: 'Group',
+          name: 'joiningGroup',
+          value: '',
+          optionKey: 'name',
+          optionValue: 'id',
+          visible: true,
+          options: [],
+          validationRules: {
+            required: {
+              value: false,
+              message: 'Group is required',
             },
           },
         },
       ],
     },
+
     {
       sectionTitle: 'Other Details',
       sectionDescription: 'Please fill out the Educational Details',
       sectionFields: [
         {
           id: '1',
-          type: 'dropdown',
-          label: 'Deapartment',
-          name: 'courseOption1',
-          value: '',
-          visible: true,
-          options: [
-            {
-              label: 'CSE',
-              value: 'cse',
-            },
-            {
-              label: 'EEE',
-              value: 'eee',
-            },
-          ],
-          validationRules: {
-            required: {
-              value: true,
-              message: 'Deapartment is required',
-            },
-          },
-        },
-        {
-          id: '2',
-          type: 'dropdown',
-          label: 'Deapartment',
-          name: 'courseOption2',
-          value: '',
-          visible: true,
-          options: [
-            {
-              label: 'CSE',
-              value: 'cse',
-            },
-            {
-              label: 'EEE',
-              value: 'eee',
-            },
-          ],
-          validationRules: {
-            required: {
-              value: true,
-              message: 'Deapartment is required',
-            },
-          },
-        },
-        {
-          id: '3',
           type: 'radio',
           label: 'Admission Type',
           name: 'admissionType',
@@ -930,7 +1177,7 @@ export const admissionForm = {
           },
         },
         {
-          id: '4',
+          id: '2',
           type: 'radio',
           label: 'Admission Mode',
           name: 'admissionMode',
@@ -954,7 +1201,7 @@ export const admissionForm = {
           },
         },
         {
-          id: '5',
+          id: '3',
           type: 'radio',
           label: 'Scholarship',
           name: 'scholarship',
@@ -978,7 +1225,7 @@ export const admissionForm = {
           },
         },
         {
-          id: '6',
+          id: '4',
           type: 'text',
           label: 'First Language',
           name: 'firstLanguage',
