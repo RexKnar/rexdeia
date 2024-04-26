@@ -88,6 +88,7 @@ model Term {
   branchId  String   @db.Uuid
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now())
+  isDeleted Boolean  @default(false)
 }
 
 model ExamConfiguration {
