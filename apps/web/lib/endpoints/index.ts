@@ -97,6 +97,7 @@ export const GET_STUDENTS_BY_CLASS_SECTION = `GET_STUDENTS_BY_CLASS_SECTION`;
 export const ADD_MARK_ENTRY = `ADD_MARK_ENTRY`;
 export const GET_STAFFS_BY_SECTION = `GET_STAFFS_BY_SECTION`;
 export const GET_MARKS_WITH_FORMAT_BY_EXAM = `GET_MARKS_WITH_FORMAT_BY_EXAM`;
+export const ADD_TERM = 'ADD_TERM';
 export const GET_SUBJECT_MASTER_LIST = `GET_SUBJECT_MASTER_LIST`;
 export const ADD_SUBJECT_MASTER = `ADD_SUBJECT_MASTER`;
 export const GET_SUBJECT_MASTER_BY_ID = `GET_SUBJECT_MASTER_BY_ID`;
@@ -104,8 +105,9 @@ export const UPDATE_SUBJECT_MASTER_BY_ID = `UPDATE_SUBJECT_MASTER_BY_ID`;
 export const DELETE_SUBJECT_MASTER_BY_ID = `DELETE_SUBJECT_MASTER_BY_ID`;
 export const ADD_EXAM_TYPE = `ADD_EXAM_TYPE`;
 export const GET_EXAM_TYPE_LIST = `GET_EXAM_TYPE_LIST`;
-export const GET_EXAM_TYPE_BY_ID = `GET_EXAM_Type_BY_ID`;
-export const UPDATE_EXAM_TYPE_BY_ID = `UPDATE_EXAM_Type_BY_ID`;
+export const GET_EXAM_TYPE_BY_ID = `GET_EXAM_TYPE_BY_ID`;
+export const UPDATE_EXAM_TYPE_BY_ID = `UPDATE_EXAM_TYPE_BY_ID`;
+export const DELETE_EXAM_TYPE_BY_ID = `DELETE_EXAM_TYPE_BY_ID`;
 
 export default <EndpointDetails>{
   [REGISTER_USER]: {
@@ -496,6 +498,10 @@ export default <EndpointDetails>{
     requestType: `PUT`,
     endpoint: `/api/mark-entry`,
   },
+  [ADD_TERM]: {
+    requestType: 'POST',
+    endpoint: '/api/exam/term',
+  },
   [GET_SUBJECT_MASTER_LIST]: {
     requestType: `PUT`,
     endpoint: `/api/subject-master`,
@@ -526,6 +532,10 @@ export default <EndpointDetails>{
   },
   [UPDATE_EXAM_TYPE_BY_ID]: {
     requestType: `PUT`,
+    endpoint: `/api/exam/exam-type/[id]`,
+  },
+  [DELETE_EXAM_TYPE_BY_ID]: {
+    requestType: `DELETE`,
     endpoint: `/api/exam/exam-type/[id]`,
   },
 };
