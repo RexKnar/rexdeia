@@ -5,8 +5,10 @@ import { StaffDetail } from './components/Staffdetail';
 export default async function Page() {
   return (
     <section>
-      <PageTitle title="Staff Details" className="mb-3" />
-      <StaffDetail />
+      <div className="mx-auto  my-5">
+        <PageTitle title="Staff Details" className=" mb-4  pl-2" />
+        <StaffDetail />
+      </div>
     </section>
   );
 }
