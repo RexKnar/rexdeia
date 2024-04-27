@@ -18,10 +18,10 @@ import { useGetStaffByIdQuery } from '../../../../../lib/queries/staff/useGetSta
 import staffForm from '../../onboard-new-staff/data/onboard-staff-fields';
 
 export function StaffDetail() {
-  const params = useParams<{ id: string }>();
+  const { id } = useParams<{ id: string }>();
 
   const { data: getStaffByIdResponse, isLoading: isGetStaffByIdLoading } =
-    useGetStaffByIdQuery(params?.id);
+    useGetStaffByIdQuery(id);
   if (isGetStaffByIdLoading) {
     return (
       <div className="flex h-20 items-center justify-center">
