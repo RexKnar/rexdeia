@@ -1,74 +1,26 @@
 import { captureException } from '@sentry/nextjs';
 import { StatusCodes } from 'http-status-codes';
-import { NextResponse } from 'next/server';
+import { authOptions } from 'lib/auth';
+import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 
-import { authOptions } from '../../../../../lib/auth';
-import { deleteTermById, getTermById, updateTermById } from '../service';
+import {
+  deleteExamTypeById,
+  getExamTypeById,
+  updateExamTypeById,
+} from '../service';
 
 /**
  * @swagger
- * /api/exam/term/{id}:
- *     get:
- *       summary: Get Term by Id
- *       description: Get Term by Id
- *       parameters:
- *         - name: id
- *           in: path
- *           required: true
- *           description: Unique identifier of the Term.
- *           schema:
- *             type: string
- *       responses:
- *         '200':
- *           description: Term details are fetched successfully.
- *           content:
- *             application/json:
- *               schema:
- *                 # Define the schema of your Term object here
- *         '400':
- *           description: Bad request due to validation error.
- *         '401':
- *           description: Unauthorized access.
- *         '500':
- *           description: Internal server error.
- */
-export async function GET(_request: Request, { params: { id } }) {
-  const session = await getServerSession(authOptions);
-  if (!session) {
-    return new NextResponse(JSON.stringify({ error: 'UNAUTHORIZED' }), {
-      status: StatusCodes.UNAUTHORIZED,
-    });
-  }
-
-  try {
-    const term = await getTermById(id);
-
-    return new NextResponse(JSON.stringify(term), {
-      status: StatusCodes.OK,
-    });
-  } catch (e) {
-    captureException(e);
-    return new NextResponse(JSON.stringify({ error: e.message }), {
-      status:
-        e.message === 'VALIDATION_ERROR'
-          ? StatusCodes.BAD_REQUEST
-          : StatusCodes.INTERNAL_SERVER_ERROR,
-    });
-  }
-}
-
-/**
- * @swagger
- * /api/exam/term/{id}:
+ * /api/exam/exam-type/{id}:
  *     put:
- *       summary: Update term By Id
- *       description: Updates the details of an existing term.
+ *       summary: Update exam-type details By Id
+ *       description: Updates the details of an existing exam-type.
  *       parameters:
  *         - name: id
  *           in: path
  *           required: true
- *           description: Unique identifier of the term.
+ *           description: Unique identifier of the batch.
  *           schema:
  *             type: string
  *       requestBody:
@@ -79,11 +31,11 @@ export async function GET(_request: Request, { params: { id } }) {
  *               type: object
  *       responses:
  *         '200':
- *           description: Term details updated successfully.
+ *           description: exam-type details updated successfully.
  *           content:
  *             application/json:
  *               schema:
- *                 # Define the schema of your term object here
+ *                 # Define the schema of your exam-type object here
  *         '400':
  *           description: Bad request due to validation error.
  *         '401':
@@ -102,9 +54,9 @@ export async function PUT(request: Request, { params: { id } }) {
   try {
     const payload = await request.json();
 
-    const term = await updateTermById(id, payload);
+    const examType = await updateExamTypeById(id, payload);
 
-    return new NextResponse(JSON.stringify(term), {
+    return new NextResponse(JSON.stringify(examType), {
       status: StatusCodes.OK,
     });
   } catch (e) {
@@ -120,10 +72,10 @@ export async function PUT(request: Request, { params: { id } }) {
 
 /**
  * @swagger
- * /api/exam/term/{id}:
- *     delete:
- *       summary: Delete term by Id
- *       description: Delete term by Id
+ * /api/exam/exam-type/{id}:
+ *     get:
+ *       summary: Get exam-type by Id
+ *       description: Get exam-type by Id
  *       parameters:
  *         - name: id
  *           in: path
@@ -133,11 +85,11 @@ export async function PUT(request: Request, { params: { id } }) {
  *             type: string
  *       responses:
  *         '200':
- *           description: term details deleted successfully.
+ *           description: exam-type details are fetched successfully.
  *           content:
  *             application/json:
  *               schema:
- *                 # Define the schema of your class object here
+ *                 # Define the schema of your exam-type object here
  *         '400':
  *           description: Bad request due to validation error.
  *         '401':
@@ -145,7 +97,59 @@ export async function PUT(request: Request, { params: { id } }) {
  *         '500':
  *           description: Internal server error.
  */
-export async function DELETE(_request: Request, { params: { id } }) {
+export async function GET(request: Request, { params: { id } }) {
+  const session = await getServerSession(authOptions);
+  if (!session) {
+    return new NextResponse(JSON.stringify({ error: 'UNAUTHORIZED' }), {
+      status: StatusCodes.UNAUTHORIZED,
+    });
+  }
+
+  try {
+    const examType = await getExamTypeById(id);
+
+    return new NextResponse(JSON.stringify(examType), {
+      status: StatusCodes.OK,
+    });
+  } catch (e) {
+    captureException(e);
+    return new NextResponse(JSON.stringify({ error: e.message }), {
+      status:
+        e.message === 'VALIDATION_ERROR'
+          ? StatusCodes.BAD_REQUEST
+          : StatusCodes.INTERNAL_SERVER_ERROR,
+    });
+  }
+}
+
+/**
+ * @swagger
+ * /api/exam/exam-type/{id}:
+ *     delete:
+ *       summary: Delete exam-type by Id
+ *       description: Delete exam-type by Id
+ *       parameters:
+ *         - name: id
+ *           in: path
+ *           required: true
+ *           description: Unique identifier of the section.
+ *           schema:
+ *             type: string
+ *       responses:
+ *         '200':
+ *           description: exam-type details deleted successfully.
+ *           content:
+ *             application/json:
+ *               schema:
+ *                 # Define the schema of your exam-type object here
+ *         '400':
+ *           description: Bad request due to validation error.
+ *         '401':
+ *           description: Unauthorized access.
+ *         '500':
+ *           description: Internal server error.
+ */
+export async function DELETE(_: NextRequest, { params: { id } }) {
   try {
     const session = await getServerSession(authOptions);
     if (!session) {
@@ -154,15 +158,15 @@ export async function DELETE(_request: Request, { params: { id } }) {
       });
     }
 
-    const term = await getTermById(id);
+    const examType = await getExamTypeById(id);
 
-    if (term) {
-      await deleteTermById(id);
+    if (examType) {
+      await deleteExamTypeById(id);
       return new Response(JSON.stringify({}), {
         status: StatusCodes.OK,
       });
     } else {
-      return new Response(JSON.stringify({ error: 'TERM_NOT_FOUND' }), {
+      return new Response(JSON.stringify({ error: 'EXAM_TYPE_NOT_FOUND' }), {
         status: StatusCodes.NOT_FOUND,
       });
     }

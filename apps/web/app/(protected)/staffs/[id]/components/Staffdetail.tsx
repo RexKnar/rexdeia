@@ -1,11 +1,12 @@
 'use client';
-import { Loader2, PencilLine, Search } from 'lucide-react';
+
+import { Loader2 } from 'lucide-react';
 import { useParams } from 'next/navigation';
 import {
   Avatar,
   AvatarImage,
-  Button,
-  Input,
+  Card,
+  CardContent,
   Tabs,
   TabsContent,
   TabsList,
@@ -17,10 +18,10 @@ import { useGetStaffByIdQuery } from '../../../../../lib/queries/staff/useGetSta
 import staffForm from '../../onboard-new-staff/data/onboard-staff-fields';
 
 export function StaffDetail() {
-  const params = useParams<{ id: string }>();
+  const { id } = useParams<{ id: string }>();
 
   const { data: getStaffByIdResponse, isLoading: isGetStaffByIdLoading } =
-    useGetStaffByIdQuery(params?.id);
+    useGetStaffByIdQuery(id);
   if (isGetStaffByIdLoading) {
     return (
       <div className="flex h-20 items-center justify-center">
@@ -30,85 +31,194 @@ export function StaffDetail() {
     );
   }
   return (
-    <section className="w-full bg-gray-50 p-3">
-      <div className="space-between mx-auto my-5 flex justify-between rounded-md bg-white p-6">
-        <div className="flex">
-          <Avatar className="h-20 w-20 cursor-pointer">
-            <AvatarImage src="https://png.pngtree.com/thumb_back/fh260/background/20230612/pngtree-man-wearing-glasses-is-wearing-colorful-background-image_2905240.jpg" />
-          </Avatar>
-          <div className="my-auto px-5">
+    <section className=" grid w-full grid-cols-3 gap-2  bg-gray-50">
+      <div className="  mx-auto my-5 mr-4 max-w-80 justify-between rounded-md bg-white p-6">
+        <div className="">
+          <div className="flex justify-center">
+            <Avatar className="h-20 w-20 cursor-pointer border-2 border-violet-200">
+              <AvatarImage src="https://png.pngtree.com/thumb_back/fh260/background/20230612/pngtree-man-wearing-glasses-is-wearing-colorful-background-image_2905240.jpg" />
+            </Avatar>
+          </div>
+          <div className="my-auto flex justify-center px-5 pb-2 pt-3">
             <Text variant="base-bold">{getStaffByIdResponse.firstName}</Text>
-            <Text variant="base-regular">{getStaffByIdResponse.mobile}</Text>
+          </div>
+          <div className="flex justify-center">
+            <Text
+              variant="base-regular"
+              className="mx-2 rounded-lg border bg-violet-100 px-2"
+            >
+              {getStaffByIdResponse.subjectHandling}
+            </Text>
+            <Text
+              variant="base-regular"
+              className=" rounded-lg border bg-violet-100 px-2"
+            >
+              {getStaffByIdResponse.employmentType}
+            </Text>
+            <Text
+              variant="base-regular"
+              className="mx-2 rounded-lg border bg-violet-100 px-2"
+            >
+              {getStaffByIdResponse.bloodGroup}
+            </Text>
           </div>
         </div>
-        <div className="my-auto flex gap-4 px-5">
-          <div className="relative">
-            <Input
-              type="text"
-              className="border-primary-500 text-sm"
-              placeholder="Search"
-            />
-            <div className="absolute inset-y-0 right-0 flex cursor-pointer items-center pr-2">
-              <Search
-                className="text-primary-500"
-                size={18}
-                strokeWidth={1.5}
-              />
-            </div>
+        <div className="mt-5 ">
+          <div className="ml-5 grid grid-cols-3 ">
+            <Text className="w-18 pt-1 text-xs text-gray-800">{'DOB'}</Text>
+            <Text className="">
+              {getStaffByIdResponse.dateOfBirth.toString()}
+            </Text>
           </div>
-          <div className="relative my-auto">
-            <Button variant="outline" className="mb-2 text-primary">
-              <PencilLine size={18} strokeWidth={0.5} />
-              <span className="pl-2">Edit</span>
-            </Button>
+          <div className="ml-5 grid grid-cols-3 pt-3">
+            <Text className="w-18 pt-1 text-xs  text-gray-800">{'Gender'}</Text>
+            <Text className="">{getStaffByIdResponse.gender}</Text>
+          </div>
+
+          <div className="ml-5 grid grid-cols-3 pt-3">
+            <Text className="w-18 pt-1 text-xs text-gray-800">{'Mobile'} </Text>
+            <Text className="">{getStaffByIdResponse.mobile}</Text>
+          </div>
+          <div className="ml-5 grid grid-cols-3 pt-3">
+            <Text className="w-18 pt-1 text-xs text-gray-800">{'Email'} </Text>
+            <Text className="">{getStaffByIdResponse.email}</Text>
+          </div>
+          <div className="ml-5 grid grid-cols-3 pt-3">
+            <Text className="w-18 pt-1 text-xs text-gray-800">{'DOJ'} </Text>
+            <Text className="">
+              {getStaffByIdResponse.dateOfJoining.toString()}
+            </Text>
+          </div>
+          <div className="ml-5 grid grid-cols-3 pt-3">
+            <Text className="w-18 pt-1 text-xs text-gray-800">
+              {'Designation'}{' '}
+            </Text>
+            <Text className="">{getStaffByIdResponse.employmentType}</Text>
           </div>
         </div>
       </div>
-      <Tabs defaultValue="profile" className="mt-4">
-        <TabsList className="w-full justify-start border-b-2 border-gray-400">
-          <TabsTrigger
-            value="profile"
-            className="mr-2 text-base focus:border-b-4 focus:border-primary"
-          >
-            Personal Information
-          </TabsTrigger>
-          <TabsTrigger
-            value="document"
-            className="mr-2 text-base focus:border-b-4 focus:border-primary"
-          >
-            Documents
-          </TabsTrigger>
-        </TabsList>
-        <TabsContent className="w-full" value="profile">
-          <section className="max-h-[50vh] overflow-y-auto">
-            {staffForm.map((section) => (
-              <div
-                key={section.sectionTitle}
-                className="mt-4 rounded-md bg-white p-6"
-              >
-                <Text variant="sm-semibold">{section.sectionTitle}</Text>
-                <div className="mt-8 flex flex-wrap gap-12">
-                  {section.sectionFields.map((field) => (
-                    <div key={field.name}>
-                      <label className="text-sm font-semibold text-gray-700">
-                        {field.label}
-                      </label>
-                      <Text variant="base-regular">
-                        {getStaffByIdResponse[field.name]
-                          ? getStaffByIdResponse[field.name]
-                          : 'N/A'}
-                      </Text>
-                    </div>
-                  ))}
+      <div className="col-span-2">
+        <Tabs defaultValue="profile" className="mt-4">
+          <TabsList className="w-full justify-start border-b-2 border-gray-400">
+            <TabsTrigger
+              value="profile"
+              className="mr-2 text-base focus:border-b-4 focus:border-primary"
+            >
+              Personal Information
+            </TabsTrigger>
+            <TabsTrigger
+              value="document"
+              className="mr-2 text-base focus:border-b-4 focus:border-primary"
+            >
+              Documents
+            </TabsTrigger>
+          </TabsList>
+          <TabsContent className="w-full" value="profile">
+            <section className="max-h-[60vh] overflow-y-auto">
+              {staffForm.map((section) => (
+                <div
+                  key={section.sectionTitle}
+                  className="mt-4 rounded-md bg-white p-6"
+                >
+                  <Text variant="sm-semibold">{section.sectionTitle}</Text>
+                  <div className="mt-8 flex flex-wrap gap-12">
+                    {section.sectionFields.map((field) => (
+                      <div key={field.name}>
+                        <label className="text-sm font-semibold text-gray-700">
+                          {field.label}
+                        </label>
+                        <Text variant="base-regular">
+                          {getStaffByIdResponse[field.name]
+                            ? getStaffByIdResponse[field.name]
+                            : 'N/A'}
+                        </Text>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </section>
+          </TabsContent>
+          <TabsContent className="w-full" value="document">
+            <section className=" bg-white p-5">
+              <div>
+                <label>Document</label>
+              </div>
+              <div className=" max-h-[60vh]overflow-y-auto flex gap-4">
+                <div className="mt-4 rounded-md bg-white">
+                  <Card className="max-w-60 p-0">
+                    <CardContent className="p-0 ">
+                      <div className="flex justify-center bg-indigo-100 pb-3 pt-3">
+                        <img className="" src="/pdf.png" alt="" />
+                      </div>
+                      <div className="grid grid-cols-2 bg-white p-2">
+                        <Text>{'Document'}</Text>
+                        <img
+                          className="justify-self-end"
+                          src="/dots.png"
+                          alt=""
+                        />
+                      </div>
+                    </CardContent>
+                  </Card>
+                </div>
+                <div className="mt-4 rounded-md bg-white">
+                  <Card className="max-w-60 p-0">
+                    <CardContent className="p-0 ">
+                      <div className="flex justify-center bg-indigo-100 pb-3 pt-3">
+                        <img className="" src="/pdf.png" alt="" />
+                      </div>
+                      <div className="grid grid-cols-2 bg-white p-2">
+                        <Text>{'Document'}</Text>
+                        <img
+                          className="justify-self-end"
+                          src="/dots.png"
+                          alt=""
+                        />
+                      </div>
+                    </CardContent>
+                  </Card>
+                </div>
+
+                <div className="mt-4 rounded-md bg-white">
+                  <Card className="max-w-60 p-0">
+                    <CardContent className="p-0 ">
+                      <div className="flex justify-center bg-indigo-100 pb-3 pt-3">
+                        <img className="" src="/pdf.png" alt="" />
+                      </div>
+                      <div className="grid grid-cols-2 bg-white p-2">
+                        <Text>{'Document'}</Text>
+                        <img
+                          className="justify-self-end"
+                          src="/dots.png"
+                          alt=""
+                        />
+                      </div>
+                    </CardContent>
+                  </Card>
+                </div>
+                <div className="mt-4 rounded-md bg-white">
+                  <Card className="max-w-60 p-0">
+                    <CardContent className="p-0 ">
+                      <div className="flex justify-center bg-indigo-100 pb-3 pt-3">
+                        <img className="" src="/pdf.png" alt="" />
+                      </div>
+                      <div className="grid grid-cols-2 bg-white p-2">
+                        <Text>{'Document'}</Text>
+                        <img
+                          className="justify-self-end"
+                          src="/dots.png"
+                          alt=""
+                        />
+                      </div>
+                    </CardContent>
+                  </Card>
                 </div>
               </div>
-            ))}
-          </section>
-        </TabsContent>
-        <TabsContent value="document">
-          <h1>Page 2</h1>
-        </TabsContent>
-      </Tabs>
+            </section>
+          </TabsContent>
+        </Tabs>
+      </div>
     </section>
   );
 }
