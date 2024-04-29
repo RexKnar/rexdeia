@@ -3,10 +3,10 @@ import {
   UseQueryOptions,
   UseQueryResult,
 } from '@tanstack/react-query';
-
-import { makeAPICall } from '../../api';
 import { TermModel } from 'lib/domain/exam';
 import { GET_TERM_BY_ID } from 'lib/endpoints';
+
+import { makeAPICall } from '../../api';
 
 function getTermById(
   termId: string,
@@ -25,7 +25,7 @@ function getTermById(
     },
   };
 }
-export function useGetMediumByIdQuery(
+export function useGetTermByIdQuery(
   id: string,
   options?: Partial<UseQueryOptions<TermModel>>
 ): UseQueryResult<TermModel> {
