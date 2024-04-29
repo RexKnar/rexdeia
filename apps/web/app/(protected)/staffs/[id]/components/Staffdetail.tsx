@@ -144,9 +144,9 @@ export function StaffDetail() {
               <div>
                 <label className="pl-1">Document</label>
               </div>
-              <div className=" flex flex-wrap gap-5 overflow-y-auto p-0 pl-2">
+              <div className=" max-h-[60vh]overflow-y-auto flex flex-wrap gap-5 p-0 pl-2">
                 <div className="mt-4 rounded-md bg-white">
-                  <Card className="w-40">
+                  <Card className="w-40 max-w-60">
                     <CardContent className="p-0">
                       <div className="flex justify-center bg-indigo-100 pb-3 pt-3">
                         <img className="" src="/pdf.png" alt="" />
@@ -163,7 +163,7 @@ export function StaffDetail() {
                   </Card>
                 </div>
                 <div className="mt-4 rounded-md bg-white">
-                  <Card className=" w-40">
+                  <Card className=" w-40 max-w-60">
                     <CardContent className="p-0 ">
                       <div className="flex justify-center bg-indigo-100 pb-3 pt-3">
                         <img className="" src="/pdf.png" alt="" />
@@ -181,7 +181,7 @@ export function StaffDetail() {
                 </div>
 
                 <div className="mt-4 rounded-md bg-white">
-                  <Card className="w-40">
+                  <Card className="w-40 max-w-60">
                     <CardContent className="p-0 ">
                       <div className="flex justify-center bg-indigo-100 pb-3 pt-3">
                         <img className="" src="/pdf.png" alt="" />
@@ -198,7 +198,7 @@ export function StaffDetail() {
                   </Card>
                 </div>
                 <div className="mt-4 rounded-md bg-white">
-                  <Card className="w-40">
+                  <Card className="w-40 max-w-60">
                     <CardContent className="p-0 ">
                       <div className="flex justify-center bg-indigo-100 pb-3 pt-3">
                         <img className="" src="/pdf.png" alt="" />
