@@ -1,8 +1,8 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-
-import { makeAPICall } from '../../api';
 import { TermModel, UpdateTermModel } from 'lib/domain/exam';
 import { GET_TERM_LIST, UPDATE_TERM_BY_ID } from 'lib/endpoints';
+
+import { makeAPICall } from '../../api';
 
 export function useUpdateTermMutationQuery({
   page,

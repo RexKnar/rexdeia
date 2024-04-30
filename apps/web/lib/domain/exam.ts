@@ -62,7 +62,6 @@ export type UpdateExamTypeModel = Pick<
   'name' | 'isActive' | 'id' | 'frequencyId'
 >;
 export type DeletExamTypeModel = Pick<ExamTypeModel, 'id' | 'isDeleted'>;
-
 export type TermModel = {
   id: string;
   name: string;
@@ -73,4 +72,4 @@ export type TermModel = {
 
 export type CreateTermModel = Pick<TermModel, 'name' | 'isActive'>;
 
-export type UpdateTermModel = Pick<TermModel, 'name' | 'isActive' | 'id'>;
+export type UpdateTermModel = Pick<TermModel, 'id' | 'name' | 'isActive'>;

@@ -1,9 +1,9 @@
 'use client';
 
-import { useCreateTermMutationQuery } from 'lib/queries/term/useCreateTermMutationQuery';
 import { CreateTermModel } from 'lib/domain/exam';
-import { useUpdateTermMutationQuery } from 'lib/queries/term/useUpdateTermMutationQuery';
+import { useCreateTermMutationQuery } from 'lib/queries/term/useCreateTermMutationQuery';
 import { useGetTermByIdQuery } from 'lib/queries/term/useGetTermByIdQuery';
+import { useUpdateTermMutationQuery } from 'lib/queries/term/useUpdateTermMutationQuery';
 import { Loader2, PlusCircle } from 'lucide-react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import React, { useEffect } from 'react';
@@ -18,6 +18,7 @@ import {
   Switch,
   Text,
 } from 'ui';
+
 import { useQueryParams } from '@/hooks/useQueryParams';
 
 export function SaveTermFlyout() {
@@ -64,7 +65,7 @@ export function SaveTermFlyout() {
   }, [getTermByIdResponse, setValue]);
 
   const { isPending: isPendingUpdateTerm, mutateAsync: mutateUpdateTermAsync } =
-    useUpdateTermMutationQuery({page, limit});
+    useUpdateTermMutationQuery({ page, limit });
 
   const closeFlyout = () => {
     const params = new URLSearchParams(searchParams);
@@ -72,8 +73,8 @@ export function SaveTermFlyout() {
     params.delete('termId');
     router.replace(pathname + '?' + params.toString());
   };
- 
-   async function saveTerm(payload: CreateTermModel) {
+
+  async function saveTerm(payload: CreateTermModel) {
     try {
       if (termId) {
         const updateTermRequestPayload = {
@@ -112,7 +113,7 @@ export function SaveTermFlyout() {
                   <div className="flex items-center">
                     <PlusCircle size={20} strokeWidth={1.5} />
                     <Text variant="lg-semibold" className="ml-2">
-                         {termId ? 'Update Term' : 'Add Term'}
+                      {termId ? 'Update Term' : 'Add Term'}
                     </Text>
                   </div>
                   <div className="flex items-center">
@@ -155,12 +156,10 @@ export function SaveTermFlyout() {
 
             <div className="mt-10">
               <Button
-               size="lg"
+                size="lg"
                 variant="default"
                 disabled={isPendingCreateTerm || isPendingUpdateTerm}
-                aria-disabled={
-                  isPendingCreateTerm || isPendingUpdateTerm
-                }
+                aria-disabled={isPendingCreateTerm || isPendingUpdateTerm}
                 className="mx-auto flex justify-center px-12 py-4"
               >
                 {isPendingCreateTerm ? (
