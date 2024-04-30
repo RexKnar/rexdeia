@@ -70,11 +70,13 @@ model ExamType {
   id        String   @id @default(uuid()) @map("_id") @db.Uuid
   name      String
   isActive  Boolean
+  frequencyId String
   branch    Branch   @relation(fields: [branchId], references: [id])
   branchId  String   @db.Uuid
   exam      Exam[]
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now())
+  isDeleted Boolean             @default(false)
 }
 
 model Term {
@@ -86,6 +88,7 @@ model Term {
   branchId  String   @db.Uuid
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now())
+  isDeleted Boolean  @default(false)
 }
 
 model ExamConfiguration {
