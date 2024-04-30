@@ -16,7 +16,6 @@ import {
   getAllSectionsByClassId,
   mapStaffsToSection,
   mapSubjectsToSection,
-  unMapStaffsFromSection,
   unMapSubjectsFromSection,
 } from '../section/service';
 import { getAllStaffsBySectionsIdWithSubjects } from '../staff/service';
@@ -281,20 +280,27 @@ export async function assignStaffToClassWithSubject(
 }
 
 export async function unMapStaffsFromClass(
-  classId: string,
-  staffIds: string[],
+  academicYearId: string,
+  staffId: string,
   sectionIds: string[]
 ) {
-  if (sectionIds === undefined || sectionIds.length == 0) {
-    const sections = await getAllSectionsByClassId(classId);
-    sections.forEach(function (section) {
-      unMapStaffsFromSection(section.id, staffIds);
-    });
-  } else {
-    sectionIds.forEach(function (section) {
-      unMapStaffsFromSection(section, staffIds);
-    });
-  }
+  await Promise.all(
+    sectionIds.map(async (sectionId) => {
+      const where = {
+        academicYearId_staffId_sectionId: {
+          academicYearId: academicYearId,
+          staffId: staffId,
+          sectionId: sectionId,
+        },
+      };
+      return await db.academicSubjectForStaff.update({
+        where,
+        data: {
+          isDeleted: true,
+        },
+      });
+    })
+  );
 }
 
 export async function getAllSubjectByClassId(id: string) {
