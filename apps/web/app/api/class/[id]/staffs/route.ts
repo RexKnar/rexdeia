@@ -165,12 +165,14 @@ export async function DELETE(request: NextRequest) {
       status: StatusCodes.UNAUTHORIZED,
     });
   }
-  const { academicYearId, staffId, sectionIds } = await request.json();
+  const { academicYearId, staffId, sectionIds, subjectId } =
+    await request.json();
   try {
     const section = await unMapStaffsFromClass(
       academicYearId,
       staffId,
-      sectionIds
+      sectionIds,
+      subjectId
     );
     return new NextResponse(JSON.stringify(section), {
       status: StatusCodes.OK,

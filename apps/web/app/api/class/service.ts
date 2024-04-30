@@ -282,15 +282,17 @@ export async function assignStaffToClassWithSubject(
 export async function unMapStaffsFromClass(
   academicYearId: string,
   staffId: string,
-  sectionIds: string[]
+  sectionIds: string[],
+  subjectId: string
 ) {
   await Promise.all(
     sectionIds.map(async (sectionId) => {
       const where = {
-        academicYearId_staffId_sectionId: {
+        academicYearId_staffId_sectionId_subjectId: {
           academicYearId: academicYearId,
           staffId: staffId,
           sectionId: sectionId,
+          subjectId: subjectId,
         },
       };
       return await db.academicSubjectForStaff.update({

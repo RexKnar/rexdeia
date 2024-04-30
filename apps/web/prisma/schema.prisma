@@ -600,6 +600,7 @@ model AcademicSubjectForStaff {
   isDeleted      Boolean  @default(false)
 
   @@id([academicYearId, staffId, sectionId])
+  @@unique([academicYearId, staffId, sectionId, subjectId])
 }
 
 model Section {
