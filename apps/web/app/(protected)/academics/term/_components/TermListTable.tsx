@@ -37,7 +37,7 @@ const columns = [
         className="px-0 "
         onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
       >
-        Exam Type Name
+        Term Name
       </Button>
     ),
   },
