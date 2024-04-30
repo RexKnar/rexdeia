@@ -42,9 +42,9 @@ export async function GET(_request: Request, { params: { id } }) {
   }
 
   try {
-    const term = await getTermById(id);
+    const termById = await getTermById(id);
 
-    return new NextResponse(JSON.stringify(term), {
+    return new NextResponse(JSON.stringify(termById), {
       status: StatusCodes.OK,
     });
   } catch (e) {
