@@ -315,7 +315,7 @@ export async function unMapStaffsFromClass(
       return await db.academicSubjectForStaff.update({
         where,
         data: {
-          isDeleted: true,
+          deletedAt: new Date(),
         },
       });
     })
