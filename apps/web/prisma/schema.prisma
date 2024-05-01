@@ -588,6 +588,7 @@ model StaffSection {
 }
 
 model AcademicSubjectForStaff {
+  id             String   @id @default(uuid()) @map("_id") @db.Uuid
   staffId        String   @db.Uuid
   staff          Staff    @relation(fields: [staffId], references: [id])
   subjectId      String?  @db.Uuid
@@ -599,7 +600,6 @@ model AcademicSubjectForStaff {
   isIncharge     Boolean  @default(false)
   isDeleted      Boolean  @default(false)
 
-  @@id([academicYearId, staffId, sectionId])
   @@unique([academicYearId, staffId, sectionId, subjectId])
 }
 
