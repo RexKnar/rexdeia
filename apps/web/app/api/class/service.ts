@@ -258,8 +258,9 @@ export async function assignStaffToClassWithSubject(
 ) {
   return await db.$transaction(async (prisma) => {
     return await Promise.all([
-      ...payload.sectionIds.map((sectionId) =>
-        prisma.section.update({
+      ...payload.sectionIds.map((sectionId) => {
+        const isIncharge = payload.sectionInCharge.includes(sectionId);
+        return prisma.section.update({
           where: { id: sectionId },
           data: {
             academicSubjectForStaff: {
@@ -268,27 +269,13 @@ export async function assignStaffToClassWithSubject(
                   subjectId: payload.subjectId,
                   staffId: payload.staffId,
                   academicYearId: payload.academicYearId,
+                  isIncharge: isIncharge,
                 },
               ],
             },
           },
-        })
-      ),
-      ...payload.sectionInCharge.map((sectionId) =>
-        prisma.section.update({
-          where: { id: sectionId },
-          data: {
-            classInCharge: {
-              create: [
-                {
-                  staffId: payload.staffId,
-                  academicYearId: payload.academicYearId,
-                },
-              ],
-            },
-          },
-        })
-      ),
+        });
+      }),
     ]);
   });
 }
