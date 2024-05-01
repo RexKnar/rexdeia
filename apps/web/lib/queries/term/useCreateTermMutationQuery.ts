@@ -7,13 +7,8 @@ import { makeAPICall } from '../../api';
 export function useCreateTermMutationQuery() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: async (shareDetails: CreateTermModel) => {
-      const response = await makeAPICall<TermModel>(
-        ADD_TERM,
-        shareDetails,
-        {},
-        {}
-      );
+    mutationFn: async (payload: CreateTermModel) => {
+      const response = await makeAPICall<TermModel>(ADD_TERM, payload, {}, {});
       await queryClient.invalidateQueries({
         queryKey: [GET_TERM_LIST],
       });

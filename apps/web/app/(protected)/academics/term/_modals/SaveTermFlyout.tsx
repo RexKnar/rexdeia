@@ -1,8 +1,10 @@
 'use client';
 
 import { useCreateTermMutationQuery } from 'lib/queries/term/useCreateTermMutationQuery';
+import { useGetTermByIdQuery } from 'lib/queries/term/useGetTermByIdQuery';
 import { Loader2, PlusCircle } from 'lucide-react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import {
   Button,
@@ -20,6 +22,7 @@ export function SaveTermFlyout() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
+  const termId = searchParams.get('termId');
   const isOpen = searchParams.get('isTermFlyoutOpen') === 'true';
   const {
     register,
@@ -36,6 +39,22 @@ export function SaveTermFlyout() {
 
   const { isPending: isPendingCreateTerm, mutateAsync: mutateCreateTermAsync } =
     useCreateTermMutationQuery();
+
+  const { data: getTermByIdResponse } = useGetTermByIdQuery(termId, {
+    enabled: !!termId,
+  });
+
+  useEffect(() => {
+    if (getTermByIdResponse) {
+      const { name, isActive } = getTermByIdResponse;
+
+      setValue('name', name);
+      setValue('isActive', isActive);
+    } else {
+      setValue('name', null);
+      setValue('isActive', false);
+    }
+  }, [getTermByIdResponse, setValue]);
 
   const closeFlyout = () => {
     const params = new URLSearchParams(searchParams);
