@@ -13,7 +13,7 @@ import { useGetTermsListQuery } from 'lib/queries/exams/useGetTermListQuery';
 import { useDeleteTermMutationQuery } from 'lib/queries/term/useDeleteTermMutationQuery';
 import { Loader2, Pencil, Trash2 } from 'lucide-react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import React, { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { When } from 'react-if';
 import {
   Button,
