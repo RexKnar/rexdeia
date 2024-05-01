@@ -8,16 +8,21 @@ import {
   getSortedRowModel,
   useReactTable,
 } from '@tanstack/react-table';
+import { DeleteConfirmationModal } from '@/components/modals/DeleteConfirmationModal';
+import { TermModel } from 'lib/domain/exam';
 import { useGetTermsListQuery } from 'lib/queries/exams/useGetTermListQuery';
-import { Pencil, Trash2 } from 'lucide-react';
+import { useDeleteTermMutationQuery } from 'lib/queries/term/useDeleteTermMutationQuery';
+import { Loader2, Pencil, Trash2 } from 'lucide-react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import React, { useCallback } from 'react';
+import React, { useCallback,useEffect, useState } from 'react';
+import { When } from 'react-if';
 import {
   Button,
   Pagination,
   Tooltip,
   TooltipContent,
   TooltipTrigger,
+  useToast,
 } from 'ui';
 import {
   Table,
@@ -37,7 +42,7 @@ const columns = [
         className="px-0 "
         onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
       >
-        Exam Type Name
+        Term Name
       </Button>
     ),
   },
@@ -68,6 +73,15 @@ export function TermListTable() {
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
+  const { toast } = useToast();
+
+  const [showDeleteConfirmationModal, setShowDeleteConfirmationModal] =
+    useState(false);
+
+  const [selectedTerm, setSelectedTerm] =
+    useState<TermModel | null>(null);
+
+
   const page = parseInt(searchParams.get('page')) || 1;
   const limit = parseInt(searchParams.get('limit')) || 10;
 
@@ -75,6 +89,32 @@ export function TermListTable() {
     page,
     limit,
   });
+
+  const {
+    isError: isDeleteTermError,
+    isSuccess: isDeleteSuccess,
+    mutateAsync: deleteTermAsync,
+  } = useDeleteTermMutationQuery(page, limit);
+
+  useEffect(() => {
+    if (isDeleteTermError) {
+      toast({
+        title: 'Error',
+        variant: 'default',
+        description: 'Error while deleting term',
+      });
+    }
+  }, [isDeleteTermError, toast]);
+  useEffect(() => {
+    if (isDeleteSuccess) {
+      toast({
+        title: 'Success',
+        variant: 'default',
+        description: 'Term deleted successfully',
+      });
+      setSelectedTerm(null);
+    }
+  }, [isDeleteSuccess, toast]);
 
   const handleOnPageChange = useCallback(
     (page: number) => {
@@ -159,11 +199,20 @@ export function TermListTable() {
                   </Tooltip>
                   <Tooltip>
                     <TooltipTrigger asChild>
-                      <Button className="h-auto px-3 py-2" variant="mild">
-                        <Trash2
-                          size={12}
-                          className="text-center text-red-600 "
-                        />
+                      <Button className="h-auto px-3 py-2" variant="mild"
+                          onClick={() => {
+                          setSelectedTerm(row.original);
+                          setShowDeleteConfirmationModal(true);
+                        }}
+                      >
+                        {row.original.isDeleted ? (
+                          <Loader2 className="mr-2 h-4 w-4 animate-spin text-red-600" />
+                        ) : (
+                          <Trash2
+                            size={12}
+                            className="text-center text-red-600 "
+                          />
+                        )}
                       </Button>
                     </TooltipTrigger>
                     <TooltipContent>
@@ -185,6 +234,7 @@ export function TermListTable() {
           )}
         </TableBody>
       </Table>
+       <When condition={termList?.data?.length && !istermLoading}>
       <Pagination
         limit={limit.toString()}
         onPageChange={handleOnPageChange}
@@ -198,6 +248,20 @@ export function TermListTable() {
           router.push(pathname + '?' + params.toString());
         }}
       />
+      <DeleteConfirmationModal
+          open={showDeleteConfirmationModal}
+          description={`Are you sure you want to delete "${selectedTerm?.name}"`}
+          onDeleteClick={async () => {
+            if (selectedTerm) {
+              setShowDeleteConfirmationModal(false);
+              await deleteTermAsync(selectedTerm.id);
+            }
+          }}
+          onCancelClick={() => {
+            setShowDeleteConfirmationModal(false);
+          }}
+        />
+        </When>
     </section>
   );
 }
