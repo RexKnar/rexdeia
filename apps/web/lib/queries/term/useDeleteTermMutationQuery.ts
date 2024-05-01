@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { DELETE_TERM_BY_ID, GET_TERM_LIST } from 'lib/endpoints';
 
 import { makeAPICall } from '../../api';
-import { DELETE_TERM_BY_ID, GET_TERM_LIST } from 'lib/endpoints';
 
 export function useDeleteTermMutationQuery(page: number, limit: number) {
   const queryClient = useQueryClient();

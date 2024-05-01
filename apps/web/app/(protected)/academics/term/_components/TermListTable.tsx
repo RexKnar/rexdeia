@@ -8,13 +8,12 @@ import {
   getSortedRowModel,
   useReactTable,
 } from '@tanstack/react-table';
-import { DeleteConfirmationModal } from '@/components/modals/DeleteConfirmationModal';
 import { TermModel } from 'lib/domain/exam';
 import { useGetTermsListQuery } from 'lib/queries/exams/useGetTermListQuery';
 import { useDeleteTermMutationQuery } from 'lib/queries/term/useDeleteTermMutationQuery';
 import { Loader2, Pencil, Trash2 } from 'lucide-react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import React, { useCallback,useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { When } from 'react-if';
 import {
   Button,
@@ -32,6 +31,8 @@ import {
   TableHeader,
   TableRow,
 } from 'ui/components/ui/Table';
+
+import { DeleteConfirmationModal } from '@/components/modals/DeleteConfirmationModal';
 
 const columns = [
   {
@@ -78,9 +79,7 @@ export function TermListTable() {
   const [showDeleteConfirmationModal, setShowDeleteConfirmationModal] =
     useState(false);
 
-  const [selectedTerm, setSelectedTerm] =
-    useState<TermModel | null>(null);
-
+  const [selectedTerm, setSelectedTerm] = useState<TermModel | null>(null);
 
   const page = parseInt(searchParams.get('page')) || 1;
   const limit = parseInt(searchParams.get('limit')) || 10;
@@ -199,8 +198,10 @@ export function TermListTable() {
                   </Tooltip>
                   <Tooltip>
                     <TooltipTrigger asChild>
-                      <Button className="h-auto px-3 py-2" variant="mild"
-                          onClick={() => {
+                      <Button
+                        className="h-auto px-3 py-2"
+                        variant="mild"
+                        onClick={() => {
                           setSelectedTerm(row.original);
                           setShowDeleteConfirmationModal(true);
                         }}
@@ -234,21 +235,21 @@ export function TermListTable() {
           )}
         </TableBody>
       </Table>
-       <When condition={termList?.data?.length && !istermLoading}>
-      <Pagination
-        limit={limit.toString()}
-        onPageChange={handleOnPageChange}
-        pageSize={termList?.limit || 0}
-        totalRecords={termList?.total || 0}
-        disabled={istermLoading}
-        onLimitChange={(value) => {
-          const params = new URLSearchParams(searchParams);
-          params.set('limit', value.toString());
+      <When condition={termList?.data?.length && !istermLoading}>
+        <Pagination
+          limit={limit.toString()}
+          onPageChange={handleOnPageChange}
+          pageSize={termList?.limit || 0}
+          totalRecords={termList?.total || 0}
+          disabled={istermLoading}
+          onLimitChange={(value) => {
+            const params = new URLSearchParams(searchParams);
+            params.set('limit', value.toString());
 
-          router.push(pathname + '?' + params.toString());
-        }}
-      />
-      <DeleteConfirmationModal
+            router.push(pathname + '?' + params.toString());
+          }}
+        />
+        <DeleteConfirmationModal
           open={showDeleteConfirmationModal}
           description={`Are you sure you want to delete "${selectedTerm?.name}"`}
           onDeleteClick={async () => {
@@ -261,7 +262,7 @@ export function TermListTable() {
             setShowDeleteConfirmationModal(false);
           }}
         />
-        </When>
+      </When>
     </section>
   );
 }
