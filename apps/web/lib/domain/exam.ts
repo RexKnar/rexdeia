@@ -68,8 +68,11 @@ export type TermModel = {
   isActive: boolean;
   createdAt: string;
   updatedAt: string;
+  isDeleted: boolean;
 };
 
 export type CreateTermModel = Pick<TermModel, 'name' | 'isActive'>;
 
 export type UpdateTermModel = Pick<TermModel, 'id' | 'name' | 'isActive'>;
+
+export type DeleteTermModel = Pick<TermModel, 'id' | 'isDeleted'>;

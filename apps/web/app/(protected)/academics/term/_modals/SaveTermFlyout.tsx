@@ -26,6 +26,7 @@ export function SaveTermFlyout() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { getParam } = useQueryParams();
+
   const page = parseInt(getParam('page')) || 1;
   const limit = parseInt(getParam('limit')) || 999;
 
