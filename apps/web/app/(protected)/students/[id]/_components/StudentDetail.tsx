@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unescaped-entities */
 'use client';
 
 import { Loader2 } from 'lucide-react';
@@ -22,7 +23,6 @@ export function StudentDetail() {
 
   const { data: getStudentByIdResponse, isLoading: isGetStudentByIdLoading } =
     useGetStudentByIdQuery(id);
-  // console.log(getStudentByIdResponse);
 
   if (isGetStudentByIdLoading) {
     return (
@@ -262,7 +262,7 @@ export function StudentDetail() {
                   <div className="mt-2 flex flex-wrap gap-12 p-6">
                     <div>
                       <label className="text-sm font-semibold text-gray-700">
-                        Father's Name
+                        Father's Name`
                       </label>
                       <Text variant="base-regular">
                         {getStudentByIdResponse.fatherName}
