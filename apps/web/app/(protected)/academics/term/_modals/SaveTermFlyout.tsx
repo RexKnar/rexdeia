@@ -1,8 +1,12 @@
 'use client';
 
+import { CreateTermModel } from 'lib/domain/exam';
 import { useCreateTermMutationQuery } from 'lib/queries/term/useCreateTermMutationQuery';
+import { useGetTermByIdQuery } from 'lib/queries/term/useGetTermByIdQuery';
+import { useUpdateTermMutationQuery } from 'lib/queries/term/useUpdateTermMutationQuery';
 import { Loader2, PlusCircle } from 'lucide-react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import React, { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import {
   Button,
@@ -15,13 +19,21 @@ import {
   Text,
 } from 'ui';
 
+import { useQueryParams } from '@/hooks/useQueryParams';
+
 export function SaveTermFlyout() {
   const pathname = usePathname();
   const router = useRouter();
   const searchParams = useSearchParams();
+  const { getParam } = useQueryParams();
 
+  const page = parseInt(getParam('page')) || 1;
+  const limit = parseInt(getParam('limit')) || 999;
+
+  const termId = searchParams.get('termId');
   const isOpen = searchParams.get('isTermFlyoutOpen') === 'true';
   const {
+    reset,
     register,
     setValue,
     watch,
@@ -37,18 +49,52 @@ export function SaveTermFlyout() {
   const { isPending: isPendingCreateTerm, mutateAsync: mutateCreateTermAsync } =
     useCreateTermMutationQuery();
 
+  const { data: getTermByIdResponse } = useGetTermByIdQuery(termId, {
+    enabled: !!termId,
+  });
+
+  useEffect(() => {
+    if (getTermByIdResponse) {
+      const { name, isActive } = getTermByIdResponse;
+
+      setValue('name', name);
+      setValue('isActive', isActive);
+    } else {
+      setValue('name', null);
+      setValue('isActive', false);
+    }
+  }, [getTermByIdResponse, setValue]);
+
+  const { isPending: isPendingUpdateTerm, mutateAsync: mutateUpdateTermAsync } =
+    useUpdateTermMutationQuery({ page, limit });
+
   const closeFlyout = () => {
     const params = new URLSearchParams(searchParams);
     params.set('isTermFlyoutOpen', 'false');
-    params.delete('TermId');
+    params.delete('termId');
     router.replace(pathname + '?' + params.toString());
   };
-  function saveTerm(payload) {
+
+  async function saveTerm(payload: CreateTermModel) {
     try {
-      mutateCreateTermAsync(payload);
-      closeFlyout();
+      if (termId) {
+        const updateTermRequestPayload = {
+          ...payload,
+          id: termId,
+        };
+        await mutateUpdateTermAsync(updateTermRequestPayload);
+      } else {
+        const requestPayload = {
+          ...payload,
+        };
+        await mutateCreateTermAsync(requestPayload);
+      }
     } catch (error) {
       console.error(error);
+    } finally {
+      closeFlyout();
+      setValue('isActive', false);
+      reset();
     }
   }
 
@@ -68,7 +114,7 @@ export function SaveTermFlyout() {
                   <div className="flex items-center">
                     <PlusCircle size={20} strokeWidth={1.5} />
                     <Text variant="lg-semibold" className="ml-2">
-                      {'Add Term'}
+                      {termId ? 'Update Term' : 'Add Term'}
                     </Text>
                   </div>
                   <div className="flex items-center">
@@ -113,8 +159,8 @@ export function SaveTermFlyout() {
               <Button
                 size="lg"
                 variant="default"
-                disabled={isPendingCreateTerm}
-                aria-disabled={isPendingCreateTerm}
+                disabled={isPendingCreateTerm || isPendingUpdateTerm}
+                aria-disabled={isPendingCreateTerm || isPendingUpdateTerm}
                 className="mx-auto flex justify-center px-12 py-4"
               >
                 {isPendingCreateTerm ? (
@@ -123,7 +169,7 @@ export function SaveTermFlyout() {
                     Saving
                   </div>
                 ) : (
-                  'Save'
+                  `${termId ? 'Update' : 'Save'}`
                 )}
               </Button>
             </div>

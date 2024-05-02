@@ -81,3 +81,18 @@ export async function updateTermById(id: string, payload: UpdateTermModel) {
     },
   });
 }
+
+export async function deleteTermById(id: string) {
+  const session = await getServerSession(authOptions);
+
+  return db.term.update({
+    where: {
+      id: id,
+      branchId: session.branchId,
+    },
+    data: {
+      isDeleted: true,
+      updatedAt: new Date(),
+    },
+  });
+}
