@@ -33,9 +33,9 @@ export function StudentDetail() {
     );
   }
   return (
-    <section className="mt-10  grid w-full grid-cols-3 ">
-      <section>
-        <Card className=" w-10/12 rounded-md bg-white ">
+    <section className="mt-10 flex w-full justify-start gap-5">
+      <section className="col-span-3 ">
+        <Card className=" w-72 rounded-md bg-white ">
           <CardHeader>
             <div className="">
               <div className="flex justify-center">
@@ -70,7 +70,7 @@ export function StudentDetail() {
               </div>
             </div>
           </CardHeader>
-          <CardContent className="pl-2">
+          <CardContent className="pl-0">
             <div className=" mt-5 pl-3 ">
               <div className="ml-5 grid grid-cols-3 ">
                 <Text className="w-18 pt-1 text-xs text-gray-800">{'DOB'}</Text>
@@ -107,8 +107,8 @@ export function StudentDetail() {
           </CardContent>
         </Card>
       </section>
-      <section className="col-span-2">
-        <Tabs className="border-0 ">
+      <section className="col-span-7">
+        <Tabs defaultValue="profile" className="border-0 ">
           <TabsList className="w-full justify-start border-b-2 border-gray-100">
             <TabsTrigger
               value="profile"
