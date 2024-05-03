@@ -1,4 +1,5 @@
 import { MoreHorizontal } from 'lucide-react';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import {
   Avatar,
   AvatarImage,
@@ -11,12 +12,17 @@ import {
   Text,
 } from 'ui';
 
+import { UnassignStaffFlyout } from '../../../_modals/UnassignStaffFlyout';
+
 type StaffCardProps = {
   id: string;
   name: string;
 };
 
 export function StaffCard(props: StaffCardProps) {
+  const pathname = usePathname();
+  const router = useRouter();
+  const searchParams = useSearchParams();
   return (
     <div className="flex bg-white p-3">
       <div className="w-1/4">
@@ -48,14 +54,25 @@ export function StaffCard(props: StaffCardProps) {
               sideOffset={15}
             >
               <DropdownMenuItem className="flex cursor-pointer items-center">
-                <span className="flex-1">Reassign</span>
+                <a className="flex-1">Reassign</a>
               </DropdownMenuItem>
               <DropdownMenuSeparator className="bg-gray-100 text-gray-500" />
               <DropdownMenuItem className="flex cursor-pointer items-center">
-                <span className="flex-1">Remove</span>
+                <a
+                  className="flex-1"
+                  onClick={async () => {
+                    const params = new URLSearchParams(searchParams);
+                    params.set('isUnassignStaffFlyoutOpen', 'true');
+
+                    router.replace(pathname + '?' + params.toString());
+                  }}
+                >
+                  Remove
+                </a>
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
+          <UnassignStaffFlyout />
         </div>
       </div>
     </div>
