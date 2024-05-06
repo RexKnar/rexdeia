@@ -1115,8 +1115,8 @@ export const admissionForm = {
         {
           id: '11',
           type: 'date',
-          label: 'dateOfJoining',
-          name: 'Date Of Joining',
+          label: 'Date Of Joining',
+          name: 'dateOfJoining',
           value: '',
           visible: true,
           isReadOnly: true,

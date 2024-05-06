@@ -11,7 +11,9 @@
     "Gruntfuggly.todo-tree",
     "wix.vscode-import-cost",
     "NextNav.NextNav",
-    "heybourn.headwind"
+    "heybourn.headwind",
+    "quicktype.quicktype",
+    "dsznajder.es7-react-js-snippets"
   ],
   "unwantedRecommendations": []
 }

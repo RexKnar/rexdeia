@@ -8,7 +8,7 @@ import { TermPageHeader } from './_components/TermPageHeader';
 export default async function Page() {
   const session = await getServerSession(authOptions);
   if (!session.branchId || !session.organizationId) {
-    return redirect('/signin?callbackUrl=/academics/medium');
+    return redirect('/signin?callbackUrl=/academics/term');
   }
 
   return (

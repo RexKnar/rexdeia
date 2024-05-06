@@ -16,7 +16,6 @@ import {
   getAllSectionsByClassId,
   mapStaffsToSection,
   mapSubjectsToSection,
-  unMapStaffsFromSection,
   unMapSubjectsFromSection,
 } from '../section/service';
 import { getAllStaffsBySectionsIdWithSubjects } from '../staff/service';
@@ -258,56 +257,69 @@ export async function assignStaffToClassWithSubject(
 ) {
   return await db.$transaction(async (prisma) => {
     return await Promise.all([
-      ...payload.sectionIds.map((sectionId) =>
-        prisma.section.update({
-          where: { id: sectionId },
+      ...payload.sectionIds.map((sectionId) => {
+        if (payload.subjectId) {
+          return prisma.section.update({
+            where: { id: sectionId },
+            data: {
+              academicSubjectForStaff: {
+                create: [
+                  {
+                    subjectId: payload.subjectId,
+                    staffId: payload.staffId,
+                    academicYearId: payload.academicYearId,
+                    isIncharge: false,
+                  },
+                ],
+              },
+            },
+          });
+        }
+      }),
+      ...payload.sectionInCharge.map((sectionInCharge) => {
+        return prisma.section.update({
+          where: { id: sectionInCharge },
           data: {
             academicSubjectForStaff: {
               create: [
                 {
-                  subjectId: payload.subjectId,
                   staffId: payload.staffId,
                   academicYearId: payload.academicYearId,
+                  isIncharge: true,
                 },
               ],
             },
           },
-        })
-      ),
-      ...payload.sectionInCharge.map((sectionId) =>
-        prisma.section.update({
-          where: { id: sectionId },
-          data: {
-            classInCharge: {
-              create: [
-                {
-                  staffId: payload.staffId,
-                  academicYearId: payload.academicYearId,
-                },
-              ],
-            },
-          },
-        })
-      ),
+        });
+      }),
     ]);
   });
 }
 
 export async function unMapStaffsFromClass(
-  classId: string,
-  staffIds: string[],
-  sectionIds: string[]
+  academicYearId: string,
+  staffId: string,
+  sectionIds: string[],
+  subjectId?: string
 ) {
-  if (sectionIds === undefined || sectionIds.length == 0) {
-    const sections = await getAllSectionsByClassId(classId);
-    sections.forEach(function (section) {
-      unMapStaffsFromSection(section.id, staffIds);
-    });
-  } else {
-    sectionIds.forEach(function (section) {
-      unMapStaffsFromSection(section, staffIds);
-    });
-  }
+  await Promise.all(
+    sectionIds.map(async (sectionId) => {
+      const where = {
+        academicYearId_staffId_sectionId_subjectId: {
+          academicYearId: academicYearId,
+          staffId: staffId,
+          sectionId: sectionId,
+          subjectId: subjectId,
+        },
+      };
+      return await db.academicSubjectForStaff.update({
+        where,
+        data: {
+          deletedAt: new Date(),
+        },
+      });
+    })
+  );
 }
 
 export async function getAllSubjectByClassId(id: string) {
