@@ -158,23 +158,21 @@ export async function POST(request: NextRequest) {
  *         '500':
  *           description: Internal server error.
  */
-export async function DELETE(request: NextRequest, { params: { id } }) {
+export async function DELETE(request: NextRequest) {
   const session = await getServerSession(authOptions);
   if (!session) {
     return new NextResponse(JSON.stringify({ error: 'UNAUTHORIZED' }), {
       status: StatusCodes.UNAUTHORIZED,
     });
   }
-  const payload: {
-    staffIds: string[];
-    sectionIds: string[];
-  } = await request.json();
-
+  const { academicYearId, staffId, sectionIds, subjectId } =
+    await request.json();
   try {
     const section = await unMapStaffsFromClass(
-      id,
-      payload.staffIds,
-      payload.sectionIds
+      academicYearId,
+      staffId,
+      sectionIds,
+      subjectId
     );
     return new NextResponse(JSON.stringify(section), {
       status: StatusCodes.OK,
