@@ -44,7 +44,7 @@ export function StaffCard(props: StaffCardProps) {
         <div className="float-end my-auto justify-end p-1">
           <DropdownMenu>
             <DropdownMenuTrigger className="flex items-center gap-2 outline-none">
-              <Button variant="mild" className="h-8 px-1">
+              <Button variant="mild" size="sm" className="h-8 px-1">
                 <MoreHorizontal className="text-primary" />
               </Button>
             </DropdownMenuTrigger>
@@ -54,11 +54,15 @@ export function StaffCard(props: StaffCardProps) {
               sideOffset={15}
             >
               <DropdownMenuItem className="flex cursor-pointer items-center">
-                <a className="flex-1">Reassign</a>
+                <Button variant="link" className="flex-1 ">
+                  Reassign
+                </Button>
               </DropdownMenuItem>
               <DropdownMenuSeparator className="bg-gray-100 text-gray-500" />
               <DropdownMenuItem className="flex cursor-pointer items-center">
-                <a
+                <Button
+                  variant="link"
+                  size="sm"
                   className="flex-1"
                   onClick={async () => {
                     const params = new URLSearchParams(searchParams);
@@ -68,7 +72,7 @@ export function StaffCard(props: StaffCardProps) {
                   }}
                 >
                   Remove
-                </a>
+                </Button>
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>

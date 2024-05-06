@@ -15,18 +15,20 @@ import {
 export function UnassignStaffFlyout() {
   const payload = [
     {
-      staffid: 1,
-      staffname: 'siva',
       sectionid: 1,
       sectionname: 'SectionA',
-      subjects: ['Tamil', 'English'],
+      subjects: [
+        { id: 1, name: 'Tamil' },
+        { id: 2, name: 'English' },
+      ],
     },
     {
-      staffid: 1,
-      staffname: 'siva',
       sectionid: 2,
       sectionname: 'SectionB',
-      subjects: ['Tamil', 'English'],
+      subjects: [
+        { id: 1, name: 'Tamil' },
+        { id: 2, name: 'English' },
+      ],
     },
   ];
   const pathname = usePathname();
@@ -78,11 +80,11 @@ export function UnassignStaffFlyout() {
                 <div className=" flex flex-wrap">
                   {item.subjects.map((subject) => (
                     <div
-                      key={subject}
+                      key={subject.id}
                       className="me-6 mt-2 flex flex-wrap items-center"
                     >
                       <Checkbox className="me-2 items-center space-x-2 rounded border border-primary-500" />
-                      <label>{subject}</label>
+                      <label>{subject.name}</label>
                     </div>
                   ))}
                 </div>
