@@ -5,8 +5,8 @@ import { ExamModel } from '../../domain/exam';
 import { GET_EXAM_BY_CLASS_SECTION } from '../../endpoints';
 
 type GetExamsByClassSectionFilter = {
-  classId: string;
-  sectionId: string;
+  classId?: string;
+  sectionId?: string;
 };
 
 function getExamsByClassSection(
