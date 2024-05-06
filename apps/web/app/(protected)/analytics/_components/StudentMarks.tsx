@@ -2,58 +2,178 @@
 
 const studentsMarks = [
   {
-    studentId: 'bb30db99-4534-4a4c-a5aa-1a7ff12caec1',
+    studentId: '6aa723d9-d41e-474e-944a-96e4c69f5f6c',
     studentName: 'Krishna',
     subjects: [
       {
-        subjectId: '1850dd26-30e8-4035-a3c1-394049695947',
-        subjectName: 'English',
-        assessmentFormat: [{ name: 'practical', id: '', mark: '98' }],
+        subjectId: '45e114c6-245b-4989-a3a4-09a1fafa3689',
+        subjectName: 'Tamil',
+        marks: [
+          {
+            mark: 86,
+            attandance: 0,
+            assessmentFormat: {
+              id: 'fbcb2abd-6584-4166-8b0c-b1bde4b6aaa1',
+              name: 'Theory',
+            },
+            student: {
+              id: '6aa723d9-d41e-474e-944a-96e4c69f5f6c',
+              firstName: 'Krishna',
+            },
+          },
+        ],
       },
       {
-        subjectId: 'e5d79993-bf27-48a6-908b-d90851442406',
+        subjectId: '7b57cf8d-ac90-474c-9939-5d0be8169522',
+        subjectName: 'English',
+        marks: [],
+      },
+      {
+        subjectId: '4f571025-c51c-43d3-8806-b77c885f5a16',
         subjectName: 'Maths',
-        assessmentFormat: [
-          { name: 'theory', id: '', mark: '85' },
-          { name: 'practical', id: '', mark: '85' },
+        marks: [
+          {
+            mark: 23,
+            attandance: 0,
+            assessmentFormat: {
+              id: '14c0c31d-8809-4c4a-99ad-d3ddbc42b39c',
+              name: 'Practial',
+            },
+            student: {
+              id: '6aa723d9-d41e-474e-944a-96e4c69f5f6c',
+              firstName: 'Krishna',
+            },
+          },
+          {
+            mark: 67,
+            attandance: 0,
+            assessmentFormat: {
+              id: 'fbcb2abd-6584-4166-8b0c-b1bde4b6aaa1',
+              name: 'Theory',
+            },
+            student: {
+              id: '6aa723d9-d41e-474e-944a-96e4c69f5f6c',
+              firstName: 'Krishna',
+            },
+          },
         ],
       },
     ],
   },
   {
-    studentId: 'ef2a9157-56ea-4e77-a6e6-aaa1eb6268a9',
-    studentName: 'Lakshmi',
+    studentId: 'ab5410ad-2fcf-436b-9420-be93568a6997',
+    studentName: 'Gopi',
     subjects: [
       {
-        subjectId: '1850dd26-30e8-4035-a3c1-394049695947',
-        subjectName: 'English',
-        assessmentFormat: [{ name: 'practical', id: '', mark: '98' }],
+        subjectId: '45e114c6-245b-4989-a3a4-09a1fafa3689',
+        subjectName: 'Tamil',
+        marks: [
+          {
+            mark: 98,
+            attandance: 0,
+            assessmentFormat: {
+              id: 'fbcb2abd-6584-4166-8b0c-b1bde4b6aaa1',
+              name: 'Theory',
+            },
+            student: {
+              id: 'ab5410ad-2fcf-436b-9420-be93568a6997',
+              firstName: 'Gopi',
+            },
+          },
+        ],
       },
       {
-        subjectId: 'e5d79993-bf27-48a6-908b-d90851442406',
+        subjectId: '7b57cf8d-ac90-474c-9939-5d0be8169522',
+        subjectName: 'English',
+        marks: [],
+      },
+      {
+        subjectId: '4f571025-c51c-43d3-8806-b77c885f5a16',
         subjectName: 'Maths',
-        assessmentFormat: [
-          { name: 'theory', id: '', mark: '85' },
-          { name: 'practical', id: '', mark: '85' },
+        marks: [
+          {
+            mark: 24,
+            attandance: 0,
+            assessmentFormat: {
+              id: '14c0c31d-8809-4c4a-99ad-d3ddbc42b39c',
+              name: 'Practial',
+            },
+            student: {
+              id: 'ab5410ad-2fcf-436b-9420-be93568a6997',
+              firstName: 'Gopi',
+            },
+          },
+          {
+            mark: 73,
+            attandance: 0,
+            assessmentFormat: {
+              id: 'fbcb2abd-6584-4166-8b0c-b1bde4b6aaa1',
+              name: 'Theory',
+            },
+            student: {
+              id: 'ab5410ad-2fcf-436b-9420-be93568a6997',
+              firstName: 'Gopi',
+            },
+          },
         ],
       },
     ],
   },
   {
-    studentId: '3d329074-6afb-4dcf-8359-30deb7163d4a',
+    studentId: 'b40e5a1a-2864-4673-8ef0-4c421c38fb24',
     studentName: 'Raji',
     subjects: [
       {
-        subjectId: '1850dd26-30e8-4035-a3c1-394049695947',
-        subjectName: 'English',
-        assessmentFormat: [{ name: 'practical', id: '', mark: '98' }],
+        subjectId: '45e114c6-245b-4989-a3a4-09a1fafa3689',
+        subjectName: 'Tamil',
+        marks: [
+          {
+            mark: 93,
+            attandance: 0,
+            assessmentFormat: {
+              id: 'fbcb2abd-6584-4166-8b0c-b1bde4b6aaa1',
+              name: 'Theory',
+            },
+            student: {
+              id: 'b40e5a1a-2864-4673-8ef0-4c421c38fb24',
+              firstName: 'Raji',
+            },
+          },
+        ],
       },
       {
-        subjectId: 'e5d79993-bf27-48a6-908b-d90851442406',
+        subjectId: '7b57cf8d-ac90-474c-9939-5d0be8169522',
+        subjectName: 'English',
+        marks: [],
+      },
+      {
+        subjectId: '4f571025-c51c-43d3-8806-b77c885f5a16',
         subjectName: 'Maths',
-        assessmentFormat: [
-          { name: 'theory', id: '', mark: '85' },
-          { name: 'practical', id: '', mark: '85' },
+        marks: [
+          {
+            mark: 22,
+            attandance: 0,
+            assessmentFormat: {
+              id: '14c0c31d-8809-4c4a-99ad-d3ddbc42b39c',
+              name: 'Practial',
+            },
+            student: {
+              id: 'b40e5a1a-2864-4673-8ef0-4c421c38fb24',
+              firstName: 'Raji',
+            },
+          },
+          {
+            mark: 56,
+            attandance: 0,
+            assessmentFormat: {
+              id: 'fbcb2abd-6584-4166-8b0c-b1bde4b6aaa1',
+              name: 'Theory',
+            },
+            student: {
+              id: 'b40e5a1a-2864-4673-8ef0-4c421c38fb24',
+              firstName: 'Raji',
+            },
+          },
         ],
       },
     ],
@@ -89,11 +209,15 @@ export function StudentsMarks() {
                 key={subject.subjectId}
                 className="whitespace-nowrap px-6 py-4"
               >
-                {subject.assessmentFormat.map((format) => (
-                  <div key={format.id} className="text-sm text-gray-900">
-                    {format.name} {format.mark}
-                  </div>
-                ))}
+                {subject.marks.length === 0 ? (
+                  <div className="text-sm text-gray-900">-</div>
+                ) : (
+                  subject.marks.map((mark, index) => (
+                    <div key={index} className="text-sm text-gray-900">
+                      {mark.assessmentFormat.name} : {mark.mark}
+                    </div>
+                  ))
+                )}
               </td>
             ))}
           </tr>
