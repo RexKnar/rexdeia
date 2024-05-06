@@ -56,64 +56,70 @@ export function StudentsMarks() {
   }
   return (
     <>
-      <div className="text-center">
-        {classList ? (
-          <Select
-            onValueChange={(value) => {
-              if (value) {
-                const params = new URLSearchParams(searchParams);
-                params.set('classId', value);
-                router.replace(pathname + '?' + params.toString());
-              }
-            }}
-          >
-            <SelectTrigger className="ml-0 basis-1/5">
-              <SelectValue className="text-gray-400" placeholder="Class Name" />
-              <ChevronDown className="text-primary-400" />
-            </SelectTrigger>
-            <SelectContent className="border border-primary-200">
-              <SelectGroup>
-                {classList?.data?.map((classDetails) => (
-                  <SelectItem key={classDetails.id} value={classDetails.id}>
-                    {classDetails.name}
-                  </SelectItem>
-                ))}
-              </SelectGroup>
-            </SelectContent>
-          </Select>
-        ) : (
-          'loading'
-        )}
+      <div className="flex">
+        <div className="width-auto flex-auto text-start">
+          {classList ? (
+            <Select
+              onValueChange={(value) => {
+                if (value) {
+                  const params = new URLSearchParams(searchParams);
+                  params.set('classId', value);
+                  router.replace(pathname + '?' + params.toString());
+                }
+              }}
+            >
+              <SelectTrigger className="ml-0 basis-1/5">
+                <SelectValue
+                  className="text-gray-400"
+                  placeholder="Class Name"
+                />
+                <ChevronDown className="text-primary-400" />
+              </SelectTrigger>
+              <SelectContent className="border border-primary-200">
+                <SelectGroup>
+                  {classList?.data?.map((classDetails) => (
+                    <SelectItem key={classDetails.id} value={classDetails.id}>
+                      {classDetails.name}
+                    </SelectItem>
+                  ))}
+                </SelectGroup>
+              </SelectContent>
+            </Select>
+          ) : (
+            'loading'
+          )}
+        </div>
+        <div className="width-auto flex-auto text-start">
+          {examListByClassId ? (
+            <Select
+              onValueChange={(value) => {
+                if (value) {
+                  const params = new URLSearchParams(searchParams);
+                  params.set('examId', value);
+                  router.replace(pathname + '?' + params.toString());
+                }
+              }}
+            >
+              <SelectTrigger className="ml-4 basis-1/5">
+                <SelectValue className="text-gray-400" placeholder="Exam" />
+                <ChevronDown className="text-primary-400" />
+              </SelectTrigger>
+              <SelectContent className="border border-primary-200">
+                <SelectGroup>
+                  {examListByClassId?.map((exam) => (
+                    <SelectItem key={exam.id} value={exam.id}>
+                      {exam.name}
+                    </SelectItem>
+                  ))}
+                </SelectGroup>
+              </SelectContent>
+            </Select>
+          ) : (
+            'Loading'
+          )}
+        </div>
       </div>
-      <div className="text-center">
-        {examListByClassId ? (
-          <Select
-            onValueChange={(value) => {
-              if (value) {
-                const params = new URLSearchParams(searchParams);
-                params.set('examId', value);
-                router.replace(pathname + '?' + params.toString());
-              }
-            }}
-          >
-            <SelectTrigger className="ml-4 basis-1/5">
-              <SelectValue className="text-gray-400" placeholder="Exam" />
-              <ChevronDown className="text-primary-400" />
-            </SelectTrigger>
-            <SelectContent className="border border-primary-200">
-              <SelectGroup>
-                {examListByClassId?.map((exam) => (
-                  <SelectItem key={exam.id} value={exam.id}>
-                    {exam.name}
-                  </SelectItem>
-                ))}
-              </SelectGroup>
-            </SelectContent>
-          </Select>
-        ) : (
-          'Loading'
-        )}
-      </div>
+
       <table className="min-w-full divide-y divide-gray-200 shadow-md">
         <thead className="bg-gray-50">
           <tr>
