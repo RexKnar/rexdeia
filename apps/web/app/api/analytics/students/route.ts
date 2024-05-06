@@ -41,7 +41,9 @@ export async function PUT(request: NextRequest) {
   }
   try {
     const filter = await request.json();
-    const studentsList = await getStudentsByFilter(filter);
+    const page = parseInt(request.nextUrl.searchParams.get('page')) || 1;
+    const limit = parseInt(request.nextUrl.searchParams.get('limit')) || 10;
+    const studentsList = await getStudentsByFilter(page, limit, filter);
 
     return new NextResponse(JSON.stringify(studentsList), {
       status: StatusCodes.OK,

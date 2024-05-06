@@ -61,10 +61,9 @@ export function ExamConfigureFlyout() {
   const closeFlyout = async () => {
     const params = new URLSearchParams(searchParams);
     params.set('isExamConfigureFlyoutOpen', 'false');
-    reset();
     fields.splice(0, fields.length);
-
     router.replace(pathname + '?' + params.toString());
+    reset();
   };
 
   async function saveExamConfigure(payload) {
@@ -82,8 +81,13 @@ export function ExamConfigureFlyout() {
     payload.classId = classId;
     payload.sectionId = sectionId;
     payload.subjectTypeId = subjectTypeId;
-    await mutateCreateExamConfigurationAsync(payload);
-    closeFlyout();
+    const createdExamConfiguration =
+      await mutateCreateExamConfigurationAsync(payload);
+    if (createdExamConfiguration) {
+      router.push(`/academics/exams/${examId}`);
+      fields.splice(0, fields.length);
+      reset();
+    }
   }
   return (
     <section>

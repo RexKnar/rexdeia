@@ -104,6 +104,7 @@ export const GET_SUBJECT_MASTER_BY_ID = `GET_SUBJECT_MASTER_BY_ID`;
 export const UPDATE_SUBJECT_MASTER_BY_ID = `UPDATE_SUBJECT_MASTER_BY_ID`;
 export const DELETE_SUBJECT_MASTER_BY_ID = `DELETE_SUBJECT_MASTER_BY_ID`;
 export const ADD_EXAM_TYPE = `ADD_EXAM_TYPE`;
+export const GET_STUDENT_LIST_BY_FILTER_WITH_PAGINATION = `GET_STUDENT_LIST_BY_FILTER_WITH_PAGINATION`;
 
 export default <EndpointDetails>{
   [REGISTER_USER]: {
@@ -517,5 +518,9 @@ export default <EndpointDetails>{
   [ADD_EXAM_TYPE]: {
     requestType: `POST`,
     endpoint: `/api/exam/exam-type`,
+  },
+  [GET_STUDENT_LIST_BY_FILTER_WITH_PAGINATION]: {
+    requestType: `PUT`,
+    endpoint: `/api/analytics/students`,
   },
 };

@@ -14,11 +14,10 @@ export function MarkFields({
 }) {
   const searchParams = useSearchParams();
   const examId = searchParams.get('examId');
-
   const { data: marksWithFormat, isPending: loadingMarks } =
     useGetMarksWithFormatByExamQuery({ examId });
   // eslint-disable-next-line no-console
-  console.log(marksWithFormat);
+  console.log(marksWithFormat, loadingMarks);
 
   const { fields, append } = useFieldArray({
     control,
@@ -36,7 +35,7 @@ export function MarkFields({
       return;
     }
 
-    if (assessmentFormats && !loadingMarks) {
+    if (assessmentFormats) {
       const newFields = assessmentFormats.examConfiguration
         .filter((config) => config.assessmentFormat != null)
         .map((config) => {
