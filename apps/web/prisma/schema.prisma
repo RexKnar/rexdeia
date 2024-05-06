@@ -588,18 +588,19 @@ model StaffSection {
 }
 
 model AcademicSubjectForStaff {
-  staffId        String   @db.Uuid
-  staff          Staff    @relation(fields: [staffId], references: [id])
-  subjectId      String?  @db.Uuid
-  subject        Subject? @relation(fields: [subjectId], references: [id])
-  academicYearId String   @db.Uuid
-  academicYear   Batch    @relation(fields: [academicYearId], references: [id])
-  sectionId      String   @db.Uuid
-  section        Section  @relation(fields: [sectionId], references: [id])
-  isIncharge     Boolean  @default(false)
-  isDeleted      Boolean  @default(false)
+  id             String    @id @default(uuid()) @map("_id") @db.Uuid
+  staffId        String    @db.Uuid
+  staff          Staff     @relation(fields: [staffId], references: [id])
+  subjectId      String?   @db.Uuid
+  subject        Subject?  @relation(fields: [subjectId], references: [id])
+  academicYearId String    @db.Uuid
+  academicYear   Batch     @relation(fields: [academicYearId], references: [id])
+  sectionId      String    @db.Uuid
+  section        Section   @relation(fields: [sectionId], references: [id])
+  isIncharge     Boolean   @default(false)
+  deletedAt      DateTime? @db.Timestamp
 
-  @@id([academicYearId, staffId, sectionId])
+  @@unique([academicYearId, staffId, sectionId, subjectId])
 }
 
 model Section {
