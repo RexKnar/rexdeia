@@ -16,7 +16,6 @@ import {
   getAllSectionsByClassId,
   mapStaffsToSection,
   mapSubjectsToSection,
-  unMapStaffsFromSection,
   unMapSubjectsFromSection,
 } from '../section/service';
 import { getAllStaffsBySectionsIdWithSubjects } from '../staff/service';
@@ -259,17 +258,34 @@ export async function assignStaffToClassWithSubject(
   return await db.$transaction(async (prisma) => {
     return await Promise.all([
       ...payload.sectionIds.map((sectionId) => {
-        const isIncharge = payload.sectionInCharge.includes(sectionId);
+        if (payload.subjectId) {
+          return prisma.section.update({
+            where: { id: sectionId },
+            data: {
+              academicSubjectForStaff: {
+                create: [
+                  {
+                    subjectId: payload.subjectId,
+                    staffId: payload.staffId,
+                    academicYearId: payload.academicYearId,
+                    isIncharge: false,
+                  },
+                ],
+              },
+            },
+          });
+        }
+      }),
+      ...payload.sectionInCharge.map((sectionInCharge) => {
         return prisma.section.update({
-          where: { id: sectionId },
+          where: { id: sectionInCharge },
           data: {
             academicSubjectForStaff: {
               create: [
                 {
-                  subjectId: payload.subjectId,
                   staffId: payload.staffId,
                   academicYearId: payload.academicYearId,
-                  isIncharge: isIncharge,
+                  isIncharge: true,
                 },
               ],
             },
@@ -281,20 +297,29 @@ export async function assignStaffToClassWithSubject(
 }
 
 export async function unMapStaffsFromClass(
-  classId: string,
-  staffIds: string[],
-  sectionIds: string[]
+  academicYearId: string,
+  staffId: string,
+  sectionIds: string[],
+  subjectId?: string
 ) {
-  if (sectionIds === undefined || sectionIds.length == 0) {
-    const sections = await getAllSectionsByClassId(classId);
-    sections.forEach(function (section) {
-      unMapStaffsFromSection(section.id, staffIds);
-    });
-  } else {
-    sectionIds.forEach(function (section) {
-      unMapStaffsFromSection(section, staffIds);
-    });
-  }
+  await Promise.all(
+    sectionIds.map(async (sectionId) => {
+      const where = {
+        academicYearId_staffId_sectionId_subjectId: {
+          academicYearId: academicYearId,
+          staffId: staffId,
+          sectionId: sectionId,
+          subjectId: subjectId,
+        },
+      };
+      return await db.academicSubjectForStaff.update({
+        where,
+        data: {
+          deletedAt: new Date(),
+        },
+      });
+    })
+  );
 }
 
 export async function getAllSubjectByClassId(id: string) {
@@ -312,4 +337,58 @@ export async function getAllStudentsByClassId(id: string) {
 export async function getAllStaffsByClassId(id: string) {
   const sections = await getAllSectionsByClassId(id);
   return await getAllStaffsBySectionsIdWithSubjects(sections.map((x) => x.id));
+}
+
+export async function getSubjectAndSectionByStaffId(
+  staffId: string,
+  academicYearId: string
+) {
+  const classDetails = await db.academicSubjectForStaff.findMany({
+    where: {
+      staffId: staffId,
+      academicYearId: academicYearId,
+      isIncharge: false,
+    },
+    select: {
+      section: {
+        select: {
+          id: true,
+          name: true,
+          academicSubjectForStaff: {
+            where: {
+              isIncharge: false,
+            },
+            select: {
+              subject: {
+                select: {
+                  id: true,
+                  name: true,
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+    distinct: ['sectionId'],
+  });
+
+  return formatData(classDetails);
+}
+
+function formatData(classDetails) {
+  return classDetails.map((item) => {
+    return {
+      section: {
+        id: item.section.id,
+        name: item.section.name,
+      },
+      subjects: item.section.academicSubjectForStaff.map((subjectItem) => {
+        return {
+          id: subjectItem.subject.id,
+          name: subjectItem.subject.name,
+        };
+      }),
+    };
+  });
 }
