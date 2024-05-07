@@ -121,7 +121,7 @@ export function StudentsMarks() {
               </SelectContent>
             </Select>
           ) : (
-            'loading'
+            <span className="text-center">loading...</span>
           )}
         </div>
         <div className="width-auto flex-auto text-start">
@@ -150,7 +150,7 @@ export function StudentsMarks() {
               </SelectContent>
             </Select>
           ) : (
-            'Loading'
+            <span className="text-center">loading...</span>
           )}
         </div>
       </div>
