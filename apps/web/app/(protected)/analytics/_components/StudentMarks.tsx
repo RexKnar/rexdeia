@@ -16,6 +16,31 @@ import {
 
 import { useQueryParams } from '@/hooks/useQueryParams';
 
+import admissionRequestIcon from '../../../../public/assets/images/admission-request.svg';
+import { AnalyticsWidget } from './AnalyticsWidget';
+
+const analyticsCardList = [
+  {
+    count: '87%',
+    title: 'Pass Percentage',
+    icon: admissionRequestIcon,
+  },
+  {
+    count: '13%',
+    title: 'Fail Percentage',
+    icon: admissionRequestIcon,
+  },
+  {
+    count: 1300,
+    title: 'No Of Stu Attendant Exam',
+    icon: admissionRequestIcon,
+  },
+  {
+    count: 70,
+    title: "No of didn't Attendant Exam",
+    icon: admissionRequestIcon,
+  },
+];
 export function StudentsMarks() {
   const { getParam } = useQueryParams();
   const classId = getParam('classId');
@@ -56,6 +81,16 @@ export function StudentsMarks() {
   }
   return (
     <>
+      <div className="flex justify-between p-5">
+        {analyticsCardList.map((analytics, index) => (
+          <AnalyticsWidget
+            key={index}
+            icon={analytics.icon}
+            title={analytics.title}
+            count={analytics.count}
+          />
+        ))}
+      </div>
       <div className="flex">
         <div className="width-auto flex-auto text-start">
           {classList ? (
