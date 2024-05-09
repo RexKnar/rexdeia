@@ -1,25 +1,63 @@
 'use client';
+
 /* eslint-disable react/no-unescaped-entities */
 import { Check } from 'lucide-react';
 import React, { useState } from 'react';
+import { useForm } from 'react-hook-form';
 import { Button, Input, RadioGroup, RadioGroupItem } from 'ui';
 
 export function EditStudentDetail() {
   const [currentPage, setCurrentPage] = useState(1);
 
+  const {
+    watch,
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
+
+  const [, setFormData] = useState({} as Record<string, unknown>);
+
+  const handleOnFormSubmit = async (data: Record<string, unknown>) => {
+    setFormData(data);
+  };
+  const validateEmail = (value, field) => {
+    const atIndex = value.indexOf('@');
+    const dotIndex = value.lastIndexOf('.');
+
+    if (value === '') {
+      return `${field} is required`;
+    }
+
+    if (
+      atIndex === -1 ||
+      dotIndex === -1 ||
+      dotIndex <= atIndex + 1 ||
+      dotIndex === value.length - 1
+    ) {
+      return `${field} must be a valid email address`;
+    }
+  };
+
   const goToPage = (page) => {
     setCurrentPage(page);
   };
-  const nextPage = () => {
-    setCurrentPage(currentPage + 1);
-  };
 
   const prevPage = () => {
-    setCurrentPage(currentPage - 1);
+    setCurrentPage((prevPage) => Math.max(prevPage - 1, 1));
+  };
+
+  const nextPage = () => {
+    setCurrentPage((prevPage) => Math.min(prevPage + 1, 7));
   };
 
   return (
-    <form autoFocus autoComplete="off" className="relative mt-[20px] w-full">
+    <form
+      onSubmit={handleSubmit(handleOnFormSubmit)}
+      autoFocus
+      autoComplete="off"
+      className="relative mt-[20px] w-full"
+    >
       <section className="flex gap-4">
         <ul className="h-fit w-[215px] shrink-0 rounded-lg bg-white py-3">
           <li>
@@ -168,33 +206,76 @@ export function EditStudentDetail() {
                   First Name
                   <span className="text-red-300"> *</span>
                 </label>
-                <Input className="mt-1" autoComplete="off" />
+                <Input
+                  {...register('firstName', {
+                    required: 'First Name is required',
+                  })}
+                  aria-invalid={errors.name ? 'true' : 'false'}
+                  errorMessage={errors?.name?.message.toString()}
+                  className="mt-1"
+                  autoComplete="off"
+                  autoFocus
+                  name="firstName"
+                />
+                {errors['firstName'] && (
+                  <p className="h-2 p-1 text-sm text-red-600">
+                    {errors['firstName'].message as string}
+                  </p>
+                )}
               </div>
               <div className="w-full">
                 <label className="mt-1 block text-sm text-gray-700">
                   Middle Name
                 </label>
-                <Input className="mt-1" autoComplete="off" />
+                <Input
+                  {...register('middleName')}
+                  className="mt-1"
+                  autoComplete="off"
+                />
               </div>
               <div className="w-full">
                 <label className="mt-1 block text-sm text-gray-700">
                   Last Name
                 </label>
-                <Input className="mt-1" autoComplete="off" />
+                <Input
+                  {...register('lastName')}
+                  className="mt-1"
+                  autoComplete="off"
+                />
               </div>
               <div className="w-full">
-                <label className="mt-1 block text-sm text-gray-700">Date</label>
-                <Input type="date" className="mt-1" autoComplete="off" />
+                <label className="mt-1 block text-sm text-gray-700">
+                  Date of Birth
+                </label>
+                <Input
+                  type="date"
+                  className="mt-1"
+                  autoComplete="off"
+                  {...register('dateOfBirth', {
+                    required: 'Date of Birth is required',
+                  })}
+                  aria-invalid={errors.date ? 'true' : 'false'}
+                  errorMessage={errors?.date?.message.toString()}
+                />
+                {errors['dateOfBirth'] && (
+                  <p className="h-2 p-1 text-sm text-red-600">
+                    {errors['dateOfBirth'].message as string}
+                  </p>
+                )}
               </div>
               <div className="w-full">
                 <label className="mt-1 block text-sm text-gray-700">Age</label>
-                <Input className="mt-1" autoComplete="off" />
+                <Input
+                  {...register('age')}
+                  className="mt-1"
+                  autoComplete="off"
+                />
               </div>
               <div className="w-full">
                 <label className="mt-1 block text-sm text-gray-700">
                   Gender
                 </label>
-                <RadioGroup className="mt-3 flex gap-2">
+                <RadioGroup {...register('gender')} className="mt-3 flex gap-2">
                   <RadioGroupItem className="mr-1 mt-1" value={'male'} />{' '}
                   {'Male'}
                   <RadioGroupItem
@@ -208,35 +289,69 @@ export function EditStudentDetail() {
                 <label className="mt-1 block text-sm text-gray-700">
                   Phone Number
                 </label>
-                <Input className="mt-1" autoComplete="off" />
+                <Input
+                  {...register('phone number')}
+                  className="mt-1"
+                  autoComplete="off"
+                />
               </div>
               <div className="w-full">
                 <label className="mt-1 block text-sm text-gray-700">
                   Email
                   <span className="text-red-300"> *</span>
                 </label>
-                <Input className="mt-1" autoComplete="off" />
+                <Input
+                  {...register('email', {
+                    required: 'Email is required',
+                    validate: (value) => {
+                      return validateEmail(value, 'email');
+                    },
+                  })}
+                  aria-invalid={errors.email ? 'true' : 'false'}
+                  className="mt-1"
+                  autoComplete="off"
+                />
+                {errors['email'] && (
+                  <p className="h-2 p-1 text-sm text-red-600">
+                    {errors?.email?.message.toString()}
+                  </p>
+                )}
               </div>
               <div className="w-full">
                 <label className="mt-1 block text-sm text-gray-700">
                   Blood Group
                 </label>
-                <select className="ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring mt-1 flex h-10 w-full rounded-md border border-gray-300 bg-transparent px-3 py-2 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50">
+                <select
+                  autoComplete="off"
+                  value={watch('bloodGroup')}
+                  {...register('bloodGroup')}
+                  className="ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring mt-1 flex h-10 w-full rounded-md border border-gray-300 bg-transparent px-3 py-2 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                >
                   <option>O+</option>
                 </select>
               </div>
               <div className="w-full">
                 <label className="mt-1 block text-sm text-gray-700">
-                  Aadhar Number
+                  Aadhar Card Number
                   <span className="text-red-300"> *</span>
                 </label>
-                <Input className="mt-1" autoComplete="off" />
+                <Input
+                  {...register('aadhar number', {
+                    required: 'Aadhar Number is required',
+                  })}
+                  className="mt-1"
+                  autoComplete="off"
+                />
               </div>
               <div className="w-full">
                 <label className="mt-1 block text-sm text-gray-700">
                   Mother Tongue
                 </label>
-                <select className="ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring mt-1 flex h-10 w-full rounded-md border border-gray-300 bg-transparent px-3 py-2 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50">
+                <select
+                  autoComplete="off"
+                  {...register('motherTongue')}
+                  className="ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring mt-1 flex h-10 w-full rounded-md border border-gray-300 bg-transparent px-3 py-2 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                >
                   <option>Tamil</option>
                   <option>Malayalam</option>
                   <option>Telugu</option>
@@ -247,7 +362,11 @@ export function EditStudentDetail() {
                 <label className="mt-1 block text-sm text-gray-700">
                   Religion
                 </label>
-                <select className="ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring mt-1 flex h-10 w-full rounded-md border border-gray-300 bg-transparent px-3 py-2 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50">
+                <select
+                  autoComplete="off"
+                  {...register('religion')}
+                  className="ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring mt-1 flex h-10 w-full rounded-md border border-gray-300 bg-transparent px-3 py-2 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                >
                   <option>Himdu</option>
                   <option>Muslim</option>
                   <option>Christian</option>
@@ -258,7 +377,10 @@ export function EditStudentDetail() {
                 <label className="mt-1 block text-sm text-gray-700">
                   Community
                 </label>
-                <select className="ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring mt-1 flex h-10 w-full rounded-md border border-gray-300 bg-transparent px-3 py-2 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50">
+                <select
+                  {...register('languageId')}
+                  className="ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring mt-1 flex h-10 w-full rounded-md border border-gray-300 bg-transparent px-3 py-2 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                >
                   <option>bc</option>
                   <option>sc</option>
                   <option>st</option>
@@ -269,15 +391,21 @@ export function EditStudentDetail() {
                 <label className="mt-1 block text-sm text-gray-700">
                   Caste
                 </label>
-                <select className="ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring mt-1 flex h-10 w-full rounded-md border border-gray-300 bg-transparent px-3 py-2 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50">
-                  <option>no caste</option>
+                <select
+                  {...register('language')}
+                  className="ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring mt-1 flex h-10 w-full rounded-md border border-gray-300 bg-transparent px-3 py-2 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                >
+                  <option>caste</option>
                 </select>
               </div>
               <div className="w-full">
                 <label className="mt-1 block text-sm text-gray-700">
                   Differently abled
                 </label>
-                <RadioGroup className="mt-3 flex gap-2">
+                <RadioGroup
+                  {...register('language')}
+                  className="mt-3 flex gap-2"
+                >
                   <RadioGroupItem className="mr-1 mt-1" value={'yes'} /> {'Yes'}
                   <RadioGroupItem className="ml-3 mr-1 mt-1 " value={'no'} />
                   {'No'}
@@ -292,73 +420,120 @@ export function EditStudentDetail() {
                 <label className="mt-1 block text-sm text-gray-700">
                   Father's Name
                 </label>
-                <Input className="mt-1" autoComplete="off" />
+                <Input
+                  {...register('fatherName')}
+                  className="mt-1"
+                  autoComplete="off"
+                />
               </div>
               <div className="w-full">
                 <label className="mt-1 block text-sm text-gray-700">
                   Father's Occupation
                 </label>
-                <Input className="mt-1" autoComplete="off" />
+                <Input
+                  {...register('fatherOccupation')}
+                  className="mt-1"
+                  autoComplete="off"
+                />
               </div>
               <div className="w-full">
                 <label className="mt-1 block text-sm text-gray-700">
                   Father's Phone Number
                 </label>
-                <Input className="mt-1" autoComplete="off" />
+                <Input
+                  {...register('fatherPhoneNumber')}
+                  className="mt-1"
+                  autoComplete="off"
+                />
               </div>
               <div className="w-full">
                 <label className="mt-1 block text-sm text-gray-700">
                   Father's Education
                 </label>
-                <Input className="mt-1" autoComplete="off" />
+                <Input
+                  {...register('fatherEducation')}
+                  className="mt-1"
+                  autoComplete="off"
+                />
               </div>
               <div className="w-full">
                 <label className="mt-1 block text-sm text-gray-700">
                   Father's Aadhar Card Number
                 </label>
-                <Input className="mt-1" autoComplete="off" />
+                <Input
+                  {...register('fatherAadharCardNumber')}
+                  className="mt-1"
+                  autoComplete="off"
+                />
               </div>
               <div className="w-full">
                 <label className="mt-1 block text-sm text-gray-700">
                   Mother's Name
                 </label>
-                <Input className="mt-1" autoComplete="off" />
+                <Input
+                  {...register('motherName')}
+                  className="mt-1"
+                  autoComplete="off"
+                />
               </div>
               <div className="w-full">
                 <label className="mt-1 block text-sm text-gray-700">
                   Mother's Occupation
                 </label>
-                <Input className="mt-1" autoComplete="off" />
+                <Input
+                  {...register('motherOccupation')}
+                  className="mt-1"
+                  autoComplete="off"
+                />
               </div>
               <div className="w-full">
                 <label className="mt-1 block text-sm text-gray-700">
                   Mother's Phone Number
                 </label>
-                <Input className="mt-1" autoComplete="off" />
+                <Input
+                  {...register('motherPhoneNumber')}
+                  className="mt-1"
+                  autoComplete="off"
+                />
               </div>
               <div className="w-full">
                 <label className="mt-1 block text-sm text-gray-700">
                   Mother's Education
                 </label>
-                <Input className="mt-1" autoComplete="off" />
+                <Input
+                  {...register('motherEducation')}
+                  className="mt-1"
+                  autoComplete="off"
+                />
               </div>
               <div className="w-full">
                 <label className="mt-1 block text-sm text-gray-700">
                   Mother's Aadhar Card Number
                 </label>
-                <Input className="mt-1" autoComplete="off" />
+                <Input
+                  {...register('motherAadharCardNumber')}
+                  className="mt-1"
+                  autoComplete="off"
+                />
               </div>
               <div className="w-full">
                 <label className="mt-1 block text-sm text-gray-700">
                   Annual Income
                 </label>
-                <Input className="mt-1" autoComplete="off" />
+                <Input
+                  {...register('annualIncome')}
+                  className="mt-1"
+                  autoComplete="off"
+                />
               </div>
               <div className="w-full">
                 <label className="mt-1 block text-sm text-gray-700">
                   Parents Separated
                 </label>
-                <RadioGroup className="mt-3 flex gap-2">
+                <RadioGroup
+                  {...register('parentsSeparated')}
+                  className="mt-3 flex gap-2"
+                >
                   <RadioGroupItem className="mr-1 mt-1" value={'yes'} />
                   {'Yes'}
                   <RadioGroupItem className="ml-3 mr-1 mt-1 " value={'no'} />
@@ -376,21 +551,34 @@ export function EditStudentDetail() {
                 <label className="mt-1 block text-sm text-gray-700">
                   No of Siblings
                 </label>
-                <select className="ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring mt-1 flex h-10 w-full rounded-md border border-gray-300 bg-transparent px-3 py-2 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50">
+                <select
+                  value={watch('language')}
+                  {...register('middleName')}
+                  className="ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring mt-1 flex h-10 w-full rounded-md border border-gray-300 bg-transparent px-3 py-2 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                >
                   <option>0</option>
+                  <option>1</option>
+                  <option>2</option>
                 </select>
               </div>
               <div className="w-full">
                 <label className="mt-1 block text-sm text-gray-700">
                   Sibling Name 1
                 </label>
-                <Input className="mt-1" autoComplete="off" />
+                <Input
+                  {...register('siblingName1')}
+                  className="mt-1"
+                  autoComplete="off"
+                />
               </div>
               <div className="w-full">
                 <label className="mt-1 block text-sm text-gray-700">
                   Relation
                 </label>
-                <RadioGroup className="mt-3 flex gap-2">
+                <RadioGroup
+                  {...register('relation')}
+                  className="mt-3 flex gap-2"
+                >
                   <RadioGroupItem className="mr-1 mt-1" value={'brother'} />
                   {'Brother'}
                   <RadioGroupItem
@@ -404,19 +592,30 @@ export function EditStudentDetail() {
                 <label className="mt-1 block text-sm text-gray-700">
                   Class for sibling 1
                 </label>
-                <Input className="mt-1" autoComplete="off" />
+                <Input
+                  {...register('classForSibling1')}
+                  className="mt-1"
+                  autoComplete="off"
+                />
               </div>
               <div className="w-full">
                 <label className="mt-1 block text-sm text-gray-700">
                   Sibling Name 2
                 </label>
-                <Input className="mt-1" autoComplete="off" />
+                <Input
+                  {...register('siblingName2')}
+                  className="mt-1"
+                  autoComplete="off"
+                />
               </div>
               <div className="w-full">
                 <label className="mt-1 block text-sm text-gray-700">
                   Relation
                 </label>
-                <RadioGroup className="mt-3 flex gap-2">
+                <RadioGroup
+                  {...register('relation')}
+                  className="mt-3 flex gap-2"
+                >
                   <RadioGroupItem className="mr-1 mt-1" value={'brother'} />
                   {'Brother'}
                   <RadioGroupItem
@@ -430,7 +629,11 @@ export function EditStudentDetail() {
                 <label className="mt-1 block text-sm text-gray-700">
                   Class for sibling 2
                 </label>
-                <Input className="mt-1" autoComplete="off" />
+                <Input
+                  {...register('classForSibling 2')}
+                  className="mt-1"
+                  autoComplete="off"
+                />
               </div>
             </section>
           </div>
@@ -443,31 +646,51 @@ export function EditStudentDetail() {
                 <label className="mt-1 block text-sm text-gray-700">
                   Guardian's Name
                 </label>
-                <Input className="mt-1" autoComplete="off" />
+                <Input
+                  {...register('guardianName')}
+                  className="mt-1"
+                  autoComplete="off"
+                />
               </div>
               <div className="w-full">
                 <label className="mt-1 block text-sm text-gray-700">
                   Guardian's Occupation
                 </label>
-                <Input className="mt-1" autoComplete="off" />
+                <Input
+                  {...register('guardianOccupation')}
+                  className="mt-1"
+                  autoComplete="off"
+                />
               </div>
               <div className="w-full">
                 <label className="mt-1 block text-sm text-gray-700">
                   Relationship Type
                 </label>
-                <Input className="mt-1" autoComplete="off" />
+                <Input
+                  {...register('relationshipType')}
+                  className="mt-1"
+                  autoComplete="off"
+                />
               </div>
               <div className="w-full">
                 <label className="mt-1 block text-sm text-gray-700">
                   Guardian's Phone Number
                 </label>
-                <Input className="mt-1" autoComplete="off" />
+                <Input
+                  {...register('guardianPhoneNumber')}
+                  className="mt-1"
+                  autoComplete="off"
+                />
               </div>
               <div className="w-full">
                 <label className="mt-1 block text-sm text-gray-700">
                   Guardian's Aadhar Card Number
                 </label>
-                <Input className="mt-1" autoComplete="off" />
+                <Input
+                  {...register('guardianAadharCardNumber')}
+                  className="mt-1"
+                  autoComplete="off"
+                />
               </div>
             </section>
           </div>
@@ -479,6 +702,7 @@ export function EditStudentDetail() {
                   Residential Address
                 </label>
                 <textarea
+                  {...register('residentialAddress')}
                   autoComplete="off"
                   className="ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring mt-1 flex h-10 w-full rounded-md border border-gray-300 bg-transparent px-3 py-2 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
                 ></textarea>
@@ -487,25 +711,38 @@ export function EditStudentDetail() {
                 <label className="mt-1 block text-sm text-gray-700">
                   District
                 </label>
-                <Input className="mt-1" autoComplete="off" />
+                <Input
+                  {...register('district')}
+                  className="mt-1"
+                  autoComplete="off"
+                />
               </div>
               <div className="w-full">
                 <label className="mt-1 block text-sm text-gray-700">
                   State
                 </label>
-                <Input className="mt-1" autoComplete="off" />
+                <Input
+                  {...register('state')}
+                  className="mt-1"
+                  autoComplete="off"
+                />
               </div>
               <div className="w-full">
                 <label className="mt-1 block text-sm text-gray-700">
                   Postal / ZIP Code
                 </label>
-                <Input className="mt-1" autoComplete="off" />
+                <Input
+                  {...register('postal/ZIPCode')}
+                  className="mt-1"
+                  autoComplete="off"
+                />
               </div>
               <div className="w-full">
                 <label className="mt-1 block text-sm text-gray-700">
                   Permanent Address
                 </label>
                 <textarea
+                  {...register('permanentaddress')}
                   autoComplete="off"
                   className="ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring mt-1 flex h-10 w-full rounded-md border border-gray-300 bg-transparent px-3 py-2 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
                 ></textarea>
@@ -514,25 +751,41 @@ export function EditStudentDetail() {
                 <label className="mt-1 block text-sm text-gray-700">
                   District
                 </label>
-                <Input className="mt-1" autoComplete="off" />
+                <Input
+                  {...register('permanentDistrict')}
+                  className="mt-1"
+                  autoComplete="off"
+                />
               </div>
               <div className="w-full">
                 <label className="mt-1 block text-sm text-gray-700">
                   State
                 </label>
-                <Input className="mt-1" autoComplete="off" />
+                <Input
+                  {...register('permanentState')}
+                  className="mt-1"
+                  autoComplete="off"
+                />
               </div>
               <div className="w-full">
                 <label className="mt-1 block text-sm text-gray-700">
                   Postal / ZIP Code
                 </label>
-                <Input className="mt-1" autoComplete="off" />
+                <Input
+                  {...register('permanentPostal/ZIPCode')}
+                  className="mt-1"
+                  autoComplete="off"
+                />
               </div>
               <div className="w-full">
                 <label className="mt-1 block text-sm text-gray-700">
                   Nationality
                 </label>
-                <Input className="mt-1" autoComplete="off" />
+                <Input
+                  {...register('Nationality')}
+                  className="mt-1"
+                  autoComplete="off"
+                />
               </div>
             </section>
           </div>
@@ -545,94 +798,193 @@ export function EditStudentDetail() {
                 <label className="mt-1 block text-sm text-gray-700">
                   School Name (10th std)
                 </label>
-                <Input className="mt-1" autoComplete="off" />
+                <Input
+                  {...register('schoolName10thstd')}
+                  className="mt-1"
+                  autoComplete="off"
+                />
               </div>
               <div className="w-full">
                 <label className="mt-1 block text-sm text-gray-700">
                   Year of Passing
                 </label>
-                <Input className="mt-1" autoComplete="off" />
+                <Input
+                  {...register('yearOfpassing10')}
+                  className="mt-1"
+                  autoComplete="off"
+                />
               </div>
               <div className="w-full">
                 <label className="mt-1 block text-sm text-gray-700">
                   Obtained Mark
                 </label>
-                <Input className="mt-1" autoComplete="off" />
+                <Input
+                  {...register('obtainedMark10')}
+                  className="mt-1"
+                  autoComplete="off"
+                />
               </div>
               <div className="w-full">
                 <label className="mt-1 block text-sm text-gray-700">
                   Medium of Education 10th
                 </label>
-                <Input className="mt-1" autoComplete="off" />
+                <Input
+                  {...register('mediumOfEducation10th')}
+                  className="mt-1"
+                  autoComplete="off"
+                />
               </div>
               <div className="w-full">
                 <label className="mt-1 block text-sm text-gray-700">
                   School Name (11th std)
                 </label>
-                <Input className="mt-1" autoComplete="off" />
+                <Input
+                  {...register('schoolName11thstd')}
+                  className="mt-1"
+                  autoComplete="off"
+                />
               </div>
               <div className="w-full">
                 <label className="mt-1 block text-sm text-gray-700">
                   Year of Passing
                 </label>
-                <Input className="mt-1" autoComplete="off" />
+                <Input
+                  {...register('yearOfPassing11')}
+                  className="mt-1"
+                  autoComplete="off"
+                />
               </div>
               <div className="w-full">
                 <label className="mt-1 block text-sm text-gray-700">
                   Obtained Mark
                 </label>
-                <Input className="mt-1" autoComplete="off" />
+                <Input
+                  {...register('obtainedMark')}
+                  className="mt-1"
+                  autoComplete="off"
+                />
               </div>
               <div className="w-full">
                 <label className="mt-1 block text-sm text-gray-700">
                   Medium of Education 11th
                 </label>
-                <Input className="mt-1" autoComplete="off" />
+                <Input
+                  {...register('mediumOfEducation11th')}
+                  className="mt-1"
+                  autoComplete="off"
+                />
               </div>
               <div className="w-full">
                 <label className="mt-1 block text-sm text-gray-700">
                   EMIS Number
                 </label>
-                <Input className="mt-1" autoComplete="off" />
+                <Input
+                  {...register('EMISNumber')}
+                  className="mt-1"
+                  autoComplete="off"
+                />
               </div>
               <div className="w-full">
                 <label className="mt-1 block text-sm text-gray-700">
                   Admission Number
                 </label>
-                <Input className="mt-1" autoComplete="off" />
+                <Input
+                  {...register('admissionNumber')}
+                  className="mt-1"
+                  autoComplete="off"
+                />
               </div>
               <div className="w-full">
                 <label className="mt-1 block text-sm text-gray-700">
                   Blood Group
                 </label>
-                <Input type="date" className="mt-1" autoComplete="off" />
+                <Input
+                  {...register('bloodGroup')}
+                  type="date"
+                  className="mt-1"
+                  autoComplete="off"
+                />
               </div>
               <div className="w-full">
                 <label className="mt-1 block text-sm text-gray-700">
                   Medium
                   <span className="text-red-300"> *</span>
                 </label>
-                <select className="ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring mt-1 flex h-10 w-full rounded-md border border-gray-300 bg-transparent px-3 py-2 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50">
+                <select
+                  {...register('medium', {
+                    required: 'Medium is required',
+                  })}
+                  className="ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring mt-1 flex h-10 w-full rounded-md border border-gray-300 bg-transparent px-3 py-2 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                >
                   <option>medium</option>
                 </select>
+                {errors['medium'] && (
+                  <p className="h-2 p-1 text-sm text-red-600">
+                    {errors['medium'].message as string}
+                  </p>
+                )}
               </div>
+
+              <div className="relative w-full">
+                <label className="mt-1 block text-sm text-gray-700">
+                  Medium
+                  <span className="text-red-300"> *</span>
+                </label>
+                <select
+                  {...register('medium', {
+                    required: 'Medium is required',
+                  })}
+                  aria-invalid={errors.medium ? 'true' : 'false'}
+                  className="ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring mt-1 flex h-10 w-full rounded-md border border-gray-300 bg-transparent px-3 py-2 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                >
+                  <option value="">Select medium</option>{' '}
+                  <option value="option1">Option 1</option>{' '}
+                  <option value="option2">Option 2</option>
+                </select>
+                {errors.medium && (
+                  <p className="absolute left-0 top-full mt-1 text-sm text-red-600">
+                    {errors.medium.message}
+                  </p>
+                )}
+              </div>
+
               <div className="w-full">
                 <label className="mt-1 block text-sm text-gray-700">
                   Class
                   <span className="text-red-300"> *</span>
                 </label>
-                <select className="ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring mt-1 flex h-10 w-full rounded-md border border-gray-300 bg-transparent px-3 py-2 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50">
+                <select
+                  {...register('class', {
+                    required: 'Class is required',
+                  })}
+                  className="ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring mt-1 flex h-10 w-full rounded-md border border-gray-300 bg-transparent px-3 py-2 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                >
                   <option>class</option>
                 </select>
+                {errors['class'] && (
+                  <p className="h-2 p-1 text-sm text-red-600">
+                    {errors['class'].message as string}
+                  </p>
+                )}
               </div>
               <div className="w-full">
                 <label className="mt-1 block text-sm text-gray-700">
                   Group
                   <span className="text-red-300"> *</span>
                 </label>
-                <select className="ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring mt-1 flex h-10 w-full rounded-md border border-gray-300 bg-transparent px-3 py-2 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50">
+                <select
+                  {...register('group', {
+                    required: 'Group is required',
+                  })}
+                  className="ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring mt-1 flex h-10 w-full rounded-md border border-gray-300 bg-transparent px-3 py-2 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                >
                   <option>group</option>
                 </select>
+                {errors['group'] && (
+                  <p className="h-2 p-1 text-sm text-red-600">
+                    {errors['group'].message as string}
+                  </p>
+                )}
               </div>
             </section>
           </div>
@@ -646,15 +998,28 @@ export function EditStudentDetail() {
                   Batch
                   <span className="text-red-300"> *</span>
                 </label>
-                <select className="ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring mt-1 flex h-10 w-full rounded-md border border-gray-300 bg-transparent px-3 py-2 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50">
+                <select
+                  {...register('batch', {
+                    required: 'Batch is required',
+                  })}
+                  className="ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring mt-1 flex h-10 w-full rounded-md border border-gray-300 bg-transparent px-3 py-2 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                >
                   <option>group</option>
                 </select>
+                {errors['batch'] && (
+                  <p className="h-2 p-1 text-sm text-red-600">
+                    {errors['batch'].message as string}
+                  </p>
+                )}
               </div>
               <div className="w-full">
                 <label className="mt-1 block text-sm text-gray-700">
                   Admission Type
                 </label>
-                <RadioGroup className="mt-3 flex gap-2">
+                <RadioGroup
+                  {...register('admissionType')}
+                  className="mt-3 flex gap-2"
+                >
                   <RadioGroupItem className="mr-1 mt-1" value={'new'} />
                   {'New'}
                   <RadioGroupItem
@@ -668,7 +1033,10 @@ export function EditStudentDetail() {
                 <label className="mt-1 block text-sm text-gray-700">
                   Admission Mode
                 </label>
-                <RadioGroup className="mt-3 flex gap-2">
+                <RadioGroup
+                  {...register('admiddionMode')}
+                  className="mt-3 flex gap-2"
+                >
                   <RadioGroupItem className="mr-1 mt-1" value={'counselling'} />
                   {'Counselling'}
                   <RadioGroupItem
@@ -682,7 +1050,10 @@ export function EditStudentDetail() {
                 <label className="mt-1 block text-sm text-gray-700">
                   Scholarship
                 </label>
-                <RadioGroup className="mt-3 flex gap-2">
+                <RadioGroup
+                  {...register('scholarship')}
+                  className="mt-3 flex gap-2"
+                >
                   <RadioGroupItem className="mr-1 mt-1" value={'yes'} />
                   {'Yes'}
                   <RadioGroupItem className="ml-3 mr-1 mt-1 " value={'no'} />
@@ -693,7 +1064,11 @@ export function EditStudentDetail() {
                 <label className="mt-1 block text-sm text-gray-700">
                   First Language
                 </label>
-                <Input className="mt-1" autoComplete="off" />
+                <Input
+                  {...register('firstLanguage')}
+                  className="mt-1"
+                  autoComplete="off"
+                />
               </div>
             </section>
           </div>
@@ -707,12 +1082,11 @@ export function EditStudentDetail() {
               Back
             </Button>
             <Button
-              type="button"
+              type="submit"
               onClick={nextPage}
-              disabled={currentPage === 7}
               className="rounded px-4 py-2 font-bold text-white "
             >
-              {currentPage === 7 ? 'Preview & Submit' : 'Next'}
+              {currentPage === 7 ? 'Update' : 'Next'}
             </Button>
           </section>
         </section>
