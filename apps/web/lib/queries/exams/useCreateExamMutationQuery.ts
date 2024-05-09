@@ -14,9 +14,6 @@ export function useCreateExamMutationQuery(page: number, limit: number) {
         {},
         {}
       );
-      await queryClient.cancelQueries({
-        queryKey: [GET_EXAM_LIST, page, limit],
-      });
       return response;
     },
     onSuccess: async () => {

@@ -110,19 +110,13 @@ export function OnboardStaffForm() {
   const { data: getBloodGroupListResponse } = useGetBloodGroupListQuery();
 
   let customDataList = {
-    bloodGroup: getBloodGroupListResponse || [{ bloodType: 'Loading' }],
-    permanentCountry: getCountryListResponse || [{ name: 'Loading...' }],
-    permanentState: getPermanentStateByCountryIdResponse || [
-      { name: 'Loading...' },
-    ],
-    permanentCity: getPermanentCityByStateCodeResponse || [
-      { name: 'Loading...' },
-    ],
-    currentCountry: getCountryListResponse || [{ name: 'Loading...' }],
-    currentState: getCurrentStateByCountryIdResponse || [
-      { name: 'Loading...' },
-    ],
-    currentCity: getCurrentCityByStateCodeResponse || [{ name: 'Loading...' }],
+    bloodGroup: getBloodGroupListResponse || [],
+    permanentCountry: getCountryListResponse || [],
+    permanentState: getPermanentStateByCountryIdResponse || [],
+    permanentCity: getPermanentCityByStateCodeResponse || [],
+    currentCountry: getCountryListResponse || [],
+    currentState: getCurrentStateByCountryIdResponse || [],
+    currentCity: getCurrentCityByStateCodeResponse || [],
   };
   return (
     <form
@@ -233,6 +227,9 @@ export function OnboardStaffForm() {
                           <div key={field.id} className="w-full">
                             <label className="mt-1 block text-sm text-gray-700">
                               {field.label}
+                              {field.validationRules.required && (
+                                <span className="text-red-500"> *</span>
+                              )}
                             </label>
                             <Input
                               {...register(field.name, {

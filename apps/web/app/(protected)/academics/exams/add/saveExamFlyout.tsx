@@ -77,58 +77,20 @@ export function SaveExamFlyout() {
     filter,
   });
 
-  const {
-    isPending: isPendingCreateExam,
-    mutateAsync: mutateCreateExamAsync,
-    isSuccess: isExamSuccess,
-    data: createdExam,
-  } = useCreateExamMutationQuery(page, limit);
-
-  // useEffect(() => {
-  //   if (getAssessmentFormatByIdResponse) {
-  //     const { name, isActive, termId, examTypeId, academicYearId } =
-  //       getAssessmentFormatByIdResponse;
-
-  //     setValue('name', name);
-  //     setValue('isActive', isActive);
-  //     setValue('termId', termId);
-  //     setValue('examTypeId', examTypeId);
-  //     setValue('academicYearId', academicYearId);
-  //   } else {
-  //     setValue('name', null);
-  //     setValue('isActive', false);
-  //     setValue('termId', null);
-  //     setValue('examTypeId', null);
-  //     setValue('academicYearId', null);
-  //   }
-  // }, [getAssessmentFormatByIdResponse, setValue]);
-
-  // const {
-  //   isPending: isPendingUpdateAssessmentFormat,
-  //   mutateAsync: mutateUpdateAssessmentFormatAsync,
-  // } = useUpdateAssessmentFormatMutationQuery(page, limit);
+  const { isPending: isPendingCreateExam, mutateAsync: mutateCreateExamAsync } =
+    useCreateExamMutationQuery(page, limit);
 
   async function saveExam(payload: CreateExamModel) {
     try {
-      if (examId) {
-        // const updateAssessmentFormatRequestPayload = {
-        //   ...payload,
-        //   id: examId,
-        // };
-        // await mutateUpdateAssessmentFormatAsync(
-        //   updateAssessmentFormatRequestPayload
-        // );
-      } else {
-        const requestPayload = {
-          ...payload,
-          isActive: Boolean(payload.isActive),
-        };
-        await mutateCreateExamAsync(requestPayload);
-        if (isExamSuccess) {
-          router.push(`/academics/exams/${createdExam?.id}/configuration/add`);
-          setValue('isActive', false);
-          reset();
-        }
+      const requestPayload = {
+        ...payload,
+        isActive: Boolean(payload.isActive),
+      };
+      const response = await mutateCreateExamAsync(requestPayload);
+      if (response) {
+        router.push(`/academics/exams/${response.id}/configuration/add`);
+        setValue('isActive', false);
+        reset();
       }
     } catch (error) {
       console.error(error);
