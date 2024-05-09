@@ -40,7 +40,7 @@ export function AssessmentSubjects({ nestIndex, control }) {
       subjectsWithFormats.forEach((format, index) => {
         if (subjectsWithFormats[index]) {
           append({
-            subjectId: format.id,
+            subjectId: format.subject.id,
           });
         }
       });
@@ -57,13 +57,17 @@ export function AssessmentSubjects({ nestIndex, control }) {
             columnColor[subjectIndex % 10]
           )}
         >
-          <MarkFields
-            nestIndex={nestIndex}
-            subjectIndex={subjectIndex}
-            control={control}
-            assessmentFormats={subjectsWithFormats[subjectIndex]}
-            assessmentId={subjectsWithFormats[subjectIndex]?.id}
-          />
+          {subjectsWithFormats ? (
+            <MarkFields
+              nestIndex={nestIndex}
+              subjectIndex={subjectIndex}
+              control={control}
+              assessmentFormats={subjectsWithFormats[subjectIndex]}
+              assessmentId={subjectsWithFormats[subjectIndex]?.id}
+            />
+          ) : (
+            'loading'
+          )}
         </div>
       ))}
     </>

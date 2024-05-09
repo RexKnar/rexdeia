@@ -15,6 +15,7 @@ export type StudentsMarkInExamModel = {
   subjects: Marks[];
 };
 export type Marks = {
+  subjectId: string;
   marks: MarksWithAssessmentFormatModel[];
 };
 export type MarksWithAssessmentFormatModel = {

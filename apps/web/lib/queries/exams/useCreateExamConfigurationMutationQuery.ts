@@ -11,15 +11,12 @@ export function useCreateExamConfigurationQuery(examId: string) {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: async (payload: CreateExamConfigurationModel) => {
-      await makeAPICall<CreateExamConfigurationModel>(
+      return await makeAPICall<CreateExamConfigurationModel>(
         ADD_EXAM_CONFIGURATION_BY_EXAM_ID,
         payload,
         {},
         { id: examId }
       );
-      await queryClient.invalidateQueries({
-        queryKey: [GET_EXAM_LIST],
-      });
     },
     onSuccess: async () => {
       await queryClient.refetchQueries({
