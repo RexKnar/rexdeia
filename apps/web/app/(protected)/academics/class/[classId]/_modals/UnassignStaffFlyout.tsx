@@ -2,6 +2,8 @@
 
 import { CircleMinus } from 'lucide-react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { useEffect } from 'react';
+import { useFieldArray, useForm } from 'react-hook-form';
 import {
   Button,
   Checkbox,
@@ -13,7 +15,24 @@ import {
 } from 'ui';
 
 export function UnassignStaffFlyout() {
-  const payload = [
+  const {
+    handleSubmit,
+    control,
+    formState: { errors },
+  } = useForm();
+  const { fields, append } = useFieldArray({
+    control,
+    name: 'sectionandsubjects',
+  });
+
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  // const staffId = searchParams.get('staffId');
+  const staffName = searchParams.get('staffName');
+  // const academicYearId = searchParams.get('academicYearId');
+  const router = useRouter();
+  const isOpen = searchParams.get('isUnassignStaffFlyoutOpen') === 'true';
+  const staffSubjectList = [
     {
       sectionid: 1,
       sectionname: 'SectionA',
@@ -31,16 +50,25 @@ export function UnassignStaffFlyout() {
       ],
     },
   ];
-  const pathname = usePathname();
-  const searchParams = useSearchParams();
-  const router = useRouter();
-  const isOpen = searchParams.get('isUnassignStaffFlyoutOpen') === 'true';
+
+  useEffect(() => {
+    if (isOpen && staffSubjectList) {
+      staffSubjectList.forEach((section) => {
+        append({ sections: section.sectionid });
+      });
+    }
+  }, []);
 
   const closeFlyout = () => {
     const params = new URLSearchParams(searchParams);
     params.set('isUnassignStaffFlyoutOpen', 'false');
     router.replace(pathname + '?' + params.toString());
   };
+
+  const onsubmit = (data) => {
+    console.log(data, errors);
+  };
+
   return (
     <section>
       <Sheet open={isOpen}>
@@ -63,42 +91,56 @@ export function UnassignStaffFlyout() {
             </SheetTitle>
             <hr className="border-t border-gray-300"></hr>
           </SheetHeader>
-          <div className="mt-6">
-            <div>
-              <Text variant="base-bold" className="text-gray-700">
-                Staff Name
-              </Text>
-            </div>
-            {payload.map((item) => (
-              <div className="mt-2" key={item.sectionid}>
-                <label
-                  htmlFor="subjectName"
-                  className="text-sm font-semibold text-gray-700"
-                >
-                  {item.sectionname}
-                </label>
-                <div className=" flex flex-wrap">
-                  {item.subjects.map((subject) => (
-                    <div
-                      key={subject.id}
-                      className="me-6 mt-2 flex flex-wrap items-center"
-                    >
-                      <Checkbox className="me-2 items-center space-x-2 rounded border border-primary-500" />
-                      <label>{subject.name}</label>
-                    </div>
-                  ))}
-                </div>
+          <form onSubmit={handleSubmit(onsubmit)}>
+            <div className="mt-6">
+              <div>
+                <Text variant="base-bold" className="text-gray-700">
+                  {staffName}
+                </Text>
               </div>
-            ))}
-          </div>
-          <Button
-            type="submit"
-            size="lg"
-            variant="default"
-            className=" mx-auto mt-8 flex justify-center px-12 py-4"
-          >
-            Remove
-          </Button>
+              {fields.map((section, index) => {
+                return (
+                  <div className="mt-2" key={index}>
+                    <label
+                      htmlFor="subjectName"
+                      className="text-sm font-semibold text-gray-700"
+                    >
+                      {/* {staffSubjectList[index]?.sectionname} */}
+                    </label>
+                    <div className="me-6 mt-2 flex flex-wrap items-center">
+                      {staffSubjectList[index].subjects.map((subject) => {
+                        return (
+                          <>
+                            <Checkbox
+                              className="me-2 items-center space-x-2 rounded border border-primary-500"
+                              value={subject.id}
+                              {...control.register(
+                                `sectionandsubjects.subjects`
+                              )}
+                            />
+                            <label>{subject?.name}</label>
+                          </>
+                        );
+                      })}
+                    </div>
+                    {/* <SubjectForUnassignStaff
+                    nestIndex={index}
+                    subjects={payload[index]?.subjects}
+                    {...{ control, register }}
+                  /> */}
+                  </div>
+                );
+              })}
+            </div>
+            <Button
+              type="submit"
+              size="lg"
+              variant="default"
+              className="mx-auto mt-8 flex justify-center px-12 py-4"
+            >
+              Remove
+            </Button>
+          </form>
         </SheetContent>
       </Sheet>
     </section>
