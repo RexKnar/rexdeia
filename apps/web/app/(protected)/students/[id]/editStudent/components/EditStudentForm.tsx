@@ -925,29 +925,6 @@ export function EditStudentDetail() {
                 )}
               </div>
 
-              <div className="relative w-full">
-                <label className="mt-1 block text-sm text-gray-700">
-                  Medium
-                  <span className="text-red-300"> *</span>
-                </label>
-                <select
-                  {...register('medium', {
-                    required: 'Medium is required',
-                  })}
-                  aria-invalid={errors.medium ? 'true' : 'false'}
-                  className="ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring mt-1 flex h-10 w-full rounded-md border border-gray-300 bg-transparent px-3 py-2 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-                >
-                  <option value="">Select medium</option>{' '}
-                  <option value="option1">Option 1</option>{' '}
-                  <option value="option2">Option 2</option>
-                </select>
-                {errors.medium && (
-                  <p className="absolute left-0 top-full mt-1 text-sm text-red-600">
-                    {errors.medium.message}
-                  </p>
-                )}
-              </div>
-
               <div className="w-full">
                 <label className="mt-1 block text-sm text-gray-700">
                   Class

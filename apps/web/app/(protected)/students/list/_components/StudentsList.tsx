@@ -332,13 +332,6 @@ export function StudentsList() {
                     <Tooltip>
                       <TooltipTrigger asChild>
                         <Button
-                          // onClick={async () => {
-                          //   const params = new URLSearchParams(searchParams);
-                          //   // params.set('isFlyoutOpen', 'true');
-                          //   params.set('studentId', row.original.id);
-
-                          //   router.replace(pathname + '?' + params.toString());
-                          // }}
                           onClick={() => {
                             handleEditClick(row.original.id);
                           }}

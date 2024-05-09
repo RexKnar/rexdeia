@@ -21,7 +21,7 @@ export type sectionFieldsType = {
 const staffForm: staffFormSectionType[] = [
   {
     id: 0,
-    sectionTitle: 'BASIC DETAILS',
+    sectionTitle: 'Basic Details',
     sectionFields: [
       {
         id: 0,
@@ -307,7 +307,7 @@ const staffForm: staffFormSectionType[] = [
   },
   {
     id: 1,
-    sectionTitle: 'PARENTS DETAILS',
+    sectionTitle: 'Parents Details',
     sectionFields: [
       {
         id: 0,
@@ -349,7 +349,7 @@ const staffForm: staffFormSectionType[] = [
   },
   {
     id: 2,
-    sectionTitle: 'ADDRESS DETAILS',
+    sectionTitle: 'Address Details',
     sectionFields: [
       {
         id: 0,
@@ -523,7 +523,7 @@ const staffForm: staffFormSectionType[] = [
   },
   {
     id: 3,
-    sectionTitle: 'WORK DETAILS',
+    sectionTitle: 'Work Details',
     sectionFields: [
       {
         id: 0,
@@ -637,7 +637,7 @@ const staffForm: staffFormSectionType[] = [
   },
   {
     id: 3,
-    sectionTitle: 'EDUCATION DETAILS',
+    sectionTitle: 'Education Details',
     sectionFields: [
       {
         id: 0,

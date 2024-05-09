@@ -61,8 +61,15 @@ export async function createMarkEntry(
                 data: {
                   studentId,
                   staffId:
-                    assessmentMarksPayload.staffId ||
-                    '49294599-b381-4e62-9436-3e1aed6cf5b8',
+                    // assessmentMarksPayload.staffId ||
+                    '555e443d-3ca1-45a6-83d2-9a9e025bf8c6',
+                  subject: {
+                    connect: [
+                      {
+                        id: studentMark.subjectId,
+                      },
+                    ],
+                  },
                   academicExamId: mark.academicExamId,
                   assessmentFormatId: mark.assessmentFormatId,
                   mark: +mark.mark,

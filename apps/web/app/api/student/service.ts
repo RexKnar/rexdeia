@@ -266,17 +266,21 @@ export async function getAllStudentsBySectionIdWithGroup(sectionId: string) {
 }
 
 export async function getAllStudentsBySectionIds(ids: string[]) {
-  const session = await getServerSession(authOptions);
-  return await db.student.findMany({
+  const studentsList = await db.studentMapping.findMany({
     where: {
       sectionId: {
         in: ids,
       },
-      status: 'Active',
-      branchId: session.branchId,
-      organizationId: session.organizationId,
+    },
+    select: {
+      student: true,
     },
   });
+
+  let studentList = studentsList.map((item) => {
+    return item.student;
+  });
+  return studentList;
 }
 
 export async function deleteStudentById(id: string) {
