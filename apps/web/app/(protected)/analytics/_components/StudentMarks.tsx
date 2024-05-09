@@ -161,7 +161,7 @@ export function StudentsMarks() {
             <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-black">
               Student
             </th>
-            {studentsMarks[0].subjects.map((subject) => (
+            {studentsMarks[0]?.subjects.map((subject) => (
               <th
                 key={subject.subjectId}
                 className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-black"

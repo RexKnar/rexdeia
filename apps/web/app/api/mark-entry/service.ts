@@ -60,9 +60,7 @@ export async function createMarkEntry(
               const createdMarkEntry = await prisma.markEntry.create({
                 data: {
                   studentId,
-                  staffId:
-                    // assessmentMarksPayload.staffId ||
-                    '555e443d-3ca1-45a6-83d2-9a9e025bf8c6',
+                  staffId: assessmentMarksPayload.staffId,
                   subject: {
                     connect: [
                       {
