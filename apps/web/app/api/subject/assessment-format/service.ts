@@ -126,7 +126,7 @@ export async function getAssessmentFormatsWithFilter(
     whereClause['isActive'] = isActive;
   }
   if (hasMarkEntry) {
-    whereClause['hasMarkEntry'] = isActive;
+    whereClause['hasMarkEntry'] = hasMarkEntry;
   }
 
   const [total, data] = await db.$transaction([
