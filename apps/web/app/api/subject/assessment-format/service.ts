@@ -8,6 +8,7 @@ import { getServerSession } from 'next-auth';
 
 type AssessmentFormatFilter = {
   isActive?: boolean;
+  hasMarkEntry?: boolean;
 };
 
 export async function getAssessmentFormatList(page: number, limit: number) {
@@ -80,28 +81,18 @@ export async function addAssessmentFormat(
 }
 
 export async function updateAssessmentFormatById(
-  subjectId: string,
+  assessmentFormatId: string,
   assessmentFormat: UpdateAssessmentFormatModel
 ) {
-  const session = await getServerSession(authOptions);
-
   return db.assessmentFormat.update({
+    where: {
+      id: assessmentFormatId,
+    },
     data: {
       name: assessmentFormat.name,
       isActive: assessmentFormat.isActive,
-      parentAssessmentFormat: {
-        connect: {
-          id: assessmentFormat.parentId,
-        },
-      },
-      branch: {
-        connect: {
-          id: session.branchId,
-        },
-      },
-    },
-    where: {
-      id: subjectId,
+      hasMarkEntry: assessmentFormat.hasMarkEntry,
+      parentId: assessmentFormat.parentId,
     },
   });
 }
@@ -110,6 +101,7 @@ export async function deleteAssessmentFormat(assessmentFormatId: string) {
   return db.assessmentFormat.update({
     where: {
       id: assessmentFormatId,
+      parentId: null,
     },
     data: {
       isDeleted: true,
@@ -122,7 +114,7 @@ export async function getAssessmentFormatsWithFilter(
   limit: number,
   filter: AssessmentFormatFilter
 ) {
-  const { isActive } = filter;
+  const { isActive, hasMarkEntry } = filter;
   const { branchId } = await getServerSession(authOptions);
 
   const whereClause = {
@@ -130,8 +122,11 @@ export async function getAssessmentFormatsWithFilter(
     isDeleted: false,
   };
 
-  if (isActive !== undefined) {
+  if (isActive) {
     whereClause['isActive'] = isActive;
+  }
+  if (hasMarkEntry) {
+    whereClause['hasMarkEntry'] = isActive;
   }
 
   const [total, data] = await db.$transaction([
