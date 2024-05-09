@@ -198,7 +198,7 @@ importers:
         version: link:../../packages/utils
       zod:
         specifier: ^3.22.4
-        version: 3.23.6
+        version: 3.23.7
     devDependencies:
       '@next/eslint-plugin-next':
         specifier: ^14.0.4
@@ -5280,8 +5280,8 @@ packages:
   zenscroll@4.0.2:
     resolution: {integrity: sha512-jEA1znR7b4C/NnaycInCU6h/d15ZzCd1jmsruqOKnZP6WXQSMH3W2GL+OXbkruslU4h+Tzuos0HdswzRUk/Vgg==}
 
-  zod@3.23.6:
-    resolution: {integrity: sha512-RTHJlZhsRbuA8Hmp/iNL7jnfc4nZishjsanDAfEY1QpDQZCahUp3xDzl+zfweE9BklxMUcgBgS1b7Lvie/ZVwA==}
+  zod@3.23.7:
+    resolution: {integrity: sha512-NBeIoqbtOiUMomACV/y+V3Qfs9+Okr18vR5c/5pHClPpufWOrsx8TENboDPe265lFdfewX2yBtNTLPvnmCxwog==}
 
 snapshots:
 
@@ -11229,4 +11229,4 @@ snapshots:
 
   zenscroll@4.0.2: {}
 
-  zod@3.23.6: {}
+  zod@3.23.7: {}
