@@ -1,26 +1,168 @@
 'use client';
 
+import { useGetBatchesListQuery } from 'lib/queries/batches/useGetBatchesListQuery';
+import { useGetClassListQuery } from 'lib/queries/class/useGetClassListQuery';
+import { useGetGroupListQuery } from 'lib/queries/group/useGetGroupListQuery';
+import { useGetMediumListQuery } from 'lib/queries/medium/useGetMediumListQuery';
+import { useGetStudentByIdQuery } from 'lib/queries/students/useGetStudentByIdQuery';
 /* eslint-disable react/no-unescaped-entities */
-import { Check } from 'lucide-react';
-import React, { useState } from 'react';
+import { Check, Loader2 } from 'lucide-react';
+import { useParams } from 'next/navigation';
+import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { Button, Input, RadioGroup, RadioGroupItem } from 'ui';
+import {
+  Button,
+  Input,
+  RadioGroup,
+  RadioGroupItem,
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from 'ui';
 
 export function EditStudentDetail() {
   const [currentPage, setCurrentPage] = useState(1);
 
   const {
     watch,
+    setValue,
     register,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm();
+  const { id } = useParams<{ id: string }>();
+
+  const page = 1;
+  const limit = 999;
+  const filter = {};
+
+  const { data: mediumList } = useGetMediumListQuery({
+    page,
+    limit,
+    filter,
+  });
+  const { data: classList } = useGetClassListQuery({
+    page,
+    limit,
+  });
+
+  const { data: groupList } = useGetGroupListQuery({
+    page,
+    limit,
+    filter,
+  });
+  const { data: batchList } = useGetBatchesListQuery({
+    page,
+    limit,
+    filter,
+  });
+
+  const { data: studentDetail, isLoading: isStudentDetailLoading } =
+    useGetStudentByIdQuery(id);
+  useEffect(() => {
+    if (studentDetail) {
+      const initialValue = {
+        firstName: studentDetail.firstName,
+        middleName: studentDetail.middleName,
+        lastName: studentDetail.lastName,
+        dob: studentDetail.dob,
+        age: studentDetail.additionalAttributes.age,
+        gender: studentDetail.gender,
+        phoneNumber: studentDetail.phoneNumber,
+        emailId: studentDetail.emailId,
+        bloodGroup: studentDetail.bloodGroup,
+        aadharCardNumber: studentDetail.aadharCardNumber,
+        motherTongue: studentDetail.motherTongue,
+        religion: studentDetail.religion,
+        community: studentDetail.additionalAttributes.community,
+        caste: studentDetail.additionalAttributes.caste,
+        differentlyAbled: studentDetail.additionalAttributes.differentlyAbled,
+        fatherName: studentDetail.fatherName,
+        fatherOccupation: studentDetail.fatherOccupation,
+        fatherPhoneNumber: studentDetail.fatherPhoneNumber,
+        fatherEducation: studentDetail.additionalAttributes.fatherEducation,
+        fatherAadharCardNumber:
+          studentDetail.additionalAttributes.fatherAadharCardNumber,
+        motherName: studentDetail.motherName,
+        motherOccupation: studentDetail.motherOccupation,
+        motherPhoneNumber: studentDetail.motherPhoneNumber,
+        motherEducation: studentDetail.additionalAttributes.motherEducation,
+        motherAadharCardNumber:
+          studentDetail.additionalAttributes.motherAadharCardNumber,
+        annualIncome: studentDetail.additionalAttributes.annualIncome,
+        parentsSeparated: studentDetail.additionalAttributes.parentsSeparated,
+        noOfSiblings: studentDetail.additionalAttributes.noOfSiblings,
+        siblingName1: studentDetail.additionalAttributes.siblingName1,
+        siblingRelation1: studentDetail.additionalAttributes.siblingRelation1,
+        siblingClass1: studentDetail.additionalAttributes.siblingClass1,
+        siblingName2: studentDetail.additionalAttributes.siblingName2,
+        siblingRelation2: studentDetail.additionalAttributes.siblingRelation2,
+        siblingClass2: studentDetail.additionalAttributes.siblingClass2,
+        guardianName: studentDetail.guardianName,
+        guardiansOccupation: studentDetail.guardiansOccupation,
+        relationshipType: studentDetail.additionalAttributes.relationshipType,
+        guardianPhoneNumber: studentDetail.guardianPhoneNumber,
+        guardianAadharCardNumber:
+          studentDetail.additionalAttributes.guardianAadharCardNumber,
+        residentialAddress:
+          studentDetail.additionalAttributes.residentialAddress,
+        residentialDistrict:
+          studentDetail.additionalAttributes.residentialDistrict,
+        residentialState: studentDetail.additionalAttributes.residentialState,
+        residentialPostalCode:
+          studentDetail.additionalAttributes.residentialPostalCode,
+        permanentAddress: studentDetail.additionalAttributes.permanentAddress,
+        permanentDistrict: studentDetail.additionalAttributes.permanentDistrict,
+        permanentState: studentDetail.additionalAttributes.permanentState,
+        permanentPostalCode:
+          studentDetail.additionalAttributes.permanentPostalCode,
+        nationality: studentDetail.nationality,
+        schoolName10th: studentDetail.additionalAttributes.schoolName10th,
+        yearOfPassing10th: studentDetail.additionalAttributes.yearOfPassing10th,
+        obtainedMark10th: studentDetail.additionalAttributes.obtainedMark10th,
+        mediumOfEducation10th:
+          studentDetail.additionalAttributes.mediumOfEducation10th,
+        schoolName11th: studentDetail.additionalAttributes.schoolName11th,
+        yearOfPassing11th: studentDetail.additionalAttributes.yearOfPassing11th,
+        obtainedMark11th: studentDetail.additionalAttributes.obtainedMark11th,
+        mediumOfEducation11th:
+          studentDetail.additionalAttributes.mediumOfEducation11th,
+        emisNumber: studentDetail.additionalAttributes.emisNumber,
+        admissionNumber: studentDetail.additionalAttributes.admissionNumber,
+        dateOfJoining: studentDetail.additionalAttributes.dateOfJoining,
+        joiningMedium: studentDetail.additionalAttributes.joiningMedium,
+        joiningClass: studentDetail.additionalAttributes.joiningClass,
+        joiningGroup: studentDetail.additionalAttributes.joiningGroup,
+        batchId: studentDetail.batchId,
+        admissionType: studentDetail.additionalAttributes.admissionType,
+        admissionMode: studentDetail.additionalAttributes.admissionMode,
+        scholarship: studentDetail.additionalAttributes.scholarship,
+        firstLanguage: studentDetail.additionalAttributes.firstLanguage,
+      };
+      reset(initialValue);
+    }
+    // console.log(studentDetail?.additionalAttributes?.caste);
+  }, [studentDetail]);
 
   const [, setFormData] = useState({} as Record<string, unknown>);
 
   const handleOnFormSubmit = async (data: Record<string, unknown>) => {
     setFormData(data);
   };
+
+  if (isStudentDetailLoading) {
+    return (
+      <div className="flex h-20 items-center justify-center">
+        <Loader2 className="mr-2  w-6 animate-spin text-black" />
+        <p className=" text-black">Fetching Student Details...</p>
+      </div>
+    );
+  }
+
   const validateEmail = (value, field) => {
     const atIndex = value.indexOf('@');
     const dotIndex = value.lastIndexOf('.');
@@ -251,15 +393,15 @@ export function EditStudentDetail() {
                   type="date"
                   className="mt-1"
                   autoComplete="off"
-                  {...register('dateOfBirth', {
+                  {...register('dob', {
                     required: 'Date of Birth is required',
                   })}
                   aria-invalid={errors.date ? 'true' : 'false'}
                   errorMessage={errors?.date?.message.toString()}
                 />
-                {errors['dateOfBirth'] && (
+                {errors['dob'] && (
                   <p className="h-2 p-1 text-sm text-red-600">
-                    {errors['dateOfBirth'].message as string}
+                    {errors['dob'].message as string}
                   </p>
                 )}
               </div>
@@ -275,7 +417,11 @@ export function EditStudentDetail() {
                 <label className="mt-1 block text-sm text-gray-700">
                   Gender
                 </label>
-                <RadioGroup {...register('gender')} className="mt-3 flex gap-2">
+                <RadioGroup
+                  {...register('gender')}
+                  defaultValue={studentDetail.gender}
+                  className="mt-3 flex gap-2"
+                >
                   <RadioGroupItem className="mr-1 mt-1" value={'male'} />{' '}
                   {'Male'}
                   <RadioGroupItem
@@ -290,7 +436,7 @@ export function EditStudentDetail() {
                   Phone Number
                 </label>
                 <Input
-                  {...register('phone number')}
+                  {...register('phoneNumber')}
                   className="mt-1"
                   autoComplete="off"
                 />
@@ -301,17 +447,17 @@ export function EditStudentDetail() {
                   <span className="text-red-300"> *</span>
                 </label>
                 <Input
-                  {...register('email', {
+                  {...register('emailId', {
                     required: 'Email is required',
                     validate: (value) => {
-                      return validateEmail(value, 'email');
+                      return validateEmail(value, 'emailId');
                     },
                   })}
                   aria-invalid={errors.email ? 'true' : 'false'}
                   className="mt-1"
                   autoComplete="off"
                 />
-                {errors['email'] && (
+                {errors['emailId'] && (
                   <p className="h-2 p-1 text-sm text-red-600">
                     {errors?.email?.message.toString()}
                   </p>
@@ -321,14 +467,32 @@ export function EditStudentDetail() {
                 <label className="mt-1 block text-sm text-gray-700">
                   Blood Group
                 </label>
-                <select
+                <Select
                   autoComplete="off"
                   value={watch('bloodGroup')}
                   {...register('bloodGroup')}
-                  className="ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring mt-1 flex h-10 w-full rounded-md border border-gray-300 bg-transparent px-3 py-2 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                  onValueChange={(value) => {
+                    if (value) {
+                      setValue('bloodGroup', value);
+                    }
+                  }}
                 >
-                  <option>O+</option>
-                </select>
+                  <SelectTrigger className="w-full">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectGroup>
+                      <SelectItem value={'O+'}>{'O+'}</SelectItem>
+                      <SelectItem value={'O+'}>{'O-'}</SelectItem>
+                      <SelectItem value={'A+'}>{'A+'}</SelectItem>
+                      <SelectItem value={'A-'}>{'A-'}</SelectItem>
+                      <SelectItem value={'B+'}>{'B+'}</SelectItem>
+                      <SelectItem value={'B-'}>{'B-'}</SelectItem>
+                      <SelectItem value={'AB+'}>{'AB+'}</SelectItem>
+                      <SelectItem value={'AB-'}>{'AB-'}</SelectItem>
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
               </div>
               <div className="w-full">
                 <label className="mt-1 block text-sm text-gray-700">
@@ -336,75 +500,136 @@ export function EditStudentDetail() {
                   <span className="text-red-300"> *</span>
                 </label>
                 <Input
-                  {...register('aadhar number', {
+                  {...register('aadharCardNumber', {
                     required: 'Aadhar Number is required',
                   })}
+                  aria-invalid={errors.name ? 'true' : 'false'}
+                  errorMessage={errors?.name?.message.toString()}
                   className="mt-1"
                   autoComplete="off"
+                  name="aadharCardNumber"
                 />
+                {errors['aadharCardNumber'] && (
+                  <p className="h-2 p-1 text-sm text-red-600">
+                    {errors['aadharCardNumber'].message as string}
+                  </p>
+                )}
               </div>
               <div className="w-full">
                 <label className="mt-1 block text-sm text-gray-700">
                   Mother Tongue
                 </label>
-                <select
+                <Select
                   autoComplete="off"
+                  value={watch('motherTongue')}
                   {...register('motherTongue')}
-                  className="ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring mt-1 flex h-10 w-full rounded-md border border-gray-300 bg-transparent px-3 py-2 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                  onValueChange={(value) => {
+                    if (value) {
+                      setValue('motherTongue', value);
+                    }
+                  }}
                 >
-                  <option>Tamil</option>
-                  <option>Malayalam</option>
-                  <option>Telugu</option>
-                  <option>Hindi</option>
-                </select>
+                  <SelectTrigger className="w-full">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectGroup>
+                      <SelectItem value={'tamil'}>{'Tamil'}</SelectItem>
+                      <SelectItem value={'malayalam'}>{'Malayalam'}</SelectItem>
+                      <SelectItem value={'telugu'}>{'Telugu'}</SelectItem>
+                      <SelectItem value={'hindi'}>{'Hindi'}</SelectItem>
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
               </div>
               <div className="w-full">
                 <label className="mt-1 block text-sm text-gray-700">
                   Religion
                 </label>
-                <select
+                <Select
                   autoComplete="off"
+                  value={watch('religion')}
                   {...register('religion')}
-                  className="ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring mt-1 flex h-10 w-full rounded-md border border-gray-300 bg-transparent px-3 py-2 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                  onValueChange={(value) => {
+                    if (value) {
+                      setValue('religion', value);
+                    }
+                  }}
                 >
-                  <option>Himdu</option>
-                  <option>Muslim</option>
-                  <option>Christian</option>
-                  <option>Others</option>
-                </select>
+                  <SelectTrigger className="w-full">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectGroup>
+                      <SelectItem value={'hindu'}>{'Hindu'}</SelectItem>
+                      <SelectItem value={'muslim'}>{'Muslim'}</SelectItem>
+                      <SelectItem value={'christian'}>{'christian'}</SelectItem>
+                      <SelectItem value={'others'}>{'Others'}</SelectItem>
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
               </div>
               <div className="w-full">
                 <label className="mt-1 block text-sm text-gray-700">
                   Community
                 </label>
-                <select
-                  {...register('languageId')}
-                  className="ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring mt-1 flex h-10 w-full rounded-md border border-gray-300 bg-transparent px-3 py-2 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                <Select
+                  autoComplete="off"
+                  value={watch('community')}
+                  {...register('community')}
+                  onValueChange={(value) => {
+                    if (value) {
+                      setValue('community', value);
+                    }
+                  }}
                 >
-                  <option>bc</option>
-                  <option>sc</option>
-                  <option>st</option>
-                  <option>mbc</option>
-                </select>
+                  <SelectTrigger className="w-full">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectGroup>
+                      <SelectItem value={'bc'}>{'BC'}</SelectItem>
+                      <SelectItem value={'sc'}>{'SC'}</SelectItem>
+                      <SelectItem value={'st'}>{'ST'}</SelectItem>
+                      <SelectItem value={'mbc'}>{'MBC'}</SelectItem>
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
               </div>
               <div className="w-full">
                 <label className="mt-1 block text-sm text-gray-700">
                   Caste
                 </label>
-                <select
-                  {...register('language')}
-                  className="ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring mt-1 flex h-10 w-full rounded-md border border-gray-300 bg-transparent px-3 py-2 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                <Select
+                  autoComplete="off"
+                  value={watch('caste')}
+                  {...register('caste')}
+                  onValueChange={(value) => {
+                    if (value) {
+                      setValue('caste', value);
+                    }
+                  }}
                 >
-                  <option>caste</option>
-                </select>
+                  <SelectTrigger className="w-full">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectGroup>
+                      <SelectItem value={'noCaste'}>{'No Caste'}</SelectItem>
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
               </div>
               <div className="w-full">
                 <label className="mt-1 block text-sm text-gray-700">
                   Differently abled
                 </label>
                 <RadioGroup
-                  {...register('language')}
+                  {...register('differentlyAbled')}
                   className="mt-3 flex gap-2"
+                  defaultValue={
+                    studentDetail.additionalAttributes.differentlyAbled
+                  }
                 >
                   <RadioGroupItem className="mr-1 mt-1" value={'yes'} /> {'Yes'}
                   <RadioGroupItem className="ml-3 mr-1 mt-1 " value={'no'} />
@@ -532,6 +757,9 @@ export function EditStudentDetail() {
                 </label>
                 <RadioGroup
                   {...register('parentsSeparated')}
+                  defaultValue={
+                    studentDetail.additionalAttributes.parentsSeparated
+                  }
                   className="mt-3 flex gap-2"
                 >
                   <RadioGroupItem className="mr-1 mt-1" value={'yes'} />
@@ -551,15 +779,30 @@ export function EditStudentDetail() {
                 <label className="mt-1 block text-sm text-gray-700">
                   No of Siblings
                 </label>
-                <select
-                  value={watch('language')}
-                  {...register('middleName')}
-                  className="ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring mt-1 flex h-10 w-full rounded-md border border-gray-300 bg-transparent px-3 py-2 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                <Select
+                  autoComplete="off"
+                  value={watch('noOfSiblings')}
+                  {...register('noOfSiblings')}
+                  onValueChange={(value) => {
+                    if (value) {
+                      setValue('noOfSiblings', value);
+                    }
+                  }}
                 >
-                  <option>0</option>
-                  <option>1</option>
-                  <option>2</option>
-                </select>
+                  <SelectTrigger className="w-full">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectGroup>
+                      <SelectItem value={'0'}>{'0'}</SelectItem>
+                      <SelectItem value={'1'}>{'1'}</SelectItem>
+                      <SelectItem value={'2'}>{'2'}</SelectItem>
+                      <SelectItem value={'3'}>{'3'}</SelectItem>
+                      <SelectItem value={'4'}>{'4'}</SelectItem>
+                      <SelectItem value={'5'}>{'5'}</SelectItem>
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
               </div>
               <div className="w-full">
                 <label className="mt-1 block text-sm text-gray-700">
@@ -576,7 +819,10 @@ export function EditStudentDetail() {
                   Relation
                 </label>
                 <RadioGroup
-                  {...register('relation')}
+                  {...register('siblingRelation1')}
+                  defaultValue={
+                    studentDetail.additionalAttributes.siblingRelation1
+                  }
                   className="mt-3 flex gap-2"
                 >
                   <RadioGroupItem className="mr-1 mt-1" value={'brother'} />
@@ -593,7 +839,7 @@ export function EditStudentDetail() {
                   Class for sibling 1
                 </label>
                 <Input
-                  {...register('classForSibling1')}
+                  {...register('siblingClass1')}
                   className="mt-1"
                   autoComplete="off"
                 />
@@ -613,7 +859,10 @@ export function EditStudentDetail() {
                   Relation
                 </label>
                 <RadioGroup
-                  {...register('relation')}
+                  {...register('siblingRelation2')}
+                  defaultValue={
+                    studentDetail.additionalAttributes.siblingRelation2
+                  }
                   className="mt-3 flex gap-2"
                 >
                   <RadioGroupItem className="mr-1 mt-1" value={'brother'} />
@@ -630,7 +879,7 @@ export function EditStudentDetail() {
                   Class for sibling 2
                 </label>
                 <Input
-                  {...register('classForSibling 2')}
+                  {...register('siblingClass2')}
                   className="mt-1"
                   autoComplete="off"
                 />
@@ -657,7 +906,7 @@ export function EditStudentDetail() {
                   Guardian's Occupation
                 </label>
                 <Input
-                  {...register('guardianOccupation')}
+                  {...register('guardiansOccupation')}
                   className="mt-1"
                   autoComplete="off"
                 />
@@ -712,7 +961,7 @@ export function EditStudentDetail() {
                   District
                 </label>
                 <Input
-                  {...register('district')}
+                  {...register('residentialDistrict')}
                   className="mt-1"
                   autoComplete="off"
                 />
@@ -722,7 +971,7 @@ export function EditStudentDetail() {
                   State
                 </label>
                 <Input
-                  {...register('state')}
+                  {...register('residentialState')}
                   className="mt-1"
                   autoComplete="off"
                 />
@@ -732,7 +981,7 @@ export function EditStudentDetail() {
                   Postal / ZIP Code
                 </label>
                 <Input
-                  {...register('postal/ZIPCode')}
+                  {...register('residentialPostalCode')}
                   className="mt-1"
                   autoComplete="off"
                 />
@@ -742,7 +991,7 @@ export function EditStudentDetail() {
                   Permanent Address
                 </label>
                 <textarea
-                  {...register('permanentaddress')}
+                  {...register('permanentAddress')}
                   autoComplete="off"
                   className="ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring mt-1 flex h-10 w-full rounded-md border border-gray-300 bg-transparent px-3 py-2 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
                 ></textarea>
@@ -772,7 +1021,7 @@ export function EditStudentDetail() {
                   Postal / ZIP Code
                 </label>
                 <Input
-                  {...register('permanentPostal/ZIPCode')}
+                  {...register('permanentPostalCode')}
                   className="mt-1"
                   autoComplete="off"
                 />
@@ -782,7 +1031,7 @@ export function EditStudentDetail() {
                   Nationality
                 </label>
                 <Input
-                  {...register('Nationality')}
+                  {...register('nationality')}
                   className="mt-1"
                   autoComplete="off"
                 />
@@ -799,7 +1048,7 @@ export function EditStudentDetail() {
                   School Name (10th std)
                 </label>
                 <Input
-                  {...register('schoolName10thstd')}
+                  {...register('schoolName10th')}
                   className="mt-1"
                   autoComplete="off"
                 />
@@ -809,7 +1058,7 @@ export function EditStudentDetail() {
                   Year of Passing
                 </label>
                 <Input
-                  {...register('yearOfpassing10')}
+                  {...register('yearOfPassing10th')}
                   className="mt-1"
                   autoComplete="off"
                 />
@@ -819,7 +1068,7 @@ export function EditStudentDetail() {
                   Obtained Mark
                 </label>
                 <Input
-                  {...register('obtainedMark10')}
+                  {...register('obtainedMark10th')}
                   className="mt-1"
                   autoComplete="off"
                 />
@@ -839,7 +1088,7 @@ export function EditStudentDetail() {
                   School Name (11th std)
                 </label>
                 <Input
-                  {...register('schoolName11thstd')}
+                  {...register('schoolName11th')}
                   className="mt-1"
                   autoComplete="off"
                 />
@@ -849,7 +1098,7 @@ export function EditStudentDetail() {
                   Year of Passing
                 </label>
                 <Input
-                  {...register('yearOfPassing11')}
+                  {...register('yearOfPassing11th')}
                   className="mt-1"
                   autoComplete="off"
                 />
@@ -859,7 +1108,7 @@ export function EditStudentDetail() {
                   Obtained Mark
                 </label>
                 <Input
-                  {...register('obtainedMark')}
+                  {...register('obtainedMark11th')}
                   className="mt-1"
                   autoComplete="off"
                 />
@@ -879,7 +1128,7 @@ export function EditStudentDetail() {
                   EMIS Number
                 </label>
                 <Input
-                  {...register('EMISNumber')}
+                  {...register('emisNumber')}
                   className="mt-1"
                   autoComplete="off"
                 />
@@ -896,10 +1145,10 @@ export function EditStudentDetail() {
               </div>
               <div className="w-full">
                 <label className="mt-1 block text-sm text-gray-700">
-                  Blood Group
+                  Date Of Joining
                 </label>
                 <Input
-                  {...register('bloodGroup')}
+                  {...register('dateOfJoining')}
                   type="date"
                   className="mt-1"
                   autoComplete="off"
@@ -910,37 +1159,66 @@ export function EditStudentDetail() {
                   Medium
                   <span className="text-red-300"> *</span>
                 </label>
-                <select
-                  {...register('medium', {
-                    required: 'Medium is required',
-                  })}
-                  className="ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring mt-1 flex h-10 w-full rounded-md border border-gray-300 bg-transparent px-3 py-2 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                <Select
+                  autoComplete="off"
+                  value={watch('joiningMedium')}
+                  {...register('joiningMedium')}
+                  onValueChange={(value) => {
+                    if (value) {
+                      setValue('joiningMedium', value);
+                    }
+                  }}
                 >
-                  <option>medium</option>
-                </select>
-                {errors['medium'] && (
+                  <SelectTrigger className="w-full">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectGroup>
+                      {mediumList?.data?.map((item) => (
+                        <SelectItem key={item.id} value={item.id}>
+                          {item.name}
+                        </SelectItem>
+                      ))}
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
+                {errors['joiningMedium'] && (
                   <p className="h-2 p-1 text-sm text-red-600">
-                    {errors['medium'].message as string}
+                    {errors['joiningMedium'].message as string}
                   </p>
                 )}
               </div>
-
               <div className="w-full">
                 <label className="mt-1 block text-sm text-gray-700">
                   Class
                   <span className="text-red-300"> *</span>
                 </label>
-                <select
-                  {...register('class', {
-                    required: 'Class is required',
-                  })}
-                  className="ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring mt-1 flex h-10 w-full rounded-md border border-gray-300 bg-transparent px-3 py-2 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                <Select
+                  autoComplete="off"
+                  value={watch('joiningClass')}
+                  {...register('joiningClass')}
+                  onValueChange={(value) => {
+                    if (value) {
+                      setValue('joiningClass', value);
+                    }
+                  }}
                 >
-                  <option>class</option>
-                </select>
-                {errors['class'] && (
+                  <SelectTrigger className="w-full">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectGroup>
+                      {classList?.data?.map((item) => (
+                        <SelectItem key={item.id} value={item.id}>
+                          {item.name}
+                        </SelectItem>
+                      ))}
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
+                {errors['joiningClass'] && (
                   <p className="h-2 p-1 text-sm text-red-600">
-                    {errors['class'].message as string}
+                    {errors['joiningClass'].message as string}
                   </p>
                 )}
               </div>
@@ -949,17 +1227,32 @@ export function EditStudentDetail() {
                   Group
                   <span className="text-red-300"> *</span>
                 </label>
-                <select
-                  {...register('group', {
-                    required: 'Group is required',
-                  })}
-                  className="ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring mt-1 flex h-10 w-full rounded-md border border-gray-300 bg-transparent px-3 py-2 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                <Select
+                  autoComplete="off"
+                  value={watch('joiningGroup')}
+                  {...register('joiningGroup')}
+                  onValueChange={(value) => {
+                    if (value) {
+                      setValue('joiningGroup', value);
+                    }
+                  }}
                 >
-                  <option>group</option>
-                </select>
-                {errors['group'] && (
+                  <SelectTrigger className="w-full">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectGroup>
+                      {groupList?.data?.map((item) => (
+                        <SelectItem key={item.id} value={item.id}>
+                          {item.name}
+                        </SelectItem>
+                      ))}
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
+                {errors['joiningGroup'] && (
                   <p className="h-2 p-1 text-sm text-red-600">
-                    {errors['group'].message as string}
+                    {errors['joiningGroup'].message as string}
                   </p>
                 )}
               </div>
@@ -975,17 +1268,32 @@ export function EditStudentDetail() {
                   Batch
                   <span className="text-red-300"> *</span>
                 </label>
-                <select
-                  {...register('batch', {
-                    required: 'Batch is required',
-                  })}
-                  className="ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring mt-1 flex h-10 w-full rounded-md border border-gray-300 bg-transparent px-3 py-2 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                <Select
+                  autoComplete="off"
+                  value={watch('batchId')}
+                  {...register('batchId')}
+                  onValueChange={(value) => {
+                    if (value) {
+                      setValue('batchId', value);
+                    }
+                  }}
                 >
-                  <option>group</option>
-                </select>
-                {errors['batch'] && (
+                  <SelectTrigger className="w-full">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectGroup>
+                      {batchList?.data?.map((item) => (
+                        <SelectItem key={item.id} value={item.id}>
+                          {item.name}
+                        </SelectItem>
+                      ))}
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
+                {errors['batchId'] && (
                   <p className="h-2 p-1 text-sm text-red-600">
-                    {errors['batch'].message as string}
+                    {errors['batchId'].message as string}
                   </p>
                 )}
               </div>
@@ -995,6 +1303,9 @@ export function EditStudentDetail() {
                 </label>
                 <RadioGroup
                   {...register('admissionType')}
+                  defaultValue={
+                    studentDetail.additionalAttributes.admissionType
+                  }
                   className="mt-3 flex gap-2"
                 >
                   <RadioGroupItem className="mr-1 mt-1" value={'new'} />
@@ -1011,7 +1322,10 @@ export function EditStudentDetail() {
                   Admission Mode
                 </label>
                 <RadioGroup
-                  {...register('admiddionMode')}
+                  {...register('admissionMode')}
+                  defaultValue={
+                    studentDetail.additionalAttributes.admissionMode
+                  }
                   className="mt-3 flex gap-2"
                 >
                   <RadioGroupItem className="mr-1 mt-1" value={'counselling'} />
@@ -1029,6 +1343,7 @@ export function EditStudentDetail() {
                 </label>
                 <RadioGroup
                   {...register('scholarship')}
+                  defaultValue={studentDetail.additionalAttributes.scholarship}
                   className="mt-3 flex gap-2"
                 >
                   <RadioGroupItem className="mr-1 mt-1" value={'yes'} />
