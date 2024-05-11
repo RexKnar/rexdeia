@@ -12,8 +12,6 @@ import {
   Text,
 } from 'ui';
 
-import { UnassignStaffFlyout } from '../../../_modals/UnassignStaffFlyout';
-
 type StaffCardProps = {
   id: string;
   name: string;
@@ -76,7 +74,7 @@ export function StaffCard(props: StaffCardProps) {
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
-          <UnassignStaffFlyout />
+          {/* <UnassignStaffFlyout /> */}
         </div>
       </div>
     </div>
