@@ -159,19 +159,17 @@ export async function DELETE(request: NextRequest, { params: { id } }) {
       });
     }
 
-    const assessmentFormatById = await getAssessmentFormatById(id);
+    const deletedAssessmentFormat = await deleteAssessmentFormat(id);
 
-    if (assessmentFormatById) {
-      const deletedAssessmentFormat = await deleteAssessmentFormat(id);
-
-      return new Response(JSON.stringify(deletedAssessmentFormat), {
-        status: StatusCodes.OK,
-      });
-    } else {
-      return new Response(JSON.stringify({ error: 'SUBJECT_TYPE_NOT_FOUND' }), {
-        status: StatusCodes.NOT_FOUND,
+    if ('error' in deletedAssessmentFormat) {
+      return new Response(JSON.stringify(deletedAssessmentFormat.error), {
+        status: StatusCodes.BAD_REQUEST,
       });
     }
+
+    return new Response(JSON.stringify(deletedAssessmentFormat), {
+      status: StatusCodes.OK,
+    });
   } catch (e) {
     captureException(e);
     return new Response(JSON.stringify({ error: e.message }), {
