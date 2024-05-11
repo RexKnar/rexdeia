@@ -21,7 +21,7 @@ import {
   SelectValue,
 } from 'ui';
 
-import { ExamCard } from './ExamCard';
+import { Card } from './Card';
 
 export function AddExamLayout() {
   const page = 1;
@@ -122,7 +122,7 @@ export function AddExamLayout() {
               {!isClassListLoading ? (
                 <div className="">
                   {classList?.data.map((cardData) => (
-                    <ExamCard examProps={cardData} key={cardData.id} />
+                    <Card examProps={cardData} key={cardData.id} />
                   ))}
                 </div>
               ) : (
@@ -139,7 +139,7 @@ export function AddExamLayout() {
           {!isSectionListLoading ? (
             <div>
               {sectionListResponse?.data?.map((cardData) => (
-                <ExamCard examProps={cardData} key={cardData.id} />
+                <Card examProps={cardData} key={cardData.id} />
               ))}
             </div>
           ) : (
@@ -157,7 +157,7 @@ export function AddExamLayout() {
                 {!isSubjectTypeListLoading ? (
                   <div>
                     {subjectTypeListResponse?.data.map((cardData) => (
-                      <ExamCard examProps={cardData} key={cardData.id} />
+                      <Card examProps={cardData} key={cardData.id} />
                     ))}
                   </div>
                 ) : (
@@ -176,7 +176,7 @@ export function AddExamLayout() {
             {!isPendingSubjectListResponse ? (
               <div>
                 {getSubjectByFilterResponse?.data.map((cardData) => (
-                  <ExamCard examProps={cardData} key={cardData.id} />
+                  <Card examProps={cardData} key={cardData.id} />
                 ))}
               </div>
             ) : (
