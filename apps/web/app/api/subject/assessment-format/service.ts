@@ -2,7 +2,6 @@ import { authOptions } from 'lib/auth';
 import { db } from 'lib/db';
 import {
   CreateAssessmentFormatModel,
-  DeleteAssessmentFormatModel,
   UpdateAssessmentFormatModel,
 } from 'lib/domain/subject';
 import { getServerSession } from 'next-auth';
@@ -98,50 +97,32 @@ export async function updateAssessmentFormatById(
   });
 }
 
-export async function deleteAssessmentFormat(
-  assessmentFormatId: string
-): Promise<DeleteAssessmentFormatModel> {
-  const assessmentFormat = await db.assessmentFormat.findUnique({
+export async function deleteAssessmentFormat(assessmentFormatId: string) {
+  return await db.assessmentFormat.update({
     where: {
       id: assessmentFormatId,
+      OR: [
+        {
+          childAssessmentFormats: {
+            none: {},
+          },
+          parentAssessmentFormat: null,
+        },
+        {
+          childAssessmentFormats: {
+            none: {},
+          },
+          NOT: {
+            parentAssessmentFormat: null,
+          },
+        },
+      ],
     },
-    include: {
-      childAssessmentFormats: true,
-      parentAssessmentFormat: true,
+    data: {
+      isDeleted: true,
+      updatedAt: new Date(),
     },
   });
-
-  if (!assessmentFormat) {
-    return { error: { message: 'Assessment format not found' } };
-  }
-
-  if (
-    assessmentFormat.childAssessmentFormats.length === 0 &&
-    assessmentFormat.parentAssessmentFormat === null
-  ) {
-    const deletedParent = await db.assessmentFormat.delete({
-      where: {
-        id: assessmentFormatId,
-      },
-    });
-    return deletedParent;
-  } else if (
-    assessmentFormat.childAssessmentFormats.length === 0 &&
-    assessmentFormat.parentAssessmentFormat !== null
-  ) {
-    const deletedChild = await db.assessmentFormat.delete({
-      where: {
-        id: assessmentFormatId,
-      },
-    });
-    return deletedChild;
-  } else {
-    return {
-      error: {
-        message: 'Cannot delete the record due to existing relationships',
-      },
-    };
-  }
 }
 
 export async function getAssessmentFormatsWithFilter(

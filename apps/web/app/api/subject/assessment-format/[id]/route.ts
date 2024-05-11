@@ -161,12 +161,6 @@ export async function DELETE(request: NextRequest, { params: { id } }) {
 
     const deletedAssessmentFormat = await deleteAssessmentFormat(id);
 
-    if ('error' in deletedAssessmentFormat) {
-      return new Response(JSON.stringify(deletedAssessmentFormat.error), {
-        status: StatusCodes.BAD_REQUEST,
-      });
-    }
-
     return new Response(JSON.stringify(deletedAssessmentFormat), {
       status: StatusCodes.OK,
     });
