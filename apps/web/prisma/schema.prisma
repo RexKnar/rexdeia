@@ -135,6 +135,7 @@ model MarkEntry {
   academicExams      AcademicExams    @relation(fields: [academicExamId], references: [id])
   assessmentFormatId String           @db.Uuid
   assessmentFormat   AssessmentFormat @relation(fields: [assessmentFormatId], references: [id])
+  subject            Subject[]
 
   @@unique([studentId, academicExamId, assessmentFormatId])
 }
@@ -675,6 +676,7 @@ model Subject {
   subjectToSubjectTypes     SubjectToSubjectType[]
   academicSubjectForStaff   AcademicSubjectForStaff[]
   academicExams             AcademicExams[]
+  markEntry                 MarkEntry[]
 }
 
 model AssessmentFormat {

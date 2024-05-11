@@ -62,13 +62,6 @@ export async function getSectionsWithFilter(
     }),
     db.section.findMany({
       where: whereClause,
-      select: {
-        id: true,
-        name: true,
-        isActive: true,
-        updatedAt: true,
-        createdAt: true,
-      },
     }),
   ]);
   return { total, data };

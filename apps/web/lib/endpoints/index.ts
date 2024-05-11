@@ -104,6 +104,7 @@ export const GET_SUBJECT_MASTER_BY_ID = `GET_SUBJECT_MASTER_BY_ID`;
 export const UPDATE_SUBJECT_MASTER_BY_ID = `UPDATE_SUBJECT_MASTER_BY_ID`;
 export const DELETE_SUBJECT_MASTER_BY_ID = `DELETE_SUBJECT_MASTER_BY_ID`;
 export const ADD_EXAM_TYPE = `ADD_EXAM_TYPE`;
+export const GET_STUDENT_LIST_BY_FILTER_WITH_PAGINATION = `GET_STUDENT_LIST_BY_FILTER_WITH_PAGINATION`;
 export const GET_TERM_BY_ID = `GET_TERM_BY_ID`;
 export const GET_EXAM_TYPE_LIST = `GET_EXAM_TYPE_LIST`;
 export const GET_EXAM_TYPE_BY_ID = `GET_EXAM_TYPE_BY_ID`;
@@ -112,6 +113,7 @@ export const DELETE_EXAM_TYPE_BY_ID = `DELETE_EXAM_TYPE_BY_ID`;
 export const GET_STUDENT_BY_ID = `GET_STUDENT_BY_ID`;
 export const UPDATE_TERM_BY_ID = `UPDATE_TERM_BY_ID`;
 export const DELETE_TERM_BY_ID = `DELETE_TERM_BY_ID`;
+export const GET_STUDENTS_MARKS_BY_CLASS_ID_AND_EXAM_ID = `GET_STUDENTS_MARKS_BY_CLASS_ID_AND_EXAM_ID`;
 
 export default <EndpointDetails>{
   [REGISTER_USER]: {
@@ -530,6 +532,10 @@ export default <EndpointDetails>{
     requestType: `POST`,
     endpoint: `/api/exam/exam-type`,
   },
+  [GET_STUDENT_LIST_BY_FILTER_WITH_PAGINATION]: {
+    requestType: `PUT`,
+    endpoint: `/api/analytics/students`,
+  },
   [GET_TERM_BY_ID]: {
     requestType: `GET`,
     endpoint: `/api/exam/term/[id]`,
@@ -557,5 +563,9 @@ export default <EndpointDetails>{
   [DELETE_TERM_BY_ID]: {
     requestType: `DELETE`,
     endpoint: `/api/exam/term/[id]`,
+  },
+  [GET_STUDENTS_MARKS_BY_CLASS_ID_AND_EXAM_ID]: {
+    requestType: `PUT`,
+    endpoint: `/api/analytics/marks`,
   },
 };
