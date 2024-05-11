@@ -231,7 +231,9 @@ export function StudentsList() {
   const handleViewClick = (studentId) => {
     router.push(`/students/${studentId}`);
   };
-
+  const handleEditClick = (studentId) => {
+    router.push(`/students/${studentId}/editStudent`);
+  };
   const handleOnPageChange = useCallback(
     (page: number) => {
       const params = new URLSearchParams(searchParams);
@@ -330,12 +332,8 @@ export function StudentsList() {
                     <Tooltip>
                       <TooltipTrigger asChild>
                         <Button
-                          onClick={async () => {
-                            const params = new URLSearchParams(searchParams);
-                            params.set('isFlyoutOpen', 'true');
-                            params.set('subjectId', row.original.id);
-
-                            router.replace(pathname + '?' + params.toString());
+                          onClick={() => {
+                            handleEditClick(row.original.id);
                           }}
                           className="mr-3 h-auto px-3 py-2"
                           variant="mild"
