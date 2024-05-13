@@ -31,10 +31,20 @@ export function SubjectList() {
   }
 
   return (
-    <section className="grid w-full grid-cols-4 justify-between gap-4 px-0">
-      {subjectListResponse.map((subjectItem) => (
-        <div key={subjectItem.id}>
-          <SubjectCard id={subjectItem.id} name={subjectItem.name} />
+    <section className="w-full">
+      {subjectListResponse.map((group) => (
+        <div className="flex flex-col gap-4" key={group.id}>
+          <p className="text-base font-bold">{group.group.name}</p>
+          <div className="grid w-full grid-cols-4 justify-between gap-4 px-0">
+            {group.group.subjectToGroup.map((subject) => (
+              <div key={subject.subject.id} className="w-auto">
+                <SubjectCard
+                  id={subject.subject.id}
+                  name={subject.subject.name}
+                />
+              </div>
+            ))}
+          </div>
         </div>
       ))}
     </section>

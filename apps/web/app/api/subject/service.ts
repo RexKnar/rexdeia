@@ -91,6 +91,8 @@ export async function getAllSubjectBySectionId(id: string) {
         select: {
           group: {
             select: {
+              name: true,
+              id: true,
               subjectToGroup: {
                 select: {
                   subject: {
@@ -134,98 +136,10 @@ export async function getAllSubjectBySectionId(id: string) {
       },
     },
   });
-  // return [...subjects.map((data) => data.subject)];
-  return subjects;
-}
-
-export async function getAllSubjectBySectionIds(ids: string[]) {
-  const subjects = await db.sectionToGroups.findMany({
-    where: {
-      sectionId: {
-        in: ids,
-      },
-    },
-    // select: {
-    //   sectionToGroups: {
-    //     select: {
-    //       group: {
-    //         select: {
-    //           subjectToGroup: {
-    //             select: {
-    //               subject: {
-    //                 include: {
-    //                   subjectToAssessmentFormat: {
-    //                     select: {
-    //                       assessmentFormat: {
-    //                         select: {
-    //                           id: true,
-    //                           name: true,
-    //                         },
-    //                       },
-    //                     },
-    //                   },
-    //                   subjectToSubjectTypes: {
-    //                     select: {
-    //                       subjectType: {
-    //                         select: {
-    //                           id: true,
-    //                           name: true,
-    //                         },
-    //                       },
-    //                     },
-    //                   },
-    //                   subjectToGroup: {
-    //                     select: {
-    //                       group: {
-    //                         select: {
-    //                           id: true,
-    //                           name: true,
-    //                         },
-    //                       },
-    //                     },
-    //                   },
-    //                   academicSubjectForStaff: {
-    //                     where: {
-    //                       sectionId: {
-    //                         in: ids,
-    //                       },
-    //                     },
-    //                     select: {
-    //                       staff: {
-    //                         select: {
-    //                           id: true,
-    //                           firstName: true,
-    //                           middleName: true,
-    //                           lastName: true,
-    //                         },
-    //                       },
-    //                     },
-    //                   },
-    //                 },
-    //               },
-    //             },
-    //           },
-    //         },
-    //       },
-    //     },
-    //   },
-    // },
-
-    select: {
-      group: {
-        select: {
-          subjectToGroup: {
-            select: {
-              subject: true,
-            },
-          },
-        },
-      },
-    },
+  let subjectListWithGroup = subjects.flatMap((item) => {
+    return item.sectionToGroups;
   });
-
-  // return [...subjects.map((data) => data.subject)];
-  return subjects;
+  return subjectListWithGroup;
 }
 
 export async function getSubjectList(page: number, limit: number) {
