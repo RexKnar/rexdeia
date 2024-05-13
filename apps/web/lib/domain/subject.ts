@@ -1,5 +1,3 @@
-import { ErrorType } from './error';
-
 export type SubjectModel = {
   id: string;
   name?: string;
@@ -61,9 +59,7 @@ export type UpdateAssessmentFormatModel = Pick<
   'id' | 'name' | 'isActive' | 'parentId' | 'hasMarkEntry'
 >;
 
-export type DeleteAssessmentFormatModel =
-  | Pick<AssessmentFormatModel, 'id'>
-  | ErrorType;
+export type DeleteAssessmentFormatModel = Pick<AssessmentFormatModel, 'id'>;
 
 export type SubjectTypeModel = {
   id: string;
