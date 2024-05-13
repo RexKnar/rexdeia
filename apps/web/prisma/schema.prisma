@@ -564,17 +564,7 @@ model Class {
   createdAt      DateTime?        @default(now())
   updatedAt      DateTime?        @default(now())
   academicExams  AcademicExams[]
-}
-
-model SectionSubject {
-  sectionId String    @db.Uuid
-  subjectId String    @db.Uuid
-  section   Section   @relation(fields: [sectionId], references: [id])
-  subject   Subject   @relation(fields: [subjectId], references: [id])
-  createdAt DateTime? @default(now())
-  updatedAt DateTime? @default(now())
-
-  @@id([sectionId, subjectId])
+  subjects       Subject[]
 }
 
 model StaffSection {
@@ -619,7 +609,6 @@ model Section {
   createdAt               DateTime?                 @default(now())
   updatedAt               DateTime?                 @default(now())
   isDeleted               Boolean                   @default(false)
-  sectionSubjects         SectionSubject[]
   Subject                 Subject?                  @relation(fields: [subjectId], references: [id])
   subjectId               String?                   @db.Uuid
   academicExams           AcademicExams[]
@@ -631,10 +620,12 @@ model Section {
 }
 
 model SectionToGroups {
-  sectionId String  @db.Uuid
-  groupId   String  @db.Uuid
-  section   Section @relation(fields: [sectionId], references: [id])
-  group     Group   @relation(fields: [groupId], references: [id])
+  sectionId String    @db.Uuid
+  groupId   String    @db.Uuid
+  section   Section   @relation(fields: [sectionId], references: [id])
+  group     Group     @relation(fields: [groupId], references: [id])
+  createdAt DateTime? @default(now())
+  updatedAt DateTime? @default(now())
 
   @@id([sectionId, groupId])
 }
@@ -664,13 +655,14 @@ model Subject {
   regulation                Regulation                  @relation(fields: [regulationId], references: [id])
   regulationId              String                      @db.Uuid
   sectionId                 String[]                    @db.Uuid
-  SectionSubject            SectionSubject[]
   ExamSubject               ExamSubject[]
   ExamSubjectPartition      ExamSubjectPartition[]
   branchId                  String?                     @db.Uuid
   branch                    Branch?                     @relation(fields: [branchId], references: [id])
   subjectMasterId           String                      @db.Uuid
   subjectMaster             SubjectMaster               @relation(fields: [subjectMasterId], references: [id])
+  classId                   String                      @db.Uuid
+  class                     Class                       @relation(fields: [classId], references: [id])
   subjectToAssessmentFormat SubjectToAssessmentFormat[]
   subjectToGroup            SubjectToGroup[]
   subjectToSubjectTypes     SubjectToSubjectType[]
