@@ -9,23 +9,7 @@ type SubjectFilter = {
 export async function getSubjectsWithFilter(filter: SubjectFilter) {
   const { branchId } = await getServerSession(authOptions);
 
-  const [total, data] = await db.$transaction([
-    db.subject.count({
-      where: {
-        branchId,
-        isDeleted: false,
-        subjectToSubjectTypes: {
-          some: {
-            subjectTypeId: filter.subjectTypeId,
-          },
-        },
-        SectionSubject: {
-          some: {
-            sectionId: filter.sectionId,
-          },
-        },
-      },
-    }),
+  const [data] = await db.$transaction([
     db.subject.findMany({
       where: {
         branchId,
@@ -35,9 +19,19 @@ export async function getSubjectsWithFilter(filter: SubjectFilter) {
             subjectTypeId: filter.subjectTypeId,
           },
         },
-        SectionSubject: {
-          some: {
-            sectionId: filter.sectionId,
+      },
+      select: {
+        subjectToGroup: {
+          select: {
+            group: {
+              select: {
+                sectionToGroups: {
+                  where: {
+                    sectionId: filter.sectionId,
+                  },
+                },
+              },
+            },
           },
         },
       },
@@ -45,7 +39,6 @@ export async function getSubjectsWithFilter(filter: SubjectFilter) {
   ]);
 
   return {
-    total,
     data,
   };
 }
