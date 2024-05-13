@@ -1,6 +1,6 @@
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 
-export function Card(props) {
+export function ExamConfigurationNameCard(props) {
   const pathname = usePathname();
   const router = useRouter();
   const searchParams = useSearchParams();

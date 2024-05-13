@@ -21,7 +21,7 @@ import {
   SelectValue,
 } from 'ui';
 
-import { Card } from './Card';
+import { ExamConfigurationNameCard } from './ExamConfigurationNameCard';
 
 export function AddExamLayout() {
   const page = 1;
@@ -122,7 +122,10 @@ export function AddExamLayout() {
               {!isClassListLoading ? (
                 <div className="">
                   {classList?.data.map((cardData) => (
-                    <Card examProps={cardData} key={cardData.id} />
+                    <ExamConfigurationNameCard
+                      examProps={cardData}
+                      key={cardData.id}
+                    />
                   ))}
                 </div>
               ) : (
@@ -139,7 +142,10 @@ export function AddExamLayout() {
           {!isSectionListLoading ? (
             <div>
               {sectionListResponse?.data?.map((cardData) => (
-                <Card examProps={cardData} key={cardData.id} />
+                <ExamConfigurationNameCard
+                  examProps={cardData}
+                  key={cardData.id}
+                />
               ))}
             </div>
           ) : (
@@ -157,7 +163,10 @@ export function AddExamLayout() {
                 {!isSubjectTypeListLoading ? (
                   <div>
                     {subjectTypeListResponse?.data.map((cardData) => (
-                      <Card examProps={cardData} key={cardData.id} />
+                      <ExamConfigurationNameCard
+                        examProps={cardData}
+                        key={cardData.id}
+                      />
                     ))}
                   </div>
                 ) : (
@@ -176,7 +185,10 @@ export function AddExamLayout() {
             {!isPendingSubjectListResponse ? (
               <div>
                 {getSubjectByFilterResponse?.data.map((cardData) => (
-                  <Card examProps={cardData} key={cardData.id} />
+                  <ExamConfigurationNameCard
+                    examProps={cardData}
+                    key={cardData.id}
+                  />
                 ))}
               </div>
             ) : (
