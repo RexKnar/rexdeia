@@ -98,31 +98,33 @@ export async function updateAssessmentFormatById(
 }
 
 export async function deleteAssessmentFormat(assessmentFormatId: string) {
-  return await db.assessmentFormat.update({
-    where: {
-      id: assessmentFormatId,
-      OR: [
-        {
-          childAssessmentFormats: {
-            none: {},
+  const isAssignedAssessmentFormat =
+    await db.subjectToAssessmentFormat.findFirst({
+      where: {
+        assessmentFormatId: assessmentFormatId,
+      },
+    });
+
+  if (!isAssignedAssessmentFormat) {
+    return await db.assessmentFormat.update({
+      where: {
+        id: assessmentFormatId,
+        AND: [
+          {
+            childAssessmentFormats: {
+              none: {},
+            },
           },
-          parentAssessmentFormat: null,
-        },
-        {
-          childAssessmentFormats: {
-            none: {},
-          },
-          NOT: {
-            parentAssessmentFormat: null,
-          },
-        },
-      ],
-    },
-    data: {
-      isDeleted: true,
-      updatedAt: new Date(),
-    },
-  });
+        ],
+      },
+      data: {
+        isDeleted: true,
+        updatedAt: new Date(),
+      },
+    });
+  } else {
+    throw new Error(`Assessment format assigned to subject`);
+  }
 }
 
 export async function getAssessmentFormatsWithFilter(
