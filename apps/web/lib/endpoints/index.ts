@@ -111,6 +111,7 @@ export const GET_EXAM_TYPE_BY_ID = `GET_EXAM_TYPE_BY_ID`;
 export const UPDATE_EXAM_TYPE_BY_ID = `UPDATE_EXAM_TYPE_BY_ID`;
 export const DELETE_EXAM_TYPE_BY_ID = `DELETE_EXAM_TYPE_BY_ID`;
 export const GET_STUDENT_BY_ID = `GET_STUDENT_BY_ID`;
+export const UPDATE_STUDENT_BY_ID = `UPDATE_STUDENT_BY_ID`;
 export const UPDATE_TERM_BY_ID = `UPDATE_TERM_BY_ID`;
 export const DELETE_TERM_BY_ID = `DELETE_TERM_BY_ID`;
 export const GET_STUDENTS_MARKS_BY_CLASS_ID_AND_EXAM_ID = `GET_STUDENTS_MARKS_BY_CLASS_ID_AND_EXAM_ID`;
@@ -567,5 +568,9 @@ export default <EndpointDetails>{
   [GET_STUDENTS_MARKS_BY_CLASS_ID_AND_EXAM_ID]: {
     requestType: `PUT`,
     endpoint: `/api/analytics/marks`,
+  },
+  [UPDATE_STUDENT_BY_ID]: {
+    requestType: `PUT`,
+    endpoint: `/api/student/[id]`,
   },
 };
