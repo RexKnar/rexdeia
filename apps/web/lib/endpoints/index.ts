@@ -229,7 +229,7 @@ export default <EndpointDetails>{
     endpoint: `/api/grade`,
   },
   [GET_CLASS_LIST]: {
-    requestType: `GET`,
+    requestType: `PUT`,
     endpoint: `/api/class`,
   },
   [GET_CLASS_BY_ID]: {
@@ -285,7 +285,7 @@ export default <EndpointDetails>{
     endpoint: `/api/subject/assessment-format/[id]`,
   },
   [GET_BATCHES_LIST]: {
-    requestType: `GET`,
+    requestType: `PUT`,
     endpoint: `/api/batch`,
   },
   [CREATE_BATCH]: {

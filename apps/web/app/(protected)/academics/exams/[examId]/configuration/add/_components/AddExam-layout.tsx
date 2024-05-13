@@ -28,7 +28,7 @@ export function AddExamLayout() {
   const examId = searchParams.get('examId');
   const sectionId = searchParams.get('sectionId');
   const subjectTypeId = searchParams.get('subjectTypeId');
-  const filter = {};
+  const filter = { isActive: true };
 
   const { data: examsList } = useGetExamListQuery({
     page,
@@ -39,6 +39,7 @@ export function AddExamLayout() {
     useGetClassListQuery({
       page,
       limit,
+      filter,
     });
   const { data: sectionListResponse, isLoading: isSectionListLoading } =
     useGetAllSectionByClassIdQuery(
