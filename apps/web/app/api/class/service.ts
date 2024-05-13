@@ -339,3 +339,63 @@ export async function getAllStaffsByClassId(id: string) {
   const sections = await getAllSectionsByClassId(id);
   return await getAllStaffsBySectionsIdWithSubjects(sections.map((x) => x.id));
 }
+
+export async function getSubjectListForStaffByClassId(
+  staffId: string,
+  academicYearId: string,
+  classId: string
+) {
+  const classDetails = await db.academicSubjectForStaff.findMany({
+    where: {
+      staffId: staffId,
+      academicYearId: academicYearId,
+      isIncharge: false,
+      section: {
+        class: {
+          id: classId,
+        },
+      },
+    },
+    include: {
+      section: {
+        select: {
+          id: true,
+          class: true,
+          name: true,
+          academicSubjectForStaff: {
+            where: {
+              isIncharge: false,
+            },
+            select: {
+              subject: {
+                select: {
+                  id: true,
+                  name: true,
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+    distinct: ['sectionId'],
+  });
+  return formatData(classDetails);
+}
+
+function formatData(classDetails) {
+  return classDetails.map((item) => {
+    return {
+      section: {
+        id: item.section.id,
+        name: item.section.name,
+      },
+      subjects: item.section.academicSubjectForStaff.map((subjectItem) => {
+        return {
+          id: subjectItem.subject.id,
+          name: subjectItem.subject.name,
+        };
+      }),
+    };
+  });
+}
