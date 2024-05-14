@@ -71,12 +71,13 @@ export function AddExamLayout() {
       const payload = {
         subjectTypeId: subjectTypeId,
         sectionId: sectionId,
+        classId: classId,
       };
       mutateGetSubjectAsync(payload).catch((error) => {
         console.error(error);
       });
     }
-  }, [subjectTypeId, sectionId, mutateGetSubjectAsync]);
+  }, [subjectTypeId, sectionId, classId, mutateGetSubjectAsync]);
 
   return (
     <>

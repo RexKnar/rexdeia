@@ -41,9 +41,8 @@ export async function PUT(request: NextRequest) {
   }
 
   try {
-    const payload = await request.json();
-
-    const gSubjectsWithFilter = await getSubjectsWithFilter(payload);
+    const filter = await request.json();
+    const gSubjectsWithFilter = await getSubjectsWithFilter(filter);
 
     return new NextResponse(JSON.stringify(gSubjectsWithFilter), {
       status: StatusCodes.OK,
