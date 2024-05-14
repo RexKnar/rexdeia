@@ -96,6 +96,12 @@ export const menuItems: SidebarMenuItem[] = [
     ],
   },
   {
+    id: 'analytics',
+    label: 'Analytics',
+    icon: SquareUserRound,
+    path: '/analytics',
+  },
+  {
     id: 'students',
     label: 'Students',
     icon: SquareUserRound,

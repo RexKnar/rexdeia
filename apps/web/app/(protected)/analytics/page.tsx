@@ -2,7 +2,8 @@ import { authOptions } from 'lib/auth';
 import { redirect } from 'next/navigation';
 import { getServerSession } from 'next-auth';
 
-import { StudentsMarks } from './_components/StudentMarks';
+import { StudentAnalytics } from './_components/StudentAnalytics';
+import { StudentAnalyticsHeader } from './_components/StudentAnalyticsPageheader';
 
 export default async function Page() {
   const session = await getServerSession(authOptions);
@@ -11,8 +12,9 @@ export default async function Page() {
   }
 
   return (
-    <section className="space-y-2 rounded-md bg-white p-4">
-      <StudentsMarks />
+    <section className="space-y-2 rounded-md  p-4">
+      <StudentAnalyticsHeader />
+      <StudentAnalytics />
     </section>
   );
 }
