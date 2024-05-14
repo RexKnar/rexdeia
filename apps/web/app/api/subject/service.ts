@@ -137,10 +137,22 @@ export async function getAllSubjectBySectionId(id: string, classId: string) {
       },
     },
   });
-  let subjectListWithGroup = subjects.flatMap((item) => {
-    return item.sectionToGroups;
-  });
-  return subjectListWithGroup;
+  const subjectsWithGroup = subjects
+    .map((section) => {
+      return section.sectionToGroups.map((groupData) => {
+        const groupInfo = {
+          id: groupData.group.id,
+          name: groupData.group.name,
+          subject: groupData.group.subjectToGroup.map((subjectGroup) => ({
+            id: subjectGroup.subject.id,
+            name: subjectGroup.subject.name,
+          })),
+        };
+        return groupInfo;
+      });
+    })
+    .flat();
+  return subjectsWithGroup;
 }
 
 export async function getSubjectList(page: number, limit: number) {

@@ -1,6 +1,5 @@
 export type SubjectModel = {
-  group: any;
-  subjectToGroup: any;
+  subject: SubjectModel[];
   id: string;
   name?: string;
   isActive?: boolean;
