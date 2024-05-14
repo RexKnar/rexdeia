@@ -4,7 +4,11 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 
 import { authOptions } from '../../../../lib/auth';
-import { deleteStudentById, getStudentById } from '../service';
+import {
+  deleteStudentById,
+  getStudentById,
+  updateStudentById,
+} from '../service';
 
 /**
  * @swagger
@@ -104,6 +108,45 @@ export async function DELETE(_: NextRequest, { params: { id } }) {
       return new Response(JSON.stringify({}), {
         status: StatusCodes.OK,
       });
+    } else {
+      return new Response(JSON.stringify({ error: 'STUDENT_NOT_FOUND' }), {
+        status: StatusCodes.NOT_FOUND,
+      });
+    }
+  } catch (e) {
+    captureException(e);
+    return new Response(JSON.stringify({ error: e.message }), {
+      status: StatusCodes.INTERNAL_SERVER_ERROR,
+    });
+  }
+}
+
+export async function PUT(request: Request, { params: { id } }) {
+  const session = await getServerSession(authOptions);
+  if (!session) {
+    return new NextResponse(JSON.stringify({ error: 'UNAUTHORIZED' }), {
+      status: 401,
+    });
+  }
+  const payload = await request.json();
+
+  try {
+    const student = await getStudentById(id);
+
+    if (student) {
+      const updatedStudent = await updateStudentById(id, payload);
+      if (updatedStudent) {
+        return new Response(JSON.stringify(updatedStudent), {
+          status: StatusCodes.OK,
+        });
+      } else {
+        return new Response(
+          JSON.stringify({ error: 'STUDENT_UPDATION_FAILED' }),
+          {
+            status: StatusCodes.INTERNAL_SERVER_ERROR,
+          }
+        );
+      }
     } else {
       return new Response(JSON.stringify({ error: 'STUDENT_NOT_FOUND' }), {
         status: StatusCodes.NOT_FOUND,
