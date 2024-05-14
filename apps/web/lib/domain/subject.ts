@@ -59,6 +59,8 @@ export type UpdateAssessmentFormatModel = Pick<
   'id' | 'name' | 'isActive' | 'parentId' | 'hasMarkEntry'
 >;
 
+export type DeleteAssessmentFormatModel = Pick<AssessmentFormatModel, 'id'>;
+
 export type SubjectTypeModel = {
   id: string;
   name: string;
