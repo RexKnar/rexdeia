@@ -18,14 +18,24 @@ export async function getExamsByClassSection(
         select: {
           id: true,
           name: true,
+          term: {
+            select: {
+              id: true,
+              name: true,
+            },
+          },
+          batch: {
+            select: {
+              id: true,
+              name: true,
+            },
+          },
         },
       },
     },
   });
 
-  let examList = exams.map((item) => {
-    return item.exam;
-  });
+  const examList = exams.map((item) => item.exam);
 
   return uniqBy(examList, (exam: ExamModel) => exam.id);
 }

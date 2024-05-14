@@ -66,6 +66,7 @@ export function SaveExamFlyout() {
     useGetExamTypeListQuery({
       page,
       limit,
+      filter,
     });
 
   const {
