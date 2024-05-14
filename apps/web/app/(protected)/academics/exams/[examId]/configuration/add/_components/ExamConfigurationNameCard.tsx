@@ -11,7 +11,7 @@ export function ExamConfigurationNameCard(props) {
         const params = new URLSearchParams(searchParams);
         if (props.examProps.Section) {
           params.set('classId', props.examProps.id);
-        } else if (props.examProps.classId) {
+        } else if (props.examProps.mediumId) {
           params.set('sectionId', props.examProps.id);
         } else if (props.examProps.regulationId) {
           params.set('subjectId', props.examProps.id);
