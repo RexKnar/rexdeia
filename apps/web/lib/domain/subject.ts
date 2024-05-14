@@ -1,5 +1,4 @@
 export type SubjectModel = {
-  subject: SubjectModel[];
   id: string;
   name?: string;
   isActive?: boolean;

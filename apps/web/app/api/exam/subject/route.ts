@@ -42,9 +42,9 @@ export async function PUT(request: NextRequest) {
 
   try {
     const filter = await request.json();
-    const gSubjectsWithFilter = await getSubjectsWithFilter(filter);
+    const getSubjectsWithFilterResponse = await getSubjectsWithFilter(filter);
 
-    return new NextResponse(JSON.stringify(gSubjectsWithFilter), {
+    return new NextResponse(JSON.stringify(getSubjectsWithFilterResponse), {
       status: StatusCodes.OK,
     });
   } catch (e) {

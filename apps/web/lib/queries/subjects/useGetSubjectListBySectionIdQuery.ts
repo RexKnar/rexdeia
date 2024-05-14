@@ -3,21 +3,21 @@ import {
   useQueryClient,
   UseQueryOptions,
 } from '@tanstack/react-query';
+import { GroupModel } from 'lib/domain/group';
 
 import { makeAPICall } from '../../api';
-import { SubjectModel } from '../../domain/subject';
 import { GET_SUBJECT_LIST_BY_SECTION_ID } from '../../endpoints';
 
 function getSubjectListBySectionId(
   sectionId: string,
   classId?: string,
-  options?: Partial<UseQueryOptions<SubjectModel[]>>
+  options?: Partial<UseQueryOptions<GroupModel[]>>
 ) {
   return {
     ...options,
     queryKey: [GET_SUBJECT_LIST_BY_SECTION_ID, sectionId],
     queryFn: async () => {
-      return await makeAPICall<SubjectModel[]>(
+      return await makeAPICall<GroupModel[]>(
         GET_SUBJECT_LIST_BY_SECTION_ID,
         {},
         { classId: classId },
@@ -30,7 +30,7 @@ function getSubjectListBySectionId(
 export function useGetSubjectListBySectionIdQuery(
   sectionId: string,
   classId?: string,
-  options?: Partial<UseQueryOptions<SubjectModel[]>>
+  options?: Partial<UseQueryOptions<GroupModel[]>>
 ) {
   return useQuery(getSubjectListBySectionId(sectionId, classId, options));
 }
