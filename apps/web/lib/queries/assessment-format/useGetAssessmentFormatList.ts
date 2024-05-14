@@ -14,7 +14,11 @@ function getAssessmentFormatList(
     page,
     limit,
     filter,
-  }: { page: number; limit: number; filter: { isActive?: boolean } },
+  }: {
+    page: number;
+    limit: number;
+    filter: { isActive?: boolean; hasMarkEntry?: boolean };
+  },
   options?: UseQueryOptions<PaginatedResponse<AssessmentFormatModel>>
 ): UseQueryOptions<PaginatedResponse<AssessmentFormatModel>> {
   return {

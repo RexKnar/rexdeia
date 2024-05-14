@@ -57,7 +57,7 @@ export function useUpdateAssessmentFormatMutationQuery(
     },
     onError: (error, _, context) => {
       queryClient.setQueryData(
-        [GET_ASSESSMENT_FORMAT_LIST],
+        [GET_ASSESSMENT_FORMAT_LIST, page, limit],
         context.previousAssessmentFormat
       );
     },

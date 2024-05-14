@@ -39,6 +39,8 @@ export type AddStudentModel = Omit<Student, 'id'> & {
   batchId: string;
 };
 
+export type UpdateStudentModel = Pick<Student, 'id'>;
+
 export type GetStudentListModel = {
   page: number;
   total: number;

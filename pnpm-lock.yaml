@@ -14,7 +14,7 @@ importers:
     devDependencies:
       '@turbo/gen':
         specifier: 1.13.3
-        version: 1.13.3(@types/node@20.12.11)(typescript@5.4.5)
+        version: 1.13.3(@types/node@20.12.8)(typescript@5.4.5)
       eslint:
         specifier: 8.57.0
         version: 8.57.0
@@ -51,7 +51,7 @@ importers:
     devDependencies:
       '@types/node':
         specifier: ^20.4.4
-        version: 20.12.11
+        version: 20.12.8
       '@types/react':
         specifier: ^18.2.15
         version: 18.2.21
@@ -99,13 +99,13 @@ importers:
         version: 7.114.0
       '@tanstack/react-query':
         specifier: ^5.13.4
-        version: 5.35.5(react@18.3.1)
+        version: 5.36.0(react@18.3.1)
       '@tanstack/react-query-devtools':
         specifier: ^5.13.5
-        version: 5.35.5(@tanstack/react-query@5.35.5(react@18.3.1))(react@18.3.1)
+        version: 5.36.0(@tanstack/react-query@5.36.0(react@18.3.1))(react@18.3.1)
       '@tanstack/react-table':
         specifier: ^8.10.7
-        version: 8.16.0(react-dom@18.2.0(react@18.3.1))(react@18.3.1)
+        version: 8.17.0(react-dom@18.2.0(react@18.3.1))(react@18.3.1)
       autoprefixer:
         specifier: ^10.4.16
         version: 10.4.19(postcss@8.4.38)
@@ -189,7 +189,7 @@ importers:
         version: 5.17.7(@types/react@18.2.21)(ramda@0.30.0)(react-dom@18.2.0(react@18.3.1))(react@18.3.1)
       tailwindcss:
         specifier: 3.4.3
-        version: 3.4.3(ts-node@10.9.2(@types/node@20.12.11)(typescript@5.4.5))
+        version: 3.4.3(ts-node@10.9.2(@types/node@20.12.8)(typescript@5.4.5))
       ui:
         specifier: workspace:*
         version: link:../../packages/ui
@@ -208,7 +208,7 @@ importers:
         version: 1.4.11
       '@types/node':
         specifier: 20.12.8
-        version: 20.12.11
+        version: 20.12.8
       '@types/react':
         specifier: 18.2.21
         version: 18.2.21
@@ -510,8 +510,8 @@ packages:
       react: '>=16.8.0'
       react-dom: '>=16.8.0'
 
-  '@floating-ui/react@0.26.13':
-    resolution: {integrity: sha512-kBa9wntpugzrZ8t/4yWelvSmEKZdeTXTJzrxqyrLmcU/n1SM4nvse8yQh2e1b37rJGvtu0EplV9+IkBrCJ1vkw==}
+  '@floating-ui/react@0.26.14':
+    resolution: {integrity: sha512-I2EhfezC+H0WfkMEkCcF9+++PU1Wq08bDKhHHGIoBZVCciiftEQHgrSI4dTUTsa7446SiIVW0gWATliIlVNgfg==}
     peerDependencies:
       react: '>=16.8.0'
       react-dom: '>=16.8.0'
@@ -1372,25 +1372,25 @@ packages:
   '@swc/helpers@0.5.5':
     resolution: {integrity: sha512-KGYxvIOXcceOAbEk4bi/dVLEK9z8sZ0uBB3Il5b1rhfClSpcX0yfRO0KmTkqR2cnQDymwLB+25ZyMzICg/cm/A==}
 
-  '@tanstack/query-core@5.35.5':
-    resolution: {integrity: sha512-OMWvlEqG01RfGj+XZb/piDzPp0eZkkHWSDHt2LvE/fd1zWburP/xwm0ghk6Iv8cuPlP+ACFkZviKXK0OVt6lhg==}
+  '@tanstack/query-core@5.36.0':
+    resolution: {integrity: sha512-B5BD3pg/mztDR36i77hGcyySKKeYrbM5mnogOROTBi1SUml5ByRK7PGUUl16vvubvQC+mSnqziFG/VIy/DE3FQ==}
 
   '@tanstack/query-devtools@5.32.1':
     resolution: {integrity: sha512-7Xq57Ctopiy/4atpb0uNY5VRuCqRS/1fi/WBCKKX6jHMa6cCgDuV/AQuiwRXcKARbq2OkVAOrW2v4xK9nTbcCA==}
 
-  '@tanstack/react-query-devtools@5.35.5':
-    resolution: {integrity: sha512-4Xll14B9uhgEJ+uqZZ5tqZ7G1LDR7wGYgb+NOZHGn11TTABnlV8GWon7zDMqdaHeR5mjjuY1UFo9pbz39kuZKQ==}
+  '@tanstack/react-query-devtools@5.36.0':
+    resolution: {integrity: sha512-AxZSmM7CmjDQrcY9gceFBS+1DqkfTqAMpDCMltzIxMKvKn+ZhgBsV49aewhVXP1DgZzb+Is4f9HH2EMu//njXw==}
     peerDependencies:
-      '@tanstack/react-query': ^5.35.5
+      '@tanstack/react-query': ^5.36.0
       react: ^18.0.0
 
-  '@tanstack/react-query@5.35.5':
-    resolution: {integrity: sha512-sppX7L+PVn5GBV3In6zzj0zcKfnZRKhXbX1MfIfKo1OjIq2GMaopvAFOP0x1bRYTUk2ikrdYcQYOozX7PWkb8A==}
+  '@tanstack/react-query@5.36.0':
+    resolution: {integrity: sha512-BATvtM0rohwg7pRHUnxgeDiwLWRGZ8OM/4y8LImHVpecQWoH6Uhytu3Z8YV6V7hQ1sMQBFcUrGE1/e4MxR6YiA==}
     peerDependencies:
       react: ^18.0.0
 
-  '@tanstack/react-table@8.16.0':
-    resolution: {integrity: sha512-rKRjnt8ostqN2fercRVOIH/dq7MAmOENCMvVlKx6P9Iokhh6woBGnIZEkqsY/vEJf1jN3TqLOb34xQGLVRuhAg==}
+  '@tanstack/react-table@8.17.0':
+    resolution: {integrity: sha512-LSJxTDzlKGs8EN7/UHB1l3yLR9HUIxoHFkTbTjHaUUGL4kgYZFYhsQsdDJSIykG86qpIA/6gSWmtwNfy5Iprhw==}
     engines: {node: '>=12'}
     peerDependencies:
       react: '>=16.8'
@@ -1475,8 +1475,8 @@ packages:
   '@types/multer@1.4.11':
     resolution: {integrity: sha512-svK240gr6LVWvv3YGyhLlA+6LRRWA4mnGIU7RcNmgjBYFl6665wcXrRfxGp5tEPVHUNm5FMcmq7too9bxCwX/w==}
 
-  '@types/node@20.12.11':
-    resolution: {integrity: sha512-vDg9PZ/zi+Nqp6boSOT7plNuthRugEKixDv5sFTIpkE89MmNtEArAShI4mxuX2+UrLEe9pxC1vm2cjm9YlWbJw==}
+  '@types/node@20.12.8':
+    resolution: {integrity: sha512-NU0rJLJnshZWdE/097cdCBbyW1h4hEg0xpovcoAQYHl8dnEyp/NAOiE45pvc+Bd1Dt+2r94v2eGFpQJ4R7g+2w==}
 
   '@types/prop-types@15.7.12':
     resolution: {integrity: sha512-5zvhXYtRNRluoE/jAp4GVsSduVUzNWKkOZrCDBWYtE7biZywwdC2AcEzg+cSMLFRfVgeAFqpfNabiPjxFddV1Q==}
@@ -2875,9 +2875,9 @@ packages:
     engines: {node: '>=16 || 14 >=14.17'}
     hasBin: true
 
-  glob@10.3.14:
-    resolution: {integrity: sha512-4fkAqu93xe9Mk7le9v0y3VrPDqLKHarNi2s4Pv7f2yOvfhWfhc7hRPHC/JyqMqb8B/Dt/eGS4n7ykwf3fOsl8g==}
-    engines: {node: '>=16 || 14 >=14.17'}
+  glob@10.3.15:
+    resolution: {integrity: sha512-0c6RlJt1TICLyvJYIApxb8GsXoai0KUP7AxKKAtsYXdgJR1mGEUa7DgwShbdk1nly0PYoZj01xd4hzbq3fsjpw==}
+    engines: {node: '>=16 || 14 >=14.18'}
     hasBin: true
 
   glob@7.1.6:
@@ -3938,9 +3938,9 @@ packages:
   path-parse@1.0.7:
     resolution: {integrity: sha512-LDJzPVEEEPR+y48z93A0Ed0yXb8pAByGWo/k5YYdYgpY2/2EsOsksJrq7lOHxryrVOn1ejG6oAp8ahvOIQD8sw==}
 
-  path-scurry@1.11.0:
-    resolution: {integrity: sha512-LNHTaVkzaYaLGlO+0u3rQTz7QrHTFOuKyba9JMTQutkmtNew8dw8wOD7mTU/5fCPZzCWpfW0XnQKzY61P0aTaw==}
-    engines: {node: '>=16 || 14 >=14.17'}
+  path-scurry@1.11.1:
+    resolution: {integrity: sha512-Xa4Nw17FS9ApQFJ9umLiJS4orGjm7ZzwUrwamcGQuHSzDyth9boKDaycYdDcZDuqYATXw4HFXgaqWTctW/v1HA==}
+    engines: {node: '>=16 || 14 >=14.18'}
 
   path-to-regexp@0.1.7:
     resolution: {integrity: sha512-5DFkuoqlv1uYQKxy8omFBeJPQcdoE07Kv2sferDCrAq1ohOU+MSDswDIbnx3YAM60qIOnYa53wBhXW0EbMonrQ==}
@@ -5377,7 +5377,7 @@ snapshots:
       react: 18.3.1
       react-dom: 18.2.0(react@18.3.1)
 
-  '@floating-ui/react@0.26.13(react-dom@18.2.0(react@18.3.1))(react@18.3.1)':
+  '@floating-ui/react@0.26.14(react-dom@18.2.0(react@18.3.1))(react@18.3.1)':
     dependencies:
       '@floating-ui/react-dom': 2.0.9(react-dom@18.2.0(react@18.3.1))(react@18.3.1)
       '@floating-ui/utils': 0.2.2
@@ -6641,22 +6641,22 @@ snapshots:
       '@swc/counter': 0.1.3
       tslib: 2.6.2
 
-  '@tanstack/query-core@5.35.5': {}
+  '@tanstack/query-core@5.36.0': {}
 
   '@tanstack/query-devtools@5.32.1': {}
 
-  '@tanstack/react-query-devtools@5.35.5(@tanstack/react-query@5.35.5(react@18.3.1))(react@18.3.1)':
+  '@tanstack/react-query-devtools@5.36.0(@tanstack/react-query@5.36.0(react@18.3.1))(react@18.3.1)':
     dependencies:
       '@tanstack/query-devtools': 5.32.1
-      '@tanstack/react-query': 5.35.5(react@18.3.1)
+      '@tanstack/react-query': 5.36.0(react@18.3.1)
       react: 18.3.1
 
-  '@tanstack/react-query@5.35.5(react@18.3.1)':
+  '@tanstack/react-query@5.36.0(react@18.3.1)':
     dependencies:
-      '@tanstack/query-core': 5.35.5
+      '@tanstack/query-core': 5.36.0
       react: 18.3.1
 
-  '@tanstack/react-table@8.16.0(react-dom@18.2.0(react@18.3.1))(react@18.3.1)':
+  '@tanstack/react-table@8.17.0(react-dom@18.2.0(react@18.3.1))(react@18.3.1)':
     dependencies:
       '@tanstack/table-core': 8.16.0
       react: 18.3.1
@@ -6676,7 +6676,7 @@ snapshots:
 
   '@tsconfig/node16@1.0.4': {}
 
-  '@turbo/gen@1.13.3(@types/node@20.12.11)(typescript@5.4.5)':
+  '@turbo/gen@1.13.3(@types/node@20.12.8)(typescript@5.4.5)':
     dependencies:
       '@turbo/workspaces': 1.13.3
       chalk: 2.4.2
@@ -6686,7 +6686,7 @@ snapshots:
       minimatch: 9.0.4
       node-plop: 0.26.3
       proxy-agent: 6.4.0
-      ts-node: 10.9.2(@types/node@20.12.11)(typescript@5.4.5)
+      ts-node: 10.9.2(@types/node@20.12.8)(typescript@5.4.5)
       update-check: 1.5.4
       validate-npm-package-name: 5.0.1
     transitivePeerDependencies:
@@ -6716,19 +6716,19 @@ snapshots:
   '@types/body-parser@1.19.5':
     dependencies:
       '@types/connect': 3.4.38
-      '@types/node': 20.12.11
+      '@types/node': 20.12.8
 
   '@types/caseless@0.12.5': {}
 
   '@types/connect@3.4.38':
     dependencies:
-      '@types/node': 20.12.11
+      '@types/node': 20.12.8
 
   '@types/estree@1.0.5': {}
 
   '@types/express-serve-static-core@4.19.0':
     dependencies:
-      '@types/node': 20.12.11
+      '@types/node': 20.12.8
       '@types/qs': 6.9.15
       '@types/range-parser': 1.2.7
       '@types/send': 0.17.4
@@ -6743,7 +6743,7 @@ snapshots:
   '@types/glob@7.2.0':
     dependencies:
       '@types/minimatch': 5.1.2
-      '@types/node': 20.12.11
+      '@types/node': 20.12.8
 
   '@types/hast@2.3.10':
     dependencies:
@@ -6768,7 +6768,7 @@ snapshots:
     dependencies:
       '@types/express': 4.17.21
 
-  '@types/node@20.12.11':
+  '@types/node@20.12.8':
     dependencies:
       undici-types: 5.26.5
 
@@ -6784,7 +6784,7 @@ snapshots:
 
   '@types/react-datepicker@6.2.0(react-dom@18.2.0(react@18.3.1))(react@18.3.1)':
     dependencies:
-      '@floating-ui/react': 0.26.13(react-dom@18.2.0(react@18.3.1))(react@18.3.1)
+      '@floating-ui/react': 0.26.14(react-dom@18.2.0(react@18.3.1))(react@18.3.1)
       '@types/react': 18.2.21
       date-fns: 3.6.0
     transitivePeerDependencies:
@@ -6809,7 +6809,7 @@ snapshots:
   '@types/request@2.48.12':
     dependencies:
       '@types/caseless': 0.12.5
-      '@types/node': 20.12.11
+      '@types/node': 20.12.8
       '@types/tough-cookie': 4.0.5
       form-data: 2.5.1
 
@@ -6820,19 +6820,19 @@ snapshots:
   '@types/send@0.17.4':
     dependencies:
       '@types/mime': 1.3.5
-      '@types/node': 20.12.11
+      '@types/node': 20.12.8
 
   '@types/serve-static@1.15.7':
     dependencies:
       '@types/http-errors': 2.0.4
-      '@types/node': 20.12.11
+      '@types/node': 20.12.8
       '@types/send': 0.17.4
 
   '@types/swagger-jsdoc@6.0.1': {}
 
   '@types/through@0.0.33':
     dependencies:
-      '@types/node': 20.12.11
+      '@types/node': 20.12.8
 
   '@types/tinycolor2@1.4.6': {}
 
@@ -8605,15 +8605,15 @@ snapshots:
       jackspeak: 2.3.6
       minimatch: 9.0.4
       minipass: 7.1.1
-      path-scurry: 1.11.0
+      path-scurry: 1.11.1
 
-  glob@10.3.14:
+  glob@10.3.15:
     dependencies:
       foreground-child: 3.1.1
       jackspeak: 2.3.6
       minimatch: 9.0.4
       minipass: 7.1.1
-      path-scurry: 1.11.0
+      path-scurry: 1.11.1
 
   glob@7.1.6:
     dependencies:
@@ -9757,7 +9757,7 @@ snapshots:
 
   path-parse@1.0.7: {}
 
-  path-scurry@1.11.0:
+  path-scurry@1.11.1:
     dependencies:
       lru-cache: 10.2.2
       minipass: 7.1.1
@@ -9790,13 +9790,13 @@ snapshots:
       camelcase-css: 2.0.1
       postcss: 8.4.38
 
-  postcss-load-config@4.0.2(postcss@8.4.38)(ts-node@10.9.2(@types/node@20.12.11)(typescript@5.4.5)):
+  postcss-load-config@4.0.2(postcss@8.4.38)(ts-node@10.9.2(@types/node@20.12.8)(typescript@5.4.5)):
     dependencies:
       lilconfig: 3.1.1
       yaml: 2.4.2
     optionalDependencies:
       postcss: 8.4.38
-      ts-node: 10.9.2(@types/node@20.12.11)(typescript@5.4.5)
+      ts-node: 10.9.2(@types/node@20.12.8)(typescript@5.4.5)
 
   postcss-nested@6.0.1(postcss@8.4.38):
     dependencies:
@@ -9987,7 +9987,7 @@ snapshots:
 
   react-datepicker@6.9.0(react-dom@18.2.0(react@18.3.1))(react@18.3.1):
     dependencies:
-      '@floating-ui/react': 0.26.13(react-dom@18.2.0(react@18.3.1))(react@18.3.1)
+      '@floating-ui/react': 0.26.14(react-dom@18.2.0(react@18.3.1))(react@18.3.1)
       clsx: 2.1.1
       date-fns: 3.6.0
       prop-types: 15.8.1
@@ -10575,7 +10575,7 @@ snapshots:
     dependencies:
       '@jridgewell/gen-mapping': 0.3.5
       commander: 4.1.1
-      glob: 10.3.14
+      glob: 10.3.15
       lines-and-columns: 1.2.4
       mz: 2.7.0
       pirates: 4.0.6
@@ -10730,7 +10730,7 @@ snapshots:
 
   tailwindcss-animate@1.0.7: {}
 
-  tailwindcss@3.4.3(ts-node@10.9.2(@types/node@20.12.11)(typescript@5.4.5)):
+  tailwindcss@3.4.3(ts-node@10.9.2(@types/node@20.12.8)(typescript@5.4.5)):
     dependencies:
       '@alloc/quick-lru': 5.2.0
       arg: 5.0.2
@@ -10749,7 +10749,7 @@ snapshots:
       postcss: 8.4.38
       postcss-import: 15.1.0(postcss@8.4.38)
       postcss-js: 4.0.1(postcss@8.4.38)
-      postcss-load-config: 4.0.2(postcss@8.4.38)(ts-node@10.9.2(@types/node@20.12.11)(typescript@5.4.5))
+      postcss-load-config: 4.0.2(postcss@8.4.38)(ts-node@10.9.2(@types/node@20.12.8)(typescript@5.4.5))
       postcss-nested: 6.0.1(postcss@8.4.38)
       postcss-selector-parser: 6.0.16
       resolve: 1.22.8
@@ -10867,14 +10867,14 @@ snapshots:
 
   ts-mixer@6.0.4: {}
 
-  ts-node@10.9.2(@types/node@20.12.11)(typescript@5.4.5):
+  ts-node@10.9.2(@types/node@20.12.8)(typescript@5.4.5):
     dependencies:
       '@cspotcode/source-map-support': 0.8.1
       '@tsconfig/node10': 1.0.11
       '@tsconfig/node12': 1.0.11
       '@tsconfig/node14': 1.0.3
       '@tsconfig/node16': 1.0.4
-      '@types/node': 20.12.11
+      '@types/node': 20.12.8
       acorn: 8.11.3
       acorn-walk: 8.3.2
       arg: 4.1.3
