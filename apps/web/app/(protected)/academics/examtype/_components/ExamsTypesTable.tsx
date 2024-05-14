@@ -96,11 +96,13 @@ export function ExamTypeListTable() {
 
   const page = parseInt(searchParams.get('page')) || 1;
   const limit = parseInt(searchParams.get('limit')) || 10;
+  const filter = {};
 
   const { data: examTypeList, isPending: isexamTypeLoading } =
     useGetExamTypeListQuery({
       page,
       limit,
+      filter,
     });
 
   const {

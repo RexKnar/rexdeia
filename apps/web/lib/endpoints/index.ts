@@ -458,7 +458,7 @@ export default <EndpointDetails>{
     endpoint: `/api/exam/subject`,
   },
   [GET_EXAM_TYPE_LIST]: {
-    requestType: `GET`,
+    requestType: `PUT`,
     endpoint: `/api/exam/exam-type`,
   },
   [GET_TERM_LIST]: {

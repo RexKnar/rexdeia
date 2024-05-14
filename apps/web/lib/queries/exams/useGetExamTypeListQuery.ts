@@ -10,16 +10,20 @@ import { PaginatedResponse } from '../../domain';
 import { GET_EXAM_TYPE_LIST } from '../../endpoints';
 
 function getExamTypeList(
-  { page, limit }: { page: number; limit: number },
+  {
+    page,
+    limit,
+    filter,
+  }: { page: number; limit: number; filter: { isActive?: boolean } },
   options?: UseQueryOptions<PaginatedResponse<ExamTypeModel>>
 ): UseQueryOptions<PaginatedResponse<ExamTypeModel>> {
   return {
     ...options,
-    queryKey: [GET_EXAM_TYPE_LIST, page, limit],
+    queryKey: [GET_EXAM_TYPE_LIST, page, limit, filter],
     queryFn: async () => {
       return await makeAPICall<PaginatedResponse<ExamTypeModel>>(
         GET_EXAM_TYPE_LIST,
-        {},
+        filter,
         {
           page: page,
           limit: limit,
@@ -31,8 +35,12 @@ function getExamTypeList(
 }
 
 export function useGetExamTypeListQuery(
-  { page, limit }: { page: number; limit: number },
+  {
+    page,
+    limit,
+    filter,
+  }: { page: number; limit: number; filter: { isActive?: boolean } },
   options?: UseQueryOptions<PaginatedResponse<ExamTypeModel>>
 ): UseQueryResult<PaginatedResponse<ExamTypeModel>> {
-  return useQuery(getExamTypeList({ page, limit }, options));
+  return useQuery(getExamTypeList({ page, limit, filter }, options));
 }
