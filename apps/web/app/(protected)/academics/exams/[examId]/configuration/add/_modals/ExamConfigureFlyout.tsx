@@ -198,7 +198,7 @@ export function ExamConfigureFlyout() {
                     <Switch
                       id={`assessmentFormatConfiguration.${index}.${assessmentFormat.name}`}
                       key={index}
-                      checked={assessmentFormat[index]}
+                      checked={!!assessmentFormat.id}
                       onCheckedChange={(value) => {
                         value
                           ? append({
