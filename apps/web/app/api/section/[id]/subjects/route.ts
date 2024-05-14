@@ -1,6 +1,6 @@
 import { captureException } from '@sentry/nextjs';
 import { StatusCodes } from 'http-status-codes';
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 
 import { authOptions } from '../../../../../lib/auth';
@@ -33,16 +33,16 @@ import { getAllSubjectBySectionId } from '../../../subject/service';
  *         '500':
  *           description: Internal server error.
  */
-export async function GET(request: Request, { params: { id } }) {
+export async function GET(request: NextRequest, { params: { id } }) {
   const session = await getServerSession(authOptions);
   if (!session) {
     return new NextResponse(JSON.stringify({ error: 'UNAUTHORIZED' }), {
       status: StatusCodes.UNAUTHORIZED,
     });
   }
-
+  const classId = request.nextUrl.searchParams.get('classId');
   try {
-    const sections = await getAllSubjectBySectionId(id);
+    const sections = await getAllSubjectBySectionId(id, classId);
 
     return new NextResponse(JSON.stringify(sections), {
       status: StatusCodes.OK,

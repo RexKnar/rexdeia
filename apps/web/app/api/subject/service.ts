@@ -73,7 +73,7 @@ export async function addSubjects(id: string, subjects: CreateSubjectModel[]) {
 
     await mapSubjectToSubjectType(createdSubject.id, subject.subjectTypeId);
 
-    await mapSubjectToGroup(createdSubject.id, subject.groupIds);
+    await mapSubjectToGroup(createdSubject.id, subject.groupIds, id);
     await mapSubjectToAssessmentFormat(
       createdSubject.id,
       subject.assessmentFormatIds
@@ -81,7 +81,7 @@ export async function addSubjects(id: string, subjects: CreateSubjectModel[]) {
   }
 }
 
-export async function getAllSubjectBySectionId(id: string) {
+export async function getAllSubjectBySectionId(id: string, classId: string) {
   const subjects = await db.section.findMany({
     where: {
       id: id,
@@ -94,6 +94,7 @@ export async function getAllSubjectBySectionId(id: string) {
               name: true,
               id: true,
               subjectToGroup: {
+                where: { classId: classId },
                 select: {
                   subject: {
                     include: {
@@ -238,7 +239,11 @@ export async function mapAssessmentFormatsToSubject(
   );
 }
 
-export async function mapSubjectToGroup(subjectId: string, groupIds: string[]) {
+export async function mapSubjectToGroup(
+  subjectId: string,
+  groupIds: string[],
+  classId: string
+) {
   await db.$transaction(
     groupIds.map((groupId) => {
       return db.subject.update({
@@ -247,7 +252,7 @@ export async function mapSubjectToGroup(subjectId: string, groupIds: string[]) {
         },
         data: {
           subjectToGroup: {
-            create: [{ groupId: groupId }],
+            create: [{ groupId: groupId, classId: classId }],
           },
         },
       });
