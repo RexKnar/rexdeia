@@ -33,6 +33,7 @@ export function StudentAnalytics() {
   const { data: classList } = useGetClassListQuery({
     page,
     limit,
+    filter,
   });
   const { data: sectionList } = useGetAllSectionByClassIdQuery({
     filter,
