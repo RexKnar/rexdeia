@@ -1,3 +1,9 @@
+/* eslint-disable react/jsx-key */
+'use client';
+
+import { useGetClassListQuery } from 'lib/queries/class/useGetClassListQuery';
+import { useGetExamListQuery } from 'lib/queries/exams/useGetExamListQuery';
+import { useGetAllSectionByClassIdQuery } from 'lib/queries/section/useGetAllSectionsByClassIdQuery';
 import {
   Card,
   CardContent,
@@ -16,6 +22,52 @@ import {
 } from 'ui';
 
 export function StudentAnalytics() {
+  const page = 1;
+  const limit = 999;
+  const filter = {};
+  const classId = '';
+  const { data: examList } = useGetExamListQuery({
+    page,
+    limit,
+  });
+  const { data: classList } = useGetClassListQuery({
+    page,
+    limit,
+  });
+  const { data: sectionList } = useGetAllSectionByClassIdQuery({
+    filter,
+    classId,
+  });
+  const marks = [
+    {
+      status1: 'Pass',
+      passPersentage: '95%',
+      girlsPassPercentage: '97%',
+      boysPassPercentage: '98%',
+      status2: 'Fail',
+      failPercentage: '5%',
+      girlsFailPercentage: '3%',
+      boysFailPercentage: '2%',
+      firstMarkStudent: 'Name',
+      firstMark: '495',
+      lastmarkstudent: 'Name',
+      lastMark: '264',
+    },
+  ];
+  const subjects = [
+    {
+      id: 'subjectd',
+      value: 'Tamil',
+    },
+    {
+      id: 'subjectd',
+      value: 'English',
+    },
+    {
+      id: 'subjectd',
+      value: 'Maths',
+    },
+  ];
   return (
     <section className=" ">
       <section className="space-y-2 rounded-md bg-white p-6">
@@ -28,10 +80,11 @@ export function StudentAnalytics() {
               </SelectTrigger>
               <SelectContent>
                 <SelectGroup>
-                  <SelectItem value={'weekly'}>{'Weekly'}</SelectItem>
-                  <SelectItem value={'monthly'}>{'Monthly'}</SelectItem>
-                  <SelectItem value={'term'}>{'Term'}</SelectItem>
-                  <SelectItem value={'anual'}>{'Anual'}</SelectItem>
+                  {examList?.data?.map((item) => (
+                    <SelectItem key={item.id} value={item.id}>
+                      {item.name}
+                    </SelectItem>
+                  ))}
                 </SelectGroup>
               </SelectContent>
             </Select>
@@ -44,10 +97,11 @@ export function StudentAnalytics() {
               </SelectTrigger>
               <SelectContent>
                 <SelectGroup>
-                  <SelectItem value={'9th'}>{'9th'}</SelectItem>
-                  <SelectItem value={'10th'}>{'10th'}</SelectItem>
-                  <SelectItem value={'11th'}>{'11th'}</SelectItem>
-                  <SelectItem value={'12th'}>{'12th'}</SelectItem>
+                  {classList?.data?.map((item) => (
+                    <SelectItem key={item.id} value={item.id}>
+                      {item.name}
+                    </SelectItem>
+                  ))}
                 </SelectGroup>
               </SelectContent>
             </Select>
@@ -60,10 +114,11 @@ export function StudentAnalytics() {
               </SelectTrigger>
               <SelectContent>
                 <SelectGroup>
-                  <SelectItem value={'a'}>{'A'}</SelectItem>
-                  <SelectItem value={'b'}>{'B'}</SelectItem>
-                  <SelectItem value={'c'}>{'C'}</SelectItem>
-                  <SelectItem value={'d'}>{'D'}</SelectItem>
+                  {sectionList?.data?.map((item) => (
+                    <SelectItem key={item.id} value={item.id}>
+                      {item.name}
+                    </SelectItem>
+                  ))}
                 </SelectGroup>
               </SelectContent>
             </Select>
@@ -89,21 +144,14 @@ export function StudentAnalytics() {
                 className="w-12/12 mt-3"
               />
             </div>
-            <div className="mt-10 ">
-              <label className="flex justify-center gap-2">
-                <Checkbox /> <span>Tamil</span>
-              </label>
-            </div>
-            <div className="mt-10">
-              <label className="flex gap-2">
-                <Checkbox /> <span>English</span>
-              </label>
-            </div>
-            <div className="mt-10">
-              <label className="flex gap-2">
-                <Checkbox /> <span>Maths</span>
-              </label>
-            </div>
+            {subjects.map((item, index) => (
+              <div className="mt-10 ">
+                <div className="flex justify-center gap-2">
+                  <Checkbox value={item.id} key={index} />
+                  <span>{item.value}</span>
+                </div>
+              </div>
+            ))}
             <div className="w-6/12">
               <label className="mt-1 block text-sm text-gray-700">
                 No of Subjects
@@ -114,11 +162,11 @@ export function StudentAnalytics() {
                 </SelectTrigger>
                 <SelectContent>
                   <SelectGroup>
-                    <SelectItem value={'1'}>{'1'}</SelectItem>
-                    <SelectItem value={'2'}>{'2'}</SelectItem>
-                    <SelectItem value={'3'}>{'3'}</SelectItem>
-                    <SelectItem value={'4'}>{'4'}</SelectItem>
-                    <SelectItem value={'5'}>{'5'}</SelectItem>
+                    {subjects.map((item, index) => (
+                      <SelectItem value={item.id} key={index}>
+                        {index + 1}
+                      </SelectItem>
+                    ))}
                   </SelectGroup>
                 </SelectContent>
               </Select>
@@ -130,130 +178,146 @@ export function StudentAnalytics() {
         <div className="flex gap-4">
           <div>
             <Card className="w-72 rounded-md bg-white">
-              <CardHeader>
-                <div>
-                  <Text variant="base-bold">{'Pass Percentage'}</Text>
-                </div>
-              </CardHeader>
-              <CardContent>
-                <div className="flex justify-center gap-5">
-                  <Text>{'Pass'}</Text>
-                  <Text
-                    variant="base-regular"
-                    className=" rounded-lg border bg-violet-100 px-2"
-                  >
-                    {'90 %'}
-                  </Text>
-                </div>
-                <div className="mt-6 flex gap-4">
-                  <div className="flex justify-center gap-3">
-                    <Text>{'Girls'}</Text>
-                    <Text
-                      variant="base-regular"
-                      className=" rounded-lg border bg-violet-100 px-2"
-                    >
-                      {'90 %'}
-                    </Text>
-                  </div>
-                  <div className="flex justify-center gap-3">
-                    <Text>{'Boys'}</Text>
-                    <Text
-                      variant="base-regular"
-                      className=" rounded-lg border bg-violet-100 px-2"
-                    >
-                      {'85 %'}
-                    </Text>
-                  </div>
-                </div>
-              </CardContent>
+              {marks.map((item) => (
+                <>
+                  <CardHeader>
+                    <div>
+                      <Text variant="base-bold">{'Pass Persentage'}</Text>
+                    </div>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="flex justify-center gap-5">
+                      <Text>{item.status1}</Text>
+                      <Text
+                        variant="base-regular"
+                        className=" rounded-lg border bg-violet-100 px-2"
+                      >
+                        {item.passPersentage}
+                      </Text>
+                    </div>
+                    <div className="mt-6 flex gap-4">
+                      <div className="flex justify-center gap-3">
+                        <Text>{'Girls'}</Text>
+                        <Text
+                          variant="base-regular"
+                          className=" rounded-lg border bg-violet-100 px-2"
+                        >
+                          {item.girlsPassPercentage}
+                        </Text>
+                      </div>
+                      <div className="flex justify-center gap-3">
+                        <Text>{'Boys'}</Text>
+                        <Text
+                          variant="base-regular"
+                          className=" rounded-lg border bg-violet-100 px-2"
+                        >
+                          {item.boysPassPercentage}
+                        </Text>
+                      </div>
+                    </div>
+                  </CardContent>
+                </>
+              ))}
             </Card>
           </div>
           <div>
             <Card className="w-72 rounded-md bg-white">
-              <CardHeader>
-                <div>
-                  <Text variant="base-bold">{'Fail Percentage'}</Text>
-                </div>
-              </CardHeader>
-              <CardContent>
-                <div className="flex justify-center gap-5">
-                  <Text>{'Fail'}</Text>
-                  <Text
-                    variant="base-regular"
-                    className=" rounded-lg border bg-violet-100 px-2"
-                  >
-                    {'10 %'}
-                  </Text>
-                </div>
-                <div className="mt-6 flex gap-4">
-                  <div className="flex justify-center gap-3">
-                    <Text>{'Girls'}</Text>
-                    <Text
-                      variant="base-regular"
-                      className=" rounded-lg border bg-violet-100 px-2"
-                    >
-                      {'7 %'}
-                    </Text>
-                  </div>
-                  <div className="flex justify-center gap-3">
-                    <Text>{'Boys'}</Text>
-                    <Text
-                      variant="base-regular"
-                      className=" rounded-lg border bg-violet-100 px-2"
-                    >
-                      {'3 %'}
-                    </Text>
-                  </div>
-                </div>
-              </CardContent>
+              {marks.map((item) => (
+                <>
+                  <CardHeader>
+                    <div>
+                      <Text variant="base-bold">{'Fail Percentage'}</Text>
+                    </div>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="flex justify-center gap-5">
+                      <Text>{item.status2}</Text>
+                      <Text
+                        variant="base-regular"
+                        className=" rounded-lg border bg-violet-100 px-2"
+                      >
+                        {item.failPercentage}
+                      </Text>
+                    </div>
+                    <div className="mt-6 flex gap-4">
+                      <div className="flex justify-center gap-3">
+                        <Text>{'Girls'}</Text>
+                        <Text
+                          variant="base-regular"
+                          className=" rounded-lg border bg-violet-100 px-2"
+                        >
+                          {item.girlsFailPercentage}
+                        </Text>
+                      </div>
+                      <div className="flex justify-center gap-3">
+                        <Text>{'Boys'}</Text>
+                        <Text
+                          variant="base-regular"
+                          className=" rounded-lg border bg-violet-100 px-2"
+                        >
+                          {item.boysFailPercentage}
+                        </Text>
+                      </div>
+                    </div>
+                  </CardContent>
+                </>
+              ))}
             </Card>
           </div>
         </div>
         <div className="mt-4 flex gap-4">
           <div>
             <Card className="w-72 rounded-md bg-white">
-              <CardHeader>
-                <div>
-                  <Text variant="base-bold">{'First Mark'}</Text>
-                </div>
-              </CardHeader>
-              <CardContent>
-                <div className="my-auto flex justify-center px-5 pb-2 ">
-                  <Text variant="base-bold">{'Name'}</Text>
-                </div>
-                <div className="flex justify-center gap-5">
-                  <Text>{'Mark'}</Text>
-                  <Text
-                    variant="base-regular"
-                    className=" rounded-lg border bg-violet-100 px-2"
-                  >
-                    {'485'}
-                  </Text>
-                </div>
-              </CardContent>
+              {marks.map((item) => (
+                <>
+                  <CardHeader>
+                    <div>
+                      <Text variant="base-bold">{'First Mark'}</Text>
+                    </div>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="my-auto flex justify-center px-5 pb-2 ">
+                      <Text variant="base-bold">{item.firstMarkStudent}</Text>
+                    </div>
+                    <div className="flex justify-center gap-5">
+                      <Text>{'Mark'}</Text>
+                      <Text
+                        variant="base-regular"
+                        className=" rounded-lg border bg-violet-100 px-2"
+                      >
+                        {item.firstMark}
+                      </Text>
+                    </div>
+                  </CardContent>
+                </>
+              ))}
             </Card>
           </div>
           <div>
             <Card className="w-72 rounded-md bg-white">
-              <CardHeader>
-                <div>
-                  <Text variant="base-bold">{'Last Mark'}</Text>
-                </div>
-              </CardHeader>
-              <CardContent>
-                <div className="my-auto flex justify-center px-5 pb-2 ">
-                  <Text variant="base-bold">{'Name'}</Text>
-                </div>
-                <div className="flex justify-center gap-5">
-                  <Text>{'Mark'}</Text>
-                  <Text
-                    variant="base-regular"
-                    className=" rounded-lg border bg-violet-100 px-2"
-                  >
-                    {'285'}
-                  </Text>
-                </div>
-              </CardContent>
+              {marks.map((item) => (
+                <>
+                  <CardHeader>
+                    <div>
+                      <Text variant="base-bold">{'Last Mark'}</Text>
+                    </div>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="my-auto flex justify-center px-5 pb-2 ">
+                      <Text variant="base-bold">{item.lastmarkstudent}</Text>
+                    </div>
+                    <div className="flex justify-center gap-5">
+                      <Text>{'Mark'}</Text>
+                      <Text
+                        variant="base-regular"
+                        className=" rounded-lg border bg-violet-100 px-2"
+                      >
+                        {item.lastMark}
+                      </Text>
+                    </div>
+                  </CardContent>
+                </>
+              ))}
             </Card>
           </div>
         </div>
