@@ -195,7 +195,6 @@ export async function mapStudentToClass(
           id: studentId,
         },
         data: {
-          batchId: studentPayload.academicYear,
           studentMapping: {
             updateMany: [
               {
@@ -206,6 +205,7 @@ export async function mapStudentToClass(
                   groupId: studentPayload.groupId,
                   classId: classId,
                   sectionId: studentPayload.sectionId,
+                  batchId: studentPayload.academicYear,
                 },
               },
             ],
@@ -398,4 +398,22 @@ function formatData(classDetails) {
       }),
     };
   });
+}
+
+export async function getAllStudentByClassIdForAssigning(id: string) {
+  const studentList = await db.studentMapping.findMany({
+    where: {
+      classId: id,
+      section: null,
+    },
+    select: {
+      student: {
+        select: {
+          id: true,
+          firstName: true,
+        },
+      },
+    },
+  });
+  return studentList;
 }
