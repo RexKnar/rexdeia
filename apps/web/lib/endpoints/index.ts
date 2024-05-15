@@ -462,7 +462,7 @@ export default <EndpointDetails>{
     endpoint: `/api/exam/exam-type`,
   },
   [GET_TERM_LIST]: {
-    requestType: `GET`,
+    requestType: `PUT`,
     endpoint: `/api/exam/term`,
   },
   [GET_ASSESSMENT_FORMAT_BY_SUBJECT_ID]: {
