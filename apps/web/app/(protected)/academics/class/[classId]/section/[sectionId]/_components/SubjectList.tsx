@@ -7,9 +7,12 @@ import { useGetSubjectListBySectionIdQuery } from '../../../../../../../../lib/q
 import { SubjectCard } from './SubjectCard';
 
 export function SubjectList() {
-  const { sectionId } = useParams<{ sectionId: string }>();
+  const { sectionId, classId } = useParams<{
+    sectionId: string;
+    classId: string;
+  }>();
   const { data: subjectListResponse, isLoading: isSubjectListLoading } =
-    useGetSubjectListBySectionIdQuery(sectionId, {
+    useGetSubjectListBySectionIdQuery(sectionId, classId, {
       enabled: !!sectionId,
     });
 
@@ -31,10 +34,17 @@ export function SubjectList() {
   }
 
   return (
-    <section className="grid w-full grid-cols-4 justify-between gap-4 px-0">
-      {subjectListResponse.map((subjectItem) => (
-        <div key={subjectItem.id}>
-          <SubjectCard id={subjectItem.id} name={subjectItem.name} />
+    <section className="w-full">
+      {subjectListResponse.map((group) => (
+        <div className="flex flex-col gap-4" key={group.id}>
+          <p className="text-base font-bold">{group.name}</p>
+          <div className="grid w-full grid-cols-4 justify-between gap-4 px-0">
+            {group.subject.map((subject) => (
+              <div key={subject.id} className="w-auto">
+                <SubjectCard id={subject.id} name={subject.name} />
+              </div>
+            ))}
+          </div>
         </div>
       ))}
     </section>

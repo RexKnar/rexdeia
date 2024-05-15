@@ -29,6 +29,11 @@ export async function getSectionById(id: string) {
     },
     include: {
       medium: true,
+      sectionToGroups: {
+        select: {
+          group: true,
+        },
+      },
     },
   });
 }

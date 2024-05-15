@@ -221,7 +221,7 @@ export function ExamConfigureFlyout() {
                 <div key={row.id} className="mt-5 p-1">
                   <div>
                     <label htmlFor="name" className="text-sm font-semibold">
-                      Theory
+                      {assessmentFormatResponse[index]?.name}
                     </label>
                   </div>
                   <div className="mt-4">

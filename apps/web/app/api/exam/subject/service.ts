@@ -4,6 +4,7 @@ import { getServerSession } from 'next-auth';
 
 type SubjectFilter = {
   sectionId: string;
+  classId: string;
   subjectTypeId: string;
 };
 export async function getSubjectsWithFilter(filter: SubjectFilter) {
@@ -19,17 +20,12 @@ export async function getSubjectsWithFilter(filter: SubjectFilter) {
             subjectTypeId: filter.subjectTypeId,
           },
         },
-      },
-      select: {
         subjectToGroup: {
-          select: {
+          some: {
+            classId: filter.classId,
             group: {
-              select: {
-                sectionToGroups: {
-                  where: {
-                    sectionId: filter.sectionId,
-                  },
-                },
+              sectionToGroups: {
+                some: { sectionId: filter.sectionId },
               },
             },
           },
