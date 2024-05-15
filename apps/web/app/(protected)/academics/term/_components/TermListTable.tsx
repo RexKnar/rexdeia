@@ -9,8 +9,8 @@ import {
   useReactTable,
 } from '@tanstack/react-table';
 import { TermModel } from 'lib/domain/exam';
-import { useGetTermsListQuery } from 'lib/queries/exams/useGetTermListQuery';
 import { useDeleteTermMutationQuery } from 'lib/queries/term/useDeleteTermMutationQuery';
+import { useGetTermsListQuery } from 'lib/queries/term/useGetTermListQuery';
 import { Loader2, Pencil, Trash2 } from 'lucide-react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useCallback, useEffect, useState } from 'react';
@@ -83,10 +83,12 @@ export function TermListTable() {
 
   const page = parseInt(searchParams.get('page')) || 1;
   const limit = parseInt(searchParams.get('limit')) || 10;
+  const filter = {};
 
   const { data: termList, isPending: istermLoading } = useGetTermsListQuery({
     page,
     limit,
+    filter,
   });
 
   const {

@@ -446,6 +446,8 @@ model StudentMapping {
   group     Group    @relation(fields: [groupId], references: [id])
   mediumId  String?  @db.Uuid
   medium    Medium?  @relation(fields: [mediumId], references: [id])
+  batchId   String?  @db.Uuid
+  batch     Batch?   @relation(fields: [batchId], references: [id])
 }
 
 model Staff {
@@ -545,6 +547,7 @@ model Batch {
   createdAt               DateTime?                 @default(now())
   updatedAt               DateTime?                 @default(now())
   exams                   Exam[]
+  StudentMapping          StudentMapping[]
 }
 
 model Class {
@@ -565,6 +568,7 @@ model Class {
   updatedAt      DateTime?        @default(now())
   academicExams  AcademicExams[]
   subjects       Subject[]
+  subjectToGroup SubjectToGroup[]
 }
 
 model StaffSection {
@@ -705,6 +709,8 @@ model SubjectToGroup {
   subject   Subject   @relation(fields: [subjectId], references: [id])
   groupId   String    @db.Uuid
   group     Group     @relation(fields: [groupId], references: [id])
+  classId   String    @db.Uuid
+  class     Class     @relation(fields: [classId], references: [id])
   createdAt DateTime? @default(now())
   updatedAt DateTime? @default(now())
 
