@@ -6,7 +6,7 @@ import { useGetClassByIdQuery } from 'lib/queries/class/useGetClassByIdQuery';
 import { useGetGroupListQuery } from 'lib/queries/group/useGetGroupListQuery';
 import { useGetAllSectionByClassIdQuery } from 'lib/queries/section/useGetAllSectionsByClassIdQuery';
 import { useCreateStudentMutationByClassIdQuery } from 'lib/queries/students/useCreateStudentMutationByClassIdQuery';
-import { useGetStudentListQuery } from 'lib/queries/useGetStudentListQuery';
+import { useGetStudentListForAssignQuery } from 'lib/queries/students/useGetStudentListForAssignQuery';
 import { ChevronDown, ChevronRight, X } from 'lucide-react';
 import { useParams, useSearchParams } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
@@ -53,7 +53,7 @@ export function AssignStudents() {
     filter,
   });
 
-  const { data: getStudentListResponse } = useGetStudentListQuery({
+  const { data: getStudentListResponse } = useGetStudentListForAssignQuery({
     page,
     pageSize,
   });

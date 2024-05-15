@@ -115,6 +115,7 @@ export const UPDATE_STUDENT_BY_ID = `UPDATE_STUDENT_BY_ID`;
 export const UPDATE_TERM_BY_ID = `UPDATE_TERM_BY_ID`;
 export const DELETE_TERM_BY_ID = `DELETE_TERM_BY_ID`;
 export const GET_STUDENTS_MARKS_BY_CLASS_ID_AND_EXAM_ID = `GET_STUDENTS_MARKS_BY_CLASS_ID_AND_EXAM_ID`;
+export const GET_STUDENTS_LIST_FOR_ASSIGN = `GET_STUDENTS_LIST_FOR_ASSIGN`;
 
 export default <EndpointDetails>{
   [REGISTER_USER]: {
@@ -572,5 +573,9 @@ export default <EndpointDetails>{
   [UPDATE_STUDENT_BY_ID]: {
     requestType: `PUT`,
     endpoint: `/api/student/[id]`,
+  },
+  [GET_STUDENTS_LIST_FOR_ASSIGN]: {
+    requestType: `PUT`,
+    endpoint: `/api//api/class/{id}/students`,
   },
 };
