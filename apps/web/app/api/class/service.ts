@@ -75,6 +75,9 @@ export async function getAllClassesWithFilter(
       take: limit,
       skip: (page - 1) * limit,
       where: whereClause,
+      include: {
+        Section: true,
+      },
     }),
   ]);
 

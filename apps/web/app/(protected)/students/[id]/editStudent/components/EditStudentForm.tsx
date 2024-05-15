@@ -50,6 +50,7 @@ export function EditStudentDetail() {
   const { data: classList } = useGetClassListQuery({
     page,
     limit,
+    filter,
   });
 
   const { data: groupList } = useGetGroupListQuery({
@@ -166,8 +167,8 @@ export function EditStudentDetail() {
   if (isStudentDetailLoading) {
     return (
       <div className="flex h-20 items-center justify-center">
-        <Loader2 className="mr-2  w-6 animate-spin text-black" />
-        <p className=" text-black">Fetching Student Details...</p>
+        <Loader2 className="mr-2 w-6 animate-spin text-black" />
+        <p className="text-black ">Fetching Student Details...</p>
       </div>
     );
   }
@@ -237,7 +238,7 @@ export function EditStudentDetail() {
               type="button"
               variant="link"
               onClick={() => goToPage(2)}
-              className=" cursor-pointer  px-4 py-1 hover:no-underline"
+              className="cursor-pointer px-4 py-1  hover:no-underline"
             >
               <h2
                 className={`px-2 text-left text-sm font-semibold ${
@@ -256,7 +257,7 @@ export function EditStudentDetail() {
               type="button"
               variant="link"
               onClick={() => goToPage(3)}
-              className=" cursor-pointer px-4 py-1 hover:no-underline"
+              className="cursor-pointer px-4 py-1  hover:no-underline"
             >
               <h2
                 className={`px-2 text-left text-sm font-semibold ${
@@ -275,7 +276,7 @@ export function EditStudentDetail() {
               type="button"
               variant="link"
               onClick={() => goToPage(4)}
-              className=" cursor-pointer px-4 py-1 hover:no-underline"
+              className="cursor-pointer px-4 py-1  hover:no-underline"
             >
               <h2
                 className={`px-2 text-left text-sm font-semibold ${
@@ -294,7 +295,7 @@ export function EditStudentDetail() {
               type="button"
               variant="link"
               onClick={() => goToPage(5)}
-              className=" cursor-pointer px-4 py-1 hover:no-underline"
+              className="cursor-pointer px-4 py-1  hover:no-underline"
             >
               <h2
                 className={`px-2  text-sm font-semibold ${
@@ -313,7 +314,7 @@ export function EditStudentDetail() {
               type="button"
               variant="link"
               onClick={() => goToPage(6)}
-              className=" cursor-pointer  px-4 py-1 hover:no-underline"
+              className="cursor-pointer px-4 py-1  hover:no-underline"
             >
               <h2
                 className={`px-2 text-left text-sm font-semibold ${
@@ -333,7 +334,7 @@ export function EditStudentDetail() {
               type="button"
               variant="link"
               onClick={() => goToPage(7)}
-              className=" cursor-pointer px-4 py-1 hover:no-underline"
+              className="cursor-pointer px-4 py-1  hover:no-underline"
             >
               <h2
                 className={`px-2 text-left text-sm font-semibold ${
