@@ -568,6 +568,7 @@ model Class {
   updatedAt      DateTime?        @default(now())
   academicExams  AcademicExams[]
   subjects       Subject[]
+  subjectToGroup SubjectToGroup[]
 }
 
 model StaffSection {
@@ -708,6 +709,8 @@ model SubjectToGroup {
   subject   Subject   @relation(fields: [subjectId], references: [id])
   groupId   String    @db.Uuid
   group     Group     @relation(fields: [groupId], references: [id])
+  classId   String    @db.Uuid
+  class     Class     @relation(fields: [classId], references: [id])
   createdAt DateTime? @default(now())
   updatedAt DateTime? @default(now())
 

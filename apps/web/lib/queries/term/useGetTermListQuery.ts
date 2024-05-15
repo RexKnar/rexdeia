@@ -10,16 +10,20 @@ import { makeAPICall } from '../../api';
 import { PaginatedResponse } from '../../domain';
 
 function getTermsList(
-  { page, limit }: { page: number; limit: number },
+  {
+    page,
+    limit,
+    filter,
+  }: { page: number; limit: number; filter: { isActive?: boolean } },
   options?: UseQueryOptions<PaginatedResponse<TermModel>>
 ): UseQueryOptions<PaginatedResponse<TermModel>> {
   return {
     ...options,
-    queryKey: [GET_TERM_LIST, page, limit],
+    queryKey: [GET_TERM_LIST, page, limit, filter],
     queryFn: async () => {
       return await makeAPICall<PaginatedResponse<TermModel>>(
         GET_TERM_LIST,
-        {},
+        filter,
         {
           page: page,
           limit: limit,
@@ -31,8 +35,12 @@ function getTermsList(
 }
 
 export function useGetTermsListQuery(
-  { page, limit }: { page: number; limit: number },
+  {
+    page,
+    limit,
+    filter,
+  }: { page: number; limit: number; filter: { isActive?: boolean } },
   options?: UseQueryOptions<PaginatedResponse<TermModel>>
 ): UseQueryResult<PaginatedResponse<TermModel>> {
-  return useQuery(getTermsList({ page, limit }, options));
+  return useQuery(getTermsList({ page, limit, filter }, options));
 }

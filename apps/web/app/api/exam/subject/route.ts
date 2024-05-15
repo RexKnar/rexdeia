@@ -41,11 +41,10 @@ export async function PUT(request: NextRequest) {
   }
 
   try {
-    const payload = await request.json();
+    const filter = await request.json();
+    const getSubjectsWithFilterResponse = await getSubjectsWithFilter(filter);
 
-    const gSubjectsWithFilter = await getSubjectsWithFilter(payload);
-
-    return new NextResponse(JSON.stringify(gSubjectsWithFilter), {
+    return new NextResponse(JSON.stringify(getSubjectsWithFilterResponse), {
       status: StatusCodes.OK,
     });
   } catch (e) {

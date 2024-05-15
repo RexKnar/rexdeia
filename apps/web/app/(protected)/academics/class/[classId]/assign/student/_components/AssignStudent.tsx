@@ -32,8 +32,8 @@ export function AssignStudents() {
   const { watch, setValue, register, handleSubmit } = useForm();
 
   const page = parseInt(searchParams.get('page')) || 1;
-  const limit = parseInt(searchParams.get('limit')) || 999;
-  const filter = {};
+  const limit = parseInt(searchParams.get('limit')) || 10;
+  const filter = { isActive: true };
   const {
     mutateAsync: mutateCreateStudentsAsync,
     isPending: isPendingAssignStudents,
