@@ -1,28 +1,30 @@
 import { useQuery, UseQueryOptions } from '@tanstack/react-query';
 
 import { makeAPICall } from '../../api';
-import { GetStudentListModel } from '../../domain/student';
+import { Student } from '../../domain';
 import { GET_STUDENTS_LIST_FOR_ASSIGN } from '../../endpoints';
 
-type GetStudentListRequestPayload = {
-  page: number;
-  pageSize: number;
-};
-
-export function useGetStudentListForAssignQuery(
-  payload: GetStudentListRequestPayload,
-  options?: UseQueryOptions<GetStudentListModel>
+function getStudentListByClassId(
+  id: string,
+  options?: Partial<UseQueryOptions<Student[]>>
 ) {
-  return useQuery({
+  return {
     ...options,
-    queryKey: [GET_STUDENTS_LIST_FOR_ASSIGN, payload.page],
+    queryKey: [GET_STUDENTS_LIST_FOR_ASSIGN, id],
     queryFn: async () => {
-      return await makeAPICall<GetStudentListModel>(
+      return await makeAPICall<Student[]>(
         GET_STUDENTS_LIST_FOR_ASSIGN,
         {},
-        { ...payload },
-        {}
+        {},
+        { id }
       );
     },
-  });
+  };
+}
+
+export function useGetStudentListForAssignQuery(
+  id: string,
+  options?: Partial<UseQueryOptions<Student[]>>
+) {
+  return useQuery(getStudentListByClassId(id, options));
 }

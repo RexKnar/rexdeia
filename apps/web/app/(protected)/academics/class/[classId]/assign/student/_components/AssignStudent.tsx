@@ -32,8 +32,7 @@ export function AssignStudents() {
   const { watch, setValue, register, handleSubmit } = useForm();
 
   const page = parseInt(searchParams.get('page')) || 1;
-  const limit = parseInt(searchParams.get('limit')) || 10;
-  const pageSize = parseInt(searchParams.get('limit')) || 10;
+  const limit = parseInt(searchParams.get('limit')) || 999;
   const filter = {};
   const {
     mutateAsync: mutateCreateStudentsAsync,
@@ -53,10 +52,17 @@ export function AssignStudents() {
     filter,
   });
 
-  const { data: getStudentListResponse } = useGetStudentListForAssignQuery({
-    page,
-    pageSize,
-  });
+  const { data: getStudentListResponse } = useGetStudentListForAssignQuery(
+    classId,
+    {
+      enabled: !!classId,
+    }
+  );
+
+  const [studentListMaster, setStudentListMaster] = useState([]);
+  useEffect(() => {
+    setStudentListMaster(getStudentListResponse);
+  }, [getStudentListResponse]);
 
   const { data: batchesList } = useGetBatchesListQuery({
     page,
@@ -88,37 +94,38 @@ export function AssignStudents() {
     ]);
 
     const updatedStudentList =
-      getStudentListResponse?.data?.filter((s) => s.id !== student.id) || [];
-    getStudentListResponse.data = updatedStudentList;
+      studentListMaster?.filter((s) => s.id !== student.id) || [];
+    setStudentListMaster(updatedStudentList);
   };
 
   const handleAssign = () => {
-    const selectedStudentsToAdd =
-      getStudentListResponse?.data?.filter((student) =>
-        selectedStudentIds.includes(student.id)
-      ) || [];
+    const selectedStudentsToAdd = studentListMaster?.filter((student) => {
+      if (selectedStudentIds.includes(student.id)) {
+        return student;
+      }
+    });
 
     selectedStudentsToAdd.forEach((student) => addSelectedStudent(student));
 
     selectedStudentIds.forEach((id) => {
-      const indexToRemove = getStudentListResponse.data.findIndex(
+      const indexToRemove = studentListMaster.findIndex(
         (student) => student.id === id
       );
       if (indexToRemove !== -1) {
-        getStudentListResponse.data.splice(indexToRemove, 1);
+        studentListMaster.splice(indexToRemove, 1);
       }
     });
   };
   const handleDeselectAll = () => {
     const updatedStudentList = [
-      ...(getStudentListResponse?.data || []),
+      ...(studentListMaster || []),
       ...selectedStudents,
     ];
     setSelectedStudents([]);
-    getStudentListResponse.data = updatedStudentList;
+    setStudentListMaster(updatedStudentList);
   };
   const handleRemoveSelected = () => {
-    const updatedStudentList = [...(getStudentListResponse?.data || [])];
+    const updatedStudentList = [...(studentListMaster || [])];
     const updatedSelectedStudents = selectedStudents.filter((student) => {
       if (selectedStudentIds.includes(student.id)) {
         updatedStudentList.push(student);
@@ -128,7 +135,7 @@ export function AssignStudents() {
     });
     setSelectedStudents(updatedSelectedStudents);
     setSelectedStudentIds([]);
-    getStudentListResponse.data = updatedStudentList;
+    setStudentListMaster(updatedStudentList);
   };
   const handleRemoveStudent = (studentId) => {
     const removedStudent = selectedStudents.find(
@@ -139,7 +146,7 @@ export function AssignStudents() {
         (student) => student.id !== studentId
       );
       setSelectedStudents(updatedSelectedStudents);
-      getStudentListResponse.data.push(removedStudent);
+      studentListMaster.push(removedStudent);
     }
   };
   const [selectAll, setSelectAll] = useState(false);
@@ -147,8 +154,7 @@ export function AssignStudents() {
   const handleSelectAll = () => {
     setSelectAll(!selectAll);
 
-    const allStudentIds =
-      getStudentListResponse?.data?.map((student) => student.id) || [];
+    const allStudentIds = studentListMaster?.map((student) => student.id) || [];
 
     setSelectedStudentIds(selectAll ? [] : allStudentIds);
     !selectAll;
@@ -164,13 +170,15 @@ export function AssignStudents() {
       classId: classId,
       studentIds: selectedStudents.map((x) => x.id),
     };
-    setSelectedStudents([]);
     await mutateCreateStudentsAsync(assignStudentPayload);
+
+    setSelectedStudents([]);
   };
 
   useEffect(() => {
     setValue('classId', classId);
   }, [classId, setValue]);
+
   return (
     <form onSubmit={handleSubmit(assignStudent)}>
       <section className="flex flex-col">
@@ -247,8 +255,8 @@ export function AssignStudents() {
                   />
                   Select All
                 </Button>
-                {getStudentListResponse &&
-                  getStudentListResponse.data.some((x) =>
+                {studentListMaster &&
+                  studentListMaster.some((x) =>
                     selectedStudentIds.includes(x.id)
                   ) && (
                     <Button
@@ -264,7 +272,7 @@ export function AssignStudents() {
             <section>
               <Table>
                 <TableBody>
-                  {getStudentListResponse?.data?.map((student) => (
+                  {studentListMaster?.map((student) => (
                     <TableRow key={student.id} className="py-0">
                       <TableCell className="py-0">
                         <div className="mb-2 flex items-center">
@@ -295,8 +303,7 @@ export function AssignStudents() {
                     </TableRow>
                   ))}
 
-                  {(!getStudentListResponse ||
-                    getStudentListResponse.data.length === 0) && (
+                  {(!studentListMaster || studentListMaster.length === 0) && (
                     <TableRow>
                       <TableCell colSpan={5} className="h-24 text-center">
                         <p>No Student found</p>

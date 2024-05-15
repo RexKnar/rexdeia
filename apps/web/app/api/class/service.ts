@@ -415,5 +415,6 @@ export async function getAllStudentByClassIdForAssigning(id: string) {
       },
     },
   });
-  return studentList;
+  const studentResponse = studentList.map((students) => students.student);
+  return studentResponse;
 }

@@ -576,6 +576,6 @@ export default <EndpointDetails>{
   },
   [GET_STUDENTS_LIST_FOR_ASSIGN]: {
     requestType: `PUT`,
-    endpoint: `/api//api/class/{id}/students`,
+    endpoint: `/api/class/[id]/students`,
   },
 };
