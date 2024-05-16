@@ -4,7 +4,9 @@
 import { useGetClassListQuery } from 'lib/queries/class/useGetClassListQuery';
 import { useGetExamListQuery } from 'lib/queries/exams/useGetExamListQuery';
 import { useGetAllSectionByClassIdQuery } from 'lib/queries/section/useGetAllSectionsByClassIdQuery';
+import React, { useState } from 'react';
 import {
+  Button,
   Card,
   CardContent,
   CardHeader,
@@ -22,6 +24,8 @@ import {
 } from 'ui';
 
 export function StudentAnalytics() {
+  const [sliderValues, setSliderValues] = useState([0, 100]);
+  // const [, setErrorMessages] = useState([false]);
   const page = 1;
   const limit = 999;
   const filter = {};
@@ -39,6 +43,10 @@ export function StudentAnalytics() {
     filter,
     classId,
   });
+  const handleValueChange = (newValue) => {
+    setSliderValues(newValue);
+    // console.log(newValue);
+  };
   const marks = [
     {
       status1: 'Pass',
@@ -137,13 +145,43 @@ export function StudentAnalytics() {
           <div className="mt-7 flex gap-4">
             <div className="w-full">
               <label className="mt-2 text-gray-700">Filter By Mark</label>
-              <Slider
-                sliderValues={[1]}
-                defaultValue={[0, 100]}
-                max={100}
-                step={1}
-                className="w-12/12 mt-3"
-              />
+              <div className="mt-2 flex">
+                {' '}
+                <input
+                  className="mt-2 w-8 text-center"
+                  type="number"
+                  maxLength={sliderValues[1]}
+                  value={sliderValues[0]}
+                  onChange={(e) => {
+                    setSliderValues([
+                      parseInt(e.target.value),
+                      sliderValues[1],
+                    ]);
+                  }}
+                />
+                <Slider
+                  sliderValues={sliderValues}
+                  value={sliderValues}
+                  onValueChange={(value) => handleValueChange(value)}
+                  defaultValue={sliderValues}
+                  max={100}
+                  step={1}
+                  className="ml-3"
+                />
+                <input
+                  className="ml-3 mt-2 w-8 text-center	"
+                  type="number"
+                  minLength={sliderValues[0]}
+                  maxLength={100}
+                  value={sliderValues[1]}
+                  onChange={(e) => {
+                    setSliderValues([
+                      sliderValues[0],
+                      parseInt(e.target.value),
+                    ]);
+                  }}
+                />
+              </div>
             </div>
             {subjects.map((item, index) => (
               <div className="mt-10 ">
@@ -164,7 +202,7 @@ export function StudentAnalytics() {
                 <SelectContent>
                   <SelectGroup>
                     {subjects.map((item, index) => (
-                      <SelectItem value={item.id} key={index}>
+                      <SelectItem value={(index + 1).toString()} key={index}>
                         {index + 1}
                       </SelectItem>
                     ))}
@@ -173,6 +211,11 @@ export function StudentAnalytics() {
               </Select>
             </div>
           </div>
+        </div>
+        <div className="mt-10 flex items-center justify-center ">
+          <Button className="mt-10 rounded px-4 py-2 font-bold text-white ">
+            {'Apply'}
+          </Button>
         </div>
       </section>
       <section className="mt-4 space-y-4 rounded-md bg-white p-6">
