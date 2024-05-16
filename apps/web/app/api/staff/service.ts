@@ -174,6 +174,15 @@ export async function getAllStaffsBySectionIds(ids: string[]) {
 
 export async function getAllStaffsBySectionsIdWithSubjects(ids: string[]) {
   const staffs = await db.staff.findMany({
+    where: {
+      academicSubjectForStaff: {
+        some: {
+          sectionId: {
+            in: ids,
+          },
+        },
+      },
+    },
     include: {
       academicSubjectForStaff: {
         where: {
