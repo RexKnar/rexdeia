@@ -94,3 +94,43 @@ export async function deleteExamTypeById(id: string) {
     },
   });
 }
+
+export async function getAllExamTypeWithFilter(
+  page: number,
+  limit: number,
+  filter: { isActive?: boolean }
+) {
+  const { isActive } = filter;
+  const { branchId } = await getServerSession(authOptions);
+
+  const whereClause = {
+    branchId,
+    isDeleted: false,
+  };
+  if (isActive !== undefined) {
+    whereClause['isActive'] = isActive;
+  }
+  const [total, data] = await db.$transaction([
+    db.examType.count({
+      where: whereClause,
+    }),
+    db.examType.findMany({
+      take: limit,
+      skip: (page - 1) * limit,
+      where: whereClause,
+      select: {
+        id: true,
+        name: true,
+        isActive: true,
+        createdAt: true,
+        frequencyId: true,
+      },
+    }),
+  ]);
+  return {
+    page,
+    total,
+    limit,
+    data,
+  };
+}

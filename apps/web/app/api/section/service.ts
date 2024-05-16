@@ -29,6 +29,11 @@ export async function getSectionById(id: string) {
     },
     include: {
       medium: true,
+      sectionToGroups: {
+        select: {
+          group: true,
+        },
+      },
     },
   });
 }
@@ -65,26 +70,6 @@ export async function getSectionsWithFilter(
     }),
   ]);
   return { total, data };
-}
-
-export async function mapSubjectsToSection(
-  sectionId: string,
-  subjectIds: string[]
-) {
-  await db.$transaction(
-    subjectIds.map((subjectId) => {
-      return db.section.update({
-        where: {
-          id: sectionId,
-        },
-        data: {
-          sectionSubjects: {
-            create: [{ subjectId: subjectId }],
-          },
-        },
-      });
-    })
-  );
 }
 
 export async function mapStaffsToSection(
@@ -125,41 +110,6 @@ export async function mapStaffsToSection(
       });
     })
   );
-}
-
-export async function unMapSubjectsFromSection(
-  sectionId: string,
-  entitiesToClassModels: MapEntitiesToSectionModel
-) {
-  const operations = entitiesToClassModels.entities.flatMap((entity) => {
-    const ops = [];
-
-    // If subjectId is provided, prepare to delete the corresponding SectionSubject entry
-    if (entity.subjectId) {
-      ops.push(
-        db.sectionSubject.deleteMany({
-          where: {
-            sectionId: sectionId,
-            subjectId: entity.subjectId,
-          },
-        })
-      );
-    }
-
-    if (entity.staffId) {
-      ops.push(
-        db.staffSection.deleteMany({
-          where: {
-            sectionId: sectionId,
-            staffId: entity.staffId,
-          },
-        })
-      );
-    }
-    return ops;
-  });
-
-  await db.$transaction(operations);
 }
 
 export async function unMapStaffsFromSection(
@@ -226,7 +176,7 @@ export async function updateSectionById(
 }
 
 export async function addSection(sectionDetails: CreateSectionModel) {
-  await db.$transaction(async (prisma) => {
+  return await db.$transaction(async (prisma) => {
     const createdSection = await prisma.section.create({
       data: {
         name: sectionDetails.name,
@@ -235,9 +185,8 @@ export async function addSection(sectionDetails: CreateSectionModel) {
         mediumId: sectionDetails.mediumId,
       },
     });
-
-    sectionDetails.groupIds.map((groupId) => {
-      return db.section.update({
+    return sectionDetails.groupIds.map(async (groupId) => {
+      return await db.section.update({
         where: {
           id: createdSection.id,
         },

@@ -45,7 +45,7 @@ export function AddStudentForm() {
 
   const page = 1;
   const limit = 999;
-  const filter = {};
+  const filter = { isActive: true };
 
   const { data: mediumList } = useGetMediumListQuery({
     page,
@@ -55,6 +55,7 @@ export function AddStudentForm() {
   const { data: classList } = useGetClassListQuery({
     page,
     limit,
+    filter,
   });
 
   const { data: groupList } = useGetGroupListQuery({
