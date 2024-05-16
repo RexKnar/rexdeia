@@ -2,11 +2,11 @@
 
 import { AssignStudentsToClassModel } from 'lib/domain/student';
 import { useGetBatchesListQuery } from 'lib/queries/batches/useGetBatchesListQuery';
-import { useGetClassByIdQuery } from 'lib/queries/class/useGetClassByIdQuery';
+import { useGetClassListQuery } from 'lib/queries/class/useGetClassListQuery';
 import { useGetGroupListQuery } from 'lib/queries/group/useGetGroupListQuery';
 import { useGetAllSectionByClassIdQuery } from 'lib/queries/section/useGetAllSectionsByClassIdQuery';
 import { useCreateStudentMutationByClassIdQuery } from 'lib/queries/students/useCreateStudentMutationByClassIdQuery';
-import { useGetStudentListQuery } from 'lib/queries/useGetStudentListQuery';
+import { useGetStudentListForAssignQuery } from 'lib/queries/students/useGetStudentListForAssignQuery';
 import { ChevronDown, ChevronRight, X } from 'lucide-react';
 import { useParams, useSearchParams } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
@@ -33,12 +33,18 @@ export function AssignStudents() {
 
   const page = parseInt(searchParams.get('page')) || 1;
   const limit = parseInt(searchParams.get('limit')) || 10;
-  const pageSize = parseInt(searchParams.get('limit')) || 10;
   const filter = { isActive: true };
   const {
     mutateAsync: mutateCreateStudentsAsync,
     isPending: isPendingAssignStudents,
   } = useCreateStudentMutationByClassIdQuery();
+
+  const [groupIdToGetStudent, setGroupIdToGetStudent] = useState('');
+  const [classIdToGetStudent, setClassIdToGetStudent] = useState('');
+
+  useEffect(() => {
+    if (classId) setClassIdToGetStudent(classId);
+  }, [classId]);
 
   const { data: sectionListResponse } = useGetAllSectionByClassIdQuery(
     { classId, filter },
@@ -53,10 +59,18 @@ export function AssignStudents() {
     filter,
   });
 
-  const { data: getStudentListResponse } = useGetStudentListQuery({
-    page,
-    pageSize,
-  });
+  const { data: getStudentListResponse } = useGetStudentListForAssignQuery(
+    classIdToGetStudent,
+    groupIdToGetStudent,
+    {
+      enabled: !!classIdToGetStudent || !!groupIdToGetStudent,
+    }
+  );
+
+  const [studentListMaster, setStudentListMaster] = useState([]);
+  useEffect(() => {
+    setStudentListMaster(getStudentListResponse);
+  }, [getStudentListResponse]);
 
   const { data: batchesList } = useGetBatchesListQuery({
     page,
@@ -64,9 +78,12 @@ export function AssignStudents() {
     filter,
   });
 
-  const { data: getClassByIdResponse } = useGetClassByIdQuery(classId, {
-    enabled: !!classId,
+  const { data: getAllClassListResponse } = useGetClassListQuery({
+    page,
+    limit,
+    filter,
   });
+
   const handleCheckboxChange = (studentId) => {
     setSelectedStudentIds((prevSelectedStudentIds) => {
       const updatedSelectedStudentIds = prevSelectedStudentIds.includes(
@@ -88,37 +105,38 @@ export function AssignStudents() {
     ]);
 
     const updatedStudentList =
-      getStudentListResponse?.data?.filter((s) => s.id !== student.id) || [];
-    getStudentListResponse.data = updatedStudentList;
+      studentListMaster?.filter((s) => s.id !== student.id) || [];
+    setStudentListMaster(updatedStudentList);
   };
 
   const handleAssign = () => {
-    const selectedStudentsToAdd =
-      getStudentListResponse?.data?.filter((student) =>
-        selectedStudentIds.includes(student.id)
-      ) || [];
+    const selectedStudentsToAdd = studentListMaster?.filter((student) => {
+      if (selectedStudentIds.includes(student.id)) {
+        return student;
+      }
+    });
 
     selectedStudentsToAdd.forEach((student) => addSelectedStudent(student));
 
     selectedStudentIds.forEach((id) => {
-      const indexToRemove = getStudentListResponse.data.findIndex(
+      const indexToRemove = studentListMaster.findIndex(
         (student) => student.id === id
       );
       if (indexToRemove !== -1) {
-        getStudentListResponse.data.splice(indexToRemove, 1);
+        studentListMaster.splice(indexToRemove, 1);
       }
     });
   };
   const handleDeselectAll = () => {
     const updatedStudentList = [
-      ...(getStudentListResponse?.data || []),
+      ...(studentListMaster || []),
       ...selectedStudents,
     ];
     setSelectedStudents([]);
-    getStudentListResponse.data = updatedStudentList;
+    setStudentListMaster(updatedStudentList);
   };
   const handleRemoveSelected = () => {
-    const updatedStudentList = [...(getStudentListResponse?.data || [])];
+    const updatedStudentList = [...(studentListMaster || [])];
     const updatedSelectedStudents = selectedStudents.filter((student) => {
       if (selectedStudentIds.includes(student.id)) {
         updatedStudentList.push(student);
@@ -128,7 +146,7 @@ export function AssignStudents() {
     });
     setSelectedStudents(updatedSelectedStudents);
     setSelectedStudentIds([]);
-    getStudentListResponse.data = updatedStudentList;
+    setStudentListMaster(updatedStudentList);
   };
   const handleRemoveStudent = (studentId) => {
     const removedStudent = selectedStudents.find(
@@ -139,7 +157,7 @@ export function AssignStudents() {
         (student) => student.id !== studentId
       );
       setSelectedStudents(updatedSelectedStudents);
-      getStudentListResponse.data.push(removedStudent);
+      studentListMaster.push(removedStudent);
     }
   };
   const [selectAll, setSelectAll] = useState(false);
@@ -147,8 +165,7 @@ export function AssignStudents() {
   const handleSelectAll = () => {
     setSelectAll(!selectAll);
 
-    const allStudentIds =
-      getStudentListResponse?.data?.map((student) => student.id) || [];
+    const allStudentIds = studentListMaster?.map((student) => student.id) || [];
 
     setSelectedStudentIds(selectAll ? [] : allStudentIds);
     !selectAll;
@@ -164,13 +181,15 @@ export function AssignStudents() {
       classId: classId,
       studentIds: selectedStudents.map((x) => x.id),
     };
-    setSelectedStudents([]);
     await mutateCreateStudentsAsync(assignStudentPayload);
+
+    setSelectedStudents([]);
   };
 
   useEffect(() => {
     setValue('classId', classId);
   }, [classId, setValue]);
+
   return (
     <form onSubmit={handleSubmit(assignStudent)}>
       <section className="flex flex-col">
@@ -179,55 +198,55 @@ export function AssignStudents() {
             <section className="p-2">
               <section className="mb-2 flex justify-between overflow-x-auto rounded-md bg-white p-2">
                 <Select
+                  defaultValue={classId}
                   autoComplete="off"
-                  {...register('classId', { required: true })}
-                  value={classId}
                   onValueChange={(value) => {
                     if (value) {
-                      setValue('classId', value);
+                      setClassIdToGetStudent(value);
                     }
                   }}
                 >
                   <SelectTrigger className=" basis-1/2">
                     <SelectValue
                       className="text-gray-400"
-                      placeholder="Class Name"
-                    >
-                      {getClassByIdResponse?.name || 'Loading...'}
-                    </SelectValue>
+                      placeholder="Class"
+                    ></SelectValue>
                     <ChevronDown className="text-gray-400" />
                   </SelectTrigger>
                   <SelectContent className="border border-primary-200">
                     {' '}
                     <SelectGroup>
-                      <SelectItem key={classId} value={classId}>
-                        {getClassByIdResponse?.name || 'Loading...'}
-                      </SelectItem>
+                      {getAllClassListResponse?.data?.map((classDetails) => (
+                        <SelectItem
+                          key={classDetails.id}
+                          value={classDetails.id}
+                        >
+                          {classDetails.name}
+                        </SelectItem>
+                      ))}
                     </SelectGroup>
                   </SelectContent>
                 </Select>
 
                 <Select
                   autoComplete="off"
-                  {...register('sectionId', { required: true })}
-                  value={watch('sectionId')}
                   onValueChange={(value) => {
                     if (value) {
-                      setValue('sectionId', value);
+                      setGroupIdToGetStudent(value);
                     }
                   }}
                 >
-                  <SelectTrigger className="ml-4 basis-1/2">
+                  <SelectTrigger className=" basis-1/2">
                     <SelectValue
                       className="text-gray-400"
-                      placeholder="Section"
+                      placeholder="Group"
                     />{' '}
                     <ChevronDown className="text-gray-400" />
                   </SelectTrigger>
                   <SelectContent className="border border-primary-200">
                     {' '}
                     <SelectGroup>
-                      {sectionListResponse?.data?.map((item) => (
+                      {groupListResponse?.data?.map((item) => (
                         <SelectItem key={item.id} value={item.id}>
                           {item.name}
                         </SelectItem>
@@ -247,8 +266,8 @@ export function AssignStudents() {
                   />
                   Select All
                 </Button>
-                {getStudentListResponse &&
-                  getStudentListResponse.data.some((x) =>
+                {studentListMaster &&
+                  studentListMaster.some((x) =>
                     selectedStudentIds.includes(x.id)
                   ) && (
                     <Button
@@ -264,7 +283,7 @@ export function AssignStudents() {
             <section>
               <Table>
                 <TableBody>
-                  {getStudentListResponse?.data?.map((student) => (
+                  {studentListMaster?.map((student) => (
                     <TableRow key={student.id} className="py-0">
                       <TableCell className="py-0">
                         <div className="mb-2 flex items-center">
@@ -295,8 +314,7 @@ export function AssignStudents() {
                     </TableRow>
                   ))}
 
-                  {(!getStudentListResponse ||
-                    getStudentListResponse.data.length === 0) && (
+                  {(!studentListMaster || studentListMaster.length === 0) && (
                     <TableRow>
                       <TableCell colSpan={5} className="h-24 text-center">
                         <p>No Student found</p>
@@ -313,6 +331,7 @@ export function AssignStudents() {
               <section className="mb-2 flex justify-between overflow-x-auto rounded-md bg-white p-2">
                 <Select
                   autoComplete="off"
+                  disabled
                   {...register('classId', { required: true })}
                   value={classId}
                   onValueChange={(value) => {
@@ -324,18 +343,21 @@ export function AssignStudents() {
                   <SelectTrigger className=" basis-1/2">
                     <SelectValue
                       className="text-gray-400"
-                      placeholder="Class Name"
-                    >
-                      {getClassByIdResponse?.name || 'Loading...'}
-                    </SelectValue>
+                      placeholder="Class"
+                    ></SelectValue>
                     <ChevronDown className="text-gray-400" />
                   </SelectTrigger>
                   <SelectContent className="border border-primary-200">
                     {' '}
                     <SelectGroup>
-                      <SelectItem key={classId} value={classId}>
-                        {getClassByIdResponse?.name || 'Loading...'}
-                      </SelectItem>
+                      {getAllClassListResponse?.data?.map((classDetails) => (
+                        <SelectItem
+                          key={classDetails.id}
+                          value={classDetails.id}
+                        >
+                          {classDetails.name}
+                        </SelectItem>
+                      ))}
                     </SelectGroup>
                   </SelectContent>
                 </Select>
