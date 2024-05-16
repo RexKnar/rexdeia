@@ -40,5 +40,5 @@ export type MarkEntryFromStructureModel = {
 export type SubjectForMarkEntry = {
   id: string;
   name: string;
-  assessmentFormat: AssessmentFormatModel;
+  assessmentFormat: AssessmentFormatModel[];
 };

@@ -217,7 +217,7 @@ export async function getFormDataByClassExam(filter: FormDataFilter) {
           const assessment = subject.subject.academicExams.map((assessment) => {
             const format = assessment.examConfiguration.map((format) => {
               return {
-                academicYearId: assessment.id,
+                academicExamId: assessment.id,
                 ...format,
               };
             });
