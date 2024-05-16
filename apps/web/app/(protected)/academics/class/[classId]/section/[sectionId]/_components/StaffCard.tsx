@@ -12,14 +12,14 @@ import {
   Text,
 } from 'ui';
 
-import { UnassignStaffFlyout } from '../../../_modals/UnassignStaffFlyout';
-
 type StaffCardProps = {
   id: string;
   name: string;
+  academicYearId: string;
 };
 
 export function StaffCard(props: StaffCardProps) {
+  const { id, name, academicYearId } = props;
   const pathname = usePathname();
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -32,7 +32,7 @@ export function StaffCard(props: StaffCardProps) {
       </div>
 
       <div className="my-auto w-2/4 px-2">
-        <Text variant="base-bold">{props.name}</Text>
+        <Text variant="base-bold">{name}</Text>
         <div className="inline-flex">
           <Text variant="base-regular">English</Text>
           <span className="ml-1 rounded bg-red-300 p-2 px-1.5 py-0.5 text-sm font-medium text-red-800 dark:bg-red-900 dark:text-red-300">
@@ -67,6 +67,8 @@ export function StaffCard(props: StaffCardProps) {
                   onClick={async () => {
                     const params = new URLSearchParams(searchParams);
                     params.set('isUnassignStaffFlyoutOpen', 'true');
+                    params.set('academicYearId', academicYearId);
+                    params.set('staffId', id);
 
                     router.replace(pathname + '?' + params.toString());
                   }}
@@ -76,7 +78,7 @@ export function StaffCard(props: StaffCardProps) {
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
-          <UnassignStaffFlyout />
+          {/* <UnassignStaffFlyout /> */}
         </div>
       </div>
     </div>

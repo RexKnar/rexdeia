@@ -8,6 +8,7 @@ export type Staff = {
   aadharCardNumber?: string;
   gender: string;
   status: 'Active' | 'InActive' | 'Resigned' | 'Suspended' | 'Fired';
+  academicYear?: AcademicYear;
   annualIncome: string;
   bloodGroup?: string;
   dateOfJoining: Date;
@@ -76,3 +77,18 @@ export type UpdateStaffModel = Omit<
   Staff,
   'aadharCardNumber' | 'dob' | 'email' | 'name'
 >;
+
+export type StaffSubjectList = {
+  section: Section;
+  subjects: Section[];
+};
+
+export type Section = {
+  id: string;
+  name: string;
+};
+
+type AcademicYear = {
+  id: string;
+  name: string;
+};

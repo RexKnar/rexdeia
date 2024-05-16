@@ -39,6 +39,12 @@ const SaveSectionFlyout = dynamic(() =>
   )
 );
 
+const UnassignStaffFlyout = dynamic(() =>
+  import('../_modals/UnassignStaffFlyout').then(
+    (mod) => mod.UnassignStaffFlyout
+  )
+);
+
 export function ClassDetail() {
   const pathname = usePathname();
   const router = useRouter();
@@ -50,167 +56,180 @@ export function ClassDetail() {
       enabled: !!params.classId,
     });
 
-  if (isLoadingGetClassById) {
-    return (
-      <div className="flex items-center justify-center">
-        <Loader2 className="mr-2 h-6 w-6 animate-spin text-black" />
-        <p className=" text-black">Fetching Class Details...</p>
-      </div>
-    );
-  }
+  // if (isLoadingGetClassById) {
+  //   return (
+  //     <div className="flex items-center justify-center">
+  //       <Loader2 className="w-6 h-6 mr-2 text-black animate-spin" />
+  //       <p className="text-black ">Fetching Class Details...</p>
+  //     </div>
+  //   );
+  // }
 
   return (
     <section className="w-full bg-gray-50 p-3">
-      {getClassByIdResponse.id ? (
-        <>
-          <PageTitle title="Class Details" className="mb-3" />
-          <div className="space-between mx-auto my-5 flex justify-between rounded-md bg-white p-6">
-            <div className="flex">
-              <div className="my-auto inline-flex px-5">
-                <Text variant="base-bold" className="pr-5">
-                  {getClassByIdResponse.name}
-                </Text>
-                <span
-                  className={cn(
-                    'rounded px-2.5 py-0.5 text-sm font-medium  text-white',
-                    getClassByIdResponse?.isActive
-                      ? 'bg-green-500'
-                      : 'bg-red-500'
-                  )}
-                >
-                  {getClassByIdResponse.isActive ? 'active' : 'Inactive'}
-                </span>
-              </div>
-            </div>
-            <div className="my-auto flex gap-4 px-5">
-              <div className="relative my-auto">
-                <Button
-                  variant="outline"
-                  onClick={() => {
-                    const params = new URLSearchParams(searchParams);
-                    params.set('isUpdateClassFlyoutOpen', 'true');
+      {!isLoadingGetClassById ? (
+        <div>
+          {getClassByIdResponse?.id ? (
+            <>
+              <PageTitle title="Class Details" className="mb-3" />
+              <div className="space-between mx-auto my-5 flex justify-between rounded-md bg-white p-6">
+                <div className="flex">
+                  <div className="my-auto inline-flex px-5">
+                    <Text variant="base-bold" className="pr-5">
+                      {getClassByIdResponse.name}
+                    </Text>
+                    <span
+                      className={cn(
+                        'rounded px-2.5 py-0.5 text-sm font-medium  text-white',
+                        getClassByIdResponse?.isActive
+                          ? 'bg-green-500'
+                          : 'bg-red-500'
+                      )}
+                    >
+                      {getClassByIdResponse.isActive ? 'active' : 'Inactive'}
+                    </span>
+                  </div>
+                </div>
+                <div className="my-auto flex gap-4 px-5">
+                  <div className="relative my-auto">
+                    <Button
+                      variant="outline"
+                      onClick={() => {
+                        const params = new URLSearchParams(searchParams);
+                        params.set('isUpdateClassFlyoutOpen', 'true');
 
-                    router.replace(pathname + '?' + params.toString());
-                  }}
-                >
-                  <PencilLine
-                    size={18}
-                    strokeWidth={2}
-                    className="text-primary"
-                  />
-                  <span className="pl-2 text-primary">Edit</span>
-                </Button>
+                        router.replace(pathname + '?' + params.toString());
+                      }}
+                    >
+                      <PencilLine
+                        size={18}
+                        strokeWidth={2}
+                        className="text-primary"
+                      />
+                      <span className="pl-2 text-primary">Edit</span>
+                    </Button>
+                  </div>
+                </div>
               </div>
-            </div>
-          </div>
-          <Tabs defaultValue="Students" className="relative mt-4 px-0 py-2">
-            <TabsList className="w-full justify-start border-b-2 border-gray-400">
-              <TabsTrigger
-                value="Subjects"
-                className="mr-2 text-base focus:border-b-4 focus:border-primary"
-              >
-                Subjects
-              </TabsTrigger>
-              <TabsTrigger
-                value="Students"
-                className="mr-2 text-base focus:border-b-4 focus:border-primary"
-              >
-                Students
-              </TabsTrigger>
-              <TabsTrigger
-                value="Staffs"
-                className="mr-2 text-base focus:border-b-4 focus:border-primary"
-              >
-                Staffs
-              </TabsTrigger>
-              <TabsTrigger
-                value="Sections"
-                className="mr-2 text-base focus:border-b-4 focus:border-primary"
-              >
-                Sections
-              </TabsTrigger>
-              <TabsTrigger
-                value="Assessments"
-                className="mr-2 text-base focus:border-b-4 focus:border-primary"
-              >
-                Assessments
-              </TabsTrigger>
-            </TabsList>
-            <TabsContent className="w-full" value="Subjects">
-              <div className="mb-4 flex items-center justify-between">
-                <SubjectList />
-                <Button
-                  variant="default"
-                  onClick={async () => {
-                    const params = new URLSearchParams(searchParams);
-                    params.set('isAddSubjectFlyoutOpen', 'true');
-                    router.replace(pathname + '?' + params.toString());
-                  }}
-                  className="absolute right-0 top-0"
-                >
-                  Add Subject
-                </Button>
-              </div>
-            </TabsContent>
+              <Tabs defaultValue="Students" className="relative mt-4 px-0 py-2">
+                <TabsList className="w-full justify-start border-b-2 border-gray-400">
+                  <TabsTrigger
+                    value="Subjects"
+                    className="mr-2 text-base focus:border-b-4 focus:border-primary"
+                  >
+                    Subjects
+                  </TabsTrigger>
+                  <TabsTrigger
+                    value="Students"
+                    className="mr-2 text-base focus:border-b-4 focus:border-primary"
+                  >
+                    Students
+                  </TabsTrigger>
+                  <TabsTrigger
+                    value="Staffs"
+                    className="mr-2 text-base focus:border-b-4 focus:border-primary"
+                  >
+                    Staffs
+                  </TabsTrigger>
+                  <TabsTrigger
+                    value="Sections"
+                    className="mr-2 text-base focus:border-b-4 focus:border-primary"
+                  >
+                    Sections
+                  </TabsTrigger>
+                  <TabsTrigger
+                    value="Assessments"
+                    className="mr-2 text-base focus:border-b-4 focus:border-primary"
+                  >
+                    Assessments
+                  </TabsTrigger>
+                </TabsList>
+                <TabsContent className="w-full" value="Subjects">
+                  <div className="mb-4 flex items-center justify-between">
+                    <SubjectList />
+                    <Button
+                      variant="default"
+                      onClick={async () => {
+                        const params = new URLSearchParams(searchParams);
+                        params.set('isAddSubjectFlyoutOpen', 'true');
+                        router.replace(pathname + '?' + params.toString());
+                      }}
+                      className="absolute right-0 top-0"
+                    >
+                      Add Subject
+                    </Button>
+                  </div>
+                </TabsContent>
 
-            <TabsContent value="Students">
-              <Button
-                variant="default"
-                onClick={() =>
-                  router.push(`/academics/class/${[classId]}/assign/student`)
-                }
-                className="absolute right-0 top-0"
-              >
-                Assign Students
-              </Button>
-              <StudentList />
-            </TabsContent>
-            <TabsContent value="Staffs">
-              <section className="pt-5">
-                <StaffList />
-                <Button
-                  variant="default"
-                  onClick={async () => {
-                    const params = new URLSearchParams(searchParams);
-                    params.set(
-                      'isAssignStaffClassDetailPageFlyoutOpen',
-                      'true'
-                    );
-                    router.replace(pathname + '?' + params.toString());
-                  }}
-                  className="absolute right-0 top-0"
-                >
-                  Assign Staff
-                </Button>
-              </section>
-            </TabsContent>
-            <TabsContent value="Sections">
-              <section className="pt-5">
-                <SectionList />
-                <Button
-                  onClick={() => {
-                    const params = new URLSearchParams(searchParams);
-                    params.set('isSectionFlyoutOpen', 'true');
-                    router.replace(pathname + '?' + params.toString());
-                  }}
-                  className="absolute right-0 top-0"
-                >
-                  Add Section
-                </Button>
-              </section>
-            </TabsContent>
-            <TabsContent value="Assessments">
-              <ExamLists />
-            </TabsContent>
-          </Tabs>
-          <AssignStaffClassDetailPageFlyout />
-          <UpdateClassFlyout />
-          <SaveSectionFlyout />
-          <AddSubjectFlyout />
-        </>
+                <TabsContent value="Students">
+                  <Button
+                    variant="default"
+                    onClick={() =>
+                      router.push(
+                        `/academics/class/${[classId]}/assign/student`
+                      )
+                    }
+                    className="absolute right-0 top-0"
+                  >
+                    Assign Students
+                  </Button>
+                  <StudentList />
+                </TabsContent>
+                <TabsContent value="Staffs">
+                  <section className="pt-5">
+                    <StaffList />
+                    <Button
+                      variant="default"
+                      onClick={async () => {
+                        const params = new URLSearchParams(searchParams);
+                        params.set(
+                          'isAssignStaffClassDetailPageFlyoutOpen',
+                          'true'
+                        );
+                        router.replace(pathname + '?' + params.toString());
+                      }}
+                      className="absolute right-0 top-0"
+                    >
+                      Assign Staff
+                    </Button>
+                  </section>
+                </TabsContent>
+                <TabsContent value="Sections">
+                  <section className="pt-5">
+                    <SectionList />
+                    <Button
+                      onClick={() => {
+                        const params = new URLSearchParams(searchParams);
+                        params.set('isSectionFlyoutOpen', 'true');
+                        router.replace(pathname + '?' + params.toString());
+                      }}
+                      className="absolute right-0 top-0"
+                    >
+                      Add Section
+                    </Button>
+                  </section>
+                </TabsContent>
+                <TabsContent value="Assessments">
+                  <ExamLists />
+                </TabsContent>
+              </Tabs>
+            </>
+          ) : (
+            ' Details Not Found'
+          )}
+        </div>
       ) : (
-        ' Details Not Found'
+        <div className="flex items-center justify-center">
+          <Loader2 className="mr-2 h-6 w-6 animate-spin text-black" />
+          <p className="text-black ">Fetching Class Details...</p>
+        </div>
       )}
+
+      <AssignStaffClassDetailPageFlyout />
+      <UpdateClassFlyout />
+      <SaveSectionFlyout />
+      <AddSubjectFlyout />
+      <UnassignStaffFlyout />
     </section>
   );
 }

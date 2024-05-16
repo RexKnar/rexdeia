@@ -1,9 +1,15 @@
 'use client';
 
+import { useGetStaffSubjectListByClassIdQuery } from 'lib/queries/staff/useGetStaffSubjectListQuery';
 import { CircleMinus } from 'lucide-react';
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import {
+  useParams,
+  usePathname,
+  useRouter,
+  useSearchParams,
+} from 'next/navigation';
 import { useEffect } from 'react';
-import { useFieldArray, useForm } from 'react-hook-form';
+import { Controller, useFieldArray, useForm } from 'react-hook-form';
 import {
   Button,
   Checkbox,
@@ -15,49 +21,29 @@ import {
 } from 'ui';
 
 export function UnassignStaffFlyout() {
+  const pathname = usePathname();
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const params = useParams<{ id: string }>();
+
+  const isOpen = searchParams.get('isUnassignStaffFlyoutOpen') === 'true';
+  const staffId = searchParams.get('staffId');
+  const academicYearId = searchParams.get('academicYearId');
+
+  const { data: getStaffSubjectListResponse } =
+    useGetStaffSubjectListByClassIdQuery(params.id, staffId, academicYearId, {
+      enabled: !!staffId,
+    });
+
   const {
     handleSubmit,
     control,
-    formState: { errors },
+    formState: { errors: fieldErrors },
   } = useForm();
   const { fields, append } = useFieldArray({
     control,
-    name: 'sectionandsubjects',
+    name: 'sections',
   });
-
-  const pathname = usePathname();
-  const searchParams = useSearchParams();
-  // const staffId = searchParams.get('staffId');
-  const staffName = searchParams.get('staffName');
-  // const academicYearId = searchParams.get('academicYearId');
-  const router = useRouter();
-  const isOpen = searchParams.get('isUnassignStaffFlyoutOpen') === 'true';
-  const staffSubjectList = [
-    {
-      sectionid: 1,
-      sectionname: 'SectionA',
-      subjects: [
-        { id: 1, name: 'Tamil' },
-        { id: 2, name: 'English' },
-      ],
-    },
-    {
-      sectionid: 2,
-      sectionname: 'SectionB',
-      subjects: [
-        { id: 1, name: 'Tamil' },
-        { id: 2, name: 'English' },
-      ],
-    },
-  ];
-
-  useEffect(() => {
-    if (isOpen && staffSubjectList) {
-      staffSubjectList.forEach((section) => {
-        append({ sections: section.sectionid });
-      });
-    }
-  }, []);
 
   const closeFlyout = () => {
     const params = new URLSearchParams(searchParams);
@@ -66,9 +52,20 @@ export function UnassignStaffFlyout() {
   };
 
   const onsubmit = (data) => {
-    console.log(data, errors);
+    console.log(data, fieldErrors);
   };
 
+  useEffect(() => {
+    if (isOpen && getStaffSubjectListResponse) {
+      getStaffSubjectListResponse.forEach((item) => {
+        append({
+          sectionId: item.section.id,
+          sectionName: item.section.name,
+          subjects: [],
+        });
+      });
+    }
+  }, [isOpen, getStaffSubjectListResponse]);
   return (
     <section>
       <Sheet open={isOpen}>
@@ -95,42 +92,60 @@ export function UnassignStaffFlyout() {
             <div className="mt-6">
               <div>
                 <Text variant="base-bold" className="text-gray-700">
-                  {staffName}
+                  Demo
                 </Text>
               </div>
-              {fields.map((section, index) => {
+              {fields.length}
+              {/* {fields.map((section, index) => {
                 return (
                   <div className="mt-2" key={index}>
                     <label
                       htmlFor="subjectName"
                       className="text-sm font-semibold text-gray-700"
-                    >
-                      {/* {staffSubjectList[index]?.sectionname} */}
-                    </label>
-                    <div className="me-6 mt-2 flex flex-wrap items-center">
-                      {staffSubjectList[index].subjects.map((subject) => {
-                        return (
-                          <>
-                            <Checkbox
-                              className="me-2 items-center space-x-2 rounded border border-primary-500"
-                              value={subject.id}
-                              {...control.register(
-                                `sectionandsubjects.subjects`
+                    ></label>
+                    <div className="flex flex-wrap items-center mt-2 me-6">
+                      {getStaffSubjectListResponse[index].subjects.map(
+                        (subject) => {
+                          return (
+                            <Controller
+                              key={subject.id}
+                              control={control}
+                              name={`sections.${index}.subjects`}
+                              render={({ field }) => (
+                                <>
+                                  <Checkbox
+                                    className="items-center space-x-2 border rounded me-2 border-primary-500"
+                                    checked={field.value.includes(subject.id)}
+                                    onCheckedChange={(checked) => {
+                                      if (checked) {
+                                        field.onChange([
+                                          ...field.value,
+                                          subject.id,
+                                        ]);
+                                      } else {
+                                        field.onChange(
+                                          field.value.filter(
+                                            (id) => id !== subject.id
+                                          )
+                                        );
+                                      }
+                                    }}
+                                  >
+                                    {subject.name}
+                                  </Checkbox>
+                                  <label className="me-5">
+                                    <span>{subject.name}</span>
+                                  </label>
+                                </>
                               )}
                             />
-                            <label>{subject?.name}</label>
-                          </>
-                        );
-                      })}
+                          );
+                        }
+                      )}
                     </div>
-                    {/* <SubjectForUnassignStaff
-                    nestIndex={index}
-                    subjects={payload[index]?.subjects}
-                    {...{ control, register }}
-                  /> */}
                   </div>
                 );
-              })}
+              })} */}
             </div>
             <Button
               type="submit"

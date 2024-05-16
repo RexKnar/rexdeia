@@ -1,5 +1,8 @@
 'use client';
 
+import { UpdateClassModel } from 'lib/domain/class';
+import { useGetClassByIdQuery } from 'lib/queries/class/useGetClassByIdQuery';
+import { useUpdateClassMutationQuery } from 'lib/queries/class/useUpdateClassMutationQuery';
 import { Loader2, PlusCircle } from 'lucide-react';
 import {
   useParams,
@@ -19,10 +22,6 @@ import {
   Switch,
   Text,
 } from 'ui';
-
-import { UpdateClassModel } from '../../../../../../lib/domain/class';
-import { useUpdateClassMutationQuery } from '../../../../../../lib/queries/class/use UpdateClassMutationQuery';
-import { useGetClassByIdQuery } from '../../../../../../lib/queries/class/useGetClassByIdQuery';
 
 export function UpdateClassFlyout() {
   const pathname = usePathname();
