@@ -10,7 +10,7 @@ import { ClassWidget } from './ClassWidget';
 
 const page = 1;
 const limit = 999;
-
+const filter = {};
 export function ClassList() {
   const router = useRouter();
 
@@ -18,6 +18,7 @@ export function ClassList() {
     useGetClassListQuery({
       page,
       limit,
+      filter,
     });
 
   if (isClassListLoading) {

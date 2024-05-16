@@ -15,12 +15,9 @@ import {
   addSection,
   getAllSectionsByClassId,
   mapStaffsToSection,
-  mapSubjectsToSection,
-  unMapSubjectsFromSection,
 } from '../section/service';
 import { getAllStaffsBySectionsIdWithSubjects } from '../staff/service';
 import { getAllStudentsBySectionIds } from '../student/service';
-import { getAllSubjectBySectionIds } from '../subject/service';
 
 type ClassFilter = {
   isActive?: boolean;
@@ -78,6 +75,9 @@ export async function getAllClassesWithFilter(
       take: limit,
       skip: (page - 1) * limit,
       where: whereClause,
+      include: {
+        Section: true,
+      },
     }),
   ]);
 
@@ -168,39 +168,6 @@ export async function updateClassById(
   });
 }
 
-export async function mapSubjectsToClass(
-  classId: string,
-  subjectIds: string[]
-) {
-  const sections = await getAllSectionsByClassId(classId);
-  sections.forEach(function (section) {
-    mapSubjectsToSection(section.id, subjectIds);
-  });
-}
-
-export async function unMapSubjectsFromClass(
-  classId: string,
-  mapEntitiesToClassModel: MapEntitiesToClassModel
-) {
-  if (
-    mapEntitiesToClassModel.sectionIds === undefined ||
-    mapEntitiesToClassModel.sectionIds.length == 0
-  ) {
-    const sections = await getAllSectionsByClassId(classId);
-    sections.forEach(function (section) {
-      unMapSubjectsFromSection(section.id, {
-        entities: mapEntitiesToClassModel.entities,
-      });
-    });
-  } else {
-    mapEntitiesToClassModel.sectionIds.forEach(function (section) {
-      unMapSubjectsFromSection(section, {
-        entities: mapEntitiesToClassModel.entities,
-      });
-    });
-  }
-}
-
 export async function mapStaffsToClass(
   classId: string,
   staffSubjects: MapEntitiesToClassModel
@@ -231,7 +198,6 @@ export async function mapStudentToClass(
           id: studentId,
         },
         data: {
-          batchId: studentPayload.academicYear,
           studentMapping: {
             updateMany: [
               {
@@ -242,6 +208,7 @@ export async function mapStudentToClass(
                   groupId: studentPayload.groupId,
                   classId: classId,
                   sectionId: studentPayload.sectionId,
+                  batchId: studentPayload.academicYear,
                 },
               },
             ],
@@ -323,9 +290,46 @@ export async function unMapStaffsFromClass(
 }
 
 export async function getAllSubjectByClassId(id: string) {
-  const sections = await getAllSectionsByClassId(id);
-  const subjects = await getAllSubjectBySectionIds(sections.map((x) => x.id));
-  return uniqBy(subjects, (subject) => subject.id);
+  const session = await getServerSession(authOptions);
+  return db.subject.findMany({
+    where: {
+      classId: id,
+      branchId: session.branchId,
+    },
+    select: {
+      id: true,
+      name: true,
+      subjectToAssessmentFormat: {
+        select: {
+          assessmentFormat: true,
+        },
+      },
+      subjectToGroup: {
+        select: {
+          group: true,
+        },
+      },
+      subjectToSubjectTypes: {
+        select: {
+          subjectType: true,
+        },
+      },
+      academicSubjectForStaff: {
+        where: {
+          sectionId: id,
+        },
+        select: {
+          staff: {
+            select: {
+              firstName: true,
+              middleName: true,
+              lastName: true,
+            },
+          },
+        },
+      },
+    },
+  });
 }
 
 export async function getAllStudentsByClassId(id: string) {
@@ -337,4 +341,83 @@ export async function getAllStudentsByClassId(id: string) {
 export async function getAllStaffsByClassId(id: string) {
   const sections = await getAllSectionsByClassId(id);
   return await getAllStaffsBySectionsIdWithSubjects(sections.map((x) => x.id));
+}
+
+export async function getSubjectListForStaffByClassId(
+  staffId: string,
+  academicYearId: string,
+  classId: string
+) {
+  const classDetails = await db.academicSubjectForStaff.findMany({
+    where: {
+      staffId: staffId,
+      academicYearId: academicYearId,
+      isIncharge: false,
+      section: {
+        class: {
+          id: classId,
+        },
+      },
+    },
+    include: {
+      section: {
+        select: {
+          id: true,
+          class: true,
+          name: true,
+          academicSubjectForStaff: {
+            where: {
+              isIncharge: false,
+            },
+            select: {
+              subject: {
+                select: {
+                  id: true,
+                  name: true,
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+    distinct: ['sectionId'],
+  });
+  return formatData(classDetails);
+}
+
+function formatData(classDetails) {
+  return classDetails.map((item) => {
+    return {
+      section: {
+        id: item.section.id,
+        name: item.section.name,
+      },
+      subjects: item.section.academicSubjectForStaff.map((subjectItem) => {
+        return {
+          id: subjectItem.subject.id,
+          name: subjectItem.subject.name,
+        };
+      }),
+    };
+  });
+}
+
+export async function getAllStudentByClassIdForAssigning(id: string) {
+  const studentList = await db.studentMapping.findMany({
+    where: {
+      classId: id,
+      section: null,
+    },
+    select: {
+      student: {
+        select: {
+          id: true,
+          firstName: true,
+        },
+      },
+    },
+  });
+  const studentResponse = studentList.map((students) => students.student);
+  return studentResponse;
 }

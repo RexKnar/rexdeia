@@ -5,7 +5,12 @@ import { useGetSubjectListByFilter } from 'lib/queries/exams/useGetSubjectByFilt
 import { useGetAllSectionByClassIdQuery } from 'lib/queries/section/useGetAllSectionsByClassIdQuery';
 import { useGetSubjectTypeList } from 'lib/queries/subject-type/useGetSubjectTypeQuery';
 import { Loader2 } from 'lucide-react';
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import {
+  useParams,
+  usePathname,
+  useRouter,
+  useSearchParams,
+} from 'next/navigation';
 import { useEffect } from 'react';
 import {
   Select,
@@ -16,7 +21,7 @@ import {
   SelectValue,
 } from 'ui';
 
-import { ExamCard } from './ExamCard';
+import { ExamConfigurationNameCard } from './ExamConfigurationNameCard';
 
 export function AddExamLayout() {
   const page = 1;
@@ -28,7 +33,8 @@ export function AddExamLayout() {
   const examId = searchParams.get('examId');
   const sectionId = searchParams.get('sectionId');
   const subjectTypeId = searchParams.get('subjectTypeId');
-  const filter = {};
+  const filter = { isActive: true };
+  const examIdFromRouteParam = useParams<{ examId: string }>();
 
   const { data: examsList } = useGetExamListQuery({
     page,
@@ -39,6 +45,7 @@ export function AddExamLayout() {
     useGetClassListQuery({
       page,
       limit,
+      filter,
     });
   const { data: sectionListResponse, isLoading: isSectionListLoading } =
     useGetAllSectionByClassIdQuery(
@@ -65,12 +72,13 @@ export function AddExamLayout() {
       const payload = {
         subjectTypeId: subjectTypeId,
         sectionId: sectionId,
+        classId: classId,
       };
       mutateGetSubjectAsync(payload).catch((error) => {
         console.error(error);
       });
     }
-  }, [subjectTypeId, sectionId, mutateGetSubjectAsync]);
+  }, [subjectTypeId, sectionId, classId, mutateGetSubjectAsync]);
 
   return (
     <>
@@ -87,6 +95,7 @@ export function AddExamLayout() {
                 router.replace(pathname + '?' + params.toString());
               }
             }}
+            disabled={!!examIdFromRouteParam}
           >
             <SelectTrigger>
               <SelectValue />
@@ -111,24 +120,23 @@ export function AddExamLayout() {
         <div className="basis-1/4 rounded-l-lg bg-gray-50 text-center">
           <div className="p-2">Class</div>
           <div>
-            {examId ? (
-              <div>
-                {!isClassListLoading ? (
-                  <div className="">
-                    {classList?.data.map((cardData) => (
-                      <ExamCard examProps={cardData} key={cardData.id} />
-                    ))}
-                  </div>
-                ) : (
-                  <div className="flex justify-center pt-36 ">
-                    <Loader2 className="mr-2 h-6 w-6 animate-spin text-black" />
-                    <p className="text-black ">Fetching Classes...</p>
-                  </div>
-                )}
-              </div>
-            ) : (
-              <h2 className="text-center">Please Choose Exam</h2>
-            )}
+            <div>
+              {!isClassListLoading ? (
+                <div className="">
+                  {classList?.data.map((cardData) => (
+                    <ExamConfigurationNameCard
+                      examProps={cardData}
+                      key={cardData.id}
+                    />
+                  ))}
+                </div>
+              ) : (
+                <div className="flex justify-center pt-36 ">
+                  <Loader2 className="mr-2 h-6 w-6 animate-spin text-black" />
+                  <p className="text-black ">Fetching Classes...</p>
+                </div>
+              )}
+            </div>
           </div>
         </div>
         <div className="basis-1/4 bg-red-50 text-center">
@@ -136,7 +144,10 @@ export function AddExamLayout() {
           {!isSectionListLoading ? (
             <div>
               {sectionListResponse?.data?.map((cardData) => (
-                <ExamCard examProps={cardData} key={cardData.id} />
+                <ExamConfigurationNameCard
+                  examProps={cardData}
+                  key={cardData.id}
+                />
               ))}
             </div>
           ) : (
@@ -154,7 +165,10 @@ export function AddExamLayout() {
                 {!isSubjectTypeListLoading ? (
                   <div>
                     {subjectTypeListResponse?.data.map((cardData) => (
-                      <ExamCard examProps={cardData} key={cardData.id} />
+                      <ExamConfigurationNameCard
+                        examProps={cardData}
+                        key={cardData.id}
+                      />
                     ))}
                   </div>
                 ) : (
@@ -173,7 +187,10 @@ export function AddExamLayout() {
             {!isPendingSubjectListResponse ? (
               <div>
                 {getSubjectByFilterResponse?.data.map((cardData) => (
-                  <ExamCard examProps={cardData} key={cardData.id} />
+                  <ExamConfigurationNameCard
+                    examProps={cardData}
+                    key={cardData.id}
+                  />
                 ))}
               </div>
             ) : (
