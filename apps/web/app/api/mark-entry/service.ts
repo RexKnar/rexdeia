@@ -17,6 +17,10 @@ type GetStaffsFilter = {
 type GetMarksByStudentAndAcademicExams = {
   examId: string;
 };
+type FormDataFilter = {
+  examId?: string;
+  classId?: string;
+};
 
 export async function getSubjectsWithFormat(filter: SubjectsWithFormatFilter) {
   return db.academicExams.findMany({
@@ -60,9 +64,7 @@ export async function createMarkEntry(
               const createdMarkEntry = await prisma.markEntry.create({
                 data: {
                   studentId,
-                  staffId:
-                    // assessmentMarksPayload.staffId ||
-                    '555e443d-3ca1-45a6-83d2-9a9e025bf8c6',
+                  staffId: assessmentMarksPayload.staffId,
                   subject: {
                     connect: [
                       {
@@ -150,4 +152,86 @@ export async function getMarksByStudentAndAcademicExams(
     },
   });
   return marks;
+}
+
+export async function getFormDataByClassExam(filter: FormDataFilter) {
+  const { classId, examId } = filter;
+
+  const [formData] = await Promise.all([
+    db.studentMapping.findMany({
+      where: {
+        classId: classId,
+      },
+      select: {
+        student: {
+          select: {
+            id: true,
+            firstName: true,
+          },
+        },
+        group: {
+          include: {
+            subjectToGroup: {
+              where: {
+                subject: {
+                  academicExams: {
+                    some: {
+                      examId: examId,
+                    },
+                  },
+                },
+              },
+              select: {
+                subject: {
+                  select: {
+                    academicExams: {
+                      include: {
+                        examConfiguration: {
+                          select: {
+                            minPassMark: true,
+                            markToConduct: true,
+                            markToConvert: true,
+                            assessmentFormat: true,
+                          },
+                        },
+                      },
+                    },
+                    name: true,
+                    id: true,
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    }),
+  ]);
+
+  function restructureResponse(data) {
+    return data.map((item) => {
+      return {
+        id: item.student.id,
+        name: item.student.firstName,
+        subjects: item.group.subjectToGroup.map((subject) => {
+          const assessment = subject.subject.academicExams.map((assessment) => {
+            const format = assessment.examConfiguration.map((format) => {
+              return {
+                academicExamId: assessment.id,
+                ...format,
+              };
+            });
+            return format;
+          });
+          return {
+            id: subject.subject.id,
+            name: subject.subject.name,
+            assessmentFormat: assessment.flatMap((format) => format),
+          };
+        }),
+      };
+    });
+  }
+
+  return await restructureResponse(formData);
 }
