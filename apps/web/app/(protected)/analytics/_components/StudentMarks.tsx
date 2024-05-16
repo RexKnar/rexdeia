@@ -50,10 +50,12 @@ export function StudentsMarks() {
   const router = useRouter();
   const page = 1;
   const limit = 999;
+  const filter = {};
 
   const { data: classList } = useGetClassListQuery({
     page,
     limit,
+    filter,
   });
 
   const { data: examListByClassId } = useGetExamsByClassSectionQuery(
