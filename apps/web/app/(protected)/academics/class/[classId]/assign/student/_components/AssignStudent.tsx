@@ -2,7 +2,7 @@
 
 import { AssignStudentsToClassModel } from 'lib/domain/student';
 import { useGetBatchesListQuery } from 'lib/queries/batches/useGetBatchesListQuery';
-import { useGetClassByIdQuery } from 'lib/queries/class/useGetClassByIdQuery';
+import { useGetClassListQuery } from 'lib/queries/class/useGetClassListQuery';
 import { useGetGroupListQuery } from 'lib/queries/group/useGetGroupListQuery';
 import { useGetAllSectionByClassIdQuery } from 'lib/queries/section/useGetAllSectionsByClassIdQuery';
 import { useCreateStudentMutationByClassIdQuery } from 'lib/queries/students/useCreateStudentMutationByClassIdQuery';
@@ -39,6 +39,13 @@ export function AssignStudents() {
     isPending: isPendingAssignStudents,
   } = useCreateStudentMutationByClassIdQuery();
 
+  const [groupIdToGetStudent, setGroupIdToGetStudent] = useState('');
+  const [classIdToGetStudent, setClassIdToGetStudent] = useState('');
+
+  useEffect(() => {
+    if (classId) setClassIdToGetStudent(classId);
+  }, [classId]);
+
   const { data: sectionListResponse } = useGetAllSectionByClassIdQuery(
     { classId, filter },
     {
@@ -53,9 +60,10 @@ export function AssignStudents() {
   });
 
   const { data: getStudentListResponse } = useGetStudentListForAssignQuery(
-    classId,
+    classIdToGetStudent,
+    groupIdToGetStudent,
     {
-      enabled: !!classId,
+      enabled: !!classIdToGetStudent || !!groupIdToGetStudent,
     }
   );
 
@@ -70,9 +78,12 @@ export function AssignStudents() {
     filter,
   });
 
-  const { data: getClassByIdResponse } = useGetClassByIdQuery(classId, {
-    enabled: !!classId,
+  const { data: getAllClassListResponse } = useGetClassListQuery({
+    page,
+    limit,
+    filter,
   });
+
   const handleCheckboxChange = (studentId) => {
     setSelectedStudentIds((prevSelectedStudentIds) => {
       const updatedSelectedStudentIds = prevSelectedStudentIds.includes(
@@ -187,55 +198,55 @@ export function AssignStudents() {
             <section className="p-2">
               <section className="mb-2 flex justify-between overflow-x-auto rounded-md bg-white p-2">
                 <Select
+                  defaultValue={classId}
                   autoComplete="off"
-                  {...register('classId', { required: true })}
-                  value={classId}
                   onValueChange={(value) => {
                     if (value) {
-                      setValue('classId', value);
+                      setClassIdToGetStudent(value);
                     }
                   }}
                 >
                   <SelectTrigger className=" basis-1/2">
                     <SelectValue
                       className="text-gray-400"
-                      placeholder="Class Name"
-                    >
-                      {getClassByIdResponse?.name || 'Loading...'}
-                    </SelectValue>
+                      placeholder="Class"
+                    ></SelectValue>
                     <ChevronDown className="text-gray-400" />
                   </SelectTrigger>
                   <SelectContent className="border border-primary-200">
                     {' '}
                     <SelectGroup>
-                      <SelectItem key={classId} value={classId}>
-                        {getClassByIdResponse?.name || 'Loading...'}
-                      </SelectItem>
+                      {getAllClassListResponse?.data?.map((classDetails) => (
+                        <SelectItem
+                          key={classDetails.id}
+                          value={classDetails.id}
+                        >
+                          {classDetails.name}
+                        </SelectItem>
+                      ))}
                     </SelectGroup>
                   </SelectContent>
                 </Select>
 
                 <Select
                   autoComplete="off"
-                  {...register('sectionId', { required: true })}
-                  value={watch('sectionId')}
                   onValueChange={(value) => {
                     if (value) {
-                      setValue('sectionId', value);
+                      setGroupIdToGetStudent(value);
                     }
                   }}
                 >
-                  <SelectTrigger className="ml-4 basis-1/2">
+                  <SelectTrigger className=" basis-1/2">
                     <SelectValue
                       className="text-gray-400"
-                      placeholder="Section"
+                      placeholder="Group"
                     />{' '}
                     <ChevronDown className="text-gray-400" />
                   </SelectTrigger>
                   <SelectContent className="border border-primary-200">
                     {' '}
                     <SelectGroup>
-                      {sectionListResponse?.data?.map((item) => (
+                      {groupListResponse?.data?.map((item) => (
                         <SelectItem key={item.id} value={item.id}>
                           {item.name}
                         </SelectItem>
@@ -320,6 +331,7 @@ export function AssignStudents() {
               <section className="mb-2 flex justify-between overflow-x-auto rounded-md bg-white p-2">
                 <Select
                   autoComplete="off"
+                  disabled
                   {...register('classId', { required: true })}
                   value={classId}
                   onValueChange={(value) => {
@@ -331,18 +343,21 @@ export function AssignStudents() {
                   <SelectTrigger className=" basis-1/2">
                     <SelectValue
                       className="text-gray-400"
-                      placeholder="Class Name"
-                    >
-                      {getClassByIdResponse?.name || 'Loading...'}
-                    </SelectValue>
+                      placeholder="Class"
+                    ></SelectValue>
                     <ChevronDown className="text-gray-400" />
                   </SelectTrigger>
                   <SelectContent className="border border-primary-200">
                     {' '}
                     <SelectGroup>
-                      <SelectItem key={classId} value={classId}>
-                        {getClassByIdResponse?.name || 'Loading...'}
-                      </SelectItem>
+                      {getAllClassListResponse?.data?.map((classDetails) => (
+                        <SelectItem
+                          key={classDetails.id}
+                          value={classDetails.id}
+                        >
+                          {classDetails.name}
+                        </SelectItem>
+                      ))}
                     </SelectGroup>
                   </SelectContent>
                 </Select>
