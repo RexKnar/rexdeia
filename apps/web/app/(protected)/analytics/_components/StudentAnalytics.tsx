@@ -25,7 +25,6 @@ import {
 
 export function StudentAnalytics() {
   const [sliderValues, setSliderValues] = useState([0, 100]);
-  // const [, setErrorMessages] = useState([false]);
   const page = 1;
   const limit = 999;
   const filter = {};
@@ -45,7 +44,6 @@ export function StudentAnalytics() {
   });
   const handleValueChange = (newValue) => {
     setSliderValues(newValue);
-    // console.log(newValue);
   };
   const marks = [
     {
