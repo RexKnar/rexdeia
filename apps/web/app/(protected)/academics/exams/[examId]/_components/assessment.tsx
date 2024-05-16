@@ -2,8 +2,8 @@
 import { useGetClassListQuery } from 'lib/queries/class/useGetClassListQuery';
 import { useCreateMarkEntryQuery } from 'lib/queries/mark-entry/useCreateMarkEntryMutationQuery';
 import { useGetExamsByClassSectionQuery } from 'lib/queries/mark-entry/useGetExamsByClassSectionQuery';
+import { useGetMarkEntryFormStructureQuery } from 'lib/queries/mark-entry/useGetMarkEntryFormStructureQuery';
 import { useGetStaffsBySectionQuery } from 'lib/queries/mark-entry/useGetStaffsBySectionQuery';
-import { useGetMarkEntryFormStructureQuery } from 'lib/queries/mark-entry/useGetStudentsByClassSectionQuery';
 import { useGetAllSectionByClassIdQuery } from 'lib/queries/section/useGetAllSectionsByClassIdQuery';
 import { ChevronDown, Loader2 } from 'lucide-react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
