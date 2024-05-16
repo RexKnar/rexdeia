@@ -2,12 +2,13 @@
 import { useGetClassListQuery } from 'lib/queries/class/useGetClassListQuery';
 import { useCreateMarkEntryQuery } from 'lib/queries/mark-entry/useCreateMarkEntryMutationQuery';
 import { useGetExamsByClassSectionQuery } from 'lib/queries/mark-entry/useGetExamsByClassSectionQuery';
+import { useGetMarkEntryFormStructureQuery } from 'lib/queries/mark-entry/useGetMarkEntryFormStructureQuery';
 import { useGetStaffsBySectionQuery } from 'lib/queries/mark-entry/useGetStaffsBySectionQuery';
-import { useGetSubjectsWithFormatsQuery } from 'lib/queries/mark-entry/useGetSubjectsWithFormatsQuery';
 import { useGetAllSectionByClassIdQuery } from 'lib/queries/section/useGetAllSectionsByClassIdQuery';
 import { ChevronDown, Loader2 } from 'lucide-react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import { useForm } from 'react-hook-form';
+import { useEffect } from 'react';
+import { useFieldArray, useForm } from 'react-hook-form';
 import {
   Button,
   Select,
@@ -17,9 +18,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from 'ui';
-import { cn } from 'utils';
 
-import { StudentRecords } from './SudentRecords';
+import { AssessmentSubjects } from './assessment-subjects';
 
 export function Assessment() {
   const page = 1;
@@ -32,18 +32,6 @@ export function Assessment() {
   const sectionId = searchParams.get('sectionId');
   const examId = searchParams.get('examId');
   const staffId = searchParams.get('staffId');
-  const columnColor = [
-    'bg-green-100',
-    'bg-red-100 ',
-    'bg-primary-100 ',
-    'bg-yellow-100 ',
-    'bg-purple-100 ',
-    'bg-green-100',
-    'bg-red-100 ',
-    'bg-primary-100 ',
-    'bg-yellow-100 ',
-    'bg-purple-100 ',
-  ];
 
   const { control, register, handleSubmit } = useForm();
 
@@ -64,16 +52,16 @@ export function Assessment() {
       enabled: !!sectionId,
     }
   );
-  const { data: subjectsWithFormats } = useGetSubjectsWithFormatsQuery(
-    { classId, sectionId, examId },
-    {
-      enabled: !!examId,
-    }
-  );
   const { data: staffList } = useGetStaffsBySectionQuery(
     { sectionId },
     {
       enabled: !!sectionId,
+    }
+  );
+  const { data: markEntryFormStructure } = useGetMarkEntryFormStructureQuery(
+    { classId, examId },
+    {
+      enabled: !!examId,
     }
   );
   const {
@@ -87,6 +75,21 @@ export function Assessment() {
     };
     mutateCreateMarkEntryAsync(markEntryPayload);
   }
+
+  const { fields: studentFields, append } = useFieldArray({
+    control,
+    name: 'studentsMarkDetails',
+  });
+
+  useEffect(() => {
+    if (studentFields.length === 0 && markEntryFormStructure) {
+      markEntryFormStructure?.forEach((studentDetail) => {
+        append({
+          studentId: studentDetail.id,
+        });
+      });
+    }
+  }, [markEntryFormStructure]);
 
   return (
     <form onSubmit={handleSubmit(saveMarkEntry)}>
@@ -186,24 +189,41 @@ export function Assessment() {
           </SelectContent>
         </Select>
       </div>
-      <div className="w-auto overflow-x-scroll bg-green-100">
-        <div className="flex items-center justify-between bg-green-100 p-4 font-bold ">
-          <div className="w-1/5 flex-none">Student</div>
-          {subjectsWithFormats?.map((subject, index) => (
-            <div
-              key={index}
-              className={cn(
-                'w-2/5 flex-none border-l-2 border-black bg-green-100 p-1 p-4',
-                columnColor[index % 10]
-              )}
-            >
-              {subject.subject.name}
-            </div>
-          ))}
-        </div>
-
-        <StudentRecords {...{ control, register }} />
-      </div>
+      {markEntryFormStructure ? (
+        <table className="min-w-full divide-y divide-gray-200 shadow-md">
+          <thead className="bg-gray-50">
+            <tr>
+              <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-black">
+                Student
+              </th>
+              {markEntryFormStructure[0]?.subjects.map((subject) => (
+                <th
+                  key={subject.id}
+                  className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-black"
+                >
+                  {subject.name}
+                </th>
+              ))}
+            </tr>
+          </thead>
+          <tbody className="divide-y divide-gray-200 bg-white">
+            {studentFields.map((student, studentIndex) => (
+              <tr key={student.id}>
+                <td className="whitespace-nowrap px-6 py-4">
+                  {markEntryFormStructure[studentIndex]?.name}
+                </td>
+                <AssessmentSubjects
+                  nestIndex={studentIndex}
+                  subjects={markEntryFormStructure[studentIndex]?.subjects}
+                  {...{ control, register }}
+                />
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      ) : (
+        'loading'
+      )}
 
       <Button className="text-center" type="submit">
         {isPendingCreateMarkEntry ? (
