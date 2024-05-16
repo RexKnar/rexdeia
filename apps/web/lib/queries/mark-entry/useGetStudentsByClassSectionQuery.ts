@@ -1,24 +1,24 @@
 import { useQuery, UseQueryOptions } from '@tanstack/react-query';
-import { MarkEntryFromStructureModel } from 'lib/domain/mark-entry';
 
 import { makeAPICall } from '../../api';
-import { GET_MARK_ENTRY_FORM_STRUCTURE } from '../../endpoints';
+import { Student } from '../../domain/student';
+import { GET_STUDENTS_BY_CLASS_SECTION } from '../../endpoints';
 
-type GetMarkEntryFormStructureFilter = {
+type GetStudentsByClassSectionFilter = {
   classId: string;
-  examId: string;
+  sectionId: string;
 };
 
-function getMarkEntryFormStructure(
-  filter: GetMarkEntryFormStructureFilter,
-  options?: Partial<UseQueryOptions<MarkEntryFromStructureModel[]>>
+function getStudentsByClassSection(
+  filter: GetStudentsByClassSectionFilter,
+  options?: Partial<UseQueryOptions<Student[]>>
 ) {
   return {
     ...options,
-    queryKey: [GET_MARK_ENTRY_FORM_STRUCTURE],
+    queryKey: [GET_STUDENTS_BY_CLASS_SECTION, filter.sectionId],
     queryFn: async () => {
-      return await makeAPICall<MarkEntryFromStructureModel[]>(
-        GET_MARK_ENTRY_FORM_STRUCTURE,
+      return await makeAPICall<Student[]>(
+        GET_STUDENTS_BY_CLASS_SECTION,
         { ...filter },
         {},
         {}
@@ -27,9 +27,9 @@ function getMarkEntryFormStructure(
   };
 }
 
-export function useGetMarkEntryFormStructureQuery(
-  filter: GetMarkEntryFormStructureFilter,
-  options?: Partial<UseQueryOptions<MarkEntryFromStructureModel[]>>
+export function useGetStudentsByClassSectionQuery(
+  filter: GetStudentsByClassSectionFilter,
+  options?: Partial<UseQueryOptions<Student[]>>
 ) {
-  return useQuery(getMarkEntryFormStructure(filter, options));
+  return useQuery(getStudentsByClassSection(filter, options));
 }

@@ -93,7 +93,7 @@ export const GET_EXAM_LIST = `GET_EXAM_LIST`;
 export const ADD_EXAM = `ADD_EXAM`;
 export const GET_EXAM_BY_CLASS_SECTION = `GET_EXAM_BY_CLASS_SECTION`;
 export const GET_SUBJECTS_WITH_FORMATS_BY_EXAM = `GET_SUBJECTS_WITH_FORMATS_BY_EXAM`;
-export const GET_MARK_ENTRY_FORM_STRUCTURE = `GET_MARK_ENTRY_FORM_STRUCTURE`;
+export const GET_STUDENTS_BY_CLASS_SECTION = `GET_STUDENTS_BY_CLASS_SECTION`;
 export const ADD_MARK_ENTRY = `ADD_MARK_ENTRY`;
 export const GET_STAFFS_BY_SECTION = `GET_STAFFS_BY_SECTION`;
 export const GET_MARKS_WITH_FORMAT_BY_EXAM = `GET_MARKS_WITH_FORMAT_BY_EXAM`;
@@ -489,9 +489,9 @@ export default <EndpointDetails>{
     requestType: `PUT`,
     endpoint: `/api/mark-entry/subjects`,
   },
-  [GET_MARK_ENTRY_FORM_STRUCTURE]: {
+  [GET_STUDENTS_BY_CLASS_SECTION]: {
     requestType: `PUT`,
-    endpoint: `/api/mark-entry/formData`,
+    endpoint: `/api/mark-entry/students`,
   },
   [ADD_MARK_ENTRY]: {
     requestType: `POST`,

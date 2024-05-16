@@ -8,7 +8,7 @@ import { cn } from 'utils';
 
 import { MarkFields } from './Mark-Fields';
 
-export function AssessmentSubjects({ nestIndex, subjects, control }) {
+export function AssessmentSubjects({ nestIndex, control }) {
   const { fields, append } = useFieldArray({
     control,
     name: `studentsMarkDetails.${nestIndex}.subjects`,
@@ -36,16 +36,16 @@ export function AssessmentSubjects({ nestIndex, subjects, control }) {
     'bg-purple-100 ',
   ];
   useEffect(() => {
-    if (fields.length === 0 && subjects) {
-      subjects.forEach((subject, index) => {
-        if (subjects[index]) {
+    if (fields.length === 0 && subjectsWithFormats) {
+      subjectsWithFormats.forEach((format, index) => {
+        if (subjectsWithFormats[index]) {
           append({
-            subjectId: subject.id,
+            subjectId: format.subject.id,
           });
         }
       });
     }
-  }, [subjects]);
+  }, [subjectsWithFormats]);
 
   return (
     <>
@@ -57,17 +57,17 @@ export function AssessmentSubjects({ nestIndex, subjects, control }) {
             columnColor[subjectIndex % 10]
           )}
         >
-          {/* {subjects && subjectsWithFormats ? (
+          {subjectsWithFormats ? (
             <MarkFields
               nestIndex={nestIndex}
               subjectIndex={subjectIndex}
               control={control}
-              assessmentFormats={subjects[subjectIndex]?.assessmentFormat}
+              assessmentFormats={subjectsWithFormats[subjectIndex]}
               assessmentId={subjectsWithFormats[subjectIndex]?.id}
             />
           ) : (
             'loading'
-          )} */}
+          )}
         </div>
       ))}
     </>

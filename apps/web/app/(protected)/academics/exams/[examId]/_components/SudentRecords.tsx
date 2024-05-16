@@ -1,6 +1,6 @@
 'use client';
 
-import { useGetMarkEntryFormStructureQuery } from 'lib/queries/mark-entry/useGetStudentsByClassSectionQuery';
+import { useGetStudentsByClassSectionQuery } from 'lib/queries/mark-entry/useGetStudentsByClassSectionQuery';
 import { useSearchParams } from 'next/navigation';
 import { useEffect } from 'react';
 import { useFieldArray } from 'react-hook-form';
@@ -15,23 +15,23 @@ export function StudentRecords({ control, register }) {
   });
   const searchParams = useSearchParams();
   const classId = searchParams.get('classId');
-  const examId = searchParams.get('examId');
+  const sectionId = searchParams.get('sectionId');
 
-  const { data: markEntryFormStructure } = useGetMarkEntryFormStructureQuery(
-    { classId, examId },
+  const { data: studentList } = useGetStudentsByClassSectionQuery(
+    { classId, sectionId },
     {
-      enabled: !!examId,
+      enabled: !!sectionId,
     }
   );
   useEffect(() => {
-    if (fields.length === 0 && markEntryFormStructure) {
-      markEntryFormStructure?.forEach((studentDetail) => {
+    if (fields.length === 0 && studentList) {
+      studentList?.forEach((studentDetail) => {
         append({
           studentId: studentDetail.id,
         });
       });
     }
-  }, [markEntryFormStructure]);
+  }, [studentList]);
 
   return (
     <div>
@@ -44,14 +44,12 @@ export function StudentRecords({ control, register }) {
             )}
           >
             <div className="flex-none w-1/5">
-              {markEntryFormStructure[index]?.name}
+              {studentList[index]?.firstName}
+              {studentList[index]?.middleName}
+              {studentList[index]?.lastName}
             </div>
 
-            {/* <AssessmentSubjects
-              nestIndex={index}
-              subjects={markEntryFormStructure[index]?.subjects}
-              {...{ control, register }}
-            /> */}
+            <AssessmentSubjects nestIndex={index} {...{ control, register }} />
           </div>
         );
       })}
