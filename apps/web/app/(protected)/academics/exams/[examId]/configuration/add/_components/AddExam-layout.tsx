@@ -125,7 +125,10 @@ export function AddExamLayout() {
                 <div className="">
                   {classList?.data.map((cardData) => (
                     <ExamConfigurationNameCard
-                      examProps={cardData}
+                      type="classId"
+                      queryValue={cardData.id}
+                      name={cardData.name}
+                      openFlyout={false}
                       key={cardData.id}
                     />
                   ))}
@@ -145,7 +148,10 @@ export function AddExamLayout() {
             <div>
               {sectionListResponse?.data?.map((cardData) => (
                 <ExamConfigurationNameCard
-                  examProps={cardData}
+                  type="sectionId"
+                  queryValue={cardData.id}
+                  name={cardData.name}
+                  openFlyout={false}
                   key={cardData.id}
                 />
               ))}
@@ -166,7 +172,10 @@ export function AddExamLayout() {
                   <div>
                     {subjectTypeListResponse?.data.map((cardData) => (
                       <ExamConfigurationNameCard
-                        examProps={cardData}
+                        type="subjectTypeId"
+                        queryValue={cardData.id}
+                        name={cardData.name}
+                        openFlyout={false}
                         key={cardData.id}
                       />
                     ))}
@@ -188,8 +197,11 @@ export function AddExamLayout() {
               <div>
                 {getSubjectByFilterResponse?.data.map((cardData) => (
                   <ExamConfigurationNameCard
-                    examProps={cardData}
+                    type="subjectId"
+                    queryValue={cardData.id}
+                    name={cardData.name}
                     key={cardData.id}
+                    openFlyout={true}
                   />
                 ))}
               </div>
