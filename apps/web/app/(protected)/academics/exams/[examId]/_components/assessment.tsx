@@ -38,6 +38,7 @@ export function Assessment() {
   const { data: classList } = useGetClassListQuery({
     page,
     limit,
+    filter,
   });
   const { data: sectionList } = useGetAllSectionByClassIdQuery(
     { classId, filter },

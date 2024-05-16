@@ -115,6 +115,7 @@ export const UPDATE_STUDENT_BY_ID = `UPDATE_STUDENT_BY_ID`;
 export const UPDATE_TERM_BY_ID = `UPDATE_TERM_BY_ID`;
 export const DELETE_TERM_BY_ID = `DELETE_TERM_BY_ID`;
 export const GET_STUDENTS_MARKS_BY_CLASS_ID_AND_EXAM_ID = `GET_STUDENTS_MARKS_BY_CLASS_ID_AND_EXAM_ID`;
+export const GET_STUDENTS_LIST_FOR_ASSIGN = `GET_STUDENTS_LIST_FOR_ASSIGN`;
 
 export default <EndpointDetails>{
   [REGISTER_USER]: {
@@ -230,7 +231,7 @@ export default <EndpointDetails>{
     endpoint: `/api/grade`,
   },
   [GET_CLASS_LIST]: {
-    requestType: `GET`,
+    requestType: `PUT`,
     endpoint: `/api/class`,
   },
   [GET_CLASS_BY_ID]: {
@@ -286,7 +287,7 @@ export default <EndpointDetails>{
     endpoint: `/api/subject/assessment-format/[id]`,
   },
   [GET_BATCHES_LIST]: {
-    requestType: `GET`,
+    requestType: `PUT`,
     endpoint: `/api/batch`,
   },
   [CREATE_BATCH]: {
@@ -462,7 +463,7 @@ export default <EndpointDetails>{
     endpoint: `/api/exam/exam-type`,
   },
   [GET_TERM_LIST]: {
-    requestType: `GET`,
+    requestType: `PUT`,
     endpoint: `/api/exam/term`,
   },
   [GET_ASSESSMENT_FORMAT_BY_SUBJECT_ID]: {
@@ -572,5 +573,9 @@ export default <EndpointDetails>{
   [UPDATE_STUDENT_BY_ID]: {
     requestType: `PUT`,
     endpoint: `/api/student/[id]`,
+  },
+  [GET_STUDENTS_LIST_FOR_ASSIGN]: {
+    requestType: `PUT`,
+    endpoint: `/api/class/[id]/students`,
   },
 };

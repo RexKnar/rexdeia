@@ -64,7 +64,7 @@ export function SaveSectionFlyout() {
   const classId = classIdFromSearchParams
     ? classIdFromSearchParams
     : classIdFromQueryParams?.classId;
-  const filter = {};
+  const filter = { isActive: true };
 
   const closeFlyout = async () => {
     setMediumId('');

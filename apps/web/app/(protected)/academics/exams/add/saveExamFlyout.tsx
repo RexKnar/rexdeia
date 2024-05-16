@@ -61,6 +61,7 @@ export function SaveExamFlyout() {
     useGetTermsListQuery({
       page,
       limit,
+      filter,
     });
   const { data: examTypeListResponse, isLoading: isExamTypeListLoading } =
     useGetExamTypeListQuery({
