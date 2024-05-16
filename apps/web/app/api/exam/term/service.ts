@@ -96,3 +96,42 @@ export async function deleteTermById(id: string) {
     },
   });
 }
+
+export async function getAllTermsWithFilter(
+  page: number,
+  limit: number,
+  filter: { isActive?: boolean }
+) {
+  const { isActive } = filter;
+  const { branchId } = await getServerSession(authOptions);
+
+  const whereClause = {
+    branchId,
+    isDeleted: false,
+  };
+  if (isActive !== undefined) {
+    whereClause['isActive'] = isActive;
+  }
+  const [total, data] = await db.$transaction([
+    db.term.count({
+      where: whereClause,
+    }),
+    db.term.findMany({
+      take: limit,
+      skip: (page - 1) * limit,
+      where: whereClause,
+      select: {
+        id: true,
+        name: true,
+        isActive: true,
+        createdAt: true,
+      },
+    }),
+  ]);
+  return {
+    page,
+    total,
+    limit,
+    data,
+  };
+}

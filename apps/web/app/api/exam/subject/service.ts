@@ -4,28 +4,13 @@ import { getServerSession } from 'next-auth';
 
 type SubjectFilter = {
   sectionId: string;
+  classId: string;
   subjectTypeId: string;
 };
 export async function getSubjectsWithFilter(filter: SubjectFilter) {
   const { branchId } = await getServerSession(authOptions);
 
-  const [total, data] = await db.$transaction([
-    db.subject.count({
-      where: {
-        branchId,
-        isDeleted: false,
-        subjectToSubjectTypes: {
-          some: {
-            subjectTypeId: filter.subjectTypeId,
-          },
-        },
-        SectionSubject: {
-          some: {
-            sectionId: filter.sectionId,
-          },
-        },
-      },
-    }),
+  const [data] = await db.$transaction([
     db.subject.findMany({
       where: {
         branchId,
@@ -35,9 +20,14 @@ export async function getSubjectsWithFilter(filter: SubjectFilter) {
             subjectTypeId: filter.subjectTypeId,
           },
         },
-        SectionSubject: {
+        subjectToGroup: {
           some: {
-            sectionId: filter.sectionId,
+            classId: filter.classId,
+            group: {
+              sectionToGroups: {
+                some: { sectionId: filter.sectionId },
+              },
+            },
           },
         },
       },
@@ -45,7 +35,6 @@ export async function getSubjectsWithFilter(filter: SubjectFilter) {
   ]);
 
   return {
-    total,
     data,
   };
 }

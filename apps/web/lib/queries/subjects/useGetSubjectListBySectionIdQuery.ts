@@ -3,34 +3,36 @@ import {
   useQueryClient,
   UseQueryOptions,
 } from '@tanstack/react-query';
+import { GroupModel } from 'lib/domain/group';
 
 import { makeAPICall } from '../../api';
-import { SubjectModel } from '../../domain/subject';
 import { GET_SUBJECT_LIST_BY_SECTION_ID } from '../../endpoints';
 
 function getSubjectListBySectionId(
-  id: string,
-  options?: Partial<UseQueryOptions<SubjectModel[]>>
+  sectionId: string,
+  classId?: string,
+  options?: Partial<UseQueryOptions<GroupModel[]>>
 ) {
   return {
     ...options,
-    queryKey: [GET_SUBJECT_LIST_BY_SECTION_ID, id],
+    queryKey: [GET_SUBJECT_LIST_BY_SECTION_ID, sectionId],
     queryFn: async () => {
-      return await makeAPICall<SubjectModel[]>(
+      return await makeAPICall<GroupModel[]>(
         GET_SUBJECT_LIST_BY_SECTION_ID,
         {},
-        {},
-        { id }
+        { classId: classId },
+        { id: sectionId }
       );
     },
   };
 }
 
 export function useGetSubjectListBySectionIdQuery(
-  id: string,
-  options?: Partial<UseQueryOptions<SubjectModel[]>>
+  sectionId: string,
+  classId?: string,
+  options?: Partial<UseQueryOptions<GroupModel[]>>
 ) {
-  return useQuery(getSubjectListBySectionId(id, options));
+  return useQuery(getSubjectListBySectionId(sectionId, classId, options));
 }
 
 export function usePrefetchSubject() {

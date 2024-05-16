@@ -1,4 +1,5 @@
 import { UserRole } from '@prisma/client';
+import { UpdateStudentModel } from 'lib/domain/student';
 import { getServerSession } from 'next-auth';
 
 import { authOptions } from '../../../lib/auth';
@@ -216,6 +217,20 @@ export async function getAllStudentsByBatchId(
     pageSize,
     data: studentsList,
   };
+}
+
+export async function updateStudentById(
+  id: string,
+  updateStudentDetails: UpdateStudentModel
+) {
+  return db.student.update({
+    where: {
+      id: id,
+    },
+    data: {
+      ...updateStudentDetails,
+    },
+  });
 }
 
 export async function getRecentlyAddedStudentsList({

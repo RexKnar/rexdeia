@@ -1,17 +1,24 @@
 import { captureException } from '@sentry/nextjs';
 import { StatusCodes } from 'http-status-codes';
 import { authOptions } from 'lib/auth';
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 
-import { getSubjectsWithFilter } from './service';
+import { getFormDataByClassExam } from '../service';
 
 /**
  * @swagger
- * /api/exam/subject:
+ * /api/mark-entry/formData:
  *     put:
- *       summary: Get All Subject with Filter
- *       description: Get All Subject with Filter
+ *       summary: get formData by class&exam
+ *       description:  get formData by class&exam
+ *       parameters:
+ *         - name: id
+ *           in: path
+ *           required: true
+ *           description: Unique identifier of the class&exam optional
+ *           schema:
+ *             type: string
  *       requestBody:
  *         required: true
  *         content:
@@ -20,11 +27,11 @@ import { getSubjectsWithFilter } from './service';
  *               type: object
  *       responses:
  *         '200':
- *           description: Data Found.
+ *           description: formData fetched successfully.
  *           content:
  *             application/json:
  *               schema:
- *                 # Define the schema of your Subject object here
+ *                 # Define the schema of your student object here
  *         '400':
  *           description: Bad request due to validation error.
  *         '401':
@@ -32,7 +39,7 @@ import { getSubjectsWithFilter } from './service';
  *         '500':
  *           description: Internal server error.
  */
-export async function PUT(request: NextRequest) {
+export async function PUT(request: Request) {
   const session = await getServerSession(authOptions);
   if (!session) {
     return new NextResponse(JSON.stringify({ error: 'UNAUTHORIZED' }), {
@@ -41,16 +48,20 @@ export async function PUT(request: NextRequest) {
   }
 
   try {
-    const filter = await request.json();
-    const getSubjectsWithFilterResponse = await getSubjectsWithFilter(filter);
+    const payload = await request.json();
 
-    return new NextResponse(JSON.stringify(getSubjectsWithFilterResponse), {
+    const formDataByClassExam = await getFormDataByClassExam(payload);
+
+    return new NextResponse(JSON.stringify(formDataByClassExam), {
       status: StatusCodes.OK,
     });
   } catch (e) {
     captureException(e);
-    return new NextResponse(e, {
-      status: StatusCodes.BAD_REQUEST,
+    return new NextResponse(JSON.stringify({ error: e.message }), {
+      status:
+        e.message === 'VALIDATION_ERROR'
+          ? StatusCodes.BAD_REQUEST
+          : StatusCodes.INTERNAL_SERVER_ERROR,
     });
   }
 }

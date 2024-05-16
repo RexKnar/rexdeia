@@ -93,7 +93,7 @@ export const GET_EXAM_LIST = `GET_EXAM_LIST`;
 export const ADD_EXAM = `ADD_EXAM`;
 export const GET_EXAM_BY_CLASS_SECTION = `GET_EXAM_BY_CLASS_SECTION`;
 export const GET_SUBJECTS_WITH_FORMATS_BY_EXAM = `GET_SUBJECTS_WITH_FORMATS_BY_EXAM`;
-export const GET_STUDENTS_BY_CLASS_SECTION = `GET_STUDENTS_BY_CLASS_SECTION`;
+export const GET_MARK_ENTRY_FORM_STRUCTURE = `GET_MARK_ENTRY_FORM_STRUCTURE`;
 export const ADD_MARK_ENTRY = `ADD_MARK_ENTRY`;
 export const GET_STAFFS_BY_SECTION = `GET_STAFFS_BY_SECTION`;
 export const GET_MARKS_WITH_FORMAT_BY_EXAM = `GET_MARKS_WITH_FORMAT_BY_EXAM`;
@@ -111,10 +111,12 @@ export const GET_EXAM_TYPE_BY_ID = `GET_EXAM_TYPE_BY_ID`;
 export const UPDATE_EXAM_TYPE_BY_ID = `UPDATE_EXAM_TYPE_BY_ID`;
 export const DELETE_EXAM_TYPE_BY_ID = `DELETE_EXAM_TYPE_BY_ID`;
 export const GET_STUDENT_BY_ID = `GET_STUDENT_BY_ID`;
+export const UPDATE_STUDENT_BY_ID = `UPDATE_STUDENT_BY_ID`;
 export const UPDATE_TERM_BY_ID = `UPDATE_TERM_BY_ID`;
 export const DELETE_TERM_BY_ID = `DELETE_TERM_BY_ID`;
 export const GET_STUDENTS_MARKS_BY_CLASS_ID_AND_EXAM_ID = `GET_STUDENTS_MARKS_BY_CLASS_ID_AND_EXAM_ID`;
 export const GET_STAFF_SUBJECT_LIST_BY_CLASS_ID = `GET_STAFF_SUBJECT_LIST_BY_CLASS_ID`;
+export const GET_STUDENTS_LIST_FOR_ASSIGN = `GET_STUDENTS_LIST_FOR_ASSIGN`;
 
 export default <EndpointDetails>{
   [REGISTER_USER]: {
@@ -230,7 +232,7 @@ export default <EndpointDetails>{
     endpoint: `/api/grade`,
   },
   [GET_CLASS_LIST]: {
-    requestType: `GET`,
+    requestType: `PUT`,
     endpoint: `/api/class`,
   },
   [GET_CLASS_BY_ID]: {
@@ -286,7 +288,7 @@ export default <EndpointDetails>{
     endpoint: `/api/subject/assessment-format/[id]`,
   },
   [GET_BATCHES_LIST]: {
-    requestType: `GET`,
+    requestType: `PUT`,
     endpoint: `/api/batch`,
   },
   [CREATE_BATCH]: {
@@ -458,11 +460,11 @@ export default <EndpointDetails>{
     endpoint: `/api/exam/subject`,
   },
   [GET_EXAM_TYPE_LIST]: {
-    requestType: `GET`,
+    requestType: `PUT`,
     endpoint: `/api/exam/exam-type`,
   },
   [GET_TERM_LIST]: {
-    requestType: `GET`,
+    requestType: `PUT`,
     endpoint: `/api/exam/term`,
   },
   [GET_ASSESSMENT_FORMAT_BY_SUBJECT_ID]: {
@@ -489,9 +491,9 @@ export default <EndpointDetails>{
     requestType: `PUT`,
     endpoint: `/api/mark-entry/subjects`,
   },
-  [GET_STUDENTS_BY_CLASS_SECTION]: {
+  [GET_MARK_ENTRY_FORM_STRUCTURE]: {
     requestType: `PUT`,
-    endpoint: `/api/mark-entry/students`,
+    endpoint: `/api/mark-entry/formData`,
   },
   [ADD_MARK_ENTRY]: {
     requestType: `POST`,
@@ -572,5 +574,9 @@ export default <EndpointDetails>{
   [GET_STAFF_SUBJECT_LIST_BY_CLASS_ID]: {
     requestType: `GET`,
     endpoint: `/api/class/[id]/staffs/[id]/subjects`,
+  },
+  [UPDATE_STUDENT_BY_ID]: {
+    requestType: `PUT`,
+    endpoint: `/api/student/[id]`,
   },
 };

@@ -1,13 +1,15 @@
 'use client';
 
+/* eslint-disable react/no-unescaped-entities */
 import { useGetBatchesListQuery } from 'lib/queries/batches/useGetBatchesListQuery';
 import { useGetClassListQuery } from 'lib/queries/class/useGetClassListQuery';
 import { useGetGroupListQuery } from 'lib/queries/group/useGetGroupListQuery';
 import { useGetMediumListQuery } from 'lib/queries/medium/useGetMediumListQuery';
 import { useGetStudentByIdQuery } from 'lib/queries/students/useGetStudentByIdQuery';
-/* eslint-disable react/no-unescaped-entities */
+import { useUpdateStudentMutationById } from 'lib/queries/students/useUpdateStudentMutationByIdQuery';
+import { formatStudentPayload } from 'lib/utils/formatters';
 import { Check, Loader2 } from 'lucide-react';
-import { useParams } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import {
@@ -48,6 +50,7 @@ export function EditStudentDetail() {
   const { data: classList } = useGetClassListQuery({
     page,
     limit,
+    filter,
   });
 
   const { data: groupList } = useGetGroupListQuery({
@@ -60,6 +63,9 @@ export function EditStudentDetail() {
     limit,
     filter,
   });
+  const router = useRouter();
+  const { mutateAsync: updateStudentMutationAsync } =
+    useUpdateStudentMutationById();
 
   const { data: studentDetail, isLoading: isStudentDetailLoading } =
     useGetStudentByIdQuery(id);
@@ -145,20 +151,24 @@ export function EditStudentDetail() {
       };
       reset(initialValue);
     }
-    // console.log(studentDetail?.additionalAttributes?.caste);
   }, [studentDetail]);
 
-  const [, setFormData] = useState({} as Record<string, unknown>);
-
   const handleOnFormSubmit = async (data: Record<string, unknown>) => {
-    setFormData(data);
+    const payload = formatStudentPayload(data);
+    const response = await updateStudentMutationAsync({
+      id: id,
+      ...payload,
+    });
+    if (response) {
+      router.push(`/students/list`);
+    }
   };
 
   if (isStudentDetailLoading) {
     return (
       <div className="flex h-20 items-center justify-center">
-        <Loader2 className="mr-2  w-6 animate-spin text-black" />
-        <p className=" text-black">Fetching Student Details...</p>
+        <Loader2 className="mr-2 w-6 animate-spin text-black" />
+        <p className="text-black ">Fetching Student Details...</p>
       </div>
     );
   }
@@ -190,7 +200,7 @@ export function EditStudentDetail() {
   };
 
   const nextPage = () => {
-    setCurrentPage((prevPage) => Math.min(prevPage + 1, 7));
+    setCurrentPage((prevPage) => Math.min(prevPage + 1, 8));
   };
 
   return (
@@ -228,7 +238,7 @@ export function EditStudentDetail() {
               type="button"
               variant="link"
               onClick={() => goToPage(2)}
-              className=" cursor-pointer  px-4 py-1 hover:no-underline"
+              className="cursor-pointer px-4 py-1  hover:no-underline"
             >
               <h2
                 className={`px-2 text-left text-sm font-semibold ${
@@ -247,7 +257,7 @@ export function EditStudentDetail() {
               type="button"
               variant="link"
               onClick={() => goToPage(3)}
-              className=" cursor-pointer px-4 py-1 hover:no-underline"
+              className="cursor-pointer px-4 py-1  hover:no-underline"
             >
               <h2
                 className={`px-2 text-left text-sm font-semibold ${
@@ -266,7 +276,7 @@ export function EditStudentDetail() {
               type="button"
               variant="link"
               onClick={() => goToPage(4)}
-              className=" cursor-pointer px-4 py-1 hover:no-underline"
+              className="cursor-pointer px-4 py-1  hover:no-underline"
             >
               <h2
                 className={`px-2 text-left text-sm font-semibold ${
@@ -285,7 +295,7 @@ export function EditStudentDetail() {
               type="button"
               variant="link"
               onClick={() => goToPage(5)}
-              className=" cursor-pointer px-4 py-1 hover:no-underline"
+              className="cursor-pointer px-4 py-1  hover:no-underline"
             >
               <h2
                 className={`px-2  text-sm font-semibold ${
@@ -304,7 +314,7 @@ export function EditStudentDetail() {
               type="button"
               variant="link"
               onClick={() => goToPage(6)}
-              className=" cursor-pointer  px-4 py-1 hover:no-underline"
+              className="cursor-pointer px-4 py-1  hover:no-underline"
             >
               <h2
                 className={`px-2 text-left text-sm font-semibold ${
@@ -324,7 +334,7 @@ export function EditStudentDetail() {
               type="button"
               variant="link"
               onClick={() => goToPage(7)}
-              className=" cursor-pointer px-4 py-1 hover:no-underline"
+              className="cursor-pointer px-4 py-1  hover:no-underline"
             >
               <h2
                 className={`px-2 text-left text-sm font-semibold ${
@@ -483,7 +493,7 @@ export function EditStudentDetail() {
                   <SelectContent>
                     <SelectGroup>
                       <SelectItem value={'O+'}>{'O+'}</SelectItem>
-                      <SelectItem value={'O+'}>{'O-'}</SelectItem>
+                      <SelectItem value={'O-'}>{'O-'}</SelectItem>
                       <SelectItem value={'A+'}>{'A+'}</SelectItem>
                       <SelectItem value={'A-'}>{'A-'}</SelectItem>
                       <SelectItem value={'B+'}>{'B+'}</SelectItem>
@@ -1374,7 +1384,7 @@ export function EditStudentDetail() {
               Back
             </Button>
             <Button
-              type="submit"
+              type={currentPage === 8 ? 'submit' : 'button'}
               onClick={nextPage}
               className="rounded px-4 py-2 font-bold text-white "
             >
