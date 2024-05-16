@@ -34,7 +34,11 @@ export function StaffList() {
     <section className="grid w-full grid-cols-4 justify-between gap-4 px-0">
       {staffListResponse.map((staffItem) => (
         <div key={staffItem.id}>
-          <StaffCard id={staffItem.id} name={staffItem.firstName} />
+          <StaffCard
+            id={staffItem.id}
+            name={staffItem.firstName}
+            academicYearId={staffItem.academicYear.id}
+          />
         </div>
       ))}
     </section>

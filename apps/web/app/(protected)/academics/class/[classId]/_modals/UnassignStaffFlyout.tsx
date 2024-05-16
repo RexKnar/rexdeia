@@ -1,8 +1,14 @@
 'use client';
 
+import { useGetStaffSubjectListByClassIdQuery } from 'lib/queries/staff/useGetStaffSubjectListQuery';
 import { CircleMinus } from 'lucide-react';
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import {
+  useParams,
+  usePathname,
+  useRouter,
+  useSearchParams,
+} from 'next/navigation';
+import { useEffect } from 'react';
 import { Controller, useFieldArray, useForm } from 'react-hook-form';
 import {
   Button,
@@ -14,31 +20,21 @@ import {
   Text,
 } from 'ui';
 
-const staffSubjectList = [
-  {
-    sectionid: 1,
-    sectionname: 'SectionA',
-    subjects: [
-      { id: 1, name: 'Tamil' },
-      { id: 2, name: 'English' },
-    ],
-  },
-  {
-    sectionid: 2,
-    sectionname: 'SectionB',
-    subjects: [
-      { id: 1, name: 'Tamil' },
-      { id: 2, name: 'English' },
-    ],
-  },
-];
 export function UnassignStaffFlyout() {
   const pathname = usePathname();
   const router = useRouter();
   const searchParams = useSearchParams();
+  const params = useParams<{ id: string }>();
 
   const isOpen = searchParams.get('isUnassignStaffFlyoutOpen') === 'true';
-  const [isSetStaffValue, setIsSetStaffValue] = useState(false);
+  const staffId = searchParams.get('staffId');
+  const academicYearId = searchParams.get('academicYearId');
+
+  const { data: getStaffSubjectListResponse } =
+    useGetStaffSubjectListByClassIdQuery(params.id, staffId, academicYearId, {
+      enabled: !!staffId,
+    });
+
   const {
     handleSubmit,
     control,
@@ -60,17 +56,16 @@ export function UnassignStaffFlyout() {
   };
 
   useEffect(() => {
-    if (isOpen && !isSetStaffValue) {
-      staffSubjectList.forEach((section) => {
+    if (isOpen && getStaffSubjectListResponse) {
+      getStaffSubjectListResponse.forEach((item) => {
         append({
-          sectionId: section.sectionid,
-          sectionName: section.sectionname,
+          sectionId: item.section.id,
+          sectionName: item.section.name,
           subjects: [],
         });
       });
-      setIsSetStaffValue(true);
     }
-  }, [isOpen]);
+  }, [isOpen, getStaffSubjectListResponse]);
   return (
     <section>
       <Sheet open={isOpen}>
@@ -101,54 +96,56 @@ export function UnassignStaffFlyout() {
                 </Text>
               </div>
               {fields.length}
-              {fields.map((section, index) => {
+              {/* {fields.map((section, index) => {
                 return (
                   <div className="mt-2" key={index}>
                     <label
                       htmlFor="subjectName"
                       className="text-sm font-semibold text-gray-700"
                     ></label>
-                    <div className="me-6 mt-2 flex flex-wrap items-center">
-                      {staffSubjectList[index].subjects.map((subject) => {
-                        return (
-                          <Controller
-                            key={subject.id}
-                            control={control}
-                            name={`sections.${index}.subjects`}
-                            render={({ field }) => (
-                              <>
-                                <Checkbox
-                                  className="me-2 items-center space-x-2 rounded border border-primary-500"
-                                  checked={field.value.includes(subject.id)}
-                                  onCheckedChange={(checked) => {
-                                    if (checked) {
-                                      field.onChange([
-                                        ...field.value,
-                                        subject.id,
-                                      ]);
-                                    } else {
-                                      field.onChange(
-                                        field.value.filter(
-                                          (id) => id !== subject.id
-                                        )
-                                      );
-                                    }
-                                  }}
-                                >
-                                  {subject.name}
-                                </Checkbox>
-                                <label className="me-5">
-                                  <span>{subject.name}</span>
-                                </label>
-                              </>
-                            )}
-                          />
-                        );
-                      })}
+                    <div className="flex flex-wrap items-center mt-2 me-6">
+                      {getStaffSubjectListResponse[index].subjects.map(
+                        (subject) => {
+                          return (
+                            <Controller
+                              key={subject.id}
+                              control={control}
+                              name={`sections.${index}.subjects`}
+                              render={({ field }) => (
+                                <>
+                                  <Checkbox
+                                    className="items-center space-x-2 border rounded me-2 border-primary-500"
+                                    checked={field.value.includes(subject.id)}
+                                    onCheckedChange={(checked) => {
+                                      if (checked) {
+                                        field.onChange([
+                                          ...field.value,
+                                          subject.id,
+                                        ]);
+                                      } else {
+                                        field.onChange(
+                                          field.value.filter(
+                                            (id) => id !== subject.id
+                                          )
+                                        );
+                                      }
+                                    }}
+                                  >
+                                    {subject.name}
+                                  </Checkbox>
+                                  <label className="me-5">
+                                    <span>{subject.name}</span>
+                                  </label>
+                                </>
+                              )}
+                            />
+                          );
+                        }
+                      )}
                     </div>
                   </div>
                 );
-              })}
+              })} */}
             </div>
             <Button
               type="submit"
