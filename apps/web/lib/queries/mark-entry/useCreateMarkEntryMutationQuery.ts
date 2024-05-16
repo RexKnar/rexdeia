@@ -9,9 +9,6 @@ export function useCreateMarkEntryQuery() {
   return useMutation({
     mutationFn: async (payload: AddMarkEntryModel) => {
       await makeAPICall<AddMarkEntryModel>(ADD_MARK_ENTRY, payload, {}, {});
-      await queryClient.invalidateQueries({
-        queryKey: [GET_EXAM_LIST],
-      });
     },
     onSuccess: async () => {
       await queryClient.refetchQueries({

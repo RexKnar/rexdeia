@@ -1,6 +1,5 @@
 'use client';
-import { useGetMarksWithFormatByExamQuery } from 'lib/queries/mark-entry/useGetMarkswithFormatbyExamQuery';
-import { useSearchParams } from 'next/navigation';
+
 import { useEffect, useRef } from 'react';
 import { useFieldArray } from 'react-hook-form';
 import { Input } from 'ui';
@@ -9,38 +8,26 @@ export function MarkFields({
   nestIndex,
   control,
   assessmentFormats,
-  assessmentId,
   subjectIndex,
 }) {
-  const searchParams = useSearchParams();
-  const examId = searchParams.get('examId');
-  const { data: marksWithFormat, isPending: loadingMarks } =
-    useGetMarksWithFormatByExamQuery({ examId });
-  // eslint-disable-next-line no-console
-  console.log(marksWithFormat, loadingMarks);
-
   const { fields, append } = useFieldArray({
     control,
     name: `studentsMarkDetails.${nestIndex}].subjects.${subjectIndex}.marks`,
   });
 
   const prevAssessmentFormats = useRef(null);
-  const prevAssessmentId = useRef(null);
 
   useEffect(() => {
-    if (
-      assessmentFormats === prevAssessmentFormats.current &&
-      assessmentId === prevAssessmentId.current
-    ) {
+    if (assessmentFormats === prevAssessmentFormats.current) {
       return;
     }
 
     if (assessmentFormats) {
-      const newFields = assessmentFormats.examConfiguration
-        .filter((config) => config.assessmentFormat != null)
+      const newFields = assessmentFormats
+        .filter((config) => config.assessmentFormat)
         .map((config) => {
           return {
-            academicExamId: assessmentId,
+            academicExamId: config.academicExamId,
             attendance: '',
             mark: '',
             assessmentFormatId: config.assessmentFormat.id || '',
@@ -51,9 +38,7 @@ export function MarkFields({
     }
 
     prevAssessmentFormats.current = assessmentFormats;
-    prevAssessmentId.current = assessmentId;
-  }, [assessmentFormats, assessmentId]);
-
+  }, [assessmentFormats]);
   return (
     <div className="flex w-full">
       {fields.map((field, formatIndex) => (
