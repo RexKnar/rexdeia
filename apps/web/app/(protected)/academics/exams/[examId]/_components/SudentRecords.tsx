@@ -43,7 +43,7 @@ export function StudentRecords({ control, register }) {
               `flex w-full items-center justify-between bg-green-100 `
             )}
           >
-            <div className="flex-none w-1/5">
+            <div className="w-1/5 flex-none">
               {studentList[index]?.firstName}
               {studentList[index]?.middleName}
               {studentList[index]?.lastName}
