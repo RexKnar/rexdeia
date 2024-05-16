@@ -36,7 +36,7 @@ export function MarkFields({
     }
 
     if (assessmentFormats) {
-      const newFields = assessmentFormats.examConfiguration
+      const newFields = assessmentFormats
         .filter((config) => config.assessmentFormat != null)
         .map((config) => {
           return {

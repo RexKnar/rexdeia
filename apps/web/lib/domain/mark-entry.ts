@@ -1,3 +1,5 @@
+import { AssessmentFormatModel } from './subject';
+
 export type MarkEntryModel = {
   id: string;
   classId: string;
@@ -28,4 +30,15 @@ export type MarksWithAssessmentFormatModel = {
 export type AddMarkEntryModel = {
   staffId: string;
   studentsMarkDetails: StudentsMarkInExamModel[];
+};
+
+export type MarkEntryFromStructureModel = {
+  id: string;
+  name: string;
+  subjects: SubjectForMarkEntry[];
+};
+export type SubjectForMarkEntry = {
+  id: string;
+  name: string;
+  assessmentFormat: AssessmentFormatModel;
 };

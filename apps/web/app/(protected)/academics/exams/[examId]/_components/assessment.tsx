@@ -89,7 +89,7 @@ export function Assessment() {
 
   return (
     <form onSubmit={handleSubmit(saveMarkEntry)}>
-      <div className="mb-4 flex justify-between rounded-md bg-white">
+      <div className="flex justify-between mb-4 bg-white rounded-md">
         <Select
           onValueChange={(value) => {
             if (value) {
@@ -186,8 +186,8 @@ export function Assessment() {
         </Select>
       </div>
       <div className="w-auto overflow-x-scroll bg-green-100">
-        <div className="flex items-center justify-between bg-green-100 p-4 font-bold ">
-          <div className="w-1/5 flex-none">Student</div>
+        <div className="flex items-center justify-between p-4 font-bold bg-green-100 ">
+          <div className="flex-none w-1/5">Student</div>
           {subjectsWithFormats?.map((subject, index) => (
             <div
               key={index}
@@ -207,7 +207,7 @@ export function Assessment() {
       <Button className="text-center" type="submit">
         {isPendingCreateMarkEntry ? (
           <div className="flex items-center justify-center">
-            <Loader2 className="mr-2 h-6 w-6 animate-spin text-white" />
+            <Loader2 className="w-6 h-6 mr-2 text-white animate-spin" />
             Saving
           </div>
         ) : (

@@ -1,6 +1,6 @@
 'use client';
 
-import { useGetStudentsByClassSectionQuery } from 'lib/queries/mark-entry/useGetStudentsByClassSectionQuery';
+import { useGetMarkEntryFormStructureQuery } from 'lib/queries/mark-entry/useGetStudentsByClassSectionQuery';
 import { useSearchParams } from 'next/navigation';
 import { useEffect } from 'react';
 import { useFieldArray } from 'react-hook-form';
@@ -15,23 +15,23 @@ export function StudentRecords({ control, register }) {
   });
   const searchParams = useSearchParams();
   const classId = searchParams.get('classId');
-  const sectionId = searchParams.get('sectionId');
+  const examId = searchParams.get('examId');
 
-  const { data: studentList } = useGetStudentsByClassSectionQuery(
-    { classId, sectionId },
+  const { data: markEntryFormStructure } = useGetMarkEntryFormStructureQuery(
+    { classId, examId },
     {
-      enabled: !!sectionId,
+      enabled: !!examId,
     }
   );
   useEffect(() => {
-    if (fields.length === 0 && studentList) {
-      studentList?.forEach((studentDetail) => {
+    if (fields.length === 0 && markEntryFormStructure) {
+      markEntryFormStructure?.forEach((studentDetail) => {
         append({
           studentId: studentDetail.id,
         });
       });
     }
-  }, [studentList]);
+  }, [markEntryFormStructure]);
 
   return (
     <div>
@@ -43,13 +43,15 @@ export function StudentRecords({ control, register }) {
               `flex w-full items-center justify-between bg-green-100 `
             )}
           >
-            <div className="w-1/5 flex-none">
-              {studentList[index]?.firstName}
-              {studentList[index]?.middleName}
-              {studentList[index]?.lastName}
+            <div className="flex-none w-1/5">
+              {markEntryFormStructure[index]?.name}
             </div>
 
-            <AssessmentSubjects nestIndex={index} {...{ control, register }} />
+            {/* <AssessmentSubjects
+              nestIndex={index}
+              subjects={markEntryFormStructure[index]?.subjects}
+              {...{ control, register }}
+            /> */}
           </div>
         );
       })}
