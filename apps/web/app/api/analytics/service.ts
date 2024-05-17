@@ -1,9 +1,9 @@
 import { db } from 'lib/db';
 
-type StudentMarksFilter = {
-  classId?: string;
-  examId?: string;
-};
+// type StudentMarksFilter = {
+//   classId?: string;
+//   examId?: string;
+// };
 
 export async function getStudentsByFilter(
   page: number,
@@ -60,7 +60,7 @@ export async function getStudentsByFilter(
 export async function getMarksByFilter(filter: any) {
   const { academicExamId, classId, examId } = filter;
 
-  const whereClause: StudentMarksFilter = {};
+  const whereClause = {};
 
   if (examId !== undefined) {
     whereClause['examId'] = examId;
@@ -74,7 +74,7 @@ export async function getMarksByFilter(filter: any) {
   const [studentsMarks] = await Promise.all([
     db.studentMapping.findMany({
       where: {
-        classId: whereClause.classId,
+        classId: classId,
       },
       select: {
         student: {
@@ -84,36 +84,52 @@ export async function getMarksByFilter(filter: any) {
           },
         },
         group: {
-          select: {
+          include: {
             subjectToGroup: {
+              where: {
+                subject: {
+                  academicExams: {
+                    some: {
+                      examId: examId,
+                    },
+                  },
+                },
+              },
               select: {
                 subject: {
                   select: {
                     academicExams: {
-                      where: { examId: whereClause.examId },
-                      select: {
-                        markEntry: {
+                      include: {
+                        examConfiguration: {
                           select: {
-                            mark: true,
-                            attandance: true,
+                            minPassMark: true,
+                            markToConduct: true,
+                            markToConvert: true,
                             assessmentFormat: {
                               select: {
                                 id: true,
                                 name: true,
-                              },
-                            },
-                            student: {
-                              select: {
-                                id: true,
-                                firstName: true,
+                                isActive: true,
+                                hasMarkEntry: true,
+                                markEntry: {
+                                  select: {
+                                    id: true,
+                                    mark: true,
+                                    attandance: true,
+                                    studentId: true,
+                                    staffId: true,
+                                    assessmentFormatId: true,
+                                    academicExamId: true,
+                                  },
+                                },
                               },
                             },
                           },
                         },
                       },
                     },
-                    id: true,
                     name: true,
+                    id: true,
                   },
                 },
               },
@@ -124,114 +140,194 @@ export async function getMarksByFilter(filter: any) {
     }),
   ]);
 
-  function restructuredStudentsMarks(studentsMarks) {
-    return studentsMarks.map((item) => {
+  function restructureResponse(data) {
+    return data.map((item) => {
       let studentId = item.student.id;
       return {
-        studentId: item.student.id,
-        studentName: item.student.firstName,
+        id: item.student.id,
+        name: item.student.firstName,
         subjects: item.group.subjectToGroup.map((subject) => {
-          const marks = subject.subject.academicExams.flatMap((exam) => {
-            return exam.markEntry.filter(
-              (mark) => mark.student.id === studentId
-            );
+          const assessment = subject.subject.academicExams.map((assessment) => {
+            let formatList = [];
+            assessment.examConfiguration.forEach((format) => {
+              const academicExamId = assessment.id;
+              const assessmentFormatId = format?.assessmentFormat?.id;
+
+              const mark = format.assessmentFormat?.markEntry?.filter(
+                (entry) =>
+                  entry.studentId === studentId &&
+                  entry?.academicExamId === academicExamId &&
+                  entry?.assessmentFormatId === assessmentFormatId
+              );
+              if (mark?.length) {
+                formatList.push(mark[0]);
+              }
+            });
+            return formatList;
           });
           return {
-            subjectId: subject.subject.id,
-            subjectName: subject.subject.name,
-            marks: marks,
+            id: subject.subject.id,
+            name: subject.subject.name,
+            assessmentFormat: assessment.flatMap((format) => format),
           };
         }),
       };
     });
   }
+  const studentMarks = await restructureResponse(studentsMarks);
 
-  const studentMarks = restructuredStudentsMarks(studentsMarks);
+  // function findClassAnalytics(studentMarks) {
+  //   let subjectAnalyticsMap = {};
+  //   let classFirstMark = {
+  //     mark: -Infinity,
+  //     studentId: '',
+  //     studentName: '',
+  //   };
+  //   let classLastMark = {
+  //     mark: Infinity,
+  //     studentId: '',
+  //     studentName: '',
+  //   };
 
-  const analytics = findClassAnalytics(studentsMarks);
-  function findClassAnalytics(studentsMarks) {
-    let subjectAnalytics = {};
-    let classFirstMark = {
-      mark: -Infinity,
-      studentId: '',
-      studentName: '',
-    };
+  //   for (const student of studentMarks) {
+  //     let studentTotalMarks = 0;
+
+  //     for (const subject of student.subjects) {
+  //       const { name: subjectName, assessmentFormat: marks } = subject;
+  //       const subjectTotalMarks = marks.reduce(
+  //         (total, mark) => total + mark.mark,
+  //         0
+  //       );
+
+  //       if (!subjectAnalyticsMap[subjectName]) {
+  //         subjectAnalyticsMap[subjectName] = {
+  //           subjectName: subjectName,
+  //           highestMark: {
+  //             mark: -Infinity,
+  //             studentId: '',
+  //             studentName: '',
+  //           },
+  //           lowestMark: {
+  //             mark: Infinity,
+  //             studentId: '',
+  //             studentName: '',
+  //           },
+  //         };
+  //       }
+
+  //       let subjectData = subjectAnalyticsMap[subjectName];
+
+  //       if (subjectTotalMarks > subjectData.highestMark.mark) {
+  //         subjectData.highestMark = {
+  //           mark: subjectTotalMarks,
+  //           studentId: student.id,
+  //           studentName: student.name,
+  //         };
+  //       }
+
+  //       if (subjectTotalMarks < subjectData.lowestMark.mark) {
+  //         subjectData.lowestMark = {
+  //           mark: subjectTotalMarks,
+  //           studentId: student.id,
+  //           studentName: student.name,
+  //         };
+  //       }
+
+  //       studentTotalMarks += subjectTotalMarks;
+  //     }
+
+  //     if (studentTotalMarks > classFirstMark.mark) {
+  //       classFirstMark = {
+  //         mark: studentTotalMarks,
+  //         studentId: student.id,
+  //         studentName: student.name,
+  //       };
+  //     }
+
+  //     if (studentTotalMarks < classLastMark.mark) {
+  //       classLastMark = {
+  //         mark: studentTotalMarks,
+  //         studentId: student.id,
+  //         studentName: student.name,
+  //       };
+  //     }
+  //   }
+
+  //   let subjectAnalytics = Object.keys(subjectAnalyticsMap).map(
+  //     (subjectName) => subjectAnalyticsMap[subjectName]
+  //   );
+
+  //   return { subjectAnalytics, classFirstMark, classLastMark };
+  // }
+
+  function findClassAnalytics(studentMarks) {
+    let subjectAnalyticsMap = {};
+    let totalStudents = 0;
+    let classFirstMark = { mark: -Infinity, studentId: '', studentName: '' };
     let classLastMark = { mark: Infinity, studentId: '', studentName: '' };
 
-    for (const student of studentsMarks) {
+    for (const student of studentMarks) {
       let studentTotalMarks = 0;
-
-      for (const subject of student.subjects) {
-        const { subjectName, marks } = subject;
-
-        if (!subjectAnalytics[subjectName]) {
-          subjectAnalytics[subjectName] = {
-            highestMark: { mark: -Infinity, studentId: '', studentName: '' },
-            lowestMark: { mark: Infinity, studentId: '', studentName: '' },
-            totalMarks: 0,
-            studentsCount: 0,
-          };
-        }
-
+      for (const {
+        name: subjectName,
+        assessmentFormat: marks,
+      } of student.subjects) {
         const subjectTotalMarks = marks.reduce(
-          (total, mark) => total + mark.mark,
+          (total, { mark }) => total + mark,
           0
         );
 
-        const subjectEntry = subjectAnalytics[subjectName];
-        subjectEntry.highestMark =
-          Math.max(subjectEntry.highestMark.mark, subjectTotalMarks) ===
-          subjectTotalMarks
-            ? {
-                mark: subjectTotalMarks,
-                studentId: student.studentId,
-                studentName: student.studentName,
-              }
-            : subjectEntry.highestMark;
+        subjectAnalyticsMap[subjectName] = subjectAnalyticsMap[subjectName] || {
+          subjectName,
+          highestMark: { mark: -Infinity, studentId: '', studentName: '' },
+          lowestMark: { mark: Infinity, studentId: '', studentName: '' },
+        };
 
-        subjectEntry.lowestMark =
-          Math.min(subjectEntry.lowestMark.mark, subjectTotalMarks) ===
-          subjectTotalMarks
-            ? {
-                mark: subjectTotalMarks,
-                studentId: student.studentId,
-                studentName: student.studentName,
-              }
-            : subjectEntry.lowestMark;
+        let subjectData = subjectAnalyticsMap[subjectName];
+
+        if (subjectTotalMarks > subjectData.highestMark.mark) {
+          subjectData.highestMark = {
+            mark: subjectTotalMarks,
+            studentId: student.id,
+            studentName: student.name,
+          };
+        }
+
+        if (subjectTotalMarks < subjectData.lowestMark.mark) {
+          subjectData.lowestMark = {
+            mark: subjectTotalMarks,
+            studentId: student.id,
+            studentName: student.name,
+          };
+        }
 
         studentTotalMarks += subjectTotalMarks;
-
-        subjectEntry.totalMarks += subjectTotalMarks;
-        subjectEntry.studentsCount++;
       }
 
       if (studentTotalMarks > classFirstMark.mark) {
         classFirstMark = {
           mark: studentTotalMarks,
-          studentId: student.studentId,
-          studentName: student.studentName,
+          studentId: student.id,
+          studentName: student.name,
         };
       }
+
       if (studentTotalMarks < classLastMark.mark) {
         classLastMark = {
           mark: studentTotalMarks,
-          studentId: student.studentId,
-          studentName: student.studentName,
+          studentId: student.id,
+          studentName: student.name,
         };
       }
+      totalStudents++;
     }
 
-    Object.keys(subjectAnalytics).forEach((subjectName) => {
-      const subjectData = subjectAnalytics[subjectName];
-      subjectData.averageMark =
-        subjectData.totalMarks / subjectData.studentsCount;
-    });
+    let subjectAnalytics = Object.values(subjectAnalyticsMap);
 
-    return { subjectAnalytics, classFirstMark, classLastMark };
+    return { subjectAnalytics, totalStudents, classFirstMark, classLastMark };
   }
 
-  return {
-    studentMarks,
-    analytics,
-  };
+  const analytics = findClassAnalytics(studentMarks);
+
+  return { studentMarks, analytics };
 }
