@@ -3,6 +3,7 @@
 
 import { useGetClassListQuery } from 'lib/queries/class/useGetClassListQuery';
 import { useGetExamListQuery } from 'lib/queries/exams/useGetExamListQuery';
+import { useGetGroupListQuery } from 'lib/queries/group/useGetGroupListQuery';
 import { useGetAllSectionByClassIdQuery } from 'lib/queries/section/useGetAllSectionsByClassIdQuery';
 import React, { useState } from 'react';
 import {
@@ -42,6 +43,11 @@ export function StudentAnalytics() {
     filter,
     classId,
   });
+  const { data: groupList } = useGetGroupListQuery({
+    page,
+    limit,
+    filter,
+  });
   const handleValueChange = (newValue) => {
     setSliderValues(newValue);
   };
@@ -73,6 +79,14 @@ export function StudentAnalytics() {
     {
       id: 'subjectd',
       value: 'Maths',
+    },
+    {
+      id: 'subjectd',
+      value: 'Science',
+    },
+    {
+      id: 'subjectd',
+      value: 'Social',
     },
   ];
   return (
@@ -114,34 +128,76 @@ export function StudentAnalytics() {
             </Select>
           </div>
           <div className="w-4/12">
-            <label className="mt-1 block text-sm text-gray-700">Section</label>
-            <Select autoComplete="off">
-              <SelectTrigger className="w-full">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectGroup>
-                  {sectionList?.data?.map((item) => (
-                    <SelectItem key={item.id} value={item.id}>
-                      {item.name}
-                    </SelectItem>
-                  ))}
-                </SelectGroup>
-              </SelectContent>
-            </Select>
-          </div>
-          <div>
             <label className="mt-1 block text-sm text-gray-700">Status</label>
             <RadioGroup className="mt-3 flex gap-2">
               <RadioGroupItem className="mr-1 mt-1" value={'pass'} /> {'Pass'}
               <RadioGroupItem className="ml-3 mr-1 mt-1 " value={'fail'} />
               {'Fail'}
+              <RadioGroupItem className="ml-3 mr-1 mt-1 " value={'both'} />
+              {'Both'}
             </RadioGroup>
           </div>
         </div>
         <div>
           <div className="mt-7 flex gap-4">
-            <div className="w-full">
+            <div className="w-4/12">
+              <label className="mt-1 block text-sm text-gray-700">
+                Section
+              </label>
+              <Select autoComplete="off">
+                <SelectTrigger className="w-full">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectGroup>
+                    {sectionList?.data?.map((item) => (
+                      <SelectItem key={item.id} value={item.id}>
+                        {item.name}
+                      </SelectItem>
+                    ))}
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="w-4/12">
+              <label className="mt-1 block text-sm text-gray-700">Group</label>
+              <Select autoComplete="off">
+                <SelectTrigger className="w-full">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectGroup>
+                    {groupList?.data?.map((item) => (
+                      <SelectItem key={item.id} value={item.id}>
+                        {item.name}
+                      </SelectItem>
+                    ))}
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="w-4/12">
+              <label className="mt-1 block text-sm text-gray-700">
+                No of Subjects
+              </label>
+              <Select autoComplete="off">
+                <SelectTrigger className="w-full">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectGroup>
+                    {subjects.map((item, index) => (
+                      <SelectItem value={(index + 1).toString()} key={index}>
+                        {index + 1}
+                      </SelectItem>
+                    ))}
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+          <div className="mt-7 flex gap-4">
+            <div className="w-8/12">
               <label className="mt-2 text-gray-700">Filter By Mark</label>
               <div className="mt-2 flex">
                 {' '}
@@ -181,32 +237,13 @@ export function StudentAnalytics() {
                 />
               </div>
             </div>
-            {subjects.map((item, index) => (
-              <div className="mt-10 ">
-                <div className="flex justify-center gap-2">
+            <div className="grid grid-cols-3 grid-rows-2 gap-3">
+              {subjects.map((item, index) => (
+                <div className="flex items-center gap-2">
                   <Checkbox value={item.id} key={index} />
                   <span>{item.value}</span>
                 </div>
-              </div>
-            ))}
-            <div className="w-6/12">
-              <label className="mt-1 block text-sm text-gray-700">
-                No of Subjects
-              </label>
-              <Select autoComplete="off">
-                <SelectTrigger className="w-full">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectGroup>
-                    {subjects.map((item, index) => (
-                      <SelectItem value={(index + 1).toString()} key={index}>
-                        {index + 1}
-                      </SelectItem>
-                    ))}
-                  </SelectGroup>
-                </SelectContent>
-              </Select>
+              ))}{' '}
             </div>
           </div>
         </div>
