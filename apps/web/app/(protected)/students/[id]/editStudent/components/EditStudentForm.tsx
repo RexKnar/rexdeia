@@ -200,7 +200,7 @@ export function EditStudentDetail() {
   };
 
   const nextPage = () => {
-    setCurrentPage((prevPage) => Math.min(prevPage + 1, 8));
+    setCurrentPage((prevPage) => Math.min(prevPage + 1, 7));
   };
 
   return (
@@ -238,7 +238,7 @@ export function EditStudentDetail() {
               type="button"
               variant="link"
               onClick={() => goToPage(2)}
-              className="cursor-pointer px-4 py-1  hover:no-underline"
+              className="cursor-pointer px-4 py-1 hover:no-underline"
             >
               <h2
                 className={`px-2 text-left text-sm font-semibold ${
@@ -257,7 +257,7 @@ export function EditStudentDetail() {
               type="button"
               variant="link"
               onClick={() => goToPage(3)}
-              className="cursor-pointer px-4 py-1  hover:no-underline"
+              className="cursor-pointer px-4 py-1 hover:no-underline"
             >
               <h2
                 className={`px-2 text-left text-sm font-semibold ${
@@ -276,7 +276,7 @@ export function EditStudentDetail() {
               type="button"
               variant="link"
               onClick={() => goToPage(4)}
-              className="cursor-pointer px-4 py-1  hover:no-underline"
+              className="cursor-pointer px-4 py-1 hover:no-underline"
             >
               <h2
                 className={`px-2 text-left text-sm font-semibold ${
@@ -295,7 +295,7 @@ export function EditStudentDetail() {
               type="button"
               variant="link"
               onClick={() => goToPage(5)}
-              className="cursor-pointer px-4 py-1  hover:no-underline"
+              className="cursor-pointer px-4 py-1 hover:no-underline"
             >
               <h2
                 className={`px-2  text-sm font-semibold ${
@@ -314,7 +314,7 @@ export function EditStudentDetail() {
               type="button"
               variant="link"
               onClick={() => goToPage(6)}
-              className="cursor-pointer px-4 py-1  hover:no-underline"
+              className="cursor-pointer px-4 py-1 hover:no-underline"
             >
               <h2
                 className={`px-2 text-left text-sm font-semibold ${
@@ -334,7 +334,7 @@ export function EditStudentDetail() {
               type="button"
               variant="link"
               onClick={() => goToPage(7)}
-              className="cursor-pointer px-4 py-1  hover:no-underline"
+              className="cursor-pointer px-4 py-1 hover:no-underline"
             >
               <h2
                 className={`px-2 text-left text-sm font-semibold ${
@@ -1384,7 +1384,7 @@ export function EditStudentDetail() {
               Back
             </Button>
             <Button
-              type={currentPage === 8 ? 'submit' : 'button'}
+              type={currentPage === 7 ? 'submit' : 'button'}
               onClick={nextPage}
               className="rounded px-4 py-2 font-bold text-white "
             >
