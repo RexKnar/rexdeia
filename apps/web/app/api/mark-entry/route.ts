@@ -4,7 +4,7 @@ import { authOptions } from 'lib/auth';
 import { NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 
-import { createMarkEntry, getMarksByStudentAndAcademicExams } from './service';
+import { createMarkEntry, getStudentsMarksByFilter } from './service';
 
 /**
  * @swagger
@@ -58,8 +58,8 @@ export async function POST(request: Request) {
  * @swagger
  * /api/mark-entry:
  *     put:
- *       summary: get marks by academic exam && student
- *       description:  get marks by academic exam && student
+ *       summary:  get Students Marks By Filter
+ *       description:   get Students Marks By Filter
  *       requestBody:
  *         required: true
  *         content:
@@ -91,10 +91,9 @@ export async function PUT(request: Request) {
   try {
     const payload = await request.json();
 
-    const marksByStudentAndAcademicExams =
-      await getMarksByStudentAndAcademicExams(payload);
+    const studentsMarks = await getStudentsMarksByFilter(payload);
 
-    return new NextResponse(JSON.stringify(marksByStudentAndAcademicExams), {
+    return new NextResponse(JSON.stringify(studentsMarks), {
       status: StatusCodes.OK,
     });
   } catch (e) {

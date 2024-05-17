@@ -9,7 +9,9 @@ export function MarkFields({
   control,
   assessmentFormats,
   subjectIndex,
+  markEnteredAssessmentFormat,
 }) {
+  // console.log(markEnteredAssessmentFormat);
   const { fields, append } = useFieldArray({
     control,
     name: `studentsMarkDetails.${nestIndex}].subjects.${subjectIndex}.marks`,
@@ -41,16 +43,27 @@ export function MarkFields({
   }, [assessmentFormats]);
   return (
     <div className="flex w-full">
-      {fields.map((field, formatIndex) => (
-        <Input
-          key={formatIndex}
-          type="text"
-          placeholder={field['assessmentFormatName']}
-          {...control.register(
-            `studentsMarkDetails.${nestIndex}.subjects.${subjectIndex}.marks.${formatIndex}.mark`
-          )}
-        />
-      ))}
+      {fields.map((field, formatIndex) => {
+        let markEnteredFormatIndex = markEnteredAssessmentFormat
+          ? markEnteredAssessmentFormat?.indexOf(
+              (obj) => obj.assessmentFormatId === field['assessmentFormatId']
+            )
+          : null;
+        let mark = markEnteredFormatIndex
+          ? markEnteredAssessmentFormat[markEnteredFormatIndex]?.mark
+          : '';
+        return (
+          <Input
+            key={formatIndex}
+            type="text"
+            placeholder={field['assessmentFormatName']}
+            {...control.register(
+              `studentsMarkDetails.${nestIndex}.subjects.${subjectIndex}.marks.${formatIndex}.mark`
+            )}
+            value={mark}
+          />
+        );
+      })}
     </div>
   );
 }

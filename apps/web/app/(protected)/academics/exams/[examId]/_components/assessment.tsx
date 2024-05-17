@@ -3,6 +3,7 @@ import { useGetClassListQuery } from 'lib/queries/class/useGetClassListQuery';
 import { useCreateMarkEntryQuery } from 'lib/queries/mark-entry/useCreateMarkEntryMutationQuery';
 import { useGetExamsByClassSectionQuery } from 'lib/queries/mark-entry/useGetExamsByClassSectionQuery';
 import { useGetMarkEntryFormStructureQuery } from 'lib/queries/mark-entry/useGetMarkEntryFormStructureQuery';
+import { useGetStudentsMarksByClassIdExamIdQuery } from 'lib/queries/mark-entry/useGetMarkswithFormatbyExamQuery';
 import { useGetStaffsBySectionQuery } from 'lib/queries/mark-entry/useGetStaffsBySectionQuery';
 import { useGetAllSectionByClassIdQuery } from 'lib/queries/section/useGetAllSectionsByClassIdQuery';
 import { ChevronDown, Loader2 } from 'lucide-react';
@@ -58,12 +59,25 @@ export function Assessment() {
       enabled: !!sectionId,
     }
   );
-  const { data: markEntryFormStructure } = useGetMarkEntryFormStructureQuery(
+  const {
+    data: markEntryFormStructure,
+    isLoading: isMarkEntryFormStructureLoading,
+  } = useGetMarkEntryFormStructureQuery(
     { classId, examId },
     {
       enabled: !!examId,
     }
   );
+  const { data: studentsMarks, isLoading: isStudentsMarksLoading } =
+    useGetStudentsMarksByClassIdExamIdQuery(
+      {
+        classId,
+        examId,
+      },
+      {
+        enabled: !!examId,
+      }
+    );
   const {
     isPending: isPendingCreateMarkEntry,
     mutateAsync: mutateCreateMarkEntryAsync,
@@ -91,9 +105,35 @@ export function Assessment() {
     }
   }, [markEntryFormStructure]);
 
+  function test() {
+    let result = studentsMarks?.indexOf(
+      (obj) => obj.id === 'efb5e3aa-37f9-4a3a-9962-d803b85e3411'
+    );
+    console.log(result);
+  }
+  test();
+
+  if (isMarkEntryFormStructureLoading) {
+    return (
+      <div className="flex items-center justify-center">
+        <Loader2 className="w-6 h-6 mr-2 text-black animate-spin" />
+        <p className="text-black ">Fetching FormData...</p>
+      </div>
+    );
+  }
+
+  if (isStudentsMarksLoading) {
+    return (
+      <div className="flex items-center justify-center">
+        <Loader2 className="w-6 h-6 mr-2 text-black animate-spin" />
+        <p className="text-black ">Fetching Students Mark...</p>
+      </div>
+    );
+  }
+
   return (
     <form onSubmit={handleSubmit(saveMarkEntry)}>
-      <div className="mb-4 flex justify-between rounded-md bg-white">
+      <div className="flex justify-between mb-4 bg-white rounded-md">
         <Select
           onValueChange={(value) => {
             if (value) {
@@ -193,42 +233,56 @@ export function Assessment() {
         <table className="min-w-full divide-y divide-gray-200 shadow-md">
           <thead className="bg-gray-50">
             <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-black">
+              <th className="px-6 py-3 text-xs font-medium tracking-wider text-left text-black uppercase">
                 Student
               </th>
               {markEntryFormStructure[0]?.subjects.map((subject) => (
                 <th
                   key={subject.id}
-                  className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-black"
+                  className="px-6 py-3 text-xs font-medium tracking-wider text-left text-black uppercase"
                 >
                   {subject.name}
                 </th>
               ))}
             </tr>
           </thead>
-          <tbody className="divide-y divide-gray-200 bg-white">
-            {studentFields.map((student, studentIndex) => (
-              <tr key={student.id}>
-                <td className="whitespace-nowrap px-6 py-4">
-                  {markEntryFormStructure[studentIndex]?.name}
-                </td>
-                <AssessmentSubjects
-                  nestIndex={studentIndex}
-                  subjects={markEntryFormStructure[studentIndex]?.subjects}
-                  {...{ control, register }}
-                />
-              </tr>
-            ))}
+          <tbody className="bg-white divide-y divide-gray-200">
+            {studentFields.map((student, studentIndex) => {
+              let studentDetailsIndex = studentsMarks?.length
+                ? studentsMarks?.indexOf(
+                    (obj) => obj.id === student['studentId']
+                  )
+                : null;
+              const studentDetail =
+                studentDetailsIndex > 0
+                  ? studentsMarks[studentDetailsIndex]?.subjects
+                  : [];
+              console.log(student['studentId']);
+              console.log(studentDetail, studentDetailsIndex);
+              return (
+                <tr key={student.id}>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    {markEntryFormStructure[studentIndex]?.name}
+                  </td>
+                  <AssessmentSubjects
+                    nestIndex={studentIndex}
+                    subjects={markEntryFormStructure[studentIndex]?.subjects}
+                    {...{ control, register }}
+                    markEnteredSubjects={studentDetail}
+                  />
+                </tr>
+              );
+            })}
           </tbody>
         </table>
       ) : (
-        'loading'
+        <div className="text-center">loading</div>
       )}
 
       <Button className="text-center" type="submit">
         {isPendingCreateMarkEntry ? (
           <div className="flex items-center justify-center">
-            <Loader2 className="mr-2 h-6 w-6 animate-spin text-white" />
+            <Loader2 className="w-6 h-6 mr-2 text-white animate-spin" />
             Saving
           </div>
         ) : (
