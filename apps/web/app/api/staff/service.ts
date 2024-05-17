@@ -1,6 +1,3 @@
-unassignstaff
-
-
 import { getServerSession } from 'next-auth';
 
 import { authOptions } from '../../../lib/auth';
@@ -176,7 +173,7 @@ export async function getAllStaffsBySectionIds(ids: string[]) {
 }
 
 export async function getAllStaffsBySectionsIdWithSubjects(ids: string[]) {
-  const staffs2 = await db.staff.findMany({
+  const staffs = await db.staff.findMany({
     where: {
       academicSubjectForStaff: {
         some: {
@@ -188,35 +185,11 @@ export async function getAllStaffsBySectionsIdWithSubjects(ids: string[]) {
     },
     include: {
       academicSubjectForStaff: {
-        include: {
-          subject: true,
-          academicYear: true,
+        where: {
+          sectionId: {
+            in: ids,
+          },
         },
-      },
-    },
-  });
-  const staffs = await db.staff.findMany({
-    include: {
-      academicSubjectForStaff: {
-        include: {
-          subject: true,
-        },
-      },
-    },
-  });
-
-  const staffs1 = await db.staff.findMany({
-    // where: {
-    //   academicSubjectForStaff: {
-    //     some: {
-    //       sectionId: {
-    //         in: ids,
-    //       },
-    //     },
-    //   },
-    // },
-    select: {
-      academicSubjectForStaff: {
         select: {
           subject: {
             select: {
@@ -231,11 +204,6 @@ export async function getAllStaffsBySectionsIdWithSubjects(ids: string[]) {
             },
           },
         },
-        where: {
-          sectionId: {
-            in: ids,
-          },
-        },
       },
     },
   });
@@ -243,7 +211,9 @@ export async function getAllStaffsBySectionsIdWithSubjects(ids: string[]) {
   const result = staffs.map(({ academicSubjectForStaff, ...rest }) => ({
     ...rest,
     subjects: academicSubjectForStaff.map((subject) => subject.subject),
-    academicYear: academicSubjectForStaff[0].academicYear,
+    academicYear: academicSubjectForStaff.length
+      ? academicSubjectForStaff[0].academicYear
+      : null,
   }));
 
   return result;

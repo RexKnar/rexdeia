@@ -117,6 +117,7 @@ export const DELETE_TERM_BY_ID = `DELETE_TERM_BY_ID`;
 export const GET_STUDENTS_MARKS_BY_CLASS_ID_AND_EXAM_ID = `GET_STUDENTS_MARKS_BY_CLASS_ID_AND_EXAM_ID`;
 export const GET_STAFF_SUBJECT_LIST_BY_CLASS_ID = `GET_STAFF_SUBJECT_LIST_BY_CLASS_ID`;
 export const GET_STUDENTS_LIST_FOR_ASSIGN = `GET_STUDENTS_LIST_FOR_ASSIGN`;
+export const UNASSIGN_STAFF_SECTION_BY_ID = `UNASSIGN_STAFF_SECTION_BY_ID`;
 
 export default <EndpointDetails>{
   [REGISTER_USER]: {
@@ -573,10 +574,14 @@ export default <EndpointDetails>{
   },
   [GET_STAFF_SUBJECT_LIST_BY_CLASS_ID]: {
     requestType: `GET`,
-    endpoint: `/api/class/[id]/staffs/[id]/subjects`,
+    endpoint: `/api/class/[id]/staffs/[staffId]/subjects`,
   },
   [UPDATE_STUDENT_BY_ID]: {
     requestType: `PUT`,
     endpoint: `/api/student/[id]`,
+  },
+  [UNASSIGN_STAFF_SECTION_BY_ID]: {
+    requestType: `DELETE`,
+    endpoint: `/api/class/[id]/staffs/[staffId]/subjects`,
   },
 };

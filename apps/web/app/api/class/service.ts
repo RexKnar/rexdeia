@@ -22,6 +22,11 @@ import { getAllStudentsBySectionIds } from '../student/service';
 type ClassFilter = {
   isActive?: boolean;
 };
+type SectionDataType = {
+  sectionId: string;
+  sectionName: string;
+  subjects: string[];
+};
 export async function getClassList(page: number, limit: number) {
   const session = await getServerSession(authOptions);
   const [data, total] = await Promise.all([
@@ -266,25 +271,29 @@ export async function assignStaffToClassWithSubject(
 export async function unMapStaffsFromClass(
   academicYearId: string,
   staffId: string,
-  sectionIds: string[],
-  subjectId?: string
+  sectionData: SectionDataType[]
 ) {
+  console.log(sectionData)
   await Promise.all(
-    sectionIds.map(async (sectionId) => {
-      const where = {
-        academicYearId_staffId_sectionId_subjectId: {
-          academicYearId: academicYearId,
-          staffId: staffId,
-          sectionId: sectionId,
-          subjectId: subjectId,
-        },
-      };
-      return await db.academicSubjectForStaff.update({
-        where,
-        data: {
-          deletedAt: new Date(),
-        },
-      });
+    sectionData.map(async (section) => {
+      if (section.subjects.length > 0) {
+        section.subjects.map(async (subject) => {
+          const where = {
+            academicYearId_staffId_sectionId_subjectId: {
+              academicYearId: academicYearId,
+              staffId: staffId,
+              sectionId: section.sectionId,
+              subjectId: subject,
+            },
+          };
+          return await db.academicSubjectForStaff.update({
+            where,
+            data: {
+              deletedAt: new Date(),
+            },
+          });
+        });
+      }
     })
   );
 }

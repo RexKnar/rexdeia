@@ -1,7 +1,9 @@
 'use client';
 
+// import { UnassignStaffModel } from 'lib/domain/staff';
 import { useGetStaffSubjectListByClassIdQuery } from 'lib/queries/staff/useGetStaffSubjectListQuery';
-import { CircleMinus } from 'lucide-react';
+import { useUnassignStaffFromSubjectMutationQurey } from 'lib/queries/staff/useUnassignStaffFromSubjectsMutationQurey';
+import { CircleMinus, Loader2 } from 'lucide-react';
 import {
   useParams,
   usePathname,
@@ -24,22 +26,29 @@ export function UnassignStaffFlyout() {
   const pathname = usePathname();
   const router = useRouter();
   const searchParams = useSearchParams();
-  const params = useParams<{ id: string }>();
+  const params = useParams<{ classId: string }>();
 
   const isOpen = searchParams.get('isUnassignStaffFlyoutOpen') === 'true';
   const staffId = searchParams.get('staffId');
   const academicYearId = searchParams.get('academicYearId');
-
   const { data: getStaffSubjectListResponse } =
-    useGetStaffSubjectListByClassIdQuery(params.id, staffId, academicYearId, {
-      enabled: !!staffId,
-    });
+    useGetStaffSubjectListByClassIdQuery(
+      params.classId,
+      staffId,
+      academicYearId,
+      {
+        enabled: !!staffId,
+      }
+    );
 
-  const {
-    handleSubmit,
-    control,
-    formState: { errors: fieldErrors },
-  } = useForm();
+  const { isPending: isUnAssignStaffPending, mutateAsync: unassignStaffAsync } =
+    useUnassignStaffFromSubjectMutationQurey(
+      params.classId,
+      staffId,
+      academicYearId
+    );
+
+  const { handleSubmit, control } = useForm();
   const { fields, append } = useFieldArray({
     control,
     name: 'sections',
@@ -47,14 +56,22 @@ export function UnassignStaffFlyout() {
 
   const closeFlyout = () => {
     const params = new URLSearchParams(searchParams);
-    params.set('isUnassignStaffFlyoutOpen', 'false');
+    params.delete('academicYearId');
+    params.delete('staffId');
+    params.delete('isUnassignStaffFlyoutOpen');
     router.replace(pathname + '?' + params.toString());
   };
 
-  const onsubmit = (data) => {
-    console.log(data, fieldErrors);
-  };
-
+  async function onsubmit(payload) {
+    try {
+      console.log(payload);
+      await unassignStaffAsync(payload);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      closeFlyout();
+    }
+  }
   useEffect(() => {
     if (isOpen && getStaffSubjectListResponse) {
       getStaffSubjectListResponse.forEach((item) => {
@@ -90,20 +107,16 @@ export function UnassignStaffFlyout() {
           </SheetHeader>
           <form onSubmit={handleSubmit(onsubmit)}>
             <div className="mt-6">
-              <div>
-                <Text variant="base-bold" className="text-gray-700">
-                  Demo
-                </Text>
-              </div>
-              {fields.length}
-              {/* {fields.map((section, index) => {
+              {fields.map((section, index) => {
                 return (
-                  <div className="mt-2" key={index}>
+                  <div className="mt-2" key={section.id}>
                     <label
                       htmlFor="subjectName"
                       className="text-sm font-semibold text-gray-700"
-                    ></label>
-                    <div className="flex flex-wrap items-center mt-2 me-6">
+                    >
+                      {getStaffSubjectListResponse[index].section.name}
+                    </label>
+                    <div className="me-6 mt-2 flex flex-wrap items-center">
                       {getStaffSubjectListResponse[index].subjects.map(
                         (subject) => {
                           return (
@@ -114,7 +127,7 @@ export function UnassignStaffFlyout() {
                               render={({ field }) => (
                                 <>
                                   <Checkbox
-                                    className="items-center space-x-2 border rounded me-2 border-primary-500"
+                                    className="me-2 items-center space-x-2 rounded border border-primary-500"
                                     checked={field.value.includes(subject.id)}
                                     onCheckedChange={(checked) => {
                                       if (checked) {
@@ -145,7 +158,7 @@ export function UnassignStaffFlyout() {
                     </div>
                   </div>
                 );
-              })} */}
+              })}
             </div>
             <Button
               type="submit"
@@ -153,7 +166,15 @@ export function UnassignStaffFlyout() {
               variant="default"
               className="mx-auto mt-8 flex justify-center px-12 py-4"
             >
-              Remove
+              {' '}
+              {isUnAssignStaffPending ? (
+                <div className="flex items-center justify-center">
+                  <Loader2 className="mr-2 h-6 w-6 animate-spin text-white" />
+                  removing
+                </div>
+              ) : (
+                'remove'
+              )}
             </Button>
           </form>
         </SheetContent>

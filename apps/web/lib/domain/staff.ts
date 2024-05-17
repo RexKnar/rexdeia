@@ -92,3 +92,12 @@ type AcademicYear = {
   id: string;
   name: string;
 };
+
+export type UnassignStaffModel = {
+  sections: sections[];
+};
+
+type sections = {
+  section: string;
+  subjects: string[];
+};
