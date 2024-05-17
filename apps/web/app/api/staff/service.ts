@@ -38,32 +38,6 @@ export async function updateStaffById(
   });
 }
 
-/**
- * @swagger
- * /api/staff:
- *     post:
- *       summary: Add new staff
- *       description: Add New staff
- *       requestBody:
- *         required: true
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *       responses:
- *         '200':
- *           description: New staff added successfully.
- *           content:
- *             application/json:
- *               schema:
- *                 # Define the schema of your staff object here
- *         '400':
- *           description: Bad request due to validation error.
- *         '401':
- *           description: Unauthorized access.
- *         '500':
- *           description: Internal server error.
- */
 export async function addStaff(staff: AddStaffModel) {
   const session = await getServerSession(authOptions);
 
@@ -220,6 +194,13 @@ export async function getAllStaffsBySectionsIdWithSubjects(ids: string[]) {
           subject: {
             select: {
               name: true,
+              id: true,
+            },
+          },
+          academicYear: {
+            select: {
+              name: true,
+              id: true,
             },
           },
         },
@@ -230,6 +211,9 @@ export async function getAllStaffsBySectionsIdWithSubjects(ids: string[]) {
   const result = staffs.map(({ academicSubjectForStaff, ...rest }) => ({
     ...rest,
     subjects: academicSubjectForStaff.map((subject) => subject.subject),
+    academicYear: academicSubjectForStaff.map(
+      (academicYear) => academicYear.academicYear
+    ),
   }));
 
   return result;

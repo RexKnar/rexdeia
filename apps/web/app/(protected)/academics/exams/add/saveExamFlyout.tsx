@@ -38,7 +38,7 @@ export function SaveExamFlyout() {
 
   const page = parseInt(getParam('page')) || 1;
   const limit = parseInt(getParam('limit')) || 999;
-  const filter = {};
+  const filter = { isActive: true };
 
   const {
     reset,
@@ -61,11 +61,13 @@ export function SaveExamFlyout() {
     useGetTermsListQuery({
       page,
       limit,
+      filter,
     });
   const { data: examTypeListResponse, isLoading: isExamTypeListLoading } =
     useGetExamTypeListQuery({
       page,
       limit,
+      filter,
     });
 
   const {

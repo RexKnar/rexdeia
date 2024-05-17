@@ -113,85 +113,6 @@ export function ExamConfigureFlyout() {
                 </SheetTitle>
                 <hr className="border-t border-gray-300"></hr>
               </SheetHeader>
-              <div className="mt-5 p-1">
-                <div>
-                  <label htmlFor="name" className="text-sm font-semibold">
-                    Subject Name
-                  </label>
-                </div>
-                <div className="mt-4">
-                  <label
-                    htmlFor="dateToConduct"
-                    className="text-sm font-semibold text-gray-700"
-                  >
-                    Date to Conduct
-                  </label>
-                  <Input
-                    type={'date'}
-                    {...register('dateToConduct', {
-                      required: 'date to Conduct is Required',
-                    })}
-                  />
-                </div>
-                <label
-                  htmlFor="name"
-                  className="text-sm font-semibold text-gray-700"
-                >
-                  mark To Conduct
-                </label>
-                <Input
-                  {...register('markToConduct', {
-                    required: ' Conduct mark is Required',
-                  })}
-                  id="markToConduct"
-                  autoFocus
-                  type="text"
-                  className="mt-2"
-                  placeholder="Mark To Conduct"
-                  errorMessage={fieldErrors?.markToConduct?.message.toString()}
-                />
-                <div className="mt-2">
-                  <label
-                    htmlFor="name"
-                    className="text-sm font-semibold text-gray-700"
-                  >
-                    Mark to Convert
-                  </label>
-                  <Input
-                    {...register('markToConvert', {
-                      required: 'Mark to Convert is Required',
-                    })}
-                    id="markToConvert"
-                    type="text"
-                    className="mt-2"
-                    placeholder="Mark to Convert"
-                    errorMessage={fieldErrors?.markToConduct?.message.toString()}
-                  />
-                </div>
-                <div className="mt-2">
-                  <label
-                    htmlFor="name"
-                    className="text-sm font-semibold text-gray-700"
-                  >
-                    Min Pass Mark
-                  </label>
-                  <Input
-                    {...register('minPassMark', {
-                      required: 'Min Pass Mark is Required',
-                    })}
-                    id="minPassMark"
-                    type="text"
-                    className="mt-2"
-                    placeholder="Min Pass Mark"
-                    errorMessage={fieldErrors?.minPassMark?.message.toString()}
-                  />
-                </div>
-                <div className="mt-1 flex justify-end">
-                  <label className="text-sm font-medium text-gray-600">
-                    From conducting mark
-                  </label>
-                </div>
-              </div>
               <div className="mt-5 flex flex-wrap">
                 {assessmentFormatResponse?.map((assessmentFormat, index) => (
                   <div className="w-1/2" key={assessmentFormat.id}>
@@ -221,7 +142,7 @@ export function ExamConfigureFlyout() {
                 <div key={row.id} className="mt-5 p-1">
                   <div>
                     <label htmlFor="name" className="text-sm font-semibold">
-                      Theory
+                      {assessmentFormatResponse[index]?.name}
                     </label>
                   </div>
                   <div className="mt-4">

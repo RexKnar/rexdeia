@@ -1,6 +1,5 @@
 'use client';
 
-import { zodResolver } from '@hookform/resolvers/zod';
 import { useGetSubjectMasterListQuery } from 'lib/queries/subject-master/useGetAllSubjectMasterQuery';
 import { PlusCircle } from 'lucide-react';
 import {
@@ -9,7 +8,6 @@ import {
   useRouter,
   useSearchParams,
 } from 'next/navigation';
-import { useEffect } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import {
   Button,
@@ -29,58 +27,13 @@ import {
   SheetTitle,
   Text,
 } from 'ui';
-import * as z from 'zod';
 
 import { CreateSubjectModel } from '../../../../../../lib/domain/subject';
 import { useGetAssessmentFormatList } from '../../../../../../lib/queries/assessment-format/useGetAssessmentFormatList';
 import { useGetGroupListQuery } from '../../../../../../lib/queries/group/useGetGroupListQuery';
 import { useGetRegulationListQuery } from '../../../../../../lib/queries/regulations/useGetRegulationListQuery';
-import { useGetAllSectionByClassIdQuery } from '../../../../../../lib/queries/section/useGetAllSectionsByClassIdQuery';
 import { useGetSubjectTypeList } from '../../../../../../lib/queries/subject-type/useGetSubjectTypeQuery';
 import { useCreateSubjectMutationByClassIdQuery } from '../../../../../../lib/queries/subjects/useCreateSubjectMutationByClassIdQuery';
-
-const schema = z.object({
-  name: z
-    .string({
-      required_error: 'Name is required',
-    })
-    .min(1),
-  subjectMasterId: z
-    .string({
-      required_error: 'Subject Master is required',
-    })
-    .min(1),
-  subjectTypeId: z
-    .string({
-      required_error: 'Subject Type is required',
-    })
-    .min(1),
-  assessmentFormatIds: z
-    .array(z.string())
-    .refine((value) => value.some((item) => item), {
-      message: 'Assessment Format is required',
-    }),
-  groupIds: z.array(z.string()).refine((value) => value.some((item) => item), {
-    message: 'Group is required',
-  }),
-  regulationId: z
-    .string({
-      required_error: 'regulation is required',
-    })
-    .min(1),
-  sectionIds: z
-    .array(z.string())
-    .refine((value) => value.some((item) => item), {
-      message: 'Section is required',
-    }),
-  elective: z
-    .string({
-      required_error: 'elective is required',
-    })
-    .min(1),
-});
-
-type SchemaType = z.infer<typeof schema>;
 
 export function AddSubjectFlyout() {
   const pathname = usePathname();
@@ -90,7 +43,7 @@ export function AddSubjectFlyout() {
   const isOpen = searchParams.get('isAddSubjectFlyoutOpen') === 'true';
   const page = parseInt(searchParams.get('page')) || 1;
   const limit = parseInt(searchParams.get('limit')) || 10;
-  const filter = { isActive: true };
+  const filter = { isActive: true, hasMarkEntry: true };
   const {
     control,
     watch,
@@ -99,12 +52,15 @@ export function AddSubjectFlyout() {
     register,
     handleSubmit,
     formState: { errors: fieldErrors },
-  } = useForm<SchemaType>({
-    resolver: zodResolver(schema),
+  } = useForm({
     defaultValues: {
+      name: null,
       assessmentFormatIds: [],
       groupIds: [],
-      sectionIds: [],
+      regulationId: null,
+      subjectMasterId: null,
+      subjectTypeId: null,
+      elective: null,
     },
   });
 
@@ -129,12 +85,6 @@ export function AddSubjectFlyout() {
   });
 
   const { classId } = useParams<{ classId: string }>();
-  const { data: sectionListResponse } = useGetAllSectionByClassIdQuery(
-    { classId, filter },
-    {
-      enabled: !!classId,
-    }
-  );
 
   const { data: regulationListResponse } = useGetRegulationListQuery({
     page,
@@ -151,7 +101,6 @@ export function AddSubjectFlyout() {
   const closeFlyout = () => {
     const params = new URLSearchParams(searchParams.toString());
     params.set('isAddSubjectFlyoutOpen', 'false');
-    params.delete('sectionId');
     reset();
     router.replace(pathname + '?' + params.toString());
   };
@@ -179,10 +128,6 @@ export function AddSubjectFlyout() {
       closeFlyout();
     }
   };
-
-  useEffect(() => {
-    register('sectionIds');
-  }, [register]);
 
   return (
     <section>
@@ -217,48 +162,16 @@ export function AddSubjectFlyout() {
                     Subject Name
                   </label>
                   <Input
-                    {...register('name')}
+                    {...register('name', {
+                      required: 'Name is required',
+                    })}
                     id="name"
                     autoFocus
-                    required
                     type="text"
                     className="mt-2"
                     placeholder="Enter Subject Name"
                     errorMessage={fieldErrors?.name?.message.toString()}
                   />
-                </div>
-              </div>
-              <div className="mt-4">
-                <label
-                  htmlFor="description"
-                  className="text-sm font-semibold text-gray-700"
-                >
-                  Sections
-                </label>
-                <div className="mt-2 flex flex-wrap" id="sectionId">
-                  {sectionListResponse?.data?.map((item) => (
-                    <label className="me-5" key={item.id}>
-                      <Checkbox
-                        className="me-2 items-center space-x-2 rounded border border-primary-500"
-                        onCheckedChange={(checked) => {
-                          if (checked) {
-                            setValue('sectionIds', [
-                              ...watch('sectionIds'),
-                              item.id,
-                            ]);
-                          } else {
-                            setValue(
-                              'sectionIds',
-                              watch('sectionIds').filter(
-                                (value) => value !== item.id
-                              )
-                            );
-                          }
-                        }}
-                      />
-                      <span>{item.name}</span>
-                    </label>
-                  ))}
                 </div>
               </div>
               <div className="mt-4">
@@ -270,7 +183,9 @@ export function AddSubjectFlyout() {
                 </label>
                 <Select
                   autoComplete="off"
-                  {...register('regulationId', { required: true })}
+                  {...register('regulationId', {
+                    required: 'Regulation is required',
+                  })}
                   value={watch('regulationId')}
                   onValueChange={(value) => {
                     if (value) {
@@ -291,6 +206,11 @@ export function AddSubjectFlyout() {
                     </SelectGroup>
                   </SelectContent>
                 </Select>
+                {fieldErrors['regulationId'] && (
+                  <p className="h-2 p-1 text-sm text-red-600">
+                    {fieldErrors['regulationId'].message as string}
+                  </p>
+                )}
               </div>
               <div className="mt-4">
                 <label
@@ -301,7 +221,9 @@ export function AddSubjectFlyout() {
                 </label>
                 <Select
                   autoComplete="off"
-                  {...register('subjectMasterId', { required: true })}
+                  {...register('subjectMasterId', {
+                    required: 'Subject master is required',
+                  })}
                   value={watch('subjectMasterId')}
                   onValueChange={(value) => {
                     if (value) {
@@ -322,6 +244,11 @@ export function AddSubjectFlyout() {
                     </SelectGroup>
                   </SelectContent>
                 </Select>
+                {fieldErrors['subjectMasterId'] && (
+                  <p className="h-2 p-1 text-sm text-red-600">
+                    {fieldErrors['subjectMasterId'].message as string}
+                  </p>
+                )}
               </div>
               <div className="mt-4">
                 <label
@@ -332,7 +259,9 @@ export function AddSubjectFlyout() {
                 </label>
                 <Select
                   autoComplete="off"
-                  {...register('subjectTypeId', { required: true })}
+                  {...register('subjectTypeId', {
+                    required: 'Subject type is required',
+                  })}
                   value={watch('subjectTypeId')}
                   onValueChange={(value) => {
                     if (value) {
@@ -353,13 +282,18 @@ export function AddSubjectFlyout() {
                     </SelectGroup>
                   </SelectContent>
                 </Select>
+                {fieldErrors['subjectTypeId'] && (
+                  <p className="h-2 p-1 text-sm text-red-600">
+                    {fieldErrors['subjectTypeId'].message as string}
+                  </p>
+                )}
               </div>
               <div className="py-4">
                 <label
                   htmlFor="description"
                   className="text-sm font-semibold text-gray-700"
                 >
-                  Subject Format
+                  Assessment Format
                 </label>
                 <div className="mt-2 flex flex-wrap">
                   {assessmentFormatList?.data?.map((item) => (
@@ -367,6 +301,7 @@ export function AddSubjectFlyout() {
                       key={item.id}
                       control={control}
                       name="assessmentFormatIds"
+                      rules={{ required: ' Select at least 1 option' }}
                       render={({ field }) => {
                         return (
                           <label className="me-5">
@@ -389,6 +324,11 @@ export function AddSubjectFlyout() {
                     />
                   ))}
                 </div>
+                {fieldErrors['assessmentFormatIds'] && (
+                  <p className="h-2 p-1 text-sm text-red-600">
+                    {fieldErrors['assessmentFormatIds'].message as string}
+                  </p>
+                )}
               </div>
               <div className="pt-3">
                 <label
@@ -403,6 +343,7 @@ export function AddSubjectFlyout() {
                       key={item.id}
                       control={control}
                       name="groupIds"
+                      rules={{ required: ' Select at least 1 option' }}
                       render={({ field }) => {
                         return (
                           <label className="me-5">
@@ -425,30 +366,49 @@ export function AddSubjectFlyout() {
                     />
                   ))}
                 </div>
-                <div className="mt-7">
-                  <RadioGroup defaultValue="0">
-                    <div className="flex">
-                      <div className="flex items-center space-x-2">
-                        <RadioGroupItem value="1" {...register('elective')} />
-                        <label
-                          htmlFor="Elective"
-                          className="text-sm font-semibold text-gray-700"
-                        >
-                          Elective
-                        </label>
+                {fieldErrors['groupIds'] && (
+                  <p className="h-2 p-1 text-sm text-red-600">
+                    {fieldErrors['groupIds'].message as string}
+                  </p>
+                )}
+              </div>
+              <div className="mt-7">
+                <Controller
+                  name="elective"
+                  control={control}
+                  rules={{ required: 'Please select an option' }}
+                  render={({ field }) => (
+                    <RadioGroup
+                      onValueChange={(value) => field.onChange(value)}
+                    >
+                      <div className="flex">
+                        <div className="flex items-center space-x-2">
+                          <RadioGroupItem value="1" />
+                          <label
+                            htmlFor="Elective"
+                            className="text-sm font-semibold text-gray-700"
+                          >
+                            Elective
+                          </label>
+                        </div>
+                        <div className="ml-5 flex items-center space-x-2">
+                          <RadioGroupItem value="2" />
+                          <label
+                            htmlFor="Non-Elective"
+                            className="text-sm font-semibold text-gray-700"
+                          >
+                            Non-Elective
+                          </label>
+                        </div>
                       </div>
-                      <div className="ml-5 flex items-center space-x-2">
-                        <RadioGroupItem value="2" {...register('elective')} />
-                        <label
-                          htmlFor="Non-Elective"
-                          className="text-sm font-semibold text-gray-700"
-                        >
-                          Non-Elective
-                        </label>
-                      </div>
-                    </div>
-                  </RadioGroup>
-                </div>
+                    </RadioGroup>
+                  )}
+                />
+                {fieldErrors['elective'] && (
+                  <p className="h-2 p-1 text-sm text-red-600">
+                    {fieldErrors['elective']?.message as string}
+                  </p>
+                )}
               </div>
             </div>
             <div className="mt-10 flex justify-center ">
