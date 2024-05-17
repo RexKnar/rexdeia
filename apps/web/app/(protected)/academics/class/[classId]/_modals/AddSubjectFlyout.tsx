@@ -373,32 +373,37 @@ export function AddSubjectFlyout() {
                 )}
               </div>
               <div className="mt-7">
-                <RadioGroup
-                  {...register('elective', {
-                    required: ' Please select an option',
-                  })}
-                >
-                  <div className="flex">
-                    <div className="flex items-center space-x-2">
-                      <RadioGroupItem value="1" />
-                      <label
-                        htmlFor="Elective"
-                        className="text-sm font-semibold text-gray-700"
-                      >
-                        Elective
-                      </label>
-                    </div>
-                    <div className="ml-5 flex items-center space-x-2">
-                      <RadioGroupItem value="2" />
-                      <label
-                        htmlFor="Non-Elective"
-                        className="text-sm font-semibold text-gray-700"
-                      >
-                        Non-Elective
-                      </label>
-                    </div>
-                  </div>
-                </RadioGroup>
+                <Controller
+                  name="elective"
+                  control={control}
+                  rules={{ required: 'Please select an option' }}
+                  render={({ field }) => (
+                    <RadioGroup
+                      onValueChange={(value) => field.onChange(value)}
+                    >
+                      <div className="flex">
+                        <div className="flex items-center space-x-2">
+                          <RadioGroupItem value="1" />
+                          <label
+                            htmlFor="Elective"
+                            className="text-sm font-semibold text-gray-700"
+                          >
+                            Elective
+                          </label>
+                        </div>
+                        <div className="ml-5 flex items-center space-x-2">
+                          <RadioGroupItem value="2" />
+                          <label
+                            htmlFor="Non-Elective"
+                            className="text-sm font-semibold text-gray-700"
+                          >
+                            Non-Elective
+                          </label>
+                        </div>
+                      </div>
+                    </RadioGroup>
+                  )}
+                />
                 {fieldErrors['elective'] && (
                   <p className="h-2 p-1 text-sm text-red-600">
                     {fieldErrors['elective']?.message as string}
