@@ -573,7 +573,7 @@ export default <EndpointDetails>{
   },
   [GET_STAFF_SUBJECT_LIST_BY_CLASS_ID]: {
     requestType: `GET`,
-    endpoint: `/api/class/[id]/staffs/[id]/subjects`,
+    endpoint: `/api/class/[id]/staffs/[staffId]/subjects`,
   },
   [UPDATE_STUDENT_BY_ID]: {
     requestType: `PUT`,

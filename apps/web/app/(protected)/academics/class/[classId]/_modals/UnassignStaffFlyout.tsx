@@ -24,16 +24,20 @@ export function UnassignStaffFlyout() {
   const pathname = usePathname();
   const router = useRouter();
   const searchParams = useSearchParams();
-  const params = useParams<{ id: string }>();
+  const params = useParams<{ classId: string }>();
 
   const isOpen = searchParams.get('isUnassignStaffFlyoutOpen') === 'true';
   const staffId = searchParams.get('staffId');
   const academicYearId = searchParams.get('academicYearId');
-
   const { data: getStaffSubjectListResponse } =
-    useGetStaffSubjectListByClassIdQuery(params.id, staffId, academicYearId, {
-      enabled: !!staffId,
-    });
+    useGetStaffSubjectListByClassIdQuery(
+      params.classId,
+      staffId,
+      academicYearId,
+      {
+        enabled: !!staffId,
+      }
+    );
 
   const {
     handleSubmit,
@@ -90,20 +94,17 @@ export function UnassignStaffFlyout() {
           </SheetHeader>
           <form onSubmit={handleSubmit(onsubmit)}>
             <div className="mt-6">
-              <div>
-                <Text variant="base-bold" className="text-gray-700">
-                  Demo
-                </Text>
-              </div>
               {fields.length}
-              {/* {fields.map((section, index) => {
+              {fields.map((section, index) => {
                 return (
-                  <div className="mt-2" key={index}>
+                  <div className="mt-2" key={section.id}>
                     <label
                       htmlFor="subjectName"
                       className="text-sm font-semibold text-gray-700"
-                    ></label>
-                    <div className="flex flex-wrap items-center mt-2 me-6">
+                    >
+                      {getStaffSubjectListResponse[index].section.name}
+                    </label>
+                    <div className="me-6 mt-2 flex flex-wrap items-center">
                       {getStaffSubjectListResponse[index].subjects.map(
                         (subject) => {
                           return (
@@ -114,7 +115,7 @@ export function UnassignStaffFlyout() {
                               render={({ field }) => (
                                 <>
                                   <Checkbox
-                                    className="items-center space-x-2 border rounded me-2 border-primary-500"
+                                    className="me-2 items-center space-x-2 rounded border border-primary-500"
                                     checked={field.value.includes(subject.id)}
                                     onCheckedChange={(checked) => {
                                       if (checked) {
@@ -145,7 +146,7 @@ export function UnassignStaffFlyout() {
                     </div>
                   </div>
                 );
-              })} */}
+              })}
             </div>
             <Button
               type="submit"
