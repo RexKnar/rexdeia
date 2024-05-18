@@ -26,12 +26,23 @@ export function MarkFields({
 
     if (assessmentFormats) {
       const newFields = assessmentFormats
-        .filter((config) => config.assessmentFormat)
+        .filter((config) => config.assessmentFormat !== null)
         .map((config) => {
+          let markEnteredFormatIndex = markEnteredAssessmentFormat
+            ? markEnteredAssessmentFormat?.findIndex(
+                (obj) => obj.assessmentFormatId === config.assessmentFormat.id
+              )
+            : false;
+
+          let mark =
+            markEnteredFormatIndex > -1
+              ? markEnteredAssessmentFormat[markEnteredFormatIndex].mark
+              : false;
           return {
             academicExamId: config.academicExamId,
             attendance: '',
-            mark: '',
+            mark: mark ? mark : '',
+            isUpdate: mark ? true : false,
             assessmentFormatId: config.assessmentFormat.id || '',
             assessmentFormatName: config.assessmentFormat.name || '',
           };
@@ -44,14 +55,6 @@ export function MarkFields({
   return (
     <div className="flex w-full">
       {fields.map((field, formatIndex) => {
-        let markEnteredFormatIndex = markEnteredAssessmentFormat
-          ? markEnteredAssessmentFormat?.indexOf(
-              (obj) => obj.assessmentFormatId === field['assessmentFormatId']
-            )
-          : null;
-        let mark = markEnteredFormatIndex
-          ? markEnteredAssessmentFormat[markEnteredFormatIndex]?.mark
-          : '';
         return (
           <Input
             key={formatIndex}
@@ -60,7 +63,6 @@ export function MarkFields({
             {...control.register(
               `studentsMarkDetails.${nestIndex}.subjects.${subjectIndex}.marks.${formatIndex}.mark`
             )}
-            value={mark}
           />
         );
       })}

@@ -16,7 +16,6 @@ export function AssessmentSubjects({
     name: `studentsMarkDetails.${nestIndex}.subjects`,
   });
   useEffect(() => {
-    console.log(markEnteredSubjects);
     if (fields.length === 0 && subjects) {
       subjects.forEach((subject) => {
         append({
@@ -26,21 +25,23 @@ export function AssessmentSubjects({
     }
   }, [subjects]);
 
-  useEffect(() => {
-    console.log(markEnteredSubjects);
-  }, [markEnteredSubjects]);
+  useEffect(() => {}, [markEnteredSubjects]);
 
   return (
     <>
       {fields.map((subject, subjectIndex) => {
         let markEnteredSubjectIndex = markEnteredSubjects
-          ? markEnteredSubjects?.indexOf((obj) => obj?.id === subject?.id)
+          ? markEnteredSubjects?.findIndex(
+              (obj) => obj?.id === subject['subjectId']
+            )
           : null;
-        const subjectDetails = markEnteredSubjectIndex
-          ? markEnteredSubjects[markEnteredSubjectIndex]?.assessmentFormat
-          : [];
+        const subjectDetails =
+          markEnteredSubjectIndex > -1
+            ? markEnteredSubjects[markEnteredSubjectIndex]?.assessmentFormat
+            : [];
+
         return (
-          <td key={subject.id} className="px-6 py-4 whitespace-nowrap">
+          <td key={subject.id} className="whitespace-nowrap px-6 py-4">
             <div>
               <MarkFields
                 nestIndex={nestIndex}
