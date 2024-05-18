@@ -38,6 +38,7 @@ export type UpdateSubjectModel = Pick<
 >;
 
 export type AssessmentFormatModel = {
+  assessmentFormat: AssessmentFormatModel;
   id: string;
   name: string;
   parentId?: string;

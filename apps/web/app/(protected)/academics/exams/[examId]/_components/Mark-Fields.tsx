@@ -2,7 +2,8 @@
 
 import { useEffect, useRef } from 'react';
 import { useFieldArray } from 'react-hook-form';
-import { Input } from 'ui';
+
+import { MarkInput } from './Mark-Input';
 
 export function MarkFields({
   nestIndex,
@@ -11,7 +12,6 @@ export function MarkFields({
   subjectIndex,
   markEnteredAssessmentFormat,
 }) {
-  // console.log(markEnteredAssessmentFormat);
   const { fields, append } = useFieldArray({
     control,
     name: `studentsMarkDetails.${nestIndex}].subjects.${subjectIndex}.marks`,
@@ -38,13 +38,16 @@ export function MarkFields({
             markEnteredFormatIndex > -1
               ? markEnteredAssessmentFormat[markEnteredFormatIndex].mark
               : false;
+          let markId =
+            markEnteredAssessmentFormat[markEnteredFormatIndex]?.id || null;
           return {
+            id: markId,
             academicExamId: config.academicExamId,
-            attendance: '',
-            mark: mark ? mark : '',
+            attendance: null,
+            mark: mark ? mark : null,
             isUpdate: mark ? true : false,
-            assessmentFormatId: config.assessmentFormat.id || '',
-            assessmentFormatName: config.assessmentFormat.name || '',
+            assessmentFormatId: config.assessmentFormat.id || null,
+            assessmentFormatName: config.assessmentFormat.name || null,
           };
         });
       append(newFields);
@@ -53,16 +56,19 @@ export function MarkFields({
     prevAssessmentFormats.current = assessmentFormats;
   }, [assessmentFormats]);
   return (
-    <div className="flex w-full">
+    <div className="flex w-full space-x-2">
       {fields.map((field, formatIndex) => {
+        const currentFormatIndex = assessmentFormats.findIndex(
+          (obj) => obj.assessmentFormat?.id === fields['assessmentFormatId']
+        );
+
         return (
-          <Input
-            key={formatIndex}
-            type="text"
-            placeholder={field['assessmentFormatName']}
-            {...control.register(
-              `studentsMarkDetails.${nestIndex}.subjects.${subjectIndex}.marks.${formatIndex}.mark`
-            )}
+          <MarkInput
+            key={field.id}
+            control={control}
+            validationData={assessmentFormats[currentFormatIndex]}
+            registerKey={`studentsMarkDetails.${nestIndex}.subjects.${subjectIndex}.marks.${formatIndex}`}
+            fieldName={field['assessmentFormatName']}
           />
         );
       })}

@@ -49,45 +49,95 @@ export async function createMarkEntry(
   assessmentMarksPayload: AddMarkEntryModel
 ) {
   try {
-    const createdMarkEntries = [];
+    const createdMarkEntries = await db.$transaction(async (prisma) => {
+      const promises = [];
 
-    await db.$transaction(async (prisma) => {
       for (const entry of assessmentMarksPayload.studentsMarkDetails) {
         const { studentId, subjects } = entry;
         for (const studentMark of subjects) {
           const { marks } = studentMark;
           for (const mark of marks) {
             if (mark.mark) {
-              const createdMarkEntry = await prisma.markEntry.create({
-                data: {
-                  studentId,
-                  staffId: assessmentMarksPayload.staffId,
-                  subject: {
-                    connect: [
-                      {
-                        id: studentMark.subjectId,
-                      },
-                    ],
-                  },
-                  academicExamId: mark.academicExamId,
-                  assessmentFormatId: mark.assessmentFormatId,
-                  mark: +mark.mark,
-                  attandance: +mark.attendance,
+              const where = { id: mark.id };
+              const data = {
+                studentId,
+                staffId: assessmentMarksPayload.staffId,
+                subject: {
+                  connect: [
+                    {
+                      id: studentMark.subjectId,
+                    },
+                  ],
                 },
-              });
-              createdMarkEntries.push(createdMarkEntry);
+                academicExamId: mark.academicExamId,
+                assessmentFormatId: mark.assessmentFormatId,
+                mark: +mark.mark,
+                attandance: +mark.attendance,
+              };
+
+              const promise = mark.id
+                ? prisma.markEntry.update({ where, data })
+                : prisma.markEntry.create({ data });
+
+              promises.push(promise);
             }
           }
         }
       }
+
+      return Promise.all(promises);
     });
 
-    return createdMarkEntries;
+    return createdMarkEntries.flat();
   } catch (error) {
     console.error('Error creating mark entry:', error);
     throw error;
   }
 }
+
+// export async function createMarkEntry(
+//   assessmentMarksPayload: AddMarkEntryModel
+// ) {
+//   try {
+//     const createdMarkEntries = [];
+
+//     await db.$transaction(async (prisma) => {
+//       for (const entry of assessmentMarksPayload.studentsMarkDetails) {
+//         const { studentId, subjects } = entry;
+//         for (const studentMark of subjects) {
+//           const { marks } = studentMark;
+//           for (const mark of marks) {
+//             if (mark.mark) {
+//               const createdMarkEntry = await prisma.markEntry.create({
+//                 data: {
+//                   studentId,
+//                   staffId: assessmentMarksPayload.staffId,
+//                   subject: {
+//                     connect: [
+//                       {
+//                         id: studentMark.subjectId,
+//                       },
+//                     ],
+//                   },
+//                   academicExamId: mark.academicExamId,
+//                   assessmentFormatId: mark.assessmentFormatId,
+//                   mark: +mark.mark,
+//                   attandance: +mark.attendance,
+//                 },
+//               });
+//               createdMarkEntries.push(createdMarkEntry);
+//             }
+//           }
+//         }
+//       }
+//     });
+
+//     return createdMarkEntries;
+//   } catch (error) {
+//     console.error('Error creating mark entry:', error);
+//     throw error;
+//   }
+// }
 
 export async function getStudentsByClassSection(filter: GetStudentsFilter) {
   const students = await db.studentMapping.findMany({

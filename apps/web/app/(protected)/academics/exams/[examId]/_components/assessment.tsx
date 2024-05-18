@@ -233,7 +233,20 @@ export function Assessment() {
                   key={subject.id}
                   className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-black"
                 >
-                  {subject.name}
+                  <div className="border-1 flex w-full space-x-2 border border-b-primary-200">
+                    <text className="flex-1 text-center ">{subject.name}</text>
+                  </div>
+                  <div className="flex w-full space-x-2">
+                    {subject.assessmentFormat
+                      .filter((config) => config.assessmentFormat !== null)
+                      .map((formatItem, index) => {
+                        return (
+                          <div key={index} className="flex-1 text-center">
+                            {formatItem.assessmentFormat.name || ''}
+                          </div>
+                        );
+                      })}
+                  </div>
                 </th>
               ))}
             </tr>

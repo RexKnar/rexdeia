@@ -21,6 +21,7 @@ export type Marks = {
   marks: MarksWithAssessmentFormatModel[];
 };
 export type MarksWithAssessmentFormatModel = {
+  id: string;
   academicExamId: string;
   assessmentFormatId: string;
   mark: string;
