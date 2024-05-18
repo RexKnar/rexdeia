@@ -3,7 +3,6 @@ import {
   FileText,
   GraduationCap,
   SquareUserRound,
-  UserPlus2,
 } from 'lucide-react';
 
 import { SidebarMenuItem } from './types';
@@ -142,49 +141,69 @@ export const menuItems: SidebarMenuItem[] = [
     ],
   },
   {
-    id: 'admission-page',
-    label: 'Admissions',
-    icon: UserPlus2,
-    path: '',
-    children: [
-      {
-        id: 'admission-dashboard',
-        label: 'Dashboard',
-        icon: null,
-        path: '/admission/dashboard',
-      },
-      {
-        id: 'admission-addnew',
-        label: 'Add new',
-        icon: null,
-        path: '/admission/add',
-      },
-      {
-        id: 'admission-analytics',
-        label: 'Analytics',
-        icon: null,
-        path: '/admission/analytics',
-      },
-      {
-        id: 'admission-configure',
-        label: 'Configure',
-        icon: null,
-        path: '/admission/configure',
-      },
-    ],
-  },
-  {
-    id: 'enquiry-page',
-    label: 'Enquiry',
+    id: 'exam-page',
+    label: 'Exams',
     icon: FileText,
     path: '',
     children: [
       {
-        id: 'enquiry-addnew',
-        label: 'Add New',
+        id: 'exam-list',
+        label: 'Exam List',
         icon: null,
-        path: '/enquiry/add',
+        path: '/academics/exams',
+      },
+      {
+        id: 'mark-entry',
+        label: 'Mark Entry',
+        icon: null,
+        path: '/academics/exams',
       },
     ],
   },
+  // {
+  //   id: 'admission-page',
+  //   label: 'Admissions',
+  //   icon: UserPlus2,
+  //   path: '',
+  //   children: [
+  //     {
+  //       id: 'admission-dashboard',
+  //       label: 'Dashboard',
+  //       icon: null,
+  //       path: '/admission/dashboard',
+  //     },
+  //     {
+  //       id: 'admission-addnew',
+  //       label: 'Add new',
+  //       icon: null,
+  //       path: '/admission/add',
+  //     },
+  //     {
+  //       id: 'admission-analytics',
+  //       label: 'Analytics',
+  //       icon: null,
+  //       path: '/admission/analytics',
+  //     },
+  //     {
+  //       id: 'admission-configure',
+  //       label: 'Configure',
+  //       icon: null,
+  //       path: '/admission/configure',
+  //     },
+  //   ],
+  // },
+  // {
+  //   id: 'enquiry-page',
+  //   label: 'Enquiry',
+  //   icon: FileText,
+  //   path: '',
+  //   children: [
+  //     {
+  //       id: 'enquiry-addnew',
+  //       label: 'Add New',
+  //       icon: null,
+  //       path: '/enquiry/add',
+  //     },
+  //   ],
+  // },
 ];
