@@ -11,7 +11,7 @@ import { formatStudentPayload } from 'lib/utils/formatters';
 import { Check, Loader2 } from 'lucide-react';
 import { useParams, useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
-import { useForm } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 import {
   Button,
   Input,
@@ -29,6 +29,7 @@ export function EditStudentDetail() {
   const [currentPage, setCurrentPage] = useState(1);
 
   const {
+    control,
     watch,
     setValue,
     register,
@@ -200,7 +201,7 @@ export function EditStudentDetail() {
   };
 
   const nextPage = () => {
-    setCurrentPage((prevPage) => Math.min(prevPage + 1, 8));
+    setCurrentPage((prevPage) => Math.min(prevPage + 1, 7));
   };
 
   return (
@@ -238,7 +239,7 @@ export function EditStudentDetail() {
               type="button"
               variant="link"
               onClick={() => goToPage(2)}
-              className="cursor-pointer px-4 py-1  hover:no-underline"
+              className="cursor-pointer px-4 py-1 hover:no-underline"
             >
               <h2
                 className={`px-2 text-left text-sm font-semibold ${
@@ -257,7 +258,7 @@ export function EditStudentDetail() {
               type="button"
               variant="link"
               onClick={() => goToPage(3)}
-              className="cursor-pointer px-4 py-1  hover:no-underline"
+              className="cursor-pointer px-4 py-1 hover:no-underline"
             >
               <h2
                 className={`px-2 text-left text-sm font-semibold ${
@@ -276,7 +277,7 @@ export function EditStudentDetail() {
               type="button"
               variant="link"
               onClick={() => goToPage(4)}
-              className="cursor-pointer px-4 py-1  hover:no-underline"
+              className="cursor-pointer px-4 py-1 hover:no-underline"
             >
               <h2
                 className={`px-2 text-left text-sm font-semibold ${
@@ -295,7 +296,7 @@ export function EditStudentDetail() {
               type="button"
               variant="link"
               onClick={() => goToPage(5)}
-              className="cursor-pointer px-4 py-1  hover:no-underline"
+              className="cursor-pointer px-4 py-1 hover:no-underline"
             >
               <h2
                 className={`px-2  text-sm font-semibold ${
@@ -314,7 +315,7 @@ export function EditStudentDetail() {
               type="button"
               variant="link"
               onClick={() => goToPage(6)}
-              className="cursor-pointer px-4 py-1  hover:no-underline"
+              className="cursor-pointer px-4 py-1 hover:no-underline"
             >
               <h2
                 className={`px-2 text-left text-sm font-semibold ${
@@ -334,7 +335,7 @@ export function EditStudentDetail() {
               type="button"
               variant="link"
               onClick={() => goToPage(7)}
-              className="cursor-pointer px-4 py-1  hover:no-underline"
+              className="cursor-pointer px-4 py-1 hover:no-underline"
             >
               <h2
                 className={`px-2 text-left text-sm font-semibold ${
@@ -427,19 +428,26 @@ export function EditStudentDetail() {
                 <label className="mt-1 block text-sm text-gray-700">
                   Gender
                 </label>
-                <RadioGroup
-                  {...register('gender')}
+                <Controller
+                  name="gender"
+                  control={control}
                   defaultValue={studentDetail.gender}
-                  className="mt-3 flex gap-2"
-                >
-                  <RadioGroupItem className="mr-1 mt-1" value={'male'} />{' '}
-                  {'Male'}
-                  <RadioGroupItem
-                    className="ml-3 mr-1 mt-1 "
-                    value={'female'}
-                  />{' '}
-                  {'Female'}
-                </RadioGroup>
+                  render={({ field: { onChange, value } }) => (
+                    <RadioGroup
+                      onValueChange={onChange}
+                      value={value}
+                      className="mt-3 flex gap-2"
+                    >
+                      <RadioGroupItem className="mr-1 mt-1" value={'male'} />{' '}
+                      {'Male'}
+                      <RadioGroupItem
+                        className="ml-3 mr-1 mt-1 "
+                        value={'female'}
+                      />{' '}
+                      {'Female'}
+                    </RadioGroup>
+                  )}
+                />
               </div>
               <div className="w-full">
                 <label className="mt-1 block text-sm text-gray-700">
@@ -634,17 +642,28 @@ export function EditStudentDetail() {
                 <label className="mt-1 block text-sm text-gray-700">
                   Differently abled
                 </label>
-                <RadioGroup
-                  {...register('differentlyAbled')}
-                  className="mt-3 flex gap-2"
+                <Controller
+                  name="differentlyAbled"
+                  control={control}
                   defaultValue={
                     studentDetail.additionalAttributes.differentlyAbled
                   }
-                >
-                  <RadioGroupItem className="mr-1 mt-1" value={'yes'} /> {'Yes'}
-                  <RadioGroupItem className="ml-3 mr-1 mt-1 " value={'no'} />
-                  {'No'}
-                </RadioGroup>
+                  render={({ field: { onChange, value } }) => (
+                    <RadioGroup
+                      onValueChange={onChange}
+                      value={value}
+                      className="mt-3 flex gap-2"
+                    >
+                      <RadioGroupItem className="mr-1 mt-1" value={'yes'} />{' '}
+                      {'Yes'}
+                      <RadioGroupItem
+                        className="ml-3 mr-1 mt-1 "
+                        value={'no'}
+                      />
+                      {'No'}
+                    </RadioGroup>
+                  )}
+                />
               </div>
             </section>
           </div>
@@ -765,18 +784,28 @@ export function EditStudentDetail() {
                 <label className="mt-1 block text-sm text-gray-700">
                   Parents Separated
                 </label>
-                <RadioGroup
-                  {...register('parentsSeparated')}
+                <Controller
+                  name="parentsSeparated"
+                  control={control}
                   defaultValue={
                     studentDetail.additionalAttributes.parentsSeparated
                   }
-                  className="mt-3 flex gap-2"
-                >
-                  <RadioGroupItem className="mr-1 mt-1" value={'yes'} />
-                  {'Yes'}
-                  <RadioGroupItem className="ml-3 mr-1 mt-1 " value={'no'} />
-                  {'No'}
-                </RadioGroup>
+                  render={({ field: { onChange, value } }) => (
+                    <RadioGroup
+                      onValueChange={onChange}
+                      value={value}
+                      className="mt-3 flex gap-2"
+                    >
+                      <RadioGroupItem className="mr-1 mt-1" value={'yes'} />
+                      {'Yes'}
+                      <RadioGroupItem
+                        className="ml-3 mr-1 mt-1 "
+                        value={'no'}
+                      />
+                      {'No'}
+                    </RadioGroup>
+                  )}
+                />
               </div>
             </section>
           </div>
@@ -828,21 +857,28 @@ export function EditStudentDetail() {
                 <label className="mt-1 block text-sm text-gray-700">
                   Relation
                 </label>
-                <RadioGroup
-                  {...register('siblingRelation1')}
+                <Controller
+                  name="siblingRelation1"
+                  control={control}
                   defaultValue={
                     studentDetail.additionalAttributes.siblingRelation1
                   }
-                  className="mt-3 flex gap-2"
-                >
-                  <RadioGroupItem className="mr-1 mt-1" value={'brother'} />
-                  {'Brother'}
-                  <RadioGroupItem
-                    className="ml-3 mr-1 mt-1 "
-                    value={'sister'}
-                  />
-                  {'Sister'}
-                </RadioGroup>
+                  render={({ field: { onChange, value } }) => (
+                    <RadioGroup
+                      onValueChange={onChange}
+                      value={value}
+                      className="mt-3 flex gap-2"
+                    >
+                      <RadioGroupItem className="mr-1 mt-1" value={'brother'} />
+                      {'Brother'}
+                      <RadioGroupItem
+                        className="ml-3 mr-1 mt-1 "
+                        value={'sister'}
+                      />
+                      {'Sister'}
+                    </RadioGroup>
+                  )}
+                />
               </div>
               <div className="w-full">
                 <label className="mt-1 block text-sm text-gray-700">
@@ -868,21 +904,28 @@ export function EditStudentDetail() {
                 <label className="mt-1 block text-sm text-gray-700">
                   Relation
                 </label>
-                <RadioGroup
-                  {...register('siblingRelation2')}
+                <Controller
+                  name="siblingRelation2"
+                  control={control}
                   defaultValue={
                     studentDetail.additionalAttributes.siblingRelation2
                   }
-                  className="mt-3 flex gap-2"
-                >
-                  <RadioGroupItem className="mr-1 mt-1" value={'brother'} />
-                  {'Brother'}
-                  <RadioGroupItem
-                    className="ml-3 mr-1 mt-1 "
-                    value={'sister'}
-                  />
-                  {'Sister'}
-                </RadioGroup>
+                  render={({ field: { onChange, value } }) => (
+                    <RadioGroup
+                      onValueChange={onChange}
+                      value={value}
+                      className="mt-3 flex gap-2"
+                    >
+                      <RadioGroupItem className="mr-1 mt-1" value={'brother'} />
+                      {'Brother'}
+                      <RadioGroupItem
+                        className="ml-3 mr-1 mt-1 "
+                        value={'sister'}
+                      />
+                      {'Sister'}
+                    </RadioGroup>
+                  )}
+                />
               </div>
               <div className="w-full">
                 <label className="mt-1 block text-sm text-gray-700">
@@ -1311,56 +1354,83 @@ export function EditStudentDetail() {
                 <label className="mt-1 block text-sm text-gray-700">
                   Admission Type
                 </label>
-                <RadioGroup
-                  {...register('admissionType')}
+                <Controller
+                  name="admissionType"
+                  control={control}
                   defaultValue={
                     studentDetail.additionalAttributes.admissionType
                   }
-                  className="mt-3 flex gap-2"
-                >
-                  <RadioGroupItem className="mr-1 mt-1" value={'new'} />
-                  {'New'}
-                  <RadioGroupItem
-                    className="ml-3 mr-1 mt-1 "
-                    value={'lateral Entry'}
-                  />
-                  {'Lateral Entry'}
-                </RadioGroup>
+                  render={({ field: { onChange, value } }) => (
+                    <RadioGroup
+                      onValueChange={onChange}
+                      value={value}
+                      className="mt-3 flex gap-2"
+                    >
+                      <RadioGroupItem className="mr-1 mt-1" value={'new'} />
+                      {'New'}
+                      <RadioGroupItem
+                        className="ml-3 mr-1 mt-1 "
+                        value={'lateral Entry'}
+                      />
+                      {'Lateral Entry'}
+                    </RadioGroup>
+                  )}
+                />
               </div>
               <div className="w-full">
                 <label className="mt-1 block text-sm text-gray-700">
                   Admission Mode
                 </label>
-                <RadioGroup
-                  {...register('admissionMode')}
+                <Controller
+                  name="admissionMode"
+                  control={control}
                   defaultValue={
                     studentDetail.additionalAttributes.admissionMode
                   }
-                  className="mt-3 flex gap-2"
-                >
-                  <RadioGroupItem className="mr-1 mt-1" value={'counselling'} />
-                  {'Counselling'}
-                  <RadioGroupItem
-                    className="ml-3 mr-1 mt-1 "
-                    value={'management'}
-                  />
-                  {'Management'}
-                </RadioGroup>
+                  render={({ field: { onChange, value } }) => (
+                    <RadioGroup
+                      onValueChange={onChange}
+                      value={value}
+                      className="mt-3 flex gap-2"
+                    >
+                      <RadioGroupItem
+                        className="mr-1 mt-1"
+                        value={'counselling'}
+                      />
+                      {'Counselling'}
+                      <RadioGroupItem
+                        className="ml-3 mr-1 mt-1 "
+                        value={'management'}
+                      />
+                      {'Management'}
+                    </RadioGroup>
+                  )}
+                />
               </div>
               <div className="w-full">
                 <label className="mt-1 block text-sm text-gray-700">
                   Scholarship
                 </label>
-                <RadioGroup
-                  {...register('scholarship')}
+                <Controller
+                  name="scholarship"
+                  control={control}
                   defaultValue={studentDetail.additionalAttributes.scholarship}
-                  className="mt-3 flex gap-2"
-                >
-                  <RadioGroupItem className="mr-1 mt-1" value={'yes'} />
-                  {'Yes'}
-                  <RadioGroupItem className="ml-3 mr-1 mt-1 " value={'no'} />
-                  {'No'}
-                </RadioGroup>
+                  render={({ field: { onChange, value } }) => (
+                    <RadioGroup
+                      onValueChange={onChange}
+                      value={value}
+                      className="mt-3 flex gap-2"
+                    >
+                      <RadioGroupItem className="mr-1 mt-1" value={'yes'} />
+                      {'Yes'}
+                      <RadioGroupItem
+                        className="ml-3 mr-1 mt-1 "
+                        value={'no'}
+                      />
+                      {'No'}
+                    </RadioGroup>
+                  )}
+                />
               </div>
               <div className="w-full">
                 <label className="mt-1 block text-sm text-gray-700">
@@ -1384,7 +1454,7 @@ export function EditStudentDetail() {
               Back
             </Button>
             <Button
-              type={currentPage === 8 ? 'submit' : 'button'}
+              type={currentPage === 7 ? 'submit' : 'button'}
               onClick={nextPage}
               className="rounded px-4 py-2 font-bold text-white "
             >

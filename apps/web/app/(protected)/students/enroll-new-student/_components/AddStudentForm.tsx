@@ -7,7 +7,7 @@ import { useGetMediumListQuery } from 'lib/queries/medium/useGetMediumListQuery'
 import { AlertTriangle, Check } from 'lucide-react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import React, { useState } from 'react';
-import { useForm } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 import { Else, If, Then, When } from 'react-if';
 import { Button, Input, RadioGroup, RadioGroupItem } from 'ui';
 import { cn } from 'utils';
@@ -26,8 +26,8 @@ export function AddStudentForm() {
   const currentStep = parseInt(searchParams.get('step')) || 0;
 
   const {
+    control,
     trigger,
-    setValue,
     getValues,
     register,
     handleSubmit,
@@ -280,45 +280,46 @@ export function AddStudentForm() {
                         );
                       case 'radio':
                         return (
-                          <RadioGroup
+                          <Controller
                             name={field.name}
-                            onValueChange={(e) => {
-                              setValue(field.name, e);
-                            }}
-                          >
-                            <div key={field.id}>
-                              <label className="mb-2 mt-1 block text-sm text-gray-700">
-                                {field.label}
-                                {field.validationRules.required.value && (
-                                  <span className="text-red-300"> *</span>
-                                )}
-                              </label>
-                              {field.options.map((option) => (
-                                <React.Fragment key={option.value}>
-                                  <RadioGroupItem
-                                    className="mr-2"
-                                    name={field.name}
-                                    value={option.value}
-                                    {...register(
-                                      field.name,
-                                      field.validationRules
-                                    )}
-                                  />
-                                  <span className="me-3">{option.label}</span>
-                                </React.Fragment>
-                              ))}
-                              <motion.p
-                                initial={{ opacity: 0 }}
-                                animate={{
-                                  opacity: errors[field.name] ? 1 : 0,
-                                }}
-                                transition={{ duration: 0.5 }}
-                                className="h-3 pb-2 pt-0.5 text-sm text-red-300"
+                            control={control}
+                            render={({ field: { onChange, value } }) => (
+                              <RadioGroup
+                                onValueChange={onChange}
+                                value={value}
                               >
-                                {errors[field.name]?.message as string}
-                              </motion.p>
-                            </div>
-                          </RadioGroup>
+                                <div key={field.id}>
+                                  <label className="mb-2 mt-1 block text-sm text-gray-700">
+                                    {field.label}
+                                    {field.validationRules.required.value && (
+                                      <span className="text-red-300"> *</span>
+                                    )}
+                                  </label>
+                                  {field.options.map((option) => (
+                                    <React.Fragment key={option.value}>
+                                      <RadioGroupItem
+                                        className="mr-2"
+                                        value={option.value}
+                                      />
+                                      <span className="me-3">
+                                        {option.label}
+                                      </span>
+                                    </React.Fragment>
+                                  ))}
+                                  <motion.p
+                                    initial={{ opacity: 0 }}
+                                    animate={{
+                                      opacity: errors[field.name] ? 1 : 0,
+                                    }}
+                                    transition={{ duration: 0.5 }}
+                                    className="h-3 pb-2 pt-0.5 text-sm text-red-300"
+                                  >
+                                    {errors[field.name]?.message as string}
+                                  </motion.p>
+                                </div>
+                              </RadioGroup>
+                            )}
+                          />
                         );
                       case 'dropdown':
                         return (
