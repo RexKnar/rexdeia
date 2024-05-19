@@ -116,6 +116,7 @@ export const UPDATE_TERM_BY_ID = `UPDATE_TERM_BY_ID`;
 export const DELETE_TERM_BY_ID = `DELETE_TERM_BY_ID`;
 export const GET_STUDENTS_MARKS_BY_CLASS_ID_AND_EXAM_ID = `GET_STUDENTS_MARKS_BY_CLASS_ID_AND_EXAM_ID`;
 export const GET_STUDENTS_LIST_FOR_ASSIGN = `GET_STUDENTS_LIST_FOR_ASSIGN`;
+export const GET_EXAM_DETAIL_BY_EXAM_ID = `GET_EXAM_DETAIL_BY_EXAM_ID`;
 
 export default <EndpointDetails>{
   [REGISTER_USER]: {
@@ -469,6 +470,10 @@ export default <EndpointDetails>{
   [GET_ASSESSMENT_FORMAT_BY_SUBJECT_ID]: {
     requestType: `GET`,
     endpoint: `/api/exam/subject/[id]/assessment-format`,
+  },
+  [GET_EXAM_DETAIL_BY_EXAM_ID]: {
+    requestType: `GET`,
+    endpoint: `/api/exam/[id]`,
   },
   [ADD_EXAM_CONFIGURATION_BY_EXAM_ID]: {
     requestType: `POST`,

@@ -1,5 +1,6 @@
 'use client';
 import { useGetClassListQuery } from 'lib/queries/class/useGetClassListQuery';
+import { useGetExamDetailQuery } from 'lib/queries/exams/useGetExamDetailQuery';
 import { useGetExamListQuery } from 'lib/queries/exams/useGetExamListQuery';
 import { useGetSubjectListByFilter } from 'lib/queries/exams/useGetSubjectByFilterQuery';
 import { useGetAllSectionByClassIdQuery } from 'lib/queries/section/useGetAllSectionsByClassIdQuery';
@@ -34,13 +35,20 @@ export function AddExamLayout() {
   const sectionId = searchParams.get('sectionId');
   const subjectTypeId = searchParams.get('subjectTypeId');
   const filter = { isActive: true };
-  const examIdFromRouteParam = useParams<{ examId: string }>();
+  const routeParams = useParams<{ examId: string }>();
 
   const { data: examsList } = useGetExamListQuery({
     page,
     limit,
   });
 
+  const { data: examDetail, isLoading: isExamDetailLoading } =
+    useGetExamDetailQuery(
+      { examId: routeParams.examId || examId },
+      {
+        enabled: !!examId || !!routeParams.examId,
+      }
+    );
   const { data: classList, isLoading: isClassListLoading } =
     useGetClassListQuery({
       page,
@@ -84,36 +92,58 @@ export function AddExamLayout() {
     <>
       <section className="mb-4 flex flex-row gap-5 rounded-md bg-white p-4">
         <div className=" basis-1/4">
-          <label htmlFor="Term" className="text-sm font-semibold text-gray-700">
-            Exam Name
-          </label>
-          <Select
-            onValueChange={(value) => {
-              if (value) {
-                const params = new URLSearchParams(searchParams);
-                params.set('examId', value);
-                router.replace(pathname + '?' + params.toString());
-              }
-            }}
-            disabled={!!examIdFromRouteParam}
+          <label
+            htmlFor="Term"
+            className="pr-2 text-sm font-semibold text-gray-700"
           >
-            <SelectTrigger>
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectGroup>
-                {examsList?.data?.map((exam) => (
-                  <SelectItem
-                    key={exam.id}
-                    defaultChecked={exam.id === examId ? true : false}
-                    value={exam.id}
-                  >
-                    {exam.name}
-                  </SelectItem>
-                ))}
-              </SelectGroup>
-            </SelectContent>
-          </Select>
+            Exam Name :
+          </label>
+          {routeParams && (
+            <text>{isExamDetailLoading ? 'Loading...' : examDetail?.name}</text>
+          )}
+
+          {!routeParams && (
+            <Select
+              onValueChange={(value) => {
+                if (value) {
+                  const params = new URLSearchParams(searchParams);
+                  params.set('examId', value);
+                  router.replace(pathname + '?' + params.toString());
+                }
+              }}
+              disabled={!!routeParams}
+            >
+              <SelectTrigger>
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectGroup>
+                  {examsList?.data?.map((exam) => (
+                    <SelectItem
+                      key={exam.id}
+                      defaultChecked={exam.id === examId ? true : false}
+                      value={exam.id}
+                    >
+                      {exam.name}
+                    </SelectItem>
+                  ))}
+                </SelectGroup>
+              </SelectContent>
+            </Select>
+          )}
+        </div>
+        <div className="basis-1/4">
+          <label
+            htmlFor="Term"
+            className="pr-2 text-sm font-semibold text-gray-700"
+          >
+            Term :
+          </label>
+          {routeParams.examId && (
+            <text>
+              {isExamDetailLoading ? 'Loading...' : examDetail?.term.name}
+            </text>
+          )}
         </div>
       </section>
       <section className="flex h-screen flex-row gap-1 rounded-xl bg-white p-1">
