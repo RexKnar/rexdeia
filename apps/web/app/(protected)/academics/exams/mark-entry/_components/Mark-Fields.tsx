@@ -40,10 +40,13 @@ export function MarkFields({
               : false;
           let markId =
             markEnteredAssessmentFormat[markEnteredFormatIndex]?.id || null;
+          let attendance =
+            markEnteredAssessmentFormat[markEnteredFormatIndex]?.attandance ||
+            null;
           return {
             id: markId,
             academicExamId: config.academicExamId,
-            attendance: null,
+            attendance: attendance,
             mark: mark ? mark : null,
             isUpdate: mark ? true : false,
             assessmentFormatId: config.assessmentFormat.id || null,
@@ -66,6 +69,7 @@ export function MarkFields({
           <MarkInput
             key={field.id}
             control={control}
+            attendance={field['attendance']}
             validationData={assessmentFormats[currentFormatIndex]}
             registerKey={`studentsMarkDetails.${nestIndex}.subjects.${subjectIndex}.marks.${formatIndex}`}
             fieldName={field['assessmentFormatName']}

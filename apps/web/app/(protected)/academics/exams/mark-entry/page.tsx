@@ -2,8 +2,8 @@ import { redirect } from 'next/navigation';
 import { getServerSession } from 'next-auth';
 
 import { authOptions } from '../../../../../lib/auth';
-import { Assessment } from '../[examId]/_components/assessment';
-import { AssessmentPageHeader } from '../[examId]/_components/AssessmentpageHeader';
+import { Assessment } from './_components/assessment';
+import { AssessmentPageHeader } from './_components/AssessmentpageHeader';
 
 export default async function Page() {
   const session = await getServerSession(authOptions);
