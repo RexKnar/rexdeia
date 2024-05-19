@@ -43,6 +43,7 @@ export function ExamLists() {
               termName={exam.term.name}
               academicYear={exam.batch.name}
               className="border border-lime-200 bg-lime-50"
+              examId={exam.id}
             />
           </div>
         ))}
