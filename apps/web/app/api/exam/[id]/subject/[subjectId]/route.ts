@@ -1,17 +1,17 @@
 import { captureException } from '@sentry/nextjs';
 import { StatusCodes } from 'http-status-codes';
 import { authOptions } from 'lib/auth';
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 
-import { getAssessmentFormatBySubjectId } from '../../service';
+import { getSubjectConfigDetailById } from './service';
 
 /**
  * @swagger
- * /api/exam/subject/{id}/assessment-format:
+ * /api/exam/{id}/subject/{id}:
  *     get:
- *       summary: Fetch assessment-format By subjectId
- *       description: Fetch assessment-format By subjectId
+ *       summary: Fetch config details By subjectId
+ *       description: Fetch configuration details of subject By subjectId
  *       parameters:
  *         - name: id
  *           in: path
@@ -21,7 +21,7 @@ import { getAssessmentFormatBySubjectId } from '../../service';
  *             type: string
  *       responses:
  *         '200':
- *           description: Assessment Format are fetched successfully.
+ *           description: Subject configuration is fetched successfully.
  *           content:
  *             application/json:
  *               schema:
@@ -33,7 +33,7 @@ import { getAssessmentFormatBySubjectId } from '../../service';
  *         '500':
  *           description: Internal server error.
  */
-export async function GET(_: Request, { params: { id } }) {
+export async function GET(request: NextRequest, { params: { id, subjectId } }) {
   const session = await getServerSession(authOptions);
   if (!session) {
     return new NextResponse(JSON.stringify({ error: 'UNAUTHORIZED' }), {
@@ -42,10 +42,9 @@ export async function GET(_: Request, { params: { id } }) {
   }
 
   try {
-    const assessmentFormatBySubjectId =
-      await getAssessmentFormatBySubjectId(id);
+    const subjectConfigDetail = await getSubjectConfigDetailById(id, subjectId);
 
-    return new NextResponse(JSON.stringify(assessmentFormatBySubjectId), {
+    return new NextResponse(JSON.stringify(subjectConfigDetail), {
       status: StatusCodes.OK,
     });
   } catch (e) {

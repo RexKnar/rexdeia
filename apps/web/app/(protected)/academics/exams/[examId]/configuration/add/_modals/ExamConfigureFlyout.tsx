@@ -50,6 +50,20 @@ export function ExamConfigureFlyout() {
     name: 'assessmentFormatConfiguration',
   });
 
+  const toggleForm = (assessmentFormat) => {
+    const index = fields.findIndex(
+      (field) => field['assessmentFormatId'] === assessmentFormat.id
+    );
+    if (index > -1) {
+      remove(index);
+    } else {
+      append({
+        assessmentFormatId: assessmentFormat.id,
+        name: assessmentFormat.name,
+      });
+    }
+  };
+
   const { data: assessmentFormatResponse } =
     useGetAssessmentFormatBySubjectIdQuery(subjectId, {
       enabled: !!subjectId,
@@ -120,12 +134,8 @@ export function ExamConfigureFlyout() {
                       id={`assessmentFormatConfiguration.${index}.${assessmentFormat.name}`}
                       key={index}
                       checked={assessmentFormat[index]}
-                      onCheckedChange={(value) => {
-                        value
-                          ? append({
-                              assessmentFormatId: assessmentFormat.id,
-                            })
-                          : remove(index);
+                      onCheckedChange={() => {
+                        toggleForm(assessmentFormat);
                       }}
                     />
                     <label
@@ -138,11 +148,11 @@ export function ExamConfigureFlyout() {
                 ))}
               </div>
 
-              {fields.map((row, index) => (
-                <div key={row.id} className="mt-5 p-1">
+              {fields.map((field, index) => (
+                <div key={field.id} className="mt-5 p-1">
                   <div>
                     <label htmlFor="name" className="text-sm font-semibold">
-                      {assessmentFormatResponse[index]?.name}
+                      {field['name']}
                     </label>
                   </div>
                   <div className="mt-4">
