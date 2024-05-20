@@ -39,7 +39,7 @@ export function AssessmentSubjects({
             : [];
 
         return (
-          <td key={subject.id} className="px-6 py-4 whitespace-nowrap">
+          <td key={subject.id} className="whitespace-nowrap px-6 py-4">
             <div>
               <MarkFields
                 nestIndex={nestIndex}

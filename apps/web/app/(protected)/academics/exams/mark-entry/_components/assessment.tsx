@@ -130,7 +130,7 @@ export function Assessment() {
   };
   return (
     <form onSubmit={handleSubmit(saveMarkEntry)} onKeyDown={handleKeyDown}>
-      <div className="flex justify-between mb-4 bg-white rounded-md">
+      <div className="mb-4 flex justify-between rounded-md bg-white">
         <Select
           onValueChange={(value) => {
             if (value) {
@@ -233,15 +233,15 @@ export function Assessment() {
             <table className="min-w-full divide-y divide-gray-200 shadow-md">
               <thead className="bg-gray-50">
                 <tr>
-                  <th className="px-6 py-3 text-xs font-medium tracking-wider text-left text-black uppercase">
+                  <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-black">
                     Student
                   </th>
                   {markEntryFormStructure[0]?.subjects.map((subject) => (
                     <th
                       key={subject.id}
-                      className="px-6 py-3 text-xs font-medium tracking-wider text-left text-black uppercase"
+                      className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-black"
                     >
-                      <div className="flex w-full space-x-2 border border-1 border-b-primary-200">
+                      <div className="border-1 flex w-full space-x-2 border border-b-primary-200">
                         <p className="flex-1 text-center ">{subject.name}</p>
                       </div>
                       <div className="flex w-full space-x-2">
@@ -259,7 +259,7 @@ export function Assessment() {
                   ))}
                 </tr>
               </thead>
-              <tbody className="bg-white divide-y divide-gray-200">
+              <tbody className="divide-y divide-gray-200 bg-white">
                 {studentFields.map((student, studentIndex) => {
                   let studentDetailsIndex = studentsMarks?.length
                     ? studentsMarks?.findIndex(
@@ -273,7 +273,7 @@ export function Assessment() {
 
                   return (
                     <tr key={student.id}>
-                      <td className="px-6 py-4 whitespace-nowrap">
+                      <td className="whitespace-nowrap px-6 py-4">
                         {markEntryFormStructure[studentIndex]?.name}
                       </td>
                       <AssessmentSubjects
@@ -298,7 +298,7 @@ export function Assessment() {
           <Button className="text-center" type="submit">
             {isPendingCreateMarkEntry ? (
               <div className="flex items-center justify-center">
-                <Loader2 className="w-6 h-6 mr-2 text-white animate-spin" />
+                <Loader2 className="mr-2 h-6 w-6 animate-spin text-white" />
                 Saving
               </div>
             ) : (
@@ -308,7 +308,7 @@ export function Assessment() {
         </>
       ) : (
         <div className="flex items-center justify-center">
-          <Loader2 className="w-6 h-6 mr-2 text-black animate-spin" />
+          <Loader2 className="mr-2 h-6 w-6 animate-spin text-black" />
           <p className="text-black ">Fetching Data...</p>
         </div>
       )}
