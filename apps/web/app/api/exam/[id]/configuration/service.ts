@@ -15,12 +15,14 @@ export async function createExamConfigurationForExam(
     subjectTypeId,
   } = configuration;
 
-  const [classData, subject, subjectType, section] = await db.$transaction([
-    db.class.findUnique({ where: { id: classId } }),
-    db.subject.findUnique({ where: { id: subjectId } }),
-    db.subjectType.findUnique({ where: { id: subjectTypeId } }),
-    db.section.findUnique({ where: { id: sectionId } }),
-  ]);
+  const [classData, subject, subjectType, section, academicExams] =
+    await db.$transaction([
+      db.class.findUnique({ where: { id: classId } }),
+      db.subject.findUnique({ where: { id: subjectId } }),
+      db.subjectType.findUnique({ where: { id: subjectTypeId } }),
+      db.section.findUnique({ where: { id: sectionId } }),
+      db.academicExams.findFirst({ where: { sectionId, classId, subjectId } }),
+    ]);
   if (!classData) {
     throw new Error(`CLASS_NOT_MATCHED`);
   }
@@ -34,8 +36,9 @@ export async function createExamConfigurationForExam(
     throw new Error(`SUBJECT_TYPE_NOT_FOUND`);
   }
 
-  return await db.$transaction(async (prisma) => {
-    const createdAcademicExam = await prisma.academicExams.create({
+  const createdAcademicExam =
+    academicExams ??
+    (await db.academicExams.create({
       data: {
         classId: classId,
         examId: examId,
@@ -43,24 +46,23 @@ export async function createExamConfigurationForExam(
         subjectId: subjectId,
         subjectTypeId: subjectTypeId,
       },
-    });
-
-    await Promise.all(
+    }));
+  return await db.$transaction(async (prisma) => {
+    return await Promise.all(
       assessmentFormatConfiguration.map(async (assessmentFormatData) => {
-        await prisma.examConfiguration.create({
-          data: {
-            assessmentFormatId: assessmentFormatData.assessmentFormatId,
-            minPassMark: +assessmentFormatData.minPassMark,
-            markToConvert: +assessmentFormatData.markToConvert,
-            academicExamId: createdAcademicExam.id,
-            dateToConduct: new Date(assessmentFormatData.dateToConduct),
-            markToConduct: +assessmentFormatData.markToConduct,
-          },
-        });
+        if (assessmentFormatData.markToConduct)
+          await prisma.examConfiguration.create({
+            data: {
+              assessmentFormatId: assessmentFormatData.assessmentFormatId,
+              minPassMark: +assessmentFormatData.minPassMark,
+              markToConvert: +assessmentFormatData.markToConvert,
+              academicExamId: createdAcademicExam.id,
+              dateToConduct: new Date(assessmentFormatData.dateToConduct),
+              markToConduct: +assessmentFormatData.markToConduct,
+            },
+          });
       })
     );
-
-    return createdAcademicExam;
   });
 }
 
@@ -122,4 +124,14 @@ export async function getExamConfigurationList(
     limit,
     data,
   };
+}
+
+export async function deleteExamConfigurationEntry(configId: string) {
+  return await db.$transaction(async (prisma) => {
+    return prisma.examConfiguration.delete({
+      where: {
+        id: configId,
+      },
+    });
+  });
 }

@@ -1,4 +1,5 @@
 import { BatchModel } from './batch';
+import { AssessmentFormatModel } from './subject';
 
 export type ExamModel = {
   id: string;
@@ -27,11 +28,14 @@ export type ExamConfigurationModel = {
 };
 
 export type assessmentFormatConfiguration = {
+  id?: string;
   assessmentFormatId: string;
   minPassMark: number;
   markToConvert: number;
   dateToConduct: string;
   markToConduct: number;
+  academicExamId: string;
+  assessmentFormat?: AssessmentFormatModel;
 };
 
 export type CreateExamConfigurationModel = Pick<

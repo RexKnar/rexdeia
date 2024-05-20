@@ -1,6 +1,5 @@
 'use client';
 
-import { useGetSubjectExamDetailQuery } from 'lib/queries/exams/subject/useGetSubjectExamConfigQuery';
 import { useCreateExamConfigurationQuery } from 'lib/queries/exams/useCreateExamConfigurationMutationQuery';
 import { useGetAssessmentFormatBySubjectIdQuery } from 'lib/queries/exams/useGetAssessmentFormatBySubjectIdQuery';
 import { PlusCircle } from 'lucide-react';
@@ -22,7 +21,7 @@ import {
   Text,
 } from 'ui';
 
-export function ExamConfigureFlyout() {
+export function EditExamConfigFlyout() {
   const pathname = usePathname();
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -31,13 +30,14 @@ export function ExamConfigureFlyout() {
   const examId = useParams<{ examId: string }>().examId;
   const sectionId = searchParams.get('sectionId');
   const subjectTypeId = searchParams.get('subjectTypeId');
+  const formatName = searchParams.get('formatName');
   const keysToDelete = [
     'markToConduct',
     'markToConvert',
     'minPassMark',
     'dateToConduct',
   ];
-  const isOpen = searchParams.get('isExamConfigureFlyoutOpen') === 'true';
+  const isOpen = searchParams.get('isEditConfigFlyoutOpen') === 'true';
   const {
     control,
     reset,
@@ -70,19 +70,12 @@ export function ExamConfigureFlyout() {
       enabled: !!subjectId,
     });
 
-  const { data: subjectConfigListResponse } = useGetSubjectExamDetailQuery(
-    { examId, sectionId, subjectId },
-    {
-      enabled: !!subjectId,
-    }
-  );
-
   const { mutateAsync: mutateCreateExamConfigurationAsync } =
     useCreateExamConfigurationQuery(examId);
 
   const closeFlyout = async () => {
     const params = new URLSearchParams(searchParams);
-    params.set('isExamConfigureFlyoutOpen', 'false');
+    params.set('isEditConfigFlyoutOpen', 'false');
     fields.splice(0, fields.length);
     router.replace(pathname + '?' + params.toString());
     reset();
@@ -105,9 +98,10 @@ export function ExamConfigureFlyout() {
     payload.subjectTypeId = subjectTypeId;
     const createdExamConfiguration =
       await mutateCreateExamConfigurationAsync(payload);
-
     if (createdExamConfiguration) {
-      closeFlyout();
+      router.push(`/academics/exams/${examId}`);
+      fields.splice(0, fields.length);
+      reset();
     }
   }
   return (
@@ -127,7 +121,7 @@ export function ExamConfigureFlyout() {
                     <div className="flex items-center">
                       <PlusCircle size={20} strokeWidth={1.5} />
                       <Text variant="lg-semibold" className="ml-2">
-                        Exam Configuration
+                        Edit Exam Subject Configuration
                       </Text>
                     </div>
                   </div>
@@ -135,38 +129,31 @@ export function ExamConfigureFlyout() {
                 <hr className="border-t border-gray-300"></hr>
               </SheetHeader>
               <div className="mt-5 flex flex-wrap">
-                {assessmentFormatResponse?.map((assessmentFormat, index) => {
-                  const subjectConfigIndex =
-                    subjectConfigListResponse?.examConfiguration.findIndex(
-                      (obj) => obj?.assessmentFormat?.id == assessmentFormat?.id
-                    ) ?? -1;
-                  if (subjectConfigIndex < 0)
-                    return (
-                      <div className="w-1/2" key={assessmentFormat.id}>
-                        <Switch
-                          id={`assessmentFormatConfiguration.${index}.${assessmentFormat.name}`}
-                          key={index}
-                          checked={assessmentFormat[index]}
-                          onCheckedChange={() => {
-                            toggleForm(assessmentFormat);
-                          }}
-                        />
-                        <label
-                          htmlFor={assessmentFormat.name}
-                          className="ml-2 text-sm font-semibold"
-                        >
-                          {assessmentFormat.name}
-                        </label>
-                      </div>
-                    );
-                })}
+                {assessmentFormatResponse?.map((assessmentFormat, index) => (
+                  <div className="w-1/2" key={assessmentFormat.id}>
+                    <Switch
+                      id={`assessmentFormatConfiguration.${index}.${assessmentFormat.name}`}
+                      key={index}
+                      checked={assessmentFormat[index]}
+                      onCheckedChange={() => {
+                        toggleForm(assessmentFormat);
+                      }}
+                    />
+                    <label
+                      htmlFor={assessmentFormat.name}
+                      className="ml-2 text-sm font-semibold"
+                    >
+                      {assessmentFormat.name}
+                    </label>
+                  </div>
+                ))}
               </div>
 
               {fields.map((field, index) => (
                 <div key={field.id} className="mt-5 p-1">
                   <div>
                     <label htmlFor="name" className="text-sm font-semibold">
-                      {field['name']}
+                      {formatName}
                     </label>
                   </div>
                   <div className="mt-4">

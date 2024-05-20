@@ -110,6 +110,7 @@ export const GET_EXAM_TYPE_LIST = `GET_EXAM_TYPE_LIST`;
 export const GET_EXAM_TYPE_BY_ID = `GET_EXAM_TYPE_BY_ID`;
 export const UPDATE_EXAM_TYPE_BY_ID = `UPDATE_EXAM_TYPE_BY_ID`;
 export const DELETE_EXAM_TYPE_BY_ID = `DELETE_EXAM_TYPE_BY_ID`;
+export const DELETE_EXAM_CONFIG_BY_ID = `DELETE_EXAM_CONFIG_BY_ID`;
 export const GET_STUDENT_BY_ID = `GET_STUDENT_BY_ID`;
 export const UPDATE_STUDENT_BY_ID = `UPDATE_STUDENT_BY_ID`;
 export const UPDATE_TERM_BY_ID = `UPDATE_TERM_BY_ID`;
@@ -117,6 +118,7 @@ export const DELETE_TERM_BY_ID = `DELETE_TERM_BY_ID`;
 export const GET_STUDENTS_MARKS_BY_CLASS_ID_AND_EXAM_ID = `GET_STUDENTS_MARKS_BY_CLASS_ID_AND_EXAM_ID`;
 export const GET_STUDENTS_LIST_FOR_ASSIGN = `GET_STUDENTS_LIST_FOR_ASSIGN`;
 export const GET_EXAM_DETAIL_BY_EXAM_ID = `GET_EXAM_DETAIL_BY_EXAM_ID`;
+export const GET_SUBJECT_EXAM_CONFIG_DETAIL = `GET_SUBJECT_EXAM_CONFIG_DETAIL`;
 
 export default <EndpointDetails>{
   [REGISTER_USER]: {
@@ -582,5 +584,13 @@ export default <EndpointDetails>{
   [GET_STUDENTS_LIST_FOR_ASSIGN]: {
     requestType: `PUT`,
     endpoint: `/api/class/[id]/students`,
+  },
+  [GET_SUBJECT_EXAM_CONFIG_DETAIL]: {
+    requestType: `GET`,
+    endpoint: `/api/exam/[id]/subject/[subjectId]`,
+  },
+  [DELETE_EXAM_CONFIG_BY_ID]: {
+    requestType: `DELETE`,
+    endpoint: `/api/exam/[id]/configuration/[configId]`,
   },
 };

@@ -1,5 +1,7 @@
 'use client';
 import { useGetClassListQuery } from 'lib/queries/class/useGetClassListQuery';
+import { useDeleteExamSubjectConfigMutationQuery } from 'lib/queries/exams/configuration/useDeleteExamConfigMutationQuery';
+import { useGetSubjectExamDetailQuery } from 'lib/queries/exams/subject/useGetSubjectExamConfigQuery';
 import { useGetExamDetailQuery } from 'lib/queries/exams/useGetExamDetailQuery';
 import { useGetExamListQuery } from 'lib/queries/exams/useGetExamListQuery';
 import { useGetSubjectListByFilter } from 'lib/queries/exams/useGetSubjectByFilterQuery';
@@ -14,6 +16,7 @@ import {
 } from 'next/navigation';
 import { useEffect } from 'react';
 import {
+  Button,
   Select,
   SelectContent,
   SelectGroup,
@@ -22,6 +25,9 @@ import {
   SelectValue,
 } from 'ui';
 
+import { DeleteConfirmationModal } from '@/components/modals/DeleteConfirmationModal';
+
+import { AssessmentFormatDetailCard } from './Assessment-Format-Detail-Card';
 import { ExamConfigurationNameCard } from './ExamConfigurationNameCard';
 
 export function AddExamLayout() {
@@ -31,12 +37,17 @@ export function AddExamLayout() {
   const pathname = usePathname();
   const router = useRouter();
   const classId = searchParams.get('classId');
-  const examId = searchParams.get('examId');
+
   const sectionId = searchParams.get('sectionId');
   const subjectTypeId = searchParams.get('subjectTypeId');
+  const subjectId = searchParams.get('subjectId');
+  const configId = searchParams.get('configId');
+  const showDeleteConfirmationModal =
+    searchParams.get('isDeleteConfigModal') === 'true';
+
   const filter = { isActive: true };
   const routeParams = useParams<{ examId: string }>();
-
+  const examId = searchParams.get('examId') || routeParams.examId;
   const { data: examsList } = useGetExamListQuery({
     page,
     limit,
@@ -63,6 +74,16 @@ export function AddExamLayout() {
       }
     );
 
+  const {
+    data: subjectConfigListResponse,
+    isLoading: isSubjectConfigListLoading,
+  } = useGetSubjectExamDetailQuery(
+    { examId, sectionId, subjectId },
+    {
+      enabled: !!subjectId,
+    }
+  );
+
   const { data: subjectTypeListResponse, isLoading: isSubjectTypeListLoading } =
     useGetSubjectTypeList({
       page,
@@ -71,9 +92,11 @@ export function AddExamLayout() {
     });
   const {
     data: getSubjectByFilterResponse,
-    isPending: isPendingSubjectListResponse,
+    isPending: isSubjectListLoading,
     mutateAsync: mutateGetSubjectAsync,
   } = useGetSubjectListByFilter();
+  const { mutateAsync: deleteExamSubjectConfigAsync } =
+    useDeleteExamSubjectConfigMutationQuery(examId, sectionId, subjectId);
 
   useEffect(() => {
     if (subjectTypeId) {
@@ -88,6 +111,12 @@ export function AddExamLayout() {
     }
   }, [subjectTypeId, sectionId, classId, mutateGetSubjectAsync]);
 
+  function hideDeleteConfirmationModal() {
+    const params = new URLSearchParams(searchParams);
+    params.set('isDeleteConfigModal', 'false');
+    params.delete('configId');
+    router.replace(pathname + '?' + params.toString());
+  }
   return (
     <>
       <section className="mb-4 flex flex-row gap-5 rounded-md bg-white p-4">
@@ -147,7 +176,7 @@ export function AddExamLayout() {
         </div>
       </section>
       <section className="flex h-screen flex-row gap-1 rounded-xl bg-white p-1">
-        <div className="basis-1/4 rounded-l-lg bg-gray-50 text-center">
+        <div className="basis-1/6 rounded-l-lg bg-gray-50 text-center">
           <div className="p-2">Class</div>
           <div>
             <div>
@@ -172,7 +201,7 @@ export function AddExamLayout() {
             </div>
           </div>
         </div>
-        <div className="basis-1/4 bg-red-50 text-center">
+        <div className="basis-1/6 bg-red-50 text-center">
           <div className="p-2">Section</div>
           {!isSectionListLoading ? (
             <div>
@@ -193,7 +222,7 @@ export function AddExamLayout() {
             </div>
           )}
         </div>
-        <div className="basis-1/4 bg-blue-50 text-center">
+        <div className="basis-2/6 bg-blue-50 text-center">
           <div className="p-2">Subject Type</div>
           <div>
             {sectionId ? (
@@ -220,10 +249,10 @@ export function AddExamLayout() {
             ) : null}
           </div>
         </div>
-        <div className="basis-1/4 bg-slate-200 text-center">
+        <div className="basis-2/6 bg-slate-200 text-center">
           <div className="p-2">Subject</div>
           <div>
-            {!isPendingSubjectListResponse ? (
+            {!isSubjectListLoading ? (
               <div>
                 {getSubjectByFilterResponse?.data.map((cardData) => (
                   <ExamConfigurationNameCard
@@ -231,7 +260,11 @@ export function AddExamLayout() {
                     queryValue={cardData.id}
                     name={cardData.name}
                     key={cardData.id}
-                    openFlyout={true}
+                    openFlyout={
+                      subjectConfigListResponse?.examConfiguration.length
+                        ? false
+                        : true
+                    }
                   />
                 ))}
               </div>
@@ -243,7 +276,54 @@ export function AddExamLayout() {
             )}
           </div>
         </div>
+        <div className="basis-2/6 bg-slate-200 px-1 text-center">
+          <div className="p-2">Config Details</div>
+          <div>
+            {!isSubjectConfigListLoading ? (
+              <div>
+                {subjectConfigListResponse?.examConfiguration.map(
+                  (cardData) => {
+                    return cardData.assessmentFormat ? (
+                      <AssessmentFormatDetailCard {...cardData} />
+                    ) : null;
+                  }
+                )}
+              </div>
+            ) : (
+              <div className="flex justify-center pt-36">
+                <Loader2 className="mr-2 h-6 w-6 animate-spin text-black" />
+                <p className="text-black ">Fetching Details...</p>
+              </div>
+            )}
+            <div className="flex justify-center py-3 ">
+              <Button
+                className=" text-primary"
+                variant="outline"
+                onClick={() => {
+                  const params = new URLSearchParams(searchParams);
+                  params.set('isExamConfigureFlyoutOpen', 'true');
+                  router.replace(pathname + '?' + params.toString());
+                }}
+              >
+                Edit
+              </Button>
+            </div>
+          </div>
+        </div>
       </section>
+      <DeleteConfirmationModal
+        open={showDeleteConfirmationModal}
+        description={`Are you sure you want to delete the record?`}
+        onDeleteClick={async () => {
+          if (configId) {
+            await deleteExamSubjectConfigAsync(configId);
+            hideDeleteConfirmationModal();
+          }
+        }}
+        onCancelClick={() => {
+          hideDeleteConfirmationModal();
+        }}
+      />
     </>
   );
 }
