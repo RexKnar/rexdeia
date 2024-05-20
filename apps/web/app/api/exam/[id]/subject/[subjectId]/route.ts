@@ -8,7 +8,7 @@ import { getSubjectConfigDetailById } from './service';
 
 /**
  * @swagger
- * /api/exam/{id}/subject/{id}:
+ * /api/exam/{id}/subject/{id}?sectionId=string:
  *     get:
  *       summary: Fetch config details By subjectId
  *       description: Fetch configuration details of subject By subjectId
@@ -42,7 +42,12 @@ export async function GET(request: NextRequest, { params: { id, subjectId } }) {
   }
 
   try {
-    const subjectConfigDetail = await getSubjectConfigDetailById(id, subjectId);
+    const sectionId = request.nextUrl.searchParams.get('sectionId');
+    const subjectConfigDetail = await getSubjectConfigDetailById(
+      id,
+      subjectId,
+      sectionId
+    );
 
     return new NextResponse(JSON.stringify(subjectConfigDetail), {
       status: StatusCodes.OK,

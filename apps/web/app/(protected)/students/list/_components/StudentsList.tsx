@@ -225,7 +225,7 @@ export function StudentsList() {
   const {
     isError: isDeleteStudentError,
     isSuccess: isDeleteSuccess,
-    mutateAsync: deleteSubjectAsync,
+    mutateAsync: deleteStudentAsync,
   } = useDeleteStudentMutationQuery();
 
   const handleViewClick = (studentId) => {
@@ -443,7 +443,7 @@ export function StudentsList() {
           onDeleteClick={async () => {
             if (selectedStudent) {
               setShowDeleteConfirmationModal(false);
-              await deleteSubjectAsync(selectedStudent.id);
+              await deleteStudentAsync(selectedStudent.id);
             }
           }}
           onCancelClick={() => {
