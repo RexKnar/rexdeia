@@ -105,11 +105,7 @@ export function ExamConfigureFlyout() {
     payload.subjectTypeId = subjectTypeId;
     const createdExamConfiguration =
       await mutateCreateExamConfigurationAsync(payload);
-    // if (createdExamConfiguration) {
-    //   router.push(`/academics/exams/${examId}`);
-    //   fields.splice(0, fields.length);
-    //   reset();
-    // }
+
     if (createdExamConfiguration) {
       closeFlyout();
     }
