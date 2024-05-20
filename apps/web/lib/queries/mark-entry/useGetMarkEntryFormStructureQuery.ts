@@ -7,6 +7,7 @@ import { GET_MARK_ENTRY_FORM_STRUCTURE } from '../../endpoints';
 type GetMarkEntryFormStructureFilter = {
   classId: string;
   examId: string;
+  sectionId: string;
 };
 
 function getMarkEntryFormStructure(

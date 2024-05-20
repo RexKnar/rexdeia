@@ -4,9 +4,9 @@ import {
   UseQueryResult,
 } from '@tanstack/react-query';
 
-import { makeAPICall } from '../../api';
-import { AssessmentFormatModel } from '../../domain/subject';
-import { GET_ASSESSMENT_FORMAT_BY_SUBJECT_ID } from '../../endpoints';
+import { makeAPICall } from '../../../api';
+import { AssessmentFormatModel } from '../../../domain/subject';
+import { GET_ASSESSMENT_FORMAT_BY_SUBJECT_ID } from '../../../endpoints';
 
 function getAssessmentFormatBySubjectId(
   subjectId: string,

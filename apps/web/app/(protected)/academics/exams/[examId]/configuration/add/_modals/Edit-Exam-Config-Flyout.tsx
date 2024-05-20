@@ -1,7 +1,7 @@
 'use client';
 
+import { useGetAssessmentFormatBySubjectIdQuery } from 'lib/queries/exams/subject/useGetAssessmentFormatBySubjectIdQuery';
 import { useCreateExamConfigurationQuery } from 'lib/queries/exams/useCreateExamConfigurationMutationQuery';
-import { useGetAssessmentFormatBySubjectIdQuery } from 'lib/queries/exams/useGetAssessmentFormatBySubjectIdQuery';
 import { PlusCircle } from 'lucide-react';
 import {
   useParams,
@@ -110,7 +110,7 @@ export function EditExamConfigFlyout() {
         <SheetContent
           side="right"
           widthSize="sm"
-          className="bg-white p-10"
+          className="p-10 bg-white"
           onCloseClick={() => closeFlyout()}
         >
           <div className="max-h-[95vh] overflow-y-auto">
@@ -128,7 +128,7 @@ export function EditExamConfigFlyout() {
                 </SheetTitle>
                 <hr className="border-t border-gray-300"></hr>
               </SheetHeader>
-              <div className="mt-5 flex flex-wrap">
+              <div className="flex flex-wrap mt-5">
                 {assessmentFormatResponse?.map((assessmentFormat, index) => (
                   <div className="w-1/2" key={assessmentFormat.id}>
                     <Switch
@@ -150,7 +150,7 @@ export function EditExamConfigFlyout() {
               </div>
 
               {fields.map((field, index) => (
-                <div key={field.id} className="mt-5 p-1">
+                <div key={field.id} className="p-1 mt-5">
                   <div>
                     <label htmlFor="name" className="text-sm font-semibold">
                       {formatName}
@@ -231,7 +231,7 @@ export function EditExamConfigFlyout() {
                       errorMessage={fieldErrors?.minPassMark?.message.toString()}
                     />
                   </div>
-                  <div className="mt-1 flex justify-end">
+                  <div className="flex justify-end mt-1">
                     <label className="text-sm font-medium text-gray-600">
                       From conducting mark
                     </label>
@@ -242,7 +242,7 @@ export function EditExamConfigFlyout() {
                 <Button
                   size="lg"
                   variant="default"
-                  className="mx-auto flex justify-center px-12 py-4"
+                  className="flex justify-center px-12 py-4 mx-auto"
                 >
                   Save & Close
                 </Button>
