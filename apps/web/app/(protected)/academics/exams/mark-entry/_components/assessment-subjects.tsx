@@ -25,8 +25,6 @@ export function AssessmentSubjects({
     }
   }, [subjects]);
 
-  useEffect(() => {}, [markEnteredSubjects]);
-
   return (
     <>
       {fields.map((subject, subjectIndex) => {

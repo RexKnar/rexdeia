@@ -34,7 +34,7 @@ export function Assessment() {
   const examId = searchParams.get('examId');
   const staffId = searchParams.get('staffId');
 
-  const { control, register, handleSubmit } = useForm();
+  const { control, register, handleSubmit, reset } = useForm();
 
   const { data: classList } = useGetClassListQuery({
     page,
@@ -63,11 +63,12 @@ export function Assessment() {
     data: markEntryFormStructure,
     isLoading: isMarkEntryFormStructureLoading,
   } = useGetMarkEntryFormStructureQuery(
-    { classId, examId },
+    { classId, examId, sectionId },
     {
       enabled: !!examId,
     }
   );
+
   const { data: studentsMarks, isLoading: isStudentsMarksLoading } =
     useGetStudentsMarksByClassIdExamIdQuery(
       {
@@ -104,6 +105,24 @@ export function Assessment() {
       });
     }
   }, [markEntryFormStructure]);
+
+  useEffect(() => {
+    const params = new URLSearchParams(searchParams);
+    params.delete('examId');
+    router.replace(pathname + '?' + params.toString());
+  }, [classId, sectionId]);
+
+  useEffect(() => {
+    const params = new URLSearchParams(searchParams);
+    params.delete('section');
+    params.delete('examId');
+    router.replace(pathname + '?' + params.toString());
+  }, [classId]);
+
+  useEffect(() => {
+    reset();
+  }, [classId, sectionId]);
+
   const handleKeyDown = (event) => {
     if (event.key === 'Enter') {
       event.preventDefault();
@@ -175,6 +194,7 @@ export function Assessment() {
           </SelectTrigger>
           <SelectContent className="border border-primary-200">
             <SelectGroup>
+              <SelectItem value="1">Select a Exam</SelectItem>
               {examList?.map((exam) => (
                 <SelectItem key={exam.id} value={exam.id}>
                   {exam.name}
@@ -209,7 +229,7 @@ export function Assessment() {
       </div>
       {!isStudentsMarksLoading && !isMarkEntryFormStructureLoading ? (
         <>
-          {markEntryFormStructure ? (
+          {markEntryFormStructure?.length ? (
             <table className="min-w-full divide-y divide-gray-200 shadow-md">
               <thead className="bg-gray-50">
                 <tr>

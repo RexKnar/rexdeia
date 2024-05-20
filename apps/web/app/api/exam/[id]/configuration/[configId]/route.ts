@@ -6,34 +6,6 @@ import { getServerSession } from 'next-auth';
 
 import { deleteExamConfigurationEntry } from '../service';
 
-/**
- * @swagger
- * /api/exam/{id}/configuration/{configId}:
- *     delete:
- *       summary: Delete exam configuration by Id
- *       description: Delete exam configuration by Id
- *       parameters:
- *         - name: id
- *           in: path
- *           required: true
- *           description: Unique identifier of the section.
- *           schema:
- *             type: string
- *       responses:
- *         '200':
- *           description: Batch details deleted successfully.
- *           content:
- *             application/json:
- *               schema:
- *                 # Define the schema of your class object here
- *         '400':
- *           description: Bad request due to validation error.
- *         '401':
- *           description: Unauthorized access.
- *         '500':
- *           description: Internal server error.
- *
- * **/
 export async function DELETE(_: NextRequest, { params: { configId } }) {
   try {
     const session = await getServerSession(authOptions);

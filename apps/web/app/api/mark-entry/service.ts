@@ -17,6 +17,7 @@ type GetStaffsFilter = {
 type FormDataFilter = {
   examId?: string;
   classId?: string;
+  sectionId?: string;
 };
 
 export async function getSubjectsWithFormat(filter: SubjectsWithFormatFilter) {
@@ -308,12 +309,13 @@ export async function getStudentsMarksByFilter(filter: any) {
 }
 
 export async function getFormDataByClassExam(filter: FormDataFilter) {
-  const { classId, examId } = filter;
+  const { classId, examId, sectionId } = filter;
 
   const [formData] = await Promise.all([
     db.studentMapping.findMany({
       where: {
         classId: classId,
+        sectionId: sectionId,
       },
       select: {
         student: {
