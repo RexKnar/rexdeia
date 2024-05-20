@@ -34,7 +34,7 @@ export function Assessment() {
   const examId = searchParams.get('examId');
   const staffId = searchParams.get('staffId');
 
-  const { control, register, handleSubmit } = useForm();
+  const { control, register, handleSubmit, reset } = useForm();
 
   const { data: classList } = useGetClassListQuery({
     page,
@@ -63,11 +63,12 @@ export function Assessment() {
     data: markEntryFormStructure,
     isLoading: isMarkEntryFormStructureLoading,
   } = useGetMarkEntryFormStructureQuery(
-    { classId, examId },
+    { classId, examId, sectionId },
     {
       enabled: !!examId,
     }
   );
+
   const { data: studentsMarks, isLoading: isStudentsMarksLoading } =
     useGetStudentsMarksByClassIdExamIdQuery(
       {
@@ -104,6 +105,24 @@ export function Assessment() {
       });
     }
   }, [markEntryFormStructure]);
+
+  useEffect(() => {
+    const params = new URLSearchParams(searchParams);
+    params.delete('examId');
+    router.replace(pathname + '?' + params.toString());
+  }, [classId, sectionId]);
+
+  useEffect(() => {
+    const params = new URLSearchParams(searchParams);
+    params.delete('section');
+    params.delete('examId');
+    router.replace(pathname + '?' + params.toString());
+  }, [classId]);
+
+  useEffect(() => {
+    reset();
+  }, [classId, sectionId]);
+
   const handleKeyDown = (event) => {
     if (event.key === 'Enter') {
       event.preventDefault();
@@ -111,7 +130,7 @@ export function Assessment() {
   };
   return (
     <form onSubmit={handleSubmit(saveMarkEntry)} onKeyDown={handleKeyDown}>
-      <div className="mb-4 flex justify-between rounded-md bg-white">
+      <div className="flex justify-between mb-4 bg-white rounded-md">
         <Select
           onValueChange={(value) => {
             if (value) {
@@ -175,6 +194,7 @@ export function Assessment() {
           </SelectTrigger>
           <SelectContent className="border border-primary-200">
             <SelectGroup>
+              <SelectItem value="1">Select a Exam</SelectItem>
               {examList?.map((exam) => (
                 <SelectItem key={exam.id} value={exam.id}>
                   {exam.name}
@@ -209,19 +229,19 @@ export function Assessment() {
       </div>
       {!isStudentsMarksLoading && !isMarkEntryFormStructureLoading ? (
         <>
-          {markEntryFormStructure ? (
+          {markEntryFormStructure?.length ? (
             <table className="min-w-full divide-y divide-gray-200 shadow-md">
               <thead className="bg-gray-50">
                 <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-black">
+                  <th className="px-6 py-3 text-xs font-medium tracking-wider text-left text-black uppercase">
                     Student
                   </th>
                   {markEntryFormStructure[0]?.subjects.map((subject) => (
                     <th
                       key={subject.id}
-                      className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-black"
+                      className="px-6 py-3 text-xs font-medium tracking-wider text-left text-black uppercase"
                     >
-                      <div className="border-1 flex w-full space-x-2 border border-b-primary-200">
+                      <div className="flex w-full space-x-2 border border-1 border-b-primary-200">
                         <p className="flex-1 text-center ">{subject.name}</p>
                       </div>
                       <div className="flex w-full space-x-2">
@@ -239,7 +259,7 @@ export function Assessment() {
                   ))}
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-200 bg-white">
+              <tbody className="bg-white divide-y divide-gray-200">
                 {studentFields.map((student, studentIndex) => {
                   let studentDetailsIndex = studentsMarks?.length
                     ? studentsMarks?.findIndex(
@@ -253,7 +273,7 @@ export function Assessment() {
 
                   return (
                     <tr key={student.id}>
-                      <td className="whitespace-nowrap px-6 py-4">
+                      <td className="px-6 py-4 whitespace-nowrap">
                         {markEntryFormStructure[studentIndex]?.name}
                       </td>
                       <AssessmentSubjects
@@ -278,7 +298,7 @@ export function Assessment() {
           <Button className="text-center" type="submit">
             {isPendingCreateMarkEntry ? (
               <div className="flex items-center justify-center">
-                <Loader2 className="mr-2 h-6 w-6 animate-spin text-white" />
+                <Loader2 className="w-6 h-6 mr-2 text-white animate-spin" />
                 Saving
               </div>
             ) : (
@@ -288,7 +308,7 @@ export function Assessment() {
         </>
       ) : (
         <div className="flex items-center justify-center">
-          <Loader2 className="mr-2 h-6 w-6 animate-spin text-black" />
+          <Loader2 className="w-6 h-6 mr-2 text-black animate-spin" />
           <p className="text-black ">Fetching Data...</p>
         </div>
       )}

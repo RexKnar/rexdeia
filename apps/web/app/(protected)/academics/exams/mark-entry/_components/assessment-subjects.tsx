@@ -25,8 +25,6 @@ export function AssessmentSubjects({
     }
   }, [subjects]);
 
-  useEffect(() => {}, [markEnteredSubjects]);
-
   return (
     <>
       {fields.map((subject, subjectIndex) => {
@@ -41,7 +39,7 @@ export function AssessmentSubjects({
             : [];
 
         return (
-          <td key={subject.id} className="whitespace-nowrap px-6 py-4">
+          <td key={subject.id} className="px-6 py-4 whitespace-nowrap">
             <div>
               <MarkFields
                 nestIndex={nestIndex}
