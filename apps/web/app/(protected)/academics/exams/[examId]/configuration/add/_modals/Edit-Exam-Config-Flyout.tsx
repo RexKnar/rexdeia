@@ -1,7 +1,7 @@
 'use client';
 
 import { useCreateExamConfigurationQuery } from 'lib/queries/exams/useCreateExamConfigurationMutationQuery';
-import { useGetAssessmentFormatBySubjectIdQuery } from 'lib/queries/exams/useGetAssessmentFormatbySubjectIdQuery';
+import { useGetAssessmentFormatBySubjectIdQuery } from 'lib/queries/exams/useGetAssessmentFormatBySubjectIdQuery';
 import { PlusCircle } from 'lucide-react';
 import {
   useParams,
