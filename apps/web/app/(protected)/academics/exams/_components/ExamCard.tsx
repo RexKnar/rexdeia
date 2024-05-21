@@ -1,5 +1,6 @@
 'use client';
 
+import { LinkButton } from '@/components/LinkButton';
 import { useRouter } from 'next/navigation';
 import React from 'react';
 import { Button } from 'ui';
@@ -20,7 +21,6 @@ export function ExamCard({
   academicYear,
   className,
 }: ExamCardProps) {
-  const router = useRouter();
   return (
     <div
       className={cn(
@@ -31,30 +31,23 @@ export function ExamCard({
       <h3 className="font-bold ">{examName}</h3>
       <div className="flex flex-wrap">
         <p className="py-3">
-          <span className="rounded-lg bg-gray-200 p-1 text-sm font-semibold">
+          <span className="p-1 text-sm font-semibold bg-gray-200 rounded-lg">
             {termName}
           </span>
-          <span className="ml-2 rounded-lg bg-gray-200 p-1 text-sm font-semibold">
+          <span className="p-1 ml-2 text-sm font-semibold bg-gray-200 rounded-lg">
             {academicYear}
           </span>
         </p>
         <div className="flex gap-2">
-          <Button
-            className="text-white"
-            onClick={() => {
-              router.push(`/academics/exams/${examId}/configuration/add`);
-            }}
+          <LinkButton
+            variant={'primary'}
+            url={`/academics/exams/${examId}/configuration/add`}
           >
             Configure
-          </Button>
-          <Button
-            variant="outline"
-            onClick={() => {
-              router.push(`/academics/exams/${examId}`);
-            }}
-          >
+          </LinkButton>
+          <LinkButton variant="outline" url={`/academics/exams/mark-entry/`}>
             Enter Mark
-          </Button>
+          </LinkButton>
         </div>
       </div>
     </div>

@@ -1,3 +1,4 @@
+'use Client';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 
 export function ExamConfigurationNameCard(props) {
@@ -11,7 +12,7 @@ export function ExamConfigurationNameCard(props) {
 
   return (
     <div
-      className="cursor-pointer border-b-2 border-white p-2 font-medium"
+      className="p-2 font-medium border-b-2 border-white cursor-pointer"
       onClick={() => {
         params.set(type, queryValue);
 
