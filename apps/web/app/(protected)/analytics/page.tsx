@@ -1,6 +1,7 @@
 import { authOptions } from 'lib/auth';
 import { redirect } from 'next/navigation';
 import { getServerSession } from 'next-auth';
+import { PieChartWithCustomLabel } from 'ui/components/Charts/Pie/PieChartWithCustomLabel';
 
 import { StudentAnalytics } from './_components/StudentAnalytics';
 import { StudentAnalyticsHeader } from './_components/StudentAnalyticsPageheader';
@@ -12,9 +13,10 @@ export default async function Page() {
   }
 
   return (
-    <section className="space-y-2 rounded-md  p-4">
+    <section className="space-y-2 rounded-md p-4">
       <StudentAnalyticsHeader />
-      <StudentAnalytics />
+      {/* <StudentAnalytics /> */}
+      <PieChartWithCustomLabel />
     </section>
   );
 }
