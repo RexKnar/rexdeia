@@ -14,7 +14,7 @@ function getStudentsMarksByFilter(
 ) {
   return {
     ...options,
-    queryKey: [GET_MARKS_WITH_FORMAT_BY_EXAM],
+    queryKey: [GET_MARKS_WITH_FORMAT_BY_EXAM, filter],
     queryFn: async () => {
       return await makeAPICall<any[]>(
         GET_MARKS_WITH_FORMAT_BY_EXAM,

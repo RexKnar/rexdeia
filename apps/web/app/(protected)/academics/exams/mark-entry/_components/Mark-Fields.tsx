@@ -61,16 +61,18 @@ export function MarkFields({
   return (
     <div className="flex w-full space-x-2">
       {fields.map((field, formatIndex) => {
-        const currentFormatIndex = assessmentFormats.findIndex(
+        const currentFormatIndex = assessmentFormats?.findIndex(
           (obj) => obj.assessmentFormat?.id === fields['assessmentFormatId']
         );
-
+        const currentAssessmentFormats = currentFormatIndex
+          ? assessmentFormats[currentFormatIndex]
+          : {};
         return (
           <MarkInput
             key={field.id}
             control={control}
-            attendance={field['attendance']}
-            validationData={assessmentFormats[currentFormatIndex]}
+            attendance={field['attendance'] || {}}
+            validationData={currentAssessmentFormats || {}}
             registerKey={`studentsMarkDetails.${nestIndex}.subjects.${subjectIndex}.marks.${formatIndex}`}
             fieldName={field['assessmentFormatName']}
           />
