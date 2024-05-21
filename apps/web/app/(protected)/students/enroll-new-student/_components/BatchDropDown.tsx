@@ -36,7 +36,7 @@ export function BatchDropDown() {
   return (
     <div className="w-full">
       <label className="mb-2 mt-1 block text-sm text-gray-700">
-        Batch
+        Academic Year
         <span className="text-red-300"> *</span>
       </label>
 
