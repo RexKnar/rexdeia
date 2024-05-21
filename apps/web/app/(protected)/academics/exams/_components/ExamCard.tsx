@@ -50,7 +50,7 @@ export function ExamCard({
           <Button
             variant="outline"
             onClick={() => {
-              router.push(`/academics/exams/${examId}`);
+              router.push(`/academics/exams/mark-entry/`);
             }}
           >
             Enter Mark
