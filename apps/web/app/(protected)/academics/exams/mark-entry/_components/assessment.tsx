@@ -91,7 +91,11 @@ export function Assessment() {
     mutateCreateMarkEntryAsync(markEntryPayload);
   }
 
-  const { fields: studentFields, append } = useFieldArray({
+  const {
+    fields: studentFields,
+    append,
+    remove,
+  } = useFieldArray({
     control,
     name: 'studentsMarkDetails',
   });
@@ -120,8 +124,9 @@ export function Assessment() {
   }, [classId]);
 
   useEffect(() => {
+    remove(Array.from({ length: studentFields.length }, (_, i) => i));
     reset();
-  }, [classId, sectionId]);
+  }, [classId, sectionId, examId]);
 
   const handleKeyDown = (event) => {
     if (event.key === 'Enter') {
