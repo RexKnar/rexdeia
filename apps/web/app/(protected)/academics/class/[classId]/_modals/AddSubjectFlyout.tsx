@@ -101,7 +101,6 @@ export function AddSubjectFlyout() {
   const closeFlyout = () => {
     const params = new URLSearchParams(searchParams.toString());
     params.set('isAddSubjectFlyoutOpen', 'false');
-    reset();
     router.replace(pathname + '?' + params.toString());
   };
 

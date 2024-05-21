@@ -37,6 +37,7 @@ export function AssignStaffClassDetailPageFlyout() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const {
+    watch,
     register,
     handleSubmit,
     setValue,
@@ -97,7 +98,6 @@ export function AssignStaffClassDetailPageFlyout() {
     const params = new URLSearchParams(searchParams.toString());
     params.set('isAssignStaffClassDetailPageFlyoutOpen', 'false');
     params.delete('sectionId');
-    reset();
     router.replace(pathname + '?' + params.toString());
   };
 
@@ -152,6 +152,7 @@ export function AssignStaffClassDetailPageFlyout() {
                         <div className="relative w-full">
                           <Select
                             autoComplete="off"
+                            value={watch(`sections.${index}.staffId`)}
                             {...register(`sections.${index}.staffId` as any, {
                               required: true,
                             })}
@@ -198,6 +199,7 @@ export function AssignStaffClassDetailPageFlyout() {
                         <div className="relative w-full">
                           <Select
                             autoComplete="off"
+                            value={watch(`sections.${index}.subjectId`)}
                             {...register(`sections.${index}.subjectId` as any, {
                               required: true,
                             })}
