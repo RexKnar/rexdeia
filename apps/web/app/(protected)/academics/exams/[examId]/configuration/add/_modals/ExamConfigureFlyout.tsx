@@ -3,7 +3,7 @@
 import { useGetAssessmentFormatBySubjectIdQuery } from 'lib/queries/exams/subject/useGetAssessmentFormatBySubjectIdQuery';
 import { useGetSubjectExamDetailQuery } from 'lib/queries/exams/subject/useGetSubjectExamConfigQuery';
 import { useCreateExamConfigurationQuery } from 'lib/queries/exams/useCreateExamConfigurationMutationQuery';
-import { PlusCircle } from 'lucide-react';
+import { Loader2, PlusCircle } from 'lucide-react';
 import {
   useParams,
   usePathname,
@@ -52,7 +52,7 @@ export function ExamConfigureFlyout() {
   });
 
   const toggleForm = (assessmentFormat) => {
-    const index = fields.findIndex(
+    const index = fields?.findIndex(
       (field) => field['assessmentFormatId'] === assessmentFormat.id
     );
     if (index > -1) {
@@ -77,8 +77,10 @@ export function ExamConfigureFlyout() {
     }
   );
 
-  const { mutateAsync: mutateCreateExamConfigurationAsync } =
-    useCreateExamConfigurationQuery(examId);
+  const {
+    isPending: isPendingCreateExamConfig,
+    mutateAsync: mutateCreateExamConfigurationAsync,
+  } = useCreateExamConfigurationQuery(examId);
 
   const closeFlyout = async () => {
     const params = new URLSearchParams(searchParams);
@@ -161,7 +163,6 @@ export function ExamConfigureFlyout() {
                     );
                 })}
               </div>
-
               {fields.map((field, index) => (
                 <div key={field.id} className="mt-5 p-1">
                   <div>
@@ -222,7 +223,7 @@ export function ExamConfigureFlyout() {
                       type="text"
                       className="mt-2"
                       placeholder="Mark to Convert"
-                      errorMessage={fieldErrors?.markToConvert?.message.toString()}
+                      errorMessage={fieldErrors.markToConvert?.message.toString()}
                     />
                   </div>
                   <div className="mt-2">
@@ -241,7 +242,7 @@ export function ExamConfigureFlyout() {
                       type="text"
                       className="mt-2"
                       placeholder="Min Pass Mark"
-                      errorMessage={fieldErrors?.minPassMark?.message.toString()}
+                      errorMessage={fieldErrors.minPassMark?.message.toString()}
                     />
                   </div>
                   <div className="mt-1 flex justify-end">
@@ -256,8 +257,16 @@ export function ExamConfigureFlyout() {
                   size="lg"
                   variant="default"
                   className="mx-auto flex justify-center px-12 py-4"
+                  disabled={isPendingCreateExamConfig}
                 >
-                  Save & Close
+                  {isPendingCreateExamConfig ? (
+                    <div className="flex items-center justify-center">
+                      <Loader2 className="mr-2 h-6 w-6 animate-spin text-white" />
+                      Saving
+                    </div>
+                  ) : (
+                    `${'Save & Close'}`
+                  )}
                 </Button>
               </div>
             </form>

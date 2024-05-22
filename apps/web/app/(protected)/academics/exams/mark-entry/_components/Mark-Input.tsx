@@ -31,10 +31,10 @@ export function MarkInput({
     const isValidNumber = !isNaN(inputValue);
 
     if (isValidNumber) {
-      if (inputValue > validationData.markToConduct) {
-        setErrorMessage(`${inputValue}> ${validationData.markToConduct}`);
+      if (inputValue > validationData?.markToConduct) {
+        setErrorMessage(`${inputValue}> ${validationData?.markToConduct}`);
       } else {
-        const status = inputValue >= validationData.minPassMark ? 'P' : 'F';
+        const status = inputValue >= validationData?.minPassMark ? 'P' : 'F';
         setErrorMessage('');
         setMarkStatus(status);
       }
@@ -60,7 +60,7 @@ export function MarkInput({
         <div className="me-2">
           <Input
             type="number"
-            maxLength={validationData.markToConduct}
+            maxLength={validationData?.markToConduct || 200}
             placeholder={fieldName}
             errorMessage={errorMessage}
             {...control.register(`${registerKey}.mark`)}
