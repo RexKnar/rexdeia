@@ -16,6 +16,36 @@ export async function getStudentById(id: string) {
       organizationId: session.organizationId,
       isDeleted: false,
     },
+    include: {
+      batch: {
+        select: {
+          id: true,
+          name: true,
+        },
+      },
+      studentMapping: {
+        select: {
+          group: {
+            select: {
+              id: true,
+              name: true,
+            },
+          },
+          class: {
+            select: {
+              id: true,
+              name: true,
+            },
+          },
+          medium: {
+            select: {
+              id: true,
+              name: true,
+            },
+          },
+        },
+      },
+    },
   });
 
   // if (!student) {

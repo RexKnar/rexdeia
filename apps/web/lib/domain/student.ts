@@ -33,10 +33,18 @@ export type Student = {
   status: 'Active' | 'Rejected' | 'Pending';
 
   additionalAttributes: any;
+  studentMapping: any[];
 };
 
 export type AddStudentModel = Omit<Student, 'id'> & {
   batchId: string;
+};
+
+export type GetStudentModel = Student & {
+  batch: {
+    name: string;
+    id: string;
+  };
 };
 
 export type UpdateStudentModel = Pick<Student, 'id'>;

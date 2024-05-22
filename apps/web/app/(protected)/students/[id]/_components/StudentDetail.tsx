@@ -27,15 +27,15 @@ export function StudentDetail() {
   if (isGetStudentByIdLoading) {
     return (
       <div className="flex h-20 items-center justify-center">
-        <Loader2 className="mr-2  w-6 animate-spin text-black" />
-        <p className=" text-black">Fetching Student Details...</p>
+        <Loader2 className="mr-2 w-6 animate-spin text-black" />
+        <p className="text-black ">Fetching Student Details...</p>
       </div>
     );
   }
   return (
     <section className="mt-10 flex w-full justify-start gap-5">
       <section className="col-span-3 ">
-        <Card className=" w-72 rounded-md bg-white ">
+        <Card className="w-72 rounded-md bg-white">
           <CardHeader>
             <div className="">
               <div className="flex justify-center">
@@ -57,7 +57,7 @@ export function StudentDetail() {
                 </Text>
                 <Text
                   variant="base-regular"
-                  className=" rounded-lg border bg-violet-100 px-2"
+                  className="rounded-lg border bg-violet-100 px-2"
                 >
                   {getStudentByIdResponse.additionalAttributes.age}
                 </Text>
@@ -71,7 +71,7 @@ export function StudentDetail() {
             </div>
           </CardHeader>
           <CardContent className="pl-0">
-            <div className=" mt-5 pl-3 ">
+            <div className="mt-5 pl-3 ">
               <div className="ml-5 grid grid-cols-3 ">
                 <Text className="w-18 pt-1 text-xs text-gray-800">{'DOB'}</Text>
                 <Text className="col-span-2">
@@ -79,7 +79,7 @@ export function StudentDetail() {
                 </Text>
               </div>
               <div className="ml-5 grid grid-cols-3 pt-3">
-                <Text className="w-18 pt-1 text-xs  text-gray-800">
+                <Text className="w-18 pt-1 text-xs text-gray-800">
                   {'Gender'}
                 </Text>
                 <Text className="">{getStudentByIdResponse.gender}</Text>
@@ -125,7 +125,7 @@ export function StudentDetail() {
           </TabsList>
           <TabsContent className="w-full" value="profile">
             <section className="max-h-[60vh] overflow-y-auto">
-              <div className=" rounded-md bg-white ">
+              <div className="rounded-md bg-white ">
                 <Text className="pl-5 pt-5" variant="sm-semibold">
                   {'BASIC DETAILS'}
                 </Text>
@@ -664,8 +664,8 @@ export function StudentDetail() {
                       </label>
                       <Text variant="base-regular">
                         {
-                          getStudentByIdResponse.additionalAttributes
-                            .joiningMedium
+                          getStudentByIdResponse?.studentMapping[0]?.medium
+                            ?.name
                         }
                       </Text>
                     </div>
@@ -674,10 +674,7 @@ export function StudentDetail() {
                         Class
                       </label>
                       <Text variant="base-regular">
-                        {
-                          getStudentByIdResponse.additionalAttributes
-                            .joiningClass
-                        }
+                        {getStudentByIdResponse?.studentMapping[0]?.class?.name}
                       </Text>
                     </div>
                     <div>
@@ -685,10 +682,7 @@ export function StudentDetail() {
                         Group
                       </label>
                       <Text variant="base-regular">
-                        {
-                          getStudentByIdResponse.additionalAttributes
-                            .joiningGroup
-                        }
+                        {getStudentByIdResponse?.studentMapping[0]?.group?.name}
                       </Text>
                     </div>
                   </div>
@@ -704,7 +698,7 @@ export function StudentDetail() {
                         Batch
                       </label>
                       <Text variant="base-regular">
-                        {getStudentByIdResponse.batchId}
+                        {getStudentByIdResponse?.batch?.name}
                       </Text>
                     </div>
                     <div>
@@ -757,7 +751,7 @@ export function StudentDetail() {
             </section>
           </TabsContent>
           <TabsContent className="w-full" value="document">
-            <section className=" bg-white p-5">
+            <section className="bg-white p-5 ">
               <div>
                 <label className="pl-1">Document</label>
               </div>
@@ -780,7 +774,7 @@ export function StudentDetail() {
                   </Card>
                 </div>
                 <div className="mt-4 rounded-md bg-white">
-                  <Card className=" w-40 max-w-60">
+                  <Card className="w-40 max-w-60">
                     <CardContent className="p-0 ">
                       <div className="flex justify-center bg-indigo-100 pb-3 pt-3">
                         <img className="" src="/pdf.png" alt="" />

@@ -1,7 +1,9 @@
 'use client';
 
 import { motion } from 'framer-motion';
+import { useGetBatchesListQuery } from 'lib/queries/batches/useGetBatchesListQuery';
 import { useGetClassListQuery } from 'lib/queries/class/useGetClassListQuery';
+import { useGetBloodGroupListQuery } from 'lib/queries/common/useGetBloodGroupListQuery';
 import { useGetGroupListQuery } from 'lib/queries/group/useGetGroupListQuery';
 import { useGetMediumListQuery } from 'lib/queries/medium/useGetMediumListQuery';
 import { AlertTriangle, Check } from 'lucide-react';
@@ -17,7 +19,6 @@ import { useGetCountryListQuery } from '../../../../../lib/queries/common/useGet
 import { useGetStateByCountryCodeQuery } from '../../../../../lib/queries/common/useGetStateListQuery';
 import { admissionForm } from '../data';
 import { AddStudentPreviewModal } from '../modals/AddStudentPreviewModal';
-import { BatchDropDown } from './BatchDropDown';
 
 const formConfig: Record<string, any> = admissionForm;
 
@@ -87,12 +88,20 @@ export function AddStudentForm() {
     useGetCityByStateCodeQuery(permanentCountryCode, permanentStateCode, {
       enabled: !!permanentStateCode,
     });
+  const { data: getBloodGroupListResponse } = useGetBloodGroupListQuery();
   const { data: getCountryListResponse } = useGetCountryListQuery();
+  const { batches } = useGetBatchesListQuery({
+    page,
+    limit,
+    filter,
+  });
 
   let customDataList = {
+    bloodGroup: getBloodGroupListResponse || [],
     joiningMedium: mediumList?.data || [],
     joiningClass: classList?.data || [],
     joiningGroup: groupList?.data || [],
+    batchId: batches || [],
     permanentCountry: getCountryListResponse || [],
     permanentState: getPermanentStateByCountryIdResponse || [],
     permanentCity: getPermanentCityByStateCodeResponse || [],
@@ -221,7 +230,6 @@ export function AddStudentForm() {
                 {section.sectionTitle}
               </h1>
               <section className="grid grid-cols-1 flex-wrap justify-between gap-4 md:grid md:grid-cols-1 lg:grid lg:grid-cols-3 ">
-                {section.sectionTitle === 'Other Details' && <BatchDropDown />}
                 {section.sectionFields.map((field) => {
                   if (field.visible) {
                     switch (field.type) {
@@ -378,6 +386,7 @@ export function AddStudentForm() {
                               placeholder={field.placeholder}
                               className="ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring mt-1 flex h-10 w-full rounded-md border border-gray-300 bg-transparent px-3 py-2 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
                             >
+                              <option value="">Select a Value</option>
                               {(field.options && field.options.length > 0
                                 ? field.options
                                 : customDataList[field.name]
