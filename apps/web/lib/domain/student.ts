@@ -33,7 +33,6 @@ export type Student = {
   status: 'Active' | 'Rejected' | 'Pending';
 
   additionalAttributes: any;
-  studentMapping: any[];
 };
 
 export type AddStudentModel = Omit<Student, 'id'> & {
@@ -41,6 +40,7 @@ export type AddStudentModel = Omit<Student, 'id'> & {
 };
 
 export type GetStudentModel = Student & {
+  studentMapping?: any[];
   batch: {
     name: string;
     id: string;
