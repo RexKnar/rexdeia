@@ -12,7 +12,7 @@ export function ExamConfigurationNameCard(props) {
 
   return (
     <div
-      className="p-2 font-medium border-b-2 border-white cursor-pointer"
+      className="cursor-pointer border-b-2 border-white p-2 font-medium"
       onClick={() => {
         params.set(type, queryValue);
 

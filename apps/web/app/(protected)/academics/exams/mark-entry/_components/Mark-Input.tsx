@@ -44,17 +44,17 @@ export function MarkInput({
   }, [currentMark]);
 
   return (
-    <div className="justify-center flex-1">
+    <div className="flex-1 justify-center">
       <div className="flex w-full">
         <div className="flex h-10 text-center">
           <When condition={markStatus == 'F'}>
-            <CircleDot className="w-4 h-full text-red-500 transition-opacity duration-500" />
+            <CircleDot className="h-full w-4 text-red-500 transition-opacity duration-500" />
           </When>
           <When condition={markStatus == 'P'}>
-            <Check className="w-4 h-full text-green-500 transition-opacity duration-500" />
+            <Check className="h-full w-4 text-green-500 transition-opacity duration-500" />
           </When>
           <When condition={markStatus == '-'}>
-            <CircleDot className="w-4 h-full text-gray-500 transition-opacity duration-500" />
+            <CircleDot className="h-full w-4 text-gray-500 transition-opacity duration-500" />
           </When>
         </div>
         <div className="me-2">
@@ -73,14 +73,14 @@ export function MarkInput({
             render={({ field }) => (
               <>
                 <Checkbox
-                  className="items-center space-x-2 border rounded me-1 border-primary-500"
+                  className="me-1 items-center space-x-2 rounded border border-primary-500"
                   checked={currentAttendance}
                   onCheckedChange={(checked) => {
                     field.onChange(checked ? 1 : 0);
                   }}
                 />
 
-                <label className="text-red-500 item-center">A</label>
+                <label className="item-center text-red-500">A</label>
               </>
             )}
           />

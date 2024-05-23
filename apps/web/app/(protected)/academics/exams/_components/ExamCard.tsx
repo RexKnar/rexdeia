@@ -31,10 +31,10 @@ export function ExamCard({
       <h3 className="font-bold ">{examName}</h3>
       <div className="flex flex-wrap">
         <p className="py-3">
-          <span className="p-1 text-sm font-semibold bg-gray-200 rounded-lg">
+          <span className="rounded-lg bg-gray-200 p-1 text-sm font-semibold">
             {termName}
           </span>
-          <span className="p-1 ml-2 text-sm font-semibold bg-gray-200 rounded-lg">
+          <span className="ml-2 rounded-lg bg-gray-200 p-1 text-sm font-semibold">
             {academicYear}
           </span>
         </p>

@@ -72,7 +72,7 @@ export async function getExamConfigWithSubjectPartion(
         );
         return {
           ...partition,
-          Mark: mark || null, // Use the first mark or null if no mark matches
+          Mark: mark || null,
         };
       }),
     }));
@@ -85,86 +85,3 @@ export async function getExamConfigWithSubjectPartion(
 
   return configResponse;
 }
-
-// export async function getFormDataByClassExam(filter: FormDataFilter) {
-//   const { classId, examId, sectionId } = filter;
-
-//   const [formData] = await Promise.all([
-//     db.studentMapping.findMany({
-//       where: {
-//         classId: classId,
-//         sectionId: sectionId,
-//       },
-//       select: {
-//         student: {
-//           select: {
-//             id: true,
-//             firstName: true,
-//           },
-//         },
-//         group: {
-//           include: {
-//             subjectToGroup: {
-//               where: {
-//                 subject: {
-//                   academicExams: {
-//                     some: {
-//                       examId: examId,
-//                     },
-//                   },
-//                 },
-//               },
-//               select: {
-//                 subject: {
-//                   select: {
-//                     academicExams: {
-//                       include: {
-//                         examConfiguration: {
-//                           select: {
-//                             minPassMark: true,
-//                             markToConduct: true,
-//                             markToConvert: true,
-//                             assessmentFormat: true,
-//                           },
-//                         },
-//                       },
-//                     },
-//                     name: true,
-//                     id: true,
-//                   },
-//                 },
-//               },
-//             },
-//           },
-//         },
-//       },
-//     }),
-//   ]);
-
-//   function restructureResponse(data) {
-//     return data.map((item) => {
-//       return {
-//         id: item.student.id,
-//         name: item.student.firstName,
-//         subjects: item.group.subjectToGroup.map((subject) => {
-//           const assessment = subject.subject.academicExams.map((assessment) => {
-//             const format = assessment.examConfiguration.map((format) => {
-//               return {
-//                 academicExamId: assessment.id,
-//                 ...format,
-//               };
-//             });
-//             return format;
-//           });
-//           return {
-//             id: subject.subject.id,
-//             name: subject.subject.name,
-//             assessmentFormat: assessment.flatMap((format) => format),
-//           };
-//         }),
-//       };
-//     });
-//   }
-
-//   return await restructureResponse(formData);
-// }
