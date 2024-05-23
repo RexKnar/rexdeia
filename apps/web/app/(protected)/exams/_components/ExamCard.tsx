@@ -40,11 +40,11 @@ export function ExamCard({
         <div className="flex gap-2">
           <LinkButton
             variant={'primary'}
-            url={`/academics/exams/${examId}/configuration/add`}
+            url={`/exams/${examId}/configuration/add`}
           >
             Configure
           </LinkButton>
-          <LinkButton variant="outline" url={`/academics/exams/mark-entry/`}>
+          <LinkButton variant="outline" url={`/exams/mark-entry/`}>
             Enter Mark
           </LinkButton>
         </div>

@@ -15,6 +15,8 @@ const linkButtonVariants = cva(
       variant: {
         default: 'text-primary-foreground',
         primary: 'bg-primary hover:bg-primary/90 text-white',
+        outline:
+          'border-input border-primary border hover:bg-accent hover:text-accent-foreground text-primary',
       },
       size: {
         default: 'h-10 py-2 px-4',

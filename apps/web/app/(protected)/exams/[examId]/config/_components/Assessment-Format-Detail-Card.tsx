@@ -8,9 +8,9 @@ export function AssessmentFormatDetailCard(props) {
   const {
     assessmentFormat,
     dateToConduct,
-    markToConduct,
-    markToConvert,
-    minPassMark,
+    totalMarks,
+    convertTo,
+    minMark,
     id: configId,
   } = props;
   const pathname = usePathname();
@@ -36,15 +36,15 @@ export function AssessmentFormatDetailCard(props) {
       </div>
       <div className="flex flex-wrap text-left">
         <span className="w-1/2">Conduct</span>
-        <span className="w-1/2">{markToConduct}</span>
+        <span className="w-1/2">{totalMarks}</span>
       </div>
       <div className="flex flex-wrap text-left">
         <span className="w-1/2">Pass</span>
-        <span className="w-1/2">{minPassMark}</span>
+        <span className="w-1/2">{minMark}</span>
       </div>
       <div className="flex flex-wrap text-left">
         <span className="w-1/2">Covert To</span>
-        <span className="w-1/2">{markToConvert}</span>
+        <span className="w-1/2">{convertTo}</span>
       </div>
       <div className="item-center flex justify-center gap-2">
         <Button

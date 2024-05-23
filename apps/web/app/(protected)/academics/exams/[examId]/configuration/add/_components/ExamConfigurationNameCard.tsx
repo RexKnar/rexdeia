@@ -1,3 +1,4 @@
+'use Client';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 
 export function ExamConfigurationNameCard(props) {
