@@ -10,7 +10,7 @@ type ExamCardProps = {
   examName: string;
   termName: string;
   academicYear: string;
-  isActive: Boolean;
+  isActive: boolean;
   className?: string;
   cardColor?: string;
 };
