@@ -52,7 +52,7 @@ export function SaveSectionFlyout() {
     defaultValues: {
       name: null,
       mediumId: null,
-      groupIds: null,
+      groupIds: [],
       isActive: false,
     },
   });
@@ -67,7 +67,6 @@ export function SaveSectionFlyout() {
   const filter = { isActive: true };
 
   const closeFlyout = async () => {
-    setMediumId('');
     const params = new URLSearchParams(searchParams);
     params.set('isSectionFlyoutOpen', 'false');
     params.delete('sectionId');
@@ -77,7 +76,6 @@ export function SaveSectionFlyout() {
   const { data: SectionDetailsResponse } = useGetSectionByIdQuery(sectionId, {
     enabled: !!sectionId,
   });
-
   const { data: groupListResponse } = useGetGroupListQuery({
     page: 1,
     limit: 999,
@@ -85,17 +83,21 @@ export function SaveSectionFlyout() {
   });
 
   const [mediumId, setMediumId] = useState('');
+
   useEffect(() => {
     if (SectionDetailsResponse) {
-      const { name, isActive, mediumId } = SectionDetailsResponse;
+      const { name, isActive, medium, group } = SectionDetailsResponse;
       setValue('name', name);
       setValue('isActive', isActive);
-      setValue('mediumId', mediumId);
-      setMediumId(mediumId);
+      setValue('mediumId', medium.id);
+      const groupIds = group.map((groupItem) => groupItem.id);
+      setValue('groupIds', groupIds);
+      setMediumId(medium.id);
     } else {
       setValue('name', null);
       setValue('isActive', false);
       setValue('mediumId', null);
+      setValue('groupIds', []);
     }
   }, [SectionDetailsResponse, setValue]);
 
@@ -248,6 +250,7 @@ export function SaveSectionFlyout() {
                             <label className="me-5">
                               <Checkbox
                                 className="me-2 items-center space-x-2 rounded border border-primary-500"
+                                checked={field.value?.includes(item.id)}
                                 onCheckedChange={(checked) => {
                                   return checked
                                     ? field.onChange([
