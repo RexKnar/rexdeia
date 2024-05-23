@@ -5,7 +5,11 @@ import { PaginatedResponse } from '../../domain';
 import { GroupModel, UpdateGroupModel } from '../../domain/group';
 import { GET_GROUP_LIST, UPDATE_GROUP_BY_ID } from '../../endpoints';
 
-export function useUpdateGroupMutationQuery(page: number, limit: number) {
+export function useUpdateGroupMutationQuery(
+  page: number,
+  limit: number,
+  filter = {}
+) {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: async (payload: UpdateGroupModel) => {
@@ -18,15 +22,15 @@ export function useUpdateGroupMutationQuery(page: number, limit: number) {
     },
     onMutate: async (payload: UpdateGroupModel) => {
       await queryClient.cancelQueries({
-        queryKey: [GET_GROUP_LIST, page, limit],
+        queryKey: [GET_GROUP_LIST, page, limit, filter],
       });
 
       const previousGroup = queryClient.getQueryData<
         PaginatedResponse<GroupModel>
-      >([GET_GROUP_LIST, page, limit]);
+      >([GET_GROUP_LIST, page, limit, filter]);
 
       queryClient.setQueryData(
-        [GET_GROUP_LIST, page, limit],
+        [GET_GROUP_LIST, page, limit, filter],
         (existingGroup: PaginatedResponse<GroupModel>) => {
           return {
             ...existingGroup,

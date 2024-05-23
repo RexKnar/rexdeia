@@ -63,12 +63,6 @@ export const menuItems: SidebarMenuItem[] = [
         path: '/academics/class',
       },
       {
-        id: 'academics-exams',
-        label: 'Exams',
-        icon: null,
-        path: '/academics/exams',
-      },
-      {
         id: 'academics-examtype',
         label: 'Exam Type',
         icon: null,
@@ -162,54 +156,8 @@ export const menuItems: SidebarMenuItem[] = [
         id: 'mark-entry',
         label: 'Mark Entry',
         icon: null,
-        path: '/academics/exams',
+        path: '/academics/exams/mark-entry',
       },
     ],
   },
-  // {
-  //   id: 'admission-page',
-  //   label: 'Admissions',
-  //   icon: UserPlus2,
-  //   path: '',
-  //   children: [
-  //     {
-  //       id: 'admission-dashboard',
-  //       label: 'Dashboard',
-  //       icon: null,
-  //       path: '/admission/dashboard',
-  //     },
-  //     {
-  //       id: 'admission-addnew',
-  //       label: 'Add new',
-  //       icon: null,
-  //       path: '/admission/add',
-  //     },
-  //     {
-  //       id: 'admission-analytics',
-  //       label: 'Analytics',
-  //       icon: null,
-  //       path: '/admission/analytics',
-  //     },
-  //     {
-  //       id: 'admission-configure',
-  //       label: 'Configure',
-  //       icon: null,
-  //       path: '/admission/configure',
-  //     },
-  //   ],
-  // },
-  // {
-  //   id: 'enquiry-page',
-  //   label: 'Enquiry',
-  //   icon: FileText,
-  //   path: '',
-  //   children: [
-  //     {
-  //       id: 'enquiry-addnew',
-  //       label: 'Add New',
-  //       icon: null,
-  //       path: '/enquiry/add',
-  //     },
-  //   ],
-  // },
 ];

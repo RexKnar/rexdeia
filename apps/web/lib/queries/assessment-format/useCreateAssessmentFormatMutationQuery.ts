@@ -34,5 +34,10 @@ export function useCreateAssessmentFormatMutationQuery() {
         queryKey: [GET_ASSESSMENT_FORMAT_LIST],
       });
     },
+    onSuccess: async () => {
+      await queryClient.refetchQueries({
+        queryKey: [GET_ASSESSMENT_FORMAT_LIST],
+      });
+    },
   });
 }
