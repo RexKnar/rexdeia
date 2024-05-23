@@ -51,7 +51,6 @@ export function SaveMediumFlyout() {
     const params = new URLSearchParams(searchParams);
     params.set('isMediumFlyoutOpen', 'false');
     params.delete('mediumId');
-    reset();
     router.replace(pathname + '?' + params.toString());
   };
 

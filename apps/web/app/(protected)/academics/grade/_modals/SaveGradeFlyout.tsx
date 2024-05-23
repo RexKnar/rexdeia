@@ -78,7 +78,6 @@ export function GradeFlyout() {
     const params = new URLSearchParams(searchParams);
     params.set('isGradeFlyoutOpen', 'false');
     router.replace(pathname + '?' + params.toString());
-    reset();
     setSliderValues([[0, 100]]);
     setErrorMessages([false]);
   };
