@@ -34,7 +34,7 @@ export function ExamsList() {
   return (
     <div>
       <h2 className="mb-4 text-sm font-semibold text-gray-600">Exams</h2>
-      <div className="container flex flex-wrap gap-5 p-4">
+      <div className="container flex flex-wrap p-4">
         {examListResponse?.data?.map((exam, index) => (
           <ExamCard
             key={exam.id}
@@ -42,7 +42,8 @@ export function ExamsList() {
             examName={exam.name}
             termName={exam.term.name}
             academicYear={exam.batch.name}
-            className="w-3/12"
+            isActive={exam.isActive}
+            className="m-2 w-1/4"
             cardColor={cardColors[index % cardColors.length]}
           />
         ))}
