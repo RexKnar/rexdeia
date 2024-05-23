@@ -1,3 +1,8 @@
+import { BatchModel } from './batch';
+import { ClassModel } from './class';
+import { GroupModel } from './group';
+import { MediumModel } from './medium';
+
 export type Student = {
   id: string;
   name: string;
@@ -30,6 +35,10 @@ export type Student = {
   isDeleting?: boolean;
   isUpdating?: boolean;
   isNewlyAdded?: boolean;
+  class: ClassModel;
+  group: GroupModel;
+  medium: MediumModel;
+  batch: BatchModel;
   status: 'Active' | 'Rejected' | 'Pending';
 
   additionalAttributes: any;
@@ -37,14 +46,6 @@ export type Student = {
 
 export type AddStudentModel = Omit<Student, 'id'> & {
   batchId: string;
-};
-
-export type GetStudentModel = Student & {
-  studentMapping?: any[];
-  batch: {
-    name: string;
-    id: string;
-  };
 };
 
 export type UpdateStudentModel = Pick<Student, 'id'>;

@@ -75,7 +75,14 @@ export async function getStudentById(id: string) {
   //   });
   //   return form.json;
   // }
-  return student;
+  const { studentMapping, ...restOfStudent } = student;
+  const studentDetails = {
+    ...restOfStudent,
+    group: studentMapping.length > 0 ? studentMapping[0].group : null,
+    class: studentMapping.length > 0 ? studentMapping[0].class : null,
+    medium: studentMapping.length > 0 ? studentMapping[0].medium : null,
+  };
+  return studentDetails;
 }
 
 export async function addStudent(student: AddStudentModel) {
