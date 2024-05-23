@@ -454,13 +454,14 @@ model Staff {
   id                           String                    @id @default(uuid()) @map("_id") @db.Uuid
   image                        String?
   aadharCardNumber             String?
-  firstName                    String                    @default("")
-  middleName                   String?                   @default("")
-  lastName                     String                    @default("")
-  dateOfBirth                  DateTime                  @default(now())
-  gender                       String                    @default("")
-  mobile                       String                    @default("")
-  email                        String                    @default("")
+  firstName                    String
+  middleName                   String?
+  lastName                     String?
+  dateOfBirth                  DateTime
+  gender                       String
+  age                          String?
+  mobile                       String?
+  email                        String
   bloodGroup                   String?
   religion                     String?
   caste                        String?
@@ -505,8 +506,13 @@ model Staff {
   pgMarksCard                  String?
   otherCertificate             String?
   dateOfDetainment             DateTime?
+  dateOfRetirement             DateTime?
   dateOfRegularization         DateTime?
   employmentType               String?
+  employeeId                   String?
+  enrollmentId                 String?
+  cps                          String?
+  tpf                          String?
   category                     String?
   subjectHandling              String?
   collegeName                  String?

@@ -161,10 +161,10 @@ export function OnboardStaffForm() {
                 </h2>
                 <section>
                   <When condition={isSectionCompleted(section)}>
-                    <Check className="h-4 w-4 text-green-500 transition-opacity duration-500" />
+                    <Check className="w-4 h-4 text-green-500 transition-opacity duration-500" />
                   </When>
                   <When condition={isSectionError(section, index)}>
-                    <AlertTriangle className="h-4 w-4 text-red-500 transition-opacity duration-500" />
+                    <AlertTriangle className="w-4 h-4 text-red-500 transition-opacity duration-500" />
                   </When>
                 </section>
               </Button>
@@ -172,7 +172,7 @@ export function OnboardStaffForm() {
           </li>
         </ul>
 
-        <section className="w-full rounded-lg bg-white p-2">
+        <section className="w-full p-2 bg-white rounded-lg">
           {staffForm.map((section, index) => (
             <motion.section
               key={section.sectionTitle}
@@ -190,7 +190,7 @@ export function OnboardStaffForm() {
               <h1 className="mb-5 text-sm font-semibold">
                 {section.sectionTitle}
               </h1>
-              <section className="grid grid-cols-1 flex-wrap justify-between gap-4 md:grid md:grid-cols-1 lg:grid lg:grid-cols-3 ">
+              <section className="grid flex-wrap justify-between grid-cols-1 gap-4 md:grid md:grid-cols-1 lg:grid lg:grid-cols-3 ">
                 {section.sectionFields.map((field) => {
                   if (field.visible) {
                     switch (field.type) {
@@ -198,7 +198,7 @@ export function OnboardStaffForm() {
                       case 'date':
                         return (
                           <div key={field.id} className="w-full">
-                            <label className="mt-1 block text-sm text-gray-700">
+                            <label className="block mt-1 text-sm text-gray-700">
                               {field.label}
                               {field.validationRules.required && (
                                 <span className="text-red-500"> *</span>
@@ -226,7 +226,7 @@ export function OnboardStaffForm() {
                       case 'email':
                         return (
                           <div key={field.id} className="w-full">
-                            <label className="mt-1 block text-sm text-gray-700">
+                            <label className="block mt-1 text-sm text-gray-700">
                               {field.label}
                               {field.validationRules.required && (
                                 <span className="text-red-500"> *</span>
@@ -264,7 +264,7 @@ export function OnboardStaffForm() {
                               {...register(field.name, field.validationRules)}
                               placeholder={field.placeholder}
                               autoComplete="off"
-                              className="ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring mt-1 flex h-10 w-full rounded-md border border-gray-300 bg-transparent px-3 py-2 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                              className="flex w-full h-10 px-3 py-2 mt-1 text-sm bg-transparent border border-gray-300 rounded-md ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
                             ></textarea>
                             <motion.p
                               initial={{ opacity: 0 }}
@@ -289,7 +289,7 @@ export function OnboardStaffForm() {
                                 value={value}
                               >
                                 <div key={field.id}>
-                                  <label className="mb-2 mt-1 block text-sm text-gray-700">
+                                  <label className="block mt-1 mb-2 text-sm text-gray-700">
                                     {field.label}
                                     {field.validationRules.required && (
                                       <span className="text-red-500"> *</span>
@@ -324,7 +324,7 @@ export function OnboardStaffForm() {
                       case 'dropdown':
                         return (
                           <div key={field.id}>
-                            <label className="mb-2 mt-1 block text-sm text-gray-700">
+                            <label className="block mt-1 mb-2 text-sm text-gray-700">
                               {field.label}
                               {field.validationRules.required && (
                                 <span className="text-red-500"> *</span>
@@ -345,8 +345,9 @@ export function OnboardStaffForm() {
                                 }
                               }}
                               placeholder={field.placeholder}
-                              className="ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring mt-1 flex h-10 w-full rounded-md border border-gray-500 bg-transparent px-3 py-2 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                              className="flex w-full h-10 px-3 py-2 mt-1 text-sm bg-transparent border border-gray-500 rounded-md ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
                             >
+                              <option value="">Select a value</option>
                               {(field.options && field.options.length > 0
                                 ? field.options
                                 : customDataList[field.name]
@@ -379,7 +380,7 @@ export function OnboardStaffForm() {
                   }
                 })}
               </section>
-              <section className="mt-8 flex justify-end gap-2">
+              <section className="flex justify-end gap-2 mt-8">
                 <Button
                   type="button"
                   className="mr-2"

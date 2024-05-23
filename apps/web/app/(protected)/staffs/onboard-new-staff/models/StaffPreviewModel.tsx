@@ -46,6 +46,7 @@ export function StaffPreviewModal({
         differentlyAbled: Boolean(formData.differentlyAbled),
         dateOfJoining: new Date(formData.dateOfJoining),
         dateOfDetainment: new Date(formData.dateOfDetainment),
+        dateOfRetirement: new Date(formData.dateOfRetirement),
         dateOfRegularization: new Date(formData.dateOfRegularization),
         passOutYear: new Date(formData.passOutYear),
         dateOfBirth: new Date(formData.dateOfBirth),
@@ -64,11 +65,11 @@ export function StaffPreviewModal({
       <Dialog.Portal>
         <Dialog.Overlay className="data-[state=open]:animate-overlayShow fixed inset-0 backdrop-blur-sm backdrop-brightness-95" />
         <Dialog.Content className="data-[state=open]:animate-contentShow fixed left-[50%] top-[50%] z-50 h-[85vh] w-[80vw] translate-x-[-50%] translate-y-[-50%]  rounded-[6px] bg-gray-50 p-[25px] focus:outline-none">
-          <Dialog.Title className="m-0 flex items-center justify-between">
+          <Dialog.Title className="flex items-center justify-between m-0">
             <section className="relative flex items-center">
-              <section className="absolute bottom-0 left-0 top-0 flex items-center justify-center">
+              <section className="absolute top-0 bottom-0 left-0 flex items-center justify-center">
                 <div className="flex h-[35px] w-[35px] items-center justify-center rounded-full bg-gray-300 text-primary">
-                  <Contact className="h-5 w-5" />
+                  <Contact className="w-5 h-5" />
                 </div>
               </section>
               <Text className="ml-12" variant="base-medium">
@@ -82,9 +83,9 @@ export function StaffPreviewModal({
                 disabled={isCreatingStaff}
                 aria-disabled={isCreatingStaff}
                 onClick={() => onOpenChange?.(false)}
-                className="h-8 w-8 rounded-full bg-gray-400 p-2"
+                className="w-8 h-8 p-2 bg-gray-400 rounded-full"
               >
-                <X className="h-4 w-4" />
+                <X className="w-4 h-4" />
               </Button>
             </Dialog.Close>
           </Dialog.Title>
@@ -97,10 +98,10 @@ export function StaffPreviewModal({
             {formSections.map((section) => (
               <div
                 key={section.sectionTitle}
-                className="mt-4 rounded-md bg-white p-6"
+                className="p-6 mt-4 bg-white rounded-md"
               >
                 <Text variant="sm-semibold">{section.sectionTitle}</Text>
-                <div className="mt-8 flex flex-wrap gap-12">
+                <div className="flex flex-wrap gap-12 mt-8">
                   {section.sectionFields.map((field) => (
                     <div key={field.name}>
                       <label className="text-sm font-semibold text-gray-700">
@@ -115,7 +116,7 @@ export function StaffPreviewModal({
               </div>
             ))}
           </section>
-          <section className="mt-10 flex justify-center gap-4">
+          <section className="flex justify-center gap-4 mt-10">
             <Button
               variant="outline"
               disabled={isCreatingStaff}
@@ -123,18 +124,18 @@ export function StaffPreviewModal({
               onClick={() => onOpenChange(false)}
             >
               <div className="flex items-center gap-2">
-                <Edit className="h-4 w-4" />
+                <Edit className="w-4 h-4" />
                 <Text variant="base-regular">Edit</Text>
               </div>
             </Button>
-            <Button variant="default" onClick={handleOnSaveClick}>
+            <Button type="submit" variant="default" onClick={handleOnSaveClick}>
               <div className="flex items-center gap-2">
                 <If condition={isCreatingStaff}>
                   <Then>
-                    <Loader2 className="h-4 w-4 animate-spin" />
+                    <Loader2 className="w-4 h-4 animate-spin" />
                   </Then>
                   <Else>
-                    <Save className="h-4 w-4" />
+                    <Save className="w-4 h-4" />
                   </Else>
                 </If>
                 <Text variant="base-regular">Submit</Text>
