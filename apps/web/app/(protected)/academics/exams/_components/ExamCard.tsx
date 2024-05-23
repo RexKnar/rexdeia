@@ -11,6 +11,7 @@ type ExamCardProps = {
   termName: string;
   academicYear: string;
   className?: string;
+  cardColor?: string;
 };
 
 export function ExamCard({
@@ -19,15 +20,11 @@ export function ExamCard({
   termName,
   academicYear,
   className,
+  cardColor,
 }: ExamCardProps) {
   const router = useRouter();
   return (
-    <div
-      className={cn(
-        ` border-1 rounded-xl border border-lime-200 bg-lime-50 p-4`,
-        className
-      )}
-    >
+    <div className={cn(`border-1 rounded-xl border p-4`, cardColor, className)}>
       <h3 className="font-bold ">{examName}</h3>
       <div className="flex flex-wrap">
         <p className="py-3">
