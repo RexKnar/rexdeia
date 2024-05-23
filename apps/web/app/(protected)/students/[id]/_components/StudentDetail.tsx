@@ -26,24 +26,24 @@ export function StudentDetail() {
 
   if (isGetStudentByIdLoading) {
     return (
-      <div className="flex items-center justify-center h-20">
-        <Loader2 className="w-6 mr-2 text-black animate-spin" />
+      <div className="flex h-20 items-center justify-center">
+        <Loader2 className="mr-2 w-6 animate-spin text-black" />
         <p className="text-black ">Fetching Student Details...</p>
       </div>
     );
   }
   return (
-    <section className="flex justify-start w-full gap-5 mt-10">
+    <section className="mt-10 flex w-full justify-start gap-5">
       <section className="col-span-3 ">
-        <Card className="bg-white rounded-md w-72">
+        <Card className="w-72 rounded-md bg-white">
           <CardHeader>
             <div className="">
               <div className="flex justify-center">
-                <Avatar className="w-20 h-20 border-2 cursor-pointer border-violet-200">
+                <Avatar className="h-20 w-20 cursor-pointer border-2 border-violet-200">
                   <AvatarImage src="https://png.pngtree.com/thumb_back/fh260/background/20230612/pngtree-man-wearing-glasses-is-wearing-colorful-background-image_2905240.jpg" />
                 </Avatar>
               </div>
-              <div className="flex justify-center px-5 pt-3 pb-2 my-auto">
+              <div className="my-auto flex justify-center px-5 pb-2 pt-3">
                 <Text variant="base-bold">
                   {getStudentByIdResponse.firstName}
                 </Text>
@@ -51,19 +51,19 @@ export function StudentDetail() {
               <div className="flex justify-center">
                 <Text
                   variant="base-regular"
-                  className="px-2 mx-2 border rounded-lg bg-violet-100"
+                  className="mx-2 rounded-lg border bg-violet-100 px-2"
                 >
                   {getStudentByIdResponse.additionalAttributes.admissionNumber}
                 </Text>
                 <Text
                   variant="base-regular"
-                  className="px-2 border rounded-lg bg-violet-100"
+                  className="rounded-lg border bg-violet-100 px-2"
                 >
                   {getStudentByIdResponse.additionalAttributes.age}
                 </Text>
                 <Text
                   variant="base-regular"
-                  className="px-2 mx-2 border rounded-lg bg-violet-100"
+                  className="mx-2 rounded-lg border bg-violet-100 px-2"
                 >
                   {getStudentByIdResponse.bloodGroup}
                 </Text>
@@ -71,34 +71,34 @@ export function StudentDetail() {
             </div>
           </CardHeader>
           <CardContent className="pl-0">
-            <div className="pl-3 mt-5 ">
-              <div className="grid grid-cols-3 ml-5 ">
-                <Text className="pt-1 text-xs text-gray-800 w-18">{'DOB'}</Text>
+            <div className="mt-5 pl-3 ">
+              <div className="ml-5 grid grid-cols-3 ">
+                <Text className="w-18 pt-1 text-xs text-gray-800">{'DOB'}</Text>
                 <Text className="col-span-2">
                   {getStudentByIdResponse.dob.toString()}
                 </Text>
               </div>
-              <div className="grid grid-cols-3 pt-3 ml-5">
-                <Text className="pt-1 text-xs text-gray-800 w-18">
+              <div className="ml-5 grid grid-cols-3 pt-3">
+                <Text className="w-18 pt-1 text-xs text-gray-800">
                   {'Gender'}
                 </Text>
                 <Text className="">{getStudentByIdResponse.gender}</Text>
               </div>
 
-              <div className="grid grid-cols-3 pt-3 ml-5">
-                <Text className="pt-1 text-xs text-gray-800 w-18">
+              <div className="ml-5 grid grid-cols-3 pt-3">
+                <Text className="w-18 pt-1 text-xs text-gray-800">
                   {'Mobile'}
                 </Text>
                 <Text className="">{getStudentByIdResponse.phoneNumber}</Text>
               </div>
-              <div className="grid grid-cols-3 pt-3 ml-5">
-                <Text className="pt-1 text-xs text-gray-800 w-18">
+              <div className="ml-5 grid grid-cols-3 pt-3">
+                <Text className="w-18 pt-1 text-xs text-gray-800">
                   {'Email'}
                 </Text>
                 <Text className="">{getStudentByIdResponse.emailId}</Text>
               </div>
-              <div className="grid grid-cols-3 pt-3 ml-5">
-                <Text className="pt-1 text-xs text-gray-800 w-18">{'DOA'}</Text>
+              <div className="ml-5 grid grid-cols-3 pt-3">
+                <Text className="w-18 pt-1 text-xs text-gray-800">{'DOA'}</Text>
                 <Text className="">
                   {getStudentByIdResponse.additionalAttributes.dateOfJoining.toString()}
                 </Text>
@@ -109,7 +109,7 @@ export function StudentDetail() {
       </section>
       <section className="col-span-7">
         <Tabs defaultValue="profile" className="border-0 ">
-          <TabsList className="justify-start w-full border-b-2 border-gray-100">
+          <TabsList className="w-full justify-start border-b-2 border-gray-100">
             <TabsTrigger
               value="profile"
               className="mr-2 text-base focus:border-b-4 focus:border-primary"
@@ -125,11 +125,11 @@ export function StudentDetail() {
           </TabsList>
           <TabsContent className="w-full" value="profile">
             <section className="max-h-[60vh] overflow-y-auto">
-              <div className="bg-white rounded-md ">
-                <Text className="pt-5 pl-5" variant="sm-semibold">
+              <div className="rounded-md bg-white ">
+                <Text className="pl-5 pt-5" variant="sm-semibold">
                   {'BASIC DETAILS'}
                 </Text>
-                <div className="flex flex-wrap gap-12 p-6 mt-2">
+                <div className="mt-2 flex flex-wrap gap-12 p-6">
                   <div>
                     <label className="text-sm font-semibold text-gray-700">
                       First name
@@ -255,11 +255,11 @@ export function StudentDetail() {
                   </div>
                 </div>
 
-                <div className="mt-4 bg-white border-t-8 border-gray-100">
-                  <Text variant="sm-semibold" className="pt-5 pl-6">
+                <div className="mt-4 border-t-8 border-gray-100 bg-white">
+                  <Text variant="sm-semibold" className="pl-6 pt-5">
                     {'PARENTS DETAILS'}
                   </Text>
-                  <div className="flex flex-wrap gap-12 p-6 mt-2">
+                  <div className="mt-2 flex flex-wrap gap-12 p-6">
                     <div>
                       <label className="text-sm font-semibold text-gray-700">
                         Father's Name`
@@ -377,11 +377,11 @@ export function StudentDetail() {
                   </div>
                 </div>
 
-                <div className="mt-4 bg-white border-t-8 border-gray-100">
-                  <Text variant="sm-semibold" className="pt-5 pl-6">
+                <div className="mt-4 border-t-8 border-gray-100 bg-white">
+                  <Text variant="sm-semibold" className="pl-6 pt-5">
                     {'GARDIANS DETAILS'}
                   </Text>
-                  <div className="flex flex-wrap gap-12 p-6 mt-2">
+                  <div className="mt-2 flex flex-wrap gap-12 p-6">
                     <div>
                       <label className="text-sm font-semibold text-gray-700">
                         Guardian's Name
@@ -431,11 +431,11 @@ export function StudentDetail() {
                   </div>
                 </div>
 
-                <div className="mt-4 bg-white border-t-8 border-gray-100">
-                  <Text variant="sm-semibold" className="pt-5 pl-6">
+                <div className="mt-4 border-t-8 border-gray-100 bg-white">
+                  <Text variant="sm-semibold" className="pl-6 pt-5">
                     {'ADDRESS DETAILS'}
                   </Text>
-                  <div className="flex flex-wrap gap-12 p-6 mt-2">
+                  <div className="mt-2 flex flex-wrap gap-12 p-6">
                     <div>
                       <label className="text-sm font-semibold text-gray-700">
                         Residential Address
@@ -535,11 +535,11 @@ export function StudentDetail() {
                   </div>
                 </div>
 
-                <div className="mt-4 bg-white border-t-8 border-gray-100">
-                  <Text variant="sm-semibold" className="pt-5 pl-6">
+                <div className="mt-4 border-t-8 border-gray-100 bg-white">
+                  <Text variant="sm-semibold" className="pl-6 pt-5">
                     {'EDUCATIONAL DETAILS'}
                   </Text>
-                  <div className="flex flex-wrap gap-12 p-6 mt-2">
+                  <div className="mt-2 flex flex-wrap gap-12 p-6">
                     <div>
                       <label className="text-sm font-semibold text-gray-700">
                         School Name (10th std)
@@ -685,11 +685,11 @@ export function StudentDetail() {
                   </div>
                 </div>
 
-                <div className="mt-4 bg-white border-t-8 border-gray-100">
-                  <Text variant="sm-semibold" className="pt-5 pl-6">
+                <div className="mt-4 border-t-8 border-gray-100 bg-white">
+                  <Text variant="sm-semibold" className="pl-6 pt-5">
                     {'OTHER DETAILS'}
                   </Text>
-                  <div className="flex flex-wrap gap-12 p-6 mt-2">
+                  <div className="mt-2 flex flex-wrap gap-12 p-6">
                     <div>
                       <label className="text-sm font-semibold text-gray-700">
                         Batch
@@ -748,18 +748,18 @@ export function StudentDetail() {
             </section>
           </TabsContent>
           <TabsContent className="w-full" value="document">
-            <section className="p-5 bg-white ">
+            <section className="bg-white p-5 ">
               <div>
                 <label className="pl-1">Document</label>
               </div>
               <div className=" max-h-[60vh]overflow-y-auto flex flex-wrap gap-5 p-0 pl-2">
-                <div className="mt-4 bg-white rounded-md">
+                <div className="mt-4 rounded-md bg-white">
                   <Card className="w-40 max-w-60">
                     <CardContent className="p-0">
-                      <div className="flex justify-center pt-3 pb-3 bg-indigo-100">
+                      <div className="flex justify-center bg-indigo-100 pb-3 pt-3">
                         <img className="" src="/pdf.png" alt="" />
                       </div>
-                      <div className="grid grid-cols-2 p-2 bg-white">
+                      <div className="grid grid-cols-2 bg-white p-2">
                         <Text>{'Document'}</Text>
                         <img
                           className="justify-self-end"
@@ -770,13 +770,13 @@ export function StudentDetail() {
                     </CardContent>
                   </Card>
                 </div>
-                <div className="mt-4 bg-white rounded-md">
+                <div className="mt-4 rounded-md bg-white">
                   <Card className="w-40 max-w-60">
                     <CardContent className="p-0 ">
-                      <div className="flex justify-center pt-3 pb-3 bg-indigo-100">
+                      <div className="flex justify-center bg-indigo-100 pb-3 pt-3">
                         <img className="" src="/pdf.png" alt="" />
                       </div>
-                      <div className="grid grid-cols-2 p-2 bg-white">
+                      <div className="grid grid-cols-2 bg-white p-2">
                         <Text>{'Document'}</Text>
                         <img
                           className="justify-self-end"
@@ -788,13 +788,13 @@ export function StudentDetail() {
                   </Card>
                 </div>
 
-                <div className="mt-4 bg-white rounded-md">
+                <div className="mt-4 rounded-md bg-white">
                   <Card className="w-40 max-w-60">
                     <CardContent className="p-0 ">
-                      <div className="flex justify-center pt-3 pb-3 bg-indigo-100">
+                      <div className="flex justify-center bg-indigo-100 pb-3 pt-3">
                         <img className="" src="/pdf.png" alt="" />
                       </div>
-                      <div className="grid grid-cols-2 p-2 bg-white">
+                      <div className="grid grid-cols-2 bg-white p-2">
                         <Text>{'Document'}</Text>
                         <img
                           className="justify-self-end"
@@ -805,13 +805,13 @@ export function StudentDetail() {
                     </CardContent>
                   </Card>
                 </div>
-                <div className="mt-4 bg-white rounded-md">
+                <div className="mt-4 rounded-md bg-white">
                   <Card className="w-40 max-w-60">
                     <CardContent className="p-0 ">
-                      <div className="flex justify-center pt-3 pb-3 bg-indigo-100">
+                      <div className="flex justify-center bg-indigo-100 pb-3 pt-3">
                         <img className="" src="/pdf.png" alt="" />
                       </div>
-                      <div className="grid grid-cols-2 p-2 bg-white">
+                      <div className="grid grid-cols-2 bg-white p-2">
                         <Text>{'Document'}</Text>
                         <img
                           className="justify-self-end"
