@@ -1,10 +1,9 @@
 'use client';
 
-import { LinkButton } from '@/components/LinkButton';
-import { useRouter } from 'next/navigation';
 import React from 'react';
-import { Button } from 'ui';
 import { cn } from 'utils';
+
+import { LinkButton } from '@/components/LinkButton';
 
 type ExamCardProps = {
   examId: string;
