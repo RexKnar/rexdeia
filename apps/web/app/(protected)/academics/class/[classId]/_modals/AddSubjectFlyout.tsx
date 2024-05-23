@@ -25,6 +25,7 @@ import {
   SheetContent,
   SheetHeader,
   SheetTitle,
+  Switch,
   Text,
 } from 'ui';
 
@@ -55,6 +56,7 @@ export function AddSubjectFlyout() {
   } = useForm({
     defaultValues: {
       name: null,
+      isActive: false,
       assessmentFormatIds: [],
       groupIds: [],
       regulationId: null,
@@ -116,7 +118,6 @@ export function AddSubjectFlyout() {
         subjects: [
           {
             ...addSubjectRequestPayload,
-            isActive: true,
           },
         ],
         classId: classId,
@@ -147,6 +148,20 @@ export function AddSubjectFlyout() {
                     <Text variant="lg-semibold" className="ml-2">
                       New Subject
                     </Text>
+                  </div>
+                  <div className="flex items-center">
+                    <Switch
+                      id="isActive"
+                      {...register('isActive')}
+                      onCheckedChange={(value) => setValue('isActive', value)}
+                      checked={watch('isActive')}
+                    />
+                    <label
+                      htmlFor="isActive"
+                      className="ml-2 text-sm font-semibold"
+                    >
+                      {watch('isActive') ? 'Active' : 'Inactive'}
+                    </label>
                   </div>
                 </div>
               </SheetTitle>
