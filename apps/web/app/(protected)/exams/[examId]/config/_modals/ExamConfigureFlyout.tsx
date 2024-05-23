@@ -27,10 +27,9 @@ export function ExamConfigureFlyout(props) {
   const router = useRouter();
   const searchParams = useSearchParams();
   const subjectId = searchParams.get('subjectId');
-  // const classId = searchParams.get('classId');
+
   const examId = useParams<{ examId: string }>().examId;
-  // const sectionId = searchParams.get('sectionId');
-  // const subjectTypeId = searchParams.get('subjectTypeId');
+
   const keysToDelete = [
     'markToConduct',
     'markToConvert',
