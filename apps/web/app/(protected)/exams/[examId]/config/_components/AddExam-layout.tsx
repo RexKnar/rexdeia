@@ -44,7 +44,7 @@ export function AddExamLayout() {
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const router = useRouter();
-
+  const params = new URLSearchParams(searchParams);
   const configId = searchParams.get('configId');
   const showDeleteConfirmationModal =
     searchParams.get('isDeleteConfigModal') === 'true';
@@ -64,6 +64,7 @@ export function AddExamLayout() {
   const [subjectTypeId, setSubjectTypeId] = useState('');
   const [subjectList, setSubjectList] = useState([]);
   const [examSubjectPartition, setExamSubjectPartition] = useState([]);
+  const [openFlyout, setOpenFlyout] = useState(false);
 
   const { data: examDetail, isLoading: isExamDetailLoading } =
     useGetExamDetailQuery(
@@ -96,6 +97,22 @@ export function AddExamLayout() {
       enabled: !!subjectId && !!sectionId,
     }
   );
+
+  useEffect(() => {
+    if (subjectId) {
+      subjectConfigListResponse?.examSubjectPartition?.length
+        ? setOpenFlyout(false)
+        : setOpenFlyout(true);
+    }
+  }, [subjectConfigListResponse, subjectId]);
+
+  useEffect(() => {
+    if (subjectId) {
+      params.set('subjectId', subjectId);
+    }
+    params.set('isExamConfigureFlyoutOpen', openFlyout ? 'true' : 'false');
+    router.replace(pathname + '?' + params.toString());
+  }, [openFlyout, subjectId]);
 
   const { data: subjectTypeListResponse, isLoading: isSubjectTypeListLoading } =
     useGetSubjectTypeList({
@@ -130,7 +147,6 @@ export function AddExamLayout() {
   }, [subjectId, refetchSubjectConfigList]);
 
   function hideDeleteConfirmationModal() {
-    const params = new URLSearchParams(searchParams);
     params.set('isDeleteConfigModal', 'false');
     params.delete('configId');
     router.replace(pathname + '?' + params.toString());
@@ -141,14 +157,10 @@ export function AddExamLayout() {
   };
 
   const handleSubjectClick = (subjectDetail) => {
-    const params = new URLSearchParams(searchParams);
-    params.set('subjectId', subjectDetail.subjectId);
-    router.replace(pathname + '?' + params.toString());
     setSubjectIds([subjectDetail] as any[]);
     setSubjectId(subjectDetail.subjectId);
     refetchSubjectConfigList();
   };
-
   const handleSubjectTypeClick = (subjectId) => {
     setSubjectTypeId(subjectId);
   };
@@ -251,24 +263,34 @@ export function AddExamLayout() {
         </div>
         <div className="basis-1/6 bg-red-50 text-center">
           <div className="p-2">Section</div>
-          {!isSectionListLoading ? (
-            <div>
-              {sectionListResponse?.data?.map((cardData) => (
-                <ExamConfigSectionCard
-                  key={cardData.id}
-                  sectionId={cardData.id}
-                  name={cardData.name}
-                  currentSectionId={sectionId}
-                  onClick={handleSectionChange}
-                />
-              ))}
-            </div>
-          ) : (
-            <div className="flex justify-center pt-36">
-              <Loader2 className="mr-2 h-6 w-6 animate-spin text-black" />
-              <p className="text-black ">Fetching Sections...</p>
-            </div>
-          )}
+          <div>
+            {classId ? (
+              <div>
+                {!isSectionListLoading ? (
+                  <div>
+                    {sectionListResponse?.data?.map((cardData) => (
+                      <ExamConfigSectionCard
+                        key={cardData.id}
+                        sectionId={cardData.id}
+                        name={cardData.name}
+                        currentSectionId={sectionId}
+                        onClick={handleSectionChange}
+                      />
+                    ))}
+                  </div>
+                ) : (
+                  <div className="flex justify-center pt-36">
+                    <Loader2 className="mr-2 h-6 w-6 animate-spin text-black" />
+                    <p className="text-black ">Fetching Sections...</p>
+                  </div>
+                )}
+              </div>
+            ) : (
+              <div className="flex justify-center pt-36">
+                <p className="text-black ">No Data Found</p>
+              </div>
+            )}
+          </div>
         </div>
         <div className="basis-2/6 bg-blue-50 text-center">
           <div className="p-2">Subject Type</div>
@@ -294,7 +316,11 @@ export function AddExamLayout() {
                   </div>
                 )}
               </div>
-            ) : null}
+            ) : (
+              <div className="flex justify-center pt-36">
+                <p className="text-black ">No Data Found</p>
+              </div>
+            )}
           </div>
         </div>
         <div className="basis-2/6 bg-slate-200 text-center">
@@ -312,6 +338,7 @@ export function AddExamLayout() {
                       {groupData.subject.map((cardData) => {
                         return (
                           <ExamConfigSubjectCard
+                            currentSubjectId={subjectId}
                             key={cardData.id}
                             subjectId={cardData.id}
                             groupId={groupData.id}
