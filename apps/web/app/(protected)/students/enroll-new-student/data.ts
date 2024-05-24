@@ -184,7 +184,7 @@ export const admissionForm = {
           },
         },
         {
-          id: '8',
+          id: '6',
           type: 'radio',
           label: 'Gender',
           name: 'gender',
@@ -209,7 +209,7 @@ export const admissionForm = {
           },
         },
         {
-          id: '6',
+          id: '7',
           type: 'text',
           label: 'Phone Number',
           name: 'phoneNumber',
@@ -221,7 +221,7 @@ export const admissionForm = {
           },
         },
         {
-          id: '7',
+          id: '8',
           type: 'email',
           label: 'Email',
           name: 'emailId',
@@ -238,7 +238,7 @@ export const admissionForm = {
           },
         },
         {
-          id: '8',
+          id: '9',
           type: 'dropdown',
           label: 'Blood Group',
           name: 'bloodGroup',
@@ -254,103 +254,7 @@ export const admissionForm = {
           },
         },
         {
-          id: '9',
-          type: 'text',
-          label: 'Aadhar Card Number',
-          name: 'aadharCardNumber',
-          value: '',
-          visible: true,
-          isReadOnly: true,
-          placeholder: 'Enter your aadhar card number',
-          validationRules: {
-            required: {
-              value: false,
-              message: 'Aadhar Card Number is required',
-            },
-          },
-        },
-        {
           id: '10',
-          type: 'dropdown',
-          label: 'Mother Tongue',
-          name: 'motherTongue',
-          optionKey: 'value',
-          optionValue: 'value',
-          visible: true,
-          options: [...motherTongue],
-          validationRules: {
-            required: {
-              value: false,
-              message: 'Mother Tongue is required',
-            },
-          },
-        },
-        {
-          id: '11',
-          type: 'dropdown',
-          label: 'Religion',
-          name: 'religion',
-          optionKey: 'value',
-          optionValue: 'value',
-          visible: true,
-          options: [...religion],
-          validationRules: {
-            required: {
-              value: false,
-              message: 'Religion is required',
-            },
-          },
-        },
-        {
-          id: '12',
-          type: 'dropdown',
-          label: 'Community',
-          name: 'community',
-          optionKey: 'value',
-          optionValue: 'value',
-          visible: true,
-          options: [...community],
-          validationRules: {
-            required: {
-              value: false,
-              message: 'Community is required',
-            },
-          },
-        },
-        {
-          id: '13',
-          type: 'dropdown',
-          label: 'Caste',
-          name: 'caste',
-          optionKey: 'value',
-          optionValue: 'value',
-          visible: true,
-          options: [...caste],
-          validationRules: {
-            required: {
-              value: false,
-              message: 'Caste is required',
-            },
-          },
-        },
-        {
-          id: '14',
-          type: 'text',
-          label: 'Nationality',
-          name: 'nationality',
-          value: '',
-          visible: true,
-          isReadOnly: true,
-          placeholder: 'Enter nationality',
-          validationRules: {
-            required: {
-              value: false,
-              message: 'Nationality is required',
-            },
-          },
-        },
-        {
-          id: '15',
           type: 'text',
           label: 'Pickup Point(transport)',
           name: 'pickupPoint',
@@ -366,7 +270,7 @@ export const admissionForm = {
           },
         },
         {
-          id: '16',
+          id: '11',
           type: 'text',
           label: 'EMIS Number',
           name: 'emisNumber',
@@ -381,7 +285,7 @@ export const admissionForm = {
           },
         },
         {
-          id: '17',
+          id: '12',
           type: 'text',
           label: 'Admission Number',
           name: 'admissionNumber',
@@ -396,7 +300,7 @@ export const admissionForm = {
           },
         },
         {
-          id: '18',
+          id: '13',
           type: 'date',
           label: 'Date Of Joining',
           name: 'dateOfJoining',
@@ -409,7 +313,7 @@ export const admissionForm = {
           },
         },
         {
-          id: '19',
+          id: '14',
           type: 'dropdown',
           label: 'Medium',
           name: 'joiningMedium',
@@ -426,7 +330,7 @@ export const admissionForm = {
           },
         },
         {
-          id: '20',
+          id: '15',
           type: 'dropdown',
           label: 'Class',
           name: 'joiningClass',
@@ -443,7 +347,7 @@ export const admissionForm = {
           },
         },
         {
-          id: '21',
+          id: '16',
           type: 'dropdown',
           label: 'Group',
           name: 'joiningGroup',
@@ -460,22 +364,7 @@ export const admissionForm = {
           },
         },
         {
-          id: '22',
-          type: 'text',
-          label: 'First Language',
-          name: 'firstLanguage',
-          value: '',
-          visible: true,
-          placeholder: 'Enter your first language',
-          validationRules: {
-            required: {
-              value: false,
-              message: 'First Language is required',
-            },
-          },
-        },
-        {
-          id: '23',
+          id: '17',
           type: 'text',
           label: 'Enrollment ID',
           name: 'enrollmentId',
@@ -487,46 +376,6 @@ export const admissionForm = {
             required: {
               value: false,
               message: 'Enrollment ID is required',
-            },
-          },
-        },
-        {
-          id: '24',
-          type: 'radio',
-          label: 'Differently abled',
-          name: 'differentlyAbled',
-          value: '',
-          visible: true,
-          options: [
-            {
-              label: 'Yes',
-              value: 'yes',
-            },
-            {
-              label: 'No',
-              value: 'no',
-            },
-          ],
-          validationRules: {
-            required: {
-              value: false,
-              message: 'Differently abled is required',
-            },
-          },
-        },
-        {
-          id: '25',
-          type: 'text',
-          label: 'Type of Disability',
-          name: 'typeOfDisability',
-          value: '',
-          visible: true,
-          isReadOnly: true,
-          placeholder: 'Enter the data',
-          validationRules: {
-            required: {
-              value: false,
-              message: 'this is required',
             },
           },
         },
@@ -1390,55 +1239,7 @@ export const admissionForm = {
           },
         },
         {
-          id: '1',
-          type: 'radio',
-          label: 'Admission Type',
-          name: 'admissionType',
-          value: '',
-          visible: true,
-          options: [
-            {
-              label: 'New',
-              value: 'new',
-            },
-            {
-              label: 'Lateral Entry',
-              value: 'lateralEntry',
-            },
-          ],
-          validationRules: {
-            required: {
-              value: false,
-              message: 'Admission Type is required',
-            },
-          },
-        },
-        {
           id: '2',
-          type: 'radio',
-          label: 'Admission Mode',
-          name: 'admissionMode',
-          value: '',
-          visible: true,
-          options: [
-            {
-              label: 'Counselling',
-              value: 'counselling',
-            },
-            {
-              label: 'Management',
-              value: 'management',
-            },
-          ],
-          validationRules: {
-            required: {
-              value: false,
-              message: 'Admission Mode is required',
-            },
-          },
-        },
-        {
-          id: '3',
           type: 'radio',
           label: 'Scholarship',
           name: 'scholarship',
@@ -1458,6 +1259,157 @@ export const admissionForm = {
             required: {
               value: false,
               message: 'Scholarship is required',
+            },
+          },
+        },
+        {
+          id: '3',
+          type: 'text',
+          label: 'Aadhar Card Number',
+          name: 'aadharCardNumber',
+          value: '',
+          visible: true,
+          isReadOnly: true,
+          placeholder: 'Enter your aadhar card number',
+          validationRules: {
+            required: {
+              value: false,
+              message: 'Aadhar Card Number is required',
+            },
+          },
+        },
+        {
+          id: '4',
+          type: 'dropdown',
+          label: 'Mother Tongue',
+          name: 'motherTongue',
+          optionKey: 'value',
+          optionValue: 'value',
+          visible: true,
+          options: [...motherTongue],
+          validationRules: {
+            required: {
+              value: false,
+              message: 'Mother Tongue is required',
+            },
+          },
+        },
+        {
+          id: '5',
+          type: 'dropdown',
+          label: 'Religion',
+          name: 'religion',
+          optionKey: 'value',
+          optionValue: 'value',
+          visible: true,
+          options: [...religion],
+          validationRules: {
+            required: {
+              value: false,
+              message: 'Religion is required',
+            },
+          },
+        },
+        {
+          id: '6',
+          type: 'dropdown',
+          label: 'Community',
+          name: 'community',
+          optionKey: 'value',
+          optionValue: 'value',
+          visible: true,
+          options: [...community],
+          validationRules: {
+            required: {
+              value: false,
+              message: 'Community is required',
+            },
+          },
+        },
+        {
+          id: '7',
+          type: 'dropdown',
+          label: 'Caste',
+          name: 'caste',
+          optionKey: 'value',
+          optionValue: 'value',
+          visible: true,
+          options: [...caste],
+          validationRules: {
+            required: {
+              value: false,
+              message: 'Caste is required',
+            },
+          },
+        },
+        {
+          id: '8',
+          type: 'text',
+          label: 'Nationality',
+          name: 'nationality',
+          value: '',
+          visible: true,
+          isReadOnly: true,
+          placeholder: 'Enter nationality',
+          validationRules: {
+            required: {
+              value: false,
+              message: 'Nationality is required',
+            },
+          },
+        },
+        {
+          id: '9',
+          type: 'text',
+          label: 'First Language',
+          name: 'firstLanguage',
+          value: '',
+          visible: true,
+          placeholder: 'Enter your first language',
+          validationRules: {
+            required: {
+              value: false,
+              message: 'First Language is required',
+            },
+          },
+        },
+        {
+          id: '10',
+          type: 'radio',
+          label: 'Differently abled',
+          name: 'differentlyAbled',
+          value: '',
+          visible: true,
+          options: [
+            {
+              label: 'Yes',
+              value: 'yes',
+            },
+            {
+              label: 'No',
+              value: 'no',
+            },
+          ],
+          validationRules: {
+            required: {
+              value: false,
+              message: 'Differently abled is required',
+            },
+          },
+        },
+        {
+          id: '11',
+          type: 'text',
+          label: 'Type of Disability',
+          name: 'typeOfDisability',
+          value: '',
+          visible: true,
+          isReadOnly: true,
+          placeholder: 'Enter the data',
+          validationRules: {
+            required: {
+              value: false,
+              message: 'this is required',
             },
           },
         },
