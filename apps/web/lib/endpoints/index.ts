@@ -85,6 +85,7 @@ export const ADD_SUBJECT_BY_CLASS_ID = `ADD_SUBJECT_BY_CLASS_ID`;
 export const ADD_ASSESSMENT_FORMAT_WITH_PARENT_ID = `ADD_ASSESSMENT_FORMAT_WITH_PARENT_ID`;
 export const ASSIGN_STUDENT_BY_CLASS_ID = `ASSIGN_STUDENT_BY_CLASS_ID`;
 export const GET_SUBJECT_LIST_BY_FILTER = `GET_SUBJECT_LIST_BY_FILTER`;
+export const GET_SUBJECTS_BY_SECTION_IDS = `GET_SUBJECTS_BY_SECTION_IDS`;
 export const GET_TERM_LIST = `GET_TERM_LIST`;
 export const GET_ASSESSMENT_FORMAT_BY_SUBJECT_ID = `GET_ASSESSMENT_FORMAT_BY_SUBJECT_ID`;
 
@@ -92,8 +93,10 @@ export const ADD_EXAM_CONFIGURATION_BY_EXAM_ID = `ADD_EXAM_CONFIGURATION_BY_EXAM
 export const GET_EXAM_LIST = `GET_EXAM_LIST`;
 export const ADD_EXAM = `ADD_EXAM`;
 export const GET_EXAM_BY_CLASS_SECTION = `GET_EXAM_BY_CLASS_SECTION`;
+export const GET_EXAM_BY_SECTION_ID = `GET_EXAM_BY_SECTION_ID`; //new
 export const GET_SUBJECTS_WITH_FORMATS_BY_EXAM = `GET_SUBJECTS_WITH_FORMATS_BY_EXAM`;
 export const GET_MARK_ENTRY_FORM_STRUCTURE = `GET_MARK_ENTRY_FORM_STRUCTURE`;
+export const GET_MARK_WITH_MARK_ENTRY_CONFIGS = `GET_MARK_WITH_MARK_ENTRY_CONFIGS`;
 export const ADD_MARK_ENTRY = `ADD_MARK_ENTRY`;
 export const GET_STAFFS_BY_SECTION = `GET_STAFFS_BY_SECTION`;
 export const GET_MARKS_WITH_FORMAT_BY_EXAM = `GET_MARKS_WITH_FORMAT_BY_EXAM`;
@@ -119,6 +122,9 @@ export const GET_STUDENTS_MARKS_BY_CLASS_ID_AND_EXAM_ID = `GET_STUDENTS_MARKS_BY
 export const GET_STUDENTS_LIST_FOR_ASSIGN = `GET_STUDENTS_LIST_FOR_ASSIGN`;
 export const GET_EXAM_DETAIL_BY_EXAM_ID = `GET_EXAM_DETAIL_BY_EXAM_ID`;
 export const GET_SUBJECT_EXAM_CONFIG_DETAIL = `GET_SUBJECT_EXAM_CONFIG_DETAIL`;
+export const ADD_EXAM_CONFIG = `ADD_EXAM_CONFIG`;
+export const GET_EXAM_CONFIG_SUBJECT_DETAIL = `GET_EXAM_CONFIG_SUBJECT_DETAIL`;
+export const EXAM_MARK_ENTRY = `EXAM_MARK_ENTRY`;
 
 export default <EndpointDetails>{
   [REGISTER_USER]: {
@@ -381,6 +387,10 @@ export default <EndpointDetails>{
     requestType: `GET`,
     endpoint: `/api/section/[id]/subjects`,
   },
+  [GET_SUBJECTS_BY_SECTION_IDS]: {
+    requestType: `PUT`,
+    endpoint: `/api/class/[id]/sections/subjects`,
+  },
   [DELETE_STUDENT_BY_ID]: {
     requestType: `DELETE`,
     endpoint: `/api/student/[id]`,
@@ -493,6 +503,11 @@ export default <EndpointDetails>{
     requestType: `PUT`,
     endpoint: `/api/exam/mark-entry`,
   },
+  [GET_EXAM_BY_SECTION_ID]: {
+    //new
+    requestType: `PUT`,
+    endpoint: `/api/exam/list`,
+  },
   [GET_SUBJECTS_WITH_FORMATS_BY_EXAM]: {
     requestType: `PUT`,
     endpoint: `/api/mark-entry/subjects`,
@@ -500,6 +515,10 @@ export default <EndpointDetails>{
   [GET_MARK_ENTRY_FORM_STRUCTURE]: {
     requestType: `PUT`,
     endpoint: `/api/mark-entry/formData`,
+  },
+  [GET_MARK_WITH_MARK_ENTRY_CONFIGS]: {
+    requestType: `PUT`,
+    endpoint: `/api/exam/[id]/mark-entry`,
   },
   [ADD_MARK_ENTRY]: {
     requestType: `POST`,
@@ -589,8 +608,20 @@ export default <EndpointDetails>{
     requestType: `GET`,
     endpoint: `/api/exam/[id]/subject/[subjectId]`,
   },
+  [GET_EXAM_CONFIG_SUBJECT_DETAIL]: {
+    requestType: `GET`,
+    endpoint: `/api/exam/[id]/config/subject/[subjectId]`,
+  },
   [DELETE_EXAM_CONFIG_BY_ID]: {
     requestType: `DELETE`,
     endpoint: `/api/exam/[id]/configuration/[configId]`,
+  },
+  [ADD_EXAM_CONFIG]: {
+    requestType: `POST`,
+    endpoint: `/api/exam/[id]/config`,
+  },
+  [EXAM_MARK_ENTRY]: {
+    requestType: `POST`,
+    endpoint: `/api/exam/mark-entry`,
   },
 };

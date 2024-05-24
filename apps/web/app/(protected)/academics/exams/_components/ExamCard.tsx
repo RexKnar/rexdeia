@@ -1,9 +1,9 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
 import React from 'react';
-import { Button } from 'ui';
 import { cn } from 'utils';
+
+import { LinkButton } from '@/components/LinkButton';
 
 type ExamCardProps = {
   examId: string;
@@ -24,7 +24,6 @@ export function ExamCard({
   className,
   cardColor,
 }: ExamCardProps) {
-  const router = useRouter();
   return (
     <div className={cn(`border-1 rounded-xl border p-4`, cardColor, className)}>
       <div className="flex justify-between">
@@ -48,25 +47,17 @@ export function ExamCard({
           </span>
         </p>
         <div className="flex gap-2">
-          <Button
+          <LinkButton
+            variant="primary"
             size="xs"
-            className="text-xs text-white"
-            onClick={() => {
-              router.push(`/academics/exams/${examId}/configuration/add`);
-            }}
+            url={`/exams/${examId}/config`}
+            className="h-7"
           >
             Configure
-          </Button>
-          <Button
-            variant="outline"
-            size="xs"
-            className="text-xs"
-            onClick={() => {
-              router.push(`/academics/exams/mark-entry/`);
-            }}
-          >
+          </LinkButton>
+          <LinkButton variant="outline" size="xs" url={`/exams/mark-entry`}>
             Enter Mark
-          </Button>
+          </LinkButton>
         </div>
       </div>
     </div>

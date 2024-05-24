@@ -1,3 +1,4 @@
+'use client';
 import { Pencil, Trash } from 'lucide-react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { Button } from 'ui';

@@ -61,7 +61,6 @@ export function SaveRegulationFlyout() {
     params.delete('regulationId');
 
     router.replace(pathname + '?' + params.toString());
-    reset();
     setAnnouncedYear(null);
   };
 
