@@ -108,7 +108,6 @@ export function SaveAcademicYearFlyout() {
 
   const closeFlyout = () => {
     removeParams(['batchId', 'isFlyoutOpen']);
-    reset();
     setEndYear(null);
     setStartYear(null);
   };

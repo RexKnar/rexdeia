@@ -47,6 +47,34 @@ export type CreateExamConfigurationModel = Pick<
   | 'assessmentFormatConfiguration'
 >;
 
+/*---------------------------------- Start of New Exam --------------------------------------- **/
+
+// New Exam
+export type ExamConfigModel = {
+  examId: string;
+  sectionIds: string[];
+  classId: string;
+  subjects: string[];
+  config: ExamSubjectPartitionModel[];
+};
+
+// New-Exam
+export type CreateExamConfigModel = Pick<
+  ExamConfigModel,
+  'subjects' | 'classId' | 'sectionIds'
+>;
+
+export type ExamSubjectPartitionModel = {
+  assessmentFormatId: string;
+  minMark: number;
+  convertTo: number;
+  dateToConduct: string;
+  totalMarks: number;
+  academicExamId: string;
+  assessmentFormat?: AssessmentFormatModel;
+};
+
+/*---------------------------------- End of New Exam --------------------------------------- **/
 export type ExamTypeModel = {
   id: string;
   name: string;

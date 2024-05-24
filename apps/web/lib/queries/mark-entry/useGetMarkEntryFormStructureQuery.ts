@@ -22,7 +22,7 @@ function getMarkEntryFormStructure(
         GET_MARK_ENTRY_FORM_STRUCTURE,
         { ...filter },
         {},
-        {}
+        { id: filter.examId }
       );
     },
   };

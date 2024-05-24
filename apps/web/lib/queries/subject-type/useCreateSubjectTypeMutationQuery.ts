@@ -19,5 +19,10 @@ export function useCreateSubjectTypeMutationQuery() {
       });
       return response;
     },
+    onSuccess: async () => {
+      await queryClient.refetchQueries({
+        queryKey: [GET_SUBJECT_TYPE_LIST],
+      });
+    },
   });
 }
