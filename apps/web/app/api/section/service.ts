@@ -236,3 +236,18 @@ export async function removeStudentsFromSection(
     },
   });
 }
+export async function getSectionsByGroupIdClassId(filter: {
+  classId: string;
+  groupId: string;
+}) {
+  return db.section.findMany({
+    where: {
+      classId: filter.classId,
+      sectionToGroups: {
+        some: {
+          groupId: filter.groupId,
+        },
+      },
+    },
+  });
+}
