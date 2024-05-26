@@ -436,12 +436,15 @@ model Student {
   fatherName           String?
   fatherOccupation     String?
   fatherPhoneNumber    String?
+  fatherEmailId        String?
   guardiansOccupation  String?
   guardianName         String?
   guardianPhoneNumber  String?
+  guardianEmailId      String?
   motherName           String?
   motherOccupation     String?
   motherPhoneNumber    String?
+  motherEmailId        String?
   motherTongue         String?
   nationality          String?
   religion             String?

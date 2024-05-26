@@ -149,10 +149,13 @@ export function StudentsList() {
               {row.original.additionalAttributes.permanentAddress}
             </p>
             <p className="text-sm text-gray-800">
-              {row.original.additionalAttributes.permanentDistrict}
+              {row.original.additionalAttributes.permanentCity}
             </p>
             <p className="text-sm text-gray-800">
               {row.original.additionalAttributes.permanentState}
+            </p>
+            <p className="text-sm text-gray-800">
+              {row.original.additionalAttributes.permanentCountry}
             </p>
             <p className="text-sm text-gray-800">
               {row.original.additionalAttributes.permanentPostalCode}
@@ -181,10 +184,13 @@ export function StudentsList() {
               {row.original.additionalAttributes.residentialAddress}
             </p>
             <p className="text-sm text-gray-800">
-              {row.original.additionalAttributes.residentialDistrict}
+              {row.original.additionalAttributes.residentialCity}
             </p>
             <p className="text-sm text-gray-800">
               {row.original.additionalAttributes.residentialState}
+            </p>
+            <p className="text-sm text-gray-800">
+              {row.original.additionalAttributes.residentialCountry}
             </p>
             <p className="text-sm text-gray-800">
               {row.original.additionalAttributes.residentialPostalCode}
@@ -439,7 +445,7 @@ export function StudentsList() {
         />
         <DeleteConfirmationModal
           open={showDeleteConfirmationModal}
-          description={`Are you sure you want to delete "${selectedStudent?.name}"`}
+          description={`Are you sure you want to delete "${selectedStudent?.firstName}"`}
           onDeleteClick={async () => {
             if (selectedStudent) {
               setShowDeleteConfirmationModal(false);
