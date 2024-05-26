@@ -17,7 +17,7 @@ function getGroupList(
   }: {
     page: number;
     limit: number;
-    filter?: { isActive?: boolean; classId?: string; sectionId?: string };
+    filter: { isActive?: boolean; classId: string; sectionId: string };
   },
   options?: Partial<UseQueryOptions<PaginatedResponse<GroupModel>>>
 ): UseQueryOptions<PaginatedResponse<GroupModel>> {
@@ -38,7 +38,7 @@ function getGroupList(
   };
 }
 
-export function useGetGroupListQuery(
+export function useGetGroupByClassIdQuery(
   {
     page,
     limit,
@@ -46,7 +46,7 @@ export function useGetGroupListQuery(
   }: {
     page: number;
     limit: number;
-    filter?: { isActive?: boolean; classId?: string; sectionId?: string };
+    filter: { isActive?: boolean; classId: string; sectionId: string };
   },
   options?: Partial<UseQueryOptions<PaginatedResponse<GroupModel>>>
 ): UseQueryResult<PaginatedResponse<GroupModel>> {

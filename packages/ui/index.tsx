@@ -40,6 +40,3 @@ export * from './components/ui/RadioGroup';
 export * from './components/ui/CheckBox';
 export * from './components/ui/Slider';
 export * from './components/ui/Toggle';
-
-/** Recharts */
-export * from './components/Charts/Pie/PieChartWithCustomLabel';
