@@ -1,3 +1,4 @@
+import ExamAnalyticsEndpoints from './examAnalyticsEndpoints';
 import { EndpointDetails } from './types';
 
 export const ADD_ENQUIRY = `ADD_ENQUIRY`;
@@ -35,6 +36,7 @@ export const GET_ASSESSMENT_FORMAT_BY_ID = `GET_ASSESSMENT_FORMAT_BY_ID`;
 export const UPDATE_REGULATION_BY_ID = `UPDATE_REGULATION_BY_ID`;
 export const UPDATE_MEDIUM_BY_ID = `UPDATE_MEDIUM_BY_ID`;
 export const GET_GROUP_LIST = `GET_GROUP_LIST`;
+export const GET_GROUPS_BY_CLASS_ID = `GET_GROUPS_BY_CLASS_ID`;
 export const GET_MEDIUM_LIST = `GET_MEDIUM_LIST`;
 export const GET_BATCHES_LIST = `GET_BATCHES_LIST`;
 export const CREATE_BATCH = `CREATE_BATCH`;
@@ -127,6 +129,7 @@ export const GET_EXAM_CONFIG_SUBJECT_DETAIL = `GET_EXAM_CONFIG_SUBJECT_DETAIL`;
 export const EXAM_MARK_ENTRY = `EXAM_MARK_ENTRY`;
 
 export default <EndpointDetails>{
+  ...ExamAnalyticsEndpoints,
   [REGISTER_USER]: {
     requestType: `POST`,
     endpoint: `/api/register`,
@@ -270,6 +273,10 @@ export default <EndpointDetails>{
   [GET_GROUP_LIST]: {
     requestType: `PUT`,
     endpoint: `/api/group`,
+  },
+  [GET_GROUPS_BY_CLASS_ID]: {
+    requestType: `PUT`,
+    endpoint: `/api/class/group`,
   },
   [GET_MEDIUM_LIST]: {
     requestType: `PUT`,

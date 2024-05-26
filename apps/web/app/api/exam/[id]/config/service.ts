@@ -68,6 +68,7 @@ export async function createExamConfig(
                   minMark: +config.minMark,
                   convertTo: +config.convertTo,
                   totalMarks: +config.totalMarks,
+                  examGroupId: examGroupId,
                   dateToConduct: new Date(config.dateToConduct),
                 },
               });
