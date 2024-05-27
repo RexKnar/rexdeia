@@ -200,7 +200,7 @@ export function OnboardStaffForm() {
                           <div key={field.id} className="w-full">
                             <label className="mt-1 block text-sm text-gray-700">
                               {field.label}
-                              {field.validationRules.required && (
+                              {field.validationRules.required.value && (
                                 <span className="text-red-500"> *</span>
                               )}
                             </label>
@@ -228,7 +228,7 @@ export function OnboardStaffForm() {
                           <div key={field.id} className="w-full">
                             <label className="mt-1 block text-sm text-gray-700">
                               {field.label}
-                              {field.validationRules.required && (
+                              {field.validationRules.required.value && (
                                 <span className="text-red-500"> *</span>
                               )}
                             </label>
@@ -256,7 +256,7 @@ export function OnboardStaffForm() {
                           <div key={field.id} className="w-full">
                             <label className="block text-gray-700">
                               {field.label}
-                              {field.validationRules.required && (
+                              {field.validationRules.required.value && (
                                 <span className="text-red-500"> *</span>
                               )}
                             </label>
@@ -291,7 +291,7 @@ export function OnboardStaffForm() {
                                 <div key={field.id}>
                                   <label className="mb-2 mt-1 block text-sm text-gray-700">
                                     {field.label}
-                                    {field.validationRules.required && (
+                                    {field.validationRules.required.value && (
                                       <span className="text-red-500"> *</span>
                                     )}
                                   </label>
@@ -326,7 +326,7 @@ export function OnboardStaffForm() {
                           <div key={field.id}>
                             <label className="mb-2 mt-1 block text-sm text-gray-700">
                               {field.label}
-                              {field.validationRules.required && (
+                              {field.validationRules.required.value && (
                                 <span className="text-red-500"> *</span>
                               )}
                             </label>

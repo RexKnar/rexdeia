@@ -542,6 +542,7 @@ model Staff {
   pucMarksCard                 String?
   degreeMarksCard              String?
   pgMarksCard                  String?
+  natureOfPosting              String?
   otherCertificate             String?
   dateOfDetainment             DateTime?
   dateOfRetirement             DateTime?
@@ -557,6 +558,10 @@ model Staff {
   passOutYear                  DateTime?
   marksObtained                String?
   designation                  String?
+  accountHolderName            String?
+  accountNumber                String?
+  branchName                   String?
+  IFSC_Code                    String?
   dateOfJoining                DateTime                  @default(now())
   status                       StaffStatus               @default(Active)
   userId                       String                    @unique @db.Uuid
