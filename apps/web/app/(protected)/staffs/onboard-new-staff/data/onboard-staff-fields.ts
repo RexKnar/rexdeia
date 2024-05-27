@@ -15,12 +15,7 @@ export type sectionFieldsType = {
   label: string;
   visible: boolean;
   options: Record<string, string>[];
-  validationRules: {
-    required: {
-      value: boolean;
-      message: string;
-    };
-  };
+  validationRules: Record<string, string | boolean | number>;
 };
 
 const staffForm: staffFormSectionType[] = [
@@ -37,10 +32,7 @@ const staffForm: staffFormSectionType[] = [
         visible: true,
         options: [],
         validationRules: {
-          required: {
-            value: true,
-            message: 'First Name is Required',
-          },
+          required: 'First Name is Required',
         },
       },
       {
@@ -52,10 +44,7 @@ const staffForm: staffFormSectionType[] = [
         visible: true,
         options: [],
         validationRules: {
-          required: {
-            value: false,
-            message: '',
-          },
+          required: false,
         },
       },
       {
@@ -67,10 +56,7 @@ const staffForm: staffFormSectionType[] = [
         visible: true,
         options: [],
         validationRules: {
-          required: {
-            value: false,
-            message: '',
-          },
+          required: false,
         },
       },
       {
@@ -82,10 +68,7 @@ const staffForm: staffFormSectionType[] = [
         visible: true,
         options: [],
         validationRules: {
-          required: {
-            value: true,
-            message: 'Date of Birth is Required',
-          },
+          required: 'Date of Birth is Required',
         },
       },
       {
@@ -97,10 +80,7 @@ const staffForm: staffFormSectionType[] = [
         visible: true,
         options: [],
         validationRules: {
-          required: {
-            value: false,
-            message: '',
-          },
+          required: false,
         },
       },
       {
@@ -121,10 +101,7 @@ const staffForm: staffFormSectionType[] = [
           },
         ],
         validationRules: {
-          required: {
-            value: true,
-            message: 'Please select an option of Gender',
-          },
+          required: 'Please select an option of Gender',
         },
       },
       {
@@ -136,10 +113,7 @@ const staffForm: staffFormSectionType[] = [
         visible: true,
         options: [],
         validationRules: {
-          required: {
-            value: false,
-            message: '',
-          },
+          required: false,
         },
       },
       {
@@ -151,10 +125,7 @@ const staffForm: staffFormSectionType[] = [
         visible: true,
         options: [],
         validationRules: {
-          required: {
-            value: true,
-            message: 'Email is Required',
-          },
+          required: 'Email is Required',
         },
       },
       {
@@ -168,10 +139,7 @@ const staffForm: staffFormSectionType[] = [
         visible: true,
         options: [],
         validationRules: {
-          required: {
-            value: false,
-            message: '',
-          },
+          required: false,
         },
       },
       {
@@ -198,10 +166,7 @@ const staffForm: staffFormSectionType[] = [
           },
         ],
         validationRules: {
-          required: {
-            value: false,
-            message: '',
-          },
+          required: false,
         },
       },
       {
@@ -228,10 +193,7 @@ const staffForm: staffFormSectionType[] = [
           },
         ],
         validationRules: {
-          required: {
-            value: false,
-            message: '',
-          },
+          required: false,
         },
       },
       {
@@ -258,10 +220,7 @@ const staffForm: staffFormSectionType[] = [
           },
         ],
         validationRules: {
-          required: {
-            value: false,
-            message: '',
-          },
+          required: false,
         },
       },
       {
@@ -288,10 +247,7 @@ const staffForm: staffFormSectionType[] = [
           },
         ],
         validationRules: {
-          required: {
-            value: false,
-            message: '',
-          },
+          required: false,
         },
       },
       {
@@ -303,10 +259,7 @@ const staffForm: staffFormSectionType[] = [
         visible: true,
         options: [],
         validationRules: {
-          required: {
-            value: false,
-            message: '',
-          },
+          required: false,
         },
       },
       {
@@ -318,10 +271,7 @@ const staffForm: staffFormSectionType[] = [
         visible: true,
         options: [],
         validationRules: {
-          required: {
-            value: false,
-            message: '',
-          },
+          required: false,
         },
       },
       {
@@ -342,10 +292,7 @@ const staffForm: staffFormSectionType[] = [
           },
         ],
         validationRules: {
-          required: {
-            value: false,
-            message: '',
-          },
+          required: false,
         },
       },
       {
@@ -357,10 +304,7 @@ const staffForm: staffFormSectionType[] = [
         visible: true,
         options: [],
         validationRules: {
-          required: {
-            value: false,
-            message: '',
-          },
+          required: false,
         },
       },
       {
@@ -372,10 +316,7 @@ const staffForm: staffFormSectionType[] = [
         visible: true,
         options: [],
         validationRules: {
-          required: {
-            value: false,
-            message: '',
-          },
+          required: false,
         },
       },
     ],
@@ -393,10 +334,7 @@ const staffForm: staffFormSectionType[] = [
         visible: true,
         options: [],
         validationRules: {
-          required: {
-            value: false,
-            message: '',
-          },
+          required: false,
         },
       },
       {
@@ -408,10 +346,7 @@ const staffForm: staffFormSectionType[] = [
         visible: true,
         options: [],
         validationRules: {
-          required: {
-            value: false,
-            message: '',
-          },
+          required: false,
         },
       },
       {
@@ -423,10 +358,7 @@ const staffForm: staffFormSectionType[] = [
         visible: true,
         options: [],
         validationRules: {
-          required: {
-            value: false,
-            message: '',
-          },
+          required: false,
         },
       },
     ],
@@ -444,10 +376,7 @@ const staffForm: staffFormSectionType[] = [
         visible: true,
         options: [],
         validationRules: {
-          required: {
-            value: false,
-            message: '',
-          },
+          required: false,
         },
       },
       {
@@ -459,10 +388,7 @@ const staffForm: staffFormSectionType[] = [
         visible: true,
         options: [],
         validationRules: {
-          required: {
-            value: false,
-            message: '',
-          },
+          required: false,
         },
       },
       {
@@ -474,10 +400,7 @@ const staffForm: staffFormSectionType[] = [
         visible: true,
         options: [],
         validationRules: {
-          required: {
-            value: false,
-            message: '',
-          },
+          required: false,
         },
       },
       {
@@ -491,10 +414,7 @@ const staffForm: staffFormSectionType[] = [
         visible: true,
         options: [],
         validationRules: {
-          required: {
-            value: false,
-            message: '',
-          },
+          required: false,
         },
       },
       {
@@ -508,10 +428,7 @@ const staffForm: staffFormSectionType[] = [
         visible: true,
         options: [],
         validationRules: {
-          required: {
-            value: false,
-            message: '',
-          },
+          required: false,
         },
       },
       {
@@ -525,10 +442,7 @@ const staffForm: staffFormSectionType[] = [
         visible: true,
         options: [],
         validationRules: {
-          required: {
-            value: false,
-            message: '',
-          },
+          required: false,
         },
       },
       {
@@ -540,10 +454,7 @@ const staffForm: staffFormSectionType[] = [
         visible: true,
         options: [],
         validationRules: {
-          required: {
-            value: false,
-            message: '',
-          },
+          required: false,
         },
       },
       {
@@ -555,10 +466,7 @@ const staffForm: staffFormSectionType[] = [
         visible: true,
         options: [],
         validationRules: {
-          required: {
-            value: false,
-            message: '',
-          },
+          required: false,
         },
       },
       {
@@ -570,10 +478,7 @@ const staffForm: staffFormSectionType[] = [
         visible: true,
         options: [],
         validationRules: {
-          required: {
-            value: false,
-            message: '',
-          },
+          required: false,
         },
       },
       {
@@ -587,10 +492,7 @@ const staffForm: staffFormSectionType[] = [
         visible: true,
         options: [],
         validationRules: {
-          required: {
-            value: false,
-            message: '',
-          },
+          required: false,
         },
       },
       {
@@ -604,10 +506,7 @@ const staffForm: staffFormSectionType[] = [
         optionValue: 'isoCode',
         options: [],
         validationRules: {
-          required: {
-            value: false,
-            message: '',
-          },
+          required: false,
         },
       },
       {
@@ -621,10 +520,7 @@ const staffForm: staffFormSectionType[] = [
         visible: true,
         options: [],
         validationRules: {
-          required: {
-            value: false,
-            message: '',
-          },
+          required: false,
         },
       },
     ],
@@ -647,10 +543,7 @@ const staffForm: staffFormSectionType[] = [
           { value: 'NonTeaching', label: 'NonTeaching' },
         ],
         validationRules: {
-          required: {
-            value: true,
-            message: 'Category is Required',
-          },
+          required: 'Category is Required',
         },
       },
       {
@@ -667,10 +560,7 @@ const staffForm: staffFormSectionType[] = [
           { value: 'Aided', label: 'Aided' },
         ],
         validationRules: {
-          required: {
-            value: true,
-            message: 'Employment Type is Required',
-          },
+          required: 'Employment Type is Required',
         },
       },
       {
@@ -695,10 +585,7 @@ const staffForm: staffFormSectionType[] = [
           { value: 'Library', label: 'Library' },
         ],
         validationRules: {
-          required: {
-            value: true,
-            message: 'Designation is Required',
-          },
+          required: 'Designation is Required',
         },
       },
       {
@@ -710,10 +597,7 @@ const staffForm: staffFormSectionType[] = [
         visible: true,
         options: [],
         validationRules: {
-          required: {
-            value: true,
-            message: 'joining Date is Required',
-          },
+          required: 'joining Date is Required',
         },
       },
       {
@@ -725,10 +609,7 @@ const staffForm: staffFormSectionType[] = [
         visible: true,
         options: [],
         validationRules: {
-          required: {
-            value: false,
-            message: '',
-          },
+          required: false,
         },
       },
       {
@@ -740,10 +621,7 @@ const staffForm: staffFormSectionType[] = [
         visible: true,
         options: [],
         validationRules: {
-          required: {
-            value: false,
-            message: '',
-          },
+          required: false,
         },
       },
       {
@@ -755,10 +633,7 @@ const staffForm: staffFormSectionType[] = [
         visible: true,
         options: [],
         validationRules: {
-          required: {
-            value: false,
-            message: '',
-          },
+          required: false,
         },
       },
       {
@@ -770,10 +645,7 @@ const staffForm: staffFormSectionType[] = [
         visible: true,
         options: [],
         validationRules: {
-          required: {
-            value: false,
-            message: '',
-          },
+          required: false,
         },
       },
       {
@@ -790,10 +662,7 @@ const staffForm: staffFormSectionType[] = [
           { value: 'management', label: 'Management' },
         ],
         validationRules: {
-          required: {
-            value: false,
-            message: '',
-          },
+          required: false,
         },
       },
       {
@@ -805,10 +674,7 @@ const staffForm: staffFormSectionType[] = [
         visible: true,
         options: [],
         validationRules: {
-          required: {
-            value: false,
-            message: '',
-          },
+          required: false,
         },
       },
       {
@@ -820,10 +686,7 @@ const staffForm: staffFormSectionType[] = [
         visible: true,
         options: [],
         validationRules: {
-          required: {
-            value: false,
-            message: '',
-          },
+          required: false,
         },
       },
       {
@@ -835,10 +698,7 @@ const staffForm: staffFormSectionType[] = [
         visible: true,
         options: [],
         validationRules: {
-          required: {
-            value: false,
-            message: '',
-          },
+          required: false,
         },
       },
     ],
@@ -856,10 +716,7 @@ const staffForm: staffFormSectionType[] = [
         visible: true,
         options: [],
         validationRules: {
-          required: {
-            value: false,
-            message: '',
-          },
+          required: false,
         },
       },
       {
@@ -871,10 +728,7 @@ const staffForm: staffFormSectionType[] = [
         visible: true,
         options: [],
         validationRules: {
-          required: {
-            value: false,
-            message: '',
-          },
+          required: false,
         },
       },
       {
@@ -886,10 +740,7 @@ const staffForm: staffFormSectionType[] = [
         visible: true,
         options: [],
         validationRules: {
-          required: {
-            value: false,
-            message: '',
-          },
+          required: false,
         },
       },
     ],
@@ -907,10 +758,7 @@ const staffForm: staffFormSectionType[] = [
         visible: true,
         options: [],
         validationRules: {
-          required: {
-            value: false,
-            message: '',
-          },
+          required: false,
         },
       },
       {
@@ -922,10 +770,7 @@ const staffForm: staffFormSectionType[] = [
         visible: true,
         options: [],
         validationRules: {
-          required: {
-            value: false,
-            message: '',
-          },
+          required: false,
         },
       },
       {
@@ -937,10 +782,7 @@ const staffForm: staffFormSectionType[] = [
         visible: true,
         options: [],
         validationRules: {
-          required: {
-            value: false,
-            message: '',
-          },
+          required: false,
         },
       },
       {
@@ -952,10 +794,7 @@ const staffForm: staffFormSectionType[] = [
         visible: true,
         options: [],
         validationRules: {
-          required: {
-            value: false,
-            message: '',
-          },
+          required: false,
         },
       },
     ],

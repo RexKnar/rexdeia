@@ -492,14 +492,14 @@ model Staff {
   id                           String                    @id @default(uuid()) @map("_id") @db.Uuid
   image                        String?
   aadharCardNumber             String?
-  firstName                    String
-  middleName                   String?
-  lastName                     String?
-  dateOfBirth                  DateTime
-  gender                       String
+  firstName                    String                    @default("")
+  middleName                   String?                   @default("")
+  lastName                     String                    @default("")
+  dateOfBirth                  DateTime                  @default(now())
+  gender                       String                    @default("")
+  mobile                       String                    @default("")
+  email                        String                    @default("")
   age                          String?
-  mobile                       String?
-  email                        String
   bloodGroup                   String?
   religion                     String?
   caste                        String?
