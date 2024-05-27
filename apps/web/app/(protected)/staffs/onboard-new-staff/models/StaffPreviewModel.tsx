@@ -128,7 +128,7 @@ export function StaffPreviewModal({
                 <Text variant="base-regular">Edit</Text>
               </div>
             </Button>
-            <Button type="submit" variant="default" onClick={handleOnSaveClick}>
+            <Button variant="default" onClick={handleOnSaveClick}>
               <div className="flex items-center gap-2">
                 <If condition={isCreatingStaff}>
                   <Then>

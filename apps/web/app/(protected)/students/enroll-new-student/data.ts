@@ -7,19 +7,23 @@ const caste = [
 const community = [
   {
     label: 'BC',
-    value: 'bc',
+    value: 'BC',
   },
   {
     label: ' SC ',
-    value: 'sc',
+    value: 'SC',
   },
   {
     label: 'ST',
-    value: 'st',
+    value: 'ST',
+  },
+  {
+    label: 'OC',
+    value: 'OC',
   },
   {
     label: 'MBC',
-    value: 'mbc',
+    value: 'MBC',
   },
 ];
 const motherTongue = [
@@ -485,8 +489,8 @@ export const admissionForm = {
         {
           id: '7',
           type: 'text',
-          label: 'Mother’s Annual Income',
-          name: 'motherAnnualIncome',
+          label: 'Fathers’s Annual Income',
+          name: 'fatherAnnualIncome',
           value: '',
           visible: true,
           placeholder: 'Enter annual income',

@@ -492,14 +492,14 @@ model Staff {
   id                           String                    @id @default(uuid()) @map("_id") @db.Uuid
   image                        String?
   aadharCardNumber             String?
-  firstName                    String
-  middleName                   String?
-  lastName                     String?
-  dateOfBirth                  DateTime
-  gender                       String
+  firstName                    String                    @default("")
+  middleName                   String?                   @default("")
+  lastName                     String                    @default("")
+  dateOfBirth                  DateTime                  @default(now())
+  gender                       String                    @default("")
+  mobile                       String                    @default("")
+  email                        String                    @default("")
   age                          String?
-  mobile                       String?
-  email                        String
   bloodGroup                   String?
   religion                     String?
   caste                        String?
@@ -542,6 +542,7 @@ model Staff {
   pucMarksCard                 String?
   degreeMarksCard              String?
   pgMarksCard                  String?
+  natureOfPosting              String?
   otherCertificate             String?
   dateOfDetainment             DateTime?
   dateOfRetirement             DateTime?
@@ -557,6 +558,10 @@ model Staff {
   passOutYear                  DateTime?
   marksObtained                String?
   designation                  String?
+  accountHolderName            String?
+  accountNumber                String?
+  branchName                   String?
+  IFSC_Code                    String?
   dateOfJoining                DateTime                  @default(now())
   status                       StaffStatus               @default(Active)
   userId                       String                    @unique @db.Uuid
