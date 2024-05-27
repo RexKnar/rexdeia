@@ -28,7 +28,7 @@ export function SaveTermFlyout() {
   const { getParam } = useQueryParams();
 
   const page = parseInt(getParam('page')) || 1;
-  const limit = parseInt(getParam('limit')) || 999;
+  const limit = parseInt(getParam('limit')) || 10;
 
   const termId = searchParams.get('termId');
   const isOpen = searchParams.get('isTermFlyoutOpen') === 'true';
