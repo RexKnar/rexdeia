@@ -68,6 +68,13 @@ export async function GET(request: Request, { params: { id } }) {
  *     put:
  *       summary: Get All Sections with Filter
  *       description: Get All Sections with Filter
+ *       parameters:
+ *         - name: id
+ *           in: path
+ *           required: true
+ *           description: Unique identifier of the class.
+ *           schema:
+ *             type: string
  *       requestBody:
  *         required: true
  *         content:
@@ -76,11 +83,11 @@ export async function GET(request: Request, { params: { id } }) {
  *               type: object
  *       responses:
  *         '200':
- *           description: Data Found.
+ *           description: section details fetched successfully.
  *           content:
  *             application/json:
  *               schema:
- *                 # Define the schema of your Section object here
+ *                 # Define the schema of your section object here
  *         '400':
  *           description: Bad request due to validation error.
  *         '401':
