@@ -593,10 +593,11 @@ const staffForm: staffFormSectionType[] = [
         optionValue: 'value',
         visible: true,
         options: [
-          { value: 'Principal', label: 'Principal' },
           { value: 'HM', label: 'HM' },
           { value: 'AHM', label: 'AHM' },
-          { value: 'PT', label: 'PT' },
+          { value: 'PG', label: 'PG' },
+          { value: 'BT', label: 'BT' },
+          { value: '2ndGrade', label: "2'nd Grade" },
           {
             value: 'Special-Teacher',
             label: 'Special-Teacher',
