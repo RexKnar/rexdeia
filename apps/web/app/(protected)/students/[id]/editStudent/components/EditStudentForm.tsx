@@ -518,9 +518,7 @@ export function EditStudentDetail() {
                   <span className="text-red-300"> *</span>
                 </label>
                 <Input
-                  {...register('aadharCardNumber', {
-                    required: 'Aadhar Number is required',
-                  })}
+                  {...register('aadharCardNumber')}
                   aria-invalid={errors.name ? 'true' : 'false'}
                   errorMessage={errors?.name?.message.toString()}
                   className="mt-1"

@@ -59,7 +59,6 @@ export function SaveSubjectMasterFlyout() {
     params.delete('subjectMasterId');
 
     router.replace(pathname + '?' + params.toString());
-    reset();
   };
 
   const { data: getSubjectMasterByIdResponse } = useGetSubjectMasterByIdQuery(

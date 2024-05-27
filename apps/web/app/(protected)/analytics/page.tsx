@@ -2,7 +2,7 @@ import { authOptions } from 'lib/auth';
 import { redirect } from 'next/navigation';
 import { getServerSession } from 'next-auth';
 
-import { StudentAnalytics } from './_components/StudentAnalytics';
+import { ExamAnalytics } from './_components/ExamAnalytics';
 import { StudentAnalyticsHeader } from './_components/StudentAnalyticsPageheader';
 
 export default async function Page() {
@@ -12,9 +12,9 @@ export default async function Page() {
   }
 
   return (
-    <section className="space-y-2 rounded-md  p-4">
+    <section className="space-y-2 rounded-md p-4">
       <StudentAnalyticsHeader />
-      <StudentAnalytics />
+      <ExamAnalytics />
     </section>
   );
 }

@@ -22,7 +22,7 @@ export async function deleteSectionById(id: string) {
 }
 
 export async function getSectionById(id: string) {
-  return db.section.findFirst({
+  const sectionDetails = await db.section.findFirst({
     where: {
       id: id,
       isActive: true,
@@ -36,6 +36,11 @@ export async function getSectionById(id: string) {
       },
     },
   });
+  sectionDetails['group'] = sectionDetails.sectionToGroups.map((item) => {
+    return item.group;
+  });
+  delete sectionDetails.sectionToGroups;
+  return sectionDetails;
 }
 
 export async function getAllSectionsByClassId(classId: string) {
@@ -227,6 +232,21 @@ export async function removeStudentsFromSection(
     data: {
       students: {
         disconnect: studentIds.map((id) => ({ id })),
+      },
+    },
+  });
+}
+export async function getSectionsByGroupIdClassId(filter: {
+  classId: string;
+  groupId: string;
+}) {
+  return db.section.findMany({
+    where: {
+      classId: filter.classId,
+      sectionToGroups: {
+        some: {
+          groupId: filter.groupId,
+        },
       },
     },
   });

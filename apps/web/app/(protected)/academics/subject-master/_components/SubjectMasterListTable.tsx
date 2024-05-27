@@ -118,7 +118,7 @@ export function SubjectMasterListTable() {
     if (isDeleteSubjectMasterError) {
       toast({
         title: 'Error',
-        variant: 'error',
+        variant: 'default',
         description: 'Error while deleting Subject Master',
       });
     }
@@ -128,7 +128,7 @@ export function SubjectMasterListTable() {
     if (isDeleteSuccess) {
       toast({
         title: 'Success',
-        variant: 'success',
+        variant: 'default',
         description: 'Subject Master deleted successfully',
       });
       setSelectedSubjectMaster(null);

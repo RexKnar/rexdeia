@@ -1,9 +1,9 @@
 import { captureException } from '@sentry/nextjs';
 import { StatusCodes } from 'http-status-codes';
+import { authOptions } from 'lib/auth';
 import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 
-import { authOptions } from '../../../../lib/auth';
 import { deleteGroupById, getGroupById, updateGroupById } from '../service';
 
 /**

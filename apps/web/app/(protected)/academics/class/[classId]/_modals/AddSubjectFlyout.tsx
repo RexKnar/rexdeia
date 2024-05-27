@@ -25,6 +25,7 @@ import {
   SheetContent,
   SheetHeader,
   SheetTitle,
+  Switch,
   Text,
 } from 'ui';
 
@@ -43,7 +44,7 @@ export function AddSubjectFlyout() {
   const isOpen = searchParams.get('isAddSubjectFlyoutOpen') === 'true';
   const page = parseInt(searchParams.get('page')) || 1;
   const limit = parseInt(searchParams.get('limit')) || 10;
-  const filter = { isActive: true, hasMarkEntry: true };
+  const filter = { isActive: true };
   const {
     control,
     watch,
@@ -55,6 +56,7 @@ export function AddSubjectFlyout() {
   } = useForm({
     defaultValues: {
       name: null,
+      isActive: false,
       assessmentFormatIds: [],
       groupIds: [],
       regulationId: null,
@@ -81,7 +83,7 @@ export function AddSubjectFlyout() {
   const { data: groupList } = useGetGroupListQuery({
     page: 1,
     limit: 999,
-    filter,
+    filter: { isActive: true },
   });
 
   const { classId } = useParams<{ classId: string }>();
@@ -101,7 +103,6 @@ export function AddSubjectFlyout() {
   const closeFlyout = () => {
     const params = new URLSearchParams(searchParams.toString());
     params.set('isAddSubjectFlyoutOpen', 'false');
-    reset();
     router.replace(pathname + '?' + params.toString());
   };
 
@@ -116,7 +117,6 @@ export function AddSubjectFlyout() {
         subjects: [
           {
             ...addSubjectRequestPayload,
-            isActive: true,
           },
         ],
         classId: classId,
@@ -147,6 +147,20 @@ export function AddSubjectFlyout() {
                     <Text variant="lg-semibold" className="ml-2">
                       New Subject
                     </Text>
+                  </div>
+                  <div className="flex items-center">
+                    <Switch
+                      id="isActive"
+                      {...register('isActive')}
+                      onCheckedChange={(value) => setValue('isActive', value)}
+                      checked={watch('isActive')}
+                    />
+                    <label
+                      htmlFor="isActive"
+                      className="ml-2 text-sm font-semibold"
+                    >
+                      {watch('isActive') ? 'Active' : 'Inactive'}
+                    </label>
                   </div>
                 </div>
               </SheetTitle>

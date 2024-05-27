@@ -20,5 +20,10 @@ export function useCreateMediumMutationQuery() {
 
       return response;
     },
+    onSuccess: async () => {
+      await queryClient.refetchQueries({
+        queryKey: [GET_MEDIUM_LIST],
+      });
+    },
   });
 }

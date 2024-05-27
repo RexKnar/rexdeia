@@ -451,7 +451,7 @@ const staffForm: staffFormSectionType[] = [
         placeholder: 'Current City',
         label: 'Current City',
         optionKey: 'name',
-        optionValue: 'isoCode',
+        optionValue: 'name',
         visible: true,
         options: [],
         validationRules: {
@@ -535,7 +535,7 @@ const staffForm: staffFormSectionType[] = [
         placeholder: 'Permanent City',
         label: 'Permanent City',
         optionKey: 'name',
-        optionValue: 'isoCode',
+        optionValue: 'name',
         visible: true,
         options: [],
         validationRules: {

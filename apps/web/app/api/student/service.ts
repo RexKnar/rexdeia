@@ -16,6 +16,36 @@ export async function getStudentById(id: string) {
       organizationId: session.organizationId,
       isDeleted: false,
     },
+    include: {
+      batch: {
+        select: {
+          id: true,
+          name: true,
+        },
+      },
+      studentMapping: {
+        select: {
+          group: {
+            select: {
+              id: true,
+              name: true,
+            },
+          },
+          class: {
+            select: {
+              id: true,
+              name: true,
+            },
+          },
+          medium: {
+            select: {
+              id: true,
+              name: true,
+            },
+          },
+        },
+      },
+    },
   });
 
   // if (!student) {
@@ -45,7 +75,14 @@ export async function getStudentById(id: string) {
   //   });
   //   return form.json;
   // }
-  return student;
+  const { studentMapping, ...restOfStudent } = student;
+  const studentDetails = {
+    ...restOfStudent,
+    group: studentMapping.length > 0 ? studentMapping[0].group : null,
+    class: studentMapping.length > 0 ? studentMapping[0].class : null,
+    medium: studentMapping.length > 0 ? studentMapping[0].medium : null,
+  };
+  return studentDetails;
 }
 
 export async function addStudent(student: AddStudentModel) {
