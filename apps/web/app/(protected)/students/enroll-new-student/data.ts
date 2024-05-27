@@ -15,11 +15,11 @@ const community = [
   },
   {
     label: 'ST',
-    value: 'St',
+    value: 'ST',
   },
   {
     label: 'OC',
-    value: 'Oc',
+    value: 'OC',
   },
   {
     label: 'MBC',
