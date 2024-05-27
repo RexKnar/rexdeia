@@ -46,6 +46,7 @@ export function StaffPreviewModal({
         differentlyAbled: Boolean(formData.differentlyAbled),
         dateOfJoining: new Date(formData.dateOfJoining),
         dateOfDetainment: new Date(formData.dateOfDetainment),
+        dateOfRetirement: new Date(formData.dateOfRetirement),
         dateOfRegularization: new Date(formData.dateOfRegularization),
         passOutYear: new Date(formData.passOutYear),
         dateOfBirth: new Date(formData.dateOfBirth),
@@ -127,7 +128,7 @@ export function StaffPreviewModal({
                 <Text variant="base-regular">Edit</Text>
               </div>
             </Button>
-            <Button variant="default" onClick={handleOnSaveClick}>
+            <Button type="submit" variant="default" onClick={handleOnSaveClick}>
               <div className="flex items-center gap-2">
                 <If condition={isCreatingStaff}>
                   <Then>
