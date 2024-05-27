@@ -6,7 +6,13 @@ import { useExamAnalyticsQuery } from 'lib/queries/analytics/exam/useGetExamAnal
 import { useGetClassListQuery } from 'lib/queries/class/useGetClassListQuery';
 import { useGetExamsBySectionIdQuery } from 'lib/queries/exams/useGetExamBySectionIdQuery';
 import { useGetAllSectionByClassIdQuery } from 'lib/queries/section/useGetAllSectionsByClassIdQuery';
-import { ArrowDown10, ArrowUp10, UserCheck, UserX } from 'lucide-react';
+import {
+  ArrowDown10,
+  ArrowUp10,
+  Loader2,
+  UserCheck,
+  UserX,
+} from 'lucide-react';
 import React, { useEffect, useState } from 'react';
 import {
   Select,
@@ -18,6 +24,7 @@ import {
   Text,
 } from 'ui';
 
+import AnalyticsEmptyState from './AnalyticsEmptyState';
 import { BasicAnalyticsCardWidget } from './BasicAnalyticsCardWidget';
 
 export function ExamAnalytics() {
@@ -55,16 +62,17 @@ export function ExamAnalytics() {
     }
   );
 
-  const { data: analyticsDetail } = useExamAnalyticsQuery(
-    {
-      classId,
-      sectionId,
-      examId,
-    },
-    {
-      enabled: !!classId && !!sectionId && !!examId,
-    }
-  );
+  const { data: analyticsDetail, isLoading: isAnalyticsDetail } =
+    useExamAnalyticsQuery(
+      {
+        classId,
+        sectionId,
+        examId,
+      },
+      {
+        enabled: !!classId && !!sectionId && !!examId,
+      }
+    );
   useEffect(() => {
     if (analyticsDetail) {
       const { analytics } = analyticsDetail;
@@ -148,7 +156,7 @@ export function ExamAnalytics() {
         {
           value: analytics?.highestTotalMark || 0,
           percentage:
-            `${analytics?.highestStudent.firstName} ${analytics?.highestStudent.middleName} ${analytics?.highestStudent.lastName}` ||
+            `${analytics?.highestStudent?.firstName} ${analytics?.highestStudent?.middleName} ${analytics?.highestStudent?.lastName}` ||
             '-',
           label: 'Highest Mark',
           icon: ArrowUp10,
@@ -173,7 +181,7 @@ export function ExamAnalytics() {
         {
           value: analytics?.lowestTotalMark || 0,
           percentage:
-            `${analytics?.lowestStudent.firstName} ${analytics?.lowestStudent.middleName} ${analytics?.lowestStudent.lastName}` ||
+            `${analytics?.lowestStudent?.firstName} ${analytics?.lowestStudent?.middleName} ${analytics?.lowestStudent?.lastName}` ||
             '-',
           label: 'Lowest Mark',
           icon: ArrowDown10,
@@ -277,125 +285,141 @@ export function ExamAnalytics() {
           </div>
         </div>
       </section>
-      <section className="mt-4 space-y-4 rounded-md bg-white p-6">
-        <p className="text-xl font-semibold text-gray-800">Students Overview</p>
-        <p className="text-gray-700">
-          This section provides a comprehensive overview of student statistics.
-        </p>
-        <div className="flex gap-2">
-          {passFailWidgetData.map((widget, index) => (
-            <div key={index} className="w-full">
-              <BasicAnalyticsCardWidget
-                icon={widget.icon}
-                percentage={widget.percentage}
-                label={widget.label}
-                value={widget.value}
-                className={widget.className}
-                subData={widget.subData}
-              />
-            </div>
-          ))}
-        </div>
-
-        <div className="flex gap-2">
-          {passFailStudentsWidgetData.map((widget, index) => (
-            <div key={index} className="w-full">
-              <BasicAnalyticsCardWidget
-                icon={widget.icon}
-                percentage={widget.percentage}
-                label={widget.label}
-                value={widget.value}
-                className={widget.className}
-                subData={widget.subData}
-              />
-            </div>
-          ))}
-        </div>
-
-        <div className="flex gap-1">
-          <div className="w-1/2">
-            {analyticsDetail && (
-              <BiaxialBarChart chartData={examStatusBarChartData} />
-            )}
-          </div>
-          <div className="w-1/2">
-            {analyticsDetail && (
-              <PieChartWithCustomLabel
-                pieData={passFailPieData}
-                colorCodeIndex={5}
-              />
-            )}
-          </div>
-        </div>
-      </section>
-      <section className="mt-4 space-y-4 rounded-md p-6">
-        <Text className="text-xl font-semibold text-gray-800">
-          Subject Wise Analytics
-        </Text>
-
+      {analyticsDetail && (
         <div>
-          <div className="flex gap-4">
-            <div className="w-1/2 rounded-md bg-white p-4">
-              <Text className="text-lg font-semibold text-gray-800">
-                Failed Student Analytics
-              </Text>
-              {analyticsDetail && (
-                <BiaxialBarChart
-                  chartData={analyticsDetail?.subjectWiseCount || []}
-                  collectiveKey={'subjectCount'}
-                  firstBarKey="maleFailed"
-                  secondBarKey="femaleFailed"
-                />
-              )}
+          <section className="mt-4 space-y-4 rounded-md bg-white p-6">
+            <p className="text-xl font-semibold text-gray-800">
+              Students Overview
+            </p>
+            <p className="text-gray-700">
+              This section provides a comprehensive overview of student
+              statistics.
+            </p>
+            <div className="flex gap-2">
+              {passFailWidgetData.map((widget, index) => (
+                <div key={index} className="w-full">
+                  <BasicAnalyticsCardWidget
+                    icon={widget.icon}
+                    percentage={widget.percentage}
+                    label={widget.label}
+                    value={widget.value}
+                    className={widget.className}
+                    subData={widget.subData}
+                  />
+                </div>
+              ))}
             </div>
-            <div className="flex w-1/2 flex-col rounded-md bg-white p-4">
-              <Text className="text-lg font-semibold text-gray-800">
-                Failed Student Analytics
-              </Text>
-              {analyticsDetail && (
-                <PieChartWithCustomLabel
-                  pieData={analyticsDetail?.subjectWiseCount}
-                  dataKey="totalFailed"
-                  nameKey="totalFailed"
-                  colorCodeIndex={5}
-                />
-              )}
+
+            <div className="flex gap-2">
+              {passFailStudentsWidgetData.map((widget, index) => (
+                <div key={index} className="w-full">
+                  <BasicAnalyticsCardWidget
+                    icon={widget.icon}
+                    percentage={widget.percentage}
+                    label={widget.label}
+                    value={widget.value}
+                    className={widget.className}
+                    subData={widget.subData}
+                  />
+                </div>
+              ))}
             </div>
-          </div>
+
+            <div className="flex gap-1">
+              <div className="w-1/2">
+                {analyticsDetail && (
+                  <BiaxialBarChart chartData={examStatusBarChartData} />
+                )}
+              </div>
+              <div className="w-1/2">
+                {analyticsDetail && (
+                  <PieChartWithCustomLabel
+                    pieData={passFailPieData}
+                    colorCodeIndex={5}
+                  />
+                )}
+              </div>
+            </div>
+          </section>
+          <section className="mt-4 space-y-4 rounded-md p-6">
+            <Text className="text-xl font-semibold text-gray-800">
+              Subject Wise Analytics
+            </Text>
+
+            <div>
+              <div className="flex gap-4">
+                <div className="w-1/2 rounded-md bg-white p-4">
+                  <Text className="text-lg font-semibold text-gray-800">
+                    Failed Student Analytics
+                  </Text>
+                  {analyticsDetail && (
+                    <BiaxialBarChart
+                      chartData={analyticsDetail?.subjectWiseCount || []}
+                      collectiveKey={'subjectCount'}
+                      firstBarKey="maleFailed"
+                      secondBarKey="femaleFailed"
+                    />
+                  )}
+                </div>
+                <div className="flex w-1/2 flex-col rounded-md bg-white p-4">
+                  <Text className="text-lg font-semibold text-gray-800">
+                    Failed Student Analytics
+                  </Text>
+                  {analyticsDetail && (
+                    <PieChartWithCustomLabel
+                      pieData={analyticsDetail?.subjectWiseCount}
+                      dataKey="totalFailed"
+                      nameKey="totalFailed"
+                      colorCodeIndex={5}
+                    />
+                  )}
+                </div>
+              </div>
+            </div>
+          </section>
+          <section className="mt-4 space-y-4 rounded-md p-6">
+            <div>
+              <div className="flex gap-4">
+                <div className="w-1/2 rounded-md bg-white p-4">
+                  <Text className="text-lg font-semibold text-gray-800">
+                    Passed Student Analytics
+                  </Text>
+                  {analyticsDetail && (
+                    <BiaxialBarChart
+                      chartData={analyticsDetail?.subjectWiseCount || []}
+                      collectiveKey={'subjectCount'}
+                      firstBarKey="malePassed"
+                      secondBarKey="femalePassed"
+                    />
+                  )}
+                </div>
+                <div className="flex w-1/2 flex-col rounded-md bg-white p-4">
+                  <Text className="text-lg font-semibold text-gray-800">
+                    Passed Student Analytics
+                  </Text>
+                  {analyticsDetail && (
+                    <PieChartWithCustomLabel
+                      pieData={analyticsDetail?.subjectWiseCount}
+                      dataKey="totalPassed"
+                      nameKey="totalPassed"
+                      colorCodeIndex={5}
+                    />
+                  )}
+                </div>
+              </div>
+            </div>
+          </section>
         </div>
-      </section>
-      <section className="mt-4 space-y-4 rounded-md p-6">
-        <div>
-          <div className="flex gap-4">
-            <div className="w-1/2 rounded-md bg-white p-4">
-              <Text className="text-lg font-semibold text-gray-800">
-                Passed Student Analytics
-              </Text>
-              {analyticsDetail && (
-                <BiaxialBarChart
-                  chartData={analyticsDetail?.subjectWiseCount || []}
-                  collectiveKey={'subjectCount'}
-                  firstBarKey="malePassed"
-                  secondBarKey="femalePassed"
-                />
-              )}
-            </div>
-            <div className="flex w-1/2 flex-col rounded-md bg-white p-4">
-              <Text className="text-lg font-semibold text-gray-800">
-                Passed Student Analytics
-              </Text>
-              {analyticsDetail && (
-                <PieChartWithCustomLabel
-                  pieData={analyticsDetail?.subjectWiseCount}
-                  dataKey="totalPassed"
-                  nameKey="totalPassed"
-                  colorCodeIndex={5}
-                />
-              )}
-            </div>
-          </div>
+      )}
+
+      {!analyticsDetail && !isAnalyticsDetail && <AnalyticsEmptyState />}
+
+      {isAnalyticsDetail && (
+        <div className="mt-4 flex items-center justify-center ">
+          <Loader2 className="mr-2 h-6 w-6 animate-spin text-black" />
+          <p className="text-black">Fetching Details...</p>
         </div>
-      </section>
+      )}
     </section>
   );
 }
