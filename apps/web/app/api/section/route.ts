@@ -4,7 +4,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 
 import { authOptions } from '../../../lib/auth';
-import { addSection, getSectionsByGroupIdClassId } from './service';
+import { addSection, getSectionsBySubjectIdClassId } from './service';
 
 /**
  * @swagger
@@ -58,8 +58,8 @@ export async function POST(request: NextRequest) {
  * @swagger
  * /api/section:
  *     put:
- *       summary: Get Section By groupId && classId
- *       description: Get Section By groupId && classId
+ *       summary: Get Section By subjectId && classId
+ *       description: Get Section By subjectId && classId
  *       requestBody:
  *         required: true
  *         content:
@@ -91,7 +91,7 @@ export async function PUT(request: NextRequest) {
   try {
     const filter = await request.json();
 
-    const SectionByGroupClass = await getSectionsByGroupIdClassId(filter);
+    const SectionByGroupClass = await getSectionsBySubjectIdClassId(filter);
 
     return new NextResponse(JSON.stringify(SectionByGroupClass), {
       status: StatusCodes.OK,
