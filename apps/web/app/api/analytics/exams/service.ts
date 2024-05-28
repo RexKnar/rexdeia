@@ -240,12 +240,12 @@ export async function getExamAnalyticsByClass(filter: MarkAnalyticsFilter) {
       totalAbsentCount,
       maleAbsentCount,
       femaleAbsentCount,
-      malePassPercentage: malePassPercentage.toFixed(2) + '%',
-      femalePassPercentage: femalePassPercentage.toFixed(2) + '%',
-      maleFailPercentage: maleFailPercentage.toFixed(2) + '%',
-      femaleFailPercentage: femaleFailPercentage.toFixed(2) + '%',
-      totalPassPercentage: totalPassPercentage.toFixed(2) + '%',
-      totalFailPercentage: totalFailPercentage.toFixed(2) + '%',
+      malePassPercentage: malePassPercentage.toFixed(2),
+      femalePassPercentage: femalePassPercentage.toFixed(2),
+      maleFailPercentage: maleFailPercentage.toFixed(2),
+      femaleFailPercentage: femaleFailPercentage.toFixed(2),
+      totalPassPercentage: totalPassPercentage.toFixed(2),
+      totalFailPercentage: totalFailPercentage.toFixed(2),
     };
   };
 
