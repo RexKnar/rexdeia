@@ -1,14 +1,16 @@
 'use client';
 
 import { useGetBatchesListQuery } from 'lib/queries/batches/useGetBatchesListQuery';
-import { PlusCircle, Search, Trash } from 'lucide-react';
+import { useGetSectionsByClassIdSubjectIdQuery } from 'lib/queries/section/useGetSectionByClassIdSubjectIdQuery';
+import { useGetSubjectListByClassIdQuery } from 'lib/queries/subjects/useGetSubjectListByClassIdQuery';
+import { Loader2, PlusCircle, Search, Trash } from 'lucide-react';
 import {
   useParams,
   usePathname,
   useRouter,
   useSearchParams,
 } from 'next/navigation';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Controller, useFieldArray, useForm } from 'react-hook-form';
 import {
   Button,
@@ -30,7 +32,6 @@ import { AssignStaffToClassRequestModel } from '../../../../../../lib/domain/cla
 import { useGetAllSectionByClassIdQuery } from '../../../../../../lib/queries/section/useGetAllSectionsByClassIdQuery';
 import { useCreateStaffMutationByClassIdQuery } from '../../../../../../lib/queries/staff/useCreateStaffMutationByClassIdQuery';
 import { useGetAllStaffListQuery } from '../../../../../../lib/queries/staff/useGetAllStaffListQuery';
-import { useGetSubjectListQuery } from '../../../../../../lib/queries/subjects/useGetSubjectListQuery';
 
 export function AssignStaffClassDetailPageFlyout() {
   const pathname = usePathname();
@@ -57,6 +58,7 @@ export function AssignStaffClassDetailPageFlyout() {
   });
   const classIdFromQueryParams = useParams<{ classId: string }>();
   const classIdFromSearchParams = searchParams.get('classId');
+  const [subjectId, setSubjectId] = useState('');
   const classId = classIdFromSearchParams
     ? classIdFromSearchParams
     : classIdFromQueryParams?.classId;
@@ -78,10 +80,13 @@ export function AssignStaffClassDetailPageFlyout() {
     page,
     limit,
   });
-  const { data: subjectListResponse } = useGetSubjectListQuery({
-    page,
-    limit,
-  });
+
+  const { data: subjectListResponse } = useGetSubjectListByClassIdQuery(
+    classId,
+    {
+      enabled: !!classId,
+    }
+  );
   const { data: batchesList } = useGetBatchesListQuery({
     page,
     limit,
@@ -94,10 +99,18 @@ export function AssignStaffClassDetailPageFlyout() {
       enabled: !!classId,
     }
   );
+  const { data: sectionResponseByGroup } =
+    useGetSectionsByClassIdSubjectIdQuery(
+      { classId, subjectId },
+      {
+        enabled: !!subjectId,
+      }
+    );
   const closeFlyout = async () => {
     const params = new URLSearchParams(searchParams.toString());
     params.set('isAssignStaffClassDetailPageFlyoutOpen', 'false');
     params.delete('sectionId');
+    setSubjectId('');
     router.replace(pathname + '?' + params.toString());
   };
 
@@ -113,6 +126,7 @@ export function AssignStaffClassDetailPageFlyout() {
     } finally {
       await closeFlyout();
       reset();
+      setSubjectId('');
     }
   };
 
@@ -205,6 +219,7 @@ export function AssignStaffClassDetailPageFlyout() {
                             })}
                             onValueChange={(value) => {
                               if (value) {
+                                setSubjectId(value);
                                 setValue(
                                   `sections.${index}.subjectId` as any,
                                   value
@@ -217,7 +232,7 @@ export function AssignStaffClassDetailPageFlyout() {
                             </SelectTrigger>
                             <SelectContent>
                               <SelectGroup>
-                                {subjectListResponse?.data?.map((item) => (
+                                {subjectListResponse?.map((item) => (
                                   <SelectItem key={item.id} value={item.id}>
                                     {item.name}
                                   </SelectItem>
@@ -262,37 +277,46 @@ export function AssignStaffClassDetailPageFlyout() {
                         Sections
                       </label>
                       <div className="mt-2 flex flex-wrap" id="sectionId">
-                        {sectionListResponse?.data?.map((item) => (
-                          <label className="me-5" key={item.id}>
-                            <Controller
-                              key={item.id}
-                              control={control}
-                              name={`sections.${index}.sectionIds` as any}
-                              render={({ field }) => {
-                                return (
-                                  <label className="me-5">
-                                    <Checkbox
-                                      className="me-2 items-center space-x-2 rounded border border-primary-500"
-                                      onCheckedChange={(checked) => {
-                                        return checked
-                                          ? field.onChange([
-                                              ...(field.value || []),
-                                              item.id,
-                                            ])
-                                          : field.onChange(
-                                              field.value?.filter(
-                                                (value) => value !== item.id
-                                              )
-                                            );
-                                      }}
-                                    />
-                                    <span>{item.name}</span>
-                                  </label>
-                                );
-                              }}
-                            />
-                          </label>
-                        ))}
+                        {sectionResponseByGroup?.length ? (
+                          sectionResponseByGroup?.map((item) => (
+                            <label className="me-5" key={item.id}>
+                              <Controller
+                                key={item.id}
+                                control={control}
+                                name={`sections.${index}.sectionIds` as any}
+                                render={({ field }) => {
+                                  return (
+                                    <label className="me-5">
+                                      <Checkbox
+                                        className="me-2 items-center space-x-2 rounded border border-primary-500"
+                                        onCheckedChange={(checked) => {
+                                          return checked
+                                            ? field.onChange([
+                                                ...(field.value || []),
+                                                item.id,
+                                              ])
+                                            : field.onChange(
+                                                field.value?.filter(
+                                                  (value) => value !== item.id
+                                                )
+                                              );
+                                        }}
+                                      />
+                                      <span>{item.name}</span>
+                                    </label>
+                                  );
+                                }}
+                              />
+                            </label>
+                          ))
+                        ) : (
+                          <div className="flex items-center justify-center">
+                            <Loader2 className="mr-2 h-6 w-6 animate-spin text-black" />
+                            <p className="text-black ">
+                              Please Select Subject...
+                            </p>
+                          </div>
+                        )}
                       </div>
                       {errors[`sections.${index}.sections`] && (
                         <p>
