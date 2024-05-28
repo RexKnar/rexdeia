@@ -1,6 +1,7 @@
 'use client';
 
 import { useGetBatchesListQuery } from 'lib/queries/batches/useGetBatchesListQuery';
+import { useGetSubjectListByClassIdQuery } from 'lib/queries/subjects/useGetSubjectListByClassIdQuery';
 import { PlusCircle, Search, Trash } from 'lucide-react';
 import {
   useParams,
@@ -30,7 +31,6 @@ import { AssignStaffToClassRequestModel } from '../../../../../../lib/domain/cla
 import { useGetAllSectionByClassIdQuery } from '../../../../../../lib/queries/section/useGetAllSectionsByClassIdQuery';
 import { useCreateStaffMutationByClassIdQuery } from '../../../../../../lib/queries/staff/useCreateStaffMutationByClassIdQuery';
 import { useGetAllStaffListQuery } from '../../../../../../lib/queries/staff/useGetAllStaffListQuery';
-import { useGetSubjectListQuery } from '../../../../../../lib/queries/subjects/useGetSubjectListQuery';
 
 export function AssignStaffClassDetailPageFlyout() {
   const pathname = usePathname();
@@ -78,10 +78,13 @@ export function AssignStaffClassDetailPageFlyout() {
     page,
     limit,
   });
-  const { data: subjectListResponse } = useGetSubjectListQuery({
-    page,
-    limit,
-  });
+
+  const { data: subjectListResponse } = useGetSubjectListByClassIdQuery(
+    classId,
+    {
+      enabled: !!classId,
+    }
+  );
   const { data: batchesList } = useGetBatchesListQuery({
     page,
     limit,
@@ -217,7 +220,7 @@ export function AssignStaffClassDetailPageFlyout() {
                             </SelectTrigger>
                             <SelectContent>
                               <SelectGroup>
-                                {subjectListResponse?.data?.map((item) => (
+                                {subjectListResponse?.map((item) => (
                                   <SelectItem key={item.id} value={item.id}>
                                     {item.name}
                                   </SelectItem>
