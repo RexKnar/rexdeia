@@ -1,5 +1,5 @@
 'use client';
-
+/* eslint-disable react-hooks/exhaustive-deps */
 import { AssignStudentsToClassModel } from 'lib/domain/student';
 import { useGetBatchesListQuery } from 'lib/queries/batches/useGetBatchesListQuery';
 import { useGetClassListQuery } from 'lib/queries/class/useGetClassListQuery';
@@ -41,6 +41,11 @@ export function AssignStudents() {
 
   const [groupIdToGetStudent, setGroupIdToGetStudent] = useState('');
   const [classIdToGetStudent, setClassIdToGetStudent] = useState('');
+  const [selectedStudentIds, setSelectedStudentIds] = useState([]);
+  const [deselectedStudentIds, setDeselectedStudentIds] = useState([]);
+  const [selectedStudents, setSelectedStudents] = useState([]);
+  const [studentListMaster, setStudentListMaster] = useState([]);
+  const [selectAll, setSelectAll] = useState(false);
 
   useEffect(() => {
     if (classId) setClassIdToGetStudent(classId);
@@ -67,7 +72,6 @@ export function AssignStudents() {
     }
   );
 
-  const [studentListMaster, setStudentListMaster] = useState([]);
   useEffect(() => {
     setStudentListMaster(getStudentListResponse);
   }, [getStudentListResponse]);
@@ -84,7 +88,7 @@ export function AssignStudents() {
     filter,
   });
 
-  const handleCheckboxChange = (studentId) => {
+  const handleActualStudentCheckboxChange = (studentId) => {
     setSelectedStudentIds((prevSelectedStudentIds) => {
       const updatedSelectedStudentIds = prevSelectedStudentIds.includes(
         studentId
@@ -92,31 +96,40 @@ export function AssignStudents() {
         ? prevSelectedStudentIds.filter((id) => id !== studentId)
         : [...prevSelectedStudentIds, studentId];
 
-      updatedSelectedStudentIds.length > 0;
       return updatedSelectedStudentIds;
     });
   };
-  const [selectedStudentIds, setSelectedStudentIds] = useState([]);
-  const [selectedStudents, setSelectedStudents] = useState([]);
+
+  const handleSelectedStudentCheckboxChange = (studentId) => {
+    setDeselectedStudentIds((prevSelectedStudentIds) => {
+      const updatedSelectedStudentIds = prevSelectedStudentIds.includes(
+        studentId
+      )
+        ? prevSelectedStudentIds.filter((id) => id !== studentId)
+        : [...prevSelectedStudentIds, studentId];
+
+      return updatedSelectedStudentIds;
+    });
+  };
+
   const addSelectedStudent = (student) => {
     setSelectedStudents((prevSelectedStudents) => [
       ...prevSelectedStudents,
       student,
     ]);
 
-    const updatedStudentList =
-      studentListMaster?.filter((s) => s.id !== student.id) || [];
-    setStudentListMaster(updatedStudentList);
+    // const updatedStudentList =
+    //   studentListMaster?.filter((s) => s.id !== student.id) || [];
+    // // setStudentListMaster(updatedStudentList);
   };
 
-  const handleAssign = () => {
+  const handleBulkAssign = () => {
     const selectedStudentsToAdd = studentListMaster?.filter((student) => {
-      if (selectedStudentIds.includes(student.id)) {
-        return student;
-      }
+      if (selectedStudentIds.includes(student.id)) return student;
     });
 
-    selectedStudentsToAdd.forEach((student) => addSelectedStudent(student));
+    // selectedStudentsToAdd.forEach((student) => addSelectedStudent(student));
+    setSelectedStudents([...selectedStudents, ...selectedStudentsToAdd]);
 
     selectedStudentIds.forEach((id) => {
       const indexToRemove = studentListMaster.findIndex(
@@ -126,27 +139,35 @@ export function AssignStudents() {
         studentListMaster.splice(indexToRemove, 1);
       }
     });
+    setSelectedStudentIds([]);
   };
+
+  useEffect(() => {
+    const selectedStudentsToAdd = getStudentListResponse?.filter((student) => {
+      // if (!selectedStudentIds.includes(student.id)) return student;
+      const studentIndex = selectedStudents.findIndex(
+        (obj) => obj.id == student.id
+      );
+      console.log(studentIndex);
+      console.log(selectedStudents);
+      if (studentIndex < 0) {
+        return student;
+      } else {
+        return null;
+      }
+    });
+
+    setStudentListMaster(selectedStudentsToAdd);
+  }, [selectedStudents]);
   const handleDeselectAll = () => {
-    const updatedStudentList = [
-      ...(studentListMaster || []),
-      ...selectedStudents,
-    ];
-    setSelectedStudents([]);
-    setStudentListMaster(updatedStudentList);
+    setDeselectedStudentIds([]);
   };
   const handleRemoveSelected = () => {
-    const updatedStudentList = [...(studentListMaster || [])];
     const updatedSelectedStudents = selectedStudents.filter((student) => {
-      if (selectedStudentIds.includes(student.id)) {
-        updatedStudentList.push(student);
-        return false;
-      }
-      return true;
+      const removeIndex = deselectedStudentIds.indexOf(student.id);
+      if (removeIndex < 0) return student;
     });
     setSelectedStudents(updatedSelectedStudents);
-    setSelectedStudentIds([]);
-    setStudentListMaster(updatedStudentList);
   };
   const handleRemoveStudent = (studentId) => {
     const removedStudent = selectedStudents.find(
@@ -157,10 +178,9 @@ export function AssignStudents() {
         (student) => student.id !== studentId
       );
       setSelectedStudents(updatedSelectedStudents);
-      studentListMaster.push(removedStudent);
+      // studentListMaster.push(removedStudent);
     }
   };
-  const [selectAll, setSelectAll] = useState(false);
 
   const handleSelectAll = () => {
     setSelectAll(!selectAll);
@@ -272,7 +292,7 @@ export function AssignStudents() {
                   ) && (
                     <Button
                       className="ml-3 h-8 px-2"
-                      onClick={handleAssign}
+                      onClick={handleBulkAssign}
                       type="button"
                     >
                       Assign Selected
@@ -290,7 +310,7 @@ export function AssignStudents() {
                           <Checkbox
                             className="mt-2"
                             onCheckedChange={() => {
-                              handleCheckboxChange(student.id);
+                              handleActualStudentCheckboxChange(student.id);
                             }}
                           />
                           <Avatar className="ml-3 mt-2 h-8 w-8 cursor-pointer ">
@@ -463,20 +483,26 @@ export function AssignStudents() {
                   <Checkbox className="mr-3 h-4 w-4  border-2 border-dashed border-red-500 data-[state=checked]:bg-red-500" />
                   Deselect All
                 </Button>
-                <Button
+                {selectedStudents &&
+                  selectedStudents.some((x) =>
+                    deselectedStudentIds.includes(x.id)
+                  ) && (
+                    <Button
+                      className="ml-3 h-8 px-2"
+                      onClick={handleRemoveSelected}
+                      type="button"
+                    >
+                      Remove Selected
+                    </Button>
+                  )}
+                {/* <Button
                   className="ml-3 h-8 border bg-red-500 px-2 text-white hover:bg-red-500"
                   onClick={handleRemoveSelected}
                   type="button"
-                  style={{
-                    display: selectedStudents.some((x) =>
-                      selectedStudentIds.includes(x.id)
-                    )
-                      ? 'block'
-                      : 'none',
-                  }}
+                  
                 >
                   Remove Selected
-                </Button>
+                </Button> */}
               </div>
             </section>
             <section>
@@ -489,9 +515,9 @@ export function AssignStudents() {
                           <Checkbox
                             className="mt-2"
                             onCheckedChange={() => {
-                              handleCheckboxChange(student.id);
+                              handleSelectedStudentCheckboxChange(student.id);
                             }}
-                            checked={selectedStudentIds.includes(student.id)}
+                            checked={deselectedStudentIds.includes(student.id)}
                           />
                           <Avatar className="ml-3 mt-2 h-8 w-8 cursor-pointer">
                             <AvatarImage src="https://png.pngtree.com/thumb_back/fh260/background/20230612/pngtree-man-wearing-glasses-is-wearing-colorful-background-image_2905240.jpg" />
