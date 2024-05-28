@@ -7,6 +7,13 @@ import { useQueryParams } from '@/hooks/useQueryParams';
 
 import { ExamCard } from './ExamCard';
 
+const cardColors = [
+  'bg-teal-50 border-teal-200',
+  'bg-violet-50 border-violet-200',
+  'bg-pink-50 border-pink-200',
+  'bg-yellow-50 border-pink-200',
+];
+
 export function ExamsList() {
   const { getParam } = useQueryParams();
 
@@ -25,19 +32,22 @@ export function ExamsList() {
     );
   }
   return (
-    <div className="container p-4">
+    <div>
       <h2 className="mb-4 text-sm font-semibold text-gray-600">Exams</h2>
-
-      {examListResponse?.data?.map((exam) => (
-        <ExamCard
-          key={exam.id}
-          examId={exam.id}
-          examName={exam.name}
-          termName={exam.term.name}
-          academicYear={exam.batch.name}
-          className="w-1/4"
-        />
-      ))}
+      <div className="container flex flex-wrap p-4">
+        {examListResponse?.data?.map((exam, index) => (
+          <ExamCard
+            key={exam.id}
+            examId={exam.id}
+            examName={exam.name}
+            termName={exam.term.name}
+            academicYear={exam.batch.name}
+            isActive={exam.isActive}
+            className="m-2 w-1/4"
+            cardColor={cardColors[index % cardColors.length]}
+          />
+        ))}
+      </div>
     </div>
   );
 }

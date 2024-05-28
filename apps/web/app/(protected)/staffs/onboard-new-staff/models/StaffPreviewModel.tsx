@@ -46,6 +46,7 @@ export function StaffPreviewModal({
         differentlyAbled: Boolean(formData.differentlyAbled),
         dateOfJoining: new Date(formData.dateOfJoining),
         dateOfDetainment: new Date(formData.dateOfDetainment),
+        dateOfRetirement: new Date(formData.dateOfRetirement),
         dateOfRegularization: new Date(formData.dateOfRegularization),
         passOutYear: new Date(formData.passOutYear),
         dateOfBirth: new Date(formData.dateOfBirth),

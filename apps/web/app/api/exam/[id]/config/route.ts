@@ -8,7 +8,7 @@ import { createExamConfig } from './service';
 
 /**
  * @swagger
- * /api/exam/config:
+ * /api/exam/[id]/config:
  *     post:
  *       summary: Add new Exam Configuration
  *       description: Add New Exam Configuration

@@ -1,4 +1,6 @@
 'use client';
+
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useGetClassListQuery } from 'lib/queries/class/useGetClassListQuery';
 import { useGetMarkWithMarkEntryQuery } from 'lib/queries/exams/mark-entry/useGetMarkWithMarkEntryQuery';
 import { useNewMarkEntryQuery } from 'lib/queries/exams/mark-entry/useNewMarkEntryQuery';
@@ -16,11 +18,13 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
+  useToast,
 } from 'ui';
 
 import { ExamSubjects } from './ExamSubjects';
 
 export function MarkEntryLayout() {
+  const { toast } = useToast();
   const page = 1;
   const limit = 999;
 
@@ -62,14 +66,25 @@ export function MarkEntryLayout() {
     useGetMarkWithMarkEntryQuery(
       { classId, examId, sectionId },
       {
-        enabled: !!examId,
+        enabled: !!staffId,
       }
     );
 
   const {
+    isSuccess: isMarkEntrySuccess,
     isPending: isPendingCreateMarkEntry,
     mutateAsync: mutateNewMarkEntryAsync,
   } = useNewMarkEntryQuery();
+
+  useEffect(() => {
+    if (isMarkEntrySuccess) {
+      toast({
+        title: 'Success',
+        variant: 'default',
+        description: 'Mark Entered successfully',
+      });
+    }
+  }, [isMarkEntrySuccess, toast]);
 
   async function submitMarkEntry(payload) {
     const markEntryPayload = {
@@ -156,7 +171,6 @@ export function MarkEntryLayout() {
             </SelectGroup>
           </SelectContent>
         </Select>
-
         <Select
           onValueChange={(value) => {
             setExamId(value);
