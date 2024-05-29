@@ -33,7 +33,7 @@ export function SectionList() {
   }
 
   return (
-    <section className="grid w-full grid-cols-6 justify-between gap-4 px-0">
+    <section className="grid w-full grid-cols-4 justify-between gap-4 px-0">
       {sectionListResponse?.data?.map((sectionItem) => (
         <div key={sectionItem.id}>
           <SectionCard

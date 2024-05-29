@@ -1,19 +1,25 @@
 'use client';
 
+import { useGetStudentListByClassIdQuery } from 'lib/queries/students/useGetStudentListByClassIdQuery';
 import { Plus } from 'lucide-react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import { Button } from 'ui';
+import { Badge, Button } from 'ui';
 import { cn } from 'utils';
 
 export function ClassWidget(props) {
   const pathname = usePathname();
   const router = useRouter();
   const searchParams = useSearchParams();
-
+  const { data: studentListResponse } = useGetStudentListByClassIdQuery(
+    props.classDetails.id,
+    {
+      enabled: !!props.classDetails.id,
+    }
+  );
   return (
     <div className="flex flex-wrap content-start items-start gap-6 self-stretch md:gap-24 md:space-x-24">
       <div className="widget h-full w-full rounded-xl border border-primary-200 bg-white p-4 shadow-md shadow-primary-200">
-        <div className="widget-title  flex items-center justify-between text-lg font-semibold">
+        <div className="widget-title flex items-center justify-between text-lg font-semibold">
           <Button
             className={cn('ps-0 text-lg font-semibold')}
             variant="ghost"
@@ -24,14 +30,10 @@ export function ClassWidget(props) {
             {props.classDetails.name}
           </Button>
           <div>
-            <Button
-              variant="outline"
-              className={cn(
-                'w-18 ml-2 h-5 rounded-lg border-none  bg-blue-100 px-2 py-1 text-center text-sm font-medium text-indigo-700'
-              )}
-            >
-              Students
-            </Button>
+            <Badge className={cn('mb-2 bg-yellow-100')}>
+              Students:&nbsp;
+              {studentListResponse ? studentListResponse.length : '-'}
+            </Badge>
             <Button
               variant="outline"
               className={cn(
