@@ -34,12 +34,6 @@ export function SectionCard(props: SectionCardProps) {
     useGetSectionByIdQuery(props.id, {
       enabled: !!props.id,
     });
-  // const groupname = SectionDetails
-  //   ? SectionDetails.group.map((group) => {
-  //       return group.name;
-  //     })
-  //   : 'no group found';
-
   return (
     <div
       className="h-full flex-col bg-white p-3"
@@ -90,7 +84,7 @@ export function SectionCard(props: SectionCardProps) {
         </Badge>
 
         {isSectionDetailsLoading ? (
-          <Loader2 className="mr-2 h-6 w-6 animate-spin text-indigo-700" />
+          <Loader2 className="mr-2 h-6 w-6 animate-spin justify-center text-indigo-700" />
         ) : SectionDetails ? (
           SectionDetails.group.map((group) => (
             <Badge key={group.id} className={cn('mb-2')}>
