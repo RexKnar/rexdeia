@@ -52,7 +52,7 @@ export function ExamConfigureFlyout(props) {
   const handleTotalMarks = (e) => {
     setsubjectTotalMarks(e.target.value);
   };
-  const MarksToConvert = (f) => {
+  const marksToConvert = (f) => {
     setSubjectMarksToConvert(f.target.value);
   };
   const { fields, append, remove } = useFieldArray({
@@ -150,7 +150,7 @@ export function ExamConfigureFlyout(props) {
                     Marks to Convert
                   </label>
                   <Input
-                    onChange={MarksToConvert}
+                    onChange={marksToConvert}
                     autoFocus
                     type="text"
                     className="mt-2"
