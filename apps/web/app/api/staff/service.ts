@@ -191,6 +191,7 @@ export async function getAllStaffsBySectionsIdWithSubjects(ids: string[]) {
           },
         },
         select: {
+          isIncharge: true,
           subject: {
             select: {
               name: true,
@@ -203,6 +204,12 @@ export async function getAllStaffsBySectionsIdWithSubjects(ids: string[]) {
               id: true,
             },
           },
+          section: {
+            select: {
+              name: true,
+              id: true,
+            },
+          },
         },
       },
     },
@@ -210,10 +217,15 @@ export async function getAllStaffsBySectionsIdWithSubjects(ids: string[]) {
 
   const result = staffs.map(({ academicSubjectForStaff, ...rest }) => ({
     ...rest,
-    subjects: academicSubjectForStaff.map((subject) => subject.subject),
+    subjects: academicSubjectForStaff
+      .filter((item) => !item.isIncharge)
+      .map((subject) => subject.subject),
     academicYear: academicSubjectForStaff.map(
       (academicYear) => academicYear.academicYear
     ),
+    sections: academicSubjectForStaff
+      .filter((item) => !item.isIncharge)
+      .map((section) => section.section),
   }));
 
   return result;
