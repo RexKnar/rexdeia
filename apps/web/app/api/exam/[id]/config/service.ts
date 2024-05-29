@@ -4,7 +4,12 @@ type CreateExamConfigModel = {
   classId: string;
   sectionIds: string[];
   staffId: string;
-  subjects: { subjectId: string; groupId: string }[];
+  subjects: {
+    subjectId: string;
+    groupId: string;
+    subjectMarksToConvert?: string;
+    subjectTotalMarks?: string;
+  }[];
   configDetail: {
     minMark: number;
     totalMarks: number;
@@ -43,6 +48,8 @@ export async function createExamConfig(
       }));
 
     for (const subject of subjects) {
+      const subjectTotalMarks = Number(subject.subjectTotalMarks) || 0;
+      const subjectMarksToConvert = Number(subject.subjectMarksToConvert) || 0;
       const existingExamSubject = await db.examSubject.findFirst({
         where: { subjectId: subject.subjectId, examGroupId },
       });
@@ -53,6 +60,8 @@ export async function createExamConfig(
             subjectId: subject.subjectId,
             groupId: subject.groupId,
             examGroupId: examGroupId,
+            totalMarks: subjectTotalMarks,
+            convertTo: subjectMarksToConvert,
           },
         }));
 
