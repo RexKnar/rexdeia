@@ -76,9 +76,12 @@ export type Staff = {
   sections?: SectionModel[];
 };
 
-export type AddStaffModel = Omit<Staff, 'id' | 'status'>;
+export type AddStaffModel = Omit<
+  Staff,
+  'id' | 'status' | 'subjects' | 'sections'
+>;
 
 export type UpdateStaffModel = Omit<
   Staff,
-  'aadharCardNumber' | 'dob' | 'email' | 'name'
+  'aadharCardNumber' | 'dob' | 'email' | 'name' | 'subjects' | 'sections'
 >;
