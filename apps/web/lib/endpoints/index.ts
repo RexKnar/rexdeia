@@ -50,6 +50,7 @@ export const ADD_SUBJECT = `ADD_SUBJECT`;
 export const ADD_GROUP = `ADD_GROUP`;
 export const ADD_SECTION = `ADD_SECTION`;
 export const GET_SECTION_BY_ID = `GET_SECTION_BY_ID`;
+
 export const DELETE_SUBJECT_BY_ID = `DELETE_SUBJECT_BY_ID`;
 export const UPDATE_SUBJECT_BY_ID = `UPDATE_SUBJECT_BY_ID`;
 export const GET_SUBJECT_BY_ID = `GET_SUBJECT_BY_ID`;
@@ -90,7 +91,7 @@ export const GET_SUBJECT_LIST_BY_FILTER = `GET_SUBJECT_LIST_BY_FILTER`;
 export const GET_SUBJECTS_BY_SECTION_IDS = `GET_SUBJECTS_BY_SECTION_IDS`;
 export const GET_TERM_LIST = `GET_TERM_LIST`;
 export const GET_ASSESSMENT_FORMAT_BY_SUBJECT_ID = `GET_ASSESSMENT_FORMAT_BY_SUBJECT_ID`;
-
+export const GET_SECTION_BY_CLASS_GROUP = `GET_SECTION_BY_CLASS_GROUP`;
 export const ADD_EXAM_CONFIGURATION_BY_EXAM_ID = `ADD_EXAM_CONFIGURATION_BY_EXAM_ID`;
 export const GET_EXAM_LIST = `GET_EXAM_LIST`;
 export const ADD_EXAM = `ADD_EXAM`;
@@ -333,6 +334,10 @@ export default <EndpointDetails>{
   [GET_SECTION_BY_ID]: {
     requestType: `GET`,
     endpoint: `/api/section/[id]`,
+  },
+  [GET_SECTION_BY_CLASS_GROUP]: {
+    requestType: `PUT`,
+    endpoint: `/api/section`,
   },
   [ADD_SECTION]: {
     requestType: `POST`,
@@ -621,7 +626,7 @@ export default <EndpointDetails>{
   },
   [DELETE_EXAM_CONFIG_BY_ID]: {
     requestType: `DELETE`,
-    endpoint: `/api/exam/[id]/configuration/[configId]`,
+    endpoint: `/api/exam/[id]/config/[configId]`,
   },
   [ADD_EXAM_CONFIG]: {
     requestType: `POST`,
