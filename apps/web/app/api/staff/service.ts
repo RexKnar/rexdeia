@@ -218,13 +218,13 @@ export async function getAllStaffsBySectionsIdWithSubjects(ids: string[]) {
   const result = staffs.map(({ academicSubjectForStaff, ...rest }) => ({
     ...rest,
     subjects: academicSubjectForStaff
-      .filter((item) => item.isIncharge === false)
+      .filter((item) => !item.isIncharge)
       .map((subject) => subject.subject),
     academicYear: academicSubjectForStaff.map(
       (academicYear) => academicYear.academicYear
     ),
     sections: academicSubjectForStaff
-      .filter((item) => item.isIncharge === false)
+      .filter((item) => !item.isIncharge)
       .map((section) => section.section),
   }));
 

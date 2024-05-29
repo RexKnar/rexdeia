@@ -45,10 +45,10 @@ export function StaffCard(props: StaffCardProps) {
             )}
           </div>
         ))}
-        {props.sectionsHandled.length === 0 && (
+        {props.sectionsHandled.length && (
           <Text variant="base-regular">No Sections</Text>
         )}
-        {props.subjects.length === 0 && (
+        {props.subjects.length && (
           <Text variant="base-regular">No Subjects</Text>
         )}
       </div>
