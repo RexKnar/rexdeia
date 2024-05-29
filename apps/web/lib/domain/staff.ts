@@ -13,6 +13,7 @@ export type Staff = {
   dateOfJoining: Date;
   dateOfDetainment: Date;
   dateOfRegularization: Date;
+  dateOfRetirement: Date;
   employmentType: string;
   category: string;
   subjectHandling: string;

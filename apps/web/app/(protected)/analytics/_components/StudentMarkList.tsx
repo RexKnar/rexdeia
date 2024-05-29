@@ -1,4 +1,12 @@
 import { useGetExamSubjectsByClassSectionIdQuery } from 'lib/queries/exams/subject/useGetExamSubjectsByClassSectionIdQuery';
+import { Text } from 'ui';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHeader,
+  TableRow,
+} from 'ui/components/ui/Table';
 
 export default function StudentMarkList({
   students,
@@ -35,51 +43,56 @@ export default function StudentMarkList({
   return (
     <div>
       {subjectList && (
-        <table className="border-1 border">
-          <thead>
-            <tr>
-              <th>Student Name</th>
+        <Table className="border-1 border">
+          <TableHeader>
+            <TableRow>
+              <TableCell>Student Name </TableCell>
               {subjectList.map((subject) => (
-                <th key={subject.subject.id}>
-                  <div>
-                    <h1>{subject.subject.name}</h1>
-                    <div className="flex">
+                <TableCell key={subject.subject.id}>
+                  <div className="w-full ">
+                    <div className="text-center">
+                      <Text className="size-lg font-semibold">
+                        {subject.subject.name}
+                      </Text>
+                    </div>
+                    <div className="flex justify-evenly">
                       {subject.examSubjectPartition.map((partition) => (
-                        <span key={partition.id}>
+                        <span
+                          className="size-lg font-semibold"
+                          key={partition.id}
+                        >
                           {partition.assessmentFormat.name}
                         </span>
                       ))}
-                      <div></div>
                     </div>
                   </div>
-                </th>
+                </TableCell>
               ))}
-            </tr>
-          </thead>
-          <tbody>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
             {students.map((student) => (
-              <tr key={student.id}>
-                <td>
+              <TableRow key={student.id}>
+                <TableCell>
                   {student.firstName} {student.lastName}
-                </td>
+                </TableCell>
                 {subjectList.map((subject) => (
-                  <td key={subject.subjectId}>
-                    <div>
-                      <div className="flex">
+                  <TableCell key={subject.subjectId}>
+                    <div className="w-full">
+                      <div className="flex justify-evenly">
                         {getMarkForSubject(student, subject.subject.id).map(
                           (mark) => (
                             <span key={mark.id}>{mark.mark}</span>
                           )
                         )}
-                        <div></div>
                       </div>
                     </div>
-                  </td>
+                  </TableCell>
                 ))}
-              </tr>
+              </TableRow>
             ))}
-          </tbody>
-        </table>
+          </TableBody>
+        </Table>
       )}
     </div>
   );

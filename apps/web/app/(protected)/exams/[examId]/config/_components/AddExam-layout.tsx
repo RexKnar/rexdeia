@@ -24,6 +24,7 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
+  useToast,
 } from 'ui';
 
 import { DeleteConfirmationModal } from '@/components/modals/DeleteConfirmationModal';
@@ -56,7 +57,7 @@ export function AddExamLayout() {
     page,
     limit,
   });
-
+  const { toast } = useToast();
   const [classId, setClassId] = useState('');
   const [sectionId, setSectionId] = useState('');
   const [subjectId, setSubjectId] = useState('');
@@ -126,8 +127,32 @@ export function AddExamLayout() {
       enabled: !!sectionId && !!subjectTypeId,
     });
 
-  const { mutateAsync: deleteExamSubjectConfigAsync } =
-    useDeleteExamSubjectConfigMutationQuery(examId, sectionId, subjectId);
+  const {
+    isError: isConfigDeleteError,
+    isSuccess: isConfigDeleteSuccess,
+    mutateAsync: deleteExamSubjectConfigAsync,
+  } = useDeleteExamSubjectConfigMutationQuery(examId, sectionId, subjectId);
+
+  useEffect(() => {
+    if (isConfigDeleteError) {
+      toast({
+        title: 'Error',
+        variant: 'default',
+        description: 'Error while deleting config',
+      });
+    }
+  }, [isConfigDeleteError, toast]);
+
+  useEffect(() => {
+    if (isConfigDeleteSuccess) {
+      toast({
+        title: 'Success',
+        variant: 'default',
+        description: 'Config deleted successfully',
+      });
+      hideDeleteConfirmationModal();
+    }
+  }, [isConfigDeleteSuccess, toast]);
 
   useEffect(() => {
     if (subjectListResponse) {
@@ -409,7 +434,6 @@ export function AddExamLayout() {
         onDeleteClick={async () => {
           if (configId) {
             await deleteExamSubjectConfigAsync(configId);
-            hideDeleteConfirmationModal();
           }
         }}
         onCancelClick={() => {

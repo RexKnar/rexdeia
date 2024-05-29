@@ -621,7 +621,7 @@ export default <EndpointDetails>{
   },
   [DELETE_EXAM_CONFIG_BY_ID]: {
     requestType: `DELETE`,
-    endpoint: `/api/exam/[id]/configuration/[configId]`,
+    endpoint: `/api/exam/[id]/config/[configId]`,
   },
   [ADD_EXAM_CONFIG]: {
     requestType: `POST`,

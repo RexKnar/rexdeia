@@ -56,7 +56,7 @@ const staffForm: staffFormSectionType[] = [
         visible: true,
         options: [],
         validationRules: {
-          required: 'Last Name is Required',
+          required: false,
         },
       },
       {
@@ -69,6 +69,18 @@ const staffForm: staffFormSectionType[] = [
         options: [],
         validationRules: {
           required: 'Date of Birth is Required',
+        },
+      },
+      {
+        id: 2,
+        type: 'text',
+        name: 'age',
+        placeholder: 'Age',
+        label: 'Age',
+        visible: true,
+        options: [],
+        validationRules: {
+          required: false,
         },
       },
       {
@@ -101,7 +113,7 @@ const staffForm: staffFormSectionType[] = [
         visible: true,
         options: [],
         validationRules: {
-          required: 'Mobile Number is Required',
+          required: false,
         },
       },
       {
@@ -127,7 +139,6 @@ const staffForm: staffFormSectionType[] = [
         visible: true,
         options: [],
         validationRules: {
-          // required: 'Please Select Blood Group',
           required: false,
         },
       },
@@ -155,7 +166,6 @@ const staffForm: staffFormSectionType[] = [
           },
         ],
         validationRules: {
-          // required: 'Please select your religion',
           required: false,
         },
       },
@@ -183,7 +193,6 @@ const staffForm: staffFormSectionType[] = [
           },
         ],
         validationRules: {
-          // required: 'Please Select Caste',
           required: false,
         },
       },
@@ -211,7 +220,6 @@ const staffForm: staffFormSectionType[] = [
           },
         ],
         validationRules: {
-          // required: 'Please select Nationality',
           required: false,
         },
       },
@@ -239,12 +247,23 @@ const staffForm: staffFormSectionType[] = [
           },
         ],
         validationRules: {
-          // required: 'Please select Mother Tongue',
           required: false,
         },
       },
       {
         id: 12,
+        type: 'text',
+        name: 'enrollmentId',
+        placeholder: 'Enrollment ID',
+        label: 'Enrollment ID',
+        visible: true,
+        options: [],
+        validationRules: {
+          required: false,
+        },
+      },
+      {
+        id: 13,
         type: 'text',
         name: 'aadharCardNumber',
         placeholder: 'Aadhar Number',
@@ -252,11 +271,11 @@ const staffForm: staffFormSectionType[] = [
         visible: true,
         options: [],
         validationRules: {
-          required: 'Please enter Adar Card number',
+          required: false,
         },
       },
       {
-        id: 13,
+        id: 14,
         type: 'radio',
         name: 'differentlyAbled',
         placeholder: 'Differently Abled',
@@ -273,12 +292,11 @@ const staffForm: staffFormSectionType[] = [
           },
         ],
         validationRules: {
-          // required: 'Please select Differently Able',
           required: false,
         },
       },
       {
-        id: 14,
+        id: 15,
         type: 'text',
         name: 'specialCategory',
         placeholder: 'special Category',
@@ -286,12 +304,11 @@ const staffForm: staffFormSectionType[] = [
         visible: true,
         options: [],
         validationRules: {
-          // required: 'Please Enter  special category',
           required: false,
         },
       },
       {
-        id: 15,
+        id: 16,
         type: 'text',
         name: 'epfNumber',
         placeholder: 'ESI/EPF NO',
@@ -299,7 +316,6 @@ const staffForm: staffFormSectionType[] = [
         visible: true,
         options: [],
         validationRules: {
-          // required: 'Please enter ESI/EPF Number',
           required: false,
         },
       },
@@ -318,7 +334,7 @@ const staffForm: staffFormSectionType[] = [
         visible: true,
         options: [],
         validationRules: {
-          required: 'Father Name is Required',
+          required: false,
         },
       },
       {
@@ -330,7 +346,7 @@ const staffForm: staffFormSectionType[] = [
         visible: true,
         options: [],
         validationRules: {
-          required: 'Mother Name is Required',
+          required: false,
         },
       },
       {
@@ -360,7 +376,6 @@ const staffForm: staffFormSectionType[] = [
         visible: true,
         options: [],
         validationRules: {
-          // required: 'Current address line1 is Required',
           required: false,
         },
       },
@@ -373,7 +388,6 @@ const staffForm: staffFormSectionType[] = [
         visible: true,
         options: [],
         validationRules: {
-          // required: 'Current address1 is Required',
           required: false,
         },
       },
@@ -386,7 +400,6 @@ const staffForm: staffFormSectionType[] = [
         visible: true,
         options: [],
         validationRules: {
-          // required: 'Current pin code is Required',
           required: false,
         },
       },
@@ -401,7 +414,6 @@ const staffForm: staffFormSectionType[] = [
         visible: true,
         options: [],
         validationRules: {
-          // required: 'Current Country is Required',
           required: false,
         },
       },
@@ -416,7 +428,6 @@ const staffForm: staffFormSectionType[] = [
         visible: true,
         options: [],
         validationRules: {
-          // required: 'Current state is Required',
           required: false,
         },
       },
@@ -431,7 +442,6 @@ const staffForm: staffFormSectionType[] = [
         visible: true,
         options: [],
         validationRules: {
-          // required: 'Current city is Required',
           required: false,
         },
       },
@@ -444,7 +454,6 @@ const staffForm: staffFormSectionType[] = [
         visible: true,
         options: [],
         validationRules: {
-          // required: 'Permanent Address1 is Required',
           required: false,
         },
       },
@@ -457,7 +466,6 @@ const staffForm: staffFormSectionType[] = [
         visible: true,
         options: [],
         validationRules: {
-          // required: 'Permanent Address2 is Required',
           required: false,
         },
       },
@@ -470,7 +478,6 @@ const staffForm: staffFormSectionType[] = [
         visible: true,
         options: [],
         validationRules: {
-          // required: 'Permanent Pincode is Required',
           required: false,
         },
       },
@@ -485,7 +492,6 @@ const staffForm: staffFormSectionType[] = [
         visible: true,
         options: [],
         validationRules: {
-          // required: 'Permanent Country is Required',
           required: false,
         },
       },
@@ -500,7 +506,6 @@ const staffForm: staffFormSectionType[] = [
         optionValue: 'isoCode',
         options: [],
         validationRules: {
-          // required: 'Permanent State is Required',
           required: false,
         },
       },
@@ -515,7 +520,6 @@ const staffForm: staffFormSectionType[] = [
         visible: true,
         options: [],
         validationRules: {
-          // required: 'Permanent City is Required',
           required: false,
         },
       },
@@ -569,10 +573,11 @@ const staffForm: staffFormSectionType[] = [
         optionValue: 'value',
         visible: true,
         options: [
-          { value: 'Principal', label: 'Principal' },
           { value: 'HM', label: 'HM' },
           { value: 'AHM', label: 'AHM' },
-          { value: 'PT', label: 'PT' },
+          { value: 'PG', label: 'PG' },
+          { value: 'BT', label: 'BT' },
+          { value: '2ndGrade', label: "2'nd Grade" },
           {
             value: 'Special-Teacher',
             label: 'Special-Teacher',
@@ -604,24 +609,35 @@ const staffForm: staffFormSectionType[] = [
         visible: true,
         options: [],
         validationRules: {
-          required: 'Detainment Date is Required',
+          required: false,
         },
       },
       {
         id: 5,
         type: 'date',
         name: 'dateOfRegularization',
-        placeholder: 'Date of regularization',
-        label: 'Date of regularization',
+        placeholder: 'Date of regularisation',
+        label: 'Date of regularisation',
         visible: true,
         options: [],
         validationRules: {
-          // required: 'Regularization date is Required',
           required: false,
         },
       },
       {
         id: 6,
+        type: 'date',
+        name: 'dateOfRetirement',
+        placeholder: 'Date of Retirement',
+        label: 'Date of Retirement',
+        visible: true,
+        options: [],
+        validationRules: {
+          required: false,
+        },
+      },
+      {
+        id: 7,
         type: 'text',
         name: 'subjectHandling',
         placeholder: 'Subject Handling',
@@ -629,14 +645,66 @@ const staffForm: staffFormSectionType[] = [
         visible: true,
         options: [],
         validationRules: {
-          // required: 'Please provide subject handling details.',
+          required: false,
+        },
+      },
+      {
+        id: 8,
+        type: 'dropdown',
+        name: 'natureOfPosting',
+        placeholder: 'Nature Of Posting',
+        label: 'Nature Of Posting',
+        visible: true,
+        optionKey: 'label',
+        optionValue: 'value',
+        options: [
+          { value: 'government', label: 'Government' },
+          { value: 'management', label: 'Management' },
+        ],
+        validationRules: {
+          required: false,
+        },
+      },
+      {
+        id: 9,
+        type: 'text',
+        name: 'employeeId',
+        placeholder: 'Employee Id',
+        label: 'Employee Id',
+        visible: true,
+        options: [],
+        validationRules: {
+          required: false,
+        },
+      },
+      {
+        id: 10,
+        type: 'text',
+        name: 'cps',
+        placeholder: 'CPS',
+        label: 'CPS',
+        visible: true,
+        options: [],
+        validationRules: {
+          required: false,
+        },
+      },
+      {
+        id: 11,
+        type: 'text',
+        name: 'tpf',
+        placeholder: 'TPF',
+        label: 'TPF',
+        visible: true,
+        options: [],
+        validationRules: {
           required: false,
         },
       },
     ],
   },
   {
-    id: 3,
+    id: 4,
     sectionTitle: 'Education Details',
     sectionFields: [
       {
@@ -648,7 +716,6 @@ const staffForm: staffFormSectionType[] = [
         visible: true,
         options: [],
         validationRules: {
-          // required: 'Please enter college name.',
           required: false,
         },
       },
@@ -661,7 +728,6 @@ const staffForm: staffFormSectionType[] = [
         visible: true,
         options: [],
         validationRules: {
-          // required: 'Please select pass out year.',
           required: false,
         },
       },
@@ -670,11 +736,64 @@ const staffForm: staffFormSectionType[] = [
         type: 'text',
         name: 'marksObtained',
         placeholder: 'Marks Obtained',
-        label: 'Marks Obtained',
+        label: 'Marks/Percentage Obtained',
         visible: true,
         options: [],
         validationRules: {
-          // required: 'Please enter marks obtained.',
+          required: false,
+        },
+      },
+    ],
+  },
+  {
+    id: 5,
+    sectionTitle: 'Bank Details',
+    sectionFields: [
+      {
+        id: 0,
+        type: 'text',
+        name: 'accountHolderName',
+        placeholder: 'Account Holder Name',
+        label: 'Account Holder Name',
+        visible: true,
+        options: [],
+        validationRules: {
+          required: false,
+        },
+      },
+      {
+        id: 1,
+        type: 'text',
+        name: 'accountNumber',
+        placeholder: 'Account Number ',
+        label: 'Account Number',
+        visible: true,
+        options: [],
+        validationRules: {
+          required: false,
+        },
+      },
+      {
+        id: 2,
+        type: 'text',
+        name: 'branchName',
+        placeholder: 'Branch Name ',
+        label: 'Branch Name',
+        visible: true,
+        options: [],
+        validationRules: {
+          required: false,
+        },
+      },
+      {
+        id: 3,
+        type: 'text',
+        name: 'IFSC_Code',
+        placeholder: 'IFSC Code ',
+        label: 'IFSC Code',
+        visible: true,
+        options: [],
+        validationRules: {
           required: false,
         },
       },
