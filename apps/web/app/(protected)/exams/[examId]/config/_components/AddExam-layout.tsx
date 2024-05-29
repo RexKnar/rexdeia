@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 'use client';
 import { useGetClassListQuery } from 'lib/queries/class/useGetClassListQuery';
 import { useGetExamConfigSubjectDetailQuery } from 'lib/queries/exams/configuration/subject/useGetExamConfigSubjectDetailQuery';
