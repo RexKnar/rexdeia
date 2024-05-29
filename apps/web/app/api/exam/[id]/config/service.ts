@@ -79,3 +79,13 @@ export async function createExamConfig(
     }
   }
 }
+
+export async function deleteExamConfigEntry(configId: string) {
+  return await db.$transaction(async (prisma) => {
+    return prisma.examSubjectPartition.delete({
+      where: {
+        id: configId,
+      },
+    });
+  });
+}
