@@ -1,3 +1,6 @@
+import { SectionModel } from './section';
+import { SubjectModel } from './subject';
+
 export type Staff = {
   id: string;
   image?: string;
@@ -68,7 +71,9 @@ export type Staff = {
   isDeleting?: boolean;
   isUpdating?: boolean;
   isNewlyAdded?: boolean;
-  additionalAttributes: Staff;
+  additionalAttributes: any;
+  subjects?: SubjectModel[];
+  sections?: SectionModel[];
 };
 
 export type AddStaffModel = Omit<Staff, 'id' | 'status'>;

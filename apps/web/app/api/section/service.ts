@@ -1,3 +1,5 @@
+import uniqBy from 'lodash/uniqBy';
+
 import { db } from '../../../lib/db';
 import {
   CreateSectionModel,
@@ -249,7 +251,6 @@ export async function getSectionsBySubjectIdClassId(filter: {
   });
 
   const groupIds = groups.map((group) => group.groupId);
-
   if (groupIds.length === 0) {
     return [];
   }
@@ -268,5 +269,5 @@ export async function getSectionsBySubjectIdClassId(filter: {
     },
   });
   const response = sections.map((section) => section.section);
-  return response;
+  return uniqBy(response, (response) => response.id);
 }
