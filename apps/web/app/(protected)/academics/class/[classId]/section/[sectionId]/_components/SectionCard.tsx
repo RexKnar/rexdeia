@@ -21,18 +21,18 @@ type SectionCardProps = {
   classId: string;
 };
 
-export function SectionCard(props: SectionCardProps) {
+export function SectionCard({ classId, id, name }: SectionCardProps) {
   const router = useRouter();
   const handleCardClick = (event: React.MouseEvent<HTMLDivElement>) => {
-    router.push(`/academics/class/${props.classId}/section/${props.id}`);
+    router.push(`/academics/class/${classId}/section/${id}`);
     event.stopPropagation();
   };
-  const { data: studentList } = useGetStudentListBySectionIdQuery(props.id, {
-    enabled: !!props.id,
+  const { data: studentList } = useGetStudentListBySectionIdQuery(id, {
+    enabled: !!id,
   });
   const { data: SectionDetails, isLoading: isSectionDetailsLoading } =
-    useGetSectionByIdQuery(props.id, {
-      enabled: !!props.id,
+    useGetSectionByIdQuery(id, {
+      enabled: !!id,
     });
   return (
     <div
@@ -41,7 +41,7 @@ export function SectionCard(props: SectionCardProps) {
     >
       <div className="flex">
         <div className="my-auto w-2/4 px-2">
-          <Text variant="base-bold">{props.name}</Text>
+          <Text variant="base-bold">{name}</Text>
         </div>
 
         <div className="my-auto w-2/4 ">
