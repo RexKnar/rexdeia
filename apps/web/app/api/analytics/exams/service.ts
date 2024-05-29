@@ -97,7 +97,7 @@ export async function getExamAnalyticsByClass(filter: MarkAnalyticsFilter) {
           acc.push(mark);
         });
 
-        return acc.concat(subjectMarks);
+        return acc;
       }, []);
 
       if (failingStatus) {
@@ -105,7 +105,6 @@ export async function getExamAnalyticsByClass(filter: MarkAnalyticsFilter) {
       } else {
         subjectPassed++;
       }
-
       const subject = {
         ...examSubject.subject,
         marks,
@@ -198,7 +197,6 @@ export async function getExamAnalyticsByClass(filter: MarkAnalyticsFilter) {
         }
       }
 
-      // Update absent counters
       if (isAbsent) {
         totalAbsentCount++;
         if (gender === 'male') {
@@ -209,12 +207,8 @@ export async function getExamAnalyticsByClass(filter: MarkAnalyticsFilter) {
       }
     });
 
-    // Calculate total students for each gender
-    // const totalMaleStudents = malePassCount + maleFailCount;
-    // const totalFemaleStudents = femalePassCount + femaleFailCount;
     const totalStudents = totalPassCount + totalFailCount;
 
-    // Calculate pass percentages
     const malePassPercentage = (malePassCount / totalPassCount) * 100;
     const femalePassPercentage = (femalePassCount / totalPassCount) * 100;
     const maleFailPercentage = (maleFailCount / totalFailCount) * 100;
@@ -240,12 +234,12 @@ export async function getExamAnalyticsByClass(filter: MarkAnalyticsFilter) {
       totalAbsentCount,
       maleAbsentCount,
       femaleAbsentCount,
-      malePassPercentage: malePassPercentage.toFixed(2) + '%',
-      femalePassPercentage: femalePassPercentage.toFixed(2) + '%',
-      maleFailPercentage: maleFailPercentage.toFixed(2) + '%',
-      femaleFailPercentage: femaleFailPercentage.toFixed(2) + '%',
-      totalPassPercentage: totalPassPercentage.toFixed(2) + '%',
-      totalFailPercentage: totalFailPercentage.toFixed(2) + '%',
+      malePassPercentage: malePassPercentage.toFixed(2),
+      femalePassPercentage: femalePassPercentage.toFixed(2),
+      maleFailPercentage: maleFailPercentage.toFixed(2),
+      femaleFailPercentage: femaleFailPercentage.toFixed(2),
+      totalPassPercentage: totalPassPercentage.toFixed(2),
+      totalFailPercentage: totalFailPercentage.toFixed(2),
     };
   };
 

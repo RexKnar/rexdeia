@@ -20,15 +20,7 @@ export function AssessmentFormatDetailCard(props) {
   const params = new URLSearchParams(searchParams);
 
   return (
-    <div
-      className="rounded-2 border border-2 border-white bg-green-200 p-2 "
-      onClick={() => {
-        // params.set(type, queryValue);
-
-        // openFlyout ? params.set('isExamConfigureFlyoutOpen', 'true') : null;
-        router.replace(pathname + '?' + params.toString());
-      }}
-    >
+    <div className="rounded-2 border border-2 border-white bg-green-200 p-2 ">
       <h4 className="text-center">{assessmentFormat?.name || ''}</h4>
       <div className="flex flex-wrap text-left">
         <span className="w-1/2">Date</span>
@@ -57,10 +49,9 @@ export function AssessmentFormatDetailCard(props) {
           className="h-auto bg-red-600 px-3 py-1 text-white"
           variant="mild"
           onClick={() => {
-            const localParams = new URLSearchParams(searchParams);
-            localParams.set('isDeleteConfigModal', 'true');
-            localParams.set('configId', configId);
-            router.replace(pathname + '?' + localParams.toString());
+            params.set('isDeleteConfigModal', 'true');
+            params.set('configId', configId);
+            router.replace(pathname + '?' + params.toString());
           }}
         >
           <Trash size={12} className="text-center" />

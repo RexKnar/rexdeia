@@ -4,7 +4,7 @@ import { authOptions } from 'lib/auth';
 import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 
-import { deleteExamConfigurationEntry } from '../service';
+import { deleteExamConfigEntry } from '../service';
 
 export async function DELETE(_: NextRequest, { params: { configId } }) {
   try {
@@ -15,7 +15,7 @@ export async function DELETE(_: NextRequest, { params: { configId } }) {
       });
     }
 
-    const examConfigData = await deleteExamConfigurationEntry(configId);
+    const examConfigData = await deleteExamConfigEntry(configId);
 
     if (examConfigData) {
       return new Response(JSON.stringify(examConfigData), {
