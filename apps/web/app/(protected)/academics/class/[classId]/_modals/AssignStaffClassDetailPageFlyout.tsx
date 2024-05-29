@@ -214,9 +214,7 @@ export function AssignStaffClassDetailPageFlyout() {
                           <Select
                             autoComplete="off"
                             value={watch(`sections.${index}.subjectId`)}
-                            {...register(`sections.${index}.subjectId` as any, {
-                              required: true,
-                            })}
+                            {...register(`sections.${index}.subjectId` as any)}
                             onValueChange={(value) => {
                               if (value) {
                                 setSubjectId(value);
