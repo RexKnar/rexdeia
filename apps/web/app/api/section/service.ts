@@ -236,18 +236,37 @@ export async function removeStudentsFromSection(
     },
   });
 }
-export async function getSectionsByGroupIdClassId(filter: {
+
+export async function getSectionsBySubjectIdClassId(filter: {
   classId: string;
-  groupId: string;
+  subjectId: string;
 }) {
-  return db.section.findMany({
+  const groups = await db.subjectToGroup.findMany({
     where: {
+      subjectId: filter.subjectId,
       classId: filter.classId,
-      sectionToGroups: {
-        some: {
-          groupId: filter.groupId,
-        },
-      },
     },
   });
+
+  const groupIds = groups.map((group) => group.groupId);
+
+  if (groupIds.length === 0) {
+    return [];
+  }
+
+  const sections = await db.sectionToGroups.findMany({
+    where: {
+      groupId: {
+        in: groupIds,
+      },
+      section: {
+        classId: filter.classId,
+      },
+    },
+    select: {
+      section: true,
+    },
+  });
+  const response = sections.map((section) => section.section);
+  return response;
 }
