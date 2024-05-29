@@ -7,7 +7,7 @@ import { makeAPICall } from 'lib/api';
 import { GET_SUBJECTS_BY_SECTION_IDS } from 'lib/endpoints';
 
 function getSectionByIdQuery(
-  { sectionIds, classId },
+  { sectionIds, subjectTypeId, classId },
   options?: Partial<UseQueryOptions<any>>
 ): UseQueryOptions<any> {
   return {
@@ -16,7 +16,7 @@ function getSectionByIdQuery(
     queryFn: async () => {
       return await makeAPICall<any>(
         GET_SUBJECTS_BY_SECTION_IDS,
-        { sectionIds },
+        { sectionIds, subjectTypeId },
         {},
         { id: classId }
       );
@@ -25,8 +25,11 @@ function getSectionByIdQuery(
 }
 export function useGetSubjectsBySectionIdsMutationQuery(
   sectionIds: string[],
+  subjectTypeId: string,
   classId: string,
   options?: Partial<UseQueryOptions>
 ): UseQueryResult {
-  return useQuery(getSectionByIdQuery({ sectionIds, classId }, options));
+  return useQuery(
+    getSectionByIdQuery({ sectionIds, subjectTypeId, classId }, options)
+  );
 }

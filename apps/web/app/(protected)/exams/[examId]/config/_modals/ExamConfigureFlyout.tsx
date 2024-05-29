@@ -9,6 +9,7 @@ import {
   useRouter,
   useSearchParams,
 } from 'next/navigation';
+import { useState } from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
 import {
   Button,
@@ -45,6 +46,15 @@ export function ExamConfigureFlyout(props) {
     formState: { errors: fieldErrors },
   } = useForm();
 
+  const [subjectTotalMarks, setsubjectTotalMarks] = useState();
+  const [subjectMarksToConvert, setSubjectMarksToConvert] = useState();
+
+  const handleTotalMarks = (e) => {
+    setsubjectTotalMarks(e.target.value);
+  };
+  const marksToConvert = (f) => {
+    setSubjectMarksToConvert(f.target.value);
+  };
   const { fields, append, remove } = useFieldArray({
     control,
     name: 'configDetail',
@@ -79,13 +89,14 @@ export function ExamConfigureFlyout(props) {
     router.replace(pathname + '?' + params.toString());
     reset();
   };
-
   async function saveExamConfigure(payload) {
     keysToDelete.forEach((key) => delete payload[key]);
 
     payload.subjects = subjects;
     payload.classId = classId;
     payload.examId = examId;
+    payload.subjectTotalMarks = subjectTotalMarks;
+    payload.subjectMarksToConvert = subjectMarksToConvert;
     payload.sectionIds = [sectionId];
     const createdExamConfiguration =
       await mutateCreateExamConfigurationAsync(payload);
@@ -111,40 +122,72 @@ export function ExamConfigureFlyout(props) {
                     <div className="flex items-center">
                       <PlusCircle size={20} strokeWidth={1.5} />
                       <Text variant="lg-semibold" className="ml-2">
-                        Exam Configuration
+                        Exam Configuration of
+                        {subjects.map((subject) => {
+                          return <span key={subject.id}>{subject.name} </span>;
+                        })}
                       </Text>
                     </div>
                   </div>
                 </SheetTitle>
                 <hr className="border-t border-gray-300"></hr>
               </SheetHeader>
-              <div className="mt-5 flex flex-wrap">
-                {assessmentFormatResponse?.map((assessmentFormat, index) => {
-                  const subjectConfigIndex =
-                    examSubjectPartition?.findIndex(
-                      (obj) => obj?.assessmentFormat?.id == assessmentFormat?.id
-                    ) ?? -1;
-                  if (subjectConfigIndex < 0)
-                    return (
-                      <div className="w-1/2" key={assessmentFormat.id}>
-                        <Switch
-                          id={`configDetail.${index}.${assessmentFormat.name}`}
-                          key={index}
-                          checked={assessmentFormat[index]}
-                          onCheckedChange={() => {
-                            toggleForm(assessmentFormat);
-                          }}
-                        />
-                        <label
-                          htmlFor={assessmentFormat.name}
-                          className="ml-2 text-sm font-semibold"
-                        >
-                          {assessmentFormat.name}
-                        </label>
-                      </div>
-                    );
-                })}
+              <div className="flex gap-3">
+                <div className="mt-2">
+                  <label className="text-sm font-semibold text-gray-700">
+                    Total Marks to Conduct
+                  </label>
+                  <Input
+                    onChange={handleTotalMarks}
+                    autoFocus
+                    type="text"
+                    className="mt-2"
+                    placeholder="Marks to conduct"
+                  />
+                </div>
+                <div className="mt-2">
+                  <label className="text-sm font-semibold text-gray-700">
+                    Marks to Convert
+                  </label>
+                  <Input
+                    onChange={marksToConvert}
+                    autoFocus
+                    type="text"
+                    className="mt-2"
+                    placeholder="Marks to Convert"
+                  />
+                </div>
               </div>
+              {subjectTotalMarks && subjectMarksToConvert && (
+                <div className="mt-5 flex flex-wrap">
+                  {assessmentFormatResponse?.map((assessmentFormat, index) => {
+                    const subjectConfigIndex =
+                      examSubjectPartition?.findIndex(
+                        (obj) =>
+                          obj?.assessmentFormat?.id == assessmentFormat?.id
+                      ) ?? -1;
+                    if (subjectConfigIndex < 0)
+                      return (
+                        <div className="w-1/2" key={assessmentFormat.id}>
+                          <Switch
+                            id={`configDetail.${index}.${assessmentFormat.name}`}
+                            key={index}
+                            checked={assessmentFormat[index]}
+                            onCheckedChange={() => {
+                              toggleForm(assessmentFormat);
+                            }}
+                          />
+                          <label
+                            htmlFor={assessmentFormat.name}
+                            className="ml-2 text-sm font-semibold"
+                          >
+                            {assessmentFormat.name}
+                          </label>
+                        </div>
+                      );
+                  })}
+                </div>
+              )}
 
               {fields.map((field, index) => (
                 <div key={field.id} className="mt-5 p-1">
@@ -221,17 +264,17 @@ export function ExamConfigureFlyout(props) {
                       From conducting mark
                     </label>
                   </div>
+                  <div className="mt-10">
+                    <Button
+                      size="lg"
+                      variant="default"
+                      className="mx-auto flex justify-center px-12 py-4"
+                    >
+                      Save & Close
+                    </Button>
+                  </div>
                 </div>
               ))}
-              <div className="mt-10">
-                <Button
-                  size="lg"
-                  variant="default"
-                  className="mx-auto flex justify-center px-12 py-4"
-                >
-                  Save & Close
-                </Button>
-              </div>
             </form>
           </div>
         </SheetContent>

@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 'use client';
 import { useGetClassListQuery } from 'lib/queries/class/useGetClassListQuery';
 import { useGetExamConfigSubjectDetailQuery } from 'lib/queries/exams/configuration/subject/useGetExamConfigSubjectDetailQuery';
@@ -66,7 +67,6 @@ export function AddExamLayout() {
   const [subjectList, setSubjectList] = useState([]);
   const [examSubjectPartition, setExamSubjectPartition] = useState([]);
   const [openFlyout, setOpenFlyout] = useState(false);
-
   const { data: examDetail, isLoading: isExamDetailLoading } =
     useGetExamDetailQuery(
       { examId: routeParams.examId || examId },
@@ -122,10 +122,18 @@ export function AddExamLayout() {
       filter,
     });
 
-  const { data: subjectListResponse, isLoading: isSubjectListLoading } =
-    useGetSubjectsBySectionIdsMutationQuery([sectionId], classId, {
+  const {
+    data: subjectListResponse,
+    isLoading: isSubjectListLoading,
+    refetch: refetchSubjectList,
+  } = useGetSubjectsBySectionIdsMutationQuery(
+    [sectionId],
+    subjectTypeId,
+    classId,
+    {
       enabled: !!sectionId && !!subjectTypeId,
-    });
+    }
+  );
 
   const {
     isError: isConfigDeleteError,
@@ -189,7 +197,9 @@ export function AddExamLayout() {
   const handleSubjectTypeClick = (subjectId) => {
     setSubjectTypeId(subjectId);
   };
-
+  useEffect(() => {
+    refetchSubjectList();
+  }, [subjectTypeId]);
   const handleClassClick = (classId) => {
     setClassId(classId);
   };
@@ -330,7 +340,9 @@ export function AddExamLayout() {
                         cardValue={cardData.id}
                         name={cardData.name}
                         key={cardData.id}
-                        onClick={handleSubjectTypeClick}
+                        onClick={() => {
+                          handleSubjectTypeClick(cardData.id);
+                        }}
                       />
                     ))}
                   </div>
@@ -359,7 +371,7 @@ export function AddExamLayout() {
                       key={groupData.id}
                       className="border-1 border border-gray-50"
                     >
-                      <h4>{groupData.name}</h4>
+                      <h4 className="bg-red-100">{groupData.name}</h4>
                       {groupData.subject.map((cardData) => {
                         return (
                           <ExamConfigSubjectCard

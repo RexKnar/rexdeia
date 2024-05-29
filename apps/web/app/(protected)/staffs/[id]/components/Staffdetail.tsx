@@ -1,4 +1,5 @@
 'use client';
+/* eslint-disable @next/next/no-img-element */
 
 import { Loader2 } from 'lucide-react';
 import { useParams } from 'next/navigation';
@@ -13,6 +14,7 @@ import {
   TabsTrigger,
   Text,
 } from 'ui';
+import { formatDate } from 'utils';
 
 import { useGetStaffByIdQuery } from '../../../../../lib/queries/staff/useGetStaffByIdQuery';
 import staffForm from '../../onboard-new-staff/data/onboard-staff-fields';
@@ -64,36 +66,40 @@ export function StaffDetail() {
           </div>
         </div>
         <div className=" mt-5 pl-3 ">
-          <div className="ml-5 grid grid-cols-3 ">
+          <div className="ml-5 grid grid-cols-4 ">
             <Text className="w-18 pt-1 text-xs text-gray-800">{'DOB'}</Text>
-            <Text className="col-span-2">
-              {getStaffByIdResponse.dateOfBirth.toString()}
+            <Text className="col-span-3">
+              {formatDate(getStaffByIdResponse.dateOfBirth.toString())}
             </Text>
           </div>
-          <div className="ml-5 grid grid-cols-3 pt-3">
+          <div className="ml-5 grid grid-cols-4 pt-3">
             <Text className="w-18 pt-1 text-xs  text-gray-800">{'Gender'}</Text>
-            <Text className="">{getStaffByIdResponse.gender}</Text>
+            <Text className="col-span-3">{getStaffByIdResponse.gender}</Text>
           </div>
 
-          <div className="ml-5 grid grid-cols-3 pt-3">
+          <div className="ml-5 grid grid-cols-4 pt-3">
             <Text className="w-18 pt-1 text-xs text-gray-800">{'Mobile'} </Text>
-            <Text className="">{getStaffByIdResponse.mobile}</Text>
+            <Text className="col-span-3">{getStaffByIdResponse.mobile}</Text>
           </div>
-          <div className="ml-5 grid grid-cols-3 pt-3">
+          <div className="ml-5 grid grid-cols-4 pt-3">
             <Text className="w-18 pt-1 text-xs text-gray-800">{'Email'} </Text>
-            <Text className="">{getStaffByIdResponse.email}</Text>
-          </div>
-          <div className="ml-5 grid grid-cols-3 pt-3">
-            <Text className="w-18 pt-1 text-xs text-gray-800">{'DOJ'} </Text>
-            <Text className="">
-              {getStaffByIdResponse.dateOfJoining.toString()}
+            <Text className="col-span-3 break-words">
+              {getStaffByIdResponse.email}
             </Text>
           </div>
-          <div className="ml-5 grid grid-cols-3 pt-3">
+          <div className="ml-5 grid grid-cols-4 pt-3">
+            <Text className="w-18 pt-1 text-xs text-gray-800">{'DOJ'} </Text>
+            <Text className="col-span-3">
+              {formatDate(getStaffByIdResponse.dateOfJoining.toString())}
+            </Text>
+          </div>
+          <div className="ml-5 grid grid-cols-4 pt-3">
             <Text className="w-18 pt-1 text-xs text-gray-800">
               {'Designation'}{' '}
             </Text>
-            <Text className="">{getStaffByIdResponse.employmentType}</Text>
+            <Text className="col-span-3">
+              {getStaffByIdResponse.employmentType}
+            </Text>
           </div>
         </div>
       </div>

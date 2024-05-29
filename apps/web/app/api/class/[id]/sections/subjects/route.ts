@@ -44,8 +44,9 @@ export async function PUT(request: Request, { params: { id: classId } }) {
     const requestPayload = await request.json();
 
     const sectionsWithFilter = await getSubjectsBySectionIds(
+      classId,
       requestPayload.sectionIds,
-      classId
+      requestPayload.subjectTypeId
     );
 
     return new NextResponse(JSON.stringify(sectionsWithFilter), {

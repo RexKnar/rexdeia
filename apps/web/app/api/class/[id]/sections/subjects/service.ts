@@ -1,6 +1,10 @@
 import { db } from 'lib/db';
 
-export async function getSubjectsBySectionIds(sectionIds, classId) {
+export async function getSubjectsBySectionIds(
+  classId,
+  sectionIds,
+  subjectTypeId
+) {
   const sectionToGroups = await db.sectionToGroups.findMany({
     where: {
       sectionId: {
@@ -14,7 +18,16 @@ export async function getSubjectsBySectionIds(sectionIds, classId) {
           name: true,
           id: true,
           subjectToGroup: {
-            where: { classId: classId },
+            where: {
+              classId: classId,
+              subject: {
+                subjectToSubjectTypes: {
+                  some: {
+                    subjectTypeId: subjectTypeId,
+                  },
+                },
+              },
+            },
             select: {
               subject: {
                 include: {
@@ -28,11 +41,7 @@ export async function getSubjectsBySectionIds(sectionIds, classId) {
                       group: true,
                     },
                   },
-                  subjectToSubjectTypes: {
-                    select: {
-                      subjectType: true,
-                    },
-                  },
+                  subjectToSubjectTypes: true,
                 },
               },
             },
