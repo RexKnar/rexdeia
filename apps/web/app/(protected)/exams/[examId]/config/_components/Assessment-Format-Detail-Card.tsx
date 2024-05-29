@@ -20,7 +20,7 @@ export function AssessmentFormatDetailCard(props) {
   const params = new URLSearchParams(searchParams);
 
   return (
-    <div className="rounded-2 border border-2 border-white bg-green-200 p-2 ">
+    <div className="rounded-2 border-2 border-white bg-green-200 p-2 ">
       <h4 className="text-center">{assessmentFormat?.name || ''}</h4>
       <div className="flex flex-wrap text-left">
         <span className="w-1/2">Date</span>

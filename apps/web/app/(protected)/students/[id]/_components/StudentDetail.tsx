@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 /* eslint-disable react/no-unescaped-entities */
 'use client';
 
@@ -82,7 +83,7 @@ export function StudentDetail() {
                 <Text className="w-18 pt-1 text-xs text-gray-800">
                   {'Gender'}
                 </Text>
-                <Text className="">{getStudentByIdResponse.gender}</Text>
+                <Text className="col">{getStudentByIdResponse.gender}</Text>
               </div>
 
               <div className="ml-5 grid grid-cols-3 pt-3">
@@ -95,7 +96,9 @@ export function StudentDetail() {
                 <Text className="w-18 pt-1 text-xs text-gray-800">
                   {'Email'}
                 </Text>
-                <Text className="">{getStudentByIdResponse.emailId}</Text>
+                <Text className="col-span-2 break-words">
+                  {getStudentByIdResponse.emailId}
+                </Text>
               </div>
               <div className="ml-5 grid grid-cols-3 pt-3">
                 <Text className="w-18 pt-1 text-xs text-gray-800">{'DOA'}</Text>
