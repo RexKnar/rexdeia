@@ -264,17 +264,17 @@ export function ExamConfigureFlyout(props) {
                       From conducting mark
                     </label>
                   </div>
-                  <div className="mt-10">
-                    <Button
-                      size="lg"
-                      variant="default"
-                      className="mx-auto flex justify-center px-12 py-4"
-                    >
-                      Save & Close
-                    </Button>
-                  </div>
                 </div>
               ))}
+              <div className="mt-10">
+                <Button
+                  size="lg"
+                  variant="default"
+                  className="mx-auto flex justify-center px-12 py-4"
+                >
+                  Save & Close
+                </Button>
+              </div>
             </form>
           </div>
         </SheetContent>

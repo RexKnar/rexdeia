@@ -15,6 +15,9 @@ export async function getExamSubjectsByClassSectionId(
     },
     select: {
       id: true,
+      totalMarks: true,
+      convertTo: true,
+      minMark: true,
       examGroup: {
         select: {
           classId: true,
@@ -30,8 +33,7 @@ export async function getExamSubjectsByClassSectionId(
         },
       },
       examSubjectPartition: {
-        select: {
-          id: true,
+        include: {
           assessmentFormat: true,
         },
       },

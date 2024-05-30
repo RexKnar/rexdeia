@@ -17,13 +17,22 @@ type CreateExamConfigModel = {
     dateToConduct: string;
     assessmentFormatId: string;
   }[];
+  subjectTotalMarks: string;
+  subjectMarksToConvert: string;
 };
 
 export async function createExamConfig(
   configDetails: CreateExamConfigModel,
   examId: string
 ) {
-  const { classId, sectionIds, subjects, configDetail } = configDetails;
+  const {
+    classId,
+    sectionIds,
+    subjects,
+    configDetail,
+    subjectTotalMarks,
+    subjectMarksToConvert,
+  } = configDetails;
 
   const [classData] = await db.$transaction([
     db.class.findUnique({ where: { id: classId } }),
@@ -48,8 +57,9 @@ export async function createExamConfig(
       }));
 
     for (const subject of subjects) {
-      const subjectTotalMarks = Number(subject.subjectTotalMarks) || 0;
-      const subjectMarksToConvert = Number(subject.subjectMarksToConvert) || 0;
+      const newSubjectTotalMarks = parseInt(subjectTotalMarks) || 0;
+      const newSubjectMarksToConvert = parseInt(subjectMarksToConvert) || 0;
+
       const existingExamSubject = await db.examSubject.findFirst({
         where: { subjectId: subject.subjectId, examGroupId },
       });
@@ -60,8 +70,8 @@ export async function createExamConfig(
             subjectId: subject.subjectId,
             groupId: subject.groupId,
             examGroupId: examGroupId,
-            totalMarks: subjectTotalMarks,
-            convertTo: subjectMarksToConvert,
+            totalMarks: newSubjectTotalMarks,
+            convertTo: newSubjectMarksToConvert,
           },
         }));
 
