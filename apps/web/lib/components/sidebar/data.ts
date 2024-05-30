@@ -24,7 +24,7 @@ export const menuItems: SidebarMenuItem[] = [
         id: 'marks',
         label: 'Marks',
         icon: FileText,
-        path: '/analytics/marks',
+        path: '/analytics/mark-list',
       },
     ],
   },
