@@ -2,7 +2,10 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import { makeAPICall } from '../../api';
 import { SubjectModel, UpdateSubjectModel } from '../../domain/subject';
-import { GET_SUBJECT_LIST, UPDATE_SUBJECT_BY_ID } from '../../endpoints';
+import {
+  GET_SUBJECT_LIST_BY_CLASS_ID,
+  UPDATE_SUBJECT_BY_ID,
+} from '../../endpoints';
 
 export function useUpdateSubjectMutationQuery() {
   const queryClient = useQueryClient();
@@ -15,7 +18,12 @@ export function useUpdateSubjectMutationQuery() {
         { id: payload.id }
       );
       await queryClient.invalidateQueries({
-        queryKey: [GET_SUBJECT_LIST],
+        queryKey: [GET_SUBJECT_LIST_BY_CLASS_ID],
+      });
+    },
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({
+        queryKey: [GET_SUBJECT_LIST_BY_CLASS_ID],
       });
     },
   });

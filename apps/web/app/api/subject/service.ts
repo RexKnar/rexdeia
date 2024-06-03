@@ -31,6 +31,7 @@ export async function getSubjectById(id: string) {
     },
     include: {
       subjectToAssessmentFormat: true,
+      subjectToGroup: true,
       subjectToSubjectTypes: {
         include: {
           subjectType: true,
@@ -44,14 +45,24 @@ export async function updateSubjectById(
   id: string,
   updateSubject: UpdateSubjectModel
 ) {
-  return db.subject.update({
+  const updatedSubject = await db.subject.update({
     where: {
       id: id,
     },
     data: {
-      ...updateSubject,
+      name: updateSubject.name,
+      isActive: updateSubject.isActive,
+      description: updateSubject.description,
+      elective: +updateSubject.elective,
+      regulationId: updateSubject.regulationId,
+      subjectMasterId: updateSubject.subjectMasterId,
     },
   });
+  await updateSubjectToSubjectType(id, updateSubject.subjectTypeId);
+  await updateSubjectToAssessmentFormat(id, updateSubject.assessmentFormatIds);
+  await updateSubjectToGroup(id, updateSubject.groupIds, updateSubject.classId);
+
+  return updatedSubject;
 }
 
 export async function addSubjects(id: string, subjects: CreateSubjectModel[]) {
@@ -292,6 +303,28 @@ export async function mapSubjectToAssessmentFormat(
   );
 }
 
+export async function updateSubjectToAssessmentFormat(
+  subjectId: string,
+  assessmentFormatIds: string[]
+) {
+  await db.$transaction([
+    db.subjectToAssessmentFormat.deleteMany({
+      where: {
+        subjectId: subjectId,
+      },
+    }),
+
+    ...assessmentFormatIds.map((assessmentId) => {
+      return db.subjectToAssessmentFormat.create({
+        data: {
+          subjectId: subjectId,
+          assessmentFormatId: assessmentId,
+        },
+      });
+    }),
+  ]);
+}
+
 export async function mapSubjectToSubjectType(
   subjectId: string,
   subjectTypeId: string
@@ -306,4 +339,47 @@ export async function mapSubjectToSubjectType(
       },
     },
   });
+}
+
+export async function updateSubjectToSubjectType(
+  subjectId: string,
+  subjectTypeId: string
+) {
+  await db.$transaction([
+    db.subjectToSubjectType.deleteMany({
+      where: {
+        subjectId: subjectId,
+      },
+    }),
+    db.subjectToSubjectType.create({
+      data: {
+        subjectId: subjectId,
+        subjectTypeId: subjectTypeId,
+      },
+    }),
+  ]);
+}
+
+export async function updateSubjectToGroup(
+  subjectId: string,
+  groupIds: string[],
+  classId: string
+) {
+  await db.$transaction([
+    db.subjectToGroup.deleteMany({
+      where: {
+        subjectId: subjectId,
+      },
+    }),
+
+    ...groupIds.map((groupId) => {
+      return db.subjectToGroup.create({
+        data: {
+          subjectId: subjectId,
+          groupId: groupId,
+          classId: classId,
+        },
+      });
+    }),
+  ]);
 }
