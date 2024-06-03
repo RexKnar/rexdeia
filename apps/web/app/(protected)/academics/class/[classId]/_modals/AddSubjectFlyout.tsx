@@ -468,6 +468,7 @@ export function AddSubjectFlyout() {
                     </RadioGroup>
                   )}
                 />
+
                 {fieldErrors['elective'] && (
                   <p className="h-2 p-1 text-sm text-red-600">
                     {fieldErrors['elective']?.message as string}
