@@ -36,7 +36,7 @@ export type Staff = {
   motherTongue?: string;
   enrollmentNumber?: string;
   specialCategory?: string;
-  differentlyAbled: boolean | string;
+  differentlyAbled: boolean;
   epfNumber?: string;
   cps: string;
   tpf: string;

@@ -359,7 +359,7 @@ export function EditStaffDetails() {
     const response = await updateStaffMutationAsync({
       id: id,
       ...payload,
-      differentlyAbled: data.differentlyAbled === 'true',
+      differentlyAbled: !!data.differentlyAbled,
       dateOfJoining: new Date(data.dateOfJoining),
       dateOfDetainment: new Date(data.dateOfDetainment),
       dateOfRetirement: new Date(data.dateOfRetirement),
