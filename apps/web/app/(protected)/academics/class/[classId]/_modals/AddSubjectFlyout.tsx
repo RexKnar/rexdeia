@@ -1,6 +1,8 @@
 'use client';
 
 import { useGetSubjectMasterListQuery } from 'lib/queries/subject-master/useGetAllSubjectMasterQuery';
+import { useGetSubjectByIdQuery } from 'lib/queries/subjects/useGetSubjectByIdQuery';
+import { useUpdateSubjectMutationQuery } from 'lib/queries/subjects/useUpdateSubjectMutationQuery';
 import { PlusCircle } from 'lucide-react';
 import {
   useParams,
@@ -8,6 +10,7 @@ import {
   useRouter,
   useSearchParams,
 } from 'next/navigation';
+import { useEffect } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import {
   Button,
@@ -45,6 +48,7 @@ export function AddSubjectFlyout() {
   const page = parseInt(searchParams.get('page')) || 1;
   const limit = parseInt(searchParams.get('limit')) || 10;
   const filter = { isActive: true };
+  const subjectId = searchParams.get('subjectId');
   const {
     control,
     watch,
@@ -66,8 +70,37 @@ export function AddSubjectFlyout() {
     },
   });
 
-  const { mutateAsync: mutateCreateSubjectsAsync } =
-    useCreateSubjectMutationByClassIdQuery();
+  const { data: subjectDetails } = useGetSubjectByIdQuery(subjectId);
+
+  useEffect(() => {
+    if (subjectDetails) {
+      const initialValues = {
+        isActive: subjectDetails.isActive,
+        name: subjectDetails.name,
+        regulationId: subjectDetails.regulationId,
+        subjectMasterId: subjectDetails.subjectMasterId,
+        elective: subjectDetails.elective?.toString(),
+        groupIds: subjectDetails.subjectToGroup.map((group) => group.groupId),
+        assessmentFormatIds: subjectDetails.subjectToAssessmentFormat.map(
+          (assessmentFormat) => assessmentFormat.assessmentFormatId
+        ),
+        subjectTypeId: subjectDetails.subjectToSubjectTypes.map(
+          (subjecttype) => subjecttype.subjectTypeId
+        ),
+      };
+      reset(initialValues);
+    }
+  }, [subjectDetails]);
+
+  const {
+    isPending: isPendingCreateSubject,
+    mutateAsync: mutateCreateSubjectsAsync,
+  } = useCreateSubjectMutationByClassIdQuery();
+
+  const {
+    isPending: isPendingUpdateSubject,
+    mutateAsync: mutateUpdateSubjectAsync,
+  } = useUpdateSubjectMutationQuery();
 
   const { data: subjectTypeList } = useGetSubjectTypeList({
     page: 1,
@@ -103,26 +136,38 @@ export function AddSubjectFlyout() {
   const closeFlyout = () => {
     const params = new URLSearchParams(searchParams.toString());
     params.set('isAddSubjectFlyoutOpen', 'false');
+    params.delete('subjectId');
     router.replace(pathname + '?' + params.toString());
   };
 
   const saveSubject = async (payload: CreateSubjectModel) => {
     try {
-      const addSubjectRequestPayload = {
-        ...payload,
-        elective: payload.elective,
-      };
+      if (subjectId) {
+        const requestPayload = {
+          ...payload,
+          elective: payload.elective,
+          id: subjectId,
+          classId: classId,
+        };
 
-      const requestPayload = {
-        subjects: [
-          {
-            ...addSubjectRequestPayload,
-          },
-        ],
-        classId: classId,
-      };
+        await mutateUpdateSubjectAsync(requestPayload);
+      } else {
+        const addSubjectRequestPayload = {
+          ...payload,
+          elective: payload.elective,
+        };
 
-      await mutateCreateSubjectsAsync(requestPayload);
+        const requestPayload = {
+          subjects: [
+            {
+              ...addSubjectRequestPayload,
+            },
+          ],
+          classId: classId,
+        };
+
+        await mutateCreateSubjectsAsync(requestPayload);
+      }
     } finally {
       reset();
       closeFlyout();
@@ -145,7 +190,7 @@ export function AddSubjectFlyout() {
                   <div className="flex items-center">
                     <PlusCircle size={20} strokeWidth={1.5} />
                     <Text variant="lg-semibold" className="ml-2">
-                      New Subject
+                      {subjectId ? 'Update subject' : 'New Subject'}
                     </Text>
                   </div>
                   <div className="flex items-center">
@@ -317,10 +362,12 @@ export function AddSubjectFlyout() {
                       name="assessmentFormatIds"
                       rules={{ required: ' Select at least 1 option' }}
                       render={({ field }) => {
+                        const isChecked = field.value.includes(item.id);
                         return (
                           <label className="me-5">
                             <Checkbox
                               className="me-2 items-center space-x-2 rounded border border-primary-500"
+                              checked={isChecked}
                               onCheckedChange={(checked) => {
                                 return checked
                                   ? field.onChange([...field.value, item.id])
@@ -359,10 +406,12 @@ export function AddSubjectFlyout() {
                       name="groupIds"
                       rules={{ required: ' Select at least 1 option' }}
                       render={({ field }) => {
+                        const isChecked = field.value.includes(item.id);
                         return (
                           <label className="me-5">
                             <Checkbox
                               className="me-2 items-center space-x-2 rounded border border-primary-500"
+                              checked={isChecked}
                               onCheckedChange={(checked) => {
                                 return checked
                                   ? field.onChange([...field.value, item.id])
@@ -393,6 +442,7 @@ export function AddSubjectFlyout() {
                   rules={{ required: 'Please select an option' }}
                   render={({ field }) => (
                     <RadioGroup
+                      value={field.value}
                       onValueChange={(value) => field.onChange(value)}
                     >
                       <div className="flex">
@@ -418,6 +468,7 @@ export function AddSubjectFlyout() {
                     </RadioGroup>
                   )}
                 />
+
                 {fieldErrors['elective'] && (
                   <p className="h-2 p-1 text-sm text-red-600">
                     {fieldErrors['elective']?.message as string}
@@ -430,9 +481,10 @@ export function AddSubjectFlyout() {
                 size="default"
                 variant="default"
                 type="submit"
+                disabled={isPendingCreateSubject || isPendingUpdateSubject}
                 className="ml-3 flex justify-center px-4 py-4"
               >
-                Save & Close
+                {subjectId ? 'Update' : 'Save'}
               </Button>
             </div>
           </form>
