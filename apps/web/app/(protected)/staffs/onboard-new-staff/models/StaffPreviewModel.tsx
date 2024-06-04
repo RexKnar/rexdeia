@@ -43,7 +43,7 @@ export function StaffPreviewModal({
     try {
       const addStaffResponse = await createStaffMutationAsync({
         ...formData,
-        differentlyAbled: Boolean(formData.differentlyAbled),
+        differentlyAbled: formData.differentlyAbled === 'true',
         dateOfJoining: new Date(formData.dateOfJoining),
         dateOfDetainment: new Date(formData.dateOfDetainment),
         dateOfRetirement: new Date(formData.dateOfRetirement),

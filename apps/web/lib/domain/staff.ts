@@ -7,18 +7,22 @@ export type Staff = {
   lastName: string;
   firstName: string;
   dateOfBirth: Date;
+  age: string;
   middleName?: string;
   aadharCardNumber?: string;
   gender: string;
   status: 'Active' | 'InActive' | 'Resigned' | 'Suspended' | 'Fired';
   annualIncome: string;
   bloodGroup?: string;
+  enrollmentId: string;
   dateOfJoining: Date;
   dateOfDetainment: Date;
   dateOfRegularization: Date;
   dateOfRetirement: Date;
   employmentType: string;
+  employeeId: string;
   category: string;
+  natureOfPosting: string;
   subjectHandling: string;
   collegeName: string;
   passOutYear: Date;
@@ -32,8 +36,14 @@ export type Staff = {
   motherTongue?: string;
   enrollmentNumber?: string;
   specialCategory?: string;
-  differentlyAbled: boolean;
+  differentlyAbled: boolean | string;
   epfNumber?: string;
+  cps: string;
+  tpf: string;
+  accountHolderName: string;
+  accountNumber: string;
+  branchName: string;
+  IFSC_Code: string;
   fatherName?: string;
   fatherOccupation?: string;
   motherName?: string;
@@ -83,5 +93,5 @@ export type AddStaffModel = Omit<
 
 export type UpdateStaffModel = Omit<
   Staff,
-  'aadharCardNumber' | 'dob' | 'email' | 'name' | 'subjects' | 'sections'
+  'email' | 'name' | 'subjects' | 'sections'
 >;

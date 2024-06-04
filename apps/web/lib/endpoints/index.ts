@@ -128,6 +128,7 @@ export const GET_SUBJECT_EXAM_CONFIG_DETAIL = `GET_SUBJECT_EXAM_CONFIG_DETAIL`;
 export const ADD_EXAM_CONFIG = `ADD_EXAM_CONFIG`;
 export const GET_EXAM_CONFIG_SUBJECT_DETAIL = `GET_EXAM_CONFIG_SUBJECT_DETAIL`;
 export const EXAM_MARK_ENTRY = `EXAM_MARK_ENTRY`;
+export const UPDATE_STAFF_BY_ID = `UPDATE_STAFF_BY_ID`;
 
 export default <EndpointDetails>{
   ...ExamAnalyticsEndpoints,
@@ -635,5 +636,9 @@ export default <EndpointDetails>{
   [EXAM_MARK_ENTRY]: {
     requestType: `POST`,
     endpoint: `/api/exam/mark-entry`,
+  },
+  [UPDATE_STAFF_BY_ID]: {
+    requestType: `PUT`,
+    endpoint: `/api/staff/[id]`,
   },
 };
