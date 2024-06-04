@@ -1,4 +1,5 @@
 import { MoreHorizontal } from 'lucide-react';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import {
   Button,
   DropdownMenu,
@@ -15,12 +16,15 @@ type SubjectCardProps = {
   type?: string;
   assessmentFormat?: string;
 };
-export function SubjectCard(props: SubjectCardProps) {
+export function SubjectCard({ id, name }: SubjectCardProps) {
+  const pathname = usePathname();
+  const router = useRouter();
+  const searchParams = useSearchParams();
   return (
     <div className="rounded-lg bg-white">
       <div className="flex p-3 pb-0">
         <div className="my-auto w-2/4">
-          <Text variant="base-bold">{props.name}</Text>
+          <Text variant="base-bold">{name}</Text>
           <div className="inline-flex">
             <Text variant="base-regular">staff Name</Text>
           </div>
@@ -39,32 +43,31 @@ export function SubjectCard(props: SubjectCardProps) {
                 sideOffset={15}
               >
                 <DropdownMenuItem className="flex cursor-pointer items-center">
-                  <span className="flex-1">Reassign</span>
+                  <Button
+                    variant="link"
+                    size="sm"
+                    className="flex-1"
+                    onClick={async () => {
+                      const params = new URLSearchParams(searchParams);
+                      params.set('isAddSubjectFlyoutOpen', 'true');
+                      params.set('subjectId', id);
+
+                      router.replace(pathname + '?' + params.toString());
+                    }}
+                  >
+                    Reassign
+                  </Button>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator className="bg-gray-100 text-gray-500" />
                 <DropdownMenuItem className="flex cursor-pointer items-center">
-                  <span className="flex-1">Remove</span>
+                  <Button variant="link" size="sm" className="flex-1">
+                    Remove
+                  </Button>
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
           </div>
         </div>
-      </div>
-      <div>
-        <ul>
-          <li
-            key={props.id}
-            value={props.id}
-            className="flex flex-wrap gap-2 p-2"
-          >
-            <div className="rounded-md bg-sky-200 p-1 text-sm">
-              {props.type}
-            </div>
-            <div className="rounded-md bg-sky-100 p-1 text-sm">
-              {props.assessmentFormat}
-            </div>
-          </li>
-        </ul>
       </div>
     </div>
   );
