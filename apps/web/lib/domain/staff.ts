@@ -85,3 +85,8 @@ export type UpdateStaffModel = Omit<
   Staff,
   'aadharCardNumber' | 'dob' | 'email' | 'name' | 'subjects' | 'sections'
 >;
+export type SubjectHandledByStaff = {
+  id: string;
+  name: string;
+  sections?: SectionModel[];
+};
