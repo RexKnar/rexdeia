@@ -2,6 +2,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 
 import { UpdateStaffModel } from 'lib/domain/staff';
+import { useGetBloodGroupListQuery } from 'lib/queries/common/useGetBloodGroupListQuery';
 import { useGetCityByStateCodeQuery } from 'lib/queries/common/useGetCityListQuery';
 import { useGetCountryListQuery } from 'lib/queries/common/useGetCountryListQuery';
 import { useGetStateByCountryCodeQuery } from 'lib/queries/common/useGetStateListQuery';
@@ -47,6 +48,7 @@ export function EditStaffDetails() {
   const [permanentCountry, setPermanentCountry] = useState([]);
   const [permanentState, setPermanentState] = useState([]);
   const [permanentCity, setPermanentCity] = useState([]);
+  const [bloodGroupList, setBloodGroupList] = useState([]);
 
   const validateEmail = (value, field) => {
     const atIndex = value.indexOf('@');
@@ -77,53 +79,18 @@ export function EditStaffDetails() {
   const nextPage = () => {
     setCurrentPage((prevPage) => Math.min(prevPage + 1, 6));
   };
-  const bloodGroup = [
-    {
-      id: '1',
-      label: 'A+',
-      value: 'A+',
-    },
-    {
-      id: '2',
-      label: 'A-',
-      value: 'A-',
-    },
-    {
-      id: '3',
-      label: 'B+',
-      value: 'B+',
-    },
-    {
-      id: '4',
-      label: 'B-',
-      value: 'B-',
-    },
-    {
-      id: '5',
-      label: 'AB+',
-      value: 'AB+',
-    },
-    {
-      id: '6',
-      label: 'AB-',
-      value: 'AB-',
-    },
-  ];
   const religion = [
     {
-      id: '1',
       label: 'Christian',
-      value: 'christian',
+      value: 'Christian',
     },
     {
-      id: '2',
       label: 'Hindu',
-      value: 'hindu',
+      value: 'Hindu',
     },
     {
-      id: '3',
       label: 'Muslim',
-      value: 'muslim',
+      value: 'Muslim',
     },
   ];
   const caste = [
@@ -244,7 +211,7 @@ export function EditStaffDetails() {
   const router = useRouter();
 
   const { id } = useParams<{ id: string }>();
-
+  const { data: getBloodGroupListResponse } = useGetBloodGroupListQuery();
   const { data: getCountryListResponse } = useGetCountryListQuery();
 
   const { data: getCurrentStateByCountryIdResponse } =
@@ -283,12 +250,16 @@ export function EditStaffDetails() {
     if (getPermanentCityByStateCodeResponse) {
       setPermanentCity(getPermanentCityByStateCodeResponse as any[]);
     }
+    if (getBloodGroupListResponse) {
+      setBloodGroupList(getBloodGroupListResponse as any[]);
+    }
   }, [
     getCountryListResponse,
     getCurrentStateByCountryIdResponse,
     getCurrentCityByStateCodeResponse,
     getPermanentStateByCountryIdResponse,
     getPermanentCityByStateCodeResponse,
+    getBloodGroupListResponse,
   ]);
 
   const { mutateAsync: updateStaffMutationAsync } =
@@ -705,9 +676,9 @@ export function EditStaffDetails() {
                   </SelectTrigger>
                   <SelectContent>
                     <SelectGroup>
-                      {bloodGroup.map((item, index) => (
-                        <SelectItem value={item.id} key={index}>
-                          {item.label}
+                      {bloodGroupList?.map((item, index) => (
+                        <SelectItem value={item.bloodType} key={index}>
+                          {item.bloodType}
                         </SelectItem>
                       ))}
                     </SelectGroup>
@@ -734,7 +705,7 @@ export function EditStaffDetails() {
                   <SelectContent>
                     <SelectGroup>
                       {religion.map((item, index) => (
-                        <SelectItem value={item.id} key={index}>
+                        <SelectItem value={item.value} key={index}>
                           {item.label}
                         </SelectItem>
                       ))}
@@ -1358,14 +1329,11 @@ export function EditStaffDetails() {
               <div className="w-full">
                 <label className="mt-1 block text-sm text-gray-700">
                   Nature Of Posting
-                  <span className="text-red-300"> *</span>
                 </label>
                 <Select
                   autoComplete="off"
                   value={watch('natureOfPosting')}
-                  {...register('natureOfPosting', {
-                    required: 'Category is required',
-                  })}
+                  {...register('natureOfPosting')}
                   onValueChange={(value) => {
                     if (value) {
                       setValue('natureOfPosting', value);
@@ -1385,11 +1353,6 @@ export function EditStaffDetails() {
                     </SelectGroup>
                   </SelectContent>
                 </Select>
-                {errors['natureOfPosting'] && (
-                  <p className="h-2 p-1 text-sm text-red-600">
-                    {errors['natureOfPosting'].message as string}
-                  </p>
-                )}
               </div>
               <div className="w-full">
                 <label className="mt-1 block text-sm text-gray-700">
