@@ -75,10 +75,11 @@ export function AssignSubjectToStudentFlyout() {
         <SheetContent
           side="right"
           widthSize="sm"
-          className="bg-white p-10"
+          className="p-10 bg-white"
           onCloseClick={() => closeFlyout()}
         >
           <div className="max-h-[80vh] overflow-y-auto">
+            
             <form onSubmit={handleSubmit(AssignStudentToSubject)}>
               <SheetHeader>
                 <SheetTitle className="mb-5">
@@ -106,7 +107,7 @@ export function AssignSubjectToStudentFlyout() {
                       setValue(`sections.${index}.StudentId` as any, value)
                     }
                   >
-                    <SelectTrigger className="mt-2 w-full">
+                    <SelectTrigger className="w-full mt-2">
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
@@ -125,7 +126,7 @@ export function AssignSubjectToStudentFlyout() {
                   {fields.length > 1 ? (
                     <div className="m-2">
                       <Button
-                        className="border-transparent bg-red-600 px-2"
+                        className="px-2 bg-red-600 border-transparent"
                         variant="outline"
                         size="sm"
                         onClick={() => {
@@ -142,7 +143,7 @@ export function AssignSubjectToStudentFlyout() {
                 <Button
                   size="sm"
                   variant="outline"
-                  className="mx-auto flex justify-center px-4 py-2"
+                  className="flex justify-center px-4 py-2 mx-auto"
                   onClick={() => {
                     append({ section: 'section' });
                   }}
@@ -156,7 +157,7 @@ export function AssignSubjectToStudentFlyout() {
                 <Button
                   size="default"
                   variant="default"
-                  className="mx-auto flex justify-center px-12 py-4"
+                  className="flex justify-center px-12 py-4 mx-auto"
                 >
                   Save & Close
                 </Button>
