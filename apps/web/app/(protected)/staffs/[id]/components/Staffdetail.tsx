@@ -59,7 +59,7 @@ export function StaffDetail() {
               variant="base-regular"
               className="rounded-lg border bg-violet-100 px-2"
             >
-              {getStaffByIdResponse.employmentType}
+              {getStaffByIdResponse.designation}
             </Text>
             <Text
               variant="base-regular"
@@ -102,7 +102,7 @@ export function StaffDetail() {
               {'Designation'}{' '}
             </Text>
             <Text className="col-span-3">
-              {getStaffByIdResponse.employmentType}
+              {getStaffByIdResponse.designation}
             </Text>
           </div>
         </div>
