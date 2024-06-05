@@ -253,6 +253,7 @@ model Branch {
   examType         ExamType[]
   term             Term[]
   SsbjectMaster    SubjectMaster[]
+  natureOfPosting  NatureOfPosting[]
 }
 
 model Organization {
@@ -445,7 +446,8 @@ model Student {
   motherOccupation     String?
   motherPhoneNumber    String?
   motherEmailId        String?
-  motherTongue         String?
+  motherTongueId       String?       @db.Uuid
+  motherTongue         Language?     @relation(fields: [motherTongueId], references: [id])
   nationality          String?
   religion             String?
   status               StudentStatus
@@ -470,6 +472,8 @@ model Student {
   markEntry      MarkEntry[]
   isDeleted      Boolean          @default(false)
   Mark           Mark[]
+  communityId    String?          @db.Uuid
+  community      Community?       @relation(fields: [communityId], references: [id])
 }
 
 model StudentMapping {
@@ -502,9 +506,11 @@ model Staff {
   age                          String?
   bloodGroup                   String?
   religion                     String?
-  caste                        String?
+  communityId                  String?                   @db.Uuid
+  community                    Community?                @relation(fields: [communityId], references: [id])
   nationality                  String?
-  motherTongue                 String?
+  motherTongueId               String?                   @db.Uuid
+  motherTongue                 Language?                 @relation(fields: [motherTongueId], references: [id])
   enrollmentNumber             String?
   specialCategory              String?
   differentlyAbled             Boolean                   @default(false)
@@ -542,22 +548,26 @@ model Staff {
   pucMarksCard                 String?
   degreeMarksCard              String?
   pgMarksCard                  String?
-  natureOfPosting              String?
+  natureOfPostingId            String?                   @db.Uuid
+  natureOfPosting              NatureOfPosting?          @relation(fields: [natureOfPostingId], references: [id])
   otherCertificate             String?
   dateOfDetainment             DateTime?
   dateOfRetirement             DateTime?
   dateOfRegularization         DateTime?
-  employmentType               String?
+  employmentTypeId             String?                   @db.Uuid
+  employmentType               EmploymentType?           @relation(fields: [employmentTypeId], references: [id])
   employeeId                   String?
   enrollmentId                 String?
   cps                          String?
   tpf                          String?
-  category                     String?
+  staffCategoryId              String?                   @db.Uuid
+  staffCategory                StaffCategory?            @relation(fields: [staffCategoryId], references: [id])
   subjectHandling              String?
   collegeName                  String?
   passOutYear                  DateTime?
   marksObtained                String?
-  designation                  String?
+  designationId                String?                   @db.Uuid
+  designation                  Designation?              @relation(fields: [designationId], references: [id])
   accountHolderName            String?
   accountNumber                String?
   branchName                   String?
@@ -848,6 +858,70 @@ model GradeScales {
   createdAt  DateTime? @default(now())
   updatedAt  DateTime? @default(now())
   isDeleted  Boolean   @default(false)
+}
+
+model Community {
+  id        String    @id @default(uuid()) @map("_id") @db.Uuid
+  name      String
+  isActive  Boolean
+  createdAt DateTime? @default(now())
+  updatedAt DateTime? @default(now())
+  isDeleted Boolean   @default(false)
+  staff     Staff[]
+  student   Student[]
+}
+
+model Language {
+  id        String    @id @default(uuid()) @map("_id") @db.Uuid
+  name      String
+  isActive  Boolean
+  createdAt DateTime? @default(now())
+  updatedAt DateTime? @default(now())
+  isDeleted Boolean   @default(false)
+  staff     Staff[]
+  student   Student[]
+}
+
+model StaffCategory {
+  id        String    @id @default(uuid()) @map("_id") @db.Uuid
+  name      String
+  isActive  Boolean
+  createdAt DateTime? @default(now())
+  updatedAt DateTime? @default(now())
+  isDeleted Boolean   @default(false)
+  staff     Staff[]
+}
+
+model EmploymentType {
+  id        String    @id @default(uuid()) @map("_id") @db.Uuid
+  name      String
+  isActive  Boolean
+  createdAt DateTime? @default(now())
+  updatedAt DateTime? @default(now())
+  isDeleted Boolean   @default(false)
+  staff     Staff[]
+}
+
+model Designation {
+  id        String    @id @default(uuid()) @map("_id") @db.Uuid
+  name      String
+  isActive  Boolean
+  createdAt DateTime? @default(now())
+  updatedAt DateTime? @default(now())
+  isDeleted Boolean   @default(false)
+  staff     Staff[]
+}
+
+model NatureOfPosting {
+  id        String    @id @default(uuid()) @map("_id") @db.Uuid
+  name      String
+  isActive  Boolean
+  createdAt DateTime? @default(now())
+  updatedAt DateTime? @default(now())
+  isDeleted Boolean   @default(false)
+  staff     Staff[]
+  branchId  String    @db.Uuid
+  branch    Branch    @relation(fields: [branchId], references: [id])
 }
 
 model Test {
