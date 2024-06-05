@@ -354,6 +354,45 @@ export function EditStaffDetails() {
     }
   }, [staffDetail]);
 
+  const dob = staffDetail?.dateOfBirth
+    ? new Date(staffDetail?.dateOfBirth).toISOString().split('T')[0]
+    : '';
+  const doj = staffDetail?.dateOfJoining
+    ? new Date(staffDetail?.dateOfJoining).toISOString().split('T')[0]
+    : '';
+  const dod = staffDetail?.dateOfDetainment
+    ? new Date(staffDetail?.dateOfDetainment).toISOString().split('T')[0]
+    : '';
+  const doreg = staffDetail?.dateOfRegularization
+    ? new Date(staffDetail?.dateOfRegularization).toISOString().split('T')[0]
+    : '';
+  const doret = staffDetail?.dateOfRetirement
+    ? new Date(staffDetail?.dateOfRetirement).toISOString().split('T')[0]
+    : '';
+  const poy = staffDetail?.passOutYear
+    ? new Date(staffDetail?.passOutYear).toISOString().split('T')[0]
+    : '';
+  useEffect(() => {
+    if (dob) {
+      setValue('dateOfBirth', dob);
+    }
+    if (doj) {
+      setValue('dateOfJoining', doj);
+    }
+    if (dod) {
+      setValue('dateOfDetainment', dod);
+    }
+    if (doreg) {
+      setValue('dateOfRegularization', doreg);
+    }
+    if (doret) {
+      setValue('dateOfRetirement', doret);
+    }
+    if (poy) {
+      setValue('passOutYear', poy);
+    }
+  }, [setValue, dob, doj, dod, doreg, doret, poy]);
+
   const handleOnFormSubmit = async (data: UpdateStaffModel) => {
     const payload = data;
     const response = await updateStaffMutationAsync({
