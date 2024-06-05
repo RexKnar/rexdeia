@@ -129,6 +129,7 @@ export const ADD_EXAM_CONFIG = `ADD_EXAM_CONFIG`;
 export const GET_EXAM_CONFIG_SUBJECT_DETAIL = `GET_EXAM_CONFIG_SUBJECT_DETAIL`;
 export const EXAM_MARK_ENTRY = `EXAM_MARK_ENTRY`;
 export const UPDATE_STAFF_BY_ID = `UPDATE_STAFF_BY_ID`;
+export const GET_SUBJECT_LIST_BY_STAFF_ID = `GET_SUBJECT_LIST_BY_STAFF_ID`;
 
 export default <EndpointDetails>{
   ...ExamAnalyticsEndpoints,
@@ -640,5 +641,9 @@ export default <EndpointDetails>{
   [UPDATE_STAFF_BY_ID]: {
     requestType: `PUT`,
     endpoint: `/api/staff/[id]`,
+  },
+  [GET_SUBJECT_LIST_BY_STAFF_ID]: {
+    requestType: `GET`,
+    endpoint: `/api/staff/[id]/subjects`,
   },
 };
