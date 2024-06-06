@@ -52,10 +52,10 @@ export function StaffCard(props: StaffCardProps) {
             )}
           </div>
         ))}
-        {sectionsHandled.length && (
+        {!sectionsHandled.length && (
           <Text variant="base-regular">No Sections</Text>
         )}
-        {subjects.length && <Text variant="base-regular">No Subjects</Text>}
+        {!subjects.length && <Text variant="base-regular">No Subjects</Text>}
       </div>
       <div className="my-auto w-3/4 ">
         <div className="float-end my-auto justify-end p-1">
@@ -71,12 +71,6 @@ export function StaffCard(props: StaffCardProps) {
               sideOffset={15}
             >
               <DropdownMenuItem className="flex cursor-pointer items-center">
-                <Button variant="link" className="flex-1 ">
-                  Reassign
-                </Button>
-              </DropdownMenuItem>
-              <DropdownMenuSeparator className="bg-gray-100 text-gray-500" />
-              <DropdownMenuItem className="flex cursor-pointer items-center">
                 <Button
                   variant="link"
                   size="sm"
@@ -90,12 +84,11 @@ export function StaffCard(props: StaffCardProps) {
                     router.replace(pathname + '?' + params.toString());
                   }}
                 >
-                  Remove
+                  Un-Assign
                 </Button>
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
-          {/* <UnassignStaffFlyout /> */}
         </div>
       </div>
     </div>

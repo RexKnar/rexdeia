@@ -131,6 +131,7 @@ export const GET_EXAM_CONFIG_SUBJECT_DETAIL = `GET_EXAM_CONFIG_SUBJECT_DETAIL`;
 export const EXAM_MARK_ENTRY = `EXAM_MARK_ENTRY`;
 export const UPDATE_STAFF_BY_ID = `UPDATE_STAFF_BY_ID`;
 export const GET_SUBJECT_LIST_BY_STAFF_ID = `GET_SUBJECT_LIST_BY_STAFF_ID`;
+export const UNASSIGN_STAFF_SECTION_BY_ID = `UNASSIGN_STAFF_SECTION_BY_ID`;
 
 export default <EndpointDetails>{
   ...ExamAnalyticsEndpoints,
@@ -650,5 +651,9 @@ export default <EndpointDetails>{
   [GET_SUBJECT_LIST_BY_STAFF_ID]: {
     requestType: `GET`,
     endpoint: `/api/staff/[id]/subjects`,
+  },
+  [UNASSIGN_STAFF_SECTION_BY_ID]: {
+    requestType: `DELETE`,
+    endpoint: `/api/class/[id]/staffs/[staffId]/subjects`,
   },
 };

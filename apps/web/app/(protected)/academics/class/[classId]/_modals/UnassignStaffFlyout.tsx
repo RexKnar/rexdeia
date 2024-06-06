@@ -1,7 +1,9 @@
 'use client';
 
+// import { UnassignStaffModel } from 'lib/domain/staff';
 import { useGetStaffSubjectListByClassIdQuery } from 'lib/queries/staff/useGetStaffSubjectListQuery';
-import { CircleMinus } from 'lucide-react';
+import { useUnassignStaffFromSubjectMutationQurey } from 'lib/queries/staff/useUnassignStaffFromSubjectsMutationQurey';
+import { CircleMinus, Loader2 } from 'lucide-react';
 import {
   useParams,
   usePathname,
@@ -39,32 +41,44 @@ export function UnassignStaffFlyout() {
       }
     );
 
-  const {
-    handleSubmit,
-    control,
-    formState: { errors: fieldErrors },
-  } = useForm();
+  const { isPending: isUnAssignStaffPending, mutateAsync: unassignStaffAsync } =
+    useUnassignStaffFromSubjectMutationQurey(
+      params.classId,
+      staffId,
+      academicYearId
+    );
+
+  const { handleSubmit, control, reset } = useForm();
   const { fields, append } = useFieldArray({
     control,
     name: 'sections',
   });
 
   const closeFlyout = () => {
+    reset({ sections: [] });
     const params = new URLSearchParams(searchParams);
-    params.set('isUnassignStaffFlyoutOpen', 'false');
+    params.delete('academicYearId');
+    params.delete('staffId');
+    params.delete('isUnassignStaffFlyoutOpen');
     router.replace(pathname + '?' + params.toString());
   };
 
-  const onsubmit = (data) => {
-    console.log(data, fieldErrors);
-  };
-
+  async function onsubmit(payload) {
+    try {
+      const response = await unassignStaffAsync(payload);
+      if (response) {
+        closeFlyout();
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  }
   useEffect(() => {
     if (isOpen && getStaffSubjectListResponse) {
       getStaffSubjectListResponse.forEach((item) => {
         append({
-          sectionId: item.section.id,
-          sectionName: item.section.name,
+          sectionId: item.sectionId,
+          sectionName: item.sectionName,
           subjects: [],
         });
       });
@@ -94,7 +108,6 @@ export function UnassignStaffFlyout() {
           </SheetHeader>
           <form onSubmit={handleSubmit(onsubmit)}>
             <div className="mt-6">
-              {fields.length}
               {fields.map((section, index) => {
                 return (
                   <div className="mt-2" key={section.id}>
@@ -102,10 +115,10 @@ export function UnassignStaffFlyout() {
                       htmlFor="subjectName"
                       className="text-sm font-semibold text-gray-700"
                     >
-                      {getStaffSubjectListResponse[index].section.name}
+                      {getStaffSubjectListResponse[index]?.sectionName}
                     </label>
                     <div className="me-6 mt-2 flex flex-wrap items-center">
-                      {getStaffSubjectListResponse[index].subjects.map(
+                      {getStaffSubjectListResponse[index]?.subjects.map(
                         (subject) => {
                           return (
                             <Controller
@@ -154,7 +167,15 @@ export function UnassignStaffFlyout() {
               variant="default"
               className="mx-auto mt-8 flex justify-center px-12 py-4"
             >
-              Remove
+              {' '}
+              {isUnAssignStaffPending ? (
+                <div className="flex items-center justify-center">
+                  <Loader2 className="mr-2 h-6 w-6 animate-spin text-white" />
+                  removing
+                </div>
+              ) : (
+                'remove'
+              )}
             </Button>
           </form>
         </SheetContent>

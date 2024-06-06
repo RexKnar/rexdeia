@@ -96,10 +96,10 @@ export type UpdateStaffModel = Omit<
   Staff,
   'email' | 'name' | 'subjects' | 'sections'
 >;
-<<<<<<< HEAD
 
 export type StaffSubjectList = {
-  section: Section;
+  sectionId: string;
+  sectionName: string;
   subjects: Section[];
 };
 
@@ -111,10 +111,18 @@ export type Section = {
 type AcademicYear = {
   id: string;
   name: string;
-=======
+};
 export type SubjectHandledByStaff = {
   id: string;
   name: string;
   sections?: SectionModel[];
->>>>>>> aabe0d325b4b09bb50ea7d160af903e57b7f7ee7
+};
+
+export type UnassignStaffModel = {
+  sections: sections[];
+};
+
+type sections = {
+  section: string;
+  subjects: string[];
 };

@@ -70,7 +70,9 @@ export function AddSubjectFlyout() {
     },
   });
 
-  const { data: subjectDetails } = useGetSubjectByIdQuery(subjectId);
+  const { data: subjectDetails } = useGetSubjectByIdQuery(subjectId, {
+    enabled: !!subjectId,
+  });
 
   useEffect(() => {
     if (subjectDetails) {
