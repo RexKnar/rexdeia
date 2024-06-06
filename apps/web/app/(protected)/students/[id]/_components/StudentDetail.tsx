@@ -218,7 +218,7 @@ export function StudentDetail() {
                       Mother Tongue
                     </label>
                     <Text variant="base-regular">
-                      {getStudentByIdResponse.motherTongue}
+                      {getStudentByIdResponse.motherTongueId}
                     </Text>
                   </div>
                   <div>

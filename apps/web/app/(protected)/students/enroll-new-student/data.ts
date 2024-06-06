@@ -1286,7 +1286,7 @@ export const admissionForm = {
           id: '4',
           type: 'dropdown',
           label: 'Mother Tongue',
-          name: 'motherTongue',
+          name: 'motherTongueId',
           optionKey: 'value',
           optionValue: 'value',
           visible: true,

@@ -75,11 +75,10 @@ export function AssignSubjectToStudentFlyout() {
         <SheetContent
           side="right"
           widthSize="sm"
-          className="p-10 bg-white"
+          className="bg-white p-10"
           onCloseClick={() => closeFlyout()}
         >
           <div className="max-h-[80vh] overflow-y-auto">
-            
             <form onSubmit={handleSubmit(AssignStudentToSubject)}>
               <SheetHeader>
                 <SheetTitle className="mb-5">
@@ -107,7 +106,7 @@ export function AssignSubjectToStudentFlyout() {
                       setValue(`sections.${index}.StudentId` as any, value)
                     }
                   >
-                    <SelectTrigger className="w-full mt-2">
+                    <SelectTrigger className="mt-2 w-full">
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
@@ -126,7 +125,7 @@ export function AssignSubjectToStudentFlyout() {
                   {fields.length > 1 ? (
                     <div className="m-2">
                       <Button
-                        className="px-2 bg-red-600 border-transparent"
+                        className="border-transparent bg-red-600 px-2"
                         variant="outline"
                         size="sm"
                         onClick={() => {
@@ -143,7 +142,7 @@ export function AssignSubjectToStudentFlyout() {
                 <Button
                   size="sm"
                   variant="outline"
-                  className="flex justify-center px-4 py-2 mx-auto"
+                  className="mx-auto flex justify-center px-4 py-2"
                   onClick={() => {
                     append({ section: 'section' });
                   }}
@@ -157,7 +156,7 @@ export function AssignSubjectToStudentFlyout() {
                 <Button
                   size="default"
                   variant="default"
-                  className="flex justify-center px-12 py-4 mx-auto"
+                  className="mx-auto flex justify-center px-12 py-4"
                 >
                   Save & Close
                 </Button>

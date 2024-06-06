@@ -126,10 +126,14 @@ export async function addStudent(student: AddStudentModel) {
     },
   });
 
-  const studentWithoutBatchId: Omit<AddStudentModel, 'batchId'> = {
+  const studentWithoutBatchId: Omit<
+    AddStudentModel,
+    'batchId' | 'motherTongueId' | 'motherTongue'
+  > = {
     ...student,
   };
   delete studentWithoutBatchId['batchId'];
+  delete studentWithoutBatchId['motherTongueId'];
 
   const createdStudent = await db.student.create({
     data: {
@@ -145,6 +149,11 @@ export async function addStudent(student: AddStudentModel) {
             mediumId: student.additionalAttributes.joiningMedium,
           },
         ],
+      },
+      motherTongue: {
+        connect: {
+          id: student.motherTongueId,
+        },
       },
       organization: {
         connect: {
