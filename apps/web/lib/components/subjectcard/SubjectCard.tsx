@@ -60,7 +60,18 @@ export function SubjectCard({ id, name }: SubjectCardProps) {
                 </DropdownMenuItem>
                 <DropdownMenuSeparator className="bg-gray-100 text-gray-500" />
                 <DropdownMenuItem className="flex cursor-pointer items-center">
-                  <Button variant="link" size="sm" className="flex-1">
+                  <Button
+                    variant="link"
+                    size="sm"
+                    className="flex-1"
+                    onClick={async () => {
+                      const params = new URLSearchParams(searchParams);
+                      params.set('isDeleteConfirmationModalOpen', 'true');
+                      params.set('subjectId', id);
+                      params.set('subjectName', name);
+                      router.replace(pathname + '?' + params.toString());
+                    }}
+                  >
                     Remove
                   </Button>
                 </DropdownMenuItem>
