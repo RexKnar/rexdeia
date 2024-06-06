@@ -57,40 +57,53 @@ export default function StudentMarkList({
                     </div>
                     <div className="flex justify-evenly">
                       {subject.examSubjectPartition.map((partition) => (
-                        <span
-                          className="size-lg font-semibold"
-                          key={partition.id}
-                        >
+                        <span key={partition.id}>
                           {partition.assessmentFormat.name}
                         </span>
                       ))}
+                      <span className="size-lg font-semibold">Mark</span>
                     </div>
                   </div>
                 </TableCell>
               ))}
+              <TableCell>
+                <span>Total Mark</span>
+              </TableCell>
             </TableRow>
           </TableHeader>
           <TableBody>
-            {students.map((student) => (
-              <TableRow key={student.id}>
-                <TableCell>
-                  {student.firstName} {student.lastName}
-                </TableCell>
-                {subjectList.map((subject) => (
-                  <TableCell key={subject.subjectId}>
-                    <div className="w-full">
-                      <div className="flex justify-evenly">
-                        {getMarkForSubject(student, subject.subject.id).map(
-                          (mark) => (
-                            <span key={mark.id}>{mark.mark}</span>
-                          )
-                        )}
-                      </div>
-                    </div>
+            {students.map((student) => {
+              let total = 0;
+              return (
+                <TableRow key={student.id}>
+                  <TableCell>
+                    {student.firstName} {student.lastName}
                   </TableCell>
-                ))}
-              </TableRow>
-            ))}
+                  {subjectList.map((subject) => {
+                    let subjectTotal = 0;
+                    return (
+                      <TableCell key={subject.subjectId}>
+                        <div className="w-full">
+                          <div className="flex justify-evenly">
+                            {getMarkForSubject(student, subject.subject.id).map(
+                              (mark) => {
+                                total += mark.mark;
+                                subjectTotal += mark.mark;
+                                return <span key={mark.id}>{mark.mark}</span>;
+                              }
+                            )}
+                            <span>{subjectTotal}</span>
+                          </div>
+                        </div>
+                      </TableCell>
+                    );
+                  })}
+                  <TableCell>
+                    <span>{total}</span>
+                  </TableCell>
+                </TableRow>
+              );
+            })}
           </TableBody>
         </Table>
       )}

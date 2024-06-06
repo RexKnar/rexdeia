@@ -10,6 +10,7 @@ import {
 import { Button, Tabs, TabsContent, TabsList, TabsTrigger, Text } from 'ui';
 import { cn } from 'utils';
 
+import { LinkButton } from '@/components/LinkButton';
 import { PageTitle } from '@/components/PageTitle';
 
 import { useGetClassByIdQuery } from '../../../../../../lib/queries/class/useGetClassByIdQuery';
@@ -54,7 +55,7 @@ export function ClassDetail() {
     return (
       <div className="flex items-center justify-center">
         <Loader2 className="mr-2 h-6 w-6 animate-spin text-black" />
-        <p className=" text-black">Fetching Class Details...</p>
+        <p className="text-black ">Fetching Class Details...</p>
       </div>
     );
   }
@@ -154,15 +155,13 @@ export function ClassDetail() {
             </TabsContent>
 
             <TabsContent value="Students">
-              <Button
-                variant="default"
-                onClick={() =>
-                  router.push(`/academics/class/${[classId]}/assign/student`)
-                }
+              <LinkButton
+                variant="primary"
+                url={`/academics/class/${classId}/assign/student`}
                 className="absolute right-0 top-0"
               >
                 Assign Students
-              </Button>
+              </LinkButton>
               <StudentList />
             </TabsContent>
             <TabsContent value="Staffs">

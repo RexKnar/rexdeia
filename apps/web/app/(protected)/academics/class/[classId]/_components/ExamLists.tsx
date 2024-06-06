@@ -3,7 +3,8 @@
 import { ExamCard } from 'app/(protected)/academics/exams/_components/ExamCard';
 import { useGetExamsByClassSectionQuery } from 'lib/queries/mark-entry/useGetExamsByClassSectionQuery';
 import { Loader2 } from 'lucide-react';
-import { useParams, useRouter } from 'next/navigation';
+import Link from 'next/link';
+import { useParams } from 'next/navigation';
 
 const cardColors = [
   'bg-teal-50 border-teal-200',
@@ -13,7 +14,6 @@ const cardColors = [
 ];
 
 export function ExamLists() {
-  const router = useRouter();
   const { classId } = useParams<{ classId: string }>();
   const {
     data: examListByClassIdResponse,
@@ -39,12 +39,7 @@ export function ExamLists() {
 
       <div className="grid grid-cols-6 gap-2 ">
         {examListByClassIdResponse?.map((exam, index) => (
-          <div
-            key={exam.id}
-            onClick={() => {
-              router.push(`/academics/exams/${exam.id}`);
-            }}
-          >
+          <Link href={`/academics/exams/${exam.id}`} key={exam.id}>
             <ExamCard
               examName={exam.name}
               termName={exam.term.name}
@@ -54,7 +49,7 @@ export function ExamLists() {
               examId={exam.id}
               cardColor={cardColors[index % cardColors.length]}
             />
-          </div>
+          </Link>
         ))}
       </div>
     </div>

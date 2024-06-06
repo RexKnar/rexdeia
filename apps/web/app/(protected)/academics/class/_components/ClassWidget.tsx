@@ -2,6 +2,7 @@
 
 import { useGetStudentListByClassIdQuery } from 'lib/queries/students/useGetStudentListByClassIdQuery';
 import { Plus } from 'lucide-react';
+import Link from 'next/link';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { Badge, Button } from 'ui';
 import { cn } from 'utils';
@@ -20,15 +21,12 @@ export function ClassWidget({ classDetails }) {
     <div className="flex flex-wrap content-start items-start gap-6 self-stretch md:gap-24 md:space-x-24">
       <div className="widget h-full w-full rounded-xl border border-primary-200 bg-white p-4 shadow-md shadow-primary-200">
         <div className="widget-title flex items-center justify-between text-lg font-semibold">
-          <Button
+          <Link
             className={cn('ps-0 text-lg font-semibold')}
-            variant="ghost"
-            onClick={() => {
-              router.push(`class/${classDetails.id}`);
-            }}
+            href={`/academics/class/${classDetails.id}`}
           >
             {classDetails.name}
-          </Button>
+          </Link>
           <div>
             <Badge className={cn('mb-2 bg-yellow-100')}>
               Students:&nbsp;
