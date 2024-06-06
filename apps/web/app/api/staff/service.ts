@@ -191,6 +191,7 @@ export async function getAllStaffsBySectionsIdWithSubjects(ids: string[]) {
           },
         },
         select: {
+          isIncharge: true,
           subject: {
             select: {
               name: true,
@@ -203,6 +204,12 @@ export async function getAllStaffsBySectionsIdWithSubjects(ids: string[]) {
               id: true,
             },
           },
+          section: {
+            select: {
+              name: true,
+              id: true,
+            },
+          },
         },
       },
     },
@@ -210,11 +217,73 @@ export async function getAllStaffsBySectionsIdWithSubjects(ids: string[]) {
 
   const result = staffs.map(({ academicSubjectForStaff, ...rest }) => ({
     ...rest,
-    subjects: academicSubjectForStaff.map((subject) => subject.subject),
-    academicYear: academicSubjectForStaff.length
-      ? academicSubjectForStaff[0].academicYear
-      : null,
+    subjects: academicSubjectForStaff
+      .filter((item) => !item.isIncharge)
+      .map((subject) => subject.subject),
+    academicYear: academicSubjectForStaff.map(
+      (academicYear) => academicYear.academicYear
+    ),
+    sections: academicSubjectForStaff
+      .filter((item) => !item.isIncharge)
+      .map((section) => section.section),
   }));
 
   return result;
+}
+
+export async function getSubjectByStaffId(id) {
+  const subjectResponse = await db.class.findMany({
+    where: {
+      Section: {
+        some: {
+          academicSubjectForStaff: {
+            some: {
+              staffId: id,
+            },
+          },
+        },
+      },
+    },
+    select: {
+      id: true,
+      name: true,
+      Section: {
+        select: {
+          id: true,
+          name: true,
+          academicSubjectForStaff: {
+            where: {
+              staffId: id,
+              isIncharge: false,
+            },
+            include: {
+              subject: true,
+            },
+          },
+        },
+      },
+    },
+  });
+
+  const response = subjectResponse.flatMap(({ id, name, ...rest }) => {
+    const sections = rest.Section.filter(
+      (section) => section?.academicSubjectForStaff.length
+    ).flatMap(({ id: sectionId, name: sectionName, ...sectionRest }) => {
+      const subjects = sectionRest.academicSubjectForStaff.flatMap(
+        (academicSubject) => {
+          return academicSubject.subject;
+        }
+      );
+
+      return { id: sectionId, name: sectionName, subjects };
+    });
+
+    return {
+      id,
+      name,
+      sections,
+    };
+  });
+
+  return response;
 }

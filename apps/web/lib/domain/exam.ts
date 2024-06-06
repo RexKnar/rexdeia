@@ -1,4 +1,5 @@
 import { BatchModel } from './batch';
+import { AssessmentFormatModel } from './subject';
 
 export type ExamModel = {
   id: string;
@@ -27,11 +28,14 @@ export type ExamConfigurationModel = {
 };
 
 export type assessmentFormatConfiguration = {
+  id?: string;
   assessmentFormatId: string;
   minPassMark: number;
   markToConvert: number;
   dateToConduct: string;
   markToConduct: number;
+  academicExamId: string;
+  assessmentFormat?: AssessmentFormatModel;
 };
 
 export type CreateExamConfigurationModel = Pick<
@@ -43,6 +47,34 @@ export type CreateExamConfigurationModel = Pick<
   | 'assessmentFormatConfiguration'
 >;
 
+/*---------------------------------- Start of New Exam --------------------------------------- **/
+
+// New Exam
+export type ExamConfigModel = {
+  examId: string;
+  sectionIds: string[];
+  classId: string;
+  subjects: string[];
+  config: ExamSubjectPartitionModel[];
+};
+
+// New-Exam
+export type CreateExamConfigModel = Pick<
+  ExamConfigModel,
+  'subjects' | 'classId' | 'sectionIds'
+>;
+
+export type ExamSubjectPartitionModel = {
+  assessmentFormatId: string;
+  minMark: number;
+  convertTo: number;
+  dateToConduct: string;
+  totalMarks: number;
+  academicExamId: string;
+  assessmentFormat?: AssessmentFormatModel;
+};
+
+/*---------------------------------- End of New Exam --------------------------------------- **/
 export type ExamTypeModel = {
   id: string;
   name: string;

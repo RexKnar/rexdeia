@@ -6,17 +6,20 @@ export type SubjectModel = {
   subjectMasterId: string;
   sectionId: string[];
   elective: string;
+  classId: string;
   sectionIds: string[];
   subjectTypeId: string;
   assessmentFormatIds: string[];
+  subjectToGroup: SubjectToGroupModel[];
   groupIds: string[];
   regulationId: string;
   isDeleting?: boolean;
   isUpdating?: boolean;
   isNewlyAdded?: boolean;
+  subjectToSubjectTypes: SubjectToSubjectTypesModel[];
   SubjectType?: SubjectTypeModel;
   assessmentFormat: AssessmentFormatModel[];
-  subjectToAssessmentFormat: string[];
+  subjectToAssessmentFormat: SubjectToAssessmentFormatModel[];
 };
 
 export type CreateSubjectModel = Pick<
@@ -34,10 +37,21 @@ export type CreateSubjectModel = Pick<
 
 export type UpdateSubjectModel = Pick<
   SubjectModel,
-  'name' | 'isActive' | 'description' | 'subjectTypeId' | 'id'
+  | 'id'
+  | 'name'
+  | 'isActive'
+  | 'description'
+  | 'subjectTypeId'
+  | 'assessmentFormatIds'
+  | 'groupIds'
+  | 'elective'
+  | 'regulationId'
+  | 'subjectMasterId'
+  | 'classId'
 >;
 
 export type AssessmentFormatModel = {
+  assessmentFormat: AssessmentFormatModel;
   id: string;
   name: string;
   parentId?: string;
@@ -101,3 +115,26 @@ export type UpdateSubjectMasterModel = Pick<
   SubjectMasterModel,
   'id' | 'name' | 'isActive'
 >;
+
+export type SubjectToAssessmentFormatModel = {
+  assessmentFormatId: string;
+  subjectId: string;
+  createdAt: string;
+  updatedAt: string;
+};
+
+export type SubjectToGroupModel = {
+  subjectId: string;
+  groupId: string;
+  classId: string;
+  createdAt: string;
+  updatedAt: string;
+};
+
+export type SubjectToSubjectTypesModel = {
+  subjectId: string;
+  subjectTypeId: string;
+  createdAt: string;
+  updatedAt: string;
+  subjectType: string;
+};

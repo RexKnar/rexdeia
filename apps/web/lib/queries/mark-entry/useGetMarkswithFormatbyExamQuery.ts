@@ -5,15 +5,16 @@ import { GET_MARKS_WITH_FORMAT_BY_EXAM } from '../../endpoints';
 
 type GetMarksWithFormatByExamFilter = {
   examId: string;
+  classId: string;
 };
 
-function getMarksWithFormatByExam(
+function getStudentsMarksByFilter(
   filter: GetMarksWithFormatByExamFilter,
   options?: Partial<UseQueryOptions<any[]>>
 ) {
   return {
     ...options,
-    queryKey: [GET_MARKS_WITH_FORMAT_BY_EXAM, filter.examId],
+    queryKey: [GET_MARKS_WITH_FORMAT_BY_EXAM, filter],
     queryFn: async () => {
       return await makeAPICall<any[]>(
         GET_MARKS_WITH_FORMAT_BY_EXAM,
@@ -25,9 +26,9 @@ function getMarksWithFormatByExam(
   };
 }
 
-export function useGetMarksWithFormatByExamQuery(
+export function useGetStudentsMarksByClassIdExamIdQuery(
   filter: GetMarksWithFormatByExamFilter,
   options?: Partial<UseQueryOptions<any[]>>
 ) {
-  return useQuery(getMarksWithFormatByExam(filter, options));
+  return useQuery(getStudentsMarksByFilter(filter, options));
 }

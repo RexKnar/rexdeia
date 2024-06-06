@@ -21,6 +21,7 @@ export type Marks = {
   marks: MarksWithAssessmentFormatModel[];
 };
 export type MarksWithAssessmentFormatModel = {
+  id: string;
   academicExamId: string;
   assessmentFormatId: string;
   mark: string;
@@ -31,6 +32,33 @@ export type AddMarkEntryModel = {
   staffId: string;
   studentsMarkDetails: StudentsMarkInExamModel[];
 };
+//New
+export type EnterMarkEntryModel = {
+  staffId: string;
+  studentsMarkDetails: ExamStudentModel[];
+};
+
+export type ExamStudentModel = {
+  studentId: string;
+  subjects: ExamSubjectModel[];
+};
+export type ExamSubjectModel = {
+  subjectId: string;
+  examSubjectId: string;
+  marks: ExamMarkModel[];
+};
+
+export type ExamMarkModel = {
+  id?: string;
+  examSubjectId: string;
+  assessmentFormatId: string;
+  attendance?: string;
+  examPartitionId: string;
+  isUpdate: boolean;
+  mark: string;
+};
+
+//end of the new mark entry model
 
 export type MarkEntryFromStructureModel = {
   id: string;

@@ -33,7 +33,7 @@ import { getAssessmentFormatBySubjectId } from '../../service';
  *         '500':
  *           description: Internal server error.
  */
-export async function GET(request: Request, { params: { id } }) {
+export async function GET(_: Request, { params: { id } }) {
   const session = await getServerSession(authOptions);
   if (!session) {
     return new NextResponse(JSON.stringify({ error: 'UNAUTHORIZED' }), {

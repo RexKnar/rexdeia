@@ -1,3 +1,5 @@
+import uniqBy from 'lodash/uniqBy';
+
 import { db } from '../../../lib/db';
 import {
   CreateSectionModel,
@@ -22,7 +24,7 @@ export async function deleteSectionById(id: string) {
 }
 
 export async function getSectionById(id: string) {
-  return db.section.findFirst({
+  const sectionDetails = await db.section.findFirst({
     where: {
       id: id,
       isActive: true,
@@ -36,6 +38,11 @@ export async function getSectionById(id: string) {
       },
     },
   });
+  sectionDetails['group'] = sectionDetails.sectionToGroups.map((item) => {
+    return item.group;
+  });
+  delete sectionDetails.sectionToGroups;
+  return sectionDetails;
 }
 
 export async function getAllSectionsByClassId(classId: string) {
@@ -230,4 +237,37 @@ export async function removeStudentsFromSection(
       },
     },
   });
+}
+
+export async function getSectionsBySubjectIdClassId(filter: {
+  classId: string;
+  subjectId: string;
+}) {
+  const groups = await db.subjectToGroup.findMany({
+    where: {
+      subjectId: filter.subjectId,
+      classId: filter.classId,
+    },
+  });
+
+  const groupIds = groups.map((group) => group.groupId);
+  if (groupIds.length === 0) {
+    return [];
+  }
+
+  const sections = await db.sectionToGroups.findMany({
+    where: {
+      groupId: {
+        in: groupIds,
+      },
+      section: {
+        classId: filter.classId,
+      },
+    },
+    select: {
+      section: true,
+    },
+  });
+  const response = sections.map((section) => section.section);
+  return uniqBy(response, (response) => response.id);
 }

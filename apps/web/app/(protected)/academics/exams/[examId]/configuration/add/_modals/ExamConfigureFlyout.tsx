@@ -1,8 +1,9 @@
 'use client';
 
+import { useGetAssessmentFormatBySubjectIdQuery } from 'lib/queries/exams/subject/useGetAssessmentFormatBySubjectIdQuery';
+import { useGetSubjectExamDetailQuery } from 'lib/queries/exams/subject/useGetSubjectExamConfigQuery';
 import { useCreateExamConfigurationQuery } from 'lib/queries/exams/useCreateExamConfigurationMutationQuery';
-import { useGetAssessmentFormatBySubjectIdQuery } from 'lib/queries/exams/usegetAssessmentFormatbySubjectIdQuery';
-import { PlusCircle } from 'lucide-react';
+import { Loader2, PlusCircle } from 'lucide-react';
 import {
   useParams,
   usePathname,
@@ -50,13 +51,36 @@ export function ExamConfigureFlyout() {
     name: 'assessmentFormatConfiguration',
   });
 
+  const toggleForm = (assessmentFormat) => {
+    const index = fields?.findIndex(
+      (field) => field['assessmentFormatId'] === assessmentFormat.id
+    );
+    if (index > -1) {
+      remove(index);
+    } else {
+      append({
+        assessmentFormatId: assessmentFormat.id,
+        name: assessmentFormat.name,
+      });
+    }
+  };
+
   const { data: assessmentFormatResponse } =
     useGetAssessmentFormatBySubjectIdQuery(subjectId, {
       enabled: !!subjectId,
     });
 
-  const { mutateAsync: mutateCreateExamConfigurationAsync } =
-    useCreateExamConfigurationQuery(examId);
+  const { data: subjectConfigListResponse } = useGetSubjectExamDetailQuery(
+    { examId, sectionId, subjectId },
+    {
+      enabled: !!subjectId,
+    }
+  );
+
+  const {
+    isPending: isPendingCreateExamConfig,
+    mutateAsync: mutateCreateExamConfigurationAsync,
+  } = useCreateExamConfigurationQuery(examId);
 
   const closeFlyout = async () => {
     const params = new URLSearchParams(searchParams);
@@ -83,10 +107,9 @@ export function ExamConfigureFlyout() {
     payload.subjectTypeId = subjectTypeId;
     const createdExamConfiguration =
       await mutateCreateExamConfigurationAsync(payload);
+
     if (createdExamConfiguration) {
-      router.push(`/academics/exams/${examId}`);
-      fields.splice(0, fields.length);
-      reset();
+      closeFlyout();
     }
   }
   return (
@@ -113,115 +136,38 @@ export function ExamConfigureFlyout() {
                 </SheetTitle>
                 <hr className="border-t border-gray-300"></hr>
               </SheetHeader>
-              <div className="mt-5 p-1">
-                <div>
-                  <label htmlFor="name" className="text-sm font-semibold">
-                    Subject Name
-                  </label>
-                </div>
-                <div className="mt-4">
-                  <label
-                    htmlFor="dateToConduct"
-                    className="text-sm font-semibold text-gray-700"
-                  >
-                    Date to Conduct
-                  </label>
-                  <Input
-                    type={'date'}
-                    {...register('dateToConduct', {
-                      required: 'date to Conduct is Required',
-                    })}
-                  />
-                </div>
-                <label
-                  htmlFor="name"
-                  className="text-sm font-semibold text-gray-700"
-                >
-                  mark To Conduct
-                </label>
-                <Input
-                  {...register('markToConduct', {
-                    required: ' Conduct mark is Required',
-                  })}
-                  id="markToConduct"
-                  autoFocus
-                  type="text"
-                  className="mt-2"
-                  placeholder="Mark To Conduct"
-                  errorMessage={fieldErrors?.markToConduct?.message.toString()}
-                />
-                <div className="mt-2">
-                  <label
-                    htmlFor="name"
-                    className="text-sm font-semibold text-gray-700"
-                  >
-                    Mark to Convert
-                  </label>
-                  <Input
-                    {...register('markToConvert', {
-                      required: 'Mark to Convert is Required',
-                    })}
-                    id="markToConvert"
-                    type="text"
-                    className="mt-2"
-                    placeholder="Mark to Convert"
-                    errorMessage={fieldErrors?.markToConduct?.message.toString()}
-                  />
-                </div>
-                <div className="mt-2">
-                  <label
-                    htmlFor="name"
-                    className="text-sm font-semibold text-gray-700"
-                  >
-                    Min Pass Mark
-                  </label>
-                  <Input
-                    {...register('minPassMark', {
-                      required: 'Min Pass Mark is Required',
-                    })}
-                    id="minPassMark"
-                    type="text"
-                    className="mt-2"
-                    placeholder="Min Pass Mark"
-                    errorMessage={fieldErrors?.minPassMark?.message.toString()}
-                  />
-                </div>
-                <div className="mt-1 flex justify-end">
-                  <label className="text-sm font-medium text-gray-600">
-                    From conducting mark
-                  </label>
-                </div>
-              </div>
               <div className="mt-5 flex flex-wrap">
-                {assessmentFormatResponse?.map((assessmentFormat, index) => (
-                  <div className="w-1/2" key={assessmentFormat.id}>
-                    <Switch
-                      id={`assessmentFormatConfiguration.${index}.${assessmentFormat.name}`}
-                      key={index}
-                      checked={assessmentFormat[index]}
-                      onCheckedChange={(value) => {
-                        value
-                          ? append({
-                              assessmentFormatId: assessmentFormat.id,
-                            })
-                          : remove(index);
-                      }}
-                    />
-                    <label
-                      htmlFor={assessmentFormat.name}
-                      className="ml-2 text-sm font-semibold"
-                    >
-                      {assessmentFormat.name}
-                    </label>
-                  </div>
-                ))}
+                {assessmentFormatResponse?.map((assessmentFormat, index) => {
+                  const subjectConfigIndex =
+                    subjectConfigListResponse?.examConfiguration.findIndex(
+                      (obj) => obj?.assessmentFormat?.id == assessmentFormat?.id
+                    ) ?? -1;
+                  if (subjectConfigIndex < 0)
+                    return (
+                      <div className="w-1/2" key={assessmentFormat.id}>
+                        <Switch
+                          id={`assessmentFormatConfiguration.${index}.${assessmentFormat.name}`}
+                          key={index}
+                          checked={assessmentFormat[index]}
+                          onCheckedChange={() => {
+                            toggleForm(assessmentFormat);
+                          }}
+                        />
+                        <label
+                          htmlFor={assessmentFormat.name}
+                          className="ml-2 text-sm font-semibold"
+                        >
+                          {assessmentFormat.name}
+                        </label>
+                      </div>
+                    );
+                })}
               </div>
-
-              {fields.map((row, index) => (
-                <div key={row.id} className="mt-5 p-1">
+              {fields.map((field, index) => (
+                <div key={field.id} className="mt-5 p-1">
                   <div>
                     <label htmlFor="name" className="text-sm font-semibold">
-                      {assessmentFormatResponse[index]?.name}
+                      {field['name']}
                     </label>
                   </div>
                   <div className="mt-4">
@@ -277,7 +223,7 @@ export function ExamConfigureFlyout() {
                       type="text"
                       className="mt-2"
                       placeholder="Mark to Convert"
-                      errorMessage={fieldErrors?.markToConvert?.message.toString()}
+                      errorMessage={fieldErrors.markToConvert?.message.toString()}
                     />
                   </div>
                   <div className="mt-2">
@@ -296,7 +242,7 @@ export function ExamConfigureFlyout() {
                       type="text"
                       className="mt-2"
                       placeholder="Min Pass Mark"
-                      errorMessage={fieldErrors?.minPassMark?.message.toString()}
+                      errorMessage={fieldErrors.minPassMark?.message.toString()}
                     />
                   </div>
                   <div className="mt-1 flex justify-end">
@@ -311,8 +257,16 @@ export function ExamConfigureFlyout() {
                   size="lg"
                   variant="default"
                   className="mx-auto flex justify-center px-12 py-4"
+                  disabled={isPendingCreateExamConfig}
                 >
-                  Save & Close
+                  {isPendingCreateExamConfig ? (
+                    <div className="flex items-center justify-center">
+                      <Loader2 className="mr-2 h-6 w-6 animate-spin text-white" />
+                      Saving
+                    </div>
+                  ) : (
+                    `${'Save & Close'}`
+                  )}
                 </Button>
               </div>
             </form>

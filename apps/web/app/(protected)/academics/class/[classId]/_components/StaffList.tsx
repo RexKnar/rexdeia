@@ -36,8 +36,12 @@ export function StaffList() {
         <div key={staffItem.id}>
           <StaffCard
             id={staffItem.id}
-            name={staffItem.firstName}
             academicYearId={staffItem.academicYear.id}
+            name={`
+              ${staffItem.firstName}  ${staffItem.middleName}  ${staffItem.lastName}
+            `}
+            subjects={staffItem.subjects}
+            sectionsHandled={staffItem.sections}
           />
         </div>
       ))}

@@ -124,8 +124,8 @@ export async function getMarksByFilter(filter: any) {
     }),
   ]);
 
-  function filterDataByStudentId(data) {
-    return data.map((item) => {
+  function restructuredStudentsMarks(studentsMarks) {
+    return studentsMarks.map((item) => {
       let studentId = item.student.id;
       return {
         studentId: item.student.id,
@@ -146,7 +146,92 @@ export async function getMarksByFilter(filter: any) {
     });
   }
 
-  const studentMarks = filterDataByStudentId(studentsMarks);
+  const studentMarks = restructuredStudentsMarks(studentsMarks);
 
-  return { studentMarks };
+  const analytics = findClassAnalytics(studentsMarks);
+  function findClassAnalytics(studentsMarks) {
+    let subjectAnalytics = {};
+    let classFirstMark = {
+      mark: -Infinity,
+      studentId: '',
+      studentName: '',
+    };
+    let classLastMark = { mark: Infinity, studentId: '', studentName: '' };
+
+    for (const student of studentsMarks) {
+      let studentTotalMarks = 0;
+
+      for (const subject of student.subjects) {
+        const { subjectName, marks } = subject;
+
+        if (!subjectAnalytics[subjectName]) {
+          subjectAnalytics[subjectName] = {
+            highestMark: { mark: -Infinity, studentId: '', studentName: '' },
+            lowestMark: { mark: Infinity, studentId: '', studentName: '' },
+            totalMarks: 0,
+            studentsCount: 0,
+          };
+        }
+
+        const subjectTotalMarks = marks.reduce(
+          (total, mark) => total + mark.mark,
+          0
+        );
+
+        const subjectEntry = subjectAnalytics[subjectName];
+        subjectEntry.highestMark =
+          Math.max(subjectEntry.highestMark.mark, subjectTotalMarks) ===
+          subjectTotalMarks
+            ? {
+                mark: subjectTotalMarks,
+                studentId: student.studentId,
+                studentName: student.studentName,
+              }
+            : subjectEntry.highestMark;
+
+        subjectEntry.lowestMark =
+          Math.min(subjectEntry.lowestMark.mark, subjectTotalMarks) ===
+          subjectTotalMarks
+            ? {
+                mark: subjectTotalMarks,
+                studentId: student.studentId,
+                studentName: student.studentName,
+              }
+            : subjectEntry.lowestMark;
+
+        studentTotalMarks += subjectTotalMarks;
+
+        subjectEntry.totalMarks += subjectTotalMarks;
+        subjectEntry.studentsCount++;
+      }
+
+      if (studentTotalMarks > classFirstMark.mark) {
+        classFirstMark = {
+          mark: studentTotalMarks,
+          studentId: student.studentId,
+          studentName: student.studentName,
+        };
+      }
+      if (studentTotalMarks < classLastMark.mark) {
+        classLastMark = {
+          mark: studentTotalMarks,
+          studentId: student.studentId,
+          studentName: student.studentName,
+        };
+      }
+    }
+
+    Object.keys(subjectAnalytics).forEach((subjectName) => {
+      const subjectData = subjectAnalytics[subjectName];
+      subjectData.averageMark =
+        subjectData.totalMarks / subjectData.studentsCount;
+    });
+
+    return { subjectAnalytics, classFirstMark, classLastMark };
+  }
+
+  return {
+    studentMarks,
+    analytics,
+  };
 }

@@ -42,6 +42,7 @@ model Exam {
   batchId       String          @db.Uuid
   batch         Batch           @relation(fields: [batchId], references: [id])
   academicExams AcademicExams[]
+  examGroup     ExamGroup[]
   createdAt     DateTime        @default(now())
   updatedAt     DateTime        @default(now())
   isDeleted     Boolean         @default(false)
@@ -104,23 +105,69 @@ model ExamConfiguration {
 }
 
 model ExamGroup {
-  id                  String        @id @default(uuid()) @map("_id") @db.Uuid
-  name                String
-  totalMarks          Int
-  convertToPercentage Int
-  examSubject         ExamSubject[]
-  exam1Id             String?       @db.Uuid
+  id                   String                 @id @default(uuid()) @map("_id") @db.Uuid
+  totalMarks           Int?
+  examSubject          ExamSubject[]
+  classId              String                 @db.Uuid
+  class                Class                  @relation(fields: [classId], references: [id])
+  sectionId            String                 @db.Uuid
+  section              Section?               @relation(fields: [sectionId], references: [id])
+  examId               String                 @db.Uuid
+  exam                 Exam                   @relation(fields: [examId], references: [id])
+  ExamSubjectPartition ExamSubjectPartition[]
 }
 
 model ExamSubject {
   id                   String                 @id @default(uuid()) @map("_id") @db.Uuid
   subjectId            String                 @db.Uuid
   subject              Subject                @relation(fields: [subjectId], references: [id])
-  totalMarks           Int
-  convertToPercentage  Int
+  groupId              String                 @db.Uuid
+  group                Group                  @relation(fields: [groupId], references: [id])
+  totalMarks           Int                    @default(0)
+  convertTo            Int                    @default(0)
+  minMark              Int                    @default(0)
   examSubjectPartition ExamSubjectPartition[]
-  ExamGroup            ExamGroup?             @relation(fields: [examGroupId], references: [id])
-  examGroupId          String?                @db.Uuid
+  examGroup            ExamGroup              @relation(fields: [examGroupId], references: [id])
+  examGroupId          String                 @db.Uuid
+  Mark                 Mark[]
+}
+
+model ExamSubjectPartition {
+  id                 String           @id @default(uuid()) @map("_id") @db.Uuid
+  subjectId          String           @db.Uuid
+  subject            Subject          @relation(fields: [subjectId], references: [id])
+  minMark            Int
+  totalMarks         Int
+  convertTo          Int
+  dateToConduct      DateTime
+  partitionName      String?
+  examSubject        ExamSubject      @relation(fields: [examSubjectId], references: [id])
+  examSubjectId      String           @db.Uuid
+  assessmentFormat   AssessmentFormat @relation(fields: [assessmentFormatId], references: [id])
+  assessmentFormatId String           @db.Uuid
+  examGroup          ExamGroup        @relation(fields: [examGroupId], references: [id])
+  examGroupId        String           @db.Uuid
+  Mark               Mark[]
+}
+
+model Mark {
+  id                     String               @id @default(uuid()) @map("_id") @db.Uuid
+  mark                   Int?
+  attandance             Int?
+  studentId              String               @db.Uuid
+  student                Student              @relation(fields: [studentId], references: [id])
+  staffId                String               @db.Uuid
+  staff                  Staff                @relation(fields: [staffId], references: [id])
+  examSubject            ExamSubject          @relation(fields: [examSubjectId], references: [id])
+  examSubjectId          String               @db.Uuid
+  examSubjectPartition   ExamSubjectPartition @relation(fields: [examSubjectPartitionId], references: [id])
+  examSubjectPartitionId String               @db.Uuid
+  Subject                Subject?             @relation(fields: [subjectId], references: [id])
+  subjectId              String?              @db.Uuid
+  AssessmentFormat       AssessmentFormat?    @relation(fields: [assessmentFormatId], references: [id])
+  assessmentFormatId     String?              @db.Uuid
+
+  @@unique([studentId, examSubjectId, examSubjectPartitionId])
 }
 
 model MarkEntry {
@@ -138,18 +185,6 @@ model MarkEntry {
   subject            Subject[]
 
   @@unique([studentId, academicExamId, assessmentFormatId])
-}
-
-model ExamSubjectPartition {
-  id                  String       @id @default(uuid()) @map("_id") @db.Uuid
-  subjectId           String       @db.Uuid
-  subject             Subject      @relation(fields: [subjectId], references: [id])
-  minMark             Int
-  totalMarks          Int
-  convertToPercentage Int
-  partitionName       String
-  ExamSubject         ExamSubject? @relation(fields: [examSubjectId], references: [id])
-  examSubjectId       String?      @db.Uuid
 }
 
 model Session {
@@ -401,12 +436,15 @@ model Student {
   fatherName           String?
   fatherOccupation     String?
   fatherPhoneNumber    String?
+  fatherEmailId        String?
   guardiansOccupation  String?
   guardianName         String?
   guardianPhoneNumber  String?
+  guardianEmailId      String?
   motherName           String?
   motherOccupation     String?
   motherPhoneNumber    String?
+  motherEmailId        String?
   motherTongue         String?
   nationality          String?
   religion             String?
@@ -430,8 +468,8 @@ model Student {
   sectionId      String?          @db.Uuid
   section        Section?         @relation(fields: [sectionId], references: [id])
   markEntry      MarkEntry[]
-
-  isDeleted Boolean @default(false)
+  isDeleted      Boolean          @default(false)
+  Mark           Mark[]
 }
 
 model StudentMapping {
@@ -461,6 +499,7 @@ model Staff {
   gender                       String                    @default("")
   mobile                       String                    @default("")
   email                        String                    @default("")
+  age                          String?
   bloodGroup                   String?
   religion                     String?
   caste                        String?
@@ -503,16 +542,26 @@ model Staff {
   pucMarksCard                 String?
   degreeMarksCard              String?
   pgMarksCard                  String?
+  natureOfPosting              String?
   otherCertificate             String?
   dateOfDetainment             DateTime?
+  dateOfRetirement             DateTime?
   dateOfRegularization         DateTime?
   employmentType               String?
+  employeeId                   String?
+  enrollmentId                 String?
+  cps                          String?
+  tpf                          String?
   category                     String?
   subjectHandling              String?
   collegeName                  String?
   passOutYear                  DateTime?
   marksObtained                String?
   designation                  String?
+  accountHolderName            String?
+  accountNumber                String?
+  branchName                   String?
+  IFSC_Code                    String?
   dateOfJoining                DateTime                  @default(now())
   status                       StaffStatus               @default(Active)
   userId                       String                    @unique @db.Uuid
@@ -528,6 +577,7 @@ model Staff {
   staffSections                StaffSection[]
   academicSubjectForStaff      AcademicSubjectForStaff[]
   markEntry                    MarkEntry[]
+  Mark                         Mark[]
 }
 
 model Batch {
@@ -569,6 +619,7 @@ model Class {
   academicExams  AcademicExams[]
   subjects       Subject[]
   subjectToGroup SubjectToGroup[]
+  ExamGroup      ExamGroup[]
 }
 
 model StaffSection {
@@ -621,6 +672,7 @@ model Section {
   academicSubjectForStaff AcademicSubjectForStaff[]
   studentMapping          StudentMapping[]
   sectionToGroups         SectionToGroups[]
+  ExamGroup               ExamGroup[]
 }
 
 model SectionToGroups {
@@ -673,6 +725,7 @@ model Subject {
   academicSubjectForStaff   AcademicSubjectForStaff[]
   academicExams             AcademicExams[]
   markEntry                 MarkEntry[]
+  marks                     Mark[]
 }
 
 model AssessmentFormat {
@@ -691,6 +744,8 @@ model AssessmentFormat {
   subjectToAssessmentFormat SubjectToAssessmentFormat[]
   examConfiguration         ExamConfiguration[]
   markEntry                 MarkEntry[]
+  ExamSubjectPartition      ExamSubjectPartition[]
+  Mark                      Mark[]
 }
 
 model SubjectToAssessmentFormat {
@@ -740,6 +795,7 @@ model Group {
   subjectToGroup  SubjectToGroup[]
   studentMapping  StudentMapping[]
   sectionToGroups SectionToGroups[]
+  ExamSubject     ExamSubject[]
 }
 
 model Medium {

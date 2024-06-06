@@ -14,8 +14,12 @@ function getGroupList(
     page,
     limit,
     filter,
-  }: { page: number; limit: number; filter: { isActive?: boolean } },
-  options?: UseQueryOptions<PaginatedResponse<GroupModel>>
+  }: {
+    page: number;
+    limit: number;
+    filter?: { isActive?: boolean; classId?: string; sectionId?: string };
+  },
+  options?: Partial<UseQueryOptions<PaginatedResponse<GroupModel>>>
 ): UseQueryOptions<PaginatedResponse<GroupModel>> {
   return {
     ...options,
@@ -39,8 +43,12 @@ export function useGetGroupListQuery(
     page,
     limit,
     filter,
-  }: { page: number; limit: number; filter: { isActive?: boolean } },
-  options?: UseQueryOptions<PaginatedResponse<GroupModel>>
+  }: {
+    page: number;
+    limit: number;
+    filter?: { isActive?: boolean; classId?: string; sectionId?: string };
+  },
+  options?: Partial<UseQueryOptions<PaginatedResponse<GroupModel>>>
 ): UseQueryResult<PaginatedResponse<GroupModel>> {
   return useQuery(getGroupList({ page, limit, filter }, options));
 }

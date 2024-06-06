@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 'use client';
 
 /* eslint-disable react/no-unescaped-entities */
@@ -11,7 +12,7 @@ import { formatStudentPayload } from 'lib/utils/formatters';
 import { Check, Loader2 } from 'lucide-react';
 import { useParams, useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
-import { useForm } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 import {
   Button,
   Input,
@@ -29,6 +30,7 @@ export function EditStudentDetail() {
   const [currentPage, setCurrentPage] = useState(1);
 
   const {
+    control,
     watch,
     setValue,
     register,
@@ -200,7 +202,7 @@ export function EditStudentDetail() {
   };
 
   const nextPage = () => {
-    setCurrentPage((prevPage) => Math.min(prevPage + 1, 8));
+    setCurrentPage((prevPage) => Math.min(prevPage + 1, 7));
   };
 
   return (
@@ -212,7 +214,7 @@ export function EditStudentDetail() {
     >
       <section className="flex gap-4">
         <ul className="h-fit w-[215px] shrink-0 rounded-lg bg-white py-3">
-          <li>
+          <li className="flex justify-between">
             <Button
               type="button"
               variant="link"
@@ -228,17 +230,17 @@ export function EditStudentDetail() {
                   {'Personal Details'}
                 </h2>
               </div>
-              <section>
-                <Check className="h-4 w-4 text-green-500 transition-opacity duration-500" />
-              </section>
             </Button>
+            <div className="p-3">
+              <Check className="h-4 w-4 text-green-500 transition-opacity duration-500" />
+            </div>
           </li>
-          <li>
+          <li className="flex justify-between">
             <Button
               type="button"
               variant="link"
               onClick={() => goToPage(2)}
-              className="cursor-pointer px-4 py-1  hover:no-underline"
+              className="cursor-pointer px-4 py-1 hover:no-underline"
             >
               <h2
                 className={`px-2 text-left text-sm font-semibold ${
@@ -247,17 +249,17 @@ export function EditStudentDetail() {
               >
                 Parent’s Details
               </h2>
-              <section>
-                <Check className="h-4 w-4 text-green-500 transition-opacity duration-500" />
-              </section>
             </Button>
+            <div className="p-3">
+              <Check className="h-4 w-4 text-green-500 transition-opacity duration-500" />
+            </div>
           </li>
-          <li>
+          <li className="flex justify-between">
             <Button
               type="button"
               variant="link"
               onClick={() => goToPage(3)}
-              className="cursor-pointer px-4 py-1  hover:no-underline"
+              className="cursor-pointer px-4 py-1 hover:no-underline"
             >
               <h2
                 className={`px-2 text-left text-sm font-semibold ${
@@ -266,17 +268,17 @@ export function EditStudentDetail() {
               >
                 Information of Siblings
               </h2>
-              <section>
-                <Check className="h-4 w-4 text-green-500 transition-opacity duration-500" />
-              </section>
             </Button>
+            <div className="p-3">
+              <Check className="h-4 w-4 text-green-500 transition-opacity duration-500" />
+            </div>
           </li>
-          <li>
+          <li className="flex justify-between">
             <Button
               type="button"
               variant="link"
               onClick={() => goToPage(4)}
-              className="cursor-pointer px-4 py-1  hover:no-underline"
+              className="cursor-pointer px-4 py-1 hover:no-underline"
             >
               <h2
                 className={`px-2 text-left text-sm font-semibold ${
@@ -285,17 +287,17 @@ export function EditStudentDetail() {
               >
                 Gurdian’s Details
               </h2>
-              <section>
-                <Check className="h-4 w-4 text-green-500 transition-opacity duration-500" />
-              </section>
             </Button>
+            <div className="p-3">
+              <Check className="h-4 w-4 text-green-500 transition-opacity duration-500" />
+            </div>
           </li>
-          <li>
+          <li className="flex justify-between">
             <Button
               type="button"
               variant="link"
               onClick={() => goToPage(5)}
-              className="cursor-pointer px-4 py-1  hover:no-underline"
+              className="cursor-pointer px-4 py-1 hover:no-underline"
             >
               <h2
                 className={`px-2  text-sm font-semibold ${
@@ -304,17 +306,17 @@ export function EditStudentDetail() {
               >
                 Address Details
               </h2>
-              <section>
-                <Check className="h-4 w-4 text-green-500 transition-opacity duration-500" />
-              </section>
             </Button>
+            <div className="p-3">
+              <Check className="h-4 w-4 text-green-500 transition-opacity duration-500" />
+            </div>
           </li>
-          <li>
+          <li className="flex justify-between">
             <Button
               type="button"
               variant="link"
               onClick={() => goToPage(6)}
-              className="cursor-pointer px-4 py-1  hover:no-underline"
+              className="cursor-pointer px-4 py-1 hover:no-underline"
             >
               <h2
                 className={`px-2 text-left text-sm font-semibold ${
@@ -323,18 +325,18 @@ export function EditStudentDetail() {
               >
                 Educational Details
               </h2>
-              <section>
-                <Check className="h-4 w-4 text-green-500 transition-opacity duration-500" />
-              </section>
             </Button>
+            <div className="p-3">
+              <Check className="h-4 w-4 text-green-500 transition-opacity duration-500" />
+            </div>
           </li>
 
-          <li>
+          <li className="flex justify-between">
             <Button
               type="button"
               variant="link"
               onClick={() => goToPage(7)}
-              className="cursor-pointer px-4 py-1  hover:no-underline"
+              className="cursor-pointer px-4 py-1 hover:no-underline"
             >
               <h2
                 className={`px-2 text-left text-sm font-semibold ${
@@ -343,10 +345,10 @@ export function EditStudentDetail() {
               >
                 Other Details
               </h2>
-              <section>
-                <Check className="h-4 w-4 text-green-500 transition-opacity duration-500" />
-              </section>
             </Button>
+            <div className="p-3">
+              <Check className="h-4 w-4 text-green-500 transition-opacity duration-500" />
+            </div>
           </li>
         </ul>
         <section className="w-full rounded-lg bg-white p-5">
@@ -427,19 +429,26 @@ export function EditStudentDetail() {
                 <label className="mt-1 block text-sm text-gray-700">
                   Gender
                 </label>
-                <RadioGroup
-                  {...register('gender')}
+                <Controller
+                  name="gender"
+                  control={control}
                   defaultValue={studentDetail.gender}
-                  className="mt-3 flex gap-2"
-                >
-                  <RadioGroupItem className="mr-1 mt-1" value={'male'} />{' '}
-                  {'Male'}
-                  <RadioGroupItem
-                    className="ml-3 mr-1 mt-1 "
-                    value={'female'}
-                  />{' '}
-                  {'Female'}
-                </RadioGroup>
+                  render={({ field: { onChange, value } }) => (
+                    <RadioGroup
+                      onValueChange={onChange}
+                      value={value}
+                      className="mt-3 flex gap-2"
+                    >
+                      <RadioGroupItem className="mr-1 mt-1" value={'male'} />{' '}
+                      {'Male'}
+                      <RadioGroupItem
+                        className="ml-3 mr-1 mt-1 "
+                        value={'female'}
+                      />{' '}
+                      {'Female'}
+                    </RadioGroup>
+                  )}
+                />
               </div>
               <div className="w-full">
                 <label className="mt-1 block text-sm text-gray-700">
@@ -510,9 +519,7 @@ export function EditStudentDetail() {
                   <span className="text-red-300"> *</span>
                 </label>
                 <Input
-                  {...register('aadharCardNumber', {
-                    required: 'Aadhar Number is required',
-                  })}
+                  {...register('aadharCardNumber')}
                   aria-invalid={errors.name ? 'true' : 'false'}
                   errorMessage={errors?.name?.message.toString()}
                   className="mt-1"
@@ -634,17 +641,28 @@ export function EditStudentDetail() {
                 <label className="mt-1 block text-sm text-gray-700">
                   Differently abled
                 </label>
-                <RadioGroup
-                  {...register('differentlyAbled')}
-                  className="mt-3 flex gap-2"
+                <Controller
+                  name="differentlyAbled"
+                  control={control}
                   defaultValue={
                     studentDetail.additionalAttributes.differentlyAbled
                   }
-                >
-                  <RadioGroupItem className="mr-1 mt-1" value={'yes'} /> {'Yes'}
-                  <RadioGroupItem className="ml-3 mr-1 mt-1 " value={'no'} />
-                  {'No'}
-                </RadioGroup>
+                  render={({ field: { onChange, value } }) => (
+                    <RadioGroup
+                      onValueChange={onChange}
+                      value={value}
+                      className="mt-3 flex gap-2"
+                    >
+                      <RadioGroupItem className="mr-1 mt-1" value={'yes'} />{' '}
+                      {'Yes'}
+                      <RadioGroupItem
+                        className="ml-3 mr-1 mt-1 "
+                        value={'no'}
+                      />
+                      {'No'}
+                    </RadioGroup>
+                  )}
+                />
               </div>
             </section>
           </div>
@@ -765,18 +783,28 @@ export function EditStudentDetail() {
                 <label className="mt-1 block text-sm text-gray-700">
                   Parents Separated
                 </label>
-                <RadioGroup
-                  {...register('parentsSeparated')}
+                <Controller
+                  name="parentsSeparated"
+                  control={control}
                   defaultValue={
                     studentDetail.additionalAttributes.parentsSeparated
                   }
-                  className="mt-3 flex gap-2"
-                >
-                  <RadioGroupItem className="mr-1 mt-1" value={'yes'} />
-                  {'Yes'}
-                  <RadioGroupItem className="ml-3 mr-1 mt-1 " value={'no'} />
-                  {'No'}
-                </RadioGroup>
+                  render={({ field: { onChange, value } }) => (
+                    <RadioGroup
+                      onValueChange={onChange}
+                      value={value}
+                      className="mt-3 flex gap-2"
+                    >
+                      <RadioGroupItem className="mr-1 mt-1" value={'yes'} />
+                      {'Yes'}
+                      <RadioGroupItem
+                        className="ml-3 mr-1 mt-1 "
+                        value={'no'}
+                      />
+                      {'No'}
+                    </RadioGroup>
+                  )}
+                />
               </div>
             </section>
           </div>
@@ -828,21 +856,28 @@ export function EditStudentDetail() {
                 <label className="mt-1 block text-sm text-gray-700">
                   Relation
                 </label>
-                <RadioGroup
-                  {...register('siblingRelation1')}
+                <Controller
+                  name="siblingRelation1"
+                  control={control}
                   defaultValue={
                     studentDetail.additionalAttributes.siblingRelation1
                   }
-                  className="mt-3 flex gap-2"
-                >
-                  <RadioGroupItem className="mr-1 mt-1" value={'brother'} />
-                  {'Brother'}
-                  <RadioGroupItem
-                    className="ml-3 mr-1 mt-1 "
-                    value={'sister'}
-                  />
-                  {'Sister'}
-                </RadioGroup>
+                  render={({ field: { onChange, value } }) => (
+                    <RadioGroup
+                      onValueChange={onChange}
+                      value={value}
+                      className="mt-3 flex gap-2"
+                    >
+                      <RadioGroupItem className="mr-1 mt-1" value={'brother'} />
+                      {'Brother'}
+                      <RadioGroupItem
+                        className="ml-3 mr-1 mt-1 "
+                        value={'sister'}
+                      />
+                      {'Sister'}
+                    </RadioGroup>
+                  )}
+                />
               </div>
               <div className="w-full">
                 <label className="mt-1 block text-sm text-gray-700">
@@ -868,21 +903,28 @@ export function EditStudentDetail() {
                 <label className="mt-1 block text-sm text-gray-700">
                   Relation
                 </label>
-                <RadioGroup
-                  {...register('siblingRelation2')}
+                <Controller
+                  name="siblingRelation2"
+                  control={control}
                   defaultValue={
                     studentDetail.additionalAttributes.siblingRelation2
                   }
-                  className="mt-3 flex gap-2"
-                >
-                  <RadioGroupItem className="mr-1 mt-1" value={'brother'} />
-                  {'Brother'}
-                  <RadioGroupItem
-                    className="ml-3 mr-1 mt-1 "
-                    value={'sister'}
-                  />
-                  {'Sister'}
-                </RadioGroup>
+                  render={({ field: { onChange, value } }) => (
+                    <RadioGroup
+                      onValueChange={onChange}
+                      value={value}
+                      className="mt-3 flex gap-2"
+                    >
+                      <RadioGroupItem className="mr-1 mt-1" value={'brother'} />
+                      {'Brother'}
+                      <RadioGroupItem
+                        className="ml-3 mr-1 mt-1 "
+                        value={'sister'}
+                      />
+                      {'Sister'}
+                    </RadioGroup>
+                  )}
+                />
               </div>
               <div className="w-full">
                 <label className="mt-1 block text-sm text-gray-700">
@@ -1311,56 +1353,83 @@ export function EditStudentDetail() {
                 <label className="mt-1 block text-sm text-gray-700">
                   Admission Type
                 </label>
-                <RadioGroup
-                  {...register('admissionType')}
+                <Controller
+                  name="admissionType"
+                  control={control}
                   defaultValue={
                     studentDetail.additionalAttributes.admissionType
                   }
-                  className="mt-3 flex gap-2"
-                >
-                  <RadioGroupItem className="mr-1 mt-1" value={'new'} />
-                  {'New'}
-                  <RadioGroupItem
-                    className="ml-3 mr-1 mt-1 "
-                    value={'lateral Entry'}
-                  />
-                  {'Lateral Entry'}
-                </RadioGroup>
+                  render={({ field: { onChange, value } }) => (
+                    <RadioGroup
+                      onValueChange={onChange}
+                      value={value}
+                      className="mt-3 flex gap-2"
+                    >
+                      <RadioGroupItem className="mr-1 mt-1" value={'new'} />
+                      {'New'}
+                      <RadioGroupItem
+                        className="ml-3 mr-1 mt-1 "
+                        value={'lateral Entry'}
+                      />
+                      {'Lateral Entry'}
+                    </RadioGroup>
+                  )}
+                />
               </div>
               <div className="w-full">
                 <label className="mt-1 block text-sm text-gray-700">
                   Admission Mode
                 </label>
-                <RadioGroup
-                  {...register('admissionMode')}
+                <Controller
+                  name="admissionMode"
+                  control={control}
                   defaultValue={
                     studentDetail.additionalAttributes.admissionMode
                   }
-                  className="mt-3 flex gap-2"
-                >
-                  <RadioGroupItem className="mr-1 mt-1" value={'counselling'} />
-                  {'Counselling'}
-                  <RadioGroupItem
-                    className="ml-3 mr-1 mt-1 "
-                    value={'management'}
-                  />
-                  {'Management'}
-                </RadioGroup>
+                  render={({ field: { onChange, value } }) => (
+                    <RadioGroup
+                      onValueChange={onChange}
+                      value={value}
+                      className="mt-3 flex gap-2"
+                    >
+                      <RadioGroupItem
+                        className="mr-1 mt-1"
+                        value={'counselling'}
+                      />
+                      {'Counselling'}
+                      <RadioGroupItem
+                        className="ml-3 mr-1 mt-1 "
+                        value={'management'}
+                      />
+                      {'Management'}
+                    </RadioGroup>
+                  )}
+                />
               </div>
               <div className="w-full">
                 <label className="mt-1 block text-sm text-gray-700">
                   Scholarship
                 </label>
-                <RadioGroup
-                  {...register('scholarship')}
+                <Controller
+                  name="scholarship"
+                  control={control}
                   defaultValue={studentDetail.additionalAttributes.scholarship}
-                  className="mt-3 flex gap-2"
-                >
-                  <RadioGroupItem className="mr-1 mt-1" value={'yes'} />
-                  {'Yes'}
-                  <RadioGroupItem className="ml-3 mr-1 mt-1 " value={'no'} />
-                  {'No'}
-                </RadioGroup>
+                  render={({ field: { onChange, value } }) => (
+                    <RadioGroup
+                      onValueChange={onChange}
+                      value={value}
+                      className="mt-3 flex gap-2"
+                    >
+                      <RadioGroupItem className="mr-1 mt-1" value={'yes'} />
+                      {'Yes'}
+                      <RadioGroupItem
+                        className="ml-3 mr-1 mt-1 "
+                        value={'no'}
+                      />
+                      {'No'}
+                    </RadioGroup>
+                  )}
+                />
               </div>
               <div className="w-full">
                 <label className="mt-1 block text-sm text-gray-700">
@@ -1374,23 +1443,43 @@ export function EditStudentDetail() {
               </div>
             </section>
           </div>
-          <section className="mt-8 flex justify-end gap-2">
-            <Button
-              type="button"
-              onClick={prevPage}
-              disabled={currentPage === 1}
-              className="mr-2 rounded px-4 py-2 font-bold text-white"
-            >
-              Back
-            </Button>
-            <Button
-              type={currentPage === 8 ? 'submit' : 'button'}
-              onClick={nextPage}
-              className="rounded px-4 py-2 font-bold text-white "
-            >
-              {currentPage === 7 ? 'Update' : 'Next'}
-            </Button>
-          </section>
+          <div className={currentPage < 7 ? 'block' : 'hidden'}>
+            <section className="mt-8 flex justify-end gap-2">
+              <Button
+                type="button"
+                onClick={prevPage}
+                disabled={currentPage === 1}
+                className="mr-2 rounded px-4 py-2 font-bold text-white"
+              >
+                Back
+              </Button>
+              <Button
+                type="button"
+                onClick={nextPage}
+                className="rounded px-4 py-2 font-bold text-white "
+              >
+                Next
+              </Button>
+            </section>
+          </div>
+          <div className={currentPage === 7 ? 'block' : 'hidden'}>
+            <section className="mt-8 flex justify-end gap-2">
+              <Button
+                type="button"
+                onClick={prevPage}
+                className="mr-2 rounded px-4 py-2 font-bold text-white"
+              >
+                Back
+              </Button>
+              <Button
+                type="submit"
+                onClick={nextPage}
+                className="rounded px-4 py-2 font-bold text-white "
+              >
+                Update
+              </Button>
+            </section>
+          </div>
         </section>
       </section>
     </form>

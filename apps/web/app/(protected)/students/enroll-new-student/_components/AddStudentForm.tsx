@@ -1,20 +1,24 @@
 'use client';
 
 import { motion } from 'framer-motion';
+import { useGetBatchesListQuery } from 'lib/queries/batches/useGetBatchesListQuery';
 import { useGetClassListQuery } from 'lib/queries/class/useGetClassListQuery';
+import { useGetBloodGroupListQuery } from 'lib/queries/common/useGetBloodGroupListQuery';
 import { useGetGroupListQuery } from 'lib/queries/group/useGetGroupListQuery';
 import { useGetMediumListQuery } from 'lib/queries/medium/useGetMediumListQuery';
 import { AlertTriangle, Check } from 'lucide-react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import React, { useState } from 'react';
-import { useForm } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 import { Else, If, Then, When } from 'react-if';
 import { Button, Input, RadioGroup, RadioGroupItem } from 'ui';
 import { cn } from 'utils';
 
+import { useGetCityByStateCodeQuery } from '../../../../../lib/queries/common/useGetCityListQuery';
+import { useGetCountryListQuery } from '../../../../../lib/queries/common/useGetCountryListQuery';
+import { useGetStateByCountryCodeQuery } from '../../../../../lib/queries/common/useGetStateListQuery';
 import { admissionForm } from '../data';
 import { AddStudentPreviewModal } from '../modals/AddStudentPreviewModal';
-import { BatchDropDown } from './BatchDropDown';
 
 const formConfig: Record<string, any> = admissionForm;
 
@@ -26,8 +30,8 @@ export function AddStudentForm() {
   const currentStep = parseInt(searchParams.get('step')) || 0;
 
   const {
+    control,
     trigger,
-    setValue,
     getValues,
     register,
     handleSubmit,
@@ -42,6 +46,10 @@ export function AddStudentForm() {
   const [formData, setFormData] = useState({} as Record<string, unknown>);
   const [isPreviewModalOpen, setIsPreviewModalOpen] = useState(false);
   const [visitedSteps, setVisitedSteps] = useState([]);
+  const [residentialCountryCode, setCurrentCountryCode] = useState('');
+  const [permanentCountryCode, setPermanentCountryCode] = useState('');
+  const [residentialStateCode, setCurrentStateCode] = useState('');
+  const [permanentStateCode, setPermanentStateCode] = useState('');
 
   const page = 1;
   const limit = 999;
@@ -64,10 +72,42 @@ export function AddStudentForm() {
     filter,
   });
 
+  const { data: getCurrentStateByCountryIdResponse } =
+    useGetStateByCountryCodeQuery(residentialCountryCode, {
+      enabled: !!residentialCountryCode,
+    });
+  const { data: getPermanentStateByCountryIdResponse } =
+    useGetStateByCountryCodeQuery(permanentCountryCode, {
+      enabled: !!permanentCountryCode,
+    });
+  const { data: getCurrentCityByStateCodeResponse } =
+    useGetCityByStateCodeQuery(residentialCountryCode, residentialStateCode, {
+      enabled: !!residentialStateCode,
+    });
+  const { data: getPermanentCityByStateCodeResponse } =
+    useGetCityByStateCodeQuery(permanentCountryCode, permanentStateCode, {
+      enabled: !!permanentStateCode,
+    });
+  const { data: getBloodGroupListResponse } = useGetBloodGroupListQuery();
+  const { data: getCountryListResponse } = useGetCountryListQuery();
+  const { batches } = useGetBatchesListQuery({
+    page,
+    limit,
+    filter,
+  });
+
   let customDataList = {
+    bloodGroup: getBloodGroupListResponse || [],
     joiningMedium: mediumList?.data || [],
     joiningClass: classList?.data || [],
     joiningGroup: groupList?.data || [],
+    batchId: batches || [],
+    permanentCountry: getCountryListResponse || [],
+    permanentState: getPermanentStateByCountryIdResponse || [],
+    permanentCity: getPermanentCityByStateCodeResponse || [],
+    residentialCountry: getCountryListResponse || [],
+    residentialState: getCurrentStateByCountryIdResponse || [],
+    residentialCity: getCurrentCityByStateCodeResponse || [],
   };
 
   const handleOnFormSubmit = async (data: Record<string, unknown>) => {
@@ -190,7 +230,6 @@ export function AddStudentForm() {
                 {section.sectionTitle}
               </h1>
               <section className="grid grid-cols-1 flex-wrap justify-between gap-4 md:grid md:grid-cols-1 lg:grid lg:grid-cols-3 ">
-                {section.sectionTitle === 'Other Details' && <BatchDropDown />}
                 {section.sectionFields.map((field) => {
                   if (field.visible) {
                     switch (field.type) {
@@ -280,45 +319,46 @@ export function AddStudentForm() {
                         );
                       case 'radio':
                         return (
-                          <RadioGroup
+                          <Controller
                             name={field.name}
-                            onValueChange={(e) => {
-                              setValue(field.name, e);
-                            }}
-                          >
-                            <div key={field.id}>
-                              <label className="mb-2 mt-1 block text-sm text-gray-700">
-                                {field.label}
-                                {field.validationRules.required.value && (
-                                  <span className="text-red-300"> *</span>
-                                )}
-                              </label>
-                              {field.options.map((option) => (
-                                <React.Fragment key={option.value}>
-                                  <RadioGroupItem
-                                    className="mr-2"
-                                    name={field.name}
-                                    value={option.value}
-                                    {...register(
-                                      field.name,
-                                      field.validationRules
-                                    )}
-                                  />
-                                  <span className="me-3">{option.label}</span>
-                                </React.Fragment>
-                              ))}
-                              <motion.p
-                                initial={{ opacity: 0 }}
-                                animate={{
-                                  opacity: errors[field.name] ? 1 : 0,
-                                }}
-                                transition={{ duration: 0.5 }}
-                                className="h-3 pb-2 pt-0.5 text-sm text-red-300"
+                            control={control}
+                            render={({ field: { onChange, value } }) => (
+                              <RadioGroup
+                                onValueChange={onChange}
+                                value={value}
                               >
-                                {errors[field.name]?.message as string}
-                              </motion.p>
-                            </div>
-                          </RadioGroup>
+                                <div key={field.id}>
+                                  <label className="mb-2 mt-1 block text-sm text-gray-700">
+                                    {field.label}
+                                    {field.validationRules.required.value && (
+                                      <span className="text-red-300"> *</span>
+                                    )}
+                                  </label>
+                                  {field.options.map((option) => (
+                                    <React.Fragment key={option.value}>
+                                      <RadioGroupItem
+                                        className="mr-2"
+                                        value={option.value}
+                                      />
+                                      <span className="me-3">
+                                        {option.label}
+                                      </span>
+                                    </React.Fragment>
+                                  ))}
+                                  <motion.p
+                                    initial={{ opacity: 0 }}
+                                    animate={{
+                                      opacity: errors[field.name] ? 1 : 0,
+                                    }}
+                                    transition={{ duration: 0.5 }}
+                                    className="h-3 pb-2 pt-0.5 text-sm text-red-300"
+                                  >
+                                    {errors[field.name]?.message as string}
+                                  </motion.p>
+                                </div>
+                              </RadioGroup>
+                            )}
+                          />
                         );
                       case 'dropdown':
                         return (
@@ -331,9 +371,22 @@ export function AddStudentForm() {
                             </label>
                             <select
                               {...register(field.name, field.validationRules)}
+                              onChange={(e) => {
+                                const selectedValue = e.target.value;
+                                if (field.name === 'residentialCountry') {
+                                  setCurrentCountryCode(selectedValue);
+                                } else if (field.name === 'permanentCountry') {
+                                  setPermanentCountryCode(selectedValue);
+                                } else if (field.name === 'residentialState') {
+                                  setCurrentStateCode(selectedValue);
+                                } else if (field.name === 'permanentState') {
+                                  setPermanentStateCode(selectedValue);
+                                }
+                              }}
                               placeholder={field.placeholder}
                               className="ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring mt-1 flex h-10 w-full rounded-md border border-gray-300 bg-transparent px-3 py-2 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
                             >
+                              <option value="">Select a Value</option>
                               {(field.options && field.options.length > 0
                                 ? field.options
                                 : customDataList[field.name]

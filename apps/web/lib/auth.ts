@@ -93,6 +93,14 @@ export const authOptions: NextAuthOptions = {
             username: nanoid(10),
           },
         });
+      } else {
+        const academicDetails = await db.batch.findFirst({
+          where: {
+            currentAcademicYear: true,
+            branchId: token.branchId,
+          },
+        });
+        user['academicDetails'] = academicDetails;
       }
 
       return {

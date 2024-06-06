@@ -4,7 +4,7 @@ import { authOptions } from 'lib/auth';
 import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 
-import { getMarksByFilter } from '../service';
+import { getMarksByFilter } from './service';
 
 /**
  * @swagger

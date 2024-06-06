@@ -188,6 +188,9 @@ export function StaffList() {
       page,
       limit,
     });
+  const handleEditClick = (studentId) => {
+    router.push(`/staffs/${studentId}/edit`);
+  };
 
   const handleOnPageChange = useCallback(
     (page: number) => {
@@ -267,6 +270,9 @@ export function StaffList() {
                     <Tooltip>
                       <TooltipTrigger asChild>
                         <Button
+                          onClick={() => {
+                            handleEditClick(row.original.id);
+                          }}
                           className="mr-3 h-auto px-3 py-2"
                           variant="mild"
                         >

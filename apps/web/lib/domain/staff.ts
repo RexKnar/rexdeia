@@ -1,9 +1,13 @@
+import { SectionModel } from './section';
+import { SubjectModel } from './subject';
+
 export type Staff = {
   id: string;
   image?: string;
   lastName: string;
   firstName: string;
   dateOfBirth: Date;
+  age: string;
   middleName?: string;
   aadharCardNumber?: string;
   gender: string;
@@ -11,11 +15,15 @@ export type Staff = {
   academicYear?: AcademicYear;
   annualIncome: string;
   bloodGroup?: string;
+  enrollmentId: string;
   dateOfJoining: Date;
   dateOfDetainment: Date;
   dateOfRegularization: Date;
+  dateOfRetirement: Date;
   employmentType: string;
+  employeeId: string;
   category: string;
+  natureOfPosting: string;
   subjectHandling: string;
   collegeName: string;
   passOutYear: Date;
@@ -31,6 +39,12 @@ export type Staff = {
   specialCategory?: string;
   differentlyAbled: boolean;
   epfNumber?: string;
+  cps: string;
+  tpf: string;
+  accountHolderName: string;
+  accountNumber: string;
+  branchName: string;
+  IFSC_Code: string;
   fatherName?: string;
   fatherOccupation?: string;
   motherName?: string;
@@ -68,15 +82,21 @@ export type Staff = {
   isDeleting?: boolean;
   isUpdating?: boolean;
   isNewlyAdded?: boolean;
-  additionalAttributes: Staff;
+  additionalAttributes: any;
+  subjects?: SubjectModel[];
+  sections?: SectionModel[];
 };
 
-export type AddStaffModel = Omit<Staff, 'id' | 'status'>;
+export type AddStaffModel = Omit<
+  Staff,
+  'id' | 'status' | 'subjects' | 'sections'
+>;
 
 export type UpdateStaffModel = Omit<
   Staff,
-  'aadharCardNumber' | 'dob' | 'email' | 'name'
+  'email' | 'name' | 'subjects' | 'sections'
 >;
+<<<<<<< HEAD
 
 export type StaffSubjectList = {
   section: Section;
@@ -91,4 +111,10 @@ export type Section = {
 type AcademicYear = {
   id: string;
   name: string;
+=======
+export type SubjectHandledByStaff = {
+  id: string;
+  name: string;
+  sections?: SectionModel[];
+>>>>>>> aabe0d325b4b09bb50ea7d160af903e57b7f7ee7
 };

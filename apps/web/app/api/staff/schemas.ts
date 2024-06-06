@@ -12,7 +12,7 @@ export const addStaffSchema = z.object({
   gender: z.string(),
   annualIncome: z.string().optional(),
   bloodGroup: z
-    .enum(['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'])
+    .enum(['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-', ''])
     .optional(),
   dateOfJoining: z.coerce.date(),
   dateOfDetainment: z.coerce.date(),

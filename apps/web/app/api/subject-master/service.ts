@@ -93,6 +93,13 @@ export async function deleteSubjectMasterById(id: string) {
   return db.subjectMaster.update({
     where: {
       id: id,
+      AND: [
+        {
+          subject: {
+            none: {},
+          },
+        },
+      ],
     },
     data: {
       isDeleted: true,

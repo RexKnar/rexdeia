@@ -6,7 +6,13 @@ export interface InputProps
   errorMessage?: string;
 }
 const Input = React.forwardRef<HTMLInputElement, InputProps>(
-  ({ className, type, placeholder, errorMessage, ...props }, ref) => {
+  ({ className, type, placeholder, errorMessage, onChange, ...props }, ref) => {
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+      if (onChange) {
+        onChange(e);
+      }
+    };
+
     return (
       <>
         <input
@@ -18,6 +24,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
           )}
           ref={ref}
           {...props}
+          onChange={handleChange}
         />
         <p
           className={cn(

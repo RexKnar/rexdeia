@@ -1,0 +1,110 @@
+import { db } from 'lib/db';
+
+type CreateExamConfigModel = {
+  classId: string;
+  sectionIds: string[];
+  staffId: string;
+  subjects: {
+    subjectId: string;
+    groupId: string;
+    subjectMarksToConvert?: string;
+    subjectTotalMarks?: string;
+  }[];
+  configDetail: {
+    minMark: number;
+    totalMarks: number;
+    convertTo: number;
+    dateToConduct: string;
+    assessmentFormatId: string;
+  }[];
+  subjectTotalMarks: string;
+  subjectMarksToConvert: string;
+};
+
+export async function createExamConfig(
+  configDetails: CreateExamConfigModel,
+  examId: string
+) {
+  const {
+    classId,
+    sectionIds,
+    subjects,
+    configDetail,
+    subjectTotalMarks,
+    subjectMarksToConvert,
+  } = configDetails;
+
+  const [classData] = await db.$transaction([
+    db.class.findUnique({ where: { id: classId } }),
+  ]);
+  if (!classData) {
+    throw new Error(`CLASS_NOT_MATCHED`);
+  }
+
+  for (const sectionId of sectionIds) {
+    const existingExamGroup = await db.examGroup.findFirst({
+      where: { examId, sectionId, classId },
+    });
+
+    const { id: examGroupId } =
+      existingExamGroup ??
+      (await db.examGroup.create({
+        data: {
+          classId: classId,
+          examId: examId,
+          sectionId: sectionId,
+        },
+      }));
+
+    for (const subject of subjects) {
+      const newSubjectTotalMarks = parseInt(subjectTotalMarks) || 0;
+      const newSubjectMarksToConvert = parseInt(subjectMarksToConvert) || 0;
+
+      const existingExamSubject = await db.examSubject.findFirst({
+        where: { subjectId: subject.subjectId, examGroupId },
+      });
+      const { id: examSubjectId } =
+        existingExamSubject ??
+        (await db.examSubject.create({
+          data: {
+            subjectId: subject.subjectId,
+            groupId: subject.groupId,
+            examGroupId: examGroupId,
+            totalMarks: newSubjectTotalMarks,
+            convertTo: newSubjectMarksToConvert,
+          },
+        }));
+
+      if (examSubjectId) {
+        return await db.$transaction(async (prisma) => {
+          return await Promise.all(
+            configDetail.map(async (config) => {
+              await prisma.examSubjectPartition.create({
+                data: {
+                  subjectId: subject.subjectId,
+                  examSubjectId: examSubjectId,
+                  assessmentFormatId: config.assessmentFormatId,
+                  minMark: +config.minMark,
+                  convertTo: +config.convertTo,
+                  totalMarks: +config.totalMarks,
+                  examGroupId: examGroupId,
+                  dateToConduct: new Date(config.dateToConduct),
+                },
+              });
+            })
+          );
+        });
+      }
+    }
+  }
+}
+
+export async function deleteExamConfigEntry(configId: string) {
+  return await db.$transaction(async (prisma) => {
+    return prisma.examSubjectPartition.delete({
+      where: {
+        id: configId,
+      },
+    });
+  });
+}

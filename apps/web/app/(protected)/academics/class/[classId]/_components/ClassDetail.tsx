@@ -13,6 +13,7 @@ import { cn } from 'utils';
 import { PageTitle } from '@/components/PageTitle';
 
 import { useGetClassByIdQuery } from '../../../../../../lib/queries/class/useGetClassByIdQuery';
+import { AssignSubjectToStudentFlyout } from '../_modals/AssignSubjectToStudent';
 import { ExamLists } from './ExamLists';
 import { SectionList } from './SectionList';
 import { StaffList } from './StaffList';
@@ -56,14 +57,14 @@ export function ClassDetail() {
       enabled: !!params.classId,
     });
 
-  // if (isLoadingGetClassById) {
-  //   return (
-  //     <div className="flex items-center justify-center">
-  //       <Loader2 className="w-6 h-6 mr-2 text-black animate-spin" />
-  //       <p className="text-black ">Fetching Class Details...</p>
-  //     </div>
-  //   );
-  // }
+  if (isLoadingGetClassById) {
+    return (
+      <div className="flex items-center justify-center">
+        <Loader2 className="mr-2 h-6 w-6 animate-spin text-black" />
+        <p className="text-black ">Fetching Class Details...</p>
+      </div>
+    );
+  }
 
   return (
     <section className="w-full bg-gray-50 p-3">
@@ -230,6 +231,7 @@ export function ClassDetail() {
       <SaveSectionFlyout />
       <AddSubjectFlyout />
       <UnassignStaffFlyout />
+      <AssignSubjectToStudentFlyout />
     </section>
   );
 }
