@@ -54,4 +54,28 @@ export const bloodGroups = [
     canDonateTo: ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'],
     notes: 'Universal donor for red blood cells but can only receive O- blood.',
   },
+  {
+    bloodType: 'A1+',
+    compatibleDonors: [],
+    canDonateTo: [],
+    notes: '',
+  },
+  {
+    bloodType: 'A1-',
+    compatibleDonors: [],
+    canDonateTo: [],
+    notes: '',
+  },
+  {
+    bloodType: 'A1B+',
+    compatibleDonors: [],
+    canDonateTo: [],
+    notes: '',
+  },
+  {
+    bloodType: 'A1B-',
+    compatibleDonors: [],
+    canDonateTo: [],
+    notes: '',
+  },
 ];

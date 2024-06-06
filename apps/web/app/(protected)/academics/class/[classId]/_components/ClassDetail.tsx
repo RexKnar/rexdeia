@@ -14,6 +14,7 @@ import { LinkButton } from '@/components/LinkButton';
 import { PageTitle } from '@/components/PageTitle';
 
 import { useGetClassByIdQuery } from '../../../../../../lib/queries/class/useGetClassByIdQuery';
+import { AssignSubjectToStudentFlyout } from '../_modals/AssignSubjectToStudent';
 import { ExamLists } from './ExamLists';
 import { SectionList } from './SectionList';
 import { StaffList } from './StaffList';
@@ -205,6 +206,7 @@ export function ClassDetail() {
           <AssignStaffClassDetailPageFlyout />
           <UpdateClassFlyout />
           <SaveSectionFlyout />
+          <AssignSubjectToStudentFlyout />
           <AddSubjectFlyout />
         </>
       ) : (
