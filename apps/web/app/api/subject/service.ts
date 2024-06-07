@@ -16,7 +16,7 @@ export async function deleteSubjectById(id: string) {
       id: id,
     },
     data: {
-      isActive: false,
+      isDeleted: true,
       updatedAt: new Date(),
     },
   });

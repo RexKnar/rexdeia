@@ -1,4 +1,5 @@
 'use client';
+import { useDeleteSubjectMutationQuery } from 'lib/queries/subjects/useDeleteSubjectMutationQuery';
 import { Loader2, PencilLine } from 'lucide-react';
 import dynamic from 'next/dynamic';
 import {
@@ -7,9 +8,19 @@ import {
   useRouter,
   useSearchParams,
 } from 'next/navigation';
-import { Button, Tabs, TabsContent, TabsList, TabsTrigger, Text } from 'ui';
+import { useEffect } from 'react';
+import {
+  Button,
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+  Text,
+  toast,
+} from 'ui';
 import { cn } from 'utils';
 
+import { DeleteConfirmationModal } from '@/components/modals/DeleteConfirmationModal';
 import { PageTitle } from '@/components/PageTitle';
 
 import { useGetClassByIdQuery } from '../../../../../../lib/queries/class/useGetClassByIdQuery';
@@ -56,6 +67,22 @@ export function ClassDetail() {
     useGetClassByIdQuery(params.classId, {
       enabled: !!params.classId,
     });
+  const isOpen = searchParams.get('isDeleteConfirmationModalOpen') === 'true';
+  const subjectId = searchParams.get('subjectId');
+  const subjectName = searchParams.get('subjectName');
+  const { isSuccess: isDeleteSuccess, mutateAsync: deleteSubjectAsync } =
+    useDeleteSubjectMutationQuery(params.classId);
+
+  useEffect(() => {
+    if (isDeleteSuccess) {
+      toast({
+        title: 'Success',
+        variant: 'default',
+        description: 'Group deleted successfully',
+      });
+      closeFlyout();
+    }
+  }, [isDeleteSuccess, toast]);
 
   if (isLoadingGetClassById) {
     return (
@@ -65,6 +92,13 @@ export function ClassDetail() {
       </div>
     );
   }
+  const closeFlyout = async () => {
+    const params = new URLSearchParams(searchParams.toString());
+    params.set('isDeleteConfirmationModalOpen', 'false');
+    params.delete('subjectId');
+    params.delete('subjectName');
+    router.replace(pathname + '?' + params.toString());
+  };
 
   return (
     <section className="w-full bg-gray-50 p-3">
@@ -214,6 +248,17 @@ export function ClassDetail() {
                   <ExamLists />
                 </TabsContent>
               </Tabs>
+              <DeleteConfirmationModal
+                open={isOpen}
+                description={`Are you sure you want to delete "${subjectName}"`}
+                onDeleteClick={async () => {
+                  if (subjectId) {
+                    await deleteSubjectAsync(subjectId);
+                    closeFlyout;
+                  }
+                }}
+                onCancelClick={closeFlyout}
+              />
             </>
           ) : (
             ' Details Not Found'
