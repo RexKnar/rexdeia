@@ -307,6 +307,7 @@ export async function getAllSubjectByClassId(id: string) {
     where: {
       classId: id,
       branchId: session.branchId,
+      isDeleted: false,
     },
     select: {
       id: true,
