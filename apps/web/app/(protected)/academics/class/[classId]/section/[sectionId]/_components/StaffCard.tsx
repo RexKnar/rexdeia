@@ -1,6 +1,7 @@
 import { SectionModel } from 'lib/domain/section';
 import { SubjectModel } from 'lib/domain/subject';
 import { MoreHorizontal } from 'lucide-react';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import {
   Avatar,
   AvatarImage,
@@ -8,7 +9,6 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
   Text,
 } from 'ui';
@@ -21,7 +21,11 @@ type StaffCardProps = {
 };
 
 export function StaffCard(props: StaffCardProps) {
-  const { name, subjects, sectionsHandled } = props;
+  const { id, name, subjects, sectionsHandled } = props;
+  const pathname = usePathname();
+  const router = useRouter();
+  const searchParams = useSearchParams();
+
   return (
     <div className="flex bg-white p-3">
       <div className="w-1/4">
@@ -46,16 +50,16 @@ export function StaffCard(props: StaffCardProps) {
             )}
           </div>
         ))}
-        {sectionsHandled.length && (
+        {!sectionsHandled.length && (
           <Text variant="base-regular">No Sections</Text>
         )}
-        {subjects.length && <Text variant="base-regular">No Subjects</Text>}
+        {!subjects.length && <Text variant="base-regular">No Subjects</Text>}
       </div>
       <div className="my-auto w-3/4 ">
         <div className="float-end my-auto justify-end p-1">
           <DropdownMenu>
             <DropdownMenuTrigger className="flex items-center gap-2 outline-none">
-              <Button variant="mild" className="h-8 px-1">
+              <Button variant="mild" size="sm" className="h-8 px-1">
                 <MoreHorizontal className="text-primary" />
               </Button>
             </DropdownMenuTrigger>
@@ -65,11 +69,20 @@ export function StaffCard(props: StaffCardProps) {
               sideOffset={15}
             >
               <DropdownMenuItem className="flex cursor-pointer items-center">
-                <span className="flex-1">Reassign</span>
-              </DropdownMenuItem>
-              <DropdownMenuSeparator className="bg-gray-100 text-gray-500" />
-              <DropdownMenuItem className="flex cursor-pointer items-center">
-                <span className="flex-1">Remove</span>
+                <Button
+                  variant="link"
+                  size="sm"
+                  className="flex-1"
+                  onClick={async () => {
+                    const params = new URLSearchParams(searchParams);
+                    params.set('isUnassignStaffFlyoutOpen', 'true');
+                    params.set('staffId', id);
+
+                    router.replace(pathname + '?' + params.toString());
+                  }}
+                >
+                  Un-Assign
+                </Button>
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>

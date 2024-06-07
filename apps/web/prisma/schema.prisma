@@ -646,7 +646,7 @@ model AcademicSubjectForStaff {
   isIncharge     Boolean   @default(false)
   deletedAt      DateTime? @db.Timestamp
 
-  @@unique([academicYearId, staffId, sectionId, subjectId])
+  @@unique([academicYearId, staffId, sectionId, subjectId, deletedAt])
 }
 
 model Section {

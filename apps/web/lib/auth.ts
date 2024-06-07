@@ -57,6 +57,7 @@ export const authOptions: NextAuthOptions = {
         session.user.role = token.role;
         session.branchId = token.branchId as string;
         session.organizationId = token.organizationId as string;
+        session.currentBatch = token.currentBatch as string;
         session.user.createdBranches = token.createdBranches as any[];
       }
 
@@ -95,6 +96,13 @@ export const authOptions: NextAuthOptions = {
         });
       }
 
+      const academicDetails = await db.batch.findFirst({
+        where: {
+          currentAcademicYear: true,
+          branchId: token.branchId,
+        },
+      });
+
       return {
         ...token,
         id: dbUser.id,
@@ -104,6 +112,7 @@ export const authOptions: NextAuthOptions = {
         username: dbUser.username,
         role: dbUser.role,
         createdBranches: dbUser.createdBranches,
+        currentBatch: academicDetails?.id,
       };
     },
   },

@@ -180,6 +180,7 @@ export async function getAllStaffsBySectionsIdWithSubjects(ids: string[]) {
           sectionId: {
             in: ids,
           },
+          deletedAt: null,
         },
       },
     },
@@ -189,6 +190,7 @@ export async function getAllStaffsBySectionsIdWithSubjects(ids: string[]) {
           sectionId: {
             in: ids,
           },
+          deletedAt: null,
         },
         select: {
           isIncharge: true,
