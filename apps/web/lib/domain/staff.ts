@@ -1,20 +1,28 @@
+import { SectionModel } from './section';
+import { SubjectModel } from './subject';
+
 export type Staff = {
   id: string;
   image?: string;
   lastName: string;
   firstName: string;
   dateOfBirth: Date;
+  age: string;
   middleName?: string;
   aadharCardNumber?: string;
   gender: string;
   status: 'Active' | 'InActive' | 'Resigned' | 'Suspended' | 'Fired';
   annualIncome: string;
   bloodGroup?: string;
+  enrollmentId: string;
   dateOfJoining: Date;
   dateOfDetainment: Date;
   dateOfRegularization: Date;
+  dateOfRetirement: Date;
   employmentType: string;
+  employeeId: string;
   category: string;
+  natureOfPosting: string;
   subjectHandling: string;
   collegeName: string;
   passOutYear: Date;
@@ -30,6 +38,12 @@ export type Staff = {
   specialCategory?: string;
   differentlyAbled: boolean;
   epfNumber?: string;
+  cps: string;
+  tpf: string;
+  accountHolderName: string;
+  accountNumber: string;
+  branchName: string;
+  IFSC_Code: string;
   fatherName?: string;
   fatherOccupation?: string;
   motherName?: string;
@@ -67,12 +81,22 @@ export type Staff = {
   isDeleting?: boolean;
   isUpdating?: boolean;
   isNewlyAdded?: boolean;
-  additionalAttributes: Staff;
+  additionalAttributes: any;
+  subjects?: SubjectModel[];
+  sections?: SectionModel[];
 };
 
-export type AddStaffModel = Omit<Staff, 'id' | 'status'>;
+export type AddStaffModel = Omit<
+  Staff,
+  'id' | 'status' | 'subjects' | 'sections'
+>;
 
 export type UpdateStaffModel = Omit<
   Staff,
-  'aadharCardNumber' | 'dob' | 'email' | 'name'
+  'email' | 'name' | 'subjects' | 'sections'
 >;
+export type SubjectHandledByStaff = {
+  id: string;
+  name: string;
+  sections?: SectionModel[];
+};

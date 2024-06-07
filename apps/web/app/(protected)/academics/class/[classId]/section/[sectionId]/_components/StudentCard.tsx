@@ -27,12 +27,6 @@ export function StudentCard(props: StudentCardProps) {
 
       <div className="my-auto w-2/4 px-2">
         <Text variant="base-bold">{props.name}</Text>
-        <div className="inline-flex">
-          <Text variant="base-regular">Stu-Id</Text>
-          <span className="ml-1 rounded bg-red-300 p-2 px-1.5 py-0.5 text-sm font-medium text-red-800 dark:bg-red-900 dark:text-red-300">
-            67%
-          </span>
-        </div>
       </div>
       <div className="my-auto w-2/4 ">
         <div className="float-end my-auto justify-end p-1">

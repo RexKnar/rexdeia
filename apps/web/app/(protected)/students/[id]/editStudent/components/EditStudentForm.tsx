@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 'use client';
 
 /* eslint-disable react/no-unescaped-entities */
@@ -213,7 +214,7 @@ export function EditStudentDetail() {
     >
       <section className="flex gap-4">
         <ul className="h-fit w-[215px] shrink-0 rounded-lg bg-white py-3">
-          <li>
+          <li className="flex justify-between">
             <Button
               type="button"
               variant="link"
@@ -229,12 +230,12 @@ export function EditStudentDetail() {
                   {'Personal Details'}
                 </h2>
               </div>
-              <section>
-                <Check className="h-4 w-4 text-green-500 transition-opacity duration-500" />
-              </section>
             </Button>
+            <div className="p-3">
+              <Check className="h-4 w-4 text-green-500 transition-opacity duration-500" />
+            </div>
           </li>
-          <li>
+          <li className="flex justify-between">
             <Button
               type="button"
               variant="link"
@@ -248,12 +249,12 @@ export function EditStudentDetail() {
               >
                 Parent’s Details
               </h2>
-              <section>
-                <Check className="h-4 w-4 text-green-500 transition-opacity duration-500" />
-              </section>
             </Button>
+            <div className="p-3">
+              <Check className="h-4 w-4 text-green-500 transition-opacity duration-500" />
+            </div>
           </li>
-          <li>
+          <li className="flex justify-between">
             <Button
               type="button"
               variant="link"
@@ -267,12 +268,12 @@ export function EditStudentDetail() {
               >
                 Information of Siblings
               </h2>
-              <section>
-                <Check className="h-4 w-4 text-green-500 transition-opacity duration-500" />
-              </section>
             </Button>
+            <div className="p-3">
+              <Check className="h-4 w-4 text-green-500 transition-opacity duration-500" />
+            </div>
           </li>
-          <li>
+          <li className="flex justify-between">
             <Button
               type="button"
               variant="link"
@@ -286,12 +287,12 @@ export function EditStudentDetail() {
               >
                 Gurdian’s Details
               </h2>
-              <section>
-                <Check className="h-4 w-4 text-green-500 transition-opacity duration-500" />
-              </section>
             </Button>
+            <div className="p-3">
+              <Check className="h-4 w-4 text-green-500 transition-opacity duration-500" />
+            </div>
           </li>
-          <li>
+          <li className="flex justify-between">
             <Button
               type="button"
               variant="link"
@@ -305,12 +306,12 @@ export function EditStudentDetail() {
               >
                 Address Details
               </h2>
-              <section>
-                <Check className="h-4 w-4 text-green-500 transition-opacity duration-500" />
-              </section>
             </Button>
+            <div className="p-3">
+              <Check className="h-4 w-4 text-green-500 transition-opacity duration-500" />
+            </div>
           </li>
-          <li>
+          <li className="flex justify-between">
             <Button
               type="button"
               variant="link"
@@ -324,13 +325,13 @@ export function EditStudentDetail() {
               >
                 Educational Details
               </h2>
-              <section>
-                <Check className="h-4 w-4 text-green-500 transition-opacity duration-500" />
-              </section>
             </Button>
+            <div className="p-3">
+              <Check className="h-4 w-4 text-green-500 transition-opacity duration-500" />
+            </div>
           </li>
 
-          <li>
+          <li className="flex justify-between">
             <Button
               type="button"
               variant="link"
@@ -344,10 +345,10 @@ export function EditStudentDetail() {
               >
                 Other Details
               </h2>
-              <section>
-                <Check className="h-4 w-4 text-green-500 transition-opacity duration-500" />
-              </section>
             </Button>
+            <div className="p-3">
+              <Check className="h-4 w-4 text-green-500 transition-opacity duration-500" />
+            </div>
           </li>
         </ul>
         <section className="w-full rounded-lg bg-white p-5">
@@ -518,9 +519,7 @@ export function EditStudentDetail() {
                   <span className="text-red-300"> *</span>
                 </label>
                 <Input
-                  {...register('aadharCardNumber', {
-                    required: 'Aadhar Number is required',
-                  })}
+                  {...register('aadharCardNumber')}
                   aria-invalid={errors.name ? 'true' : 'false'}
                   errorMessage={errors?.name?.message.toString()}
                   className="mt-1"
@@ -1444,23 +1443,43 @@ export function EditStudentDetail() {
               </div>
             </section>
           </div>
-          <section className="mt-8 flex justify-end gap-2">
-            <Button
-              type="button"
-              onClick={prevPage}
-              disabled={currentPage === 1}
-              className="mr-2 rounded px-4 py-2 font-bold text-white"
-            >
-              Back
-            </Button>
-            <Button
-              type={currentPage === 7 ? 'submit' : 'button'}
-              onClick={nextPage}
-              className="rounded px-4 py-2 font-bold text-white "
-            >
-              {currentPage === 7 ? 'Update' : 'Next'}
-            </Button>
-          </section>
+          <div className={currentPage < 7 ? 'block' : 'hidden'}>
+            <section className="mt-8 flex justify-end gap-2">
+              <Button
+                type="button"
+                onClick={prevPage}
+                disabled={currentPage === 1}
+                className="mr-2 rounded px-4 py-2 font-bold text-white"
+              >
+                Back
+              </Button>
+              <Button
+                type="button"
+                onClick={nextPage}
+                className="rounded px-4 py-2 font-bold text-white "
+              >
+                Next
+              </Button>
+            </section>
+          </div>
+          <div className={currentPage === 7 ? 'block' : 'hidden'}>
+            <section className="mt-8 flex justify-end gap-2">
+              <Button
+                type="button"
+                onClick={prevPage}
+                className="mr-2 rounded px-4 py-2 font-bold text-white"
+              >
+                Back
+              </Button>
+              <Button
+                type="submit"
+                onClick={nextPage}
+                className="rounded px-4 py-2 font-bold text-white "
+              >
+                Update
+              </Button>
+            </section>
+          </div>
         </section>
       </section>
     </form>

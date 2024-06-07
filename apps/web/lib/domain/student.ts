@@ -1,3 +1,9 @@
+import { BatchModel } from './batch';
+import { ClassModel } from './class';
+import { GroupModel } from './group';
+import { LanguageModel } from './language';
+import { MediumModel } from './medium';
+
 export type Student = {
   id: string;
   name: string;
@@ -14,7 +20,7 @@ export type Student = {
   middleName: string;
   motherName: string;
   nationality: string;
-  motherTongue: string;
+  motherTongueId?: string;
   guardianName: string;
   maritalStatus: string;
   fatherEmailId: string;
@@ -30,12 +36,17 @@ export type Student = {
   isDeleting?: boolean;
   isUpdating?: boolean;
   isNewlyAdded?: boolean;
+  class: ClassModel;
+  group: GroupModel;
+  medium: MediumModel;
+  batch: BatchModel;
+  motherTongue?: LanguageModel;
   status: 'Active' | 'Rejected' | 'Pending';
 
   additionalAttributes: any;
 };
 
-export type AddStudentModel = Omit<Student, 'id'> & {
+export type AddStudentModel = Omit<Student, 'id' | 'motherTongue'> & {
   batchId: string;
 };
 

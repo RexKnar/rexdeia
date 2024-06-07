@@ -54,7 +54,6 @@ export function SubjectTypeFlyout() {
     const params = new URLSearchParams(searchParams);
     params.set('isSubjectTypeFlyoutOpen', 'false');
     params.delete('subjectTypeId');
-    reset();
     router.replace(pathname + '?' + params.toString());
   };
 

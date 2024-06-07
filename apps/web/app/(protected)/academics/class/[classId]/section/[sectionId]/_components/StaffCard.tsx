@@ -1,3 +1,5 @@
+import { SectionModel } from 'lib/domain/section';
+import { SubjectModel } from 'lib/domain/subject';
 import { MoreHorizontal } from 'lucide-react';
 import {
   Avatar,
@@ -14,9 +16,12 @@ import {
 type StaffCardProps = {
   id: string;
   name: string;
+  subjects?: SubjectModel[];
+  sectionsHandled?: SectionModel[];
 };
 
 export function StaffCard(props: StaffCardProps) {
+  const { name, subjects, sectionsHandled } = props;
   return (
     <div className="flex bg-white p-3">
       <div className="w-1/4">
@@ -26,15 +31,27 @@ export function StaffCard(props: StaffCardProps) {
       </div>
 
       <div className="my-auto w-2/4 px-2">
-        <Text variant="base-bold">{props.name}</Text>
-        <div className="inline-flex">
-          <Text variant="base-regular">English</Text>
-          <span className="ml-1 rounded bg-red-300 p-2 px-1.5 py-0.5 text-sm font-medium text-red-800 dark:bg-red-900 dark:text-red-300">
-            67%
-          </span>
-        </div>
+        <Text variant="base-bold">{name}</Text>
+        {sectionsHandled.map((section, sectionIndex) => (
+          <div key={sectionIndex} className="inline-flex items-center">
+            <span className="ml-1 rounded bg-red-300 p-2 px-1.5 py-0.5 text-sm font-medium text-red-800 dark:bg-red-900 dark:text-red-300">
+              {section.name}
+            </span>
+            {subjects.length > sectionIndex && (
+              <div className="ml-2">
+                <Text variant="base-regular">
+                  {subjects[sectionIndex].name}
+                </Text>
+              </div>
+            )}
+          </div>
+        ))}
+        {sectionsHandled.length && (
+          <Text variant="base-regular">No Sections</Text>
+        )}
+        {subjects.length && <Text variant="base-regular">No Subjects</Text>}
       </div>
-      <div className="my-auto w-2/4 ">
+      <div className="my-auto w-3/4 ">
         <div className="float-end my-auto justify-end p-1">
           <DropdownMenu>
             <DropdownMenuTrigger className="flex items-center gap-2 outline-none">

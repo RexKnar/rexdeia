@@ -14,7 +14,7 @@ function getCityByStateCode(
 ): UseQueryOptions {
   return {
     ...options,
-    queryKey: [GET_CITY_BY_STATE_CODE, countryCode],
+    queryKey: [GET_CITY_BY_STATE_CODE, stateCode],
     queryFn: async () => {
       return await makeAPICall(
         GET_CITY_BY_STATE_CODE,

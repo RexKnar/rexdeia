@@ -3,8 +3,8 @@
 import { Loader2 } from 'lucide-react';
 import { useParams } from 'next/navigation';
 
+import { SubjectCard } from '../../../../../../../../lib/components/subjectcard/SubjectCard';
 import { useGetSubjectListBySectionIdQuery } from '../../../../../../../../lib/queries/subjects/useGetSubjectListBySectionIdQuery';
-import { SubjectCard } from './SubjectCard';
 
 export function SubjectList() {
   const { sectionId, classId } = useParams<{

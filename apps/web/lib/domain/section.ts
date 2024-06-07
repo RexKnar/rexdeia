@@ -1,5 +1,6 @@
+import { GroupModel } from './group';
 import { MediumModel } from './medium';
-import { CreateSubjectModel } from './subject';
+import { CreateSubjectModel, SubjectModel } from './subject';
 
 export type SectionModel = {
   id: string;
@@ -10,8 +11,9 @@ export type SectionModel = {
   mediumId: string;
   classId: string;
   faculty: string;
+  group: GroupModel[];
   groupIds: string[];
-  subjects: string[];
+  subjects: SubjectModel[];
   staffs: string[];
   students: string[];
 };

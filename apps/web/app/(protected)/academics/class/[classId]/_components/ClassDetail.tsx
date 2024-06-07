@@ -13,6 +13,7 @@ import { cn } from 'utils';
 import { PageTitle } from '@/components/PageTitle';
 
 import { useGetClassByIdQuery } from '../../../../../../lib/queries/class/useGetClassByIdQuery';
+import { AssignSubjectToStudentFlyout } from '../_modals/AssignSubjectToStudent';
 import { ExamLists } from './ExamLists';
 import { SectionList } from './SectionList';
 import { StaffList } from './StaffList';
@@ -54,7 +55,7 @@ export function ClassDetail() {
     return (
       <div className="flex items-center justify-center">
         <Loader2 className="mr-2 h-6 w-6 animate-spin text-black" />
-        <p className=" text-black">Fetching Class Details...</p>
+        <p className="text-black ">Fetching Class Details...</p>
       </div>
     );
   }
@@ -206,6 +207,7 @@ export function ClassDetail() {
           <AssignStaffClassDetailPageFlyout />
           <UpdateClassFlyout />
           <SaveSectionFlyout />
+          <AssignSubjectToStudentFlyout />
           <AddSubjectFlyout />
         </>
       ) : (

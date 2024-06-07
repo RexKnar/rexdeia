@@ -16,13 +16,13 @@ function getMarkEntryFormStructure(
 ) {
   return {
     ...options,
-    queryKey: [GET_MARK_ENTRY_FORM_STRUCTURE],
+    queryKey: [GET_MARK_ENTRY_FORM_STRUCTURE, filter],
     queryFn: async () => {
       return await makeAPICall<MarkEntryFromStructureModel[]>(
         GET_MARK_ENTRY_FORM_STRUCTURE,
         { ...filter },
         {},
-        {}
+        { id: filter.examId }
       );
     },
   };

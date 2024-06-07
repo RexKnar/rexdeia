@@ -52,7 +52,7 @@ export function EditExamConfigFlyout() {
   });
 
   const toggleForm = (assessmentFormat) => {
-    const index = fields.findIndex(
+    const index = fields?.findIndex(
       (field) => field['assessmentFormatId'] === assessmentFormat.id
     );
     if (index > -1) {

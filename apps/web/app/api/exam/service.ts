@@ -51,7 +51,7 @@ export async function getExamsList(page: number, limit: number) {
 
 export async function createExam(examPayload: CreateExamModel) {
   const session = await getServerSession(authOptions);
-  const { name, examTypeId, termId, academicYearId } = examPayload;
+  const { name, examTypeId, termId, academicYearId, isActive } = examPayload;
 
   const [examType, term, academicYear] = await db.$transaction([
     db.examType.findUnique({ where: { id: examTypeId } }),
@@ -73,7 +73,7 @@ export async function createExam(examPayload: CreateExamModel) {
     const createdExam = await prisma.exam.create({
       data: {
         name: name,
-        isActive: true,
+        isActive: isActive,
         branch: {
           connect: {
             id: session.branchId,
