@@ -36,7 +36,6 @@ export function StaffList() {
         <div key={staffItem.id}>
           <StaffCard
             id={staffItem.id}
-            academicYearId={staffItem.academicYear.id}
             name={`
               ${staffItem.firstName}  ${staffItem.middleName}  ${staffItem.lastName}
             `}

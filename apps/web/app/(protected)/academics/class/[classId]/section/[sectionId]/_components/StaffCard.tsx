@@ -16,13 +16,12 @@ import {
 type StaffCardProps = {
   id: string;
   name: string;
-  academicYearId: string;
   subjects?: SubjectModel[];
   sectionsHandled?: SectionModel[];
 };
 
 export function StaffCard(props: StaffCardProps) {
-  const { id, name, subjects, sectionsHandled, academicYearId } = props;
+  const { id, name, subjects, sectionsHandled } = props;
   const pathname = usePathname();
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -77,7 +76,6 @@ export function StaffCard(props: StaffCardProps) {
                   onClick={async () => {
                     const params = new URLSearchParams(searchParams);
                     params.set('isUnassignStaffFlyoutOpen', 'true');
-                    params.set('academicYearId', academicYearId);
                     params.set('staffId', id);
 
                     router.replace(pathname + '?' + params.toString());
