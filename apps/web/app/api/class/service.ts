@@ -272,11 +272,12 @@ export async function unMapStaffsFromClass(
   await Promise.all(
     sectionIds.map(async (sectionId) => {
       const where = {
-        academicYearId_staffId_sectionId_subjectId: {
+        academicYearId_staffId_sectionId_subjectId_deletedAt: {
           academicYearId: academicYearId,
           staffId: staffId,
           sectionId: sectionId,
           subjectId: subjectId,
+          deletedAt: null,
         },
       };
       return await db.academicSubjectForStaff.update({
