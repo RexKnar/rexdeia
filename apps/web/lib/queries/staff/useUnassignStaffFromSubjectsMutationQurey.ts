@@ -15,7 +15,6 @@ export function useUnassignStaffFromSubjectMutationQurey(
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: async (payload: UnassignStaffModel) => {
-      console.log(payload);
       const response = await makeAPICall(
         UNASSIGN_STAFF_SECTION_BY_ID,
         payload,

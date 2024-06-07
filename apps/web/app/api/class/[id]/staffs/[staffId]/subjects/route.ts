@@ -1,11 +1,12 @@
 import { captureException } from '@sentry/nextjs';
-import { unMapStaffsFromClass } from 'app/api/class/service';
+import {
+  getSubjectListForStaffByClassId,
+  unMapStaffsFromClass,
+} from 'app/api/class/service';
 import { StatusCodes } from 'http-status-codes';
+import { authOptions } from 'lib/auth';
 import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
-
-import { authOptions } from '../../../../../../../lib/auth';
-import { getSubjectListForStaffByClassId } from '../../../../service';
 
 /**
  * @swagger
