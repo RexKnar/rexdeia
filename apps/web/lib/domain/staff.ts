@@ -1,3 +1,6 @@
+import { Language } from '@prisma/client';
+
+import { CommunityModel } from './community';
 import { SectionModel } from './section';
 import { SubjectModel } from './subject';
 
@@ -22,7 +25,7 @@ export type Staff = {
   employmentType: string;
   employeeId: string;
   category: string;
-  natureOfPosting: string;
+  natureOfPosting?: string | null;
   subjectHandling: string;
   collegeName: string;
   passOutYear: Date;
@@ -33,7 +36,10 @@ export type Staff = {
   religion?: string;
   caste?: string;
   nationality?: string;
-  motherTongue?: string;
+  motherTongueId?: string | null;
+  motherTongue?: Language | null;
+  communityId?: string | null;
+  community?: CommunityModel;
   enrollmentNumber?: string;
   specialCategory?: string;
   differentlyAbled: boolean;
@@ -88,13 +94,43 @@ export type Staff = {
 
 export type AddStaffModel = Omit<
   Staff,
-  'id' | 'status' | 'subjects' | 'sections'
+  | 'id'
+  | 'motherTongue'
+  | 'motherTongueId'
+  | 'community'
+  | 'communityId'
+  | 'natureOfPosting'
+  | 'employmentType'
+  | 'employeeId'
+  | 'category'
+  | 'natureOfPostingId'
+  | 'natureOfPosting'
+  | 'designationId'
+  | 'designation'
+  | 'status'
+  | 'subjects'
+  | 'sections'
 >;
-
 export type UpdateStaffModel = Omit<
   Staff,
-  'email' | 'name' | 'subjects' | 'sections'
+  | 'id'
+  | 'motherTongue'
+  | 'motherTongueId'
+  | 'community'
+  | 'communityId'
+  | 'natureOfPosting'
+  | 'employmentType'
+  | 'employeeId'
+  | 'category'
+  | 'natureOfPostingId'
+  | 'natureOfPosting'
+  | 'designationId'
+  | 'designation'
+  | 'status'
+  | 'subjects'
+  | 'sections'
 >;
+
 export type SubjectHandledByStaff = {
   id: string;
   name: string;

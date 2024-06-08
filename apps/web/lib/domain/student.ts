@@ -1,5 +1,6 @@
 import { BatchModel } from './batch';
 import { ClassModel } from './class';
+import { CommunityModel } from './community';
 import { GroupModel } from './group';
 import { LanguageModel } from './language';
 import { MediumModel } from './medium';
@@ -21,6 +22,9 @@ export type Student = {
   motherName: string;
   nationality: string;
   motherTongueId?: string;
+  motherTongue?: LanguageModel;
+  communityId?: string;
+  community?: CommunityModel;
   guardianName: string;
   maritalStatus: string;
   fatherEmailId: string;
@@ -40,13 +44,15 @@ export type Student = {
   group: GroupModel;
   medium: MediumModel;
   batch: BatchModel;
-  motherTongue?: LanguageModel;
   status: 'Active' | 'Rejected' | 'Pending';
 
   additionalAttributes: any;
 };
 
-export type AddStudentModel = Omit<Student, 'id' | 'motherTongue'> & {
+export type AddStudentModel = Omit<
+  Student,
+  'id' | 'motherTongue' | 'community'
+> & {
   batchId: string;
 };
 

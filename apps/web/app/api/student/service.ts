@@ -1,10 +1,8 @@
 import { UserRole } from '@prisma/client';
-import { UpdateStudentModel } from 'lib/domain/student';
+import { authOptions } from 'lib/auth';
+import { db } from 'lib/db';
+import { AddStudentModel, UpdateStudentModel } from 'lib/domain/student';
 import { getServerSession } from 'next-auth';
-
-import { authOptions } from '../../../lib/auth';
-import { db } from '../../../lib/db';
-import { AddStudentModel } from '../../../lib/domain';
 
 export async function getStudentById(id: string) {
   const session = await getServerSession(authOptions);
@@ -126,14 +124,10 @@ export async function addStudent(student: AddStudentModel) {
     },
   });
 
-  const studentWithoutBatchId: Omit<
-    AddStudentModel,
-    'batchId' | 'motherTongueId' | 'motherTongue'
-  > = {
+  const studentWithoutBatchId: Omit<AddStudentModel, 'batchId'> = {
     ...student,
   };
   delete studentWithoutBatchId['batchId'];
-  delete studentWithoutBatchId['motherTongueId'];
 
   const createdStudent = await db.student.create({
     data: {
@@ -149,11 +143,6 @@ export async function addStudent(student: AddStudentModel) {
             mediumId: student.additionalAttributes.joiningMedium,
           },
         ],
-      },
-      motherTongue: {
-        connect: {
-          id: student.motherTongueId,
-        },
       },
       organization: {
         connect: {

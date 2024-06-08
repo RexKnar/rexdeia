@@ -172,23 +172,23 @@ const staffForm: staffFormSectionType[] = [
       {
         id: 9,
         type: 'dropdown',
-        name: 'caste',
-        placeholder: 'Caste',
-        label: 'Caste',
+        name: 'communityId',
+        placeholder: 'Community',
+        label: 'Community',
         optionKey: 'value',
         optionValue: 'value',
         visible: true,
         options: [
           {
-            value: 'BC',
+            value: '',
             label: 'BC',
           },
           {
-            value: 'ST',
+            value: '',
             label: 'ST',
           },
           {
-            value: 'MBC',
+            value: '',
             label: 'MBC',
           },
         ],
