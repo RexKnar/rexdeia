@@ -1,5 +1,5 @@
-import type { User } from 'next-auth';
 import { UserRole } from '@prisma/client';
+import type { User } from 'next-auth';
 
 type UserId = string;
 
@@ -15,6 +15,7 @@ declare module 'next-auth' {
   interface Session {
     branchId?: string | null;
     organizationId?: string | null;
+    currentBatch?: string | null;
     user: User & {
       id: UserId;
       password: string;

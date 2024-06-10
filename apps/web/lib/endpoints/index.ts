@@ -122,6 +122,7 @@ export const UPDATE_STUDENT_BY_ID = `UPDATE_STUDENT_BY_ID`;
 export const UPDATE_TERM_BY_ID = `UPDATE_TERM_BY_ID`;
 export const DELETE_TERM_BY_ID = `DELETE_TERM_BY_ID`;
 export const GET_STUDENTS_MARKS_BY_CLASS_ID_AND_EXAM_ID = `GET_STUDENTS_MARKS_BY_CLASS_ID_AND_EXAM_ID`;
+export const GET_STAFF_SUBJECT_LIST_BY_CLASS_ID = `GET_STAFF_SUBJECT_LIST_BY_CLASS_ID`;
 export const GET_STUDENTS_LIST_FOR_ASSIGN = `GET_STUDENTS_LIST_FOR_ASSIGN`;
 export const GET_EXAM_DETAIL_BY_EXAM_ID = `GET_EXAM_DETAIL_BY_EXAM_ID`;
 export const GET_SUBJECT_EXAM_CONFIG_DETAIL = `GET_SUBJECT_EXAM_CONFIG_DETAIL`;
@@ -130,6 +131,7 @@ export const GET_EXAM_CONFIG_SUBJECT_DETAIL = `GET_EXAM_CONFIG_SUBJECT_DETAIL`;
 export const EXAM_MARK_ENTRY = `EXAM_MARK_ENTRY`;
 export const UPDATE_STAFF_BY_ID = `UPDATE_STAFF_BY_ID`;
 export const GET_SUBJECT_LIST_BY_STAFF_ID = `GET_SUBJECT_LIST_BY_STAFF_ID`;
+export const UNASSIGN_STAFF_SECTION_BY_ID = `UNASSIGN_STAFF_SECTION_BY_ID`;
 
 export default <EndpointDetails>{
   ...ExamAnalyticsEndpoints,
@@ -610,6 +612,10 @@ export default <EndpointDetails>{
     requestType: `PUT`,
     endpoint: `/api/analytics/marks`,
   },
+  [GET_STAFF_SUBJECT_LIST_BY_CLASS_ID]: {
+    requestType: `GET`,
+    endpoint: `/api/class/[id]/staffs/[staffId]/subjects`,
+  },
   [UPDATE_STUDENT_BY_ID]: {
     requestType: `PUT`,
     endpoint: `/api/student/[id]`,
@@ -645,5 +651,9 @@ export default <EndpointDetails>{
   [GET_SUBJECT_LIST_BY_STAFF_ID]: {
     requestType: `GET`,
     endpoint: `/api/staff/[id]/subjects`,
+  },
+  [UNASSIGN_STAFF_SECTION_BY_ID]: {
+    requestType: `DELETE`,
+    endpoint: `/api/class/[id]/staffs/[staffId]/subjects`,
   },
 };

@@ -22,6 +22,11 @@ import { getAllStudentsBySectionIds } from '../student/service';
 type ClassFilter = {
   isActive?: boolean;
 };
+type SectionDataType = {
+  sectionId: string;
+  sectionName: string;
+  subjects: string[];
+};
 export async function getClassList(page: number, limit: number) {
   const session = await getServerSession(authOptions);
   const [data, total] = await Promise.all([
@@ -268,28 +273,32 @@ export async function assignStaffToClassWithSubject(
 export async function unMapStaffsFromClass(
   academicYearId: string,
   staffId: string,
-  sectionIds: string[],
-  subjectId?: string
+  sectionData: SectionDataType[]
 ) {
-  await Promise.all(
-    sectionIds.map(async (sectionId) => {
-      const where = {
-        academicYearId_staffId_sectionId_subjectId_deletedAt: {
-          academicYearId: academicYearId,
-          staffId: staffId,
-          sectionId: sectionId,
-          subjectId: subjectId,
-          deletedAt: null,
-        },
-      };
-      return await db.academicSubjectForStaff.update({
-        where,
-        data: {
-          deletedAt: new Date(),
-        },
-      });
+  const response = await Promise.all(
+    sectionData.map(async (section) => {
+      if (section.subjects.length > 0) {
+        section.subjects.map(async (subject) => {
+          const where = {
+            academicYearId_staffId_sectionId_subjectId_deletedAt: {
+              academicYearId: academicYearId,
+              staffId: staffId,
+              sectionId: section.sectionId,
+              subjectId: subject,
+              deletedAt: null,
+            },
+          };
+          return await db.academicSubjectForStaff.update({
+            where,
+            data: {
+              deletedAt: new Date(),
+            },
+          });
+        });
+      }
     })
   );
+  return response;
 }
 
 export async function getAllSubjectByClassId(id: string) {
@@ -298,6 +307,7 @@ export async function getAllSubjectByClassId(id: string) {
     where: {
       classId: id,
       branchId: session.branchId,
+      isDeleted: false,
     },
     select: {
       id: true,
@@ -351,59 +361,52 @@ export async function getSubjectListForStaffByClassId(
   academicYearId: string,
   classId: string
 ) {
-  const classDetails = await db.academicSubjectForStaff.findMany({
+  const classDetails = await db.section.findMany({
     where: {
-      staffId: staffId,
-      academicYearId: academicYearId,
-      isIncharge: false,
-      section: {
-        class: {
-          id: classId,
+      classId: classId,
+      academicSubjectForStaff: {
+        some: {
+          staffId: staffId,
+          academicYearId: academicYearId,
+          isIncharge: false,
+          deletedAt: null,
         },
       },
     },
-    include: {
-      section: {
+    select: {
+      id: true,
+      name: true,
+      academicSubjectForStaff: {
+        where: {
+          staffId: staffId,
+          academicYearId: academicYearId,
+          isIncharge: false,
+          deletedAt: null,
+        },
         select: {
-          id: true,
-          class: true,
-          name: true,
-          academicSubjectForStaff: {
-            where: {
-              isIncharge: false,
-            },
+          subject: {
             select: {
-              subject: {
-                select: {
-                  id: true,
-                  name: true,
-                },
-              },
+              id: true,
+              name: true,
             },
           },
         },
       },
     },
-    distinct: ['sectionId'],
   });
+
   return formatData(classDetails);
 }
 
-function formatData(classDetails) {
-  return classDetails.map((item) => {
-    return {
-      section: {
-        id: item.section.id,
-        name: item.section.name,
-      },
-      subjects: item.section.academicSubjectForStaff.map((subjectItem) => {
-        return {
-          id: subjectItem.subject.id,
-          name: subjectItem.subject.name,
-        };
-      }),
-    };
-  });
+function formatData(data) {
+  return data.map((section) => ({
+    sectionId: section.id,
+    sectionName: section.name,
+    subjects: section.academicSubjectForStaff.map((subjectEntry) => ({
+      id: subjectEntry.subject.id,
+      name: subjectEntry.subject.name,
+    })),
+  }));
 }
 
 export async function getAllStudentByClassIdForAssigning(id: string) {

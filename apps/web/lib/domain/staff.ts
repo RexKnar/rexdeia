@@ -15,6 +15,7 @@ export type Staff = {
   aadharCardNumber?: string;
   gender: string;
   status: 'Active' | 'InActive' | 'Resigned' | 'Suspended' | 'Fired';
+  academicYear?: AcademicYear;
   annualIncome: string;
   bloodGroup?: string;
   enrollmentId: string;
@@ -122,8 +123,32 @@ export type UpdateStaffModel = Omit<
   | 'sections'
 >;
 
+export type StaffSubjectList = {
+  sectionId: string;
+  sectionName: string;
+  subjects: Section[];
+};
+
+export type Section = {
+  id: string;
+  name: string;
+};
+
+type AcademicYear = {
+  id: string;
+  name: string;
+};
 export type SubjectHandledByStaff = {
   id: string;
   name: string;
   sections?: SectionModel[];
+};
+
+export type UnassignStaffModel = {
+  sections: sections[];
+};
+
+type sections = {
+  section: string;
+  subjects: string[];
 };
