@@ -79,9 +79,26 @@ export async function addStaff(staff: AddStaffModel) {
     },
   });
 
+  const staffDetails: Omit<
+    AddStaffModel,
+    | 'motherTongueId'
+    | 'communityId'
+    | 'categoryId'
+    | 'employmentTypeId'
+    | 'designationId'
+    | 'natureOfPostingId'
+  > = {
+    ...staff,
+  };
+  delete staffDetails['communityId'];
+  delete staffDetails['motherTongueId'];
+  delete staffDetails['categoryId'];
+  delete staffDetails['employmentTypeId'];
+  delete staffDetails['designationId'];
+  delete staffDetails['natureOfPostingId'];
   return db.staff.create({
     data: {
-      ...staff,
+      ...staffDetails,
       createdAt: new Date(),
       updatedAt: new Date(),
       user: {
@@ -99,6 +116,48 @@ export async function addStaff(staff: AddStaffModel) {
           id: session.branchId,
         },
       },
+      ...(staff.communityId && {
+        community: {
+          connect: {
+            id: staff.communityId,
+          },
+        },
+      }),
+      ...(staff.motherTongueId && {
+        motherTongue: {
+          connect: {
+            id: staff.motherTongueId,
+          },
+        },
+      }),
+      ...(staff.categoryId && {
+        category: {
+          connect: {
+            id: staff.categoryId,
+          },
+        },
+      }),
+      ...(staff.employmentTypeId && {
+        employmentType: {
+          connect: {
+            id: staff.employmentTypeId,
+          },
+        },
+      }),
+      ...(staff.designationId && {
+        designation: {
+          connect: {
+            id: staff.designationId,
+          },
+        },
+      }),
+      ...(staff.natureOfPostingId && {
+        natureOfPosting: {
+          connect: {
+            id: staff.natureOfPostingId,
+          },
+        },
+      }),
     },
   });
 }

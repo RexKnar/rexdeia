@@ -175,7 +175,7 @@ const staffForm: staffFormSectionType[] = [
         name: 'communityId',
         placeholder: 'Community',
         label: 'Community',
-        optionKey: 'value',
+        optionKey: 'label',
         optionValue: 'value',
         visible: true,
         options: [
@@ -226,10 +226,10 @@ const staffForm: staffFormSectionType[] = [
       {
         id: 11,
         type: 'dropdown',
-        name: 'motherTongue',
+        name: 'motherTongueId',
         placeholder: 'Mother Tongue',
         label: 'Mother Tongue',
-        optionKey: 'value',
+        optionKey: 'label',
         optionValue: 'value',
         visible: true,
         options: [
@@ -532,10 +532,10 @@ const staffForm: staffFormSectionType[] = [
       {
         id: 0,
         type: 'dropdown',
-        name: 'category',
+        name: 'categoryId',
         placeholder: 'category',
         label: 'Category',
-        optionKey: 'value',
+        optionKey: 'label',
         optionValue: 'value',
         visible: true,
         options: [
@@ -543,16 +543,16 @@ const staffForm: staffFormSectionType[] = [
           { value: 'NonTeaching', label: 'NonTeaching' },
         ],
         validationRules: {
-          required: 'Category is Required',
+          required: false,
         },
       },
       {
         id: 1,
         type: 'dropdown',
-        name: 'employmentType',
+        name: 'employmentTypeId',
         placeholder: 'Employment Type',
         label: 'Employment Type',
-        optionKey: 'value',
+        optionKey: 'label',
         optionValue: 'value',
         visible: true,
         options: [
@@ -560,16 +560,16 @@ const staffForm: staffFormSectionType[] = [
           { value: 'Aided', label: 'Aided' },
         ],
         validationRules: {
-          required: 'Employment Type is Required',
+          required: false,
         },
       },
       {
         id: 2,
         type: 'dropdown',
-        name: 'designation',
+        name: 'designationId',
         placeholder: 'Designation',
         label: 'Designation',
-        optionKey: 'value',
+        optionKey: 'label',
         optionValue: 'value',
         visible: true,
         options: [
@@ -585,7 +585,7 @@ const staffForm: staffFormSectionType[] = [
           { value: 'Library', label: 'Library' },
         ],
         validationRules: {
-          required: 'Designation is Required',
+          required: false,
         },
       },
       {
@@ -651,7 +651,7 @@ const staffForm: staffFormSectionType[] = [
       {
         id: 8,
         type: 'dropdown',
-        name: 'natureOfPosting',
+        name: 'natureOfPostingId',
         placeholder: 'Nature Of Posting',
         label: 'Nature Of Posting',
         visible: true,

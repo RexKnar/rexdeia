@@ -29,7 +29,7 @@ const community = [
 const motherTongue = [
   {
     label: 'Tamil',
-    value: 'tamil',
+    value: 'Tamil',
   },
   {
     label: ' Malayalam ',
@@ -1318,7 +1318,7 @@ export const admissionForm = {
           id: '6',
           type: 'dropdown',
           label: 'Community',
-          name: 'community',
+          name: 'communityId',
           optionKey: 'value',
           optionValue: 'value',
           visible: true,

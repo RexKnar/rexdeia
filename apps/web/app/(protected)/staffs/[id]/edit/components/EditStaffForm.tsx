@@ -720,7 +720,7 @@ export function EditStaffDetails() {
                 <Select
                   autoComplete="off"
                   value={watch('caste')}
-                  {...register('caste')}
+                  {...register('communityId')}
                   onValueChange={(value) => {
                     if (value) {
                       setValue('caste', value);
@@ -776,7 +776,7 @@ export function EditStaffDetails() {
                 <Select
                   autoComplete="off"
                   value={watch('motherTongue')}
-                  {...register('motherTongue')}
+                  {...register('motherTongueId')}
                   onValueChange={(value) => {
                     if (value) {
                       setValue('motherTongue', value);
@@ -1153,14 +1153,11 @@ export function EditStaffDetails() {
               <div className="w-full">
                 <label className="mt-1 block text-sm text-gray-700">
                   Category
-                  <span className="text-red-300"> *</span>
                 </label>
                 <Select
                   autoComplete="off"
                   value={watch('category')}
-                  {...register('category', {
-                    required: 'Category is required',
-                  })}
+                  {...register('categoryId')}
                   onValueChange={(value) => {
                     if (value) {
                       setValue('category', value);
@@ -1190,14 +1187,11 @@ export function EditStaffDetails() {
               <div className="w-full">
                 <label className="mt-1 block text-sm text-gray-700">
                   Employment Type
-                  <span className="text-red-300"> *</span>
                 </label>
                 <Select
                   autoComplete="off"
                   value={watch('employmentType')}
-                  {...register('employmentType', {
-                    required: 'Employment Type is required',
-                  })}
+                  {...register('employmentTypeId')}
                   onValueChange={(value) => {
                     if (value) {
                       setValue('employmentType', value);
@@ -1226,14 +1220,11 @@ export function EditStaffDetails() {
               <div className="w-full">
                 <label className="mt-1 block text-sm text-gray-700">
                   Designation
-                  <span className="text-red-300"> *</span>
                 </label>
                 <Select
                   autoComplete="off"
                   value={watch('designation')}
-                  {...register('designation', {
-                    required: 'Designation is required',
-                  })}
+                  {...register('designationId')}
                   onValueChange={(value) => {
                     if (value) {
                       setValue('designation', value);
@@ -1333,7 +1324,7 @@ export function EditStaffDetails() {
                 <Select
                   autoComplete="off"
                   value={watch('natureOfPosting')}
-                  {...register('natureOfPosting')}
+                  {...register('natureOfPostingId')}
                   onValueChange={(value) => {
                     if (value) {
                       setValue('natureOfPosting', value);
@@ -1406,9 +1397,7 @@ export function EditStaffDetails() {
                   type="date"
                   className="mt-1"
                   autoComplete="off"
-                  {...register('passOutYear', {
-                    required: 'Date of Birth is required',
-                  })}
+                  {...register('passOutYear')}
                   aria-invalid={errors.date ? 'true' : 'false'}
                   errorMessage={errors?.date?.message.toString()}
                 />

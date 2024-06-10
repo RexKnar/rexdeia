@@ -124,10 +124,15 @@ export async function addStudent(student: AddStudentModel) {
     },
   });
 
-  const studentWithoutBatchId: Omit<AddStudentModel, 'batchId'> = {
+  const studentWithoutBatchId: Omit<
+    AddStudentModel,
+    'batchId' | 'motherTongueId' | 'communityId'
+  > = {
     ...student,
   };
   delete studentWithoutBatchId['batchId'];
+  delete studentWithoutBatchId['motherTongueId'];
+  delete studentWithoutBatchId['communityId'];
 
   const createdStudent = await db.student.create({
     data: {
@@ -159,11 +164,27 @@ export async function addStudent(student: AddStudentModel) {
           id: user.id,
         },
       },
-      batch: {
-        connect: {
-          id: student.batchId,
+      ...(student.batchId && {
+        batch: {
+          connect: {
+            id: student.batchId,
+          },
         },
-      },
+      }),
+      ...(student.motherTongueId && {
+        motherTongue: {
+          connect: {
+            id: student.motherTongueId,
+          },
+        },
+      }),
+      ...(student.communityId && {
+        community: {
+          connect: {
+            id: student.communityId,
+          },
+        },
+      }),
     },
   });
 

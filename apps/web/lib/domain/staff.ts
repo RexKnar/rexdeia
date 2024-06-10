@@ -23,14 +23,18 @@ export type Staff = {
   dateOfRegularization: Date;
   dateOfRetirement: Date;
   employmentType: string;
+  employmentTypeId: string;
   employeeId: string;
-  category: string;
+  category?: string;
+  categoryId?: string;
   natureOfPosting?: string | null;
+  natureOfPostingId: string;
   subjectHandling: string;
   collegeName: string;
   passOutYear: Date;
   marksObtained: string;
   designation: string;
+  designationId: string;
   email: string;
   mobile: string;
   religion?: string;
@@ -96,16 +100,10 @@ export type AddStaffModel = Omit<
   Staff,
   | 'id'
   | 'motherTongue'
-  | 'motherTongueId'
   | 'community'
-  | 'communityId'
   | 'natureOfPosting'
   | 'employmentType'
-  | 'employeeId'
   | 'category'
-  | 'natureOfPostingId'
-  | 'natureOfPosting'
-  | 'designationId'
   | 'designation'
   | 'status'
   | 'subjects'
@@ -113,18 +111,11 @@ export type AddStaffModel = Omit<
 >;
 export type UpdateStaffModel = Omit<
   Staff,
-  | 'id'
   | 'motherTongue'
-  | 'motherTongueId'
   | 'community'
-  | 'communityId'
   | 'natureOfPosting'
   | 'employmentType'
-  | 'employeeId'
   | 'category'
-  | 'natureOfPostingId'
-  | 'natureOfPosting'
-  | 'designationId'
   | 'designation'
   | 'status'
   | 'subjects'

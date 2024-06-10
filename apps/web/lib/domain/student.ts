@@ -51,9 +51,11 @@ export type Student = {
 
 export type AddStudentModel = Omit<
   Student,
-  'id' | 'motherTongue' | 'community'
+  'id' | 'motherTongue' | 'community' | 'batch'
 > & {
   batchId: string;
+  communityId: string;
+  motherTongueId: string;
 };
 
 export type UpdateStudentModel = Pick<Student, 'id'>;

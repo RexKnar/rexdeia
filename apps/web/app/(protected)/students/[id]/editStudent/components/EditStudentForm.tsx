@@ -539,7 +539,7 @@ export function EditStudentDetail() {
                 <Select
                   autoComplete="off"
                   value={watch('motherTongue')}
-                  {...register('motherTongue')}
+                  {...register('motherTongueId')}
                   onValueChange={(value) => {
                     if (value) {
                       setValue('motherTongue', value);
@@ -593,7 +593,7 @@ export function EditStudentDetail() {
                 <Select
                   autoComplete="off"
                   value={watch('community')}
-                  {...register('community')}
+                  {...register('communityId')}
                   onValueChange={(value) => {
                     if (value) {
                       setValue('community', value);

@@ -30,6 +30,7 @@ export function formatStudentPayload(data: Record<string, unknown>) {
     'motherTongue',
     'phoneNumber',
     'motherTongueId',
+    'communityId',
     'guardianName',
     'fatherEmailId',
     'motherEmailId',
