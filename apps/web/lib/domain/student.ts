@@ -21,9 +21,9 @@ export type Student = {
   middleName: string;
   motherName: string;
   nationality: string;
-  motherTongueId?: string;
+  motherTongueId: string;
   motherTongue?: LanguageModel;
-  communityId?: string;
+  communityId: string;
   community?: CommunityModel;
   guardianName: string;
   maritalStatus: string;
