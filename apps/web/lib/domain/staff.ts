@@ -1,3 +1,6 @@
+import { Language } from '@prisma/client';
+
+import { CommunityModel } from './community';
 import { SectionModel } from './section';
 import { SubjectModel } from './subject';
 
@@ -21,20 +24,27 @@ export type Staff = {
   dateOfRegularization: Date;
   dateOfRetirement: Date;
   employmentType: string;
+  employmentTypeId: string;
   employeeId: string;
-  category: string;
-  natureOfPosting: string;
+  category?: string;
+  categoryId?: string;
+  natureOfPosting?: string | null;
+  natureOfPostingId: string;
   subjectHandling: string;
   collegeName: string;
   passOutYear: Date;
   marksObtained: string;
   designation: string;
+  designationId: string;
   email: string;
   mobile: string;
   religion?: string;
   caste?: string;
   nationality?: string;
-  motherTongue?: string;
+  motherTongueId?: string | null;
+  motherTongue?: Language | null;
+  communityId?: string | null;
+  community?: CommunityModel;
   enrollmentNumber?: string;
   specialCategory?: string;
   differentlyAbled: boolean;
@@ -89,12 +99,28 @@ export type Staff = {
 
 export type AddStaffModel = Omit<
   Staff,
-  'id' | 'status' | 'subjects' | 'sections'
+  | 'id'
+  | 'motherTongue'
+  | 'community'
+  | 'natureOfPosting'
+  | 'employmentType'
+  | 'category'
+  | 'designation'
+  | 'status'
+  | 'subjects'
+  | 'sections'
 >;
-
 export type UpdateStaffModel = Omit<
   Staff,
-  'email' | 'name' | 'subjects' | 'sections'
+  | 'motherTongue'
+  | 'community'
+  | 'natureOfPosting'
+  | 'employmentType'
+  | 'category'
+  | 'designation'
+  | 'status'
+  | 'subjects'
+  | 'sections'
 >;
 
 export type StaffSubjectList = {

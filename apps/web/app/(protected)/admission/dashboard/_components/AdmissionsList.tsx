@@ -175,7 +175,7 @@ export function AdmissionsList() {
           </TableBody>
         </Table>
       </div>
-      <div className="flex items-center justify-between space-x-2 py-4">
+      <div className="flex items-center justify-between space-x-2 py-4 ">
         <div className="text-muted-foreground flex text-sm">
           <span className="flex items-center gap-1">
             <div>Page</div>

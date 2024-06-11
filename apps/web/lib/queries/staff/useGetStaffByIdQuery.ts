@@ -3,10 +3,9 @@ import {
   UseQueryOptions,
   UseQueryResult,
 } from '@tanstack/react-query';
-
-import { makeAPICall } from '../../api';
-import { Staff } from '../../domain/staff';
-import { GET_STAFF_BY_ID } from '../../endpoints';
+import { makeAPICall } from 'lib/api';
+import { Staff } from 'lib/domain/staff';
+import { GET_STAFF_BY_ID } from 'lib/endpoints';
 
 function getStaffById(
   staffId: string,

@@ -1,47 +1,7 @@
 import { db } from 'lib/db';
-import { ExamModel } from 'lib/domain/exam';
 import { EnterMarkEntryModel } from 'lib/domain/mark-entry';
-import uniqBy from 'lodash/uniqBy';
 
-type GetExamsByClassSectionFilter = {
-  classId: string;
-  sectionId: string;
-};
-export async function getExamsByClassSection(
-  filter: GetExamsByClassSectionFilter
-) {
-  const exams = await db.academicExams.findMany({
-    where: {
-      ...filter,
-    },
-    select: {
-      exam: {
-        select: {
-          id: true,
-          name: true,
-          term: {
-            select: {
-              id: true,
-              name: true,
-            },
-          },
-          batch: {
-            select: {
-              id: true,
-              name: true,
-            },
-          },
-        },
-      },
-    },
-  });
-
-  const examList = exams.map((item) => item.exam);
-
-  return uniqBy(examList, (exam: ExamModel) => exam.id);
-}
-
-export async function newMarkEntry(markEntryPayload: EnterMarkEntryModel) {
+export async function enterMark(markEntryPayload: EnterMarkEntryModel) {
   try {
     const createdMarkEntries = await db.$transaction(async (prisma) => {
       const promises = [];
