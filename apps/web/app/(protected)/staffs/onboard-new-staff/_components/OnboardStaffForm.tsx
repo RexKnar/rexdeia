@@ -1,6 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
+import { useGetCommunityListQuery } from 'lib/queries/community/useGetCommunityListQuery';
 import { AlertTriangle, Check } from 'lucide-react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import React, { useState } from 'react';
@@ -109,6 +110,7 @@ export function OnboardStaffForm() {
     });
   const { data: getCountryListResponse } = useGetCountryListQuery();
   const { data: getBloodGroupListResponse } = useGetBloodGroupListQuery();
+  const { data: getCommunityListResponse } = useGetCommunityListQuery();
 
   let customDataList = {
     bloodGroup: getBloodGroupListResponse || [],
@@ -118,6 +120,7 @@ export function OnboardStaffForm() {
     currentCountry: getCountryListResponse || [],
     currentState: getCurrentStateByCountryIdResponse || [],
     currentCity: getCurrentCityByStateCodeResponse || [],
+    communityId: getCommunityListResponse || [],
   };
   return (
     <form

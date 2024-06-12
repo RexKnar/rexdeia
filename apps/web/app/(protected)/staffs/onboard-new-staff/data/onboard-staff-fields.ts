@@ -175,23 +175,10 @@ const staffForm: staffFormSectionType[] = [
         name: 'communityId',
         placeholder: 'Community',
         label: 'Community',
-        optionKey: 'label',
-        optionValue: 'value',
+        optionKey: 'name',
+        optionValue: 'id',
         visible: true,
-        options: [
-          {
-            value: '',
-            label: 'BC',
-          },
-          {
-            value: '',
-            label: 'ST',
-          },
-          {
-            value: '',
-            label: 'MBC',
-          },
-        ],
+        options: [],
         validationRules: {
           required: false,
         },
