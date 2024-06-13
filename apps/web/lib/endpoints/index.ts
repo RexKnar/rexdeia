@@ -138,12 +138,12 @@ export const ADD_STAFF_CATEGORY = `ADD_STAFF_CATEGORY`;
 export const ADD_DESIGNATION = `ADD_DESIGNATION`;
 export const ADD_NATURE_OF_POSTING = `ADD_NATURE_OF_POSTING`;
 export const ADD_EMPLOYMENT_TYPE = `ADD_EMPLOYMENT_TYPE`;
-export const GET_ALL_COMMUNITY = `GET_ALL_COMMUNITY`;
-export const GET_ALL_LANGUAGE = `GET_ALL_LANGUAGE`;
-export const GET_ALL_STAFF_CATEGORY = `GET_ALL_STAFF_CATEGORY`;
-export const GET_ALL_DESIGNATION = `GET_ALL_DESIGNATION`;
-export const GET_ALL_NATURE_OF_POSTING = `GET_ALL_NATURE_OF_POSTING`;
-export const GET_ALL_EMPLOYMENT_TYPE = `GET_ALL_EMPLOYMENT_TYPE`;
+export const GET_COMMUNITY_LIST = `GET_COMMUNITY_LIST`;
+export const GET_LANGUAGE_LIST = `GET_LANGUAGE_LIST`;
+export const GET_STAFF_CATEGORY_LIST = `GET_STAFF_CATEGORY_LIST`;
+export const GET_DESIGNATION_LIST = `GET_DESIGNATION_LIST`;
+export const GET_NATURE_OF_POSTING_LIST = `GET_NATURE_OF_POSTING_LIST`;
+export const GET_EMPLOYMENT_TYPE_LIST = `GET_EMPLOYMENT_TYPE_LIST`;
 export const UPDATE_COMMUNITY_BY_ID = `UPDATE_COMMUNITY_BY_ID`;
 export const UPDATE_LANGUAGE_BY_ID = `UPDATE_LANGUAGE_BY_ID`;
 export const UPDATE_STAFF_CATEGORY_BY_ID = `UPDATE_STAFF_CATEGORY_BY_ID`;
@@ -704,27 +704,27 @@ export default <EndpointDetails>{
     requestType: 'POST',
     endpoint: '/api/staff/staff-category',
   },
-  [GET_ALL_COMMUNITY]: {
+  [GET_COMMUNITY_LIST]: {
     requestType: 'GET',
     endpoint: '/api/community',
   },
-  [GET_ALL_LANGUAGE]: {
+  [GET_LANGUAGE_LIST]: {
     requestType: 'GET',
     endpoint: '/api/language',
   },
-  [GET_ALL_EMPLOYMENT_TYPE]: {
+  [GET_EMPLOYMENT_TYPE_LIST]: {
     requestType: 'GET',
     endpoint: '/api/staff/employment-type',
   },
-  [GET_ALL_NATURE_OF_POSTING]: {
+  [GET_NATURE_OF_POSTING_LIST]: {
     requestType: 'GET',
     endpoint: '/api/staff/nature-of-posting',
   },
-  [GET_ALL_DESIGNATION]: {
+  [GET_DESIGNATION_LIST]: {
     requestType: 'GET',
     endpoint: '/api/staff/designation',
   },
-  [GET_ALL_STAFF_CATEGORY]: {
+  [GET_STAFF_CATEGORY_LIST]: {
     requestType: 'GET',
     endpoint: '/api/staff/staff-category',
   },

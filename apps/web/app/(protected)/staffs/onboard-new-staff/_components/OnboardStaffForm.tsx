@@ -2,6 +2,11 @@
 
 import { motion } from 'framer-motion';
 import { useGetCommunityListQuery } from 'lib/queries/community/useGetCommunityListQuery';
+import { useGetDesignationListQuery } from 'lib/queries/designation/useGetDesignationListQuery';
+import { useGetEmploymentTypeListQuery } from 'lib/queries/employment-type/useGetEmploymentTypeListQuery';
+import { useGetLanguageListQuery } from 'lib/queries/language/useGetLanguageListQurey';
+import { useGetNatureOfPostingListQuery } from 'lib/queries/nature-of-posting/useGetNatureOfPostingListQuery';
+import { useGetStaffCategoryListQuery } from 'lib/queries/staff-category/useGetStaffCategoryListQuery';
 import { AlertTriangle, Check } from 'lucide-react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import React, { useState } from 'react';
@@ -111,6 +116,13 @@ export function OnboardStaffForm() {
   const { data: getCountryListResponse } = useGetCountryListQuery();
   const { data: getBloodGroupListResponse } = useGetBloodGroupListQuery();
   const { data: getCommunityListResponse } = useGetCommunityListQuery();
+  const { data: getLanguageListResponse } = useGetLanguageListQuery();
+  const { data: getDesignationListResponse } = useGetDesignationListQuery();
+  const { data: getStaffCategoryListResponse } = useGetStaffCategoryListQuery();
+  const { data: getEmploymentTypeListResponse } =
+    useGetEmploymentTypeListQuery();
+  const { data: getNatureOfPostingListResponse } =
+    useGetNatureOfPostingListQuery();
 
   let customDataList = {
     bloodGroup: getBloodGroupListResponse || [],
@@ -121,6 +133,11 @@ export function OnboardStaffForm() {
     currentState: getCurrentStateByCountryIdResponse || [],
     currentCity: getCurrentCityByStateCodeResponse || [],
     communityId: getCommunityListResponse || [],
+    motherTongueId: getLanguageListResponse || [],
+    designationId: getDesignationListResponse || [],
+    staffCategoryId: getStaffCategoryListResponse || [],
+    employmentTypeId: getEmploymentTypeListResponse || [],
+    natureOfPostingId: getNatureOfPostingListResponse || [],
   };
   return (
     <form

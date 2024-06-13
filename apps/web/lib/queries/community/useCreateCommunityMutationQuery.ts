@@ -4,7 +4,7 @@ import {
   CommunityModel,
   CreateCommunityRequestModel,
 } from 'lib/domain/community';
-import { ADD_COMMUNITY, GET_ALL_COMMUNITY } from 'lib/endpoints';
+import { ADD_COMMUNITY, GET_COMMUNITY_LIST } from 'lib/endpoints';
 
 export function useCreateCommunityMutationQuery() {
   const queryClient = useQueryClient();
@@ -17,14 +17,14 @@ export function useCreateCommunityMutationQuery() {
         {}
       );
       await queryClient.invalidateQueries({
-        queryKey: [GET_ALL_COMMUNITY],
+        queryKey: [GET_COMMUNITY_LIST],
       });
 
       return response;
     },
     onSuccess: async () => {
       await queryClient.refetchQueries({
-        queryKey: [GET_ALL_COMMUNITY],
+        queryKey: [GET_COMMUNITY_LIST],
       });
     },
   });

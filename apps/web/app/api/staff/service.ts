@@ -83,16 +83,17 @@ export async function addStaff(staff: AddStaffModel) {
     AddStaffModel,
     | 'motherTongueId'
     | 'communityId'
-    | 'categoryId'
+    | 'staffCategoryId'
     | 'employmentTypeId'
     | 'designationId'
     | 'natureOfPostingId'
+    | 'staffCategory'
   > = {
     ...staff,
   };
   delete staffDetails['communityId'];
   delete staffDetails['motherTongueId'];
-  delete staffDetails['categoryId'];
+  delete staffDetails['staffCategoryId'];
   delete staffDetails['employmentTypeId'];
   delete staffDetails['designationId'];
   delete staffDetails['natureOfPostingId'];
@@ -130,10 +131,10 @@ export async function addStaff(staff: AddStaffModel) {
           },
         },
       }),
-      ...(staff.categoryId && {
-        category: {
+      ...(staff.staffCategoryId && {
+        staffCategory: {
           connect: {
-            id: staff.categoryId,
+            id: staff.staffCategoryId,
           },
         },
       }),

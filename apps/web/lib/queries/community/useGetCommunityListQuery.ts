@@ -1,16 +1,21 @@
 import { useQuery, UseQueryOptions } from '@tanstack/react-query';
 import { makeAPICall } from 'lib/api';
 import { CommunityModel } from 'lib/domain/community';
-import { GET_ALL_COMMUNITY } from 'lib/endpoints';
+import { GET_COMMUNITY_LIST } from 'lib/endpoints';
 
 function getCommunityList(
   options?: Partial<UseQueryOptions<CommunityModel[]>>
 ) {
   return {
     ...options,
-    queryKey: [GET_ALL_COMMUNITY],
+    queryKey: [GET_COMMUNITY_LIST],
     queryFn: async () => {
-      return await makeAPICall<CommunityModel[]>(GET_ALL_COMMUNITY, {}, {}, {});
+      return await makeAPICall<CommunityModel[]>(
+        GET_COMMUNITY_LIST,
+        {},
+        {},
+        {}
+      );
     },
   };
 }

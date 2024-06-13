@@ -2,6 +2,7 @@ import { Language } from '@prisma/client';
 
 import { CommunityModel } from './community';
 import { SectionModel } from './section';
+import { StaffCategoryModel } from './staffCategory';
 import { SubjectModel } from './subject';
 
 export type Staff = {
@@ -26,8 +27,8 @@ export type Staff = {
   employmentType: string;
   employmentTypeId: string;
   employeeId: string;
-  category?: string;
-  categoryId?: string;
+  staffCategory?: StaffCategoryModel;
+  staffCategoryId?: string;
   natureOfPosting?: string | null;
   natureOfPostingId: string;
   subjectHandling: string;
@@ -104,7 +105,7 @@ export type AddStaffModel = Omit<
   | 'community'
   | 'natureOfPosting'
   | 'employmentType'
-  | 'category'
+  | 'staffCategory'
   | 'designation'
   | 'status'
   | 'subjects'
@@ -116,7 +117,7 @@ export type UpdateStaffModel = Omit<
   | 'community'
   | 'natureOfPosting'
   | 'employmentType'
-  | 'category'
+  | 'staffCategory'
   | 'designation'
   | 'status'
   | 'subjects'

@@ -4,7 +4,9 @@
 /* eslint-disable react/no-unescaped-entities */
 import { useGetBatchesListQuery } from 'lib/queries/batches/useGetBatchesListQuery';
 import { useGetClassListQuery } from 'lib/queries/class/useGetClassListQuery';
+import { useGetCommunityListQuery } from 'lib/queries/community/useGetCommunityListQuery';
 import { useGetGroupListQuery } from 'lib/queries/group/useGetGroupListQuery';
+import { useGetLanguageListQuery } from 'lib/queries/language/useGetLanguageListQurey';
 import { useGetMediumListQuery } from 'lib/queries/medium/useGetMediumListQuery';
 import { useGetStudentByIdQuery } from 'lib/queries/students/useGetStudentByIdQuery';
 import { useUpdateStudentMutationById } from 'lib/queries/students/useUpdateStudentMutationByIdQuery';
@@ -28,6 +30,8 @@ import {
 
 export function EditStudentDetail() {
   const [currentPage, setCurrentPage] = useState(1);
+  const [communityList, setCommunityList] = useState([]);
+  const [languageList, setLanguageList] = useState([]);
 
   const {
     control,
@@ -71,6 +75,19 @@ export function EditStudentDetail() {
 
   const { data: studentDetail, isLoading: isStudentDetailLoading } =
     useGetStudentByIdQuery(id);
+
+  const { data: getCommunityListResponse } = useGetCommunityListQuery();
+  const { data: getLanguageListResponse } = useGetLanguageListQuery();
+
+  useEffect(() => {
+    if (getLanguageListResponse) {
+      setLanguageList(getLanguageListResponse as any[]);
+    }
+    if (getCommunityListResponse) {
+      setCommunityList(getCommunityListResponse as any[]);
+    }
+  });
+
   useEffect(() => {
     if (studentDetail) {
       const initialValue = {
@@ -84,9 +101,9 @@ export function EditStudentDetail() {
         emailId: studentDetail.emailId,
         bloodGroup: studentDetail.bloodGroup,
         aadharCardNumber: studentDetail.aadharCardNumber,
-        motherTongue: studentDetail.motherTongue,
+        motherTongueId: studentDetail.motherTongueId,
         religion: studentDetail.religion,
-        community: studentDetail.additionalAttributes.community,
+        communityId: studentDetail.communityId,
         caste: studentDetail.additionalAttributes.caste,
         differentlyAbled: studentDetail.additionalAttributes.differentlyAbled,
         fatherName: studentDetail.fatherName,
@@ -538,11 +555,11 @@ export function EditStudentDetail() {
                 </label>
                 <Select
                   autoComplete="off"
-                  value={watch('motherTongue')}
+                  value={watch('motherTongueId')}
                   {...register('motherTongueId')}
                   onValueChange={(value) => {
                     if (value) {
-                      setValue('motherTongue', value);
+                      setValue('motherTongueId', value);
                     }
                   }}
                 >
@@ -551,10 +568,11 @@ export function EditStudentDetail() {
                   </SelectTrigger>
                   <SelectContent>
                     <SelectGroup>
-                      <SelectItem value={'tamil'}>{'Tamil'}</SelectItem>
-                      <SelectItem value={'malayalam'}>{'Malayalam'}</SelectItem>
-                      <SelectItem value={'telugu'}>{'Telugu'}</SelectItem>
-                      <SelectItem value={'hindi'}>{'Hindi'}</SelectItem>
+                      {languageList.map((item, index) => (
+                        <SelectItem value={item.id} key={index}>
+                          {item.name}
+                        </SelectItem>
+                      ))}
                     </SelectGroup>
                   </SelectContent>
                 </Select>
@@ -592,11 +610,11 @@ export function EditStudentDetail() {
                 </label>
                 <Select
                   autoComplete="off"
-                  value={watch('community')}
+                  value={watch('communityId')}
                   {...register('communityId')}
                   onValueChange={(value) => {
                     if (value) {
-                      setValue('community', value);
+                      setValue('communityId', value);
                     }
                   }}
                 >
@@ -605,10 +623,11 @@ export function EditStudentDetail() {
                   </SelectTrigger>
                   <SelectContent>
                     <SelectGroup>
-                      <SelectItem value={'bc'}>{'BC'}</SelectItem>
-                      <SelectItem value={'sc'}>{'SC'}</SelectItem>
-                      <SelectItem value={'st'}>{'ST'}</SelectItem>
-                      <SelectItem value={'mbc'}>{'MBC'}</SelectItem>
+                      {communityList.map((item, index) => (
+                        <SelectItem value={item.id} key={index}>
+                          {item.name}
+                        </SelectItem>
+                      ))}
                     </SelectGroup>
                   </SelectContent>
                 </Select>
