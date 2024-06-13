@@ -4,7 +4,9 @@ import { motion } from 'framer-motion';
 import { useGetBatchesListQuery } from 'lib/queries/batches/useGetBatchesListQuery';
 import { useGetClassListQuery } from 'lib/queries/class/useGetClassListQuery';
 import { useGetBloodGroupListQuery } from 'lib/queries/common/useGetBloodGroupListQuery';
+import { useGetCommunityListQuery } from 'lib/queries/community/useGetCommunityListQuery';
 import { useGetGroupListQuery } from 'lib/queries/group/useGetGroupListQuery';
+import { useGetLanguageListQuery } from 'lib/queries/language/useGetLanguageListQurey';
 import { useGetMediumListQuery } from 'lib/queries/medium/useGetMediumListQuery';
 import { AlertTriangle, Check } from 'lucide-react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
@@ -90,6 +92,9 @@ export function AddStudentForm() {
     });
   const { data: getBloodGroupListResponse } = useGetBloodGroupListQuery();
   const { data: getCountryListResponse } = useGetCountryListQuery();
+  const { data: getCommunityListResponse } = useGetCommunityListQuery();
+  const { data: getLanguageListResponse } = useGetLanguageListQuery();
+
   const { batches } = useGetBatchesListQuery({
     page,
     limit,
@@ -108,6 +113,8 @@ export function AddStudentForm() {
     residentialCountry: getCountryListResponse || [],
     residentialState: getCurrentStateByCountryIdResponse || [],
     residentialCity: getCurrentCityByStateCodeResponse || [],
+    communityId: getCommunityListResponse || [],
+    motherTongueId: getLanguageListResponse || [],
   };
 
   const handleOnFormSubmit = async (data: Record<string, unknown>) => {

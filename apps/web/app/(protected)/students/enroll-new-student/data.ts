@@ -4,46 +4,6 @@ const caste = [
     value: 'noCaste',
   },
 ];
-const community = [
-  {
-    label: 'BC',
-    value: 'BC',
-  },
-  {
-    label: ' SC ',
-    value: 'SC',
-  },
-  {
-    label: 'ST',
-    value: 'ST',
-  },
-  {
-    label: 'OC',
-    value: 'OC',
-  },
-  {
-    label: 'MBC',
-    value: 'MBC',
-  },
-];
-const motherTongue = [
-  {
-    label: 'Tamil',
-    value: 'Tamil',
-  },
-  {
-    label: ' Malayalam ',
-    value: 'malayalam',
-  },
-  {
-    label: 'Telugu',
-    value: 'telugu',
-  },
-  {
-    label: 'Hindi',
-    value: 'hindi',
-  },
-];
 const religion = [
   {
     label: 'Hindu',
@@ -1287,10 +1247,10 @@ export const admissionForm = {
           type: 'dropdown',
           label: 'Mother Tongue',
           name: 'motherTongueId',
-          optionKey: 'value',
-          optionValue: 'value',
+          optionKey: 'name',
+          optionValue: 'id',
           visible: true,
-          options: [...motherTongue],
+          options: [],
           validationRules: {
             required: {
               value: false,
@@ -1319,10 +1279,10 @@ export const admissionForm = {
           type: 'dropdown',
           label: 'Community',
           name: 'communityId',
-          optionKey: 'value',
-          optionValue: 'value',
+          optionKey: 'name',
+          optionValue: 'id',
           visible: true,
-          options: [...community],
+          options: [],
           validationRules: {
             required: {
               value: false,

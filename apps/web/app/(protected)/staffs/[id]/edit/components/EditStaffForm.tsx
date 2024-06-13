@@ -6,8 +6,14 @@ import { useGetBloodGroupListQuery } from 'lib/queries/common/useGetBloodGroupLi
 import { useGetCityByStateCodeQuery } from 'lib/queries/common/useGetCityListQuery';
 import { useGetCountryListQuery } from 'lib/queries/common/useGetCountryListQuery';
 import { useGetStateByCountryCodeQuery } from 'lib/queries/common/useGetStateListQuery';
+import { useGetCommunityListQuery } from 'lib/queries/community/useGetCommunityListQuery';
+import { useGetDesignationListQuery } from 'lib/queries/designation/useGetDesignationListQuery';
+import { useGetEmploymentTypeListQuery } from 'lib/queries/employment-type/useGetEmploymentTypeListQuery';
+import { useGetLanguageListQuery } from 'lib/queries/language/useGetLanguageListQurey';
+import { useGetNatureOfPostingListQuery } from 'lib/queries/nature-of-posting/useGetNatureOfPostingListQuery';
 import { useGetStaffByIdQuery } from 'lib/queries/staff/useGetStaffByIdQuery';
 import { useUpdateStaffMutationById } from 'lib/queries/staff/useUpdateStaffMutationByIdQuery';
+import { useGetStaffCategoryListQuery } from 'lib/queries/staff-category/useGetStaffCategoryListQuery';
 import { Check, Loader2 } from 'lucide-react';
 import { useParams, useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
@@ -43,12 +49,18 @@ export function EditStaffDetails() {
   const [currentStateCode, setCurrentStateCode] = useState('');
   const [permanentStateCode, setPermanentStateCode] = useState('');
   const [currentCountry, setCurrentCountry] = useState([]);
-  const [correntState, setCourrentState] = useState([]);
+  const [currentState, setCurrentState] = useState([]);
   const [currentCityList, setCurrentCityList] = useState([]);
   const [permanentCountry, setPermanentCountry] = useState([]);
   const [permanentState, setPermanentState] = useState([]);
   const [permanentCity, setPermanentCity] = useState([]);
   const [bloodGroupList, setBloodGroupList] = useState([]);
+  const [communityList, setCommunityList] = useState([]);
+  const [languageList, setLanguageList] = useState([]);
+  const [staffCategoryList, setStaffCategoryList] = useState([]);
+  const [designationList, setDesignationList] = useState([]);
+  const [natureOfPostingList, setNatureOfPostingList] = useState([]);
+  const [employmentTypeList, setEmploymentTypeList] = useState([]);
 
   const validateEmail = (value, field) => {
     const atIndex = value.indexOf('@');
@@ -93,38 +105,6 @@ export function EditStaffDetails() {
       value: 'Muslim',
     },
   ];
-  const caste = [
-    {
-      id: '1',
-      label: 'BC',
-      value: 'bc',
-    },
-    {
-      id: '2',
-      label: 'SC',
-      value: 'sc',
-    },
-    {
-      id: '3',
-      label: 'SC',
-      value: 'sc',
-    },
-    {
-      id: '4',
-      label: 'ST',
-      value: 'st',
-    },
-    {
-      id: '5',
-      label: 'MBC',
-      value: 'mbc',
-    },
-    {
-      id: '6',
-      label: 'OC',
-      value: 'oc',
-    },
-  ];
   const nationality = [
     {
       id: '1',
@@ -137,82 +117,20 @@ export function EditStaffDetails() {
       value: 'american',
     },
   ];
-  const motherTongue = [
-    {
-      id: '1',
-      label: 'Tamil',
-      value: 'tamil',
-    },
-    {
-      id: '2',
-      label: 'English',
-      value: 'english',
-    },
-    {
-      id: '3',
-      label: 'Malayalam',
-      value: 'malayalam',
-    },
-  ];
-  const category = [
-    {
-      id: '1',
-      label: 'Teaching',
-      value: 'teaching',
-    },
-    {
-      id: '2',
-      label: 'Non Teaching',
-      value: 'nonTeaching',
-    },
-  ];
-  const employmentType = [
-    {
-      id: '1',
-      label: 'Management',
-      value: 'management',
-    },
-    {
-      id: '2',
-      label: 'Aided',
-      value: 'aided',
-    },
-  ];
-  const designation = [
-    {
-      id: '1',
-      label: 'HM',
-      value: 'hm',
-    },
-    {
-      id: '2',
-      label: 'AHM',
-      value: 'ahm',
-    },
-    {
-      id: '3',
-      label: 'PG',
-      value: 'pg',
-    },
-  ];
-  const natureOfPosting = [
-    {
-      id: '1',
-      label: 'Government',
-      value: 'government',
-    },
-    {
-      id: '2',
-      label: 'Management',
-      value: 'management',
-    },
-  ];
 
   const router = useRouter();
 
   const { id } = useParams<{ id: string }>();
   const { data: getBloodGroupListResponse } = useGetBloodGroupListQuery();
   const { data: getCountryListResponse } = useGetCountryListQuery();
+  const { data: getCommunityListResponse } = useGetCommunityListQuery();
+  const { data: getLanguageListResponse } = useGetLanguageListQuery();
+  const { data: getDesignationListResponse } = useGetDesignationListQuery();
+  const { data: getEmploymentTypeListResponse } =
+    useGetEmploymentTypeListQuery();
+  const { data: getStaffCategoryListResponse } = useGetStaffCategoryListQuery();
+  const { data: getNatureOfPostingListResponse } =
+    useGetNatureOfPostingListQuery();
 
   const { data: getCurrentStateByCountryIdResponse } =
     useGetStateByCountryCodeQuery(currentCountryCode, {
@@ -236,7 +154,7 @@ export function EditStaffDetails() {
       setCurrentCountry(getCountryListResponse as any[]);
     }
     if (getCurrentStateByCountryIdResponse) {
-      setCourrentState(getCurrentStateByCountryIdResponse as any[]);
+      setCurrentState(getCurrentStateByCountryIdResponse as any[]);
     }
     if (getCurrentCityByStateCodeResponse) {
       setCurrentCityList(getCurrentCityByStateCodeResponse as any[]);
@@ -253,6 +171,24 @@ export function EditStaffDetails() {
     if (getBloodGroupListResponse) {
       setBloodGroupList(getBloodGroupListResponse as any[]);
     }
+    if (getCommunityListResponse) {
+      setCommunityList(getCommunityListResponse as any[]);
+    }
+    if (getLanguageListResponse) {
+      setLanguageList(getLanguageListResponse as any[]);
+    }
+    if (getDesignationListResponse) {
+      setDesignationList(getDesignationListResponse as any[]);
+    }
+    if (getEmploymentTypeListResponse) {
+      setEmploymentTypeList(getEmploymentTypeListResponse as any[]);
+    }
+    if (getStaffCategoryListResponse) {
+      setStaffCategoryList(getStaffCategoryListResponse as any[]);
+    }
+    if (getNatureOfPostingListResponse) {
+      setNatureOfPostingList(getNatureOfPostingListResponse as any[]);
+    }
   }, [
     getCountryListResponse,
     getCurrentStateByCountryIdResponse,
@@ -260,6 +196,12 @@ export function EditStaffDetails() {
     getPermanentStateByCountryIdResponse,
     getPermanentCityByStateCodeResponse,
     getBloodGroupListResponse,
+    getCommunityListResponse,
+    getLanguageListResponse,
+    getDesignationListResponse,
+    getEmploymentTypeListResponse,
+    getStaffCategoryListResponse,
+    getNatureOfPostingListResponse,
   ]);
 
   const { mutateAsync: updateStaffMutationAsync } =
@@ -281,9 +223,9 @@ export function EditStaffDetails() {
         email: staffDetail.email,
         bloodGroup: staffDetail.bloodGroup,
         religion: staffDetail.religion,
-        caste: staffDetail.caste,
+        communityId: staffDetail.communityId,
         nationality: staffDetail.nationality,
-        motherTongue: staffDetail.motherTongue,
+        motherTongueId: staffDetail.motherTongueId,
         enrollmentId: staffDetail.enrollmentId,
         aadharCardNumber: staffDetail.aadharCardNumber,
         differentlyAbled: staffDetail.differentlyAbled,
@@ -304,10 +246,10 @@ export function EditStaffDetails() {
         permanentAddress1: staffDetail.permanentAddress1,
         permanentAddress2: staffDetail.permanentAddress2,
         permanentPincode: staffDetail.permanentPincode,
-        category: staffDetail.category,
-        employmentType: staffDetail.employmentType,
-        designation: staffDetail.designation,
-        natureOfPosting: staffDetail.natureOfPosting,
+        staffCategoryId: staffDetail.staffCategoryId,
+        employmentTypeId: staffDetail.employmentTypeId,
+        designationId: staffDetail.designationId,
+        natureOfPostingId: staffDetail.natureOfPostingId,
         dateOfJoining: staffDetail.dateOfJoining,
         subjectHandling: staffDetail.subjectHandling,
         employeeId: staffDetail.employeeId,
@@ -715,15 +657,15 @@ export function EditStaffDetails() {
               </div>
               <div className="w-full">
                 <label className="mt-1 block text-sm text-gray-700">
-                  Caste
+                  Community
                 </label>
                 <Select
                   autoComplete="off"
-                  value={watch('caste')}
+                  value={watch('communityId')}
                   {...register('communityId')}
                   onValueChange={(value) => {
                     if (value) {
-                      setValue('caste', value);
+                      setValue('communityId', value);
                     }
                   }}
                 >
@@ -732,9 +674,9 @@ export function EditStaffDetails() {
                   </SelectTrigger>
                   <SelectContent>
                     <SelectGroup>
-                      {caste.map((item, index) => (
+                      {communityList.map((item, index) => (
                         <SelectItem value={item.id} key={index}>
-                          {item.label}
+                          {item.name}
                         </SelectItem>
                       ))}
                     </SelectGroup>
@@ -775,11 +717,11 @@ export function EditStaffDetails() {
                 </label>
                 <Select
                   autoComplete="off"
-                  value={watch('motherTongue')}
+                  value={watch('motherTongueId')}
                   {...register('motherTongueId')}
                   onValueChange={(value) => {
                     if (value) {
-                      setValue('motherTongue', value);
+                      setValue('motherTongueId', value);
                     }
                   }}
                 >
@@ -788,9 +730,9 @@ export function EditStaffDetails() {
                   </SelectTrigger>
                   <SelectContent>
                     <SelectGroup>
-                      {motherTongue.map((item, index) => (
+                      {languageList.map((item, index) => (
                         <SelectItem value={item.id} key={index}>
-                          {item.label}
+                          {item.name}
                         </SelectItem>
                       ))}
                     </SelectGroup>
@@ -987,7 +929,7 @@ export function EditStaffDetails() {
                   </SelectTrigger>
                   <SelectContent>
                     <SelectGroup>
-                      {correntState?.map((item, index) => (
+                      {currentState?.map((item, index) => (
                         <SelectItem value={item.isoCode} key={index}>
                           {item.name}
                         </SelectItem>
@@ -1050,13 +992,13 @@ export function EditStaffDetails() {
               </div>
               <div className="w-full">
                 <label className="mt-1 block text-sm text-gray-700">
-                  Permanent Pioncode
+                  Permanent Pincode
                 </label>
                 <Input
                   {...register('permanentPincode')}
                   className="mt-1"
                   autoComplete="off"
-                  placeholder="Permanent Pioncode"
+                  placeholder="Permanent Pincode"
                 />
               </div>
               <div className="w-full">
@@ -1156,23 +1098,23 @@ export function EditStaffDetails() {
                 </label>
                 <Select
                   autoComplete="off"
-                  value={watch('category')}
-                  {...register('categoryId')}
+                  value={watch('staffCategoryId')}
+                  {...register('staffCategoryId')}
                   onValueChange={(value) => {
                     if (value) {
-                      setValue('category', value);
+                      setValue('staffCategoryId', value);
                     }
                   }}
-                  aria-invalid={errors.category ? 'true' : 'false'}
+                  aria-invalid={errors.staffCategoryId ? 'true' : 'false'}
                 >
                   <SelectTrigger className="w-full">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
                     <SelectGroup>
-                      {category.map((item, index) => (
+                      {staffCategoryList.map((item, index) => (
                         <SelectItem value={item.id} key={index}>
-                          {item.label}
+                          {item.name}
                         </SelectItem>
                       ))}
                     </SelectGroup>
@@ -1190,11 +1132,11 @@ export function EditStaffDetails() {
                 </label>
                 <Select
                   autoComplete="off"
-                  value={watch('employmentType')}
+                  value={watch('employmentTypeId')}
                   {...register('employmentTypeId')}
                   onValueChange={(value) => {
                     if (value) {
-                      setValue('employmentType', value);
+                      setValue('employmentTypeId', value);
                     }
                   }}
                 >
@@ -1203,9 +1145,9 @@ export function EditStaffDetails() {
                   </SelectTrigger>
                   <SelectContent>
                     <SelectGroup>
-                      {employmentType.map((item, index) => (
+                      {employmentTypeList.map((item, index) => (
                         <SelectItem value={item.id} key={index}>
-                          {item.label}
+                          {item.name}
                         </SelectItem>
                       ))}
                     </SelectGroup>
@@ -1223,11 +1165,11 @@ export function EditStaffDetails() {
                 </label>
                 <Select
                   autoComplete="off"
-                  value={watch('designation')}
+                  value={watch('designationId')}
                   {...register('designationId')}
                   onValueChange={(value) => {
                     if (value) {
-                      setValue('designation', value);
+                      setValue('designationId', value);
                     }
                   }}
                 >
@@ -1236,9 +1178,9 @@ export function EditStaffDetails() {
                   </SelectTrigger>
                   <SelectContent>
                     <SelectGroup>
-                      {designation.map((item, index) => (
+                      {designationList.map((item, index) => (
                         <SelectItem value={item.id} key={index}>
-                          {item.label}
+                          {item.name}
                         </SelectItem>
                       ))}
                     </SelectGroup>
@@ -1323,11 +1265,11 @@ export function EditStaffDetails() {
                 </label>
                 <Select
                   autoComplete="off"
-                  value={watch('natureOfPosting')}
+                  value={watch('natureOfPostingId')}
                   {...register('natureOfPostingId')}
                   onValueChange={(value) => {
                     if (value) {
-                      setValue('natureOfPosting', value);
+                      setValue('natureOfPostingId', value);
                     }
                   }}
                 >
@@ -1336,9 +1278,9 @@ export function EditStaffDetails() {
                   </SelectTrigger>
                   <SelectContent>
                     <SelectGroup>
-                      {natureOfPosting.map((item, index) => (
+                      {natureOfPostingList.map((item, index) => (
                         <SelectItem value={item.id} key={index}>
-                          {item.label}
+                          {item.name}
                         </SelectItem>
                       ))}
                     </SelectGroup>

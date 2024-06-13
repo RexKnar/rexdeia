@@ -132,6 +132,30 @@ export const EXAM_MARK_ENTRY = `EXAM_MARK_ENTRY`;
 export const UPDATE_STAFF_BY_ID = `UPDATE_STAFF_BY_ID`;
 export const GET_SUBJECT_LIST_BY_STAFF_ID = `GET_SUBJECT_LIST_BY_STAFF_ID`;
 export const UNASSIGN_STAFF_SECTION_BY_ID = `UNASSIGN_STAFF_SECTION_BY_ID`;
+export const ADD_COMMUNITY = `ADD_COMMUNITY`;
+export const ADD_LANGUAGE = `ADD_LANGUAGE`;
+export const ADD_STAFF_CATEGORY = `ADD_STAFF_CATEGORY`;
+export const ADD_DESIGNATION = `ADD_DESIGNATION`;
+export const ADD_NATURE_OF_POSTING = `ADD_NATURE_OF_POSTING`;
+export const ADD_EMPLOYMENT_TYPE = `ADD_EMPLOYMENT_TYPE`;
+export const GET_COMMUNITY_LIST = `GET_COMMUNITY_LIST`;
+export const GET_LANGUAGE_LIST = `GET_LANGUAGE_LIST`;
+export const GET_STAFF_CATEGORY_LIST = `GET_STAFF_CATEGORY_LIST`;
+export const GET_DESIGNATION_LIST = `GET_DESIGNATION_LIST`;
+export const GET_NATURE_OF_POSTING_LIST = `GET_NATURE_OF_POSTING_LIST`;
+export const GET_EMPLOYMENT_TYPE_LIST = `GET_EMPLOYMENT_TYPE_LIST`;
+export const UPDATE_COMMUNITY_BY_ID = `UPDATE_COMMUNITY_BY_ID`;
+export const UPDATE_LANGUAGE_BY_ID = `UPDATE_LANGUAGE_BY_ID`;
+export const UPDATE_STAFF_CATEGORY_BY_ID = `UPDATE_STAFF_CATEGORY_BY_ID`;
+export const UPDATE_DESIGNATION_BY_ID = `UPDATE_DESIGNATION_BY_ID`;
+export const UPDATE_NATURE_OF_POSTING_BY_ID = `UPDATE_NATURE_OF_POSTING_BY_ID`;
+export const UPDATE_EMPLOYMENT_TYPE_BY_ID = `UPDATE_EMPLOYMENT_TYPE_BY_ID`;
+export const DELETE_COMMUNITY_BY_ID = `DELETE_COMMUNITY_BY_ID`;
+export const DELETE_LANGUAGE_BY_ID = `DELETE_LANGUAGE_BY_ID`;
+export const DELETE_STAFF_CATEGORY_BY_ID = `DELETE_STAFF_CATEGORY_BY_ID`;
+export const DELETE_DESIGNATION_BY_ID = `DELETE_DESIGNATION_BY_ID`;
+export const DELETE_NATURE_OF_POSTING_BY_ID = `DELETE_NATURE_OF_POSTING_BY_ID`;
+export const DELETE_EMPLOYMENT_TYPE_BY_ID = `DELETE_EMPLOYMENT_TYPE_BY_ID`;
 
 export default <EndpointDetails>{
   ...ExamAnalyticsEndpoints,
@@ -655,5 +679,101 @@ export default <EndpointDetails>{
   [UNASSIGN_STAFF_SECTION_BY_ID]: {
     requestType: `DELETE`,
     endpoint: `/api/class/[id]/staffs/[staffId]/subjects`,
+  },
+  [ADD_COMMUNITY]: {
+    requestType: 'POST',
+    endpoint: '/api/community',
+  },
+  [ADD_LANGUAGE]: {
+    requestType: 'POST',
+    endpoint: '/api/language',
+  },
+  [ADD_EMPLOYMENT_TYPE]: {
+    requestType: 'POST',
+    endpoint: '/api/staff/employment-type',
+  },
+  [ADD_NATURE_OF_POSTING]: {
+    requestType: 'POST',
+    endpoint: '/api/staff/nature-of-posting',
+  },
+  [ADD_DESIGNATION]: {
+    requestType: 'POST',
+    endpoint: '/api/staff/designation',
+  },
+  [ADD_STAFF_CATEGORY]: {
+    requestType: 'POST',
+    endpoint: '/api/staff/staff-category',
+  },
+  [GET_COMMUNITY_LIST]: {
+    requestType: 'GET',
+    endpoint: '/api/community',
+  },
+  [GET_LANGUAGE_LIST]: {
+    requestType: 'GET',
+    endpoint: '/api/language',
+  },
+  [GET_EMPLOYMENT_TYPE_LIST]: {
+    requestType: 'GET',
+    endpoint: '/api/staff/employment-type',
+  },
+  [GET_NATURE_OF_POSTING_LIST]: {
+    requestType: 'GET',
+    endpoint: '/api/staff/nature-of-posting',
+  },
+  [GET_DESIGNATION_LIST]: {
+    requestType: 'GET',
+    endpoint: '/api/staff/designation',
+  },
+  [GET_STAFF_CATEGORY_LIST]: {
+    requestType: 'GET',
+    endpoint: '/api/staff/staff-category',
+  },
+  [UPDATE_COMMUNITY_BY_ID]: {
+    requestType: 'PUT',
+    endpoint: '/api/community/[id]',
+  },
+  [UPDATE_LANGUAGE_BY_ID]: {
+    requestType: 'PUT',
+    endpoint: '/api/language/[id]',
+  },
+  [UPDATE_EMPLOYMENT_TYPE_BY_ID]: {
+    requestType: 'PUT',
+    endpoint: '/api/staff/employment-type/[id]',
+  },
+  [UPDATE_NATURE_OF_POSTING_BY_ID]: {
+    requestType: 'PUT',
+    endpoint: '/api/staff/nature-of-posting/[id]',
+  },
+  [UPDATE_DESIGNATION_BY_ID]: {
+    requestType: 'PUT',
+    endpoint: '/api/staff/designation/[id]',
+  },
+  [UPDATE_STAFF_CATEGORY_BY_ID]: {
+    requestType: 'PUT',
+    endpoint: '/api/staff/staff-category/[id]',
+  },
+  [DELETE_COMMUNITY_BY_ID]: {
+    requestType: 'DELETE',
+    endpoint: '/api/community/[id]',
+  },
+  [DELETE_LANGUAGE_BY_ID]: {
+    requestType: 'DELETE',
+    endpoint: '/api/language/[id]',
+  },
+  [DELETE_EMPLOYMENT_TYPE_BY_ID]: {
+    requestType: 'DELETE',
+    endpoint: '/api/staff/employment-type/[id]',
+  },
+  [DELETE_NATURE_OF_POSTING_BY_ID]: {
+    requestType: 'DELETE',
+    endpoint: '/api/staff/nature-of-posting/[id]',
+  },
+  [DELETE_DESIGNATION_BY_ID]: {
+    requestType: 'DELETE',
+    endpoint: '/api/staff/designation/[id]',
+  },
+  [DELETE_STAFF_CATEGORY_BY_ID]: {
+    requestType: 'DELETE',
+    endpoint: '/api/staff/staff-category/[id]',
   },
 };
