@@ -382,6 +382,8 @@ model Student {
   middleName           String?
   lastName             String
   emailId              String
+  emisNumber           String        @unique
+  admissionNumber      String?
   phoneNumber          String
   aadharCardNumber     String
   gender               String

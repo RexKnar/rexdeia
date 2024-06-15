@@ -18,6 +18,8 @@ export function formatStudentPayload(data: Record<string, unknown>) {
     'status',
     'gender',
     'emailId',
+    'emisNumber',
+    'admissionNumber',
     'batchId',
     'lastName',
     'religion',

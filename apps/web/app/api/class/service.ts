@@ -317,6 +317,12 @@ export async function getAllSubjectByClassId(id: string) {
           assessmentFormat: true,
         },
       },
+      subjectMaster: {
+        select: {
+          id: true,
+          name: true,
+        },
+      },
       subjectToGroup: {
         select: {
           group: true,

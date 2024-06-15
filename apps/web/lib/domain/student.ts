@@ -12,6 +12,8 @@ export type Student = {
   gender: string;
   batchId: string;
   emailId: string;
+  emisNumber: string;
+  admissionNumber: string;
   lastName: string;
   religion: string;
   firstName: string;
