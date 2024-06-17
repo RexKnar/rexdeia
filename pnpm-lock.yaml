@@ -28,8 +28,8 @@ importers:
         specifier: 2.4.12
         version: 2.4.12(prettier@3.3.1)
       prettier-plugin-tailwindcss:
-        specifier: 0.5.14
-        version: 0.5.14(prettier@3.3.1)
+        specifier: 0.6.5
+        version: 0.6.5(prettier@3.3.1)
       turbo:
         specifier: 1.13.3
         version: 1.13.3
@@ -261,8 +261,8 @@ importers:
         specifier: ^2.4.7
         version: 2.4.12(prettier@3.3.2)
       prettier-plugin-tailwindcss:
-        specifier: ^0.5.9
-        version: 0.5.14(prettier@3.3.2)
+        specifier: ^0.6.0
+        version: 0.6.5(prettier@3.3.2)
       prisma:
         specifier: 5.15.0
         version: 5.15.0
@@ -4036,8 +4036,8 @@ packages:
       prettier:
         optional: true
 
-  prettier-plugin-tailwindcss@0.5.14:
-    resolution: {integrity: sha512-Puaz+wPUAhFp8Lo9HuciYKM2Y2XExESjeT+9NQoVFXZsPPnc9VYss2SpxdQ6vbatmt8/4+SN0oe0I1cPDABg9Q==}
+  prettier-plugin-tailwindcss@0.6.5:
+    resolution: {integrity: sha512-axfeOArc/RiGHjOIy9HytehlC0ZLeMaqY09mm8YCkMzznKiDkwFzOpBvtuhuv3xG5qB73+Mj7OCe2j/L1ryfuQ==}
     engines: {node: '>=14.21.3'}
     peerDependencies:
       '@ianvs/prettier-plugin-sort-imports': '*'
@@ -9783,11 +9783,11 @@ snapshots:
     optionalDependencies:
       prettier: 3.3.2
 
-  prettier-plugin-tailwindcss@0.5.14(prettier@3.3.1):
+  prettier-plugin-tailwindcss@0.6.5(prettier@3.3.1):
     dependencies:
       prettier: 3.3.1
 
-  prettier-plugin-tailwindcss@0.5.14(prettier@3.3.2):
+  prettier-plugin-tailwindcss@0.6.5(prettier@3.3.2):
     dependencies:
       prettier: 3.3.2
 
