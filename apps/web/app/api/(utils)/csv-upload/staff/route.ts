@@ -85,7 +85,6 @@ export async function POST(request: NextRequest) {
 
   try {
     const data = await csvResponse;
-    // console.log(data);
     const dbResponse = await addStaffCSV(data);
     return new NextResponse(JSON.stringify(dbResponse), {
       status: StatusCodes.OK,

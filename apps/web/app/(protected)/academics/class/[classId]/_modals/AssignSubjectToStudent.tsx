@@ -76,8 +76,7 @@ export function AssignSubjectToStudentFlyout() {
       subjectMasterId,
       studentIds,
     };
-    const assignedResponse = await mutateAssignElectiveSubjectAsync(payload);
-    console.log(assignedResponse);
+    await mutateAssignElectiveSubjectAsync(payload);
   }
   const { mutateAsync: mutateAssignElectiveSubjectAsync } =
     useAssignElectiveSubjectToStudentQuery(subjectId);
