@@ -41,7 +41,7 @@ export function MarkInput({
     } else {
       setMarkStatus('-');
     }
-  }, [currentMark]);
+  }, [currentMark, validationData?.minMark, validationData?.totalMarks]);
 
   return (
     <div className="flex-1 justify-center">

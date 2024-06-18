@@ -41,7 +41,7 @@ export function MarkFields({
     }
 
     prevAssessmentFormats.current = examSubjectPartition;
-  }, [examSubjectPartition]);
+  }, [append, examSubjectPartition]);
   return (
     <div className="flex w-full space-x-2">
       {fields.map((field, formatIndex) => {
