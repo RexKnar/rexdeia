@@ -568,7 +568,7 @@ export default <EndpointDetails>{
   },
   [GET_STAFFS_BY_SECTION]: {
     requestType: `PUT`,
-    endpoint: `/api/mark-entry/staffs`,
+    endpoint: `/api/staff`,
   },
   [GET_MARKS_WITH_FORMAT_BY_EXAM]: {
     requestType: `PUT`,

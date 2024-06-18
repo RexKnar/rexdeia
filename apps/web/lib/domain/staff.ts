@@ -19,7 +19,7 @@ export type Staff = {
   academicYear?: AcademicYear;
   annualIncome: string;
   bloodGroup?: string;
-  enrollmentId: string;
+  enrollmentId?: number;
   dateOfJoining: Date;
   dateOfDetainment: Date;
   dateOfRegularization: Date;
@@ -122,6 +122,8 @@ export type UpdateStaffModel = Omit<
   | 'status'
   | 'subjects'
   | 'sections'
+  | 'enrollmentNumber'
+  | 'enrollmentId'
 >;
 
 export type StaffSubjectList = {

@@ -6,7 +6,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 
 import fileHandler from '../service';
-import { addStudentCSV } from './service';
+import { addStaffCSV } from './service';
 
 const upload = multer({
   storage: multer.memoryStorage(),
@@ -14,10 +14,10 @@ const upload = multer({
 
 /**
  * @swagger
- * /api/csv-upload/student:
+ * /api/csv-upload/staff:
  *   post:
- *     summary: Add new Student
- *     description: Add New Student by uploading a CSV file
+ *     summary: Add new Staff
+ *     description: Add New Staff by uploading a CSV file
  *     requestBody:
  *       required: true
  *       content:
@@ -31,13 +31,13 @@ const upload = multer({
  *                 description: The CSV file to upload.
  *     responses:
  *       '200':
- *         description: Student details added successfully.
+ *         description: Staff details added successfully.
  *         content:
  *           application/json:
  *             schema:
  *               type: object
  *               properties:
- *                 # Define the schema of your Student object here
+ *                 # Define the schema of your Staff object here
  *       '400':
  *         description: Bad request due to validation error.
  *       '401':
@@ -86,7 +86,7 @@ export async function POST(request: NextRequest) {
   try {
     const data = await csvResponse;
     // console.log(data);
-    const dbResponse = await addStudentCSV(data);
+    const dbResponse = await addStaffCSV(data);
     return new NextResponse(JSON.stringify(dbResponse), {
       status: StatusCodes.OK,
     });

@@ -466,7 +466,8 @@ model Staff {
   nationality                  String?
   motherTongueId               String?                   @db.Uuid
   motherTongue                 Language?                 @relation(fields: [motherTongueId], references: [id])
-  enrollmentNumber             String?
+  enrollmentNumber             Int                       @default(autoincrement())
+  udiseNumber                  String?
   specialCategory              String?
   differentlyAbled             Boolean                   @default(false)
   epfNumber                    String?
@@ -518,6 +519,14 @@ model Staff {
   staffCategoryId              String?                   @db.Uuid
   staffCategory                StaffCategory?            @relation(fields: [staffCategoryId], references: [id])
   subjectHandling              String?
+  primarySubject               SubjectMaster?            @relation("PrimarySubject", fields: [primarySubjectId], references: [id])
+  primarySubjectId             String?                   @db.Uuid
+  secondarySubject             SubjectMaster?            @relation("SecondarySubject", fields: [secondarySubjectId], references: [id])
+  secondarySubjectId           String?                   @db.Uuid
+  otherSubject                 SubjectMaster?            @relation("OtherSubject", fields: [otherSubjectId], references: [id])
+  otherSubjectId               String?                   @db.Uuid
+  mediumOfTeaching             Medium?                   @relation(fields: [mediumOfTeachingId], references: [id])
+  mediumOfTeachingId           String?                   @db.Uuid
   collegeName                  String?
   passOutYear                  DateTime?
   marksObtained                String?
@@ -661,6 +670,9 @@ model SubjectMaster {
   updatedAt              DateTime?                @default(now())
   StudentElectiveSubject StudentElectiveSubject[]
   Mark                   Mark[]
+  primaryStaff           Staff[]                  @relation("PrimarySubject")
+  secondaryStaff         Staff[]                  @relation("SecondarySubject")
+  otherStaff             Staff[]                  @relation("OtherSubject")
 }
 
 model Subject {
@@ -786,6 +798,7 @@ model Medium {
   branchId       String           @db.Uuid
   createdAt      DateTime?        @default(now())
   updatedAt      DateTime?        @default(now())
+  Staff          Staff[]
 }
 
 model subjectType {
