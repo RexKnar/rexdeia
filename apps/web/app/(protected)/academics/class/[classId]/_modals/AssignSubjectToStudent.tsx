@@ -1,5 +1,6 @@
 'use client';
 import { useGetStudentListByClassIdQuery } from 'lib/queries/students/useGetStudentListByClassIdQuery';
+import { useAssignElectiveSubjectToStudentQuery } from 'lib/queries/subjects/assign-elective-subject/useAssignElectiveSubjectToStudentQuery';
 import { PlusCircle, Trash } from 'lucide-react';
 import {
   useParams,
@@ -29,7 +30,8 @@ export function AssignSubjectToStudentFlyout() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const isOpen = searchParams.get('isAssignSubjectToStudentFlyout') === 'true';
-  // const subjectId = searchParams.get('subjectId');
+  const subjectId = searchParams.get('subjectId');
+  const subjectMasterId = searchParams.get('subjectMasterId');
   const subjectName = searchParams.get('subjectName');
   const params = useParams<{ classId: string }>();
   const { data: studentListResponse } = useGetStudentListByClassIdQuery(
@@ -58,17 +60,27 @@ export function AssignSubjectToStudentFlyout() {
   };
   const { fields, append, remove } = useFieldArray({
     control,
-    name: 'sections' as never,
+    name: 'students' as never,
   });
   useEffect(() => {
     if (isOpen && fields.length === 0) {
-      append({ sections: 'sections' });
+      append({ studentId: null });
     }
-  }, [isOpen, fields, append]);
+  }, [isOpen, append]);
 
-  async function AssignStudentToSubject(payload) {
-    payload;
+  async function AssignStudentToSubject(formData) {
+    const studentIds = formData.students.map((student) => {
+      return student.studentId;
+    });
+    const payload = {
+      subjectMasterId,
+      studentIds,
+    };
+    await mutateAssignElectiveSubjectAsync(payload);
   }
+  const { mutateAsync: mutateAssignElectiveSubjectAsync } =
+    useAssignElectiveSubjectToStudentQuery(subjectId);
+
   return (
     <section>
       <Sheet open={isOpen}>
@@ -98,12 +110,12 @@ export function AssignSubjectToStudentFlyout() {
                 <section key={row.id} className="flex align-middle">
                   <Select
                     autoComplete="off"
-                    value={watch(`sections.${index}.StudentId`)}
-                    {...register(`sections.${index}.StudentId` as any, {
+                    value={watch(`students.${index}.studentId`)}
+                    {...register(`students.${index}.studentId` as any, {
                       required: 'student is required',
                     })}
                     onValueChange={(value) =>
-                      setValue(`sections.${index}.StudentId` as any, value)
+                      setValue(`students.${index}.studentId` as any, value)
                     }
                   >
                     <SelectTrigger className="mt-2 w-full">
@@ -120,7 +132,7 @@ export function AssignSubjectToStudentFlyout() {
                     </SelectContent>
                   </Select>
                   <p>
-                    {errors[`sections.${index}.staffId`]?.message.toString()}
+                    {errors[`students.${index}.studentId`]?.message.toString()}
                   </p>
                   {fields.length > 1 ? (
                     <div className="m-2">

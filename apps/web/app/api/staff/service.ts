@@ -1,8 +1,13 @@
+import uniqBy from 'lodash/uniqBy';
 import { getServerSession } from 'next-auth';
 
 import { authOptions } from '../../../lib/auth';
 import { db } from '../../../lib/db';
 import { AddStaffModel, UpdateStaffModel } from '../../../lib/domain/staff';
+
+type GetStaffsFilter = {
+  sectionId: string;
+};
 
 export async function getStaffById(id: string) {
   return db.staff.findFirst({
@@ -88,6 +93,8 @@ export async function addStaff(staff: AddStaffModel) {
     | 'designationId'
     | 'natureOfPostingId'
     | 'staffCategory'
+    | 'enrollmentNumber'
+    | 'enrollmentId'
   > = {
     ...staff,
   };
@@ -291,6 +298,29 @@ export async function getAllStaffsBySectionsIdWithSubjects(ids: string[]) {
   }));
 
   return result;
+}
+
+export async function getStaffsBySection(filter: GetStaffsFilter) {
+  const staffs = await db.academicSubjectForStaff.findMany({
+    where: {
+      ...filter,
+    },
+    select: {
+      staff: {
+        select: {
+          id: true,
+          firstName: true,
+          middleName: true,
+          lastName: true,
+        },
+      },
+    },
+  });
+  let staffsList = staffs.map((item) => {
+    return item.staff;
+  });
+
+  return uniqBy(staffsList, (staff) => staff.id);
 }
 
 export async function getSubjectByStaffId(id) {

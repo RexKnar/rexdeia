@@ -18,6 +18,8 @@ export function formatStudentPayload(data: Record<string, unknown>) {
     'status',
     'gender',
     'emailId',
+    'emisNumber',
+    'admissionNumber',
     'batchId',
     'lastName',
     'religion',
@@ -59,4 +61,10 @@ export function formatStudentPayload(data: Record<string, unknown>) {
   });
 
   return student as Student;
+}
+
+export function toTitleCase(str: string) {
+  return str.toLowerCase().replace(/\b\w/g, function (match) {
+    return match.toUpperCase();
+  });
 }

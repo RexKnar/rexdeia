@@ -170,7 +170,7 @@ export function StudentDetail() {
                       Age
                     </label>
                     <Text variant="base-regular">
-                      {getStudentByIdResponse.additionalAttributes.age}
+                      {getStudentByIdResponse.additionalAttributes?.age}
                     </Text>
                   </div>
                   <div>
@@ -242,7 +242,7 @@ export function StudentDetail() {
                       Caste
                     </label>
                     <Text variant="base-regular">
-                      {getStudentByIdResponse.additionalAttributes.caste}
+                      {getStudentByIdResponse.additionalAttributes?.caste}
                     </Text>
                   </div>
                   <div>
@@ -252,7 +252,7 @@ export function StudentDetail() {
                     <Text variant="base-regular">
                       {
                         getStudentByIdResponse.additionalAttributes
-                          .differentlyAbled
+                          ?.differentlyAbled
                       }
                     </Text>
                   </div>
@@ -294,7 +294,7 @@ export function StudentDetail() {
                       <Text variant="base-regular">
                         {
                           getStudentByIdResponse.additionalAttributes
-                            .fatherEducation
+                            ?.fatherEducation
                         }
                       </Text>
                     </div>
@@ -305,7 +305,7 @@ export function StudentDetail() {
                       <Text variant="base-regular">
                         {
                           getStudentByIdResponse.additionalAttributes
-                            .fatherAadharCardNumber
+                            ?.fatherAadharCardNumber
                         }
                       </Text>
                     </div>

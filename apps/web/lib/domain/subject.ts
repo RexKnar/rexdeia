@@ -4,6 +4,7 @@ export type SubjectModel = {
   isActive?: boolean;
   description?: string;
   subjectMasterId: string;
+  subjectMaster?: SubjectMasterModel;
   sectionId: string[];
   elective: string;
   classId: string;
@@ -137,4 +138,12 @@ export type SubjectToSubjectTypesModel = {
   createdAt: string;
   updatedAt: string;
   subjectType: string;
+};
+
+export type AssignElectiveSubjectModel = {
+  sectionId?: string;
+  academicYearId?: string;
+  subjectId: string;
+  studentId: string;
+  subjectMasterId: string;
 };

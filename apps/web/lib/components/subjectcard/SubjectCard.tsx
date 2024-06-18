@@ -15,8 +15,9 @@ type SubjectCardProps = {
   name: string;
   type?: string;
   assessmentFormat?: string;
+  subjectMaster?: { id: string; name: string };
 };
-export function SubjectCard({ id, name }: SubjectCardProps) {
+export function SubjectCard({ id, name, subjectMaster }: SubjectCardProps) {
   const pathname = usePathname();
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -49,13 +50,31 @@ export function SubjectCard({ id, name }: SubjectCardProps) {
                     className="flex-1"
                     onClick={async () => {
                       const params = new URLSearchParams(searchParams);
+                      params.set('isAssignSubjectToStudentFlyout', 'true');
+                      params.set('subjectId', id);
+                      params.set('subjectMasterId', subjectMaster.id);
+                      params.set('subjectName', name);
+                      router.replace(pathname + '?' + params.toString());
+                    }}
+                  >
+                    Assign elective
+                  </Button>
+                </DropdownMenuItem>
+                <DropdownMenuSeparator className="bg-gray-100 text-gray-500" />
+                <DropdownMenuItem className="flex cursor-pointer items-center">
+                  <Button
+                    variant="link"
+                    size="sm"
+                    className="flex-1"
+                    onClick={async () => {
+                      const params = new URLSearchParams(searchParams);
                       params.set('isAddSubjectFlyoutOpen', 'true');
                       params.set('subjectId', id);
 
                       router.replace(pathname + '?' + params.toString());
                     }}
                   >
-                    Reassign
+                    Edit
                   </Button>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator className="bg-gray-100 text-gray-500" />
@@ -73,23 +92,6 @@ export function SubjectCard({ id, name }: SubjectCardProps) {
                     }}
                   >
                     Remove
-                  </Button>
-                </DropdownMenuItem>
-                <DropdownMenuSeparator className="bg-gray-100 text-gray-500" />
-                <DropdownMenuItem className="flex cursor-pointer items-center">
-                  <Button
-                    variant="link"
-                    size="sm"
-                    className="flex-1"
-                    onClick={async () => {
-                      const params = new URLSearchParams(searchParams);
-                      params.set('isAssignSubjectToStudentFlyout', 'true');
-                      params.set('subjectId', id);
-                      params.set('subjectName', name);
-                      router.replace(pathname + '?' + params.toString());
-                    }}
-                  >
-                    Assign elective
                   </Button>
                 </DropdownMenuItem>
               </DropdownMenuContent>

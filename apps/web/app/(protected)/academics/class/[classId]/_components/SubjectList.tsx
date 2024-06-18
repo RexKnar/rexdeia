@@ -34,7 +34,11 @@ export function SubjectList() {
     <section className="grid w-full grid-cols-4 justify-between gap-4 px-0">
       {subjectListResponse.map((subject) => (
         <div key={subject.id}>
-          <SubjectCard id={subject.id} name={subject.name} />
+          <SubjectCard
+            id={subject.id}
+            name={subject.name}
+            subjectMaster={subject.subjectMaster}
+          />
         </div>
       ))}
     </section>

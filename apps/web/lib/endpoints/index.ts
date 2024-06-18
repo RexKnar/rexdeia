@@ -1,4 +1,5 @@
 import ExamAnalyticsEndpoints from './examAnalyticsEndpoints';
+import SubjectEndpoints from './subjectEndpoints';
 import { EndpointDetails } from './types';
 
 export const ADD_ENQUIRY = `ADD_ENQUIRY`;
@@ -159,6 +160,7 @@ export const DELETE_EMPLOYMENT_TYPE_BY_ID = `DELETE_EMPLOYMENT_TYPE_BY_ID`;
 
 export default <EndpointDetails>{
   ...ExamAnalyticsEndpoints,
+  ...SubjectEndpoints,
   [REGISTER_USER]: {
     requestType: `POST`,
     endpoint: `/api/register`,
@@ -566,7 +568,7 @@ export default <EndpointDetails>{
   },
   [GET_STAFFS_BY_SECTION]: {
     requestType: `PUT`,
-    endpoint: `/api/mark-entry/staffs`,
+    endpoint: `/api/staff`,
   },
   [GET_MARKS_WITH_FORMAT_BY_EXAM]: {
     requestType: `PUT`,
