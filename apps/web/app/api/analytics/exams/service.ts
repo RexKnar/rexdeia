@@ -43,6 +43,7 @@ export async function getExamAnalyticsByClass(filter: MarkAnalyticsFilter) {
                 examSubject: {
                   select: {
                     subject: true,
+                    convertTo: true,
                     examSubjectPartition: {
                       include: {
                         Mark: true,
@@ -66,6 +67,7 @@ export async function getExamAnalyticsByClass(filter: MarkAnalyticsFilter) {
     const [{ examSubject }] = student.section.ExamGroup;
     let subjectPassed = 0;
     let subjectFailed = 0;
+    let studentTotalMark = 0;
 
     const subjects = examSubject.map((examSubject) => {
       const examSubjectPartition = examSubject.examSubjectPartition;
@@ -91,8 +93,10 @@ export async function getExamAnalyticsByClass(filter: MarkAnalyticsFilter) {
             absentOn.push(partition.assessmentFormat.name);
           }
 
-          const actualMark = (mark.mark / partition.convertTo) * 100;
-          subjectTotalMark += actualMark;
+          const actualMark =
+            (mark.mark / partition.totalMarks) * partition.convertTo;
+          subjectTotalMark += Math.ceil(actualMark);
+          mark['total'] = Math.ceil(actualMark);
 
           acc.push(mark);
         });
@@ -105,10 +109,12 @@ export async function getExamAnalyticsByClass(filter: MarkAnalyticsFilter) {
       } else {
         subjectPassed++;
       }
+
+      studentTotalMark += subjectTotalMark;
       const subject = {
         ...examSubject.subject,
         marks,
-        subjectTotalMark,
+        subjectTotalMark: Math.ceil(subjectTotalMark),
         absentStatus,
         absentOn,
         failingStatus,
@@ -121,7 +127,7 @@ export async function getExamAnalyticsByClass(filter: MarkAnalyticsFilter) {
     });
     subjectCount =
       subjectCount < subjects.length ? subjects.length : subjectCount;
-
+    studentDetail['totalMark'] = studentTotalMark;
     studentDetail['subjects'] = subjects;
     studentDetail['subjectPassed'] = subjectPassed;
     studentDetail['subjectFailed'] = subjectFailed;
@@ -183,25 +189,25 @@ export async function getExamAnalyticsByClass(filter: MarkAnalyticsFilter) {
 
       if (isFailing) {
         totalFailCount++;
-        if (gender === 'male') {
+        if (gender === 'Male' || gender === 'male') {
           maleFailCount++;
-        } else if (gender === 'female') {
+        } else if (gender === 'female' || gender === 'Female') {
           femaleFailCount++;
         }
       } else {
         totalPassCount++;
-        if (gender === 'male') {
+        if (gender === 'male' || gender === 'Male') {
           malePassCount++;
-        } else if (gender === 'female') {
+        } else if (gender === 'female' || gender === 'Female') {
           femalePassCount++;
         }
       }
 
       if (isAbsent) {
         totalAbsentCount++;
-        if (gender === 'male') {
+        if (gender === 'male' || gender === 'Male') {
           maleAbsentCount++;
-        } else if (gender === 'female') {
+        } else if (gender === 'female' || gender === 'Female') {
           femaleAbsentCount++;
         }
       }
@@ -251,7 +257,10 @@ export async function getExamAnalyticsByClass(filter: MarkAnalyticsFilter) {
       let maleFailCount = 0;
       let femaleFailCount = 0;
       students.forEach((student) => {
-        if (student['subjectPassed'] == i + 1 && student['gender'] == 'male') {
+        if (
+          student['subjectPassed'] == i + 1 &&
+          (student['gender'] == 'male' || student['gender'] == 'Male')
+        ) {
           malePassCount += 1;
         }
         if (
@@ -260,12 +269,15 @@ export async function getExamAnalyticsByClass(filter: MarkAnalyticsFilter) {
         ) {
           femalePassCount += 1;
         }
-        if (student['subjectFailed'] == i + 1 && student['gender'] == 'male') {
+        if (
+          student['subjectFailed'] == i + 1 &&
+          (student['gender'] == 'male' || student['gender'] == 'Male')
+        ) {
           maleFailCount += 1;
         }
         if (
           student['subjectFailed'] == i + 1 &&
-          student['gender'] == 'female'
+          (student['gender'] == 'female' || student['gender'] == 'Female')
         ) {
           femaleFailCount += 1;
         }

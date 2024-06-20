@@ -34,7 +34,7 @@ export function BasicAnalyticsCardWidget({
 
     return animation.stop;
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [value]);
 
   return (
     <div className="rounded-md border border-blue-100 bg-white p-3 ">
@@ -53,7 +53,7 @@ export function BasicAnalyticsCardWidget({
           <span className="text-xs text-gray-900">{label}</span>
           <Text className="text-xl">
             <motion.span className="font-bold ">{roundedValue}</motion.span>
-            <span className="font-semibold ">({percentage})</span>
+            <span className="font-semibold ">({percentage}%)</span>
           </Text>
         </div>
       </div>

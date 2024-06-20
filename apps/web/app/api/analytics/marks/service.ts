@@ -107,8 +107,10 @@ export async function getMarksByFilter(filter: MarkAnalyticsFilter) {
             absentOn.push(partition.assessmentFormat.name);
           }
 
-          const actualMark = (mark.mark / partition.convertTo) * 100;
-          subjectTotalMark += actualMark;
+          const actualMark =
+            (mark.mark / partition.totalMarks) * partition.convertTo;
+          subjectTotalMark += Math.ceil(actualMark);
+          mark['total'] = Math.ceil(actualMark);
 
           acc.push(mark);
         });
@@ -171,9 +173,9 @@ export async function getMarksByFilter(filter: MarkAnalyticsFilter) {
     students.forEach((student) => {
       const gender = student.gender;
 
-      if (gender === 'male') {
+      if (gender === 'Male') {
         totalMale++;
-      } else if (gender === 'female') {
+      } else if (gender === 'Female') {
         totalFemale++;
       }
     });
