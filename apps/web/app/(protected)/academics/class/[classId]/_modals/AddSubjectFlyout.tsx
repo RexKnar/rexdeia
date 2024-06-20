@@ -130,8 +130,8 @@ export function AddSubjectFlyout() {
   });
 
   const { data: subjectMasterList } = useGetSubjectMasterListQuery({
-    page,
-    limit,
+    page: 1,
+    limit: 9999,
     filter,
   });
 

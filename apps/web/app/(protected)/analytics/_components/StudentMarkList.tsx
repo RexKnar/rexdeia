@@ -29,6 +29,16 @@ export default function StudentMarkList({
     }
     return [];
   };
+  const getSubjectTotalMark = (student, subjectId) => {
+    const subject = student.subjects.find(
+      (subject) => subject.id === subjectId
+    );
+
+    if (subject && subject.marks.length > 0) {
+      return subject.subjectTotalMark;
+    }
+    return 0;
+  };
   const { data: subjectList } = useGetExamSubjectsByClassSectionIdQuery(
     {
       examId,
@@ -64,10 +74,12 @@ export default function StudentMarkList({
                           {partition.assessmentFormat.name}
                         </span>
                       ))}
+                      <span>Tot</span>
                     </div>
                   </div>
                 </TableCell>
               ))}
+              <TableCell>Total</TableCell>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -82,13 +94,27 @@ export default function StudentMarkList({
                       <div className="flex justify-evenly">
                         {getMarkForSubject(student, subject.subject.id).map(
                           (mark) => (
-                            <span key={mark.id}>{mark.mark}</span>
+                            <span key={mark.id}>{mark.total}</span>
                           )
                         )}
+
+                        <b>
+                          {getSubjectTotalMark(student, subject.subject.id) ||
+                            0}
+                        </b>
                       </div>
                     </div>
                   </TableCell>
                 ))}
+                <TableCell>
+                  {student.failingStatus ? (
+                    <span className="text-red-500">{student.totalMark}(F)</span>
+                  ) : (
+                    <span className="text-green-500">
+                      {student.totalMark}(P)
+                    </span>
+                  )}
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>

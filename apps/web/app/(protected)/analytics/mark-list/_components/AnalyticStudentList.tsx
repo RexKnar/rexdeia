@@ -87,13 +87,19 @@ export function AnalyticStudentList() {
     let currentTotalMarks = 0;
     if (filterSubjects?.length > 0) {
       filterSubjects.map((subject) => {
-        currentTotalMarks += subject.totalMarks;
+        currentTotalMarks += subject.convertTo;
       });
     }
     setFilterTotalMarks(currentTotalMarks || 100);
     setSliderValues([sliderValues[0], currentTotalMarks || 100]);
     refetchMarkList();
   }, [filterSubjects]);
+
+  useEffect(() => {
+    if (subjects) {
+      setFilterSubjects([...subjects]);
+    }
+  }, [subjects]);
 
   const { data: markDetails, refetch: refetchMarkList } =
     useGetMarkListWithFilterQuery(
@@ -116,7 +122,6 @@ export function AnalyticStudentList() {
   useEffect(() => {
     if (markDetails) {
       const { analytics, markList } = markDetails;
-      // setAnalyticDetails(analytics);
       setStudentMarkList(markList);
 
       const widgetData = [
