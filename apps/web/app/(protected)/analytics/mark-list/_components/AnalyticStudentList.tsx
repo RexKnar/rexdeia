@@ -269,6 +269,7 @@ export function AnalyticStudentList() {
                       <Checkbox
                         value={item.id}
                         key={index}
+                        checked={filterSubjects.some((s) => s.id === item.id)}
                         onCheckedChange={() => {
                           handleSubjectCheckedChange(item);
                         }}
