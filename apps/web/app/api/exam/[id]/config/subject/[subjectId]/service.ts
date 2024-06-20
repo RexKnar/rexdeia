@@ -17,6 +17,9 @@ export async function getConfigDetailBySectionSubjectId(
       id: true,
       sectionId: true,
       examSubject: {
+        where: {
+          subjectId,
+        },
         select: {
           id: true,
           subjectId: true,
