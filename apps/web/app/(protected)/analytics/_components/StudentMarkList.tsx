@@ -218,8 +218,10 @@ export default function StudentMarkList({
         <div className="mt-4 space-y-4 rounded-md bg-white p-6">
           <Table className="border-1 border">
             <TableHeader>
-              <TableRow>
-                <TableCell>Student Name </TableCell>
+              <TableRow className="mt-5 bg-primary-300">
+                <TableCell>
+                  <Text className="size-lg font-semibold">Analytics</Text>
+                </TableCell>
                 {subjectList.map((subject) => (
                   <TableCell key={subject.subject.id}>
                     <div className="w-full ">
@@ -228,80 +230,13 @@ export default function StudentMarkList({
                           {subject.subject.name}
                         </Text>
                       </div>
-                      <div className="flex justify-evenly">
-                        {subject.examSubjectPartition.map((partition) => (
-                          <span
-                            className="size-lg font-semibold"
-                            key={partition.id}
-                          >
-                            {partition.assessmentFormat.name}
-                          </span>
-                        ))}
-                        <span>Tot</span>
-                      </div>
                     </div>
                   </TableCell>
                 ))}
-                <TableCell>Total</TableCell>
+                <TableCell>
+                  <Text className="size-lg font-semibold">Overall</Text>
+                </TableCell>
               </TableRow>
-            </TableHeader>
-            <TableBody>
-              {students.map((student) => (
-                <TableRow key={student.id}>
-                  <TableCell>
-                    {student.firstName} {student.lastName}
-                  </TableCell>
-                  {subjectList.map((subject) => (
-                    <TableCell key={subject.subjectId}>
-                      <div className="w-full">
-                        <div className="flex justify-evenly">
-                          {getMarkForSubject(student, subject.subject.id).map(
-                            (mark) =>
-                              mark.attandance ? (
-                                <span
-                                  key={mark.id}
-                                  className="text-bold text-red-500"
-                                >
-                                  A
-                                </span>
-                              ) : (
-                                <span key={mark.id}>{mark.total}</span>
-                              )
-                          )}
-
-                          <b>
-                            {getStudentSubject(student, subject.subject.id)
-                              ?.failingStatus ? (
-                              <span className="text-red-500">
-                                {getStudentSubject(student, subject.subject.id)
-                                  .subjectTotalMark || 0}
-                                (F)
-                              </span>
-                            ) : (
-                              <span className="text-green-500">
-                                {getStudentSubject(student, subject.subject.id)
-                                  ?.subjectTotalMark || 0}
-                                (P)
-                              </span>
-                            )}
-                          </b>
-                        </div>
-                      </div>
-                    </TableCell>
-                  ))}
-                  <TableCell>
-                    {student.failingStatus ? (
-                      <span className="text-red-500">
-                        {student.totalMark}({student.totalAverage}%)-(F)
-                      </span>
-                    ) : (
-                      <span className="text-green-500">
-                        {student.totalMark}({student.totalAverage}%)-(P)
-                      </span>
-                    )}
-                  </TableCell>
-                </TableRow>
-              ))}
               <TableRow>
                 <TableCell>
                   <Text className="text-sm">Average</Text>
@@ -413,6 +348,109 @@ export default function StudentMarkList({
                   <Text className="text-sm">{getTotalLowestMark()}</Text>
                 </TableCell>
               </TableRow>
+              <br />
+              <TableRow className="bg-primary-300">
+                <TableCell>
+                  <Text className="text-lg font-semibold">Student Name </Text>
+                </TableCell>
+                {subjectList.map((subject) => (
+                  <TableCell key={subject.subject.id}>
+                    <div className="w-full ">
+                      <div className="text-center">
+                        <Text className="size-lg font-semibold">
+                          {subject.subject.name}
+                        </Text>
+                      </div>
+                      <div className="flex justify-evenly">
+                        {subject.examSubjectPartition.map((partition) => (
+                          <span
+                            className="size-lg font-semibold"
+                            key={partition.id}
+                          >
+                            {partition.assessmentFormat.name}
+                          </span>
+                        ))}
+                        <span>Tot</span>
+                      </div>
+                    </div>
+                  </TableCell>
+                ))}
+                <TableCell>
+                  {' '}
+                  <Text className="text-lg font-semibold">Total </Text>
+                </TableCell>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {students.map((student) => (
+                <TableRow key={student.id}>
+                  <TableCell>
+                    {student.firstName} {student.lastName}
+                  </TableCell>
+                  {subjectList.map((subject) => (
+                    <TableCell key={subject.subjectId}>
+                      <div className="w-full">
+                        <div className="flex justify-evenly">
+                          {getMarkForSubject(student, subject.subject.id).map(
+                            (mark) =>
+                              mark.attandance ? (
+                                <span
+                                  key={mark.id}
+                                  className="text-bold text-red-500"
+                                >
+                                  A
+                                </span>
+                              ) : (
+                                <span key={mark.id}>{mark.total}</span>
+                              )
+                          )}
+
+                          <b>
+                            {getStudentSubject(student, subject.subject.id)
+                              ?.failingStatus ? (
+                              <span className="text-red-500">
+                                {getStudentSubject(student, subject.subject.id)
+                                  .subjectTotalMark || 0}
+                                (F)
+                              </span>
+                            ) : (
+                              <span className="text-green-500">
+                                {getStudentSubject(student, subject.subject.id)
+                                  ?.subjectTotalMark || 0}
+                                (P)
+                              </span>
+                            )}
+                          </b>
+                        </div>
+                      </div>
+                    </TableCell>
+                  ))}
+                  <TableCell>
+                    {student.failingStatus ? (
+                      <>
+                        <p className="text-red-500">
+                          {student.totalMark}(
+                          {student.totalPercentage.toFixed(2)}%)
+                        </p>
+                        <p className="text-red-500">
+                          {' '}
+                          Avg:{student.totalAverage}(F)
+                        </p>
+                      </>
+                    ) : (
+                      <>
+                        <p className="text-green-500">
+                          {student.totalMark}(
+                          {student.totalPercentage.toFixed(2)}%)
+                        </p>
+                        <p className="text-green-500">
+                          Avg:{student.totalAverage}-(P)
+                        </p>
+                      </>
+                    )}
+                  </TableCell>
+                </TableRow>
+              ))}
             </TableBody>
           </Table>
         </div>
