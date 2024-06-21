@@ -47,7 +47,7 @@ export async function PUT(request: NextRequest) {
       status: StatusCodes.OK,
     });
   } catch (e) {
-    captureException(e);
+    captureException({ message: e, source: '/api/analytics/marks' });
     return new NextResponse(e, {
       status: StatusCodes.BAD_REQUEST,
     });

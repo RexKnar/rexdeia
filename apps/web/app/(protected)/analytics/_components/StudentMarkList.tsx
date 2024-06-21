@@ -427,13 +427,26 @@ export default function StudentMarkList({
                   ))}
                   <TableCell>
                     {student.failingStatus ? (
-                      <span className="text-red-500">
-                        {student.totalMark}({student.totalAverage}%)-(F)
-                      </span>
+                      <>
+                        <p className="text-red-500">
+                          {student.totalMark}(
+                          {student.totalPercentage.toFixed(2)}%)
+                        </p>
+                        <p className="text-red-500">
+                          {' '}
+                          Avg:{student.totalAverage}(F)
+                        </p>
+                      </>
                     ) : (
-                      <span className="text-green-500">
-                        {student.totalMark}({student.totalAverage}%)-(P)
-                      </span>
+                      <>
+                        <p className="text-green-500">
+                          {student.totalMark}(
+                          {student.totalPercentage.toFixed(2)}%)
+                        </p>
+                        <p className="text-green-500">
+                          Avg:{student.totalAverage}-(P)
+                        </p>
+                      </>
                     )}
                   </TableCell>
                 </TableRow>

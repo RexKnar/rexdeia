@@ -82,6 +82,7 @@ export async function getMarksByFilter(filter: MarkAnalyticsFilter) {
     let subjectPassed = 0;
     let subjectFailed = 0;
     let totalMark = 0;
+    let actualTotalMarks = 0;
     let subjectMasters = [];
 
     const subjects = examSubject.map((examSubject) => {
@@ -99,7 +100,7 @@ export async function getMarksByFilter(filter: MarkAnalyticsFilter) {
         const subjectMarks = partition.Mark.filter(
           (subjectMark) => subjectMark.studentId === studentId
         );
-
+        actualTotalMarks += partition.convertTo;
         subjectMarks.forEach((mark) => {
           if (mark.mark < partition.minMark || mark.attandance) {
             failingStatus = true;
@@ -150,6 +151,7 @@ export async function getMarksByFilter(filter: MarkAnalyticsFilter) {
     studentDetail['subjectPassed'] = subjectPassed;
     studentDetail['subjectFailed'] = subjectFailed;
     studentDetail['failingStatus'] = subjectFailed > 0 ? true : false;
+    studentDetail['totalPercentage'] = (totalMark / actualTotalMarks) * 100;
 
     return studentDetail;
   });
