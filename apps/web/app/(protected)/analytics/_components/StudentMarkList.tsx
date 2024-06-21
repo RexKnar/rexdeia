@@ -292,11 +292,11 @@ export default function StudentMarkList({
                   <TableCell>
                     {student.failingStatus ? (
                       <span className="text-red-500">
-                        {student.totalMark}(F)
+                        {student.totalMark}({student.totalAverage}%)-(F)
                       </span>
                     ) : (
                       <span className="text-green-500">
-                        {student.totalMark}(P)
+                        {student.totalMark}({student.totalAverage}%)-(P)
                       </span>
                     )}
                   </TableCell>
