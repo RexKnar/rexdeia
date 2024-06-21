@@ -82,6 +82,7 @@ export async function getMarksByFilter(filter: MarkAnalyticsFilter) {
     let subjectPassed = 0;
     let subjectFailed = 0;
     let totalMark = 0;
+    let subjectMasters = [];
 
     const subjects = examSubject.map((examSubject) => {
       const examSubjectPartition = examSubject.examSubjectPartition;
@@ -91,7 +92,9 @@ export async function getMarksByFilter(filter: MarkAnalyticsFilter) {
       let failingOn = [];
       let absentStatus = false;
       let absentOn = [];
-
+      if (!subjectMasters.includes(examSubject.subject.subjectMasterId)) {
+        subjectMasters.push(examSubject.subject.subjectMasterId);
+      }
       const marks = examSubjectPartition.reduce((acc, partition) => {
         const subjectMarks = partition.Mark.filter(
           (subjectMark) => subjectMark.studentId === studentId
@@ -140,9 +143,10 @@ export async function getMarksByFilter(filter: MarkAnalyticsFilter) {
     });
     subjectCount =
       subjectCount < subjects.length ? subjects.length : subjectCount;
-
+    studentDetail['subjectMasterCount'] = subjectMasters.length;
     studentDetail['subjects'] = subjects;
     studentDetail['totalMark'] = totalMark;
+    studentDetail['totalAverage'] = totalMark / subjectMasters.length;
     studentDetail['subjectPassed'] = subjectPassed;
     studentDetail['subjectFailed'] = subjectFailed;
     studentDetail['failingStatus'] = subjectFailed > 0 ? true : false;
