@@ -312,6 +312,7 @@ export async function getStaffsBySection(filter: GetStaffsFilter) {
           firstName: true,
           middleName: true,
           lastName: true,
+          email: true,
         },
       },
     },

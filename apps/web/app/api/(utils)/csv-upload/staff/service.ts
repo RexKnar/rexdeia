@@ -11,16 +11,24 @@ export async function addStaffCSV(staffDetails) {
     for (const staffDetail of staffDetails) {
       if (staffDetail.Name && staffDetail.AadharNumber) {
         let user = await db.user.findFirst({
-          where: { username: `${staffDetail.Mobile}@gmail.com` },
+          where: {
+            username: staffDetail.Email
+              ? staffDetail.Email.toLowerCase()
+              : `${staffDetail.Mobile}@gmail.com`,
+          },
         });
 
         if (!user) {
           user = await db.user.create({
             data: {
-              password: '',
+              password: `${staffDetail.Mobile}`,
               name: staffDetail.Name,
-              email: `${staffDetail.Mobile}@gmail.com`,
-              username: `${staffDetail.Mobile}@gmail.com`,
+              email: staffDetail.Email
+                ? staffDetail.Email.toLowerCase()
+                : `${staffDetail.Mobile}@gmail.com`,
+              username: staffDetail.Email
+                ? staffDetail.Email.toLowerCase()
+                : `${staffDetail.Mobile}@gmail.com`,
               phoneNumber: staffDetail.Mobile,
               role: UserRole.TeachingStaff,
             },
@@ -79,7 +87,9 @@ export async function addStaffCSV(staffDetails) {
                 lastName: '',
                 aadharCardNumber: staffDetail.AadharNumber,
                 mobile: staffDetail.Mobile,
-                email: `${staffDetail.Mobile}@gmail.com`,
+                email: staffDetail.Email
+                  ? staffDetail.Email.toLowerCase()
+                  : `${staffDetail.Mobile}@gmail.com`,
                 gender: staffDetail.Gender,
                 udiseNumber: staffDetail.udiseNumber,
                 dateOfBirth: new Date(staffDetail.DateOfBirth),

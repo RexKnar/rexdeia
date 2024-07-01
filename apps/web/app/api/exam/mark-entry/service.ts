@@ -15,7 +15,7 @@ export async function enterMark(markEntryPayload: EnterMarkEntryModel) {
               const where = { id: mark?.id };
               const data = {
                 studentId: studentId,
-                staffId: markEntryPayload.staffId,
+                userId: markEntryPayload.userId,
                 examSubjectId: studentMark.examSubjectId,
                 subjectId: studentMark.subjectId,
                 assessmentFormatId: mark.assessmentFormatId,

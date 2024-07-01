@@ -91,7 +91,7 @@ export async function getMarksByFilter(filter: MarkAnalyticsFilter) {
       let subjectTotalMark = 0;
       let failingStatus = false;
       let failingOn = [];
-      let absentStatus = false;
+      let absentStatus = true;
       let absentOn = [];
       if (!subjectMasters.includes(examSubject.subject.subjectMasterId)) {
         subjectMasters.push(examSubject.subject.subjectMasterId);
@@ -102,20 +102,25 @@ export async function getMarksByFilter(filter: MarkAnalyticsFilter) {
         );
         actualTotalMarks += partition.convertTo;
         subjectMarks.forEach((mark) => {
-          if (mark.mark < partition.minMark || mark.attandance) {
-            failingStatus = true;
-            failingOn.push(partition.assessmentFormat.name);
-          }
-          if (mark.attandance) {
-            absentStatus = true;
-            absentOn.push(partition.assessmentFormat.name);
-          }
+          if (mark) {
+            absentStatus = false;
+            if (mark.mark < partition.minMark || mark.attandance) {
+              failingStatus = true;
+              failingOn.push(partition.assessmentFormat.name);
+            }
+            if (mark.attandance) {
+              absentOn.push(partition.assessmentFormat.name);
+            }
 
-          const actualMark =
-            (mark.mark / partition.totalMarks) * partition.convertTo;
-          subjectTotalMark += Math.ceil(actualMark);
-          mark['total'] = Math.ceil(actualMark);
-
+            const actualMark =
+              (mark.mark / partition.totalMarks) * partition.convertTo;
+            subjectTotalMark += Math.ceil(actualMark);
+            mark['total'] = Math.ceil(actualMark);
+            mark['entryStatus'] = true;
+          } else {
+            mark['entryStatus'] = false;
+            mark['total'] = 0;
+          }
           acc.push(mark);
         });
 

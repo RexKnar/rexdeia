@@ -6,6 +6,7 @@ type GetMarkEntryFormStructureFilter = {
   classId: string;
   examId: string;
   sectionId: string;
+  staffId: string;
 };
 
 function getMarkWithMarkEntry(

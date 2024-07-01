@@ -34,7 +34,7 @@ export type AddMarkEntryModel = {
 };
 //New
 export type EnterMarkEntryModel = {
-  staffId: string;
+  userId: string;
   studentsMarkDetails: ExamStudentModel[];
 };
 

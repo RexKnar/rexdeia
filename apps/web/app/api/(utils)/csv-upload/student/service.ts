@@ -52,7 +52,7 @@ export async function addStudentCSV(studentDetails: any) {
         if (!user) {
           user = await db.user.create({
             data: {
-              password: '',
+              password: `${studentDetail.PhoneNumber}`,
               name: studentDetail.Name,
               email: studentDetail.AadharNumber + '@gmail.com',
               username: studentDetail.AadharNumber + '@gmail.com',
