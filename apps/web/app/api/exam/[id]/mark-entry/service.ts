@@ -4,12 +4,13 @@ type GetExamConfigFilterModel = {
   examId?: string;
   classId?: string;
   sectionId?: string;
+  staffId?: string;
 };
 
 export async function getExamConfigWithSubjectPartion(
   filter: GetExamConfigFilterModel
 ) {
-  const { examId, classId, sectionId } = filter;
+  const { examId, classId, sectionId, staffId } = filter;
   const [examConfig] = await Promise.all([
     db.studentMapping.findMany({
       where: {
@@ -17,7 +18,22 @@ export async function getExamConfigWithSubjectPartion(
         sectionId: sectionId,
         section: {
           ExamGroup: {
-            some: { examId: examId },
+            some: {
+              examId: examId,
+              examSubject: staffId
+                ? {
+                    some: {
+                      subject: {
+                        academicSubjectForStaff: {
+                          some: {
+                            staffId: staffId,
+                          },
+                        },
+                      },
+                    },
+                  }
+                : {},
+            },
           },
         },
       },
@@ -42,9 +58,30 @@ export async function getExamConfigWithSubjectPartion(
                 id: true,
                 examId: true,
                 examSubject: {
+                  where: staffId
+                    ? {
+                        subject: {
+                          academicSubjectForStaff: {
+                            some: {
+                              staffId: staffId,
+                            },
+                          },
+                        },
+                      }
+                    : {},
                   select: {
                     id: true,
-                    subject: true,
+                    subject: {
+                      include: {
+                        academicSubjectForStaff: {
+                          where: staffId
+                            ? {
+                                staffId: staffId,
+                              }
+                            : {},
+                        },
+                      },
+                    },
                     examSubjectPartition: {
                       include: {
                         assessmentFormat: true,

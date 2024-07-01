@@ -8,6 +8,7 @@ import { useGetExamsBySectionIdQuery } from 'lib/queries/exams/useGetExamBySecti
 import { useGetStaffsBySectionQuery } from 'lib/queries/mark-entry/useGetStaffsBySectionQuery';
 import { useGetAllSectionByClassIdQuery } from 'lib/queries/section/useGetAllSectionsByClassIdQuery';
 import { ChevronDown, Loader2 } from 'lucide-react';
+import { useSession } from 'next-auth/react';
 import { useEffect, useState } from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
 import {
@@ -24,6 +25,10 @@ import {
 import { ExamSubjects } from './ExamSubjects';
 
 export function MarkEntryLayout() {
+  const { data: session } = useSession();
+  const [userRole, setUserRole] = useState<string>('User');
+  const [userId, setUserId] = useState<string>('');
+
   const { toast } = useToast();
   const page = 1;
   const limit = 999;
@@ -64,9 +69,9 @@ export function MarkEntryLayout() {
 
   const { data: markEntryConfigResponse, isLoading: isMarkEntryConfigLoading } =
     useGetMarkWithMarkEntryQuery(
-      { classId, examId, sectionId },
+      { classId, examId, sectionId, staffId },
       {
-        enabled: !!staffId,
+        enabled: !!examId,
       }
     );
 
@@ -86,9 +91,29 @@ export function MarkEntryLayout() {
     }
   }, [isMarkEntrySuccess, toast]);
 
+  useEffect(() => {
+    if (session?.user?.role) {
+      setUserRole(session?.user?.role);
+      setUserId(session?.user?.id);
+    }
+    if (session?.user?.role !== 'Admin') {
+      if (staffList && session?.user?.email) {
+        const staffEmail = session?.user?.email;
+        const matchingStaff = staffList.find(
+          (staff) => staff.email === staffEmail
+        );
+        if (matchingStaff) {
+          setStaffId(matchingStaff.id);
+        } else {
+          setStaffId('');
+        }
+      }
+    }
+  }, [staffList, session]);
+
   async function submitMarkEntry(payload) {
     const markEntryPayload = {
-      staffId: staffId,
+      userId: userId,
       ...payload,
     };
     mutateNewMarkEntryAsync(markEntryPayload);
@@ -97,17 +122,22 @@ export function MarkEntryLayout() {
     setMarkEntryResponse(markEntryConfigResponse);
   }, [markEntryConfigResponse]);
 
-  const { fields: studentFields, append } = useFieldArray({
+  const {
+    fields: studentFields,
+    append,
+    remove,
+  } = useFieldArray({
     control,
     name: 'studentsMarkDetails',
   });
 
   useEffect(() => {
-    if (studentFields.length === 0 && markEntryResponse) {
+    remove();
+    if (markEntryResponse) {
       markEntryResponse?.forEach((studentDetail) => {
         append({
           studentId: studentDetail.id,
-          staffId,
+          userId,
           name: `${studentDetail.firstName} ${studentDetail.middleName} ${studentDetail.lastName}`,
         });
       });
@@ -191,25 +221,27 @@ export function MarkEntryLayout() {
             </SelectGroup>
           </SelectContent>
         </Select>
-        <Select
-          onValueChange={(value) => {
-            setStaffId(value);
-          }}
-        >
-          <SelectTrigger className="ml-4 basis-1/5">
-            <SelectValue className="text-gray-400" placeholder="Staff Name" />
-            <ChevronDown className="text-primary-400" />
-          </SelectTrigger>
-          <SelectContent className="border border-primary-200">
-            <SelectGroup>
-              {staffList?.map((staff) => (
-                <SelectItem key={staff.id} value={staff.id}>
-                  {staff.firstName} + {staff.lastName}
-                </SelectItem>
-              ))}
-            </SelectGroup>
-          </SelectContent>
-        </Select>
+        {userRole === 'Admin' ? (
+          <Select
+            onValueChange={(value) => {
+              setStaffId(value);
+            }}
+          >
+            <SelectTrigger className="ml-4 basis-1/5">
+              <SelectValue className="text-gray-400" placeholder="Staff Name" />
+              <ChevronDown className="text-primary-400" />
+            </SelectTrigger>
+            <SelectContent className="border border-primary-200">
+              <SelectGroup>
+                {staffList?.map((staff) => (
+                  <SelectItem key={staff.id} value={staff.id}>
+                    {staff.firstName} {staff.lastName}
+                  </SelectItem>
+                ))}
+              </SelectGroup>
+            </SelectContent>
+          </Select>
+        ) : null}
       </div>
       <form onSubmit={handleSubmit(submitMarkEntry)} onKeyDown={handleKeyDown}>
         {!isMarkEntryConfigLoading ? (
@@ -218,13 +250,14 @@ export function MarkEntryLayout() {
               <table className="min-w-full divide-y divide-gray-200 shadow-md">
                 <thead className="bg-gray-50">
                   <tr>
+                    <th>#</th>
                     <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-black">
                       Student
                     </th>
                     {markEntryResponse[0]?.examSubjects.map((examSubject) => (
                       <th
                         key={examSubject.id}
-                        className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-black"
+                        className="justify-start px-6 py-3 text-start text-xs font-medium uppercase tracking-wider text-black"
                       >
                         <div className="border-1 flex w-full space-x-2 border border-b-primary-200">
                           <p className="flex-1 text-center ">
@@ -252,6 +285,7 @@ export function MarkEntryLayout() {
                   {studentFields.map((student, studentIndex) => {
                     return (
                       <tr key={student.id}>
+                        <td>{studentIndex + 1}</td>
                         <td className="whitespace-nowrap px-6 py-4">
                           {student['name']}
                         </td>

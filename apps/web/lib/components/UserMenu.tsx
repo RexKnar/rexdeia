@@ -17,6 +17,7 @@ import { useGetUserDetailsQuery } from '../queries/useGetUserDetailsQuery';
 export function UserMenu() {
   const router = useRouter();
   const { data, isLoading } = useGetUserDetailsQuery();
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger className="flex items-center gap-2 outline-none">

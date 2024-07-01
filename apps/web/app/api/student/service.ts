@@ -94,7 +94,7 @@ export async function addStudent(student: AddStudentModel) {
   if (!user) {
     user = await db.user.create({
       data: {
-        password: '',
+        password: `${student.phoneNumber}`,
         name: student.firstName,
         email: student.emailId,
         username: student.emailId,

@@ -1,3 +1,4 @@
+import { UserRole } from '@prisma/client';
 import bcrypt from 'bcrypt';
 
 import { db } from '../../../lib/db';
@@ -11,6 +12,7 @@ export async function onBoardUserAndOrganization(user: UserToRegisterModel) {
       ...user,
       username: user.email,
       password: hashedPassword,
+      role: UserRole.Admin,
     },
   });
 

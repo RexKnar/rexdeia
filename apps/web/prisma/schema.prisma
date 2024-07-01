@@ -124,8 +124,8 @@ model Mark {
   attandance             Int?
   studentId              String               @db.Uuid
   student                Student              @relation(fields: [studentId], references: [id])
-  staffId                String               @db.Uuid
-  staff                  Staff                @relation(fields: [staffId], references: [id])
+  userId                 String               @db.Uuid
+  user                   User                 @relation(fields: [userId], references: [id])
   examSubject            ExamSubject          @relation(fields: [examSubjectId], references: [id])
   examSubjectId          String               @db.Uuid
   examSubjectPartition   ExamSubjectPartition @relation(fields: [examSubjectPartitionId], references: [id])
@@ -136,6 +136,7 @@ model Mark {
   SubjectMaster          SubjectMaster?       @relation(fields: [SubjectMasterId], references: [id])
   AssessmentFormat       AssessmentFormat?    @relation(fields: [assessmentFormatId], references: [id])
   assessmentFormatId     String?              @db.Uuid
+  updatedAt              DateTime?            @default(now())
 
   @@unique([studentId, examSubjectId, examSubjectPartitionId])
 }
@@ -167,12 +168,16 @@ model User {
   createdBranches       Branch[]
   createdOrganizations  Organization[]
   createdAdmissionForms AdmissionForm[]
+  Mark                  Mark[]
 }
 
 enum UserRole {
   Admin
   TeachingStaff
   NonTeachingStaff
+  OfficeAdmin
+  HM
+  AHM
   Student
   User
 }
@@ -550,7 +555,6 @@ model Staff {
   sectionIds                   String[]                  @db.Uuid
   staffSections                StaffSection[]
   academicSubjectForStaff      AcademicSubjectForStaff[]
-  Mark                         Mark[]
 }
 
 model Batch {

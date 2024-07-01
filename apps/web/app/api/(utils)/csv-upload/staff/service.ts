@@ -17,7 +17,7 @@ export async function addStaffCSV(staffDetails) {
         if (!user) {
           user = await db.user.create({
             data: {
-              password: '',
+              password: `${staffDetail.Mobile}`,
               name: staffDetail.Name,
               email: `${staffDetail.Mobile}@gmail.com`,
               username: `${staffDetail.Mobile}@gmail.com`,

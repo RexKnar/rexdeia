@@ -10,15 +10,16 @@ import {
 } from 'ui/components/ui/Table';
 
 interface Analytics {
-  numberOfPassStudents: number;
-  numberOfFailStudents: number;
-  highestMark: number;
-  highestMarkStudentName: string;
-  lowestMark: number;
-  lowestMarkStudentName: string;
-  averageMark: number;
-  passPercentage: number;
-  failPercentage: number;
+  numberOfPassStudents: { male: number; female: number; overall: number };
+  numberOfFailStudents: { male: number; female: number; overall: number };
+  highestMark: { male: number; female: number; overall: number };
+  highestMarkStudentName: { male: string; female: string; overall: string };
+  lowestMark: { male: number; female: number; overall: number };
+  lowestMarkStudentName: { male: string; female: string; overall: string };
+  averageMark: { male: number; female: number; overall: number };
+  passPercentage: { male: number; female: number; overall: number };
+  failPercentage: { male: number; female: number; overall: number };
+  attendance: { male: number; female: number; overall: number };
 }
 export default function StudentMarkList({
   students,
@@ -60,60 +61,158 @@ export default function StudentMarkList({
       enabled: !!examId && !!classId && !!sectionId,
     }
   );
+  // function analyzeSubjectPerformance(subjectId: string): Analytics {
+  //   const result: Analytics = {
+  //     numberOfPassStudents: { male: 0, female: 0, overall: 0 },
+  //     numberOfFailStudents: { male: 0, female: 0, overall: 0 },
+  //     highestMark: { male: 0, female: 0, overall: 0 },
+  //     highestMarkStudentName: { male: '', female: '', overall: '' },
+  //     lowestMark: { male: Infinity, female: Infinity, overall: Infinity },
+  //     lowestMarkStudentName: { male: '', female: '', overall: '' },
+  //     averageMark: { male: 0, female: 0, overall: 0 },
+  //     passPercentage: { male: 0, female: 0, overall: 0 },
+  //     failPercentage: { male: 0, female: 0, overall: 0 },
+  //   };
+
+  //   let totalMarks = 0;
+  //   let totalStudents = 0;
+
+  //   students.forEach((student) => {
+  //     const subject = student.subjects.find((subj) => subj.id === subjectId);
+  //     const gender =
+  //       student.gender.toLowerCase() === 'male' ? 'male' : 'female';
+
+  //     if (subject) {
+  //       const mark = subject.subjectTotalMark || 0;
+  //       totalMarks += subject.subjectTotalMark || 0;
+  //       totalStudents += 1;
+
+  //       const studentFullName =
+  //         `${student.firstName} ${student.middleName || ''} ${student.lastName}`.trim();
+
+  //       if (mark > result.highestMark) {
+  //         result.highestMark = mark;
+  //         result.highestMarkStudentName[gender] = studentFullName;
+  //       }
+
+  //       if (mark < result.lowestMark) {
+  //         result.lowestMark = mark;
+  //         result.lowestMarkStudentName = studentFullName;
+  //       }
+
+  //       if (subject.failingStatus) {
+  //         result.numberOfFailStudents += 1;
+  //       } else {
+  //         result.numberOfPassStudents += 1;
+  //       }
+  //     }
+  //   });
+
+  //   if (totalStudents > 0) {
+  //     result.averageMark = totalMarks / totalStudents;
+  //     result.lowestMark =
+  //       result.lowestMark === Infinity ? 0 : result.lowestMark;
+  //   } else {
+  //     result.lowestMark = 0;
+  //   }
+  //   result.passPercentage = (result.numberOfPassStudents / totalStudents) * 100;
+  //   result.failPercentage = (result.numberOfFailStudents / totalStudents) * 100;
+
+  //   return result;
+  // }
+
   function analyzeSubjectPerformance(subjectId: string): Analytics {
     const result: Analytics = {
-      numberOfPassStudents: 0,
-      numberOfFailStudents: 0,
-      highestMark: 0,
-      highestMarkStudentName: '',
-      lowestMark: Infinity,
-      lowestMarkStudentName: '',
-      averageMark: 0,
-      passPercentage: 0,
-      failPercentage: 0,
+      numberOfPassStudents: { male: 0, female: 0, overall: 0 },
+      numberOfFailStudents: { male: 0, female: 0, overall: 0 },
+      highestMark: { male: 0, female: 0, overall: 0 },
+      highestMarkStudentName: { male: '', female: '', overall: '' },
+      lowestMark: { male: Infinity, female: Infinity, overall: Infinity },
+      lowestMarkStudentName: { male: '', female: '', overall: '' },
+      averageMark: { male: 0, female: 0, overall: 0 },
+      passPercentage: { male: 0, female: 0, overall: 0 },
+      failPercentage: { male: 0, female: 0, overall: 0 },
+      attendance: { male: 0, female: 0, overall: 0 },
     };
 
-    let totalMarks = 0;
-    let totalStudents = 0;
+    let totalMarks = { male: 0, female: 0, overall: 0 };
+    let totalStudents = { male: 0, female: 0, overall: 0 };
 
     students.forEach((student) => {
       const subject = student.subjects.find((subj) => subj.id === subjectId);
+      const gender =
+        student.gender.toLowerCase() === 'male' ? 'male' : 'female';
 
       if (subject) {
         const mark = subject.subjectTotalMark || 0;
-        totalMarks += subject.subjectTotalMark || 0;
-        totalStudents += 1;
-
+        totalMarks[gender] += mark;
+        totalMarks.overall += mark;
+        totalStudents[gender] += 1;
+        totalStudents.overall += 1;
+        if (subject.absentStatus) {
+          result.attendance[gender] += 1;
+          result.attendance.overall += 1;
+        }
         const studentFullName =
           `${student.firstName} ${student.middleName || ''} ${student.lastName}`.trim();
 
-        if (mark > result.highestMark) {
-          result.highestMark = mark;
-          result.highestMarkStudentName = studentFullName;
+        if (mark > result.highestMark[gender]) {
+          result.highestMark[gender] = mark;
+          result.highestMarkStudentName[gender] = studentFullName;
+        }
+        if (mark > result.highestMark.overall) {
+          result.highestMark.overall = mark;
+          result.highestMarkStudentName.overall = studentFullName;
         }
 
-        if (mark < result.lowestMark) {
-          result.lowestMark = mark;
-          result.lowestMarkStudentName = studentFullName;
+        if (mark < result.lowestMark[gender]) {
+          result.lowestMark[gender] = mark;
+          result.lowestMarkStudentName[gender] = studentFullName;
+        }
+        if (mark < result.lowestMark.overall) {
+          result.lowestMark.overall = mark;
+          result.lowestMarkStudentName.overall = studentFullName;
         }
 
         if (subject.failingStatus) {
-          result.numberOfFailStudents += 1;
+          result.numberOfFailStudents[gender] += 1;
+          result.numberOfFailStudents.overall += 1;
         } else {
-          result.numberOfPassStudents += 1;
+          result.numberOfPassStudents[gender] += 1;
+          result.numberOfPassStudents.overall += 1;
         }
       }
     });
 
-    if (totalStudents > 0) {
-      result.averageMark = totalMarks / totalStudents;
-      result.lowestMark =
-        result.lowestMark === Infinity ? 0 : result.lowestMark;
-    } else {
-      result.lowestMark = 0;
+    if (totalStudents.male > 0) {
+      result.averageMark.male = totalMarks.male / totalStudents.male;
+      result.lowestMark.male =
+        result.lowestMark.male === Infinity ? 0 : result.lowestMark.male;
+      result.passPercentage.male =
+        (result.numberOfPassStudents.male / totalStudents.male) * 100;
+      result.failPercentage.male =
+        (result.numberOfFailStudents.male / totalStudents.male) * 100;
     }
-    result.passPercentage = (result.numberOfPassStudents / totalStudents) * 100;
-    result.failPercentage = (result.numberOfFailStudents / totalStudents) * 100;
+
+    if (totalStudents.female > 0) {
+      result.averageMark.female = totalMarks.female / totalStudents.female;
+      result.lowestMark.female =
+        result.lowestMark.female === Infinity ? 0 : result.lowestMark.female;
+      result.passPercentage.female =
+        (result.numberOfPassStudents.female / totalStudents.female) * 100;
+      result.failPercentage.female =
+        (result.numberOfFailStudents.female / totalStudents.female) * 100;
+    }
+
+    if (totalStudents.overall > 0) {
+      result.averageMark.overall = totalMarks.overall / totalStudents.overall;
+      result.lowestMark.overall =
+        result.lowestMark.overall === Infinity ? 0 : result.lowestMark.overall;
+      result.passPercentage.overall =
+        (result.numberOfPassStudents.overall / totalStudents.overall) * 100;
+      result.failPercentage.overall =
+        (result.numberOfFailStudents.overall / totalStudents.overall) * 100;
+    }
 
     return result;
   }
@@ -218,138 +317,161 @@ export default function StudentMarkList({
         <div className="mt-4 space-y-4 rounded-md bg-white p-6">
           <Table className="border-1 border">
             <TableHeader>
-              <TableRow className="mt-5 bg-primary-300">
+              <TableRow className="mt-5 bg-primary-300 text-center">
+                <TableCell></TableCell>
                 <TableCell>
-                  <Text className="size-lg font-semibold">Analytics</Text>
+                  <Text className="size-lg font-semibold">Appeared</Text>
                 </TableCell>
-                {subjectList.map((subject) => (
-                  <TableCell key={subject.subject.id}>
-                    <div className="w-full ">
-                      <div className="text-center">
-                        <Text className="size-lg font-semibold">
-                          {subject.subject.name}
+                <TableCell>
+                  <Text className="size-lg font-semibold"># of Pass</Text>
+                </TableCell>
+                <TableCell>
+                  <Text className="size-lg font-semibold"># of Fail</Text>
+                </TableCell>
+                <TableCell>
+                  <Text className="size-lg font-semibold">Pass %</Text>
+                </TableCell>
+                <TableCell>
+                  <Text className="size-lg font-semibold">Fail %</Text>
+                </TableCell>
+                <TableCell>
+                  <Text className="size-lg font-semibold">Highest</Text>
+                </TableCell>
+                <TableCell>
+                  <Text className="size-lg font-semibold">Lowest</Text>
+                </TableCell>
+              </TableRow>
+              {subjectList.map((subject) => (
+                <TableRow className="mt-5 " key={subject.id}>
+                  <TableCell className="bg-primary-300">
+                    <Text className="size-lg font-semibold">
+                      {subject.subject.name}
+                    </Text>
+                  </TableCell>
+                  <TableCell>
+                    <Text className="size-lg text-center font-semibold">
+                      <div className="flex flex-col justify-evenly">
+                        <Text className="size-lg text-center font-semibold">
+                          {analytics.get(subject.id)?.attendance.overall}
+                        </Text>
+                        <div className="flex justify-evenly">
+                          <Text className="text-primary-800">
+                            M:
+                            {analytics.get(subject.id)?.attendance.male}
+                          </Text>
+                          <Text className="text-primary-800">
+                            F:
+                            {analytics.get(subject.id)?.attendance.female}
+                          </Text>
+                        </div>
+                      </div>
+                    </Text>
+                  </TableCell>
+                  <TableCell>
+                    <div className="flex flex-col justify-evenly">
+                      <Text className="size-lg text-center font-semibold">
+                        {
+                          analytics.get(subject.id)?.numberOfPassStudents
+                            .overall
+                        }
+                      </Text>
+                      <div className="flex justify-evenly">
+                        <Text className="text-primary-800">
+                          M:
+                          {analytics.get(subject.id)?.numberOfPassStudents.male}
+                        </Text>
+                        <Text className="text-primary-800">
+                          F:
+                          {
+                            analytics.get(subject.id)?.numberOfPassStudents
+                              .female
+                          }
                         </Text>
                       </div>
                     </div>
                   </TableCell>
-                ))}
-                <TableCell>
-                  <Text className="size-lg font-semibold">Overall</Text>
-                </TableCell>
-              </TableRow>
-              <TableRow>
-                <TableCell>
-                  <Text className="text-sm">Average</Text>
-                </TableCell>
-                {subjectList.map((subject) => (
-                  <TableCell key={subject.id}>
-                    <div className="text-center">
-                      {analytics.get(subject.id)?.averageMark.toFixed(2)}
-                    </div>
+                  <TableCell>
+                    <Text className="size-lg text-center font-semibold">
+                      {analytics.get(subject.id)?.numberOfFailStudents.overall}
+                    </Text>
                   </TableCell>
-                ))}
+                  <TableCell>
+                    <Text className="size-lg text-center font-semibold">
+                      {analytics
+                        .get(subject.id)
+                        ?.passPercentage.overall.toFixed(2)}
+                      %
+                    </Text>
+                  </TableCell>
+                  <TableCell>
+                    <Text className="size-lg text-center font-semibold">
+                      {analytics
+                        .get(subject.id)
+                        ?.failPercentage.overall.toFixed(2)}
+                      %
+                    </Text>
+                  </TableCell>
+                  <TableCell>
+                    <Text className="size-lg text-center font-semibold">
+                      {analytics.get(subject.id)?.highestMark.overall}
+                    </Text>
+                  </TableCell>
+                  <TableCell>
+                    <Text className="size-lg text-center font-semibold">
+                      {analytics.get(subject.id)?.lowestMark.overall}
+                    </Text>
+                  </TableCell>
+                </TableRow>
+              ))}
+              <TableRow className="mt-5 bg-green-100 text-center">
                 <TableCell>
-                  <Text className="text-sm">
-                    {getTotalAvgMark().toFixed(2)}
+                  <Text className="text-center text-lg font-semibold">
+                    Overall
                   </Text>
                 </TableCell>
-              </TableRow>
-              <TableRow>
                 <TableCell>
-                  <Text className="text-sm">Number Of Pass</Text>
+                  <Text className="size-lg font-semibold">
+                    Average {getTotalAvgMark().toFixed(2)}
+                  </Text>
                 </TableCell>
-                {subjectList.map((subject) => (
-                  <TableCell key={subject.id}>
-                    <div className="text-center">
-                      {analytics.get(subject.id)?.numberOfPassStudents}
-                    </div>
-                  </TableCell>
-                ))}
                 <TableCell>
-                  <Text className="text-sm">{getTotalPassCount()}</Text>
+                  <Text className="size-lg font-semibold">
+                    {getTotalPassCount()}
+                  </Text>
                 </TableCell>
-              </TableRow>
-              <TableRow>
                 <TableCell>
-                  <Text className="text-sm">Number Of Fail</Text>
+                  <Text className="size-lg font-semibold">
+                    {getTotalFailCount()}
+                  </Text>
                 </TableCell>
-                {subjectList.map((subject) => (
-                  <TableCell key={subject.id}>
-                    <div className="text-center">
-                      {analytics.get(subject.id)?.numberOfFailStudents}
-                    </div>
-                  </TableCell>
-                ))}
                 <TableCell>
-                  <Text className="text-sm">{getTotalFailCount()}</Text>
-                </TableCell>
-              </TableRow>
-              <TableRow>
-                <TableCell>
-                  <Text className="text-sm">Pass Percentage</Text>
-                </TableCell>
-                {subjectList.map((subject) => (
-                  <TableCell key={subject.id}>
-                    <div className="text-center">
-                      {analytics.get(subject.id)?.passPercentage.toFixed(2)}%
-                    </div>
-                  </TableCell>
-                ))}
-                <TableCell>
-                  <Text className="text-sm">
+                  <Text className="size-lg font-semibold">
                     {getTotalPassPercentage().toFixed(2)}%
                   </Text>
                 </TableCell>
-              </TableRow>
-              <TableRow>
                 <TableCell>
-                  <Text className="text-sm">Fail Percentage</Text>
-                </TableCell>
-                {subjectList.map((subject) => (
-                  <TableCell key={subject.id}>
-                    <div className="text-center">
-                      {analytics.get(subject.id)?.failPercentage.toFixed(2)}%
-                    </div>
-                  </TableCell>
-                ))}
-                <TableCell>
-                  <Text className="text-sm">
+                  <Text className="size-lg font-semibold">
                     {getTotalFailPercentage().toFixed(2)}%
                   </Text>
                 </TableCell>
-              </TableRow>
-              <TableRow>
                 <TableCell>
-                  <Text className="text-sm">Highest Mark</Text>
+                  <Text className="size-lg font-semibold">
+                    {getTotalHighestMark()}
+                  </Text>
                 </TableCell>
-                {subjectList.map((subject) => (
-                  <TableCell key={subject.id}>
-                    <div className="text-center">
-                      {analytics.get(subject.id)?.highestMark}
-                    </div>
-                  </TableCell>
-                ))}
                 <TableCell>
-                  <Text className="text-sm">{getTotalHighestMark()}</Text>
+                  <Text className="size-lg font-semibold">
+                    {getTotalLowestMark()}
+                  </Text>
                 </TableCell>
               </TableRow>
-              <TableRow>
-                <TableCell>
-                  <Text className="text-sm">Lowest Mark</Text>
-                </TableCell>
-                {subjectList.map((subject) => (
-                  <TableCell key={subject.id}>
-                    <div className="text-center">
-                      {analytics.get(subject.id)?.lowestMark}
-                    </div>
-                  </TableCell>
-                ))}
-                <TableCell>
-                  <Text className="text-sm">{getTotalLowestMark()}</Text>
-                </TableCell>
-              </TableRow>
+              <TableRow className="mt-5 bg-primary-300 text-center"></TableRow>
+
               <br />
               <TableRow className="bg-primary-300">
+                <TableCell>
+                  <Text className="text-center text-lg font-semibold"># </Text>
+                </TableCell>
                 <TableCell>
                   <Text className="text-lg font-semibold">Student Name </Text>
                 </TableCell>
@@ -376,14 +498,14 @@ export default function StudentMarkList({
                   </TableCell>
                 ))}
                 <TableCell>
-                  {' '}
                   <Text className="text-lg font-semibold">Total </Text>
                 </TableCell>
               </TableRow>
             </TableHeader>
             <TableBody>
-              {students.map((student) => (
+              {students.map((student, index) => (
                 <TableRow key={student.id}>
+                  <TableCell className="text-center">{index + 1}</TableCell>
                   <TableCell>
                     {student.firstName} {student.lastName}
                   </TableCell>
