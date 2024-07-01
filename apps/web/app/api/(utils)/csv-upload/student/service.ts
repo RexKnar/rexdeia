@@ -8,7 +8,8 @@ export async function addStudentCSV(studentDetails: any) {
     const promises = [];
     const session = await getServerSession(authOptions);
     for (const studentDetail of studentDetails) {
-      promises.push(studentDetail.AadharNumber);
+      console.log(studentDetail);
+      promises.push(studentDetail);
       if (studentDetail.Name && studentDetail.AadharNumber) {
         const classDetail = await db.class.findFirst({
           where: {
@@ -34,7 +35,7 @@ export async function addStudentCSV(studentDetails: any) {
         });
         const mediumDetail = await db.medium.findFirst({
           where: {
-            name: studentDetail.Medium,
+            name: studentDetail.Medium || 'English',
           },
         });
 
@@ -190,6 +191,7 @@ export async function addStudentCSV(studentDetails: any) {
 
     return promises;
   } catch (e) {
+    console.log(e);
     return e;
   }
 }
