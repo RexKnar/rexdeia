@@ -5,8 +5,6 @@ import { useGetSubjectByStaffIdQuery } from 'lib/queries/staff/useGetSubjectList
 import { Loader2 } from 'lucide-react';
 import { useParams } from 'next/navigation';
 import {
-  Avatar,
-  AvatarImage,
   Card,
   CardContent,
   Tabs,
