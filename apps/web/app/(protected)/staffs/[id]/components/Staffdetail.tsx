@@ -5,6 +5,8 @@ import { useGetSubjectByStaffIdQuery } from 'lib/queries/staff/useGetSubjectList
 import { Loader2 } from 'lucide-react';
 import { useParams } from 'next/navigation';
 import {
+  Avatar,
+  AvatarImage,
   Card,
   CardContent,
   Tabs,
@@ -38,6 +40,11 @@ export function StaffDetail() {
     <section className="grid w-full grid-cols-3 bg-gray-50">
       <div className="mx-auto my-5 mr-4 max-w-80 rounded-md bg-white py-5 pr-3">
         <div className="">
+          <div className="flex justify-center">
+            <Avatar className="h-20 w-20 cursor-pointer border-2 border-violet-200">
+              <AvatarImage src="https://png.pngtree.com/thumb_back/fh260/background/20230612/pngtree-man-wearing-glasses-is-wearing-colorful-background-image_2905240.jpg" />
+            </Avatar>
+          </div>
           <div className="my-auto flex justify-center px-5 pb-2 pt-3">
             <Text variant="base-bold">{getStaffByIdResponse.firstName}</Text>
           </div>
