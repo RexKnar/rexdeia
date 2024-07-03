@@ -92,24 +92,15 @@ export function MarkEntryLayout() {
   }, [isMarkEntrySuccess, toast]);
 
   useEffect(() => {
+    console.log(session);
     if (session?.user?.role) {
       setUserRole(session?.user?.role);
       setUserId(session?.user?.id);
     }
     if (session?.user?.role !== 'Admin') {
-      if (staffList && session?.user?.email) {
-        const staffEmail = session?.user?.email;
-        const matchingStaff = staffList.find(
-          (staff) => staff.email === staffEmail
-        );
-        if (matchingStaff) {
-          setStaffId(matchingStaff.id);
-        } else {
-          setStaffId('');
-        }
-      }
+      setStaffId(session?.user?.staffId);
     }
-  }, [staffList, session]);
+  }, [session]);
 
   async function submitMarkEntry(payload) {
     const markEntryPayload = {
@@ -161,7 +152,7 @@ export function MarkEntryLayout() {
 
   return (
     <>
-      <div className="mb-4 flex justify-between rounded-md bg-white">
+      <div className="flex justify-between mb-4 bg-white rounded-md">
         <Select
           onValueChange={(value) => {
             setClassId(value);
@@ -251,15 +242,15 @@ export function MarkEntryLayout() {
                 <thead className="bg-gray-50">
                   <tr>
                     <th>#</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-black">
+                    <th className="px-6 py-3 text-xs font-medium tracking-wider text-left text-black uppercase">
                       Student
                     </th>
                     {markEntryResponse[0]?.examSubjects.map((examSubject) => (
                       <th
                         key={examSubject.id}
-                        className="justify-start px-6 py-3 text-start text-xs font-medium uppercase tracking-wider text-black"
+                        className="justify-start px-6 py-3 text-xs font-medium tracking-wider text-black uppercase text-start"
                       >
-                        <div className="border-1 flex w-full space-x-2 border border-b-primary-200">
+                        <div className="flex w-full space-x-2 border border-1 border-b-primary-200">
                           <p className="flex-1 text-center ">
                             {examSubject.subject.name}
                           </p>
@@ -281,12 +272,12 @@ export function MarkEntryLayout() {
                     ))}
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-gray-200 bg-white">
+                <tbody className="bg-white divide-y divide-gray-200">
                   {studentFields.map((student, studentIndex) => {
                     return (
                       <tr key={student.id}>
                         <td>{studentIndex + 1}</td>
-                        <td className="whitespace-nowrap px-6 py-4">
+                        <td className="px-6 py-4 whitespace-nowrap">
                           {student['name']}
                         </td>
                         <ExamSubjects
@@ -310,7 +301,7 @@ export function MarkEntryLayout() {
             <Button className="text-center" type="submit">
               {isPendingCreateMarkEntry ? (
                 <div className="flex items-center justify-center">
-                  <Loader2 className="mr-2 h-6 w-6 animate-spin text-white" />
+                  <Loader2 className="w-6 h-6 mr-2 text-white animate-spin" />
                   Saving
                 </div>
               ) : (
@@ -320,7 +311,7 @@ export function MarkEntryLayout() {
           </>
         ) : (
           <div className="flex items-center justify-center">
-            <Loader2 className="mr-2 h-6 w-6 animate-spin text-black" />
+            <Loader2 className="w-6 h-6 mr-2 text-black animate-spin" />
             <p className="text-black ">Fetching Data...</p>
           </div>
         )}
