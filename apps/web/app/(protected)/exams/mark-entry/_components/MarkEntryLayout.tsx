@@ -92,7 +92,6 @@ export function MarkEntryLayout() {
   }, [isMarkEntrySuccess, toast]);
 
   useEffect(() => {
-    console.log(session);
     if (session?.user?.role) {
       setUserRole(session?.user?.role);
       setUserId(session?.user?.id);

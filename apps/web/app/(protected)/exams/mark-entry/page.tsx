@@ -7,7 +7,6 @@ import { MarkEntryPageHeader } from './_components/MarkEntryPageHeader';
 
 export default async function Page() {
   const session = await getServerSession(authOptions);
-  console.log(session);
   if (!session.branchId || !session.organizationId) {
     return redirect('/signin?callbackUrl=/academics/exams/examId');
   }

@@ -10,6 +10,7 @@ import {
   useRouter,
   useSearchParams,
 } from 'next/navigation';
+import { useSession } from 'next-auth/react';
 import { useEffect } from 'react';
 import { Controller, useFieldArray, useForm } from 'react-hook-form';
 import {
@@ -27,10 +28,12 @@ export function UnassignStaffFlyout() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const params = useParams<{ classId: string }>();
+  const { data: session } = useSession();
 
   const isOpen = searchParams.get('isUnassignStaffFlyoutOpen') === 'true';
   const staffId = searchParams.get('staffId');
-  const academicYearId = searchParams.get('academicYearId');
+  const academicYearId =
+    searchParams.get('academicYearId') || session.currentBatch;
   const { data: getStaffSubjectListResponse } =
     useGetStaffSubjectListByClassIdQuery(
       params.classId,
