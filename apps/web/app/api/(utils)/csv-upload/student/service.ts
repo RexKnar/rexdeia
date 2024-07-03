@@ -50,7 +50,6 @@ export async function addStudentCSV(studentDetails: any) {
           },
         });
         if (!user) {
-          console.log(studentDetail);
           const hashedPassword = await bcrypt.hash(
             studentDetail.Mobile || studentDetail?.PhoneNumber,
             10
@@ -170,7 +169,6 @@ export async function addStudentCSV(studentDetails: any) {
             },
           });
 
-          console.log(createdStudent);
           promises.push(createdStudent);
           await db.admissionForm.create({
             data: {
@@ -197,7 +195,7 @@ export async function addStudentCSV(studentDetails: any) {
 
     return promises;
   } catch (e) {
-    console.log(e);
+    console.error(e);
     return e;
   }
 }
