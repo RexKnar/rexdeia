@@ -97,19 +97,9 @@ export function MarkEntryLayout() {
       setUserId(session?.user?.id);
     }
     if (session?.user?.role !== 'Admin') {
-      if (staffList && session?.user?.email) {
-        const staffEmail = session?.user?.email;
-        const matchingStaff = staffList.find(
-          (staff) => staff.email === staffEmail
-        );
-        if (matchingStaff) {
-          setStaffId(matchingStaff.id);
-        } else {
-          setStaffId('');
-        }
-      }
+      setStaffId(session?.user?.staffId);
     }
-  }, [staffList, session]);
+  }, [session]);
 
   async function submitMarkEntry(payload) {
     const markEntryPayload = {

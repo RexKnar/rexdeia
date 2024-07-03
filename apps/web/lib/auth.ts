@@ -55,6 +55,7 @@ export const authOptions: NextAuthOptions = {
         session.user.image = token.picture;
         session.user.username = token.username;
         session.user.role = token.role;
+        session.user.staffId = token.staffId || (null as any);
         session.branchId = token.branchId as string;
         session.organizationId = token.organizationId as string;
         session.currentBatch = token.currentBatch as string;
@@ -102,7 +103,15 @@ export const authOptions: NextAuthOptions = {
           branchId: token.branchId,
         },
       });
-
+      let staffId = null;
+      if (token.role === 'TeachingStaff') {
+        const dbStaff = await db.staff.findFirst({
+          where: {
+            email: token.email,
+          },
+        });
+        staffId = dbStaff.id || null;
+      }
       return {
         ...token,
         id: dbUser.id,
@@ -113,6 +122,7 @@ export const authOptions: NextAuthOptions = {
         role: dbUser.role,
         createdBranches: dbUser.createdBranches,
         currentBatch: academicDetails?.id,
+        staffId: staffId || null,
       };
     },
   },
