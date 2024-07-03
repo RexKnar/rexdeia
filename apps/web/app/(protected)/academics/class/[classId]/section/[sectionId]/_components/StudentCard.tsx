@@ -19,8 +19,6 @@ type StudentCardProps = {
 export function StudentCard(props: StudentCardProps) {
   return (
     <div className="flex bg-white p-3">
-      <div className="w-1/4"></div>
-
       <div className="my-auto w-2/4 px-2">
         <Text variant="base-bold">{props.name}</Text>
       </div>

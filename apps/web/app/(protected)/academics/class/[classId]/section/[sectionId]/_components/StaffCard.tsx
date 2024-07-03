@@ -28,8 +28,6 @@ export function StaffCard(props: StaffCardProps) {
 
   return (
     <div className="flex bg-white p-3">
-      <div className="w-1/4"></div>
-
       <div className="my-auto w-2/4 px-2">
         <Text variant="base-bold">{name}</Text>
         {sectionsHandled.map((section, sectionIndex) => (
