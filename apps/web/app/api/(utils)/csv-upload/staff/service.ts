@@ -1,4 +1,5 @@
 import { UserRole } from '@prisma/client';
+import bcrypt from 'bcrypt';
 import { authOptions } from 'lib/auth';
 import { db } from 'lib/db';
 import { toTitleCase } from 'lib/utils/formatters';
@@ -19,9 +20,10 @@ export async function addStaffCSV(staffDetails) {
         });
 
         if (!user) {
+          const hashedPassword = await bcrypt.hash(staffDetail.Mobile, 10);
           user = await db.user.create({
             data: {
-              password: `${staffDetail.Mobile}`,
+              password: hashedPassword,
               name: staffDetail.Name,
               email: staffDetail.Email
                 ? staffDetail.Email.toLowerCase()
@@ -92,7 +94,7 @@ export async function addStaffCSV(staffDetails) {
                   : `${staffDetail.Mobile}@gmail.com`,
                 gender: staffDetail.Gender,
                 udiseNumber: staffDetail.udiseNumber,
-                dateOfBirth: new Date(staffDetail.DateOfBirth),
+                // dateOfBirth: new Date(staffDetail.DateOfBirth),
                 dateOfJoining: new Date(staffDetail.DateOfAppointment),
 
                 permanentAddress1: staffDetail.Address,
@@ -130,7 +132,7 @@ export async function addStaffCSV(staffDetails) {
               },
             });
 
-            promises.push(createdStaff);
+            promises.push(createdStaff.firstName);
           } catch (e) {
             console.error('Error creating staff:', e);
           }

@@ -1,4 +1,5 @@
 import { UserRole } from '@prisma/client';
+import bcrypt from 'bcrypt';
 import { authOptions } from 'lib/auth';
 import { db } from 'lib/db';
 import { getServerSession } from 'next-auth';
@@ -8,9 +9,7 @@ export async function addStudentCSV(studentDetails: any) {
     const promises = [];
     const session = await getServerSession(authOptions);
     for (const studentDetail of studentDetails) {
-      console.log(studentDetail);
-      promises.push(studentDetail);
-      if (studentDetail.Name && studentDetail.AadharNumber) {
+      if (studentDetail.Name && studentDetail.AadhaarNumber) {
         const classDetail = await db.class.findFirst({
           where: {
             name: studentDetail.Class,
@@ -30,12 +29,12 @@ export async function addStudentCSV(studentDetails: any) {
         });
         const groupDetail = await db.group.findFirst({
           where: {
-            name: studentDetail.Group,
+            name: studentDetail.Group || 'General',
           },
         });
         const mediumDetail = await db.medium.findFirst({
           where: {
-            name: studentDetail.Medium || 'English',
+            name: studentDetail.Medium || studentDetail.Mediun_1 || 'English',
           },
         });
 
@@ -47,17 +46,22 @@ export async function addStudentCSV(studentDetails: any) {
 
         let user = await db.user.findFirst({
           where: {
-            username: studentDetail.AadharNumber + '@gmail.com',
+            username: studentDetail.AadhaarNumber + '@gmail.com',
           },
         });
         if (!user) {
+          console.log(studentDetail);
+          const hashedPassword = await bcrypt.hash(
+            studentDetail.Mobile || studentDetail?.PhoneNumber,
+            10
+          );
           user = await db.user.create({
             data: {
-              password: `${studentDetail.PhoneNumber}`,
+              password: hashedPassword,
               name: studentDetail.Name,
-              email: studentDetail.AadharNumber + '@gmail.com',
-              username: studentDetail.AadharNumber + '@gmail.com',
-              phoneNumber: studentDetail.PhoneNumber,
+              email: studentDetail.AadhaarNumber + '@gmail.com',
+              username: studentDetail.AadhaarNumber + '@gmail.com',
+              phoneNumber: studentDetail.Mobile || studentDetail?.PhoneNumber,
               role: UserRole.Student,
             },
           });
@@ -86,16 +90,16 @@ export async function addStudentCSV(studentDetails: any) {
         const studentWithoutBatchId = {
           firstName: studentDetail.Name,
           lastName: '',
-          aadharCardNumber: studentDetail.AadharNumber,
-          phoneNumber: studentDetail.PhoneNumber,
-          emailId: studentDetail.AadharNumber + '@gmail.com',
+          aadharCardNumber: studentDetail.AadhaarNumber,
+          phoneNumber: studentDetail.Mobile || studentDetail?.PhoneNumber,
+          emailId: studentDetail.AadhaarNumber + '@gmail.com',
           gender: studentDetail.Gender,
           emisNumber: studentDetail.EMISId,
           fatherName: studentDetail.FatherName,
           motherName: studentDetail.MotherName,
           admissionNumber: studentDetail.AdmissionNumber,
           bloodGroup: studentDetail.BloodGroup,
-          dob: studentDetail.DateOfBirth,
+          dob: studentDetail.DateOfBirth || studentDetail.DataOfBirth,
           additionalAttributes: {
             dateOfJoining: studentDetail.DateOfJoining,
             residentialAddress: studentDetail.Address,
@@ -105,11 +109,11 @@ export async function addStudentCSV(studentDetails: any) {
 
         const student = await db.student.findFirst({
           where: {
-            aadharCardNumber: studentDetail.AadharNumber,
+            aadharCardNumber: studentDetail.AadhaarNumber,
           },
         });
 
-        if (!student && studentDetail.AadharNumber) {
+        if (!student && studentDetail.AadhaarNumber) {
           const createdStudent = await db.student.create({
             data: {
               ...studentWithoutBatchId,
@@ -149,14 +153,14 @@ export async function addStudentCSV(studentDetails: any) {
                   },
                 },
               }),
-              ...(motherTongueDetail.id && {
+              ...(motherTongueDetail?.id && {
                 motherTongue: {
                   connect: {
                     id: motherTongueDetail.id,
                   },
                 },
               }),
-              ...(communityDetail.id && {
+              ...(communityDetail?.id && {
                 community: {
                   connect: {
                     id: communityDetail.id,
@@ -166,6 +170,8 @@ export async function addStudentCSV(studentDetails: any) {
             },
           });
 
+          console.log(createdStudent);
+          promises.push(createdStudent);
           await db.admissionForm.create({
             data: {
               createdAt: new Date(),
