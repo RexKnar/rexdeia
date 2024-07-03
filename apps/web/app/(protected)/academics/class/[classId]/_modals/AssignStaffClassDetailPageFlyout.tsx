@@ -70,7 +70,7 @@ export function AssignStaffClassDetailPageFlyout() {
   }, [isOpen, fields, append]);
 
   const page = parseInt(searchParams.get('page')) || 1;
-  const limit = parseInt(searchParams.get('limit')) || 10;
+  const limit = parseInt(searchParams.get('limit')) || 9999;
   const filter = { isActive: true };
 
   const { mutateAsync: mutateCreateStaffsAsync } =
