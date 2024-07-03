@@ -59,7 +59,7 @@ export function MarkInput({
         </div>
         <div className="me-2">
           <Input
-            type="number"
+            type="string"
             maxLength={validationData?.totalMarks}
             placeholder={fieldName}
             errorMessage={errorMessage}
