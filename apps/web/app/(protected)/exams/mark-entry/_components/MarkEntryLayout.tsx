@@ -128,7 +128,7 @@ export function MarkEntryLayout() {
         append({
           studentId: studentDetail.id,
           userId,
-          name: `${studentDetail.firstName} ${studentDetail.middleName} ${studentDetail.lastName}`,
+          name: `${studentDetail.firstName} ${studentDetail?.middleName ?? ' '} ${studentDetail?.lastName ?? ' '}`,
         });
       });
     }
@@ -136,6 +136,7 @@ export function MarkEntryLayout() {
 
   useEffect(() => {
     setExamId('');
+    setStaffId('');
   }, [classId, sectionId]);
 
   useEffect(() => {
@@ -173,6 +174,7 @@ export function MarkEntryLayout() {
         </Select>
 
         <Select
+          value={sectionId}
           onValueChange={(value) => {
             setSectionId(value);
           }}
@@ -192,6 +194,7 @@ export function MarkEntryLayout() {
           </SelectContent>
         </Select>
         <Select
+          value={examId}
           onValueChange={(value) => {
             setExamId(value);
           }}
@@ -213,6 +216,7 @@ export function MarkEntryLayout() {
         </Select>
         {userRole === 'Admin' ? (
           <Select
+            value={staffId}
             onValueChange={(value) => {
               setStaffId(value);
             }}
