@@ -136,7 +136,6 @@ export function MarkEntryLayout() {
 
   useEffect(() => {
     setExamId('');
-    setStaffId('');
   }, [classId, sectionId]);
 
   useEffect(() => {
