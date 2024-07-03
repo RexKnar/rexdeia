@@ -15,7 +15,7 @@ export default async function Page() {
   return (
     <section className="flex flex-col gap-6">
       <MarkEntryPageHeader />
-      <section className="p-4 space-y-2 bg-white rounded-md">
+      <section className="space-y-2 rounded-md bg-white p-4">
         <MarkEntryLayout />
       </section>
     </section>
