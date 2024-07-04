@@ -120,7 +120,7 @@ model ExamSubjectPartition {
 
 model Mark {
   id                     String               @id @default(uuid()) @map("_id") @db.Uuid
-  mark                   Int?
+  mark                   Float?
   attandance             Int?
   studentId              String               @db.Uuid
   student                Student              @relation(fields: [studentId], references: [id])

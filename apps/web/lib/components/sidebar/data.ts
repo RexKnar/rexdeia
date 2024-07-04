@@ -399,26 +399,6 @@ export const menuItem = {
       ],
     },
     {
-      id: 'academics-class-student',
-      label: 'Class',
-      icon: FileText,
-      path: '',
-      children: [
-        {
-          id: 'class-dashboard',
-          label: 'Dashboard',
-          icon: FileText,
-          path: '/class/dashboard',
-        },
-        {
-          id: 'class-list',
-          label: 'Class List',
-          icon: FileText,
-          path: '/academics/class',
-        },
-      ],
-    },
-    {
       id: 'exam-page',
       label: 'Exams',
       icon: FileText,
