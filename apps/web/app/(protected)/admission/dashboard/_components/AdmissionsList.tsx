@@ -96,7 +96,7 @@ export function AdmissionsList() {
       { page: pageNumber, pageSize: 10 }
     ).then((res) => {
       setAdmissionsList(res.data);
-      setTotalPages(Math.ceil(res.total / 10));
+      setTotalPages(Math.round(res.total / 10));
     });
   }, [pageNumber]);
 

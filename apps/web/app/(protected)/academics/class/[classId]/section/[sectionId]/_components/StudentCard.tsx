@@ -1,7 +1,5 @@
 import { MoreHorizontal } from 'lucide-react';
 import {
-  Avatar,
-  AvatarImage,
   Button,
   DropdownMenu,
   DropdownMenuContent,

@@ -3,8 +3,6 @@ import { SubjectModel } from 'lib/domain/subject';
 import { MoreHorizontal } from 'lucide-react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import {
-  Avatar,
-  AvatarImage,
   Button,
   DropdownMenu,
   DropdownMenuContent,

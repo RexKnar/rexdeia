@@ -95,8 +95,8 @@ export async function getExamAnalyticsByClass(filter: MarkAnalyticsFilter) {
 
           const actualMark =
             (mark.mark / partition.totalMarks) * partition.convertTo;
-          subjectTotalMark += Math.ceil(actualMark);
-          mark['total'] = Math.ceil(actualMark);
+          subjectTotalMark += Math.round(actualMark);
+          mark['total'] = Math.round(actualMark);
 
           acc.push(mark);
         });
@@ -109,12 +109,14 @@ export async function getExamAnalyticsByClass(filter: MarkAnalyticsFilter) {
       } else {
         subjectPassed++;
       }
-
+      if (marks.length == absentOn.length) {
+        absentStatus = true;
+      }
       studentTotalMark += subjectTotalMark;
       const subject = {
         ...examSubject.subject,
         marks,
-        subjectTotalMark: Math.ceil(subjectTotalMark),
+        subjectTotalMark: Math.round(subjectTotalMark),
         absentStatus,
         absentOn,
         failingStatus,

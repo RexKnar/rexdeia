@@ -207,6 +207,12 @@ export const menuItem = {
           path: '/analytics',
         },
         {
+          id: 'master-marks',
+          label: 'Master',
+          icon: FileText,
+          path: '/analytics/master',
+        },
+        {
           id: 'marks',
           label: 'Marks',
           icon: FileText,
@@ -391,6 +397,12 @@ export const menuItem = {
           path: '/analytics',
         },
         {
+          id: 'master-marks',
+          label: 'Master',
+          icon: FileText,
+          path: '/analytics/master',
+        },
+        {
           id: 'marks',
           label: 'Marks',
           icon: FileText,
@@ -404,12 +416,6 @@ export const menuItem = {
       icon: FileText,
       path: '',
       children: [
-        {
-          id: 'exam-list',
-          label: 'Exam List',
-          icon: null,
-          path: '/exams',
-        },
         {
           id: 'mark-entry',
           label: 'Mark Entry',
