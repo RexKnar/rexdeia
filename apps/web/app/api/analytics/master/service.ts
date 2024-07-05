@@ -12,15 +12,8 @@ type MarkAnalyticsFilter = {
   };
 };
 
-export async function getMarksByFilter(filter: MarkAnalyticsFilter) {
-  const { classId, examId, sectionId, filterSubjects, markRange } = filter;
-
-  let subjectArray = [];
-  if (filterSubjects.length) {
-    subjectArray = filterSubjects.map((subject) => subject.id);
-  }
-
-  let subjectWhere = subjectArray.length ? { id: { in: subjectArray } } : {};
+export async function getMasterMarksByFilter(filter: MarkAnalyticsFilter) {
+  const { classId, examId, sectionId } = filter;
 
   const mainClause = {};
   if (sectionId) {
@@ -54,7 +47,6 @@ export async function getMarksByFilter(filter: MarkAnalyticsFilter) {
               select: {
                 exam: true,
                 examSubject: {
-                  where: subjectWhere,
                   select: {
                     subject: true,
                     examSubjectPartition: {
@@ -131,6 +123,10 @@ export async function getMarksByFilter(filter: MarkAnalyticsFilter) {
       } else {
         subjectPassed++;
       }
+
+      if (marks.length == absentOn.length) {
+        absentStatus = true;
+      }
       totalMark += subjectTotalMark;
       const subject = {
         ...examSubject.subject,
@@ -160,21 +156,6 @@ export async function getMarksByFilter(filter: MarkAnalyticsFilter) {
     return studentDetail;
   });
 
-  const markList = studentMarkList.filter((marks) => {
-    if (markRange.length) {
-      if (
-        marks['totalMark'] > markRange[0] &&
-        marks['totalMark'] < markRange[1]
-      ) {
-        return marks;
-      } else {
-        return false;
-      }
-    } else {
-      return marks;
-    }
-  });
-
   const findMinMaxTotalMarks = (students) => {
     let totalMale = 0;
     let totalFemale = 0;
@@ -202,6 +183,6 @@ export async function getMarksByFilter(filter: MarkAnalyticsFilter) {
     };
   };
 
-  const analytics = findMinMaxTotalMarks(markList);
-  return { markList, analytics };
+  const analytics = findMinMaxTotalMarks(studentMarkList);
+  return { markList: studentMarkList, analytics };
 }

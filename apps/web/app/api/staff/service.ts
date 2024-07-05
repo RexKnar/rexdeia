@@ -1,3 +1,4 @@
+import bcrypt from 'bcrypt';
 import uniqBy from 'lodash/uniqBy';
 import { getServerSession } from 'next-auth';
 
@@ -53,9 +54,10 @@ export async function addStaff(staff: AddStaffModel) {
   });
 
   if (!user) {
+    const hashedPassword = await bcrypt.hash(staff.mobile || '123456', 10);
     user = await db.user.create({
       data: {
-        password: '',
+        password: hashedPassword,
         email: staff.email,
         role: 'TeachingStaff',
         username: staff.email,
