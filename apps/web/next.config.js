@@ -1,6 +1,7 @@
 module.exports = {
   reactStrictMode: true,
   transpilePackages: ['ui'],
+  swcMinify: true,
 };
 
 // Injected content via Sentry wizard below

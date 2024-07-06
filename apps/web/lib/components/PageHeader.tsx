@@ -5,16 +5,20 @@ import { Input } from 'ui';
 
 import { NotificationPopover } from './notification/NotificationPopover';
 import { PathBreadcrumb } from './PathBreadcrumb';
+import { SidebarHeader } from './sidebar/SidebarHeader';
 import { UserMenu } from './UserMenu';
 
 export function PageHeader() {
   return (
-    <header className="sticky top-0 z-0 flex h-[64px] items-center justify-center border border-b-gray-200 border-l-transparent bg-white">
-      <section className="container mx-auto flex items-center justify-between">
-        <PathBreadcrumb />
+    <header className="sticky top-0 z-50 flex h-[64px] w-full  border border-b-gray-200 border-l-transparent bg-white ">
+      <section className="mx-auto flex w-full items-center justify-between ">
+        <SidebarHeader />
+        <div>
+          <PathBreadcrumb />
+        </div>
 
         <div className="flex items-center gap-6">
-          <div className="relative flex items-center">
+          <div className="relative flex hidden items-center lg:block">
             <Input
               type="search"
               placeholder="Search"

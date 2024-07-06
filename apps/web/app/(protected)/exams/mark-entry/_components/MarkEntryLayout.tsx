@@ -21,6 +21,13 @@ import {
   SelectValue,
   useToast,
 } from 'ui';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHeader,
+  TableRow,
+} from 'ui/components/ui/Table';
 
 import { ExamSubjects } from './ExamSubjects';
 
@@ -151,7 +158,7 @@ export function MarkEntryLayout() {
 
   return (
     <>
-      <div className="mb-4 flex justify-between rounded-md bg-white">
+      <div className="mb-4 flex flex-wrap justify-between rounded-md bg-white">
         <Select
           onValueChange={(value) => {
             setClassId(value);
@@ -240,60 +247,71 @@ export function MarkEntryLayout() {
         {!isMarkEntryConfigLoading ? (
           <>
             {markEntryResponse?.length ? (
-              <table className="min-w-full divide-y divide-gray-200 shadow-md">
-                <thead className="bg-gray-50">
-                  <tr>
-                    <th>#</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-black">
-                      Student
-                    </th>
-                    {markEntryResponse[0]?.examSubjects.map((examSubject) => (
-                      <th
-                        key={examSubject.id}
-                        className="justify-start px-6 py-3 text-start text-xs font-medium uppercase tracking-wider text-black"
-                      >
-                        <div className="border-1 flex w-full space-x-2 border border-b-primary-200">
-                          <p className="flex-1 text-center ">
-                            {examSubject.subject.name}
-                          </p>
-                        </div>
-                        <div className="flex w-full space-x-2">
-                          {examSubject.examSubjectPartition
-                            .filter(
-                              (config) => config.assessmentFormat !== null
-                            )
-                            .map((formatItem, index) => {
-                              return (
-                                <div key={index} className="flex-1 text-center">
-                                  {formatItem.assessmentFormat.name || ''}
-                                </div>
-                              );
-                            })}
-                        </div>
-                      </th>
-                    ))}
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-gray-200 bg-white">
-                  {studentFields.map((student, studentIndex) => {
-                    return (
-                      <tr key={student.id}>
-                        <td>{studentIndex + 1}</td>
-                        <td className="whitespace-nowrap px-6 py-4">
-                          {student['name']}
-                        </td>
-                        <ExamSubjects
-                          nestIndex={studentIndex}
-                          examSubjects={
-                            markEntryResponse[studentIndex]?.examSubjects
-                          }
-                          {...{ control, register }}
-                        />
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
+              <div className="">
+                <Table className="w-auto min-w-full divide-gray-200 shadow-md">
+                  <TableHeader className=" bg-gray-50">
+                    <TableRow>
+                      <TableCell className="sticky left-0 z-10 w-[20px] bg-gray-50 lg:w-[50px]">
+                        #
+                      </TableCell>
+                      <TableCell className="sticky left-[20px] z-10 w-1/4 bg-gray-50 px-6  py-3 text-left text-xs font-medium uppercase tracking-wider text-black lg:left-[50px] lg:w-[300px]">
+                        Student
+                      </TableCell>
+                      {markEntryResponse[0]?.examSubjects.map(
+                        (examSubject, subjectIndex) => (
+                          <TableCell
+                            key={examSubject.id}
+                            className={`w-2/3 justify-start px-6 py-3 text-start text-xs font-medium uppercase tracking-wider text-black lg:w-[300px] ${subjectIndex === 0 ? 'ml-[350px]' : ''}`}
+                          >
+                            <div className="border-1 flex w-full space-x-2 border border-b-primary-200">
+                              <p className="flex-1 text-center ">
+                                {examSubject.subject.name}
+                              </p>
+                            </div>
+                            <div className="flex w-full space-x-2">
+                              {examSubject.examSubjectPartition
+                                .filter(
+                                  (config) => config.assessmentFormat !== null
+                                )
+                                .map((formatItem, index) => {
+                                  return (
+                                    <div
+                                      key={index}
+                                      className="flex-1 text-center"
+                                    >
+                                      {formatItem.assessmentFormat.name || ''}
+                                    </div>
+                                  );
+                                })}
+                            </div>
+                          </TableCell>
+                        )
+                      )}
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody className="divide-y divide-gray-200 bg-white">
+                    {studentFields.map((student, studentIndex) => {
+                      return (
+                        <TableRow key={student.id} className="group relative">
+                          <TableCell className=" sticky left-0 z-10 w-[20px] bg-white group-hover:bg-gray-50 lg:w-[50px]">
+                            {studentIndex + 1}
+                          </TableCell>
+                          <TableCell className="sticky left-[20px] z-10 w-1/4 whitespace-nowrap bg-white px-6  py-4 group-hover:bg-gray-50 lg:left-[50px] lg:w-[300px]">
+                            {student['name']}
+                          </TableCell>
+                          <ExamSubjects
+                            nestIndex={studentIndex}
+                            examSubjects={
+                              markEntryResponse[studentIndex]?.examSubjects
+                            }
+                            {...{ control, register }}
+                          />
+                        </TableRow>
+                      );
+                    })}
+                  </TableBody>
+                </Table>
+              </div>
             ) : (
               <div className="flex items-center justify-center">
                 <p className="text-black ">No Data Found</p>

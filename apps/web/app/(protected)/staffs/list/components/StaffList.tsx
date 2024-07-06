@@ -336,8 +336,8 @@ export function StaffList() {
                 <TableCell colSpan={5} className="">
                   {isStaffListLoading ? (
                     <div className="flex h-20 items-center justify-center">
-                      <Loader2 className="mr-2  w-6 animate-spin text-black" />
-                      <p className=" text-black">Fetching Staff List...</p>
+                      <Loader2 className="mr-2 w-6 animate-spin text-black" />
+                      <p className="text-black ">Fetching Staff List...</p>
                     </div>
                   ) : (
                     'Staffs not Found'
@@ -352,6 +352,7 @@ export function StaffList() {
         condition={getStaffListResponse?.data?.length && !isStaffListLoading}
       >
         <Pagination
+          pageNumber={page}
           limit={limit.toString()}
           onPageChange={handleOnPageChange}
           pageSize={getStaffListResponse?.limit || 0}

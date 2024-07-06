@@ -2,6 +2,7 @@
 
 import { useEffect } from 'react';
 import { useFieldArray } from 'react-hook-form';
+import { TableCell } from 'ui/components/ui/Table';
 
 import { MarkFields } from './Mark-Fields';
 
@@ -25,7 +26,10 @@ export function ExamSubjects({ nestIndex, examSubjects, control }) {
     <>
       {fields.map((examSubject, subjectIndex) => {
         return (
-          <td key={examSubject.id} className="whitespace-nowrap px-6 py-4">
+          <TableCell
+            key={examSubject.id}
+            className={`w-2/3 whitespace-nowrap px-6 py-4 lg:w-[300px] ${subjectIndex === 0 ? 'ml-[350px]' : ''}`}
+          >
             <div>
               <MarkFields
                 nestIndex={nestIndex}
@@ -36,7 +40,7 @@ export function ExamSubjects({ nestIndex, examSubjects, control }) {
                 }
               />
             </div>
-          </td>
+          </TableCell>
         );
       })}
     </>
