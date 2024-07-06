@@ -158,8 +158,8 @@ importers:
         specifier: 4.24.7
         version: 4.24.7(next@14.2.4(react-dom@18.2.0(react@18.3.1))(react@18.3.1))(react-dom@18.2.0(react@18.3.1))(react@18.3.1)
       next-intl:
-        specifier: 3.13.0
-        version: 3.13.0(next@14.2.4(react-dom@18.2.0(react@18.3.1))(react@18.3.1))(react@18.3.1)
+        specifier: 3.15.3
+        version: 3.15.3(next@14.2.4(react-dom@18.2.0(react@18.3.1))(react@18.3.1))(react@18.3.1)
       next-swagger-doc:
         specifier: ^0.4.0
         version: 0.4.0(next@14.2.4(react-dom@18.2.0(react@18.3.1))(react@18.3.1))(openapi-types@12.1.3)
@@ -3863,8 +3863,8 @@ packages:
       nodemailer:
         optional: true
 
-  next-intl@3.13.0:
-    resolution: {integrity: sha512-qCfjOkdUtSPWRnyAkNbZWJREzBGxSHGoqbfV1F7m+msztXTly26USwJeKLTCvXIi6HP38IOC1Zegg7sYJoD/lA==}
+  next-intl@3.15.3:
+    resolution: {integrity: sha512-jNc2xYzwv0Q4EQKvuHye9dXaDaneiP/ZCQC+AccyOQD6N9d/FZiSWT4wfVVD4B0IXC1Hhzj1QussUu+k3ynnTg==}
     peerDependencies:
       next: ^10.0.0 || ^11.0.0 || ^12.0.0 || ^13.0.0 || ^14.0.0
       react: ^16.8.0 || ^17.0.0 || ^18.0.0
@@ -9759,7 +9759,7 @@ snapshots:
       react-dom: 18.2.0(react@18.3.1)
       uuid: 8.3.2
 
-  next-intl@3.13.0(next@14.2.4(react-dom@18.2.0(react@18.3.1))(react@18.3.1))(react@18.3.1):
+  next-intl@3.15.3(next@14.2.4(react-dom@18.2.0(react@18.3.1))(react@18.3.1))(react@18.3.1):
     dependencies:
       '@formatjs/intl-localematcher': 0.2.32
       negotiator: 0.6.3
