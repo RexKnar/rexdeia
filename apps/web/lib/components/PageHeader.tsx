@@ -1,6 +1,7 @@
 'use client';
 
 import { Search } from 'lucide-react';
+import { Suspense } from 'react';
 import { Input } from 'ui';
 
 import { NotificationPopover } from './notification/NotificationPopover';
@@ -12,7 +13,10 @@ export function PageHeader() {
   return (
     <header className="sticky top-0 z-50 flex h-[64px] w-full  border border-b-gray-200 border-l-transparent bg-white ">
       <section className="mx-auto flex w-full items-center justify-between ">
-        <SidebarHeader />
+        <Suspense fallback={<div>Loading...</div>}>
+          <SidebarHeader />
+        </Suspense>
+
         <div>
           <PathBreadcrumb />
         </div>
