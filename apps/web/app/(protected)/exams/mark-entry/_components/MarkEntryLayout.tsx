@@ -254,7 +254,7 @@ export function MarkEntryLayout() {
                       <TableCell className="sticky left-0 z-10 w-[20px] bg-gray-50 lg:w-[50px]">
                         #
                       </TableCell>
-                      <TableCell className="sticky left-[20px] z-10 w-1/4 bg-gray-50 px-6  py-3 text-left text-xs font-medium uppercase tracking-wider text-black lg:left-[50px] lg:w-[300px]">
+                      <TableCell className="sticky left-[20px] z-10 w-[100px] bg-gray-50 px-6  py-3 text-left text-xs font-medium uppercase tracking-wider text-black lg:left-[50px] lg:w-[300px]">
                         Student
                       </TableCell>
                       {markEntryResponse[0]?.examSubjects.map(
@@ -296,7 +296,7 @@ export function MarkEntryLayout() {
                           <TableCell className=" sticky left-0 z-10 w-[20px] bg-white group-hover:bg-gray-50 lg:w-[50px]">
                             {studentIndex + 1}
                           </TableCell>
-                          <TableCell className="sticky left-[20px] z-10 w-1/4 whitespace-nowrap bg-white px-6  py-4 group-hover:bg-gray-50 lg:left-[50px] lg:w-[300px]">
+                          <TableCell className="sticky left-[20px] z-10 w-[100px] whitespace-nowrap bg-white px-6  py-4 group-hover:bg-gray-50 lg:left-[50px] lg:w-[300px]">
                             {student['name']}
                           </TableCell>
                           <ExamSubjects
