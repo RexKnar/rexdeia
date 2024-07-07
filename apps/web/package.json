@@ -8,7 +8,8 @@
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "postinstall": "prisma generate",
     "lint": "next lint",
-    "start": "next start"
+    "start": "next start",
+    "trace-types": "tsc --traceResolution"
   },
   "dependencies": {
     "@google-cloud/storage": "^7.7.0",
