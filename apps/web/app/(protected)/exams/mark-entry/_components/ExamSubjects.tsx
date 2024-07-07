@@ -28,7 +28,7 @@ export function ExamSubjects({ nestIndex, examSubjects, control }) {
         return (
           <TableCell
             key={examSubject.id}
-            className={`w-[150px] whitespace-nowrap px-6 py-4 lg:w-[300px] ${subjectIndex === 0 ? 'ml-[350px]' : ''}`}
+            className={`w-[150px] whitespace-nowrap px-6 py-4 lg:w-[300px] ${subjectIndex === 0 ? 'ml-[70px] lg:ml-[350px]' : ''}`}
           >
             <div>
               <MarkFields

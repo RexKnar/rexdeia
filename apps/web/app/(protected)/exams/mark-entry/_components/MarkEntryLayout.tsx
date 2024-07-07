@@ -158,7 +158,7 @@ export function MarkEntryLayout() {
 
   return (
     <>
-      <div className="mb-4 flex flex-wrap justify-between rounded-md bg-white">
+      <div className="flex flex-wrap justify-between mb-4 bg-white rounded-md">
         <Select
           onValueChange={(value) => {
             setClassId(value);
@@ -254,16 +254,16 @@ export function MarkEntryLayout() {
                       <TableCell className="sticky left-0 z-10 w-[20px] bg-gray-50 lg:w-[50px]">
                         #
                       </TableCell>
-                      <TableCell className="sticky left-[20px] z-10 w-[100px] bg-gray-50 px-6  py-3 text-left text-xs font-medium uppercase tracking-wider text-black lg:left-[50px] lg:w-[300px]">
+                      <TableCell className="sticky left-[20px] z-10 w-[20px] bg-gray-50 lg:px-6  py-3 text-left text-xs font-medium uppercase tracking-wider text-black lg:left-[50px] lg:w-[300px]">
                         Student
                       </TableCell>
                       {markEntryResponse[0]?.examSubjects.map(
                         (examSubject, subjectIndex) => (
                           <TableCell
                             key={examSubject.id}
-                            className={`w-2/3 justify-start px-6 py-3 text-start text-xs font-medium uppercase tracking-wider text-black lg:w-[300px] ${subjectIndex === 0 ? 'ml-[350px]' : ''}`}
+                            className={`w-2/3 justify-start lg:px-6 py-3 text-start text-xs font-medium uppercase tracking-wider text-black lg:w-[300px] ${subjectIndex === 0 ? 'ml-[350px]' : ''}`}
                           >
-                            <div className="border-1 flex w-full space-x-2 border border-b-primary-200">
+                            <div className="flex w-full space-x-2 border border-1 border-b-primary-200">
                               <p className="flex-1 text-center ">
                                 {examSubject.subject.name}
                               </p>
@@ -289,14 +289,14 @@ export function MarkEntryLayout() {
                       )}
                     </TableRow>
                   </TableHeader>
-                  <TableBody className="divide-y divide-gray-200 bg-white">
+                  <TableBody className="bg-white divide-y divide-gray-200">
                     {studentFields.map((student, studentIndex) => {
                       return (
-                        <TableRow key={student.id} className="group relative">
+                        <TableRow key={student.id} className="relative group">
                           <TableCell className=" sticky left-0 z-10 w-[20px] bg-white group-hover:bg-gray-50 lg:w-[50px]">
                             {studentIndex + 1}
                           </TableCell>
-                          <TableCell className="sticky left-[20px] z-10 w-[100px] whitespace-nowrap bg-white px-6  py-4 group-hover:bg-gray-50 lg:left-[50px] lg:w-[300px]">
+                          <TableCell className="sticky text-xs left-[20px] z-10 w-[20px] whitespace-nowrap bg-white lg:px-6  py-4 group-hover:bg-gray-50 lg:left-[50px] lg:w-[300px]">
                             {student['name']}
                           </TableCell>
                           <ExamSubjects
@@ -321,7 +321,7 @@ export function MarkEntryLayout() {
             <Button className="text-center" type="submit">
               {isPendingCreateMarkEntry ? (
                 <div className="flex items-center justify-center">
-                  <Loader2 className="mr-2 h-6 w-6 animate-spin text-white" />
+                  <Loader2 className="w-6 h-6 mr-2 text-white animate-spin" />
                   Saving
                 </div>
               ) : (
@@ -331,7 +331,7 @@ export function MarkEntryLayout() {
           </>
         ) : (
           <div className="flex items-center justify-center">
-            <Loader2 className="mr-2 h-6 w-6 animate-spin text-black" />
+            <Loader2 className="w-6 h-6 mr-2 text-black animate-spin" />
             <p className="text-black ">Fetching Data...</p>
           </div>
         )}
