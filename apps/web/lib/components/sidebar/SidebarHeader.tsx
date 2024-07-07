@@ -1,6 +1,9 @@
 'use client';
 
-import { ChevronDown, Plus, Settings } from 'lucide-react';
+import { motion } from 'framer-motion';
+import { ChevronDown, Menu, Plus, X } from 'lucide-react';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { useState } from 'react';
 import {
   Avatar,
   AvatarImage,
@@ -16,9 +19,16 @@ import { useGetUserDetailsQuery } from '../../queries/useGetUserDetailsQuery';
 
 export function SidebarHeader() {
   const { data, isLoading } = useGetUserDetailsQuery();
+  const pathname = usePathname();
+  const router = useRouter();
+
+  const searchParams = useSearchParams();
+  const params = new URLSearchParams(searchParams);
+  const isMenuOpen = params.get('isMenu') === 'false' ? false : true;
+  const [isOpen, setIsOpen] = useState(() => isMenuOpen ?? false);
 
   return (
-    <div className="fixed flex h-[64px] w-full items-center justify-between border border-b-gray-200 border-r-transparent bg-white px-4 text-lg font-semibold">
+    <div className=" flex h-[64px]  items-center justify-between border border-b-gray-200 border-r-transparent bg-white px-4 text-lg font-semibold">
       <div className="flex items-center gap-4 text-left">
         <Avatar className="cursor-pointer">
           <AvatarImage src="https://avatars.githubusercontent.com/u/124599?v=4" />
@@ -48,7 +58,25 @@ export function SidebarHeader() {
         </DropdownMenu>
       </div>
       <div className="p-2 ">
-        <Settings className="cursor-pointer text-gray-700" />
+        <button
+          onClick={() => {
+            const isMenuOpen = !isOpen;
+            setIsOpen(isMenuOpen);
+            const params = new URLSearchParams(searchParams);
+            params.set('isMenu', isMenuOpen.toString());
+
+            router.push(pathname + '?' + params.toString());
+          }}
+          className="lg:hidden"
+        >
+          <motion.span
+            initial={{ rotate: 0 }}
+            animate={{ rotate: isOpen ? 180 : 0 }}
+            transition={{ duration: 0.3 }}
+          >
+            {isOpen ? <X /> : <Menu />}
+          </motion.span>
+        </button>
       </div>
     </div>
   );

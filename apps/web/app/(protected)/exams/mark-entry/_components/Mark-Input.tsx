@@ -60,6 +60,7 @@ export function MarkInput({
         <div className="me-2">
           <Input
             type="string"
+            className="w-[100px] lg:w-[200px]"
             maxLength={validationData?.totalMarks}
             placeholder={fieldName}
             errorMessage={errorMessage}

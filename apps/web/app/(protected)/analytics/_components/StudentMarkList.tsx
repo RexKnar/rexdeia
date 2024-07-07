@@ -251,12 +251,12 @@ export default function StudentMarkList({
         </TableCell>
         <TableCell>
           <Text className="size-lg text-center font-semibold">
-            {subjectAnalytics?.passPercentage.overall.toFixed(2)}%
+            {subjectAnalytics?.passPercentage.overall?.toFixed(2)}%
           </Text>
         </TableCell>
         <TableCell>
           <Text className="size-lg text-center font-semibold">
-            {subjectAnalytics?.failPercentage.overall.toFixed(2)}%
+            {subjectAnalytics?.failPercentage.overall?.toFixed(2)}%
           </Text>
         </TableCell>
         <TableCell>
@@ -276,11 +276,11 @@ export default function StudentMarkList({
   const renderStudentRow = (student, index) => (
     <TableRow key={student.id}>
       <TableCell className="text-center">{index + 1}</TableCell>
-      <TableCell>
+      <TableCell className="sticky">
         {student.firstName} {student.lastName}
       </TableCell>
       {subjectList.map((subject) => (
-        <TableCell key={subject.subjectId}>
+        <TableCell key={subject.subjectId} className="w:1/3">
           <div className="w-full">
             <div className="flex justify-evenly">
               {getMarkForSubject(student, subject.subject.id).map((mark) =>
@@ -316,19 +316,19 @@ export default function StudentMarkList({
         {student.failingStatus ? (
           <>
             <p className="text-red-500">
-              {student.totalMark}({student.totalPercentage.toFixed(2)}%)
+              {student.totalMark}({student.totalPercentage?.toFixed(2)}%)
             </p>
             <p className="text-red-500">
-              Avg:{student.totalAverage.toFixed(2)}(F)
+              Avg:{student.totalAverage?.toFixed(2)}(F)
             </p>
           </>
         ) : (
           <>
             <p className="text-green-500">
-              {student.totalMark}({student.totalPercentage.toFixed(2)}%)
+              {student.totalMark}({student.totalPercentage?.toFixed(2)}%)
             </p>
             <p className="text-green-500">
-              Avg:{student.totalAverage.toFixed(2)}-(P)
+              Avg:{student.totalAverage?.toFixed(2)}-(P)
             </p>
           </>
         )}
@@ -339,7 +339,7 @@ export default function StudentMarkList({
   return (
     <section>
       {subjectList && (
-        <div className="mt-4 space-y-4 rounded-md bg-white p-6">
+        <div className="mt-4 space-y-4 overflow-x-auto rounded-md bg-white p-6">
           <Table className="border-1 border">
             <TableHeader>
               <TableRow className="mt-5 bg-primary-300 text-center">
@@ -378,7 +378,7 @@ export default function StudentMarkList({
                 </TableCell>
                 <TableCell>
                   <Text className="size-lg font-semibold">
-                    Average {overallStats.avgMark.toFixed(2)}
+                    Average {overallStats.avgMark?.toFixed(2)}
                   </Text>
                 </TableCell>
                 <TableCell>
@@ -393,12 +393,12 @@ export default function StudentMarkList({
                 </TableCell>
                 <TableCell>
                   <Text className="size-lg font-semibold">
-                    {overallStats.passPercentage.toFixed(2)}%
+                    {overallStats.passPercentage?.toFixed(2)}%
                   </Text>
                 </TableCell>
                 <TableCell>
                   <Text className="size-lg font-semibold">
-                    {overallStats.failPercentage.toFixed(2)}%
+                    {overallStats.failPercentage?.toFixed(2)}%
                   </Text>
                 </TableCell>
                 <TableCell>

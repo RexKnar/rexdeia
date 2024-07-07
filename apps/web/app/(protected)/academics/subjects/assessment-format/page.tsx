@@ -1,5 +1,6 @@
 import { redirect } from 'next/navigation';
 import { getServerSession } from 'next-auth';
+import { Suspense } from 'react';
 
 import { authOptions } from '../../../../../lib/auth';
 import { AssessmentFormatHeader } from './_components/AssessmentFormatHeader';
@@ -15,10 +16,12 @@ export default async function Page() {
 
   return (
     <section className="flex flex-col gap-6">
-      <AssessmentFormatHeader />
-      <section className="space-y-2 rounded-md bg-white p-4">
-        <AssessmentFormatListTable />
-      </section>
+      <Suspense>
+        <AssessmentFormatHeader />
+        <section className="space-y-2 rounded-md bg-white p-4">
+          <AssessmentFormatListTable />
+        </section>
+      </Suspense>
     </section>
   );
 }

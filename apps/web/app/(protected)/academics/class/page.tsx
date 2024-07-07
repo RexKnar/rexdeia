@@ -1,5 +1,6 @@
 import { redirect } from 'next/navigation';
 import { getServerSession } from 'next-auth/next';
+import { Suspense } from 'react';
 
 import { authOptions } from '../../../../lib/auth';
 import { ClassList } from './_components/ClassList';
@@ -13,10 +14,12 @@ export default async function Page() {
 
   return (
     <section className="flex flex-col gap-6">
-      <ClassPageHeader />
-      <section className="space-y-2 rounded-md bg-white py-4">
-        <ClassList />
-      </section>
+      <Suspense>
+        <ClassPageHeader />
+        <section className="space-y-2 rounded-md bg-white py-4">
+          <ClassList />
+        </section>
+      </Suspense>
     </section>
   );
 }

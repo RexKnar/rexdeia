@@ -1,5 +1,6 @@
 import { redirect } from 'next/navigation';
 import { getServerSession } from 'next-auth';
+import { Suspense } from 'react';
 
 import { DepartmentList } from '@/components/department/departmentList';
 
@@ -18,7 +19,9 @@ export default async function Page() {
     });
     return (
       <div className="flex flex-col">
-        <DepartmentList departmentList={apiResponse} />
+        <Suspense>
+          <DepartmentList departmentList={apiResponse} />
+        </Suspense>
       </div>
     );
   } catch (error) {

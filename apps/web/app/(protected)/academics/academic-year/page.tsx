@@ -1,5 +1,6 @@
 import { redirect } from 'next/navigation';
 import { getServerSession } from 'next-auth';
+import { Suspense } from 'react';
 
 import { authOptions } from '../../../../lib/auth';
 import { isAuthenticated } from '../../../../lib/utils/auth';
@@ -13,10 +14,12 @@ export default async function Page() {
 
   return (
     <section className="flex flex-col gap-6">
-      <AcademicYearPageHeader />
-      <section className="space-y-2 rounded-md bg-white p-4">
-        <AcademicYearListTable />
-      </section>
+      <Suspense>
+        <AcademicYearPageHeader />
+        <section className="space-y-2 rounded-md bg-white p-4">
+          <AcademicYearListTable />
+        </section>
+      </Suspense>
     </section>
   );
 }

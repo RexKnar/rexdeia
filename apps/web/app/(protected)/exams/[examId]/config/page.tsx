@@ -1,6 +1,7 @@
 import { authOptions } from 'lib/auth';
 import { redirect } from 'next/navigation';
 import { getServerSession } from 'next-auth';
+import { Suspense } from 'react';
 
 import { AddExamLayout } from './_components/AddExam-layout';
 import { PageHeader } from './_components/PageHeader';
@@ -13,10 +14,12 @@ export default async function Page() {
 
   return (
     <section className="flex flex-col gap-6">
-      <PageHeader />
-      <section className="space-y-2 rounded-md p-4">
-        <AddExamLayout />
-      </section>
+      <Suspense>
+        <PageHeader />
+        <section className="space-y-2 rounded-md p-4">
+          <AddExamLayout />
+        </section>
+      </Suspense>
     </section>
   );
 }

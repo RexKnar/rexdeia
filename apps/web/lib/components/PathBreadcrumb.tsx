@@ -17,6 +17,7 @@ export function PathBreadcrumb() {
   return (
     <Breadcrumb
       separator={<Slash className="rotate-[-30deg] text-gray-900" size={12} />}
+      className="hidden lg:block"
     >
       {pathSegments.map((segment, index) => {
         const key = segment + index;

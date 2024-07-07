@@ -1,5 +1,6 @@
 import { redirect } from 'next/navigation';
 import { getServerSession } from 'next-auth';
+import { Suspense } from 'react';
 
 import { authOptions } from '../../../../lib/auth';
 import { TermListTable } from './_components/TermListTable';
@@ -13,10 +14,12 @@ export default async function Page() {
 
   return (
     <section className="flex flex-col gap-6">
-      <TermPageHeader />
-      <section className="space-y-2 rounded-md bg-white p-4">
-        <TermListTable />
-      </section>
+      <Suspense>
+        <TermPageHeader />
+        <section className="space-y-2 rounded-md bg-white p-4">
+          <TermListTable />
+        </section>
+      </Suspense>
     </section>
   );
 }

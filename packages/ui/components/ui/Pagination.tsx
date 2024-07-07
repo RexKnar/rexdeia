@@ -13,6 +13,7 @@ import {
 } from './Select';
 
 type PaginationProps = {
+  pageNumber?: number;
   pageSize: number;
   totalRecords: number;
   limit: string;
@@ -22,6 +23,7 @@ type PaginationProps = {
 };
 
 export function Pagination({
+  pageNumber = 1,
   pageSize,
   totalRecords,
   limit,
@@ -29,7 +31,7 @@ export function Pagination({
   onPageChange,
   onLimitChange,
 }: Readonly<PaginationProps>) {
-  const [currentPage, setCurrentPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState(pageNumber || 1);
   const totalPages = Math.ceil(totalRecords / pageSize);
 
   useEffect(() => {

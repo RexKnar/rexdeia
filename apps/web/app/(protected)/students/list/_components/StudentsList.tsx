@@ -243,9 +243,9 @@ export function StudentsList() {
   const handleOnPageChange = useCallback(
     (page: number) => {
       const params = new URLSearchParams(searchParams);
-      params.set('page', page.toString());
+      params.set('page', page?.toString());
 
-      router.push(pathname + '?' + params.toString());
+      router.push(pathname + '?' + params?.toString());
     },
     [searchParams, pathname, router]
   );
@@ -431,16 +431,17 @@ export function StudentsList() {
         }
       >
         <Pagination
-          limit={limit.toString()}
+          pageNumber={page}
+          limit={limit?.toString()}
           onPageChange={handleOnPageChange}
           pageSize={getStudentListResponse?.pageSize || 0}
           totalRecords={getStudentListResponse?.total || 0}
           disabled={isStudentListLoading}
           onLimitChange={(value) => {
             const params = new URLSearchParams(searchParams);
-            params.set('limit', value.toString());
+            params.set('limit', value?.toString());
 
-            router.replace(pathname + '?' + params.toString());
+            router.replace(pathname + '?' + params?.toString());
           }}
         />
         <DeleteConfirmationModal
