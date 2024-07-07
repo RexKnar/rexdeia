@@ -1,4 +1,3 @@
-import { UserRole } from '@prisma/client';
 import bcrypt from 'bcrypt';
 import { authOptions } from 'lib/auth';
 import { db } from 'lib/db';
@@ -63,7 +62,7 @@ export async function addStudentCSV(studentDetails: any) {
               email: studentDetail.AadhaarNumber + '@gmail.com',
               username: studentDetail.AadhaarNumber + '@gmail.com',
               phoneNumber: studentDetail.Mobile || studentDetail?.PhoneNumber,
-              role: UserRole.Student,
+              role: 'Student',
             },
           });
 

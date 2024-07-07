@@ -1,4 +1,3 @@
-import { UserRole } from '@prisma/client';
 import bcrypt from 'bcrypt';
 import { authOptions } from 'lib/auth';
 import { db } from 'lib/db';
@@ -32,7 +31,7 @@ export async function addStaffCSV(staffDetails) {
                 ? staffDetail.Email.toLowerCase()
                 : `${staffDetail.Mobile}@gmail.com`,
               phoneNumber: staffDetail.Mobile,
-              role: UserRole.TeachingStaff,
+              role: 'TeachingStaff',
             },
           });
 

@@ -3,8 +3,6 @@ import { SubjectModel } from 'lib/domain/subject';
 import { MoreHorizontal } from 'lucide-react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import {
-  Avatar,
-  AvatarImage,
   Button,
   DropdownMenu,
   DropdownMenuContent,
@@ -28,12 +26,6 @@ export function StaffCard(props: StaffCardProps) {
 
   return (
     <div className="flex bg-white p-3">
-      <div className="w-1/4">
-        <Avatar className="h-16 w-16 cursor-pointer">
-          <AvatarImage src="https://png.pngtree.com/thumb_back/fh260/background/20230612/pngtree-man-wearing-glasses-is-wearing-colorful-background-image_2905240.jpg" />
-        </Avatar>
-      </div>
-
       <div className="my-auto w-2/4 px-2">
         <Text variant="base-bold">{name}</Text>
         {sectionsHandled.map((section, sectionIndex) => (
