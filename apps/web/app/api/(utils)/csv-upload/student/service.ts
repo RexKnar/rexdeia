@@ -14,6 +14,7 @@ export async function addStudentCSV(studentDetails: any) {
             name: studentDetail.Class,
           },
         });
+
         const sectionDetail = await db.section.findFirst({
           where: {
             name: studentDetail.Section,
@@ -29,6 +30,7 @@ export async function addStudentCSV(studentDetails: any) {
         const groupDetail = await db.group.findFirst({
           where: {
             name: studentDetail.Group || 'General',
+            isDeleted: false,
           },
         });
         const mediumDetail = await db.medium.findFirst({

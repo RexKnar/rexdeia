@@ -1,7 +1,7 @@
 import 'configs/tailwind/styles.css';
 
 import NextTopLoader from 'nextjs-toploader';
-import { ReactNode } from 'react';
+import { ReactNode, Suspense } from 'react';
 import { primaryColor, Toaster } from 'ui';
 
 import { PageHeader } from '@/components/PageHeader';
@@ -17,11 +17,11 @@ export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <main className="h-screen bg-gray-50">
       <NextTopLoader color={primaryColor} showSpinner={false} />
-      <PageHeader />
+     <Suspense><PageHeader /></Suspense>
       <section className="lg:flex">
-        <Sidebar />
+       <Suspense><Sidebar /></Suspense>
         <section className="h-full bg-gray-50 lg:ml-72 lg:flex-1">
-          <section className="container mx-auto bg-gray-50 py-6">
+          <section className="container py-6 mx-auto bg-gray-50">
             {children}
           </section>
         </section>
