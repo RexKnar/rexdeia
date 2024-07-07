@@ -15,13 +15,13 @@ export default async function Page() {
 
   return (
     <section className="flex flex-col gap-6">
-      <RegulationsPageHeader />
-      <section className="space-y-2 rounded-md bg-white p-4">
-        <Suspense>
+      <Suspense>
+        <RegulationsPageHeader />
+        <section className="space-y-2 rounded-md bg-white p-4">
           <RegulationListTable />
-        </Suspense>
-      </section>
-      <SaveRegulationFlyout />
+        </section>
+        <SaveRegulationFlyout />
+      </Suspense>
     </section>
   );
 }

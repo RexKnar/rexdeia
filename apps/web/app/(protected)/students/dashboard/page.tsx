@@ -1,5 +1,6 @@
 import Image from 'next/image';
 import Link from 'next/link';
+import { Suspense } from 'react';
 
 import noStudentData from '../../../../public/assets/images/no-student-data.svg';
 import { getRecentlyAddedStudentsList } from '../../../api/student/service';
@@ -47,7 +48,9 @@ export default async function Page() {
           </div>
         )}
         {studentsList.map((student) => (
-          <RecentEnrolledStudents {...student} key={student.id} />
+          <Suspense key={student.id}>
+            <RecentEnrolledStudents {...student} />{' '}
+          </Suspense>
         ))}
         <div className="flex justify-end text-primary">
           <Link href={`/students/list`}>Browse All</Link>

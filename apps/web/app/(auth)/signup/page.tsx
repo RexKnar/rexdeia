@@ -2,6 +2,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import { getServerSession } from 'next-auth';
+import { Suspense } from 'react';
 import { Text } from 'ui';
 
 import { SignUpForm } from '@/components/auth/SignUpForm';
@@ -40,7 +41,9 @@ export default async function Page() {
             <Text variant="sm-regular" className="text-gray-800">
               Join rexdeia and embark on a seamless academic experience.
             </Text>
-            <SignUpForm />
+            <Suspense>
+              <SignUpForm />
+            </Suspense>
             <Text
               variant="sm-semibold"
               className="mt-12 text-center text-gray-800"

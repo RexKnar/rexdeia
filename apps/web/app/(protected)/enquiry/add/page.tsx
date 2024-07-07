@@ -1,4 +1,5 @@
 import { getServerSession } from 'next-auth';
+import { Suspense } from 'react';
 
 import { PageTitle } from '@/components/PageTitle';
 
@@ -10,11 +11,13 @@ export default async function page() {
 
   return (
     <section>
-      <PageTitle title="Add New Enquiry" />
-      <EnquiryPage
-        branchId={session.branchId}
-        organizationId={session.organizationId}
-      />
+      <Suspense>
+        <PageTitle title="Add New Enquiry" />
+        <EnquiryPage
+          branchId={session.branchId}
+          organizationId={session.organizationId}
+        />
+      </Suspense>
     </section>
   );
 }

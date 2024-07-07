@@ -1,5 +1,6 @@
 import { redirect } from 'next/navigation';
 import { getServerSession } from 'next-auth';
+import { Suspense } from 'react';
 
 import { authOptions } from '../../../../../lib/auth';
 import AddClass from './_components/AddClass';
@@ -13,7 +14,9 @@ export default async function Page() {
 
   return (
     <section className="mx-auto my-5 rounded-md bg-white p-6">
-      <AddClass />
+      <Suspense fallback={<div>Loading...</div>}>
+        <AddClass />
+      </Suspense>
     </section>
   );
 }

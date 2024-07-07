@@ -1,5 +1,6 @@
 import { redirect } from 'next/navigation';
 import { getServerSession } from 'next-auth';
+import { Suspense } from 'react';
 
 import { PageTitle } from '@/components/PageTitle';
 
@@ -14,8 +15,10 @@ export default async function Page() {
 
   return (
     <section>
-      <PageTitle title="Onboard New Staff" />
-      <OnboardStaffForm />
+      <Suspense>
+        <PageTitle title="Onboard New Staff" />
+        <OnboardStaffForm />
+      </Suspense>
     </section>
   );
 }

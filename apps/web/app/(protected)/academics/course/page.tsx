@@ -1,5 +1,6 @@
 import { redirect } from 'next/navigation';
 import { getServerSession } from 'next-auth';
+import { Suspense } from 'react';
 
 import { CourseList } from '@/components/course/courseList';
 
@@ -18,7 +19,9 @@ export default async function Page() {
 
   return (
     <div className="flex flex-col">
-      <CourseList courseList={courses} />
+      <Suspense>
+        <CourseList courseList={courses} />
+      </Suspense>
     </div>
   );
 }

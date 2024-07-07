@@ -1,5 +1,6 @@
 import { redirect } from 'next/navigation';
 import { getServerSession } from 'next-auth';
+import { Suspense } from 'react';
 
 import { authOptions } from '../../../../lib/auth';
 import { SubjectMasterListTable } from './_components/SubjectMasterListTable';
@@ -13,10 +14,12 @@ export default async function Page() {
 
   return (
     <section className="flex flex-col gap-6">
-      <SubjectMasterPageHeader />
-      <section className="space-y-2 rounded-md bg-white p-4">
-        <SubjectMasterListTable />
-      </section>
+      <Suspense>
+        <SubjectMasterPageHeader />
+        <section className="space-y-2 rounded-md bg-white p-4">
+          <SubjectMasterListTable />
+        </section>
+      </Suspense>
     </section>
   );
 }

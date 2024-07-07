@@ -1,5 +1,6 @@
 import { redirect } from 'next/navigation';
 import { getServerSession } from 'next-auth';
+import { Suspense } from 'react';
 
 import { authOptions } from '../../../../../lib/auth';
 import { SubjectTypeFlyout } from './_components/_modals/SubjectTypeFlyout';
@@ -13,11 +14,13 @@ export default async function Page() {
   }
   return (
     <section className="flex flex-col gap-6">
-      <SubjectTypeHeader />
-      <section className="space-y-2 rounded-md bg-white p-4">
-        <SubjectTypeListTable />
-      </section>
-      <SubjectTypeFlyout />
+      <Suspense>
+        <SubjectTypeHeader />
+        <section className="space-y-2 rounded-md bg-white p-4">
+          <SubjectTypeListTable />
+        </section>
+        <SubjectTypeFlyout />
+      </Suspense>
     </section>
   );
 }

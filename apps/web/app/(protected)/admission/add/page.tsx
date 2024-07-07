@@ -1,5 +1,6 @@
 import { redirect } from 'next/navigation';
 import { getServerSession } from 'next-auth';
+import { Suspense } from 'react';
 
 import { PageTitle } from '@/components/PageTitle';
 
@@ -15,12 +16,13 @@ export default async function Page() {
 
   return (
     <section>
-      <PageTitle title="Add New Admission" />
-
-      <AdmissionPage
-        branchId={session.branchId}
-        organizationId={session.organizationId}
-      />
+      <Suspense>
+        <PageTitle title="Add New Admission" />
+        <AdmissionPage
+          branchId={session.branchId}
+          organizationId={session.organizationId}
+        />
+      </Suspense>
     </section>
   );
 }

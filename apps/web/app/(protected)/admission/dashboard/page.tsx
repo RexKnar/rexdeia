@@ -1,4 +1,5 @@
 import { FileText } from 'lucide-react';
+import { Suspense } from 'react';
 import { formatNumberWithSuffix } from 'utils';
 
 import { LinkButton } from '@/components/LinkButton';
@@ -40,8 +41,10 @@ export default async function Page() {
       </div>
 
       <div className="mx-auto my-5 rounded-md bg-white p-6">
-        <PageTitle title="Admission List" className="mb-3" />
-        <AdmissionsList />
+        <Suspense>
+          <PageTitle title="Admission List" className="mb-3" />
+          <AdmissionsList />
+        </Suspense>
       </div>
     </section>
   );
