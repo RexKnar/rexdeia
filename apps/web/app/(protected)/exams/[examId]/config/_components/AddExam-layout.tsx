@@ -41,7 +41,7 @@ export function AddExamLayout() {
     )
   );
   const EditExamPartitionFlyout = dynamic(() =>
-    import('../_modals/EditExamPartitionFlyout.tsx').then(
+    import('../_modals/EditExamPartitionFlyout').then(
       (mod) => mod.EditExamPartitionFlyout
     )
   );
