@@ -14,6 +14,7 @@ export function useUpdateExamConfigQuery(examId: string) {
     mutationFn: async (payload: {
       payload: ExamConfigModel;
       sectionId: string;
+      classId: string;
       subjectId: string;
     }) => {
       return await makeAPICall<ExamConfigModel>(
