@@ -99,6 +99,22 @@ export async function createExamConfig(
   }
 }
 
+
+export async function editExamPartition(config: any, id:string) {
+     return db.examSubjectPartition.update({
+    where: {
+      id: id,
+    },
+   
+                data: {
+                  minMark: +config.minMark,
+                  convertTo: +config.convertTo,
+                  totalMarks: +config.totalMarks,
+                  dateToConduct: new Date(config.dateToConduct),
+                },
+  });
+}
+
 export async function deleteExamConfigEntry(configId: string) {
   return await db.$transaction(async (prisma) => {
     return prisma.examSubjectPartition.delete({

@@ -118,6 +118,8 @@ export const GET_EXAM_TYPE_BY_ID = `GET_EXAM_TYPE_BY_ID`;
 export const UPDATE_EXAM_TYPE_BY_ID = `UPDATE_EXAM_TYPE_BY_ID`;
 export const DELETE_EXAM_TYPE_BY_ID = `DELETE_EXAM_TYPE_BY_ID`;
 export const DELETE_EXAM_CONFIG_BY_ID = `DELETE_EXAM_CONFIG_BY_ID`;
+export const GET_EXAM_CONFIG_BY_ID = `GET_EXAM_CONFIG_BY_ID`;
+export const EDIT_EXAM_CONFIG_BY_ID = `EDIT_EXAM_CONFIG_BY_ID`;
 export const GET_STUDENT_BY_ID = `GET_STUDENT_BY_ID`;
 export const UPDATE_STUDENT_BY_ID = `UPDATE_STUDENT_BY_ID`;
 export const UPDATE_TERM_BY_ID = `UPDATE_TERM_BY_ID`;
@@ -660,6 +662,14 @@ export default <EndpointDetails>{
   },
   [DELETE_EXAM_CONFIG_BY_ID]: {
     requestType: `DELETE`,
+    endpoint: `/api/exam/[id]/config/[configId]`,
+  },
+  [GET_EXAM_CONFIG_BY_ID]: {
+    requestType: `GET`,
+    endpoint: `/api/exam/[id]/config/[configId]`,
+  },
+  [EDIT_EXAM_CONFIG_BY_ID]: {
+    requestType: `PUT`,
     endpoint: `/api/exam/[id]/config/[configId]`,
   },
   [ADD_EXAM_CONFIG]: {

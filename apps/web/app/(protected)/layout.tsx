@@ -16,14 +16,14 @@ export default function RootLayout({ children }: { children: ReactNode }) {
     <main className="h-screen bg-gray-50">
       <NextTopLoader color={primaryColor} showSpinner={false} />
       <Suspense>
-        <PageHeader />
+        <PageHeader/>
       </Suspense>
       <section className="lg:flex ">
         <Suspense>
           <Sidebar />
         </Suspense>
-        <section className="h-full bg-gray-50 lg:ml-72 lg:flex-1">
-          <section className="container mx-auto bg-gray-50 py-6">
+        <section className="h-full bg-gray-50 lg:ml-72 lg:flex-1 print:ml-0">
+          <section className="py-6 mx-auto md:container bg-gray-50">
             {children}
           </section>
         </section>
