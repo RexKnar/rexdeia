@@ -282,14 +282,19 @@ export default function StudentMarkList({
       {subjectList.map((subject) => (
         <TableCell key={subject.subjectId} className="w:1/3">
           <div className="w-full">
-            <div className="flex justify-evenly print:hidden">
+            <div className="flex justify-evenly ">
               {getMarkForSubject(student, subject.subject.id).map((mark) =>
                 mark.attandance ? (
-                  <span key={mark.id} className="text-bold text-red-500">
+                  <span
+                    key={mark.id}
+                    className="text-bold text-red-500 print:hidden"
+                  >
                     A
                   </span>
                 ) : (
-                  <span key={mark.id}>{mark.total}</span>
+                  <span className="print:hidden" key={mark.id}>
+                    {mark.total}
+                  </span>
                 )
               )}
               <b>
@@ -318,7 +323,7 @@ export default function StudentMarkList({
             <p className="text-red-500">
               {student.totalMark}({student.totalPercentage?.toFixed(2)}%)
             </p>
-            <p className="text-red-500">
+            <p className="text-red-500 print:hidden">
               Avg:{student.totalAverage?.toFixed(2)}(F)
             </p>
           </>
@@ -339,7 +344,7 @@ export default function StudentMarkList({
   return (
     <section>
       {subjectList && (
-        <div className="mt-4 space-y-4 overflow-x-auto rounded-md bg-white p-6">
+        <div className="mt-4 space-y-4 overflow-x-auto rounded-md bg-white p-6 print:p-0">
           <Table className="border-1 border">
             <TableHeader>
               <TableRow className="mt-5 bg-primary-300 text-center">
@@ -442,7 +447,7 @@ export default function StudentMarkList({
                   </TableCell>
                 ))}
                 <TableCell>
-                  <Text className="text-lg font-semibold">Total </Text>
+                  <Text className="text-xs font-semibold">Total </Text>
                 </TableCell>
               </TableRow>
             </TableHeader>
