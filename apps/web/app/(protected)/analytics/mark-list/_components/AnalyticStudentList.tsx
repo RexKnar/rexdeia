@@ -125,7 +125,7 @@ export function AnalyticStudentList() {
 
   return (
     <>
-      <section className="space-y-2 rounded-md bg-white p-6">
+      <section className="space-y-2 rounded-md bg-white p-6 print:hidden">
         <div className="flex gap-4">
           <div className="w-4/12">
             <label className="mt-1 block text-sm text-gray-700">Class</label>
@@ -257,25 +257,6 @@ export function AnalyticStudentList() {
           </div>
         </section>
       </section>
-      {/* <section className="p-6 mt-4 space-y-4 bg-white rounded-md">
-        <div className="flex gap-2">
-          {analyticsWidgetData.map((widget, index) => (
-            <div
-              key={index + widget.percentage + widget.label}
-              className="w-full"
-            >
-              <BasicAnalyticsCardWidget
-                icon={widget.icon}
-                percentage={widget.percentage}
-                label={widget.label}
-                value={widget.value}
-                className={widget.className}
-                subData={widget.subData}
-              />
-            </div>
-          ))}
-        </div>
-      </section> */}
 
       <section>
         {studentMarkList && (

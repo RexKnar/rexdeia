@@ -191,7 +191,7 @@ export default function StudentMarkList({
   const renderSubjectRow = (subject) => {
     const subjectAnalytics = analytics.get(subject.id);
     return (
-      <TableRow className="mt-5" key={subject.id}>
+      <TableRow className="mt-5 print:hidden" key={subject.id}>
         <TableCell className="bg-primary-300">
           <Text className="size-lg font-semibold">{subject.subject.name}</Text>
         </TableCell>
@@ -300,13 +300,13 @@ export default function StudentMarkList({
               <b>
                 {getStudentSubject(student, subject.subject.id)
                   ?.failingStatus ? (
-                  <span className="text-red-500 print:p-0">
+                  <span className="text-red-500 print:p-0 print:text-sm">
                     {getStudentSubject(student, subject.subject.id)
                       .subjectTotalMark || 0}
                     (F)
                   </span>
                 ) : (
-                  <span className="text-green-500 print:p-0">
+                  <span className="text-green-500 print:p-0 print:text-sm">
                     {getStudentSubject(student, subject.subject.id)
                       ?.subjectTotalMark || 0}
                     (P)
