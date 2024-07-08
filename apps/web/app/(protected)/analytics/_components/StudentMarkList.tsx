@@ -282,7 +282,7 @@ export default function StudentMarkList({
       {subjectList.map((subject) => (
         <TableCell key={subject.subjectId} className="w:1/3">
           <div className="w-full">
-            <div className="flex justify-evenly">
+            <div className="flex justify-evenly print:hidden">
               {getMarkForSubject(student, subject.subject.id).map((mark) =>
                 mark.attandance ? (
                   <span key={mark.id} className="text-bold text-red-500">
@@ -427,7 +427,7 @@ export default function StudentMarkList({
                           {subject.subject.name}
                         </Text>
                       </div>
-                      <div className="flex justify-evenly">
+                      <div className="flex justify-evenly print:hidden">
                         {subject.examSubjectPartition.map((partition) => (
                           <span
                             className="size-lg font-semibold"
@@ -436,7 +436,7 @@ export default function StudentMarkList({
                             {partition.assessmentFormat.name}
                           </span>
                         ))}
-                        <span>Tot</span>
+                        <span className="print:hidden">Tot</span>
                       </div>
                     </div>
                   </TableCell>

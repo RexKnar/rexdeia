@@ -99,19 +99,18 @@ export async function createExamConfig(
   }
 }
 
-
-export async function editExamPartition(config: any, id:string) {
-     return db.examSubjectPartition.update({
+export async function editExamPartition(config: any, id: string) {
+  return db.examSubjectPartition.update({
     where: {
       id: id,
     },
-   
-                data: {
-                  minMark: +config.minMark,
-                  convertTo: +config.convertTo,
-                  totalMarks: +config.totalMarks,
-                  dateToConduct: new Date(config.dateToConduct),
-                },
+
+    data: {
+      minMark: +config.minMark,
+      convertTo: +config.convertTo,
+      totalMarks: +config.totalMarks,
+      dateToConduct: new Date(config.dateToConduct),
+    },
   });
 }
 

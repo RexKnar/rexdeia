@@ -20,7 +20,7 @@ export function AssessmentFormatDetailCard(props) {
   const params = new URLSearchParams(searchParams);
 
   return (
-    <div className="p-2 bg-green-200 border-2 border-white rounded-2 ">
+    <div className="rounded-2 border-2 border-white bg-green-200 p-2 ">
       <h4 className="text-center">{assessmentFormat?.name || ''}</h4>
       <div className="flex flex-wrap text-left">
         <span className="w-1/2">Date</span>
@@ -38,9 +38,9 @@ export function AssessmentFormatDetailCard(props) {
         <span className="w-1/2">Covert To</span>
         <span className="w-1/2">{convertTo}</span>
       </div>
-      <div className="flex justify-center gap-2 item-center">
+      <div className="item-center flex justify-center gap-2">
         <Button
-          className="h-auto px-3 py-1 text-white bg-primary-600"
+          className="h-auto bg-primary-600 px-3 py-1 text-white"
           variant="mild"
           onClick={() => {
             params.set('isEditExamPartitionFlyoutOpen', 'true');
@@ -51,7 +51,7 @@ export function AssessmentFormatDetailCard(props) {
           <Pencil size={12} className="text-center" />
         </Button>
         <Button
-          className="h-auto px-3 py-1 text-white bg-red-600"
+          className="h-auto bg-red-600 px-3 py-1 text-white"
           variant="mild"
           onClick={() => {
             params.set('isDeleteConfigModal', 'true');

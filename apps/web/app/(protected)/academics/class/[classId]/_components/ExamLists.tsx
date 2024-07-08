@@ -1,6 +1,6 @@
 'use client';
 
-import { ExamCard } from 'app/(protected)/academics/exams/_components/ExamCard';
+import { ExamCard } from 'app/(protected)/exams/_components/ExamCard';
 import { useGetExamsByClassSectionQuery } from 'lib/queries/mark-entry/useGetExamsByClassSectionQuery';
 import { Loader2 } from 'lucide-react';
 import { useParams, useRouter } from 'next/navigation';

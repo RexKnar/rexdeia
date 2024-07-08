@@ -34,9 +34,6 @@ export async function DELETE(_: NextRequest, { params: { configId } }) {
   }
 }
 
-
-
-
 /**
  * @swagger
  * /api/exam/[id]/config/[configId]:
