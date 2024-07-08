@@ -275,12 +275,12 @@ export default function StudentMarkList({
 
   const renderStudentRow = (student, index) => (
     <TableRow key={student.id}>
-      <TableCell className="text-center">{index + 1}</TableCell>
-      <TableCell className="sticky">
+      <TableCell className="text-center print:p-0">{index + 1}</TableCell>
+      <TableCell className="sticky print:p-0">
         {student.firstName} {student.lastName}
       </TableCell>
       {subjectList.map((subject) => (
-        <TableCell key={subject.subjectId} className="w:1/3">
+        <TableCell key={subject.subjectId} className="w:1/3 print:p-0">
           <div className="w-full">
             <div className="flex justify-evenly ">
               {getMarkForSubject(student, subject.subject.id).map((mark) =>
@@ -300,13 +300,13 @@ export default function StudentMarkList({
               <b>
                 {getStudentSubject(student, subject.subject.id)
                   ?.failingStatus ? (
-                  <span className="text-red-500">
+                  <span className="text-red-500 print:p-0">
                     {getStudentSubject(student, subject.subject.id)
                       .subjectTotalMark || 0}
                     (F)
                   </span>
                 ) : (
-                  <span className="text-green-500">
+                  <span className="text-green-500 print:p-0">
                     {getStudentSubject(student, subject.subject.id)
                       ?.subjectTotalMark || 0}
                     (P)
@@ -320,7 +320,7 @@ export default function StudentMarkList({
       <TableCell>
         {student.failingStatus ? (
           <>
-            <p className="text-red-500">
+            <p className="text-red-500 print:p-0 print:text-sm">
               {student.totalMark}({student.totalPercentage?.toFixed(2)}%)
             </p>
             <p className="text-red-500 print:hidden">
@@ -329,10 +329,10 @@ export default function StudentMarkList({
           </>
         ) : (
           <>
-            <p className="text-green-500">
+            <p className="text-green-500 print:p-0 print:text-sm">
               {student.totalMark}({student.totalPercentage?.toFixed(2)}%)
             </p>
-            <p className="text-green-500">
+            <p className="text-green-500 print:p-0 print:text-sm">
               Avg:{student.totalAverage?.toFixed(2)}-(P)
             </p>
           </>
@@ -344,10 +344,10 @@ export default function StudentMarkList({
   return (
     <section>
       {subjectList && (
-        <div className="mt-4 space-y-4 overflow-x-auto rounded-md bg-white p-6 print:p-0">
+        <div className="mt-4 space-y-4 overflow-x-auto rounded-md bg-white p-6 print:m-0 print:p-0 ">
           <Table className="border-1 border">
             <TableHeader>
-              <TableRow className="mt-5 bg-primary-300 text-center">
+              <TableRow className="mt-5 bg-primary-300 text-center print:hidden">
                 <TableCell></TableCell>
                 <TableCell>
                   <Text className="size-lg font-semibold">Pending Entry</Text>
@@ -375,7 +375,7 @@ export default function StudentMarkList({
                 </TableCell>
               </TableRow>
               {subjectList.map(renderSubjectRow)}
-              <TableRow className="mt-5 bg-green-100 text-center">
+              <TableRow className="mt-5 bg-green-100 text-center print:hidden">
                 <TableCell>
                   <Text className="text-center text-lg font-semibold">
                     Overall
@@ -419,23 +419,27 @@ export default function StudentMarkList({
               </TableRow>
               <TableRow className="bg-primary-300">
                 <TableCell>
-                  <Text className="text-center text-lg font-semibold"># </Text>
+                  <Text className="text-center text-lg font-semibold print:text-sm">
+                    #{' '}
+                  </Text>
                 </TableCell>
                 <TableCell>
-                  <Text className="text-lg font-semibold">Student Name </Text>
+                  <Text className="text-lg font-semibold print:text-sm">
+                    Student Name{' '}
+                  </Text>
                 </TableCell>
                 {subjectList.map((subject) => (
                   <TableCell key={subject.subject.id}>
                     <div className="w-full ">
                       <div className="text-center">
-                        <Text className="size-lg font-semibold">
+                        <Text className="size-lg font-semibold print:text-sm">
                           {subject.subject.name}
                         </Text>
                       </div>
                       <div className="flex justify-evenly print:hidden">
                         {subject.examSubjectPartition.map((partition) => (
                           <span
-                            className="size-lg font-semibold"
+                            className="size-lg font-semibold print:text-sm"
                             key={partition.id}
                           >
                             {partition.assessmentFormat.name}
