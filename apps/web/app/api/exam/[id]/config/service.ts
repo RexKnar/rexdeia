@@ -99,27 +99,34 @@ export async function createExamConfig(
   }
 }
 
-export async function editExamPartition(config: any, id: string) {
+export async function editExamPartition(config: any, configId: string) {
+  const { minMark, convertTo, totalMarks, dateToConduct } = config;
   return db.examSubjectPartition.update({
     where: {
-      id: id,
+      id: configId,
     },
 
     data: {
-      minMark: +config.minMark,
-      convertTo: +config.convertTo,
-      totalMarks: +config.totalMarks,
-      dateToConduct: new Date(config.dateToConduct),
+      minMark: +minMark,
+      convertTo: +convertTo,
+      totalMarks: +totalMarks,
+      dateToConduct: new Date(dateToConduct),
     },
   });
 }
 
 export async function deleteExamConfigEntry(configId: string) {
-  return await db.$transaction(async (prisma) => {
-    return prisma.examSubjectPartition.delete({
-      where: {
-        id: configId,
-      },
-    });
+  return await db.examSubjectPartition.delete({
+    where: {
+      id: configId,
+    },
+  });
+}
+
+export async function getExamPartitionDetailById(configId: string) {
+  return await db.examSubjectPartition.findUnique({
+    where: {
+      id: configId,
+    },
   });
 }

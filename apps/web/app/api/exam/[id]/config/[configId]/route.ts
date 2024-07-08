@@ -4,7 +4,63 @@ import { authOptions } from 'lib/auth';
 import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 
-import { deleteExamConfigEntry, editExamPartition } from '../service';
+import {
+  deleteExamConfigEntry,
+  editExamPartition,
+  getExamPartitionDetailById,
+} from '../service';
+
+/**
+ * @swagger
+ * /api/exam/{id}/config/{id}:
+ *     get:
+ *       summary: Fetch config details By Id
+ *       description: Fetch configuration details of subject By Id
+ *       parameters:
+ *         - name: id
+ *           in: path
+ *           required: true
+ *           description: Unique identifier of the config.
+ *           schema:
+ *             type: string
+ *       responses:
+ *         '200':
+ *           description: Subject configuration is fetched successfully.
+ *           content:
+ *             application/json:
+ *               schema:
+ *                 # Define the schema of your class object here
+ *         '400':
+ *           description: Bad request due to validation error.
+ *         '401':
+ *           description: Unauthorized access.
+ *         '500':
+ *           description: Internal server error.
+ */
+export async function GET(request: NextRequest, { params: { configId } }) {
+  const session = await getServerSession(authOptions);
+  if (!session) {
+    return new NextResponse(JSON.stringify({ error: 'UNAUTHORIZED' }), {
+      status: StatusCodes.UNAUTHORIZED,
+    });
+  }
+
+  try {
+    const subjectConfigDetail = await getExamPartitionDetailById(configId);
+
+    return new NextResponse(JSON.stringify(subjectConfigDetail), {
+      status: StatusCodes.OK,
+    });
+  } catch (e) {
+    captureException(e);
+    return new NextResponse(JSON.stringify({ error: e.message }), {
+      status:
+        e.message === 'VALIDATION_ERROR'
+          ? StatusCodes.BAD_REQUEST
+          : StatusCodes.INTERNAL_SERVER_ERROR,
+    });
+  }
+}
 
 export async function DELETE(_: NextRequest, { params: { configId } }) {
   try {
@@ -67,17 +123,17 @@ export async function DELETE(_: NextRequest, { params: { configId } }) {
  *         '500':
  *           description: Internal server error.
  */
-export async function PUT(request: Request, { params: { id } }) {
+export async function PUT(request: Request, { params: { configId } }) {
   const session = await getServerSession(authOptions);
   if (!session) {
     return new NextResponse(JSON.stringify({ error: 'UNAUTHORIZED' }), {
       status: StatusCodes.UNAUTHORIZED,
     });
   }
-  const payload = await request.json();
+  const { payload } = await request.json();
 
   try {
-    const createdExam = await editExamPartition(payload, id);
+    const createdExam = await editExamPartition(payload, configId);
     return new NextResponse(JSON.stringify(createdExam), {
       status: StatusCodes.CREATED,
     });

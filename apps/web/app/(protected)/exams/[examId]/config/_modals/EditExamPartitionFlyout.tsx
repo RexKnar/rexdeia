@@ -8,6 +8,7 @@ import {
   useRouter,
   useSearchParams,
 } from 'next/navigation';
+import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import {
   Button,
@@ -29,7 +30,7 @@ export function EditExamPartitionFlyout(props) {
 
   const examId = useParams<{ examId: string }>().examId;
 
-  const isOpen = searchParams.get('isExamPartitionFlyoutOpen') === 'true';
+  const isOpen = searchParams.get('isEditExamPartitionFlyoutOpen') === 'true';
   const {
     reset,
     register,
@@ -38,12 +39,27 @@ export function EditExamPartitionFlyout(props) {
   } = useForm();
 
   const { data: examPartitionDetailResponse } = useGetExamPartitionByIdIdQuery(
-    configId,
+    { configId, id: examId },
     {
       enabled: !!configId,
     }
   );
-  console.error(examPartitionDetailResponse);
+
+  useEffect(() => {
+    if (examPartitionDetailResponse) {
+      const { minMark, convertTo, totalMarks, dateToConduct } =
+        examPartitionDetailResponse;
+      const formattedDate = dateToConduct.split('T')[0];
+
+      const partitionValues = {
+        minMark: minMark,
+        convertTo: convertTo,
+        totalMarks: totalMarks,
+        dateToConduct: formattedDate,
+      };
+      reset(partitionValues);
+    }
+  }, [examPartitionDetailResponse]);
 
   const { mutateAsync: mutateUpdateExamConfigurationAsync } =
     useUpdateExamConfigQuery(examId);
@@ -60,6 +76,7 @@ export function EditExamPartitionFlyout(props) {
       classId,
       sectionId,
       subjectId,
+      configId,
     });
 
     if (createdExamConfiguration) {
