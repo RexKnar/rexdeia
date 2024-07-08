@@ -16,12 +16,13 @@ export function useUpdateExamConfigQuery(examId: string) {
       sectionId: string;
       classId: string;
       subjectId: string;
+      configId: string;
     }) => {
       return await makeAPICall<ExamConfigModel>(
         EDIT_EXAM_CONFIG_BY_ID,
         payload,
         {},
-        { id: examId }
+        { id: examId, configId: payload.configId }
       );
     },
     onSuccess: async () => {
