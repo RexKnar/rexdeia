@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 'use client';
 import { useGetClassListQuery } from 'lib/queries/class/useGetClassListQuery';
 import { useGetExamConfigSubjectDetailQuery } from 'lib/queries/exams/configuration/subject/useGetExamConfigSubjectDetailQuery';
@@ -39,6 +38,11 @@ export function AddExamLayout() {
   const ExamConfigureFlyout = dynamic(() =>
     import('../_modals/ExamConfigureFlyout').then(
       (mod) => mod.ExamConfigureFlyout
+    )
+  );
+  const EditExamPartitionFlyout = dynamic(() =>
+    import('../_modals/EditExamPartitionFlyout').then(
+      (mod) => mod.EditExamPartitionFlyout
     )
   );
   const page = 1;
@@ -439,6 +443,11 @@ export function AddExamLayout() {
         subjects={subjectIds}
         classId={classId}
         examSubjectPartition={examSubjectPartition || []}
+      />
+      <EditExamPartitionFlyout
+        sectionId={sectionId}
+        subjects={subjectIds}
+        classId={classId}
       />
       <DeleteConfirmationModal
         open={showDeleteConfirmationModal}

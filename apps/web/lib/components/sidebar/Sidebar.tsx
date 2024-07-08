@@ -34,7 +34,7 @@ export function Sidebar() {
           animate={{ x: 0 }}
           exit={{ x: -300 }}
           transition={{ type: 'spring', stiffness: 500, damping: 30 }}
-          className="fixed left-0 top-0 z-40 flex h-[vh] h-screen w-72 flex-col overflow-y-auto border-r bg-white shadow-lg lg:bottom-0 lg:z-0 "
+          className="fixed left-0 top-0 z-40 flex h-[vh] h-screen w-72 flex-col overflow-y-auto border-r bg-white shadow-lg lg:bottom-0 lg:z-0 print:hidden"
         >
           <nav className="h-full ">
             <div className="flex h-full flex-col justify-between space-y-4">

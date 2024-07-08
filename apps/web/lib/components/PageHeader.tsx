@@ -11,7 +11,7 @@ import { UserMenu } from './UserMenu';
 
 export function PageHeader() {
   return (
-    <header className="sticky top-0 z-50 flex h-[64px] w-full  border border-b-gray-200 border-l-transparent bg-white ">
+    <header className="sticky top-0 z-50 flex h-[64px] w-full  border border-b-gray-200 border-l-transparent bg-white print:hidden ">
       <section className="mx-auto flex w-full items-center justify-between ">
         <Suspense fallback={<div>Loading...</div>}>
           <SidebarHeader />

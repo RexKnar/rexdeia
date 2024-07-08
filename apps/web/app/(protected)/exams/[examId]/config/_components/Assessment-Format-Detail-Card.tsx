@@ -42,6 +42,11 @@ export function AssessmentFormatDetailCard(props) {
         <Button
           className="h-auto bg-primary-600 px-3 py-1 text-white"
           variant="mild"
+          onClick={() => {
+            params.set('isEditExamPartitionFlyoutOpen', 'true');
+            params.set('configId', configId);
+            router.replace(pathname + '?' + params.toString());
+          }}
         >
           <Pencil size={12} className="text-center" />
         </Button>
