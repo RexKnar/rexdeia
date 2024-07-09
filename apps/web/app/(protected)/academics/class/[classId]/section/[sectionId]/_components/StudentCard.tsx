@@ -1,4 +1,5 @@
 import { MoreHorizontal } from 'lucide-react';
+import Link from 'next/link';
 import {
   Button,
   DropdownMenu,
@@ -34,12 +35,11 @@ export function StudentCard(props: StudentCardProps) {
               sideOffset={15}
             >
               <DropdownMenuItem className="flex cursor-pointer items-center">
-                <span className="flex-1">Reassign</span>
+                <span className="flex-1">
+                  <Link href={`/students/${props.id}/editStudent`}>Edit</Link>
+                </span>
               </DropdownMenuItem>
               <DropdownMenuSeparator className="bg-gray-100 text-gray-500" />
-              <DropdownMenuItem className="flex cursor-pointer items-center">
-                <span className="flex-1">Remove</span>
-              </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         </div>

@@ -34,7 +34,15 @@ export function StaffList() {
     <section className="grid w-full grid-cols-4 justify-between gap-4 px-0">
       {staffListResponse.map((staffItem) => (
         <div key={staffItem.id} className="w-[275px]">
-          <StaffCard id={staffItem.id} name={staffItem.firstName} />
+          {/* <StaffCard id={staffItem.id} name={staffItem.firstName} /> */}
+          <StaffCard
+            id={staffItem.id}
+            name={`
+              ${staffItem.firstName || ''}  ${staffItem.middleName || ''}  ${staffItem.lastName || ''}
+            `}
+            subjects={staffItem.subjects || []}
+            sectionsHandled={staffItem.sections || []}
+          />
         </div>
       ))}
     </section>

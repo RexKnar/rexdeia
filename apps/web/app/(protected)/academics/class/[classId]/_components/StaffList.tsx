@@ -37,10 +37,10 @@ export function StaffList() {
           <StaffCard
             id={staffItem.id}
             name={`
-              ${staffItem.firstName}  ${staffItem.middleName}  ${staffItem.lastName}
+              ${staffItem.firstName || ''}  ${staffItem.middleName || ''}  ${staffItem.lastName || ''}
             `}
-            subjects={staffItem.subjects}
-            sectionsHandled={staffItem.sections}
+            subjects={staffItem.subjects || []}
+            sectionsHandled={staffItem.sections || []}
           />
         </div>
       ))}

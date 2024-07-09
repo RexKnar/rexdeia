@@ -4,7 +4,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 
 import { authOptions } from '../../../../../lib/auth';
-import { getAllStaffsBySectionId } from '../../../staff/service';
+import { getAllStaffsBySectionsIdWithSubjects } from '../../../staff/service';
 import { mapStaffsToSection, unMapStaffsFromSection } from '../../service';
 
 /**
@@ -153,7 +153,7 @@ export async function GET(request: Request, { params: { id } }) {
   }
 
   try {
-    const sections = await getAllStaffsBySectionId(id);
+    const sections = await getAllStaffsBySectionsIdWithSubjects([id]);
 
     return new NextResponse(JSON.stringify(sections), {
       status: StatusCodes.OK,
