@@ -95,6 +95,23 @@ export async function getExamConfigWithSubjectPartion(
           },
         },
       },
+      orderBy: [
+        {
+          student: {
+            gender: 'desc',
+          },
+        },
+        {
+          student: {
+            firstName: 'asc',
+          },
+        },
+        {
+          student: {
+            lastName: 'asc',
+          },
+        },
+      ],
     }),
   ]);
   const configResponse = examConfig.map((examData) => {

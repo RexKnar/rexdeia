@@ -19,7 +19,7 @@ type StaffCardProps = {
 };
 
 export function StaffCard(props: StaffCardProps) {
-  const { id, name, subjects, sectionsHandled } = props;
+  const { id, name = '', subjects, sectionsHandled } = props;
   const pathname = usePathname();
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -36,7 +36,7 @@ export function StaffCard(props: StaffCardProps) {
             {subjects.length > sectionIndex && (
               <div className="ml-2">
                 <Text variant="base-regular">
-                  {subjects[sectionIndex].name}
+                  {subjects[sectionIndex]?.name || ''}
                 </Text>
               </div>
             )}
