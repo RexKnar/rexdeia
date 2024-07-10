@@ -94,8 +94,9 @@ export async function getExamAnalyticsByClass(filter: MarkAnalyticsFilter) {
           }
 
           const actualMark =
-            (mark.mark / partition.totalMarks) * partition.convertTo;
-          subjectTotalMark += Math.round(actualMark);
+            (Number(mark.mark) / Number(partition.totalMarks)) *
+              Number(partition.convertTo) || 0;
+          subjectTotalMark = subjectTotalMark + Math.round(actualMark);
           mark['total'] = Math.round(actualMark);
 
           acc.push(mark);
