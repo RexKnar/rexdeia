@@ -100,7 +100,7 @@ export async function getMarksByFilter(filter: MarkAnalyticsFilter) {
         const subjectMarks = partition.Mark.filter(
           (subjectMark) => subjectMark.studentId === studentId
         );
-        actualTotalMarks += partition.convertTo;
+        actualTotalMarks += Number(partition.convertTo);
         subjectMarks.forEach((mark) => {
           if (mark) {
             absentStatus = false;
@@ -112,7 +112,8 @@ export async function getMarksByFilter(filter: MarkAnalyticsFilter) {
               absentOn.push(partition.assessmentFormat.name);
             }
             const actualMark =
-              (mark.mark / partition.totalMarks) * partition.convertTo;
+              (Number(mark.mark) / Number(partition.totalMarks)) *
+              Number(partition.convertTo);
             subjectTotalMark += Math.round(actualMark);
             mark['total'] = Math.round(actualMark);
             mark['entryStatus'] = true;

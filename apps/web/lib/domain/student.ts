@@ -75,3 +75,10 @@ export type AssignStudentsToClassModel = {
   groupId: string;
   academicYear: string;
 };
+
+export type SwitchStudentsToClassModel = {
+  studentId: string;
+  sectionId: string;
+  groupId: string;
+  academicYear: string;
+};

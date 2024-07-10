@@ -1,0 +1,16 @@
+-- AlterTable
+
+ALTER TABLE "ExamSubject" ALTER COLUMN "totalMarks" TYPE FLOAT;
+ALTER TABLE "ExamSubject" ALTER COLUMN "totalMarks" SET DEFAULT 0.0;
+
+ALTER TABLE "ExamSubject" ALTER COLUMN "convertTo" TYPE FLOAT;
+ALTER TABLE "ExamSubject" ALTER COLUMN "convertTo" SET DEFAULT 0.0;
+
+ALTER TABLE "ExamSubject" ALTER COLUMN "minMark" TYPE FLOAT;
+ALTER TABLE "ExamSubject" ALTER COLUMN "minMark" SET DEFAULT 0.0;
+
+ALTER TABLE "ExamSubjectPartition" ALTER COLUMN "minMark" TYPE FLOAT;
+ALTER TABLE "ExamSubjectPartition" ALTER COLUMN "totalMarks" TYPE FLOAT;
+ALTER TABLE "ExamSubjectPartition" ALTER COLUMN "convertTo" TYPE FLOAT;
+
+ALTER TABLE "Mark" ALTER COLUMN "mark" TYPE FLOAT;
