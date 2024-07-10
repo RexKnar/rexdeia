@@ -63,6 +63,18 @@ export async function getMasterMarksByFilter(filter: MarkAnalyticsFilter) {
         },
         class: true,
       },
+      orderBy: [
+        {
+          student: {
+            gender: 'asc',
+          },
+        },
+        {
+          student: {
+            firstName: 'asc',
+          },
+        },
+      ],
     }),
   ]);
 
@@ -96,7 +108,11 @@ export async function getMasterMarksByFilter(filter: MarkAnalyticsFilter) {
         subjectMarks.forEach((mark) => {
           if (mark) {
             absentStatus = false;
-            if (mark.mark < partition.minMark || mark.attandance) {
+
+            if (
+              Number(mark.mark) < Number(partition.minMark) ||
+              mark.attandance
+            ) {
               failingStatus = true;
               failingOn.push(partition.assessmentFormat.name);
             }
