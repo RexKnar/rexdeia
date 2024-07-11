@@ -27,6 +27,7 @@ export async function getMasterMarksByFilter(filter: MarkAnalyticsFilter) {
     db.studentMapping.findMany({
       where: {
         ...mainClause,
+        isCurrent: true,
       },
       select: {
         student: {

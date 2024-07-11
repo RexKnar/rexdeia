@@ -21,6 +21,7 @@ export async function getExamAnalyticsByClass(filter: MarkAnalyticsFilter) {
     db.studentMapping.findMany({
       where: {
         ...mainClause,
+        isCurrent: true,
       },
       select: {
         student: {

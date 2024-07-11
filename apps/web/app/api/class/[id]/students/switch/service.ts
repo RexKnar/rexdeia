@@ -2,50 +2,44 @@ import { db } from 'lib/db';
 import { SwitchStudentsToClassModel } from 'lib/domain/student';
 
 export async function switchStudentToClass(
-  classId: string,
   studentPayload: SwitchStudentsToClassModel
 ) {
-  const { studentId } = studentPayload;
-  const response = [
-    await db.$transaction(async (prisma) => {
-      prisma.student.update({
-        where: {
-          id: studentId,
-        },
-        data: {
-          studentMapping: {
-            updateMany: [
-              {
-                where: {
-                  studentId: studentPayload.studentId,
-                },
-                data: {
-                  isCurrent: false,
-                },
-              },
-            ],
-          },
-        },
-      });
+  const { studentId, groupId, classId, sectionId, academicYear } =
+    studentPayload;
 
-      prisma.student.update({
-        where: {
-          id: studentId,
+  const response = await db.$transaction(async (prisma) => {
+    const updateExisting = await prisma.student.update({
+      where: { id: studentId },
+      data: {
+        studentMapping: {
+          updateMany: [
+            {
+              where: { studentId: studentId },
+              data: { isCurrent: false },
+            },
+          ],
         },
-        data: {
-          studentMapping: {
-            create: [
-              {
-                groupId: studentPayload.groupId,
-                classId: classId,
-                sectionId: studentPayload.sectionId,
-                batchId: studentPayload.academicYear,
-              },
-            ],
-          },
+      },
+    });
+
+    const createNew = await prisma.student.update({
+      where: { id: studentId },
+      data: {
+        studentMapping: {
+          create: [
+            {
+              groupId,
+              classId,
+              sectionId,
+              batchId: academicYear,
+            },
+          ],
         },
-      });
-    }),
-  ];
-  return response.flat();
+      },
+    });
+
+    return [updateExisting, createNew];
+  });
+
+  return response;
 }

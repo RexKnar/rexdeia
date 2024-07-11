@@ -2,69 +2,10 @@ import { captureException } from '@sentry/nextjs';
 import { StatusCodes } from 'http-status-codes';
 import { authOptions } from 'lib/auth';
 import { SwitchStudentsToClassModel } from 'lib/domain/student';
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 
 import { switchStudentToClass } from './service';
-
-/**
- * @swagger
- *   /api/class/{id}/students/switch:
- *     post:
- *       summary: Switch students to a class
- *       description: map students to a class
- *       parameters:
- *         - name: id
- *           in: path
- *           required: true
- *           description: Unique identifier of the class.
- *           schema:
- *             type: string
- *       requestBody:
- *         required: true
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *       responses:
- *         '200':
- *           description: Successfully switched students to a class
- *           content:
- *             application/json:
- *               schema:
- *                 type: array
- *                 items:
- *                   # Define the schema for a single class here
- *         '401':
- *           description: Unauthorized access.
- *         '400':
- *           description: Bad request due to an error in processing the request.
- */
-export async function POST(request: NextRequest, { params: { id } }) {
-  const session = await getServerSession(authOptions);
-
-  if (!session) {
-    return new NextResponse(JSON.stringify({ error: 'UNAUTHORIZED' }), {
-      status: StatusCodes.UNAUTHORIZED,
-    });
-  }
-
-  const payload: SwitchStudentsToClassModel = await request.json();
-
-  try {
-    const mappedStudentResponse = await switchStudentToClass(id, payload);
-
-    return new NextResponse(JSON.stringify(mappedStudentResponse), {
-      status: StatusCodes.CREATED,
-    });
-  } catch (e) {
-    captureException(e);
-    return new NextResponse(e, {
-      status: StatusCodes.BAD_REQUEST,
-    });
-  }
-}
 
 /**
  * @swagger
@@ -93,7 +34,7 @@ export async function POST(request: NextRequest, { params: { id } }) {
  *         '500':
  *           description: Internal server error.
  */
-export async function PUT(request: Request, { params: { id } }) {
+export async function PUT(request: Request) {
   const session = await getServerSession(authOptions);
   if (!session) {
     return new NextResponse(JSON.stringify({ error: 'UNAUTHORIZED' }), {
@@ -102,8 +43,8 @@ export async function PUT(request: Request, { params: { id } }) {
   }
 
   try {
-    const payload = await request.json();
-    const response = await switchStudentToClass(id, payload);
+    const payload: SwitchStudentsToClassModel = await request.json();
+    const response = await switchStudentToClass(payload);
 
     return new NextResponse(JSON.stringify(response), {
       status: StatusCodes.OK,

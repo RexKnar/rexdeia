@@ -18,12 +18,12 @@ export async function getStudentsByFilter(
 
   const [total, studentsList] = await Promise.all([
     db.studentMapping.count({
-      where: whereClause,
+      where: { ...whereClause, isCurrent: true },
     }),
     db.studentMapping.findMany({
       take: limit,
       skip: (page - 1) * limit,
-      where: whereClause,
+      where: { ...whereClause, isCurrent: true },
       select: {
         student: true,
       },

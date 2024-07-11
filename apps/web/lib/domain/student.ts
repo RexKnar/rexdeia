@@ -80,5 +80,6 @@ export type SwitchStudentsToClassModel = {
   studentId: string;
   sectionId: string;
   groupId: string;
+  classId: string;
   academicYear: string;
 };
