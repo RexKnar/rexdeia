@@ -99,12 +99,12 @@ model ExamSubject {
 model ExamSubjectPartition {
   id                 String           @id @default(uuid()) @map("_id") @db.Uuid
   subjectId          String           @db.Uuid
-  minMark            Decimal          @default(0) @db.Decimal
-  totalMarks         Decimal          @default(0) @db.Decimal
+  minMark            Decimal          @db.Decimal
+  totalMarks         Decimal          @db.Decimal
   partitionName      String?
   examSubjectId      String           @db.Uuid
   assessmentFormatId String           @db.Uuid
-  convertTo          Decimal          @default(0) @db.Decimal
+  convertTo          Decimal          @db.Decimal
   dateToConduct      DateTime
   examGroupId        String           @db.Uuid
   assessmentFormat   AssessmentFormat @relation(fields: [assessmentFormatId], references: [id])
@@ -116,7 +116,7 @@ model ExamSubjectPartition {
 
 model Mark {
   id                     String               @id @default(uuid()) @map("_id") @db.Uuid
-  mark                   Decimal?             @default(0) @db.Decimal
+  mark                   Decimal?             @db.Decimal
   attandance             Int?
   studentId              String               @db.Uuid
   examSubjectId          String               @db.Uuid
@@ -870,17 +870,6 @@ model EmploymentType {
   staff     Staff[]
 }
 
-enum UserRole {
-  Admin
-  TeachingStaff
-  NonTeachingStaff
-  Student
-  User
-  OfficeAdmin
-  HM
-  AHM
-}
-
 model Designation {
   id        String    @id @default(uuid()) @map("_id") @db.Uuid
   name      String
@@ -898,9 +887,9 @@ model NatureOfPosting {
   createdAt DateTime? @default(now())
   updatedAt DateTime? @default(now())
   isDeleted Boolean   @default(false)
-  staff     Staff[]
   branchId  String    @db.Uuid
   branch    Branch    @relation(fields: [branchId], references: [id])
+  staff     Staff[]
 }
 
 model Test {
@@ -909,6 +898,17 @@ model Test {
   testNumber   Int
   studentMarks Json
   outOfMark    String
+}
+
+enum UserRole {
+  Admin
+  TeachingStaff
+  NonTeachingStaff
+  Student
+  User
+  OfficeAdmin
+  HM
+  AHM
 }
 
 enum TestType {
