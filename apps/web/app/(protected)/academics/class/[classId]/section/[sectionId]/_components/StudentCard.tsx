@@ -1,5 +1,7 @@
+'use client';
 import { MoreHorizontal } from 'lucide-react';
 import Link from 'next/link';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import {
   Button,
   DropdownMenu,
@@ -16,6 +18,9 @@ type StudentCardProps = {
 };
 
 export function StudentCard(props: StudentCardProps) {
+  const pathname = usePathname();
+  const router = useRouter();
+  const searchParams = useSearchParams();
   return (
     <div className="flex bg-white p-3">
       <div className="my-auto w-2/4 px-2">
@@ -37,6 +42,21 @@ export function StudentCard(props: StudentCardProps) {
               <DropdownMenuItem className="flex cursor-pointer items-center">
                 <span className="flex-1">
                   <Link href={`/students/${props.id}/editStudent`}>Edit</Link>
+                </span>
+              </DropdownMenuItem>
+              <DropdownMenuItem className="flex cursor-pointer items-center">
+                <span className="flex-1">
+                  <button
+                    onClick={() => {
+                      const params = new URLSearchParams(searchParams);
+                      params.set('isReassignStudentFlyoutOpen', 'true');
+                      params.set('studentId', props.id);
+
+                      router.replace(pathname + '?' + params.toString());
+                    }}
+                  >
+                    Re-Assign
+                  </button>
                 </span>
               </DropdownMenuItem>
               <DropdownMenuSeparator className="bg-gray-100 text-gray-500" />

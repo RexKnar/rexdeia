@@ -420,6 +420,7 @@ export async function getAllStudentByClassIdForAssigning(id: string) {
     where: {
       classId: id,
       section: null,
+      isCurrent: true,
     },
     select: {
       student: {

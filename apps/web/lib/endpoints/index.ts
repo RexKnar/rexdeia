@@ -88,6 +88,7 @@ export const ASSIGN_STAFF_BY_CLASS_ID = `ASSIGN_STAFF_BY_CLASS_ID`;
 export const ADD_SUBJECT_BY_CLASS_ID = `ADD_SUBJECT_BY_CLASS_ID`;
 export const ADD_ASSESSMENT_FORMAT_WITH_PARENT_ID = `ADD_ASSESSMENT_FORMAT_WITH_PARENT_ID`;
 export const ASSIGN_STUDENT_BY_CLASS_ID = `ASSIGN_STUDENT_BY_CLASS_ID`;
+export const REASSIGN_STUDENT = `REASSIGN_STUDENT`;
 export const GET_SUBJECT_LIST_BY_FILTER = `GET_SUBJECT_LIST_BY_FILTER`;
 export const GET_SUBJECTS_BY_SECTION_IDS = `GET_SUBJECTS_BY_SECTION_IDS`;
 export const GET_TERM_LIST = `GET_TERM_LIST`;
@@ -510,6 +511,10 @@ export default <EndpointDetails>{
   [ASSIGN_STUDENT_BY_CLASS_ID]: {
     requestType: `POST`,
     endpoint: `/api/class/[id]/students`,
+  },
+  [REASSIGN_STUDENT]: {
+    requestType: `PUT`,
+    endpoint: `/api/class/[id]/students/switch`,
   },
   [GET_SUBJECT_LIST_BY_FILTER]: {
     requestType: `PUT`,

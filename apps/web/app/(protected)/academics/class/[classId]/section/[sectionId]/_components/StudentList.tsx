@@ -4,6 +4,7 @@ import { Loader2 } from 'lucide-react';
 import { useParams } from 'next/navigation';
 
 import { useGetStudentListBySectionIdQuery } from '../../../../../../../../lib/queries/students/useGetStudentListBySectionIdQuery';
+import { ReassignStudentFlyout } from '../_modals/ReassignStudentFlyout';
 import { StudentCard } from './StudentCard';
 
 export function StudentList() {
@@ -37,6 +38,7 @@ export function StudentList() {
           <StudentCard id={studentItem.id} name={studentItem.firstName} />
         </div>
       ))}
+      <ReassignStudentFlyout />
     </section>
   );
 }

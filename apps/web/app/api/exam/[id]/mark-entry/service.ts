@@ -16,6 +16,7 @@ export async function getExamConfigWithSubjectPartion(
       where: {
         classId: classId,
         sectionId: sectionId,
+        isCurrent: true,
         section: {
           ExamGroup: {
             some: {

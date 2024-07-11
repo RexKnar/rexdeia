@@ -677,6 +677,7 @@ model Subject {
   branchId                  String?                     @db.Uuid
   subjectMasterId           String                      @db.Uuid
   classId                   String                      @db.Uuid
+  subjectOrder              Int                         @default(1)
   academicSubjectForStaff   AcademicSubjectForStaff[]
   ExamSubject               ExamSubject[]
   ExamSubjectPartition      ExamSubjectPartition[]

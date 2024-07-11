@@ -103,7 +103,7 @@ export default function StudentMarkList({
             result.highestMark[category] = mark;
             result.highestMarkStudentName[category] = studentFullName;
           }
-          if (mark < result.lowestMark[category]) {
+          if (mark < result.lowestMark[category] && !subject.absentStatus) {
             result.lowestMark[category] = mark;
             result.lowestMarkStudentName[category] = studentFullName;
           }

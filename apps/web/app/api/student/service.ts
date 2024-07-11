@@ -22,6 +22,9 @@ export async function getStudentById(id: string) {
         },
       },
       studentMapping: {
+        where: {
+          isCurrent: true,
+        },
         select: {
           group: {
             select: {
@@ -316,6 +319,7 @@ export async function getAllStudentsBySectionIdWithGroup(sectionId: string) {
       studentMapping: {
         some: {
           sectionId: sectionId,
+          isCurrent: true,
         },
       },
     },
@@ -342,6 +346,7 @@ export async function getAllStudentsBySectionIds(ids: string[]) {
       sectionId: {
         in: ids,
       },
+      isCurrent: true,
     },
     select: {
       student: true,
