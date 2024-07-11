@@ -1,6 +1,7 @@
 import { useGetClassListQuery } from 'lib/queries/class/useGetClassListQuery';
 import { useReassignStudentMuttionQuery } from 'lib/queries/class/useReassignStudentMuttionQuery';
 import { useGetGroupListQuery } from 'lib/queries/group/useGetGroupListQuery';
+import { useGetMediumListQuery } from 'lib/queries/medium/useGetMediumListQuery';
 import { useGetAllSectionByClassIdQuery } from 'lib/queries/section/useGetAllSectionsByClassIdQuery';
 import { ChevronDown, PlusCircle } from 'lucide-react';
 import {
@@ -62,6 +63,12 @@ export function ReassignStudentFlyout() {
   }, [classId, setValue]);
 
   const { data: groupListResponse } = useGetGroupListQuery({
+    page,
+    limit,
+    filter,
+  });
+
+  const { data: mediumListResponse } = useGetMediumListQuery({
     page,
     limit,
     filter,
@@ -232,6 +239,45 @@ export function ReassignStudentFlyout() {
                 {fieldErrors.groupId && (
                   <p className="text-red-500">
                     {fieldErrors.groupId.message.toString()}
+                  </p>
+                )}
+              </Select>
+            </div>
+            <div className="mt-4">
+              <label
+                htmlFor="group"
+                className="text-sm font-semibold text-gray-700"
+              >
+                Choose Medium
+              </label>
+              <Select
+                autoComplete="off"
+                {...register('mediumId', {
+                  required: 'Medium is  Requeired',
+                })}
+                value={watch('mediumId')}
+                onValueChange={(value) => {
+                  if (value) {
+                    setValue('mediumId', value);
+                  }
+                }}
+              >
+                <SelectTrigger className=" basis-1/2">
+                  <SelectValue className="text-gray-400" placeholder="Medium" />{' '}
+                  <ChevronDown className="text-gray-400" />
+                </SelectTrigger>
+                <SelectContent className="border border-primary-200">
+                  <SelectGroup>
+                    {mediumListResponse?.data?.map((item) => (
+                      <SelectItem key={item.id} value={item.id}>
+                        {item.name}
+                      </SelectItem>
+                    ))}
+                  </SelectGroup>
+                </SelectContent>
+                {fieldErrors.mediumId && (
+                  <p className="text-red-500">
+                    {fieldErrors.mediumId.message.toString()}
                   </p>
                 )}
               </Select>
