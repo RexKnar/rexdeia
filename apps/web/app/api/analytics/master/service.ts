@@ -48,6 +48,11 @@ export async function getMasterMarksByFilter(filter: MarkAnalyticsFilter) {
               select: {
                 exam: true,
                 examSubject: {
+                  orderBy: {
+                    subject: {
+                      subjectOrder: 'asc',
+                    },
+                  },
                   select: {
                     subject: true,
                     examSubjectPartition: {
