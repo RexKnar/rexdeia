@@ -13,6 +13,11 @@ export async function getExamSubjectsByClassSectionId(
         sectionId,
       },
     },
+    orderBy: {
+      subject: {
+        subjectOrder: 'asc',
+      },
+    },
     select: {
       id: true,
       totalMarks: true,
