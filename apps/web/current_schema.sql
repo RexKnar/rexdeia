@@ -396,6 +396,7 @@ CREATE TABLE "StudentMapping" (
     "_id" UUID NOT NULL,
     "mediumId" UUID,
     "batchId" UUID,
+    "isCurrent" BOOLEAN NOT NULL DEFAULT true,
 
     CONSTRAINT "StudentMapping_pkey" PRIMARY KEY ("_id")
 );
