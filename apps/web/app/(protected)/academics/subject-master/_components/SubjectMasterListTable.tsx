@@ -272,6 +272,7 @@ export function SubjectMasterListTable() {
         }
       >
         <Pagination
+          pageNumber={page}
           limit={limit.toString()}
           onPageChange={handleOnPageChange}
           pageSize={subjectMasterListResponse?.limit || 0}

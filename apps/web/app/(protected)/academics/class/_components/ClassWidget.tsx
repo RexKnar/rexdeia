@@ -6,6 +6,8 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { Badge, Button } from 'ui';
 import { cn } from 'utils';
 
+import { LinkButton } from '@/components/LinkButton';
+
 export function ClassWidget({ classDetails }) {
   const pathname = usePathname();
   const router = useRouter();
@@ -20,15 +22,12 @@ export function ClassWidget({ classDetails }) {
     <div className="flex flex-wrap content-start items-start gap-6 self-stretch md:gap-24 md:space-x-24">
       <div className="widget h-full w-full rounded-xl border border-primary-200 bg-white p-4 shadow-md shadow-primary-200">
         <div className="widget-title flex items-center justify-between text-lg font-semibold">
-          <Button
+          <LinkButton
             className={cn('ps-0 text-lg font-semibold')}
-            variant="ghost"
-            onClick={() => {
-              router.push(`class/${classDetails.id}`);
-            }}
+            url={`class/${classDetails.id}`}
           >
             {classDetails.name}
-          </Button>
+          </LinkButton>
           <div>
             <Badge className={cn('mb-2 bg-yellow-100')}>
               Students:&nbsp;
@@ -47,7 +46,7 @@ export function ClassWidget({ classDetails }) {
         </div>
         <div className="mb-2 mt-4 flex flex-wrap content-center items-center gap-2 self-stretch">
           {classDetails.Section.map((section, index) => (
-            <Button
+            <LinkButton
               key={index}
               className={cn(
                 'h-7 w-7 text-center',
@@ -55,14 +54,10 @@ export function ClassWidget({ classDetails }) {
                   ? 'bg-primary text-white hover:bg-primary'
                   : 'bg-gray-400 text-black hover:bg-gray-400'
               )}
-              onClick={() => {
-                router.push(
-                  `/academics/class/${classDetails.id}/section/${section.id}`
-                );
-              }}
+              url={`/academics/class/${classDetails.id}/section/${section.id}`}
             >
               {section.name}
-            </Button>
+            </LinkButton>
           ))}
           <Button
             variant="outline"

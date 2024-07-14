@@ -90,6 +90,13 @@ export async function getExamConfigWithSubjectPartion(
                       },
                     },
                   },
+                  orderBy: [
+                    {
+                      subject: {
+                        subjectOrder: 'asc',
+                      },
+                    },
+                  ],
                 },
               },
             },

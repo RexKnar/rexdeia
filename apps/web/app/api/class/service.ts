@@ -408,10 +408,12 @@ function formatData(data) {
   return data.map((section) => ({
     sectionId: section.id,
     sectionName: section.name,
-    subjects: section.academicSubjectForStaff.map((subjectEntry) => ({
-      id: subjectEntry.subject.id,
-      name: subjectEntry.subject.name,
-    })),
+    subjects: section.academicSubjectForStaff
+      .filter((subject) => subject.subject)
+      .map((subjectEntry) => ({
+        id: subjectEntry.subject.id,
+        name: subjectEntry.subject.name,
+      })),
   }));
 }
 
