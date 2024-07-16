@@ -263,6 +263,10 @@ export function EditStaffDetails() {
         branchName: staffDetail.branchName,
         IFSC_Code: staffDetail.IFSC_Code,
       };
+      setCurrentCountryCode(staffDetail.currentCountry);
+      setCurrentStateCode(staffDetail.currentState);
+      setPermanentCountryCode(staffDetail.permanentCountry);
+      setPermanentStateCode(staffDetail.permanentState);
       reset(initialValue);
     }
   }, [staffDetail]);
@@ -328,7 +332,7 @@ export function EditStaffDetails() {
     return (
       <div className="flex h-20 items-center justify-center">
         <Loader2 className="mr-2 w-6 animate-spin text-black" />
-        <p className="text-black ">Fetching Student Details...</p>
+        <p className="text-black ">Fetching Staff Details...</p>
       </div>
     );
   }
@@ -871,7 +875,7 @@ export function EditStaffDetails() {
               </div>
               <div className="w-full">
                 <label className="mt-1 block text-sm text-gray-700">
-                  Current Pioncode
+                  Current Pincode
                 </label>
                 <Input
                   {...register('currentPincode')}
