@@ -1,5 +1,6 @@
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
+  previewFeatures = ["fullTextSearch"]
 }
 
 datasource db {
@@ -417,6 +418,8 @@ model Student {
   user                   User                     @relation(fields: [userId], references: [id])
   StudentElectiveSubject StudentElectiveSubject[]
   studentMapping         StudentMapping[]
+
+  @@index([firstName, lastName, emisNumber, phoneNumber, emailId, aadharCardNumber])
 }
 
 model StudentMapping {

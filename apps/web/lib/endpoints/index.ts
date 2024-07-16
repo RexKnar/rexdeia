@@ -25,6 +25,7 @@ export const GET_ADMISSIONS_FORM_SHARE_DETAILS = `GET_ADMISSIONS_FORM_SHARE_DETA
 export const CREATE_SHARE_FOR_FORM = `CREATE_SHARE_FOR_FORM`;
 export const UPDATE_SHARE_FOR_FORM = `UPDATE_SHARE_FOR_FORM`;
 export const GET_STUDENTS_LIST = `GET_STUDENTS_LIST`;
+export const GET_STUDENT_SEARCH_LIST = `GET_STUDENT_SEARCH_LIST`;
 export const ADD_CLASS = `ADD_CLASS`;
 export const ADD_MEDIUM = `ADD_MEDIUM`;
 export const GET_CLASS_LIST = `GET_CLASS_LIST`;
@@ -263,6 +264,10 @@ export default <EndpointDetails>{
   [GET_STUDENTS_LIST]: {
     requestType: `GET`,
     endpoint: `/api/student`,
+  },
+  [GET_STUDENT_SEARCH_LIST]: {
+    requestType: `GET`,
+    endpoint: `/api/student/search`,
   },
   [ADD_CLASS]: {
     requestType: `POST`,

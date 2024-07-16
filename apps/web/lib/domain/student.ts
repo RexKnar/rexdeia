@@ -4,6 +4,7 @@ import { CommunityModel } from './community';
 import { GroupModel } from './group';
 import { LanguageModel } from './language';
 import { MediumModel } from './medium';
+import { SectionModel } from './section';
 
 export type Student = {
   id: string;
@@ -49,11 +50,12 @@ export type Student = {
   status: 'Active' | 'Rejected' | 'Pending';
 
   additionalAttributes: any;
+  studentMapping?: StudentMappingModel[];
 };
 
 export type AddStudentModel = Omit<
   Student,
-  'id' | 'motherTongue' | 'community' | 'batch'
+  'id' | 'motherTongue' | 'community' | 'batch' | 'studentMapping'
 > & {
   batchId: string;
   communityId: string;
@@ -82,4 +84,12 @@ export type SwitchStudentsToClassModel = {
   groupId: string;
   classId: string;
   academicYear: string;
+};
+
+export type StudentMappingModel = {
+  class?: ClassModel;
+  section?: SectionModel;
+  classId?: string;
+  sectionId?: string;
+  batchId?: string;
 };
