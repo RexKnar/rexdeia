@@ -4,6 +4,9 @@
 /* eslint-disable react/no-unescaped-entities */
 import { useGetBatchesListQuery } from 'lib/queries/batches/useGetBatchesListQuery';
 import { useGetClassListQuery } from 'lib/queries/class/useGetClassListQuery';
+import { useGetCityByStateCodeQuery } from 'lib/queries/common/useGetCityListQuery';
+import { useGetCountryListQuery } from 'lib/queries/common/useGetCountryListQuery';
+import { useGetStateByCountryCodeQuery } from 'lib/queries/common/useGetStateListQuery';
 import { useGetCommunityListQuery } from 'lib/queries/community/useGetCommunityListQuery';
 import { useGetGroupListQuery } from 'lib/queries/group/useGetGroupListQuery';
 import { useGetLanguageListQuery } from 'lib/queries/language/useGetLanguageListQurey';
@@ -32,6 +35,15 @@ export function EditStudentDetail() {
   const [currentPage, setCurrentPage] = useState(1);
   const [communityList, setCommunityList] = useState([]);
   const [languageList, setLanguageList] = useState([]);
+  const [Country, setCountry] = useState([]);
+  const [residentialCountryCode, setResidentialCountryCode] = useState('');
+  const [permanentCountryCode, setPermanentCountryCode] = useState('');
+  const [residentialStateCode, setResidentialStateCode] = useState('');
+  const [permanentStateCode, setPermanentStateCode] = useState('');
+  const [residentialState, setResidentialState] = useState([]);
+  const [permanentState, setPermanentState] = useState([]);
+  const [residentialCityList, setResidentialCityList] = useState([]);
+  const [permanentCity, setPermanentCity] = useState([]);
 
   const {
     control,
@@ -75,16 +87,48 @@ export function EditStudentDetail() {
 
   const { data: studentDetail, isLoading: isStudentDetailLoading } =
     useGetStudentByIdQuery(id);
-
+  const { data: getCountryListResponse } = useGetCountryListQuery();
   const { data: getCommunityListResponse } = useGetCommunityListQuery();
   const { data: getLanguageListResponse } = useGetLanguageListQuery();
+  const { data: getResidentialStateByCountryIdResponse } =
+    useGetStateByCountryCodeQuery(residentialCountryCode, {
+      enabled: !!residentialCountryCode,
+    });
+
+  const { data: getPermanentStateByCountryIdResponse } =
+    useGetStateByCountryCodeQuery(permanentCountryCode, {
+      enabled: !!permanentCountryCode,
+    });
+  const { data: getResidentialCityByStateCodeResponse } =
+    useGetCityByStateCodeQuery(residentialCountryCode, residentialStateCode, {
+      enabled: !!residentialStateCode,
+    });
+  const { data: getPermanentCityByStateCodeResponse } =
+    useGetCityByStateCodeQuery(permanentCountryCode, permanentStateCode, {
+      enabled: !!permanentStateCode,
+    });
 
   useEffect(() => {
+    if (getCountryListResponse) {
+      setCountry(getCountryListResponse as any[]);
+    }
     if (getLanguageListResponse) {
       setLanguageList(getLanguageListResponse as any[]);
     }
     if (getCommunityListResponse) {
       setCommunityList(getCommunityListResponse as any[]);
+    }
+    if (getResidentialStateByCountryIdResponse) {
+      setResidentialState(getResidentialStateByCountryIdResponse as any[]);
+    }
+    if (getResidentialCityByStateCodeResponse) {
+      setResidentialCityList(getResidentialCityByStateCodeResponse as any[]);
+    }
+    if (getPermanentStateByCountryIdResponse) {
+      setPermanentState(getPermanentStateByCountryIdResponse as any[]);
+    }
+    if (getPermanentCityByStateCodeResponse) {
+      setPermanentCity(getPermanentCityByStateCodeResponse as any[]);
     }
   });
 
@@ -135,14 +179,10 @@ export function EditStudentDetail() {
           studentDetail.additionalAttributes.guardianAadharCardNumber,
         residentialAddress:
           studentDetail.additionalAttributes.residentialAddress,
-        residentialDistrict:
-          studentDetail.additionalAttributes.residentialDistrict,
-        residentialState: studentDetail.additionalAttributes.residentialState,
         residentialPostalCode:
           studentDetail.additionalAttributes.residentialPostalCode,
         permanentAddress: studentDetail.additionalAttributes.permanentAddress,
         permanentDistrict: studentDetail.additionalAttributes.permanentDistrict,
-        permanentState: studentDetail.additionalAttributes.permanentState,
         permanentPostalCode:
           studentDetail.additionalAttributes.permanentPostalCode,
         nationality: studentDetail.nationality,
@@ -179,7 +219,30 @@ export function EditStudentDetail() {
           studentDetail.additionalAttributes.guardianAnnualIncome,
         guardianEmailId: studentDetail.guardianEmailId,
         typeOfDisability: studentDetail.additionalAttributes.typeOfDisability,
+        permanentCountry: studentDetail.additionalAttributes.permanentCountry,
+        residentialCountry:
+          studentDetail.additionalAttributes.residentialCountry,
+        residentialState: studentDetail.additionalAttributes.residentialState,
+        residentialCity: studentDetail.additionalAttributes.residentialCity,
+        permanentState: studentDetail.additionalAttributes.permanentState,
+        permanentCity: studentDetail.additionalAttributes.permanentCity,
+        tcNumber10th: studentDetail.additionalAttributes.tcNumber10th,
+        boardOfEducation10th:
+          studentDetail.additionalAttributes.boardOfEducation10th,
+        boardOfEducation11th:
+          studentDetail.additionalAttributes.boardOfEducation11th,
       };
+      setResidentialCountryCode(
+        studentDetail.additionalAttributes.residentialCountry
+      );
+      setResidentialStateCode(
+        studentDetail.additionalAttributes.residentialState
+      );
+      setPermanentCountryCode(
+        studentDetail.additionalAttributes.permanentCountry
+      );
+      setPermanentStateCode(studentDetail.additionalAttributes.permanentState);
+
       reset(initialValue);
     }
   }, [studentDetail]);
@@ -1091,25 +1154,92 @@ export function EditStudentDetail() {
                 ></textarea>
               </div>
               <div className="w-full">
-                <label className="mt-1 block text-sm text-gray-700">
-                  District
+                <label className="mb-1 mt-1 block text-sm text-gray-700 ">
+                  Residential Country
                 </label>
-                <Input
-                  {...register('residentialDistrict')}
-                  className="mt-1"
+                <Select
                   autoComplete="off"
-                />
+                  value={watch('residentialCountry')}
+                  {...register('residentialCountry')}
+                  onValueChange={(value) => {
+                    if (value) {
+                      setValue('residentialCountry', value);
+                      setResidentialCountryCode(value);
+                    }
+                  }}
+                >
+                  <SelectTrigger className="w-full">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectGroup>
+                      {Country?.map((item, index) => (
+                        <SelectItem value={item.isoCode} key={index}>
+                          {item.name}
+                        </SelectItem>
+                      ))}
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
               </div>
               <div className="w-full">
                 <label className="mt-1 block text-sm text-gray-700">
-                  State
+                  Residential State
                 </label>
-                <Input
-                  {...register('residentialState')}
-                  className="mt-1"
+                <Select
                   autoComplete="off"
-                />
+                  value={watch('residentialState')}
+                  {...register('residentialState')}
+                  onValueChange={(value) => {
+                    if (value) {
+                      setValue('residentialState', value);
+                      setResidentialStateCode(value);
+                    }
+                  }}
+                >
+                  <SelectTrigger className="w-full">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectGroup>
+                      {residentialState?.map((item, index) => (
+                        <SelectItem value={item.isoCode} key={index}>
+                          {item.name}
+                        </SelectItem>
+                      ))}
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
               </div>
+              <div className="w-full">
+                <label className="mt-1 block text-sm text-gray-700">
+                  Residential City
+                </label>
+                <Select
+                  autoComplete="off"
+                  value={watch('residentialCity')}
+                  {...register('residentialCity')}
+                  onValueChange={(value) => {
+                    if (value) {
+                      setValue('residentialCity', value);
+                    }
+                  }}
+                >
+                  <SelectTrigger className="w-full">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectGroup>
+                      {residentialCityList?.map((item, index) => (
+                        <SelectItem value={item.name} key={index}>
+                          {item.name}
+                        </SelectItem>
+                      ))}
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
+              </div>
+
               <div className="w-full">
                 <label className="mt-1 block text-sm text-gray-700">
                   Postal / ZIP Code
@@ -1131,25 +1261,92 @@ export function EditStudentDetail() {
                 ></textarea>
               </div>
               <div className="w-full">
-                <label className="mt-1 block text-sm text-gray-700">
-                  District
+                <label className="mb-1 mt-1 block text-sm text-gray-700">
+                  Permanent Country
                 </label>
-                <Input
-                  {...register('permanentDistrict')}
-                  className="mt-1"
+                <Select
                   autoComplete="off"
-                />
+                  value={watch('permanentCountry')}
+                  {...register('permanentCountry')}
+                  onValueChange={(value) => {
+                    if (value) {
+                      setValue('permanentCountry', value);
+                      setPermanentCountryCode(value);
+                    }
+                  }}
+                >
+                  <SelectTrigger className="w-full">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectGroup>
+                      {Country?.map((item, index) => (
+                        <SelectItem value={item.isoCode} key={index}>
+                          {item.name}
+                        </SelectItem>
+                      ))}
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
               </div>
               <div className="w-full">
                 <label className="mt-1 block text-sm text-gray-700">
-                  State
+                  Permanent State
                 </label>
-                <Input
-                  {...register('permanentState')}
-                  className="mt-1"
+                <Select
                   autoComplete="off"
-                />
+                  value={watch('permanentState')}
+                  {...register('permanentState')}
+                  onValueChange={(value) => {
+                    if (value) {
+                      setValue('permanentState', value);
+                      setPermanentStateCode(value);
+                    }
+                  }}
+                >
+                  <SelectTrigger className="w-full">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectGroup>
+                      {permanentState?.map((item, index) => (
+                        <SelectItem value={item.isoCode} key={index}>
+                          {item.name}
+                        </SelectItem>
+                      ))}
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
               </div>
+              <div className="w-full">
+                <label className="mt-1 block text-sm text-gray-700">
+                  Permanent City
+                </label>
+                <Select
+                  autoComplete="off"
+                  value={watch('permanentCity')}
+                  {...register('permanentCity')}
+                  onValueChange={(value) => {
+                    if (value) {
+                      setValue('permanentCity', value);
+                    }
+                  }}
+                >
+                  <SelectTrigger className="w-full">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectGroup>
+                      {permanentCity?.map((item, index) => (
+                        <SelectItem value={item.name} key={index}>
+                          {item.name}
+                        </SelectItem>
+                      ))}
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
+              </div>
+
               <div className="w-full">
                 <label className="mt-1 block text-sm text-gray-700">
                   Postal / ZIP Code
