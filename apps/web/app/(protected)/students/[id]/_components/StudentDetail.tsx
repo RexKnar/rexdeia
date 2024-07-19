@@ -73,13 +73,13 @@ export function StudentDetail() {
                   variant="base-regular"
                   className="mx-2 rounded-lg border bg-violet-100 px-2"
                 >
-                  {getStudentByIdResponse.additionalAttributes.admissionNumber}
+                  {getStudentByIdResponse.additionalAttributes?.admissionNumber}
                 </Text>
                 <Text
                   variant="base-regular"
                   className="rounded-lg border bg-violet-100 px-2"
                 >
-                  {getStudentByIdResponse.additionalAttributes.age}
+                  {getStudentByIdResponse.additionalAttributes?.age}
                 </Text>
                 <Text
                   variant="base-regular"
@@ -95,7 +95,7 @@ export function StudentDetail() {
               <div className="ml-5 grid grid-cols-3 ">
                 <Text className="w-18 pt-1 text-xs text-gray-800">{'DOB'}</Text>
                 <Text className="col-span-2">
-                  {getStudentByIdResponse.dob.toString()}
+                  {getStudentByIdResponse.dob?.toString()}
                 </Text>
               </div>
               <div className="ml-5 grid grid-cols-3 pt-3">
@@ -121,8 +121,8 @@ export function StudentDetail() {
               </div>
               <div className="ml-5 grid grid-cols-3 pt-3">
                 <Text className="w-18 pt-1 text-xs text-gray-800">{'DOA'}</Text>
-                <Text className="col-span-2">
-                  {getStudentByIdResponse?.additionalAttributes?.dateOfJoining?.toString()}
+                <Text className="">
+                  {getStudentByIdResponse.additionalAttributes?.dateOfJoining?.toString()}
                 </Text>
               </div>
             </div>
@@ -259,7 +259,7 @@ export function StudentDetail() {
                       Community
                     </label>
                     <Text variant="base-regular">
-                      {getStudentByIdResponse.additionalAttributes.community}
+                      {getStudentByIdResponse.additionalAttributes?.community}
                     </Text>
                   </div>
                   <div>
@@ -661,7 +661,10 @@ export function StudentDetail() {
                         EMIS Number
                       </label>
                       <Text variant="base-regular">
-                        {getStudentByIdResponse.additionalAttributes.emisNumber}
+                        {
+                          getStudentByIdResponse.additionalAttributes
+                            ?.emisNumber
+                        }
                       </Text>
                     </div>
                     <div>
