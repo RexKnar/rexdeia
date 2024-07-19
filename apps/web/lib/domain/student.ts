@@ -4,6 +4,7 @@ import { CommunityModel } from './community';
 import { GroupModel } from './group';
 import { LanguageModel } from './language';
 import { MediumModel } from './medium';
+import { SectionModel } from './section';
 
 export type Student = {
   id: string;
@@ -46,6 +47,7 @@ export type Student = {
   group: GroupModel;
   medium: MediumModel;
   batch: BatchModel;
+  section: SectionModel;
   status: 'Active' | 'Rejected' | 'Pending';
 
   additionalAttributes: any;

@@ -130,6 +130,7 @@ export type SubjectToGroupModel = {
   classId: string;
   createdAt: string;
   updatedAt: string;
+  subject: SubjectModel;
 };
 
 export type SubjectToSubjectTypesModel = {

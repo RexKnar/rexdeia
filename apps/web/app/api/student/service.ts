@@ -44,6 +44,12 @@ export async function getStudentById(id: string) {
               name: true,
             },
           },
+          section: {
+            select: {
+              id: true,
+              name: true,
+            },
+          },
         },
       },
     },
@@ -82,6 +88,7 @@ export async function getStudentById(id: string) {
     group: studentMapping.length > 0 ? studentMapping[0].group : null,
     class: studentMapping.length > 0 ? studentMapping[0].class : null,
     medium: studentMapping.length > 0 ? studentMapping[0].medium : null,
+    section: studentMapping.length > 0 ? studentMapping[0].section : null,
   };
   return studentDetails;
 }

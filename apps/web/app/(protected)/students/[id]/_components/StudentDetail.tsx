@@ -1,12 +1,13 @@
-/* eslint-disable @next/next/no-img-element */
-/* eslint-disable react/no-unescaped-entities */
 'use client';
 
+import { useGetStudentMarkListQuery } from 'lib/queries/analytics/student/useGetStudentMarkQuery';
+import { useGetSubjectToStudentByClassAndGroupId } from 'lib/queries/subjects/useGetSubjectsByClassAndGroupIdQuery';
 import { Loader2 } from 'lucide-react';
 import { useParams } from 'next/navigation';
 import {
   Avatar,
   AvatarImage,
+  // Button,
   Card,
   CardContent,
   CardHeader,
@@ -16,6 +17,13 @@ import {
   TabsTrigger,
   Text,
 } from 'ui';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHeader,
+  TableRow,
+} from 'ui/components/ui/Table';
 
 import { useGetStudentByIdQuery } from '../../../../../lib/queries/students/useGetStudentByIdQuery';
 
@@ -24,17 +32,28 @@ export function StudentDetail() {
 
   const { data: getStudentByIdResponse, isLoading: isGetStudentByIdLoading } =
     useGetStudentByIdQuery(id);
+  const sectionId = getStudentByIdResponse?.section?.id;
+  const classId = getStudentByIdResponse?.class?.id;
+  const groupId = getStudentByIdResponse?.group?.id;
+  const { data: subjectList } = useGetSubjectToStudentByClassAndGroupId(
+    groupId,
+    classId
+  );
 
+  const {
+    data: getStudentMarkListResponse,
+    isLoading: isGetStudentMarkListLoading,
+  } = useGetStudentMarkListQuery(id, sectionId, classId, groupId);
   if (isGetStudentByIdLoading) {
     return (
       <div className="flex h-20 items-center justify-center">
         <Loader2 className="mr-2 w-6 animate-spin text-black" />
-        <p className="text-black ">Fetching Student Details...</p>
+        <p className="text-black ">Loading...</p>
       </div>
     );
   }
   return (
-    <section className="mt-10 flex w-full justify-start gap-5">
+    <section className="mt-10 grid w-full grid-cols-11 justify-start gap-2">
       <section className="col-span-3 ">
         <Card className="w-72 rounded-md bg-white">
           <CardHeader>
@@ -102,15 +121,15 @@ export function StudentDetail() {
               </div>
               <div className="ml-5 grid grid-cols-3 pt-3">
                 <Text className="w-18 pt-1 text-xs text-gray-800">{'DOA'}</Text>
-                <Text className="">
-                  {getStudentByIdResponse.additionalAttributes.dateOfJoining.toString()}
+                <Text className="col-span-2">
+                  {getStudentByIdResponse?.additionalAttributes?.dateOfJoining?.toString()}
                 </Text>
               </div>
             </div>
           </CardContent>
         </Card>
       </section>
-      <section className="col-span-7">
+      <section className="col-span-8">
         <Tabs defaultValue="profile" className="border-0 ">
           <TabsList className="w-full justify-start border-b-2 border-gray-100">
             <TabsTrigger
@@ -124,6 +143,12 @@ export function StudentDetail() {
               className="mr-2 text-base focus:border-b-4 focus:border-primary"
             >
               Documents
+            </TabsTrigger>
+            <TabsTrigger
+              value="report"
+              className="mr-2 text-base focus:border-b-4 focus:border-primary"
+            >
+              Report
             </TabsTrigger>
           </TabsList>
           <TabsContent className="w-full" value="profile">
@@ -750,7 +775,7 @@ export function StudentDetail() {
               </div>
             </section>
           </TabsContent>
-          <TabsContent className="w-full" value="document">
+          <TabsContent className="w-full " value="document">
             <section className="bg-white p-5 ">
               <div>
                 <label className="pl-1">Document</label>
@@ -826,6 +851,63 @@ export function StudentDetail() {
                   </Card>
                 </div>
               </div>
+            </section>
+          </TabsContent>
+          <TabsContent className="w-full min-w-full" value="report">
+            <section className="rounded-md bg-white ">
+              {isGetStudentMarkListLoading ? (
+                <div className="flex h-20 items-center justify-center">
+                  <Loader2 className="mr-2 w-6 animate-spin text-black" />
+                  <p className="text-black ">Fetching Student Details...</p>
+                </div>
+              ) : (
+                <Table>
+                  <TableHeader>
+                    <TableRow className="mt-5 bg-primary-300 text-center print:hidden">
+                      <TableCell>
+                        <Text className="size-lg font-semibold">Exams</Text>
+                      </TableCell>
+                      {getStudentMarkListResponse.subjectList?.map(
+                        (subject) => (
+                          <TableCell key={subject.subjectId}>
+                            <Text className="size-lg font-semibold">
+                              {subject.subject.name}
+                            </Text>
+                          </TableCell>
+                        )
+                      )}
+                      <TableCell>
+                        <Text className="size-lg font-semibold">Total</Text>
+                      </TableCell>
+                    </TableRow>
+                  </TableHeader>
+                  {getStudentMarkListResponse && (
+                    <TableBody>
+                      {getStudentMarkListResponse.markList.map((exam) => (
+                        <TableRow key={exam.exam.id}>
+                          <TableCell className="mt-5 bg-green-100 text-center print:hidden">
+                            {exam.exam.name}
+                          </TableCell>
+                          {exam.subjects.map((subject) => (
+                            <TableCell key={subject.id}>
+                              {subject.subject.name}
+                              <div>
+                                {subject.examSubjectPartition.map(
+                                  (partition) => (
+                                    <div key={partition.id}>
+                                      {partition.Mark[0].mark}
+                                    </div>
+                                  )
+                                )}
+                              </div>
+                            </TableCell>
+                          ))}
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  )}
+                </Table>
+              )}
             </section>
           </TabsContent>
         </Tabs>
