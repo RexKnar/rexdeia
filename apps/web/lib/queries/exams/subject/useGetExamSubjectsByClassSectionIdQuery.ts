@@ -30,7 +30,7 @@ function getExamSubjectsByClassSectionId(
       return await makeAPICall<any>(
         EXAM_SUBJECTS_BY_CLASS_SECTION_EXAM_ID,
         {},
-        { sectionId, classId },
+        sectionId ? { sectionId, classId } : { classId },
         { id: examId }
       );
     },

@@ -21,8 +21,8 @@ export default function StudentMarkList({
   examId: string;
 }) {
   const { data: subjectList } = useGetExamSubjectsByClassSectionIdQuery(
-    { examId, classId, sectionId },
-    { enabled: !!examId && !!classId && !!sectionId }
+    sectionId ? { examId, classId, sectionId } : { examId, classId },
+    { enabled: !!examId && !!classId }
   );
 
   const getStudentSubject = useCallback((student, subjectId) => {

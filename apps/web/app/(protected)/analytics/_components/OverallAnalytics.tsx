@@ -40,8 +40,8 @@ export default function OverallAnalytics({
   const [analytics, setAnalytics] = useState<Map<string, Analytics>>(new Map());
 
   const { data: subjectList } = useGetExamSubjectsByClassSectionIdQuery(
-    { examId, classId, sectionId },
-    { enabled: !!examId && !!classId && !!sectionId }
+    sectionId ? { examId, classId, sectionId } : { examId, classId },
+    { enabled: !!examId && !!classId }
   );
 
   const analyzeSubjectPerformance = useCallback(
