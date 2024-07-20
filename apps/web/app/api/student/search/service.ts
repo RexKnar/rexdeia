@@ -30,7 +30,8 @@ export async function getStudentSearchList(
       {
         OR: searchFields.map((field) => ({
           [field]: {
-            search: searchTerm,
+            contains: searchTerm,
+            mode: 'insensitive',
           },
         })),
       },
@@ -46,13 +47,7 @@ export async function getStudentSearchList(
       where: whereCondition,
       take: pageSize,
       skip: (page - 1) * pageSize,
-      orderBy: {
-        _relevance: {
-          fields: [...searchFields],
-          search: searchTerm,
-          sort: 'desc',
-        },
-      },
+
       select: {
         id: true,
         firstName: true,
