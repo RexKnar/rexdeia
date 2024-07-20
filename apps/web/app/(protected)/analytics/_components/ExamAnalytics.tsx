@@ -44,9 +44,9 @@ export function ExamAnalytics() {
   );
 
   const { data: examList } = useGetExamsBySectionIdQuery(
-    { classId, sectionId },
+    sectionId ? { classId, sectionId } : { classId },
     {
-      enabled: !!classId && !!sectionId,
+      enabled: !!classId,
     }
   );
   const { data: classList } = useGetClassListQuery({
@@ -66,13 +66,15 @@ export function ExamAnalytics() {
 
   const { data: analyticsDetail, isLoading: isAnalyticsDetail } =
     useExamAnalyticsQuery(
+      sectionId
+        ? {
+            classId,
+            sectionId,
+            examId,
+          }
+        : { classId, examId },
       {
-        classId,
-        sectionId,
-        examId,
-      },
-      {
-        enabled: !!classId && !!sectionId && !!examId,
+        enabled: !!classId && !!examId,
       }
     );
   useEffect(() => {

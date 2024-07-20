@@ -43,14 +43,14 @@ export function AnalyticStudentList() {
       sectionId,
     },
     {
-      enabled: !!examId && !!classId && !!sectionId,
+      enabled: !!examId && !!classId,
     }
   );
 
   const { data: examList } = useGetExamsBySectionIdQuery(
-    { classId, sectionId },
+    sectionId ? { classId, sectionId } : { classId },
     {
-      enabled: !!classId && !!sectionId,
+      enabled: !!classId,
     }
   );
   const { data: classList } = useGetClassListQuery({
@@ -70,10 +70,14 @@ export function AnalyticStudentList() {
 
   const handleSubjectCheckedChange = (subject: any) => {
     setFilterSubjects((prevSubjects) => {
-      const isPresent = prevSubjects.some((item) => item.id === subject.id);
+      const isPresent = prevSubjects.some(
+        (item) => item.subject.id === subject.subject.id
+      );
 
       if (isPresent) {
-        return prevSubjects.filter((item) => item.id !== subject.id);
+        return prevSubjects.filter(
+          (item) => item.subject.id !== subject.subject.id
+        );
       } else {
         return [...prevSubjects, subject];
       }
@@ -84,7 +88,7 @@ export function AnalyticStudentList() {
     let currentTotalMarks = 0;
     if (filterSubjects?.length > 0) {
       filterSubjects.map((subject) => {
-        currentTotalMarks += subject.convertTo;
+        currentTotalMarks += Number(subject.convertTo);
       });
     }
     setFilterTotalMarks(currentTotalMarks || 100);
@@ -241,9 +245,11 @@ export function AnalyticStudentList() {
                   {subjects.map((item, index) => (
                     <div className="flex items-center gap-2" key={index}>
                       <Checkbox
-                        value={item.id}
+                        value={item.subject.id}
                         key={index}
-                        checked={filterSubjects.some((s) => s.id === item.id)}
+                        checked={filterSubjects.some(
+                          (s) => s.subject.id === item.subject.id
+                        )}
                         onCheckedChange={() => {
                           handleSubjectCheckedChange(item);
                         }}
