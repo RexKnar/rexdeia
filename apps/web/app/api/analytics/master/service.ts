@@ -114,7 +114,6 @@ export async function getMasterMarksByFilter(filter: MarkAnalyticsFilter) {
         subjectMarks.forEach((mark) => {
           if (mark) {
             absentStatus = false;
-
             if (
               Number(mark.mark) < Number(partition.minMark) ||
               mark.attandance
