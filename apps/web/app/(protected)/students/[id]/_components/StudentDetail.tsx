@@ -1,7 +1,6 @@
 'use client';
 
 import { useGetStudentMarkListQuery } from 'lib/queries/analytics/student/useGetStudentMarkQuery';
-import { useGetSubjectToStudentByClassAndGroupId } from 'lib/queries/subjects/useGetSubjectsByClassAndGroupIdQuery';
 import { Loader2 } from 'lucide-react';
 import { useParams } from 'next/navigation';
 import {
@@ -35,10 +34,6 @@ export function StudentDetail() {
   const sectionId = getStudentByIdResponse?.section?.id;
   const classId = getStudentByIdResponse?.class?.id;
   const groupId = getStudentByIdResponse?.group?.id;
-  const { data: subjectList } = useGetSubjectToStudentByClassAndGroupId(
-    groupId,
-    classId
-  );
 
   const {
     data: getStudentMarkListResponse,
@@ -290,7 +285,7 @@ export function StudentDetail() {
                   <div className="mt-2 flex flex-wrap gap-12 p-6">
                     <div>
                       <label className="text-sm font-semibold text-gray-700">
-                        Father's Name`
+                        Father&apos;s Name`
                       </label>
                       <Text variant="base-regular">
                         {getStudentByIdResponse.fatherName}
@@ -298,7 +293,7 @@ export function StudentDetail() {
                     </div>
                     <div>
                       <label className="text-sm font-semibold text-gray-700">
-                        Father's Occupation
+                        Father&apos;s Occupation
                       </label>
                       <Text variant="base-regular">
                         {getStudentByIdResponse.fatherOccupation}
@@ -306,7 +301,7 @@ export function StudentDetail() {
                     </div>
                     <div>
                       <label className="text-sm font-semibold text-gray-700">
-                        Father's Phone Number
+                        Father&apos;s Phone Number
                       </label>
                       <Text variant="base-regular">
                         {getStudentByIdResponse.fatherPhoneNumber}
@@ -314,7 +309,7 @@ export function StudentDetail() {
                     </div>
                     <div>
                       <label className="text-sm font-semibold text-gray-700">
-                        Father's Education
+                        Father&apos;s Education
                       </label>
                       <Text variant="base-regular">
                         {
@@ -325,7 +320,7 @@ export function StudentDetail() {
                     </div>
                     <div>
                       <label className="text-sm font-semibold text-gray-700">
-                        Father's Aadhar Card Number
+                        Father&apos;s Aadhar Card Number
                       </label>
                       <Text variant="base-regular">
                         {
@@ -336,7 +331,7 @@ export function StudentDetail() {
                     </div>
                     <div>
                       <label className="text-sm font-semibold text-gray-700">
-                        Mother's Name
+                        Mother&apos;s Name
                       </label>
                       <Text variant="base-regular">
                         {getStudentByIdResponse.motherName}
@@ -344,7 +339,7 @@ export function StudentDetail() {
                     </div>
                     <div>
                       <label className="text-sm font-semibold text-gray-700">
-                        Mother's Occupation
+                        Mother&apos;s Occupation
                       </label>
                       <Text variant="base-regular">
                         {getStudentByIdResponse.motherOccupation}
@@ -352,7 +347,7 @@ export function StudentDetail() {
                     </div>
                     <div>
                       <label className="text-sm font-semibold text-gray-700">
-                        Mother's Phone Number
+                        Mother&apos;s Phone Number
                       </label>
                       <Text variant="base-regular">
                         {getStudentByIdResponse.motherPhoneNumber}
@@ -360,7 +355,7 @@ export function StudentDetail() {
                     </div>
                     <div>
                       <label className="text-sm font-semibold text-gray-700">
-                        Mother's Education
+                        Mother&apos;s Education
                       </label>
                       <Text variant="base-regular">
                         {
@@ -371,7 +366,7 @@ export function StudentDetail() {
                     </div>
                     <div>
                       <label className="text-sm font-semibold text-gray-700">
-                        Mother's Aadhar Card Number
+                        Mother&apos;s Aadhar Card Number
                       </label>
                       <Text variant="base-regular">
                         {
@@ -407,12 +402,12 @@ export function StudentDetail() {
 
                 <div className="mt-4 border-t-8 border-gray-100 bg-white">
                   <Text variant="sm-semibold" className="pl-6 pt-5">
-                    {'GARDIANS DETAILS'}
+                    {'GUARDIANS DETAILS'}
                   </Text>
                   <div className="mt-2 flex flex-wrap gap-12 p-6">
                     <div>
                       <label className="text-sm font-semibold text-gray-700">
-                        Guardian's Name
+                        Guardian&apos;s Name
                       </label>
                       <Text variant="base-regular">
                         {getStudentByIdResponse.guardianName}
@@ -420,7 +415,7 @@ export function StudentDetail() {
                     </div>
                     <div>
                       <label className="text-sm font-semibold text-gray-700">
-                        Guardian's Occupation
+                        Guardian&apos;s Occupation
                       </label>
                       <Text variant="base-regular">
                         {getStudentByIdResponse.guardiansOccupation}
@@ -439,7 +434,7 @@ export function StudentDetail() {
                     </div>
                     <div>
                       <label className="text-sm font-semibold text-gray-700">
-                        Guardian's Phone Number
+                        Guardian&apos;s Phone Number
                       </label>
                       <Text variant="base-regular">
                         {getStudentByIdResponse.guardianPhoneNumber}
@@ -447,7 +442,7 @@ export function StudentDetail() {
                     </div>
                     <div>
                       <label className="text-sm font-semibold text-gray-700">
-                        Guardian's Aadhar Card Number
+                        Guardian&apos;s Aadhar Card Number
                       </label>
                       <Text variant="base-regular">
                         {
