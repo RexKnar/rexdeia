@@ -32,11 +32,12 @@ export function AnalyticStudentList() {
   const [examId, setExamId] = useState('');
 
   const { data: examList } = useGetExamsBySectionIdQuery(
-    { classId, sectionId },
+    sectionId ? { classId, sectionId } : { classId },
     {
-      enabled: !!classId && !!sectionId,
+      enabled: !!classId,
     }
   );
+
   const { data: classList } = useGetClassListQuery({
     page,
     limit,
