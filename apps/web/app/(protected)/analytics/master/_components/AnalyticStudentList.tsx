@@ -12,8 +12,13 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
 } from 'ui';
 
+import OverallAnalytics from '../../_components/OverallAnalytics';
 import StudentMarkList from '../../_components/StudentMarkList';
 
 export function AnalyticStudentList() {
@@ -160,17 +165,44 @@ export function AnalyticStudentList() {
           ))}
         </div>
       </section> */}
-
-      <section>
-        {studentMarkList && (
-          <StudentMarkList
-            examId={examId}
-            classId={classId}
-            sectionId={sectionId}
-            students={studentMarkList}
-          />
-        )}
-      </section>
+      <Tabs defaultValue="profile" className="border-0 ">
+        <TabsList className="w-full justify-start border-b-2 border-gray-100">
+          <TabsTrigger
+            value="overall"
+            className="mr-2 text-base focus:border-b-4 focus:border-primary print:hidden"
+          >
+            Overall
+          </TabsTrigger>
+          <TabsTrigger
+            value="markList"
+            className="mr-2 text-base focus:border-b-4 focus:border-primary print:hidden"
+          >
+            Mark List
+          </TabsTrigger>
+        </TabsList>
+        <TabsContent className="w-full" value="overall">
+          <section>
+            <OverallAnalytics
+              examId={examId}
+              classId={classId}
+              sectionId={sectionId}
+              students={studentMarkList}
+            />
+          </section>
+        </TabsContent>
+        <TabsContent className="w-full" value="markList">
+          <section>
+            {studentMarkList && (
+              <StudentMarkList
+                examId={examId}
+                classId={classId}
+                sectionId={sectionId}
+                students={studentMarkList}
+              />
+            )}
+          </section>
+        </TabsContent>
+      </Tabs>
     </>
   );
 }
