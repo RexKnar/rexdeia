@@ -28,6 +28,9 @@ export async function getMasterMarksByFilter(filter: MarkAnalyticsFilter) {
       where: {
         ...mainClause,
         isCurrent: true,
+        sectionId: {
+          not: null,
+        },
       },
       select: {
         student: {
@@ -186,9 +189,9 @@ export async function getMasterMarksByFilter(filter: MarkAnalyticsFilter) {
     students.forEach((student) => {
       const gender = student.gender;
 
-      if (gender === 'Male') {
+      if (gender.toLowerCase() === 'male') {
         totalMale++;
-      } else if (gender === 'Female') {
+      } else if (gender.toLowerCase() === 'female') {
         totalFemale++;
       }
     });
