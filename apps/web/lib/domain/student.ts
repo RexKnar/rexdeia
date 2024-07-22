@@ -56,7 +56,7 @@ export type Student = {
 
 export type AddStudentModel = Omit<
   Student,
-  'id' | 'motherTongue' | 'community' | 'batch' | 'studentMapping'
+  'id' | 'motherTongue' | 'community' | 'batch' | 'studentMapping ' | 'section'
 > & {
   batchId: string;
   communityId: string;
