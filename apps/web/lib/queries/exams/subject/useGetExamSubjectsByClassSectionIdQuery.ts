@@ -18,6 +18,7 @@ function getExamSubjectsByClassSectionId(
   { examId, classId, sectionId }: getSubjectInputModel,
   options?: Partial<UseQueryOptions<any[]>>
 ): UseQueryOptions<any[]> {
+  console.log(sectionId);
   sectionId = sectionId || '';
   return {
     ...options,

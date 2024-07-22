@@ -41,6 +41,7 @@ export async function PUT(request: NextRequest) {
   }
   try {
     const filter = await request.json();
+    console.log(filter);
     const markList = await getMasterMarksByFilter(filter);
 
     return new NextResponse(JSON.stringify(markList), {

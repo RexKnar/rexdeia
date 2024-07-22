@@ -28,9 +28,6 @@ export async function getMasterMarksByFilter(filter: MarkAnalyticsFilter) {
       where: {
         ...mainClause,
         isCurrent: true,
-        sectionId: {
-          not: null,
-        },
       },
       select: {
         student: {
