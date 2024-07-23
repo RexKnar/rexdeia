@@ -127,6 +127,10 @@ export default function StudentMarkList({
         </TableCell>
         <TableCell className="text-center print:p-0">
           {rankedStudents.find((s) => s.id === student.id)?.rank || '-'}
+          <br />
+          {!student.attendance && (
+            <span className="text-red-500 print:p-0 print:text-sm">A</span>
+          )}
         </TableCell>
       </TableRow>
     );

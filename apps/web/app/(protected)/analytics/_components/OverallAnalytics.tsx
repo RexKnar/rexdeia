@@ -20,7 +20,9 @@ interface Analytics {
   passPercentage: { male: number; female: number; overall: number };
   failPercentage: { male: number; female: number; overall: number };
   attendance: { male: number; female: number; overall: number };
+  absent: { male: number; female: number; overall: number };
   markEntry: { male: number; female: number; overall: number };
+  totalStudents: { male: number; female: number; overall: number };
 }
 
 const calculatePercentage = (part: number, whole: number) =>
@@ -57,7 +59,9 @@ export default function OverallAnalytics({
         passPercentage: { male: 0, female: 0, overall: 0 },
         failPercentage: { male: 0, female: 0, overall: 0 },
         attendance: { male: 0, female: 0, overall: 0 },
+        absent: { male: 0, female: 0, overall: 0 },
         markEntry: { male: 0, female: 0, overall: 0 },
+        totalStudents: { male: 0, female: 0, overall: 0 },
       };
 
       let totalMarks = { male: 0, female: 0, overall: 0 };
@@ -73,6 +77,8 @@ export default function OverallAnalytics({
         const studentFullName =
           `${student.firstName} ${student.middleName || ''} ${student.lastName}`.trim();
 
+        result.totalStudents[gender]++;
+        result.totalStudents.overall++;
         totalMarks[gender] += mark;
         totalMarks.overall += mark;
         totalStudents[gender]++;
@@ -81,22 +87,43 @@ export default function OverallAnalytics({
         if (!subject.absentStatus && subject?.marks?.length > 0) {
           result.attendance[gender]++;
           result.attendance.overall++;
+        } else if (subject.absentStatus && subject?.marks?.length > 0) {
+          result.absent[gender]++;
+          result.absent.overall++;
         }
         if (subject?.marks?.length === 0) {
           result.markEntry[gender]++;
           result.markEntry.overall++;
         }
 
-        ['male', 'female', 'overall'].forEach((category) => {
-          if (mark > result.highestMark[category]) {
-            result.highestMark[category] = mark;
-            result.highestMarkStudentName[category] = studentFullName;
-          }
-          if (mark < result.lowestMark[category] && !subject.absentStatus) {
-            result.lowestMark[category] = mark;
-            result.lowestMarkStudentName[category] = studentFullName;
-          }
-        });
+        // ['male', 'female', 'overall'].forEach((category) => {
+        //   if (mark > result.highestMark[category]) {
+        //     result.highestMark[category] = mark;
+        //     result.highestMarkStudentName[category] = studentFullName;
+        //   }
+        //   if (mark < result.lowestMark[category] && !subject.absentStatus) {
+        //     result.lowestMark[category] = mark;
+        //     result.lowestMarkStudentName[category] = studentFullName;
+        //   }
+        // });
+
+        if (mark > result.highestMark[gender]) {
+          result.highestMark[gender] = mark;
+          result.highestMarkStudentName[gender] = studentFullName;
+        }
+        if (mark < result.lowestMark[gender] && !subject.absentStatus) {
+          result.lowestMark[gender] = mark;
+          result.lowestMarkStudentName[gender] = studentFullName;
+        }
+
+        if (mark > result.highestMark['overall']) {
+          result.highestMark['overall'] = mark;
+          result.highestMarkStudentName['overall'] = studentFullName;
+        }
+        if (mark < result.lowestMark['overall'] && !subject.absentStatus) {
+          result.lowestMark['overall'] = mark;
+          result.lowestMarkStudentName['overall'] = studentFullName;
+        }
 
         if (subject.failingStatus && !subject.absentStatus) {
           result.numberOfFailStudents[gender]++;
@@ -150,7 +177,8 @@ export default function OverallAnalytics({
       totalPass = 0,
       totalFail = 0,
       highestMark = 0,
-      lowestMark = Infinity;
+      lowestMark = 0,
+      isFirst = true;
 
     students.forEach((student) => {
       totalMarks += student.totalMark;
@@ -161,8 +189,14 @@ export default function OverallAnalytics({
         totalPass++;
       }
       highestMark = Math.max(highestMark, student.totalMark);
-      if (!student.attandance) {
-        lowestMark = Math.min(lowestMark, student.totalMark);
+
+      if (student.attendance) {
+        if (isFirst) {
+          lowestMark = student.totalMark;
+          isFirst = false;
+        } else {
+          lowestMark = Math.min(lowestMark, student.totalMark);
+        }
       }
     });
 
@@ -173,7 +207,7 @@ export default function OverallAnalytics({
       passPercentage: calculatePercentage(totalPass, totalStudents),
       failPercentage: calculatePercentage(totalFail, totalStudents),
       highestMark,
-      lowestMark: lowestMark === Infinity ? 0 : lowestMark,
+      lowestMark,
     };
   }, [students]);
 
@@ -184,57 +218,81 @@ export default function OverallAnalytics({
         <TableCell className="bg-primary-300">
           <Text className="size-lg font-semibold">{subject.subject.name}</Text>
         </TableCell>
-        <TableCell>
-          <Text className="size-lg text-center font-semibold">
-            <div className="flex flex-col justify-evenly">
-              <Text className="size-lg text-center font-semibold">
-                {subjectAnalytics?.markEntry.overall}
+        <TableCell className="text-center">
+          <div className="flex flex-col justify-evenly">
+            <Text className="size-lg text-center font-semibold">
+              {subjectAnalytics?.totalStudents.overall}
+            </Text>
+            <div className="flex justify-evenly">
+              <Text className="text-primary-800">
+                M: {subjectAnalytics?.totalStudents.male}
               </Text>
-              <div className="flex justify-evenly">
-                <Text className="text-primary-800">
-                  M: {subjectAnalytics?.markEntry.male}
-                </Text>
-                <Text className="text-primary-800">
-                  F: {subjectAnalytics?.markEntry.female}
-                </Text>
-              </div>
+              <Text className="text-primary-800">
+                F: {subjectAnalytics?.totalStudents.female}
+              </Text>
             </div>
-          </Text>
+          </div>
+        </TableCell>
+        <TableCell>
+          <div className="flex flex-col justify-evenly">
+            <Text className="size-lg text-center font-semibold">
+              {subjectAnalytics?.markEntry.overall}
+            </Text>
+            <div className="flex justify-evenly">
+              <Text className="text-primary-800">
+                M: {subjectAnalytics?.markEntry.male}
+              </Text>
+              <Text className="text-primary-800">
+                F: {subjectAnalytics?.markEntry.female}
+              </Text>
+            </div>
+          </div>
         </TableCell>
 
         <TableCell>
-          <Text className="size-lg text-center font-semibold">
-            <div className="flex flex-col justify-evenly">
-              <Text className="size-lg text-center font-semibold">
-                {subjectAnalytics?.attendance.overall}
+          <div className="flex flex-col justify-evenly">
+            <Text className="size-lg text-center font-semibold">
+              {subjectAnalytics?.attendance.overall}
+            </Text>
+            <div className="flex justify-evenly">
+              <Text className="text-primary-800">
+                M: {subjectAnalytics?.attendance.male}
               </Text>
-              <div className="flex justify-evenly">
-                <Text className="text-primary-800">
-                  M: {subjectAnalytics?.attendance.male}
-                </Text>
-                <Text className="text-primary-800">
-                  F: {subjectAnalytics?.attendance.female}
-                </Text>
-              </div>
+              <Text className="text-primary-800">
+                F: {subjectAnalytics?.attendance.female}
+              </Text>
             </div>
-          </Text>
+          </div>
+        </TableCell>
+        <TableCell className="text-center">
+          <div className="flex flex-col justify-evenly">
+            <Text className="size-lg text-center font-semibold">
+              {subjectAnalytics?.absent.overall}
+            </Text>
+            <div className="flex justify-evenly">
+              <Text className="text-primary-800">
+                M: {subjectAnalytics?.absent.male}
+              </Text>
+              <Text className="text-primary-800">
+                F: {subjectAnalytics?.absent.female}
+              </Text>
+            </div>
+          </div>
         </TableCell>
         <TableCell>
-          <Text className="size-lg text-center font-semibold">
-            <div className="flex flex-col justify-evenly">
-              <Text className="size-lg text-center font-semibold">
-                {subjectAnalytics?.averageMark.overall.toFixed(2)}
+          <div className="flex flex-col justify-evenly">
+            <Text className="size-lg text-center font-semibold">
+              {subjectAnalytics?.averageMark.overall.toFixed(2)}
+            </Text>
+            <div className="flex justify-evenly">
+              <Text className="text-primary-800">
+                M: {subjectAnalytics?.averageMark.male.toFixed(2)}
               </Text>
-              <div className="flex justify-evenly">
-                <Text className="text-primary-800">
-                  M: {subjectAnalytics?.averageMark.male.toFixed(2)}
-                </Text>
-                <Text className="text-primary-800">
-                  F: {subjectAnalytics?.averageMark.female.toFixed(2)}
-                </Text>
-              </div>
+              <Text className="text-primary-800">
+                F: {subjectAnalytics?.averageMark.female.toFixed(2)}
+              </Text>
             </div>
-          </Text>
+          </div>
         </TableCell>
         <TableCell>
           <div className="flex flex-col justify-evenly">
@@ -338,26 +396,30 @@ export default function OverallAnalytics({
             <TableHeader>
               <TableRow className="mt-5 bg-primary-300 text-center">
                 <TableCell></TableCell>
+                <TableCell className="text-center">Total Count</TableCell>
                 <TableCell>
                   <Text className="size-lg font-semibold">Pending Entry</Text>
                 </TableCell>
                 <TableCell>
                   <Text className="size-lg font-semibold">Appeared</Text>
                 </TableCell>
+                <TableCell className="text-center">
+                  <Text className="size-lg font-semibold">Absent</Text>
+                </TableCell>
                 <TableCell>
                   <Text className="size-lg font-semibold">Average</Text>
                 </TableCell>
                 <TableCell>
-                  <Text className="size-lg font-semibold"># of Pass</Text>
+                  <Text className="size-lg font-semibold">No. of Pass</Text>
                 </TableCell>
                 <TableCell>
-                  <Text className="size-lg font-semibold"># of Fail</Text>
+                  <Text className="size-lg font-semibold">No. of Failures</Text>
                 </TableCell>
                 <TableCell>
                   <Text className="size-lg font-semibold">Pass %</Text>
                 </TableCell>
                 <TableCell>
-                  <Text className="size-lg font-semibold">Fail %</Text>
+                  <Text className="size-lg font-semibold">Failure %</Text>
                 </TableCell>
                 <TableCell>
                   <Text className="size-lg font-semibold">Highest</Text>
@@ -375,6 +437,8 @@ export default function OverallAnalytics({
                     Overall
                   </Text>
                 </TableCell>
+                <TableCell className=""></TableCell>
+                <TableCell className=""></TableCell>
                 <TableCell className=""></TableCell>
                 <TableCell className=""></TableCell>
                 <TableCell>
