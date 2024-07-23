@@ -94,6 +94,7 @@ export async function getMasterMarksByFilter(filter: MarkAnalyticsFilter) {
     let totalMark = 0;
     let actualTotalMarks = 0;
     let subjectMasters = [];
+    let attendance = false;
 
     const subjects = examSubject.map((examSubject) => {
       const examSubjectPartition = examSubject.examSubjectPartition;
@@ -103,6 +104,7 @@ export async function getMasterMarksByFilter(filter: MarkAnalyticsFilter) {
       let failingOn = [];
       let absentStatus = true;
       let absentOn = [];
+
       if (!subjectMasters.includes(examSubject.subject.subjectMasterId)) {
         subjectMasters.push(examSubject.subject.subjectMasterId);
       }
@@ -111,6 +113,7 @@ export async function getMasterMarksByFilter(filter: MarkAnalyticsFilter) {
           (subjectMark) => subjectMark.studentId === studentId
         );
         actualTotalMarks += Number(partition.convertTo);
+
         subjectMarks.forEach((mark) => {
           if (mark) {
             absentStatus = false;
@@ -123,6 +126,8 @@ export async function getMasterMarksByFilter(filter: MarkAnalyticsFilter) {
             }
             if (mark.attandance) {
               absentOn.push(partition.assessmentFormat.name);
+            } else {
+              attendance = true;
             }
             const actualMark =
               (Number(mark.mark) / Number(partition.totalMarks)) *
@@ -150,6 +155,7 @@ export async function getMasterMarksByFilter(filter: MarkAnalyticsFilter) {
         absentStatus = true;
       }
       totalMark += subjectTotalMark;
+
       const subject = {
         ...examSubject.subject,
         marks,
@@ -161,6 +167,8 @@ export async function getMasterMarksByFilter(filter: MarkAnalyticsFilter) {
         subjectPassed,
         subjectFailed,
       };
+
+      if (!subject.absentStatus) attendance = true;
 
       return subject;
     });
@@ -174,6 +182,7 @@ export async function getMasterMarksByFilter(filter: MarkAnalyticsFilter) {
     studentDetail['subjectFailed'] = subjectFailed;
     studentDetail['failingStatus'] = subjectFailed > 0 ? true : false;
     studentDetail['totalPercentage'] = (totalMark / actualTotalMarks) * 100;
+    studentDetail['attendance'] = attendance;
 
     return studentDetail;
   });
