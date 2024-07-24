@@ -297,6 +297,9 @@ export async function getAllStaffsBySectionsIdWithSubjects(ids: string[]) {
     sections: academicSubjectForStaff
       .filter((item) => !item.isIncharge)
       .map((section) => section.section),
+    sectionIncharge: academicSubjectForStaff
+      .filter((item) => item.isIncharge)
+      .map((section) => section.section),
   }));
 
   return result;
