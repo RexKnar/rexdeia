@@ -1,18 +1,8 @@
 import { db } from 'lib/db';
 
-type MarkAnalyticsFilter = {
-  classId?: string;
-  sectionId?: string;
-  examId?: string;
-  markRange?: string[];
-  filterSubjects?: any[];
-  pagination: {
-    limit: number;
-    page: number;
-  };
-};
+import { MarkAnalyticsFilterModel } from '../service';
 
-export async function getMarksByFilter(filter: MarkAnalyticsFilter) {
+export async function getMarksByFilter(filter: MarkAnalyticsFilterModel) {
   const { classId, examId, sectionId, filterSubjects, markRange } = filter;
 
   let subjectArray = [];
