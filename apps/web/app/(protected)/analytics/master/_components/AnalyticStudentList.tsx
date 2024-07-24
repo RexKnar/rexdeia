@@ -84,6 +84,8 @@ export function AnalyticStudentList() {
             <Select
               autoComplete="off"
               onValueChange={(value) => {
+                setSectionId(null);
+                setExamId(null);
                 setClassId(value);
               }}
             >
@@ -106,7 +108,8 @@ export function AnalyticStudentList() {
             <Select
               autoComplete="off"
               onValueChange={(value) => {
-                setSectionId(value);
+                setExamId(null);
+                setSectionId(value === 'all' ? null : value);
               }}
             >
               <SelectTrigger className="w-full">
@@ -114,6 +117,7 @@ export function AnalyticStudentList() {
               </SelectTrigger>
               <SelectContent>
                 <SelectGroup>
+                  <SelectItem value="all">All</SelectItem>
                   {sectionList?.data?.map((item) => (
                     <SelectItem key={item.id} value={item.id}>
                       {item.name}
@@ -128,7 +132,7 @@ export function AnalyticStudentList() {
             <Select
               autoComplete="off"
               onValueChange={(value) => {
-                setExamId(value);
+                setExamId(value === 'all' ? null : value);
               }}
             >
               <SelectTrigger className="w-full">
@@ -136,6 +140,7 @@ export function AnalyticStudentList() {
               </SelectTrigger>
               <SelectContent>
                 <SelectGroup>
+                  <SelectItem value="all">Reset</SelectItem>
                   {examList?.map((item) => (
                     <SelectItem key={item.id} value={item.id}>
                       {item.name}
@@ -147,25 +152,6 @@ export function AnalyticStudentList() {
           </div>
         </div>
       </section>
-      {/* <section className="p-6 mt-4 space-y-4 bg-white rounded-md">
-        <div className="flex gap-2">
-          {analyticsWidgetData.map((widget, index) => (
-            <div
-              key={index + widget.percentage + widget.label}
-              className="w-full"
-            >
-              <BasicAnalyticsCardWidget
-                icon={widget.icon}
-                percentage={widget.percentage}
-                label={widget.label}
-                value={widget.value}
-                className={widget.className}
-                subData={widget.subData}
-              />
-            </div>
-          ))}
-        </div>
-      </section> */}
       <Tabs defaultValue="profile" className="border-0 ">
         <TabsList className="w-full justify-start border-b-2 border-gray-100">
           <TabsTrigger
