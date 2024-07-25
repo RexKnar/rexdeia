@@ -29,29 +29,7 @@ export default function StudentMarkList({
     return student.subjects.find((subject) => subject.id === subjectId);
   }, []);
 
-  const calculateRanks = (students) => {
-    const passedStudents = students
-      .filter((student) => !student.failingStatus)
-      .sort((a, b) => b.totalMark - a.totalMark);
-
-    let rank = 1;
-    let prevMark = null;
-    let skipRanks = 0;
-
-    return passedStudents.map((student) => {
-      if (student.totalMark !== prevMark) {
-        rank = rank + skipRanks;
-        skipRanks = 1;
-      } else {
-        skipRanks++;
-      }
-      prevMark = student.totalMark;
-      return { ...student, rank };
-    });
-  };
-
   const renderStudentRow = (student, index) => {
-    const rankedStudents = calculateRanks(students);
     return (
       <TableRow key={student.id}>
         <TableCell className="text-center print:p-0">{index + 1}</TableCell>
@@ -126,7 +104,12 @@ export default function StudentMarkList({
           )}
         </TableCell>
         <TableCell className="text-center print:p-0">
-          {rankedStudents.find((s) => s.id === student.id)?.rank || '-'}
+          {student.rank || '-'}
+
+          <br />
+          {!student.attendance && (
+            <span className="text-red-500 print:p-0 print:text-sm">A</span>
+          )}
         </TableCell>
       </TableRow>
     );

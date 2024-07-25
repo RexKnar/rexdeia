@@ -7,7 +7,6 @@ import { Suspense, useEffect, useState } from 'react';
 import { Avatar, AvatarImage, Input, Text } from 'ui';
 
 import { NotificationPopover } from './notification/NotificationPopover';
-import { PathBreadcrumb } from './PathBreadcrumb';
 import { SidebarHeader } from './sidebar/SidebarHeader';
 import { UserMenu } from './UserMenu';
 
@@ -45,10 +44,6 @@ export function PageHeader() {
         <Suspense fallback={<div>Loading...</div>}>
           <SidebarHeader />
         </Suspense>
-
-        <div>
-          <PathBreadcrumb />
-        </div>
 
         <div className="flex items-center gap-6">
           <div className="relative hidden items-center lg:flex">

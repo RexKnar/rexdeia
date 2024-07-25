@@ -56,6 +56,7 @@ export async function updateSubjectById(
       elective: +updateSubject.elective,
       regulationId: updateSubject.regulationId,
       subjectMasterId: updateSubject.subjectMasterId,
+      subjectOrder: Number(updateSubject.subjectOrder),
     },
   });
   await updateSubjectToSubjectType(id, updateSubject.subjectTypeId);
@@ -79,6 +80,7 @@ export async function addSubjects(id: string, subjects: CreateSubjectModel[]) {
         regulationId: subject.regulationId,
         subjectMasterId: subject.subjectMasterId,
         classId: id,
+        subjectOrder: Number(subject.subjectOrder),
       },
     });
 
