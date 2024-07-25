@@ -916,7 +916,7 @@ model LevelConfig {
   createdAt    DateTime?   @default(now())
   updatedAt    DateTime?   @default(now())
   isDeleted    Boolean     @default(false)
-  ClassLevel   ClassLevel? @relation(fields: [classLevelId], references: [id])
+  classLevel   ClassLevel? @relation(fields: [classLevelId], references: [id])
   classLevelId String?     @db.Uuid
 }
 
@@ -927,20 +927,20 @@ model Days {
   createdAt      DateTime?     @default(now())
   updatedAt      DateTime?     @default(now())
   isDeleted      Boolean       @default(false)
-  PeriodMaster   PeriodMaster? @relation(fields: [periodMasterId], references: [id])
+  periodMaster   PeriodMaster? @relation(fields: [periodMasterId], references: [id])
   periodMasterId String?       @db.Uuid
 }
 
 model PeriodsType {
   id             String        @id @default(uuid()) @map("_id") @db.Uuid
   name           String
-  PeriodMode     String
-  PeriodDuration String
+  periodMode     String
+  periodDuration String
   isActive       Boolean
   createdAt      DateTime?     @default(now())
   updatedAt      DateTime?     @default(now())
   isDeleted      Boolean       @default(false)
-  PeriodMaster   PeriodMaster? @relation(fields: [periodMasterId], references: [id])
+  periodMaster   PeriodMaster? @relation(fields: [periodMasterId], references: [id])
   periodMasterId String?       @db.Uuid
 }
 
@@ -953,8 +953,8 @@ model PeriodMaster {
   updatedAt    DateTime?     @default(now())
   isDeleted    Boolean       @default(false)
   PeriodsType  PeriodsType[]
-  Days         Days[]
-  ClassLevel   ClassLevel?   @relation(fields: [classLevelId], references: [id])
+  days         Days[]
+  classLevel   ClassLevel?   @relation(fields: [classLevelId], references: [id])
   periods      Periods?      @relation(fields: [periodsId], references: [id])
   periodsId    String        @db.Uuid
   classLevelId String?       @db.Uuid
@@ -968,8 +968,8 @@ model Periods {
   updatedAt    DateTime?      @default(now())
   isDeleted    Boolean        @default(false)
   section      Section[]
-  PeriodMaster PeriodMaster[]
-  Subject      Subject[]
+  periodMaster PeriodMaster[]
+  subject      Subject[]
   class        Class[]
   staff        Staff[]
 }
