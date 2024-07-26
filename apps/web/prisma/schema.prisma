@@ -931,7 +931,7 @@ model Days {
   periodMasterId String?       @db.Uuid
 }
 
-model PeriodsType {
+model PeriodType {
   id             String        @id @default(uuid()) @map("_id") @db.Uuid
   name           String
   periodMode     String
@@ -945,19 +945,19 @@ model PeriodsType {
 }
 
 model PeriodMaster {
-  id           String        @id @default(uuid()) @map("_id") @db.Uuid
+  id           String       @id @default(uuid()) @map("_id") @db.Uuid
   name         String
   isActive     Boolean
   order        Int
-  createdAt    DateTime?     @default(now())
-  updatedAt    DateTime?     @default(now())
-  isDeleted    Boolean       @default(false)
-  PeriodsType  PeriodsType[]
+  createdAt    DateTime?    @default(now())
+  updatedAt    DateTime?    @default(now())
+  isDeleted    Boolean      @default(false)
+  periodType   PeriodType[]
   days         Days[]
-  classLevel   ClassLevel?   @relation(fields: [classLevelId], references: [id])
-  periods      Periods?      @relation(fields: [periodsId], references: [id])
-  periodsId    String        @db.Uuid
-  classLevelId String?       @db.Uuid
+  classLevel   ClassLevel?  @relation(fields: [classLevelId], references: [id])
+  periods      Periods?     @relation(fields: [periodsId], references: [id])
+  periodsId    String       @db.Uuid
+  classLevelId String?      @db.Uuid
 }
 
 model Periods {
