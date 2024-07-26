@@ -2,12 +2,21 @@ import { db } from 'lib/db';
 import { PeriodMasterModel } from 'lib/domain/periodMaster';
 
 export async function addPeriodMaster(data: PeriodMasterModel) {
-  const { name, order, isActive } = data;
   return await db.periodMaster.create({
     data: {
-      name,
-      order,
-      isActive,
+      name: data.name,
+      order: data.order,
+      isActive: data.isActive,
+      periods: {
+        connect: {
+          id: data.periodsId,
+        },
+      },
+      classLevel: {
+        connect: {
+          id: data.classLevelId,
+        },
+      },
     },
   });
 }
@@ -30,15 +39,24 @@ export async function updatePeriodMasterById(
   id: string,
   data: PeriodMasterModel
 ) {
-  const { name, order, isActive } = data;
   return await db.periodMaster.update({
     where: {
       id,
     },
     data: {
-      name,
-      order,
-      isActive,
+      name: data.name,
+      order: data.order,
+      isActive: data.isActive,
+      periods: {
+        connect: {
+          id: data.periodsId,
+        },
+      },
+      classLevel: {
+        connect: {
+          id: data.classLevelId,
+        },
+      },
     },
   });
 }

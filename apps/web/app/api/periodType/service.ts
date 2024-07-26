@@ -2,13 +2,17 @@ import { db } from 'lib/db';
 import { PeriodTypeModel } from 'lib/domain/periodsType';
 
 export async function addPeriodType(data: PeriodTypeModel) {
-  const { name, periodMode, periodDuration, isActive } = data;
   return await db.periodType.create({
     data: {
-      name,
-      periodMode,
-      periodDuration,
-      isActive,
+      name: data.name,
+      periodMode: data.periodMode,
+      periodDuration: data.periodDuration,
+      isActive: data.isActive,
+      periodMaster: {
+        connect: {
+          id: data.periodMasterId,
+        },
+      },
     },
   });
 }
@@ -28,16 +32,20 @@ export async function getPeriodTypeById(id: string) {
   });
 }
 export async function updatePeriodTypeById(id: string, data: PeriodTypeModel) {
-  const { name, periodMode, periodDuration, isActive } = data;
   return await db.periodType.update({
     where: {
       id,
     },
     data: {
-      name,
-      periodMode,
-      periodDuration,
-      isActive,
+      name: data.name,
+      periodMode: data.periodMode,
+      periodDuration: data.periodDuration,
+      isActive: data.isActive,
+      periodMaster: {
+        connect: {
+          id: data.periodMasterId,
+        },
+      },
     },
   });
 }

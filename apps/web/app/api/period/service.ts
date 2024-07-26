@@ -2,11 +2,15 @@ import { db } from 'lib/db';
 import { PeriodModel } from 'lib/domain/period';
 
 export async function addPeriod(data: PeriodModel) {
-  const { name, isActive } = data;
   return await db.periods.create({
     data: {
-      name,
-      isActive,
+      name: data.name,
+      isActive: data.isActive,
+      subject: {
+        connect: {
+          id: data.subjectId,
+        },
+      },
     },
   });
 }
@@ -26,14 +30,18 @@ export async function getPeriodById(id: string) {
   });
 }
 export async function updatePeriodById(id: string, data: PeriodModel) {
-  const { name, isActive } = data;
   return await db.periods.update({
     where: {
       id,
     },
     data: {
-      name,
-      isActive,
+      name: data.name,
+      isActive: data.isActive,
+      subject: {
+        connect: {
+          id: data.subjectId,
+        },
+      },
     },
   });
 }

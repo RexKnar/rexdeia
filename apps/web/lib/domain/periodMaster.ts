@@ -1,3 +1,4 @@
+import { DaysModel } from './days';
 import { PeriodTypeModel } from './periodsType';
 
 export type PeriodMasterModel = {
@@ -9,7 +10,7 @@ export type PeriodMasterModel = {
   updatedAt: Date;
   isDeleted: boolean;
   periodsType: PeriodTypeModel[];
-  // days: Days[];
+  days: DaysModel[];
   classLevelId: string;
   periodsId: string;
 };

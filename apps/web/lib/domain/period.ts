@@ -2,7 +2,6 @@ import { ClassModel } from './class';
 import { PeriodMasterModel } from './periodMaster';
 import { SectionModel } from './section';
 import { Staff } from './staff';
-import { SubjectModel } from './subject';
 
 export type PeriodModel = {
   id: string;
@@ -13,7 +12,7 @@ export type PeriodModel = {
   isDeleted: boolean;
   section: SectionModel[];
   periodMaster: PeriodMasterModel[];
-  subject: SubjectModel[];
+  subjectId: string;
   class: ClassModel[];
   staff: Staff[];
 };
