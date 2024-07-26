@@ -20,7 +20,13 @@ export async function getAllPeriodType() {
     },
   });
 }
-
+export async function getPeriodTypeById(id: string) {
+  return db.periodType.findFirst({
+    where: {
+      id: id,
+    },
+  });
+}
 export async function updatePeriodTypeById(id: string, data: PeriodTypeModel) {
   const { name, periodMode, periodDuration, isActive } = data;
   return await db.periodType.update({

@@ -4,23 +4,19 @@ import { authOptions } from 'lib/auth';
 import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 
-import {
-  deletePeriodTypeById,
-  getPeriodTypeById,
-  updatePeriodTypeById,
-} from '../service';
+import { deletePeriodById, getPeriodById, updatePeriodById } from '../service';
 
 /**
  * @swagger
- * /api/periodType/{id}:
+ * /api/period/{id}:
  *     put:
- *       summary: Update periodType details
- *       description: Updates the details of an existing periodType.
+ *       summary: Update period details
+ *       description: Updates the details of an existing period.
  *       parameters:
  *         - name: id
  *           in: path
  *           required: true
- *           description: Unique identifier of the periodType.
+ *           description: Unique identifier of the period.
  *           schema:
  *             type: string
  *       requestBody:
@@ -31,11 +27,11 @@ import {
  *               type: object
  *       responses:
  *         '200':
- *           description: PeriodType details updated successfully.
+ *           description: Period details updated successfully.
  *           content:
  *             application/json:
  *               schema:
- *                 # Define the schema of your periodType object here
+ *                 # Define the schema of your period object here
  *         '400':
  *           description: Bad request due to validation error.
  *         '401':
@@ -53,9 +49,9 @@ export async function PUT(request: Request, { params: { id } }) {
   try {
     const payload = await request.json();
 
-    const PeriodType = await updatePeriodTypeById(id, payload);
+    const Period = await updatePeriodById(id, payload);
 
-    return new NextResponse(JSON.stringify(PeriodType), {
+    return new NextResponse(JSON.stringify(Period), {
       status: StatusCodes.OK,
     });
   } catch (e) {
@@ -71,24 +67,24 @@ export async function PUT(request: Request, { params: { id } }) {
 
 /**
  * @swagger
- * /api/periodType/{id}:
+ * /api/period/{id}:
  *     get:
- *       summary: Get PeriodType by Id
- *       description: Get periodType by Id
+ *       summary: Get Period by Id
+ *       description: Get period by Id
  *       parameters:
  *         - name: id
  *           in: path
  *           required: true
- *           description: Unique identifier of the periodType.
+ *           description: Unique identifier of the period.
  *           schema:
  *             type: string
  *       responses:
  *         '200':
- *           description: PeriodType details are fetched successfully.
+ *           description: Period details are fetched successfully.
  *           content:
  *             application/json:
  *               schema:
- *                 # Define the schema of your periodType object here
+ *                 # Define the schema of your period object here
  *         '400':
  *           description: Bad request due to validation error.
  *         '401':
@@ -104,9 +100,9 @@ export async function GET(request: Request, { params: { id } }) {
     });
   }
   try {
-    const periodsType = await getPeriodTypeById(id);
+    const period = await getPeriodById(id);
 
-    return new NextResponse(JSON.stringify(periodsType), {
+    return new NextResponse(JSON.stringify(period), {
       status: StatusCodes.OK,
     });
   } catch (e) {
@@ -122,10 +118,10 @@ export async function GET(request: Request, { params: { id } }) {
 
 /**
  * @swagger
- * /api/periodType/{id}:
+ * /api/period/{id}:
  *     delete:
- *       summary: Delete periodType by Id
- *       description: Delete periodType by Id
+ *       summary: Delete period by Id
+ *       description: Delete period by Id
  *       parameters:
  *         - name: id
  *           in: path
@@ -135,11 +131,11 @@ export async function GET(request: Request, { params: { id } }) {
  *             type: string
  *       responses:
  *         '200':
- *           description: PeriodType details deleted successfully.
+ *           description: Period details deleted successfully.
  *           content:
  *             application/json:
  *               schema:
- *                 # Define the schema of your periodType here
+ *                 # Define the schema of your period here
  *         '400':
  *           description: Bad request due to validation error.
  *         '401':
@@ -156,10 +152,10 @@ export async function DELETE(_: NextRequest, { params: { id } }) {
       });
     }
 
-    const periodsType = await getPeriodTypeById(id);
+    const period = await getPeriodById(id);
 
-    if (periodsType) {
-      await deletePeriodTypeById(id);
+    if (period) {
+      await deletePeriodById(id);
       return new Response(JSON.stringify({}), {
         status: StatusCodes.OK,
       });

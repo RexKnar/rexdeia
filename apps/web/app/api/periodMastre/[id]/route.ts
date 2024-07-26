@@ -5,22 +5,22 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 
 import {
-  deletePeriodTypeById,
-  getPeriodTypeById,
-  updatePeriodTypeById,
+  deletePeriodMasterById,
+  getPeriodMasterById,
+  updatePeriodMasterById,
 } from '../service';
 
 /**
  * @swagger
- * /api/periodType/{id}:
+ * /api/periodMaster/{id}:
  *     put:
- *       summary: Update periodType details
- *       description: Updates the details of an existing periodType.
+ *       summary: Update periodMaster details
+ *       description: Updates the details of an existing periodMaster.
  *       parameters:
  *         - name: id
  *           in: path
  *           required: true
- *           description: Unique identifier of the periodType.
+ *           description: Unique identifier of the periodMaster.
  *           schema:
  *             type: string
  *       requestBody:
@@ -31,11 +31,11 @@ import {
  *               type: object
  *       responses:
  *         '200':
- *           description: PeriodType details updated successfully.
+ *           description: PeriodMaster details updated successfully.
  *           content:
  *             application/json:
  *               schema:
- *                 # Define the schema of your periodType object here
+ *                 # Define the schema of your periodMaster object here
  *         '400':
  *           description: Bad request due to validation error.
  *         '401':
@@ -53,9 +53,9 @@ export async function PUT(request: Request, { params: { id } }) {
   try {
     const payload = await request.json();
 
-    const PeriodType = await updatePeriodTypeById(id, payload);
+    const PeriodMaster = await updatePeriodMasterById(id, payload);
 
-    return new NextResponse(JSON.stringify(PeriodType), {
+    return new NextResponse(JSON.stringify(PeriodMaster), {
       status: StatusCodes.OK,
     });
   } catch (e) {
@@ -71,24 +71,24 @@ export async function PUT(request: Request, { params: { id } }) {
 
 /**
  * @swagger
- * /api/periodType/{id}:
+ * /api/periodMaster/{id}:
  *     get:
- *       summary: Get PeriodType by Id
- *       description: Get periodType by Id
+ *       summary: Get PeriodMaster by Id
+ *       description: Get periodMaster by Id
  *       parameters:
  *         - name: id
  *           in: path
  *           required: true
- *           description: Unique identifier of the periodType.
+ *           description: Unique identifier of the periodMaster.
  *           schema:
  *             type: string
  *       responses:
  *         '200':
- *           description: PeriodType details are fetched successfully.
+ *           description: PeriodMaster details are fetched successfully.
  *           content:
  *             application/json:
  *               schema:
- *                 # Define the schema of your periodType object here
+ *                 # Define the schema of your periodMaster object here
  *         '400':
  *           description: Bad request due to validation error.
  *         '401':
@@ -104,9 +104,9 @@ export async function GET(request: Request, { params: { id } }) {
     });
   }
   try {
-    const periodsType = await getPeriodTypeById(id);
+    const periodMaster = await getPeriodMasterById(id);
 
-    return new NextResponse(JSON.stringify(periodsType), {
+    return new NextResponse(JSON.stringify(periodMaster), {
       status: StatusCodes.OK,
     });
   } catch (e) {
@@ -122,10 +122,10 @@ export async function GET(request: Request, { params: { id } }) {
 
 /**
  * @swagger
- * /api/periodType/{id}:
+ * /api/periodMaster/{id}:
  *     delete:
- *       summary: Delete periodType by Id
- *       description: Delete periodType by Id
+ *       summary: Delete periodMaster by Id
+ *       description: Delete periodMaster by Id
  *       parameters:
  *         - name: id
  *           in: path
@@ -135,11 +135,11 @@ export async function GET(request: Request, { params: { id } }) {
  *             type: string
  *       responses:
  *         '200':
- *           description: PeriodType details deleted successfully.
+ *           description: PeriodMaster details deleted successfully.
  *           content:
  *             application/json:
  *               schema:
- *                 # Define the schema of your periodType here
+ *                 # Define the schema of your periodMaster here
  *         '400':
  *           description: Bad request due to validation error.
  *         '401':
@@ -156,10 +156,10 @@ export async function DELETE(_: NextRequest, { params: { id } }) {
       });
     }
 
-    const periodsType = await getPeriodTypeById(id);
+    const periodMaster = await getPeriodMasterById(id);
 
-    if (periodsType) {
-      await deletePeriodTypeById(id);
+    if (periodMaster) {
+      await deletePeriodMasterById(id);
       return new Response(JSON.stringify({}), {
         status: StatusCodes.OK,
       });
