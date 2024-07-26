@@ -687,7 +687,6 @@ model Subject {
   branchId                  String?                     @db.Uuid
   subjectMasterId           String                      @db.Uuid
   classId                   String                      @db.Uuid
-  periodsId                 String                      @db.Uuid
   subjectOrder              Int                         @default(1)
   academicSubjectForStaff   AcademicSubjectForStaff[]
   ExamSubject               ExamSubject[]
@@ -699,10 +698,10 @@ model Subject {
   class                     Class                       @relation(fields: [classId], references: [id])
   regulation                Regulation                  @relation(fields: [regulationId], references: [id])
   subjectMaster             SubjectMaster               @relation(fields: [subjectMasterId], references: [id])
-  periods                   Periods                     @relation(fields: [periodsId], references: [id])
   subjectToAssessmentFormat SubjectToAssessmentFormat[]
   subjectToGroup            SubjectToGroup[]
   subjectToSubjectTypes     SubjectToSubjectType[]
+  periods                   Periods[]
 }
 
 model StudentElectiveSubject {
@@ -967,9 +966,10 @@ model Periods {
   createdAt    DateTime?      @default(now())
   updatedAt    DateTime?      @default(now())
   isDeleted    Boolean        @default(false)
+  subjectId    String?        @db.Uuid
   section      Section[]
   periodMaster PeriodMaster[]
-  subject      Subject[]
+  subject      Subject?       @relation(fields: [subjectId], references: [id])
   class        Class[]
   staff        Staff[]
 }
