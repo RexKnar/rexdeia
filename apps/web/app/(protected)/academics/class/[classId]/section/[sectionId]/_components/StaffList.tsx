@@ -12,7 +12,6 @@ export function StaffList() {
     useGetStaffListBySectionIdQuery(sectionId, {
       enabled: !!sectionId,
     });
-
   if (isStaffListLoading) {
     return (
       <div className="flex items-center justify-center">
@@ -42,6 +41,7 @@ export function StaffList() {
             `}
             subjects={staffItem.subjects || []}
             sectionsHandled={staffItem.sections || []}
+            sectionIncharge={staffItem.sectionIncharge || []}
           />
         </div>
       ))}

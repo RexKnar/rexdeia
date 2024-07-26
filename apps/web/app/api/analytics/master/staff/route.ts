@@ -4,14 +4,14 @@ import { authOptions } from 'lib/auth';
 import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 
-import { getStudentsByFilter } from '../service';
+import { getStaffWiseMarkAnalytics } from './service';
 
 /**
  * @swagger
- * /api/analytics/students:
+ * /api/analytics/master/staff:
  *     put:
- *       summary: Get All students with Filter
- *       description: Get All students with Filter
+ *       summary: Get All  Marks by Filter
+ *       description: Get All  Marks by Filter
  *       requestBody:
  *         required: true
  *         content:
@@ -24,7 +24,7 @@ import { getStudentsByFilter } from '../service';
  *           content:
  *             application/json:
  *               schema:
- *                 # Define the schema of your students object here
+ *                 # Define the schema of your marks object here
  *         '400':
  *           description: Bad request due to validation error.
  *         '401':
@@ -41,11 +41,9 @@ export async function PUT(request: NextRequest) {
   }
   try {
     const filter = await request.json();
-    const page = parseInt(request.nextUrl.searchParams.get('page')) || 1;
-    const limit = parseInt(request.nextUrl.searchParams.get('limit')) || 10;
-    const studentsList = await getStudentsByFilter(page, limit, filter);
+    const markList = await getStaffWiseMarkAnalytics(filter);
 
-    return new NextResponse(JSON.stringify(studentsList), {
+    return new NextResponse(JSON.stringify(markList), {
       status: StatusCodes.OK,
     });
   } catch (e) {

@@ -916,7 +916,7 @@ model LevelConfig {
   createdAt    DateTime?   @default(now())
   updatedAt    DateTime?   @default(now())
   isDeleted    Boolean     @default(false)
-  ClassLevel   ClassLevel? @relation(fields: [classLevelId], references: [id])
+  classLevel   ClassLevel? @relation(fields: [classLevelId], references: [id])
   classLevelId String?     @db.Uuid
 }
 
@@ -927,37 +927,37 @@ model Days {
   createdAt      DateTime?     @default(now())
   updatedAt      DateTime?     @default(now())
   isDeleted      Boolean       @default(false)
-  PeriodMaster   PeriodMaster? @relation(fields: [periodMasterId], references: [id])
+  periodMaster   PeriodMaster? @relation(fields: [periodMasterId], references: [id])
   periodMasterId String?       @db.Uuid
 }
 
-model PeriodsType {
+model PeriodType {
   id             String        @id @default(uuid()) @map("_id") @db.Uuid
   name           String
-  PeriodMode     String
-  PeriodDuration String
+  periodMode     String
+  periodDuration String
   isActive       Boolean
   createdAt      DateTime?     @default(now())
   updatedAt      DateTime?     @default(now())
   isDeleted      Boolean       @default(false)
-  PeriodMaster   PeriodMaster? @relation(fields: [periodMasterId], references: [id])
+  periodMaster   PeriodMaster? @relation(fields: [periodMasterId], references: [id])
   periodMasterId String?       @db.Uuid
 }
 
 model PeriodMaster {
-  id           String        @id @default(uuid()) @map("_id") @db.Uuid
+  id           String       @id @default(uuid()) @map("_id") @db.Uuid
   name         String
   isActive     Boolean
   order        Int
-  createdAt    DateTime?     @default(now())
-  updatedAt    DateTime?     @default(now())
-  isDeleted    Boolean       @default(false)
-  PeriodsType  PeriodsType[]
-  Days         Days[]
-  ClassLevel   ClassLevel?   @relation(fields: [classLevelId], references: [id])
-  periods      Periods?      @relation(fields: [periodsId], references: [id])
-  periodsId    String        @db.Uuid
-  classLevelId String?       @db.Uuid
+  createdAt    DateTime?    @default(now())
+  updatedAt    DateTime?    @default(now())
+  isDeleted    Boolean      @default(false)
+  periodType   PeriodType[]
+  days         Days[]
+  classLevel   ClassLevel?  @relation(fields: [classLevelId], references: [id])
+  periods      Periods?     @relation(fields: [periodsId], references: [id])
+  periodsId    String       @db.Uuid
+  classLevelId String?      @db.Uuid
 }
 
 model Periods {
@@ -968,8 +968,8 @@ model Periods {
   updatedAt    DateTime?      @default(now())
   isDeleted    Boolean        @default(false)
   section      Section[]
-  PeriodMaster PeriodMaster[]
-  Subject      Subject[]
+  periodMaster PeriodMaster[]
+  subject      Subject[]
   class        Class[]
   staff        Staff[]
 }

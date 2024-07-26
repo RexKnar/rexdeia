@@ -49,6 +49,17 @@ export function AddSubjectFlyout() {
   const limit = parseInt(searchParams.get('limit')) || 10;
   const filter = { isActive: true };
   const subjectId = searchParams.get('subjectId');
+  const defaultValues = {
+    name: null,
+    isActive: false,
+    assessmentFormatIds: [],
+    groupIds: [],
+    regulationId: null,
+    subjectMasterId: null,
+    subjectTypeId: null,
+    elective: null,
+    subjectOrder: null,
+  };
   const {
     control,
     watch,
@@ -57,18 +68,7 @@ export function AddSubjectFlyout() {
     register,
     handleSubmit,
     formState: { errors: fieldErrors },
-  } = useForm({
-    defaultValues: {
-      name: null,
-      isActive: false,
-      assessmentFormatIds: [],
-      groupIds: [],
-      regulationId: null,
-      subjectMasterId: null,
-      subjectTypeId: null,
-      elective: null,
-    },
-  });
+  } = useForm({ defaultValues });
 
   const { data: subjectDetails } = useGetSubjectByIdQuery(subjectId, {
     enabled: !!subjectId,
@@ -81,6 +81,7 @@ export function AddSubjectFlyout() {
         name: subjectDetails.name,
         regulationId: subjectDetails.regulationId,
         subjectMasterId: subjectDetails.subjectMasterId,
+        subjectOrder: subjectDetails.subjectOrder,
         elective: subjectDetails.elective?.toString(),
         groupIds: subjectDetails.subjectToGroup.map((group) => group.groupId),
         assessmentFormatIds: subjectDetails.subjectToAssessmentFormat.map(
@@ -136,6 +137,7 @@ export function AddSubjectFlyout() {
   });
 
   const closeFlyout = () => {
+    reset(defaultValues);
     const params = new URLSearchParams(searchParams.toString());
     params.set('isAddSubjectFlyoutOpen', 'false');
     params.delete('subjectId');
@@ -171,7 +173,6 @@ export function AddSubjectFlyout() {
         await mutateCreateSubjectsAsync(requestPayload);
       }
     } finally {
-      reset();
       closeFlyout();
     }
   };
@@ -231,6 +232,25 @@ export function AddSubjectFlyout() {
                     type="text"
                     className="mt-2"
                     placeholder="Enter Subject Name"
+                    errorMessage={fieldErrors?.name?.message.toString()}
+                  />
+                </div>
+                <div>
+                  <label
+                    htmlFor="order"
+                    className="text-sm font-semibold text-gray-700"
+                  >
+                    Subject Order
+                  </label>
+                  <Input
+                    {...register('subjectOrder', {
+                      required: 'Order is required',
+                    })}
+                    id="subjectOrder"
+                    autoFocus
+                    type="number"
+                    className="mt-2"
+                    placeholder="Enter Subject subjectOrder"
                     errorMessage={fieldErrors?.name?.message.toString()}
                   />
                 </div>
