@@ -1,7 +1,7 @@
 import { getExamSubjectsByClassSectionId } from 'app/api/exam/[id]/subject/service';
 import { db } from 'lib/db';
 
-type MarkAnalyticsFilter = {
+export type MarkAnalyticsFilter = {
   classId?: string;
   sectionId?: string;
   examId?: string;
