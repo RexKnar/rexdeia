@@ -605,6 +605,7 @@ CREATE TABLE "Subject" (
     "branchId" UUID,
     "subjectMasterId" UUID NOT NULL,
     "classId" UUID NOT NULL,
+    "subjectOrder" INTEGER NOT NULL DEFAULT 1,
 
     CONSTRAINT "Subject_pkey" PRIMARY KEY ("_id")
 );
