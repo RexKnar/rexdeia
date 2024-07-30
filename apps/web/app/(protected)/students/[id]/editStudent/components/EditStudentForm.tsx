@@ -30,6 +30,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from 'ui';
+import { formatDate } from 'utils';
 
 export function EditStudentDetail() {
   const [currentPage, setCurrentPage] = useState(1);
@@ -87,6 +88,7 @@ export function EditStudentDetail() {
 
   const { data: studentDetail, isLoading: isStudentDetailLoading } =
     useGetStudentByIdQuery(id);
+
   const { data: getCountryListResponse } = useGetCountryListQuery();
   const { data: getCommunityListResponse } = useGetCommunityListQuery();
   const { data: getLanguageListResponse } = useGetLanguageListQuery();
@@ -134,11 +136,13 @@ export function EditStudentDetail() {
 
   useEffect(() => {
     if (studentDetail) {
+      const dob = formatDate(studentDetail.dob, 'yyyy/mm/dd');
+
       const initialValue = {
         firstName: studentDetail.firstName,
         middleName: studentDetail.middleName,
         lastName: studentDetail.lastName,
-        dob: studentDetail.dob,
+        dob: dob,
         age: studentDetail.additionalAttributes.age,
         gender: studentDetail.gender,
         phoneNumber: studentDetail.phoneNumber,

@@ -25,7 +25,7 @@ export function UserMenu() {
           <AvatarImage src="https://imgv3.fotor.com/images/gallery/Realistic-Male-Profile-Picture.jpg" />
         </Avatar>
         <Text variant="sm-medium" className="hidden lg:block">
-          Hi, {isLoading ? 'Loading...' : data.name}
+          Hi, {isLoading ? 'Loading...' : data?.name}
         </Text>
         <ChevronDown className="h-5 w-5 cursor-pointer" />
       </DropdownMenuTrigger>

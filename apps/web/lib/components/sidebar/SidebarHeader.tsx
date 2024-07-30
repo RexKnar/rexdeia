@@ -38,7 +38,7 @@ export function SidebarHeader() {
             <div className="flex cursor-pointer text-sm font-semibold">
               {isLoading
                 ? 'Loading...'
-                : data.userOrganizations[0].organization.name}
+                : data?.userOrganizations[0]?.organization?.name}
               <ChevronDown className="ml-2 h-4 w-4 rounded text-gray-800 hover:bg-gray-200" />
             </div>
           </DropdownMenuTrigger>

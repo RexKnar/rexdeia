@@ -130,7 +130,7 @@ export function StudentsList() {
       },
     },
     {
-      accessorKey: 'emailId',
+      accessorKey: 'permanentAddress',
       header: ({ column }) => {
         return (
           <Button
