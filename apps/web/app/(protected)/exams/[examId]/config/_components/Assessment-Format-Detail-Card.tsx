@@ -24,7 +24,7 @@ export function AssessmentFormatDetailCard(props) {
       <h4 className="text-center">{assessmentFormat?.name || ''}</h4>
       <div className="flex flex-wrap text-left">
         <span className="w-1/2">Date</span>
-        <span className="w-1/2">{formatDate(dateToConduct)}</span>
+        <span className="w-1/2">{formatDate(dateToConduct, 'dd/mm/yyyy')}</span>
       </div>
       <div className="flex flex-wrap text-left">
         <span className="w-1/2">Conduct</span>

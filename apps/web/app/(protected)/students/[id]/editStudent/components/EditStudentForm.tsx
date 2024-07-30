@@ -137,13 +137,12 @@ export function EditStudentDetail() {
   useEffect(() => {
     if (studentDetail) {
       const dob = formatDate(studentDetail.dob, 'yyyy/mm/dd');
-      console.log(studentDetail.dob.toString());
 
       const initialValue = {
         firstName: studentDetail.firstName,
         middleName: studentDetail.middleName,
         lastName: studentDetail.lastName,
-        dob: studentDetail.dob,
+        dob: dob,
         age: studentDetail.additionalAttributes.age,
         gender: studentDetail.gender,
         phoneNumber: studentDetail.phoneNumber,

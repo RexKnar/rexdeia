@@ -78,14 +78,17 @@ export function formatNumberWithSuffix(
 }
 
 export function formatDate(isoDateString: string, format: string) {
-  console.log(typeof isoDateString);
+  let day: string, month: string, year: string;
 
   const date = new Date(isoDateString);
-  const day = String(date.getDate()).padStart(2, '0'); // Add leading zero if needed
-  const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are zero-based, so add 1
-  const year = date.getFullYear();
 
-  console.log(date);
+  if (isNaN(date.getDate() || date.getMonth() || date.getFullYear())) {
+    [day, month, year] = isoDateString.split('/');
+  } else {
+    day = String(date.getDate()).padStart(2, '0');
+    month = String(date.getMonth() + 1).padStart(2, '0');
+    year = String(date.getFullYear());
+  }
 
   switch (format) {
     case 'dd/mm/yyyy':
@@ -93,6 +96,6 @@ export function formatDate(isoDateString: string, format: string) {
     case 'mm/dd/yyyy':
       return `${month}/${day}/${year}`;
     case 'yyyy/mm/dd':
-      return `${year}/${month}/${day}`;
+      return `${year}-${month}-${day}`;
   }
 }
