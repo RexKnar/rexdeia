@@ -1,0 +1,38 @@
+import {
+  useQuery,
+  UseQueryOptions,
+  UseQueryResult,
+} from '@tanstack/react-query';
+import { PeriodMasterModel } from 'lib/domain/periodMaster';
+
+import { makeAPICall } from '../../api';
+import { PaginatedResponse } from '../../domain';
+import { GET_PERIOD_MASTERS_LIST } from '../../endpoints';
+
+function getPeriodMasterList(
+  { page, limit }: { page: number; limit: number },
+  options?: UseQueryOptions<PaginatedResponse<PeriodMasterModel>>
+): UseQueryOptions<PaginatedResponse<PeriodMasterModel>> {
+  return {
+    ...options,
+    queryKey: [GET_PERIOD_MASTERS_LIST, page, limit],
+    queryFn: async () => {
+      return await makeAPICall<PaginatedResponse<PeriodMasterModel>>(
+        GET_PERIOD_MASTERS_LIST,
+
+        {
+          page: page,
+          limit: limit,
+        },
+        {}
+      );
+    },
+  };
+}
+
+export function useGetPeriodMasterListQuery(
+  { page, limit }: { page: number; limit: number },
+  options?: UseQueryOptions<PaginatedResponse<PeriodMasterModel>>
+): UseQueryResult<PaginatedResponse<PeriodMasterModel>> {
+  return useQuery(getPeriodMasterList({ page, limit }, options));
+}

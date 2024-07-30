@@ -5,3 +5,12 @@ export type DaysModel = {
   isDeleted: boolean;
   periodMasterId: string;
 };
+
+export type CreateDaysModel = Pick<
+  DaysModel,
+  'name' | 'isActive' | 'periodMasterId'
+>;
+export type UpdateDaysModel = Pick<
+  DaysModel,
+  'id' | 'name' | 'isActive' | 'periodMasterId'
+>;
