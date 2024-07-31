@@ -116,6 +116,11 @@ export async function addClass(classPayload: CreateClassModel) {
           id: session.branchId,
         },
       },
+      classLevel: {
+        connect: {
+          id: classPayload.classLevelId,
+        },
+      },
     },
   });
 
@@ -169,6 +174,11 @@ export async function updateClassById(
     data: {
       name: updateClass.name,
       isActive: updateClass.isActive,
+      classLevel: {
+        connect: {
+          id: updateClass.classLevelId,
+        },
+      },
     },
   });
 }

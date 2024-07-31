@@ -5,11 +5,6 @@ export async function addClassLevel(data: ClassLevelModel) {
   return await db.classLevel.create({
     data: {
       name: data.name,
-      class: {
-        connect: {
-          id: data.classId,
-        },
-      },
       isActive: data.isActive,
     },
   });
@@ -30,11 +25,6 @@ export async function updateClassLevelById(id: string, data: ClassLevelModel) {
     },
     data: {
       name: data.name,
-      class: {
-        connect: {
-          id: data.classId,
-        },
-      },
       isActive: data.isActive,
     },
   });
