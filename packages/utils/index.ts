@@ -1,5 +1,4 @@
 import { ClassValue, clsx } from 'clsx';
-import { log } from 'console';
 import { twMerge } from 'tailwind-merge';
 
 const suffixes = [
@@ -77,7 +76,10 @@ export function formatNumberWithSuffix(
     : value.toFixed(0) + matchingSuffix.suffix;
 }
 
-export function formatDate(isoDateString: string, format: string) {
+export function formatDate(
+  isoDateString: string,
+  format: string = 'dd/mm/yyyy'
+) {
   let day: string, month: string, year: string;
 
   const date = new Date(isoDateString);
