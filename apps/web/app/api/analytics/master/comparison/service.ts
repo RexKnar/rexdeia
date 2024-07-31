@@ -1,4 +1,5 @@
 import { getExamSubjectsByClassSectionId } from 'app/api/exam/[id]/subject/service';
+import { getSectionsWithFilter } from 'app/api/section/service';
 
 import { getStudentMarksByFilter } from '../../service';
 import { MarkAnalyticsFilter } from '../staff/service';
@@ -13,34 +14,47 @@ export async function getMasterMarkComparisonBySection(
     sectionId
   );
 
-  const studentsMarkList = await getStudentMarksByFilter({
-    examId,
-    classId,
-    sectionId,
+  const { data: sectionList } = await getSectionsWithFilter(classId, {
+    isActive: true,
   });
 
   const subjectList = examSubjectList.map((examSubject) => examSubject.subject);
 
   if (subjectList?.length > 0) {
-    const analytics = subjectList.map((subject) => {
-      return {
-        subject: subject,
-        analytics: analyzeSubjectPerformance(subject.id, studentsMarkList),
-      };
-    });
+    const analytics = await Promise.all(
+      subjectList.map(async (subject) => {
+        const sectionAnalytics = await Promise.all(
+          sectionList.map(async (section) => {
+            const studentsMarkList = await getStudentMarksByFilter({
+              examId,
+              classId,
+              sectionId: section.id,
+            });
+            return {
+              ...analyzeSubjectPerformance(subject.id, studentsMarkList),
+              section,
+            };
+          })
+        );
+
+        return {
+          subject,
+          analytics: sectionAnalytics,
+        };
+      })
+    );
     return analytics;
   }
 
   return [];
 }
-
 const calculatePercentage = (part: number, whole: number) =>
   whole > 0 ? (part / whole) * 100 : 0;
 
-const analyzeSubjectPerformance = (
+function analyzeSubjectPerformance(
   subjectId: string,
   studentsMarkList: any[] = []
-) => {
+) {
   const result = {
     numberOfPassStudents: { male: 0, female: 0, overall: 0 },
     numberOfFailStudents: { male: 0, female: 0, overall: 0 },
@@ -135,4 +149,4 @@ const analyzeSubjectPerformance = (
   });
 
   return result;
-};
+}
