@@ -73,7 +73,10 @@ export function StaffDetail() {
           <div className="ml-5 grid grid-cols-4 ">
             <Text className="w-18 pt-1 text-xs text-gray-800">{'DOB'}</Text>
             <Text className="col-span-3">
-              {formatDate(getStaffByIdResponse.dateOfBirth.toString())}
+              {formatDate(
+                getStaffByIdResponse.dateOfBirth.toString(),
+                'dd/mm/yyyy'
+              )}
             </Text>
           </div>
           <div className="ml-5 grid grid-cols-4 pt-3">
@@ -94,7 +97,10 @@ export function StaffDetail() {
           <div className="ml-5 grid grid-cols-4 pt-3">
             <Text className="w-18 pt-1 text-xs text-gray-800">{'DOJ'} </Text>
             <Text className="col-span-3">
-              {formatDate(getStaffByIdResponse.dateOfJoining.toString())}
+              {formatDate(
+                getStaffByIdResponse.dateOfJoining.toString(),
+                'dd/mm/yyyy'
+              )}
             </Text>
           </div>
           <div className="ml-5 grid grid-cols-4 pt-3">

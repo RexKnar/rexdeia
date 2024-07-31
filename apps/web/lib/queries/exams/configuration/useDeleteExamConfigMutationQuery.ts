@@ -17,7 +17,7 @@ export function useDeleteExamSubjectConfigMutationQuery(
         DELETE_EXAM_CONFIG_BY_ID,
         {},
         {},
-        { configId }
+        { id: examId, configId }
       );
     },
     onSuccess: async () => {
