@@ -9,3 +9,12 @@ export type ClassLevelModel = {
   periodMaster: PeriodMasterModel[];
   levelConfig: LevelConfigModel[];
 };
+
+export type CreateClassLevelModel = Pick<
+  ClassLevelModel,
+  'name' | 'isActive' | 'classId'
+>;
+export type UpdateClassLevelModel = Pick<
+  ClassLevelModel,
+  'id' | 'name' | 'isActive' | 'classId'
+>;

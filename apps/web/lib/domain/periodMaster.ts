@@ -14,3 +14,11 @@ export type PeriodMasterModel = {
   classLevelId: string;
   periodsId: string;
 };
+export type CreatePeriodMasterModel = Pick<
+  PeriodMasterModel,
+  'name' | 'isActive' | 'order' | 'classLevelId' | 'periodsId'
+>;
+export type UpdatePeriodMasterModel = Pick<
+  PeriodMasterModel,
+  'id' | 'name' | 'isActive' | 'order' | 'classLevelId' | 'periodsId'
+>;

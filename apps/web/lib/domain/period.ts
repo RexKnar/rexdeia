@@ -16,3 +16,12 @@ export type PeriodModel = {
   class: ClassModel[];
   staff: Staff[];
 };
+
+export type CreatePeriodModel = Pick<
+  PeriodModel,
+  'name' | 'isActive' | 'subjectId'
+>;
+export type UpdatePeriodModel = Pick<
+  PeriodModel,
+  'id' | 'name' | 'isActive' | 'subjectId'
+>;
