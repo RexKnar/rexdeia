@@ -13,7 +13,9 @@ export type MarkAnalyticsFilterModel = {
   };
 };
 export async function getStudentMarksByFilter(
-  filter: MarkAnalyticsFilterModel
+  filter:
+    | MarkAnalyticsFilterModel
+    | { classId: string; examId: string; sectionId: string }
 ) {
   const { classId, examId, sectionId } = filter;
   const mainClause = {};
