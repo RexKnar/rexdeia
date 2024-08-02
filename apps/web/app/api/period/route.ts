@@ -8,7 +8,7 @@ import { addPeriod, getAllPeriod } from './service';
 
 /**
  * @swagger
- * /api/peroid:
+ * /api/period:
  *     get:
  *       summary: Retrieve Period
  *       description: Gets a list of all Period .
@@ -44,7 +44,7 @@ export async function GET() {
 
 /**
  * @swagger
- *   /api/peroid:
+ *   /api/period:
  *     post:
  *       summary: Add a new peroid
  *       description: Creates a new peroid with the provided details.

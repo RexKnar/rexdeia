@@ -395,10 +395,10 @@ export const menuItem = {
           path: '/timeTable/classLevel',
         },
         {
-          id: 'mark-entry',
-          label: 'Mark Entry',
+          id: 'period_master',
+          label: 'Period Master',
           icon: null,
-          path: '/exams/mark-entry',
+          path: '/timeTable/periodMaster',
         },
       ],
     },
