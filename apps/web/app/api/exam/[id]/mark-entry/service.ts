@@ -27,6 +27,7 @@ export async function getExamConfigWithSubjectPartion(
                       subject: {
                         academicSubjectForStaff: {
                           some: {
+                            sectionId: sectionId,
                             staffId: staffId,
                           },
                         },

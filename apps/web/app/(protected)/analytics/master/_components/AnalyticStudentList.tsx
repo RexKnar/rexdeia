@@ -153,7 +153,7 @@ export function AnalyticStudentList() {
           </div>
         </div>
       </section>
-      <Tabs defaultValue="profile" className="border-0 ">
+      <Tabs defaultValue="overall" className="border-0 ">
         <TabsList className="w-full justify-start border-b-2 border-gray-100">
           <TabsTrigger
             value="overall"
