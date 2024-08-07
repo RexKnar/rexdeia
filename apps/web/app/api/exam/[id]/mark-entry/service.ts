@@ -15,16 +15,18 @@ export async function getExamConfigWithSubjectPartion(
   const session = await getServerSession(authOptions);
   const { examId, classId, sectionId, staffId } = filter;
 
-  const [isIncharge] = await Promise.all([
-    db.academicSubjectForStaff.findFirst({
-      where: {
-        staffId: staffId,
-        isIncharge: true,
-        sectionId: sectionId,
-        academicYearId: session.currentBatch,
-      },
-    }),
-  ]);
+  const [isIncharge] = staffId
+    ? await Promise.all([
+        db.academicSubjectForStaff.findFirst({
+          where: {
+            staffId: staffId,
+            isIncharge: true,
+            sectionId: sectionId,
+            academicYearId: session.currentBatch,
+          },
+        }),
+      ])
+    : [false];
 
   const [examConfig] = await Promise.all([
     db.studentMapping.findMany({
