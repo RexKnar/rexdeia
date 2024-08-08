@@ -1015,6 +1015,8 @@ enum StudentStatus {
   Pending
   Rejected
   Active
+  Discontinued
+  Transfered
 }
 
 enum StaffStatus {
