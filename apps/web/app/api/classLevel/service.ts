@@ -51,7 +51,6 @@ export async function getClassLevelById(id: string) {
       id: true,
       name: true,
       isActive: true,
-      classId: true,
       createdAt: true,
       updatedAt: true,
     },

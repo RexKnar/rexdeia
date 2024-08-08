@@ -215,6 +215,7 @@ model Organization {
   staff       Staff[]
   Student     Student[]
   users       UserOrganization[]
+  periods     Periods[]
 }
 
 model UserOrganization {
@@ -528,7 +529,6 @@ model Staff {
   enrollmentNumber             Int                       @default(autoincrement())
   academicSubjectForStaff      AcademicSubjectForStaff[]
   sections                     Section[]
-  periodsId                    String?                   @db.Uuid
   Branch                       Branch?                   @relation(fields: [branchId], references: [id])
   community                    Community?                @relation(fields: [communityId], references: [id])
   designation                  Designation?              @relation(fields: [designationId], references: [id])
@@ -542,7 +542,7 @@ model Staff {
   secondarySubject             SubjectMaster?            @relation("SecondarySubject", fields: [secondarySubjectId], references: [id])
   staffCategory                StaffCategory?            @relation(fields: [staffCategoryId], references: [id])
   user                         User                      @relation(fields: [userId], references: [id])
-  periods                      Periods?                  @relation(fields: [periodsId], references: [id])
+  periods                      Periods[]
   staffSections                StaffSection[]
 }
 
@@ -565,6 +565,7 @@ model Batch {
   students                Student[]
   StudentElectiveSubject  StudentElectiveSubject[]
   StudentMapping          StudentMapping[]
+  periods                 Periods[]
 }
 
 model Class {
@@ -578,11 +579,10 @@ model Class {
   regulationId   String?          @db.Uuid
   createdAt      DateTime?        @default(now())
   updatedAt      DateTime?        @default(now())
-  periodsId      String?          @db.Uuid
   batch          Batch?           @relation(fields: [batchId], references: [id])
   branch         Branch           @relation(fields: [branchId], references: [id])
   regulation     Regulation?      @relation(fields: [regulationId], references: [id])
-  periods        Periods?         @relation(fields: [periodsId], references: [id])
+  periods        Periods[]
   classLevel     ClassLevel?      @relation(fields: [classLevelId], references: [id])
   classLevelId   String?          @db.Uuid
   ExamGroup      ExamGroup[]
@@ -634,7 +634,6 @@ model Section {
   isDeleted               Boolean                   @default(false)
   academicSubjectForStaff AcademicSubjectForStaff[]
   ExamGroup               ExamGroup[]
-  periodsId               String?                   @db.Uuid
   class                   Class                     @relation(fields: [classId], references: [id])
   medium                  Medium                    @relation(fields: [mediumId], references: [id])
   staff                   Staff?                    @relation(fields: [staffId], references: [id])
@@ -643,7 +642,7 @@ model Section {
   staffSections           StaffSection[]
   students                Student[]
   studentMapping          StudentMapping[]
-  periods                 Periods?                  @relation(fields: [periodsId], references: [id])
+  periods                 Periods[]
 }
 
 model SectionToGroups {
@@ -920,58 +919,76 @@ model LevelConfig {
 }
 
 model Days {
-  id             String        @id @default(uuid()) @map("_id") @db.Uuid
-  name           String
-  isActive       Boolean
-  createdAt      DateTime?     @default(now())
-  updatedAt      DateTime?     @default(now())
-  isDeleted      Boolean       @default(false)
-  periodMaster   PeriodMaster? @relation(fields: [periodMasterId], references: [id])
-  periodMasterId String?       @db.Uuid
-}
-
-model PeriodType {
-  id             String        @id @default(uuid()) @map("_id") @db.Uuid
-  name           String
-  periodMode     String
-  periodDuration String
-  isActive       Boolean
-  createdAt      DateTime?     @default(now())
-  updatedAt      DateTime?     @default(now())
-  isDeleted      Boolean       @default(false)
-  periodMaster   PeriodMaster? @relation(fields: [periodMasterId], references: [id])
-  periodMasterId String?       @db.Uuid
-}
-
-model PeriodMaster {
-  id           String       @id @default(uuid()) @map("_id") @db.Uuid
-  name         String
-  isActive     Boolean
-  order        Int
-  createdAt    DateTime?    @default(now())
-  updatedAt    DateTime?    @default(now())
-  isDeleted    Boolean      @default(false)
-  periodType   PeriodType[]
-  days         Days[]
-  classLevel   ClassLevel?  @relation(fields: [classLevelId], references: [id])
-  periods      Periods?     @relation(fields: [periodsId], references: [id])
-  periodsId    String       @db.Uuid
-  classLevelId String?      @db.Uuid
-}
-
-model Periods {
   id           String         @id @default(uuid()) @map("_id") @db.Uuid
   name         String
   isActive     Boolean
   createdAt    DateTime?      @default(now())
   updatedAt    DateTime?      @default(now())
   isDeleted    Boolean        @default(false)
-  subjectId    String?        @db.Uuid
-  section      Section[]
   periodMaster PeriodMaster[]
-  subject      Subject?       @relation(fields: [subjectId], references: [id])
-  class        Class[]
-  staff        Staff[]
+}
+
+model PeriodType {
+  id           String         @id @default(uuid()) @map("_id") @db.Uuid
+  name         String
+  isActive     Boolean
+  createdAt    DateTime?      @default(now())
+  updatedAt    DateTime?      @default(now())
+  isDeleted    Boolean        @default(false)
+  periodMaster PeriodMaster[]
+}
+
+model PeriodMode {
+  id           String         @id @default(uuid()) @map("_id") @db.Uuid
+  name         String
+  duration     String
+  isActive     Boolean
+  createdAt    DateTime?      @default(now())
+  updatedAt    DateTime?      @default(now())
+  isDeleted    Boolean        @default(false)
+  periodMaster PeriodMaster[]
+}
+
+model PeriodMaster {
+  id           String      @id @default(uuid()) @map("_id") @db.Uuid
+  name         String
+  isActive     Boolean
+  order        Int
+  createdAt    DateTime?   @default(now())
+  updatedAt    DateTime?   @default(now())
+  isDeleted    Boolean     @default(false)
+  periodType   PeriodType? @relation(fields: [periodTypeId], references: [id])
+  days         Days?       @relation(fields: [daysId], references: [id])
+  periodTypeId String?
+  daysId       String?
+  classLevel   ClassLevel? @relation(fields: [classLevelId], references: [id])
+  periods      Periods[]
+  classLevelId String?     @db.Uuid
+  periodMode   PeriodMode? @relation(fields: [periodModeId], references: [id])
+  periodModeId String?     @db.Uuid
+}
+
+model Periods {
+  id             String        @id @default(uuid()) @map("_id") @db.Uuid
+  name           String
+  isActive       Boolean
+  createdAt      DateTime?     @default(now())
+  updatedAt      DateTime?     @default(now())
+  isDeleted      Boolean       @default(false)
+  subjectId      String?       @db.Uuid
+  sectionId      String?       @db.Uuid
+  staffId        String?       @db.Uuid
+  classId        String?       @db.Uuid
+  periodMasterId String?       @db.Uuid
+  batchId        String?       @db.Uuid
+  organizationId String?       @db.Uuid
+  periodMaster   PeriodMaster? @relation(fields: [periodMasterId], references: [id])
+  Section        Section?      @relation(fields: [sectionId], references: [id])
+  subject        Subject?      @relation(fields: [subjectId], references: [id])
+  class          Class?        @relation(fields: [classId], references: [id])
+  staff          Staff?        @relation(fields: [staffId], references: [id])
+  batch          Batch?        @relation(fields: [batchId], references: [id])
+  organization   Organization? @relation(fields: [organizationId], references: [id])
 }
 
 model NatureOfPosting {

@@ -1,3 +1,5 @@
+import { PeriodMasterModel } from './periodMaster';
+
 export type BatchModel = {
   id: string;
   name: string;
@@ -11,6 +13,7 @@ export type BatchModel = {
   isDeleting?: boolean;
   isUpdating?: boolean;
   isNewlyAdded?: boolean;
+  periodMaster: PeriodMasterModel[];
 };
 
 export type CreateBatchModel = Pick<

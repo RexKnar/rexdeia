@@ -6,6 +6,9 @@ export async function getAllDays() {
     where: {
       isDeleted: false,
     },
+    include: {
+      periodMaster: true,
+    },
   });
   return days;
 }
@@ -25,11 +28,6 @@ export async function addDay(data: DaysModel) {
     data: {
       name: data.name,
       isActive: data.isActive,
-      periodMaster: {
-        connect: {
-          id: data.periodMasterId,
-        },
-      },
     },
   });
 }
@@ -42,11 +40,6 @@ export async function updateDayById(id: string, data: DaysModel) {
     data: {
       name: data.name,
       isActive: data.isActive,
-      periodMaster: {
-        connect: {
-          id: data.periodMasterId,
-        },
-      },
     },
   });
 }

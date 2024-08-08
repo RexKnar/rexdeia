@@ -19,7 +19,7 @@ function getLevelConfigList(
     queryFn: async () => {
       return await makeAPICall<PaginatedResponse<LevelConfigModel>>(
         GET_LEVELCONFIG_LIST,
-
+        {},
         {
           page: page,
           limit: limit,

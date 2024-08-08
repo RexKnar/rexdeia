@@ -1,6 +1,3 @@
-import { DaysModel } from './days';
-import { PeriodTypeModel } from './periodsType';
-
 export type PeriodMasterModel = {
   id: string;
   name: string;
@@ -9,16 +6,35 @@ export type PeriodMasterModel = {
   createdAt: Date;
   updatedAt: Date;
   isDeleted: boolean;
-  periodsType: PeriodTypeModel[];
-  days: DaysModel[];
+  periodsTypeId: string;
+  daysId: string;
   classLevelId: string;
   periodsId: string;
+  periodModeId: string;
+  batchId: string;
 };
 export type CreatePeriodMasterModel = Pick<
   PeriodMasterModel,
-  'name' | 'isActive' | 'order' | 'classLevelId' | 'periodsId'
+  | 'name'
+  | 'isActive'
+  | 'order'
+  | 'classLevelId'
+  | 'periodsId'
+  | 'periodModeId'
+  | 'batchId'
+  | 'daysId'
+  | 'periodsTypeId'
 >;
 export type UpdatePeriodMasterModel = Pick<
   PeriodMasterModel,
-  'id' | 'name' | 'isActive' | 'order' | 'classLevelId' | 'periodsId'
+  | 'id'
+  | 'name'
+  | 'isActive'
+  | 'order'
+  | 'classLevelId'
+  | 'periodsId'
+  | 'periodModeId'
+  | 'batchId'
+  | 'daysId'
+  | 'periodsTypeId'
 >;

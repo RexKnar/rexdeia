@@ -19,7 +19,7 @@ function getClassLevelList(
     queryFn: async () => {
       return await makeAPICall<PaginatedResponse<ClassLevelModel>>(
         GET_CLASSLEVELS_LIST,
-
+        {},
         {
           page: page,
           limit: limit,

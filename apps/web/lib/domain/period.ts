@@ -1,8 +1,3 @@
-import { ClassModel } from './class';
-import { PeriodMasterModel } from './periodMaster';
-import { SectionModel } from './section';
-import { Staff } from './staff';
-
 export type PeriodModel = {
   id: string;
   name: string;
@@ -10,18 +5,34 @@ export type PeriodModel = {
   createdAt: Date;
   updatedAt: Date;
   isDeleted: boolean;
-  section: SectionModel[];
-  periodMaster: PeriodMasterModel[];
+  sectionId: string;
+  periodMasterId: string;
   subjectId: string;
-  class: ClassModel[];
-  staff: Staff[];
+  classId: string;
+  staffId: string;
+  batchId: string;
 };
 
 export type CreatePeriodModel = Pick<
   PeriodModel,
-  'name' | 'isActive' | 'subjectId'
+  | 'name'
+  | 'isActive'
+  | 'subjectId'
+  | 'periodMasterId'
+  | 'sectionId'
+  | 'classId'
+  | 'staffId'
+  | 'batchId'
 >;
 export type UpdatePeriodModel = Pick<
   PeriodModel,
-  'id' | 'name' | 'isActive' | 'subjectId'
+  | 'id'
+  | 'name'
+  | 'isActive'
+  | 'subjectId'
+  | 'periodMasterId'
+  | 'sectionId'
+  | 'classId'
+  | 'staffId'
+  | 'batchId'
 >;

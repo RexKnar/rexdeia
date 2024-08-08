@@ -7,14 +7,24 @@ export async function addPeriodMaster(data: PeriodMasterModel) {
       name: data.name,
       order: data.order,
       isActive: data.isActive,
-      periods: {
+      periodType: {
         connect: {
-          id: data.periodsId,
+          id: data.periodsTypeId,
+        },
+      },
+      periodMode: {
+        connect: {
+          id: data.periodModeId,
         },
       },
       classLevel: {
         connect: {
           id: data.classLevelId,
+        },
+      },
+      days: {
+        connect: {
+          id: data.daysId,
         },
       },
     },
@@ -47,14 +57,24 @@ export async function updatePeriodMasterById(
       name: data.name,
       order: data.order,
       isActive: data.isActive,
-      periods: {
+      periodType: {
         connect: {
-          id: data.periodsId,
+          id: data.periodsTypeId,
+        },
+      },
+      periodMode: {
+        connect: {
+          id: data.periodModeId,
         },
       },
       classLevel: {
         connect: {
           id: data.classLevelId,
+        },
+      },
+      days: {
+        connect: {
+          id: data.daysId,
         },
       },
     },
