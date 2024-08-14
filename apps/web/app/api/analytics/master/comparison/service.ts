@@ -20,18 +20,22 @@ export async function getMasterMarkComparisonBySection(
 
   const subjectList = examSubjectList.map((examSubject) => examSubject.subject);
 
+  const studentsMarkList = await getStudentMarksByFilter({
+    examId,
+    classId,
+  });
+
   if (subjectList?.length > 0) {
     const analytics = await Promise.all(
       subjectList.map(async (subject) => {
         const sectionAnalytics = await Promise.all(
           sectionList.map(async (section) => {
-            const studentsMarkList = await getStudentMarksByFilter({
-              examId,
-              classId,
-              sectionId: section.id,
-            });
             return {
-              ...analyzeSubjectPerformance(subject.id, studentsMarkList),
+              ...analyzeSubjectPerformance(
+                subject.id,
+                section.id,
+                studentsMarkList
+              ),
               section,
             };
           })
@@ -53,6 +57,7 @@ const calculatePercentage = (part: number, whole: number) =>
 
 function analyzeSubjectPerformance(
   subjectId: string,
+  sectionId: string,
   studentsMarkList: any[] = []
 ) {
   const result = {
@@ -74,60 +79,66 @@ function analyzeSubjectPerformance(
   let totalMarks = { male: 0, female: 0, overall: 0 };
   let totalStudents = { male: 0, female: 0, overall: 0 };
 
-  studentsMarkList.forEach((student) => {
-    const subject = student.subjects.find((subj) => subj.id === subjectId);
-    if (!subject) return;
+  studentsMarkList
+    .filter(
+      (studentFilter) =>
+        studentFilter.section && studentFilter.section.id === sectionId
+    )
+    .forEach((student) => {
+      const subject = student.subjects.find((subj) => subj.id === subjectId);
+      if (!subject) return;
 
-    const gender = student.gender.toLowerCase() === 'male' ? 'male' : 'female';
-    const mark = subject.subjectTotalMark || 0;
-    const studentFullName =
-      `${student.firstName} ${student.middleName || ''} ${student.lastName}`.trim();
+      const gender =
+        student.gender.toLowerCase() === 'male' ? 'male' : 'female';
+      const mark = subject.subjectTotalMark || 0;
+      const studentFullName =
+        `${student.firstName} ${student.middleName || ''} ${student.lastName}`.trim();
 
-    result.totalStudents[gender]++;
-    result.totalStudents.overall++;
-    totalMarks[gender] += mark;
-    totalMarks.overall += mark;
-    totalStudents[gender]++;
-    totalStudents.overall++;
+      result.totalStudents[gender]++;
+      result.totalStudents.overall++;
+      totalMarks[gender] += mark;
+      totalMarks.overall += mark;
+      totalStudents[gender]++;
+      totalStudents.overall++;
 
-    if (!subject.absentStatus && subject?.marks?.length > 0) {
-      result.attendance[gender]++;
-      result.attendance.overall++;
-    } else if (subject.absentStatus && subject?.marks?.length > 0) {
-      result.absent[gender]++;
-      result.absent.overall++;
-    }
-    if (subject?.marks?.length === 0) {
-      result.markEntry[gender]++;
-      result.markEntry.overall++;
-    }
+      if (!subject.absentStatus && subject?.marks?.length > 0) {
+        result.attendance[gender]++;
+        result.attendance.overall++;
+      } else if (subject.absentStatus && subject?.marks?.length > 0) {
+        result.absent[gender]++;
+        result.absent.overall++;
+      }
+      if (subject?.marks?.length === 0) {
+        result.markEntry[gender]++;
+        result.markEntry.overall++;
+      }
 
-    if (mark > result.highestMark[gender]) {
-      result.highestMark[gender] = mark;
-      result.highestMarkStudentName[gender] = studentFullName;
-    }
-    if (mark < result.lowestMark[gender] && !subject.absentStatus) {
-      result.lowestMark[gender] = mark;
-      result.lowestMarkStudentName[gender] = studentFullName;
-    }
+      if (mark > result.highestMark[gender]) {
+        result.highestMark[gender] = mark;
+        result.highestMarkStudentName[gender] = studentFullName;
+      }
+      if (mark < result.lowestMark[gender] && !subject.absentStatus) {
+        result.lowestMark[gender] = mark;
+        result.lowestMarkStudentName[gender] = studentFullName;
+      }
 
-    if (mark > result.highestMark['overall']) {
-      result.highestMark['overall'] = mark;
-      result.highestMarkStudentName['overall'] = studentFullName;
-    }
-    if (mark < result.lowestMark['overall'] && !subject.absentStatus) {
-      result.lowestMark['overall'] = mark;
-      result.lowestMarkStudentName['overall'] = studentFullName;
-    }
+      if (mark > result.highestMark['overall']) {
+        result.highestMark['overall'] = mark;
+        result.highestMarkStudentName['overall'] = studentFullName;
+      }
+      if (mark < result.lowestMark['overall'] && !subject.absentStatus) {
+        result.lowestMark['overall'] = mark;
+        result.lowestMarkStudentName['overall'] = studentFullName;
+      }
 
-    if (subject.failingStatus && !subject.absentStatus) {
-      result.numberOfFailStudents[gender]++;
-      result.numberOfFailStudents.overall++;
-    } else if (!subject.failingStatus && !subject.absentStatus) {
-      result.numberOfPassStudents[gender]++;
-      result.numberOfPassStudents.overall++;
-    }
-  });
+      if (subject.failingStatus && !subject.absentStatus) {
+        result.numberOfFailStudents[gender]++;
+        result.numberOfFailStudents.overall++;
+      } else if (!subject.failingStatus && !subject.absentStatus) {
+        result.numberOfPassStudents[gender]++;
+        result.numberOfPassStudents.overall++;
+      }
+    });
 
   ['male', 'female', 'overall'].forEach((category) => {
     if (totalStudents[category] > 0) {
