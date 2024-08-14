@@ -583,12 +583,13 @@ model Class {
   branch         Branch           @relation(fields: [branchId], references: [id])
   regulation     Regulation?      @relation(fields: [regulationId], references: [id])
   periods        Periods?         @relation(fields: [periodsId], references: [id])
+  classLevel     ClassLevel?      @relation(fields: [classLevelId], references: [id])
+  classLevelId   String?          @db.Uuid
   ExamGroup      ExamGroup[]
   Section        Section[]
   studentmapping StudentMapping[]
   subjects       Subject[]
   subjectToGroup SubjectToGroup[]
-  classLevel     ClassLevel[]
 }
 
 model StaffSection {
@@ -899,9 +900,8 @@ model ClassLevel {
   updatedAt    DateTime?      @default(now())
   isDeleted    Boolean        @default(false)
   levelConfig  LevelConfig[]
-  class        Class?         @relation(fields: [classId], references: [id])
-  classId      String?        @db.Uuid
   periodMaster PeriodMaster[]
+  class        Class[]
 }
 
 model LevelConfig {

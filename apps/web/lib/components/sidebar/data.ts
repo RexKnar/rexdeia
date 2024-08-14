@@ -382,6 +382,26 @@ export const menuItem = {
         },
       ],
     },
+    {
+      id: 'timetable-page',
+      label: 'Timetable',
+      icon: FileText,
+      path: '',
+      children: [
+        {
+          id: 'class-level',
+          label: 'Class Level',
+          icon: null,
+          path: '/timeTable/classLevel',
+        },
+        {
+          id: 'period_master',
+          label: 'Period Master',
+          icon: null,
+          path: '/timeTable/periodMaster',
+        },
+      ],
+    },
   ],
   TeachingStaff: [
     {
