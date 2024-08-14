@@ -15,7 +15,7 @@ export type MarkAnalyticsFilterModel = {
 export async function getStudentMarksByFilter(
   filter:
     | MarkAnalyticsFilterModel
-    | { classId: string; examId: string; sectionId: string }
+    | { classId: string; examId: string; sectionId?: string }
 ) {
   const { classId, examId, sectionId } = filter;
   const mainClause = {};
@@ -44,6 +44,8 @@ export async function getStudentMarksByFilter(
         },
         section: {
           select: {
+            id: true,
+            name: true,
             ExamGroup: {
               where: {
                 examId,
@@ -186,6 +188,10 @@ export async function getStudentMarksByFilter(
     studentDetail['failingStatus'] = subjectFailed > 0 ? true : false;
     studentDetail['totalPercentage'] = (totalMark / actualTotalMarks) * 100;
     studentDetail['attendance'] = attendance;
+    studentDetail['section'] = {
+      id: student.section.id || null,
+      name: student.section.name || null,
+    };
 
     return studentDetail;
   });
