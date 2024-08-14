@@ -9,30 +9,18 @@ import { makeAPICall } from '../../api';
 import { GET_PERIODS_LIST } from '../../endpoints';
 
 function getPeriodsList(
-  page: number,
-  limit: number,
-  options?: Partial<UseQueryOptions<PeriodModel>>
-): UseQueryOptions<PeriodModel> {
+  options?: Partial<UseQueryOptions<PeriodModel[]>>
+): UseQueryOptions<PeriodModel[]> {
   return {
     ...options,
-    queryKey: [GET_PERIODS_LIST, page, limit],
+    queryKey: [GET_PERIODS_LIST],
     queryFn: async () => {
-      return await makeAPICall<PeriodModel>(
-        GET_PERIODS_LIST,
-        {
-          page: page,
-          limit: limit,
-        },
-        {},
-        {}
-      );
+      return await makeAPICall<PeriodModel[]>(GET_PERIODS_LIST, {}, {}, {});
     },
   };
 }
 export function useGetPeriodsListQuery(
-  page: number,
-  limit: number,
-  options?: Partial<UseQueryOptions<PeriodModel>>
-): UseQueryResult<PeriodModel> {
-  return useQuery(getPeriodsList(page, limit, options));
+  options?: Partial<UseQueryOptions<PeriodModel[]>>
+): UseQueryResult<PeriodModel[]> {
+  return useQuery(getPeriodsList(options));
 }
