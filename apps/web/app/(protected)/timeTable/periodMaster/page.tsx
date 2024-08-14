@@ -6,8 +6,9 @@ import PeriodMasterList from './components/PeriodMasterList';
 export default function Page() {
   return (
     <section>
-      <PeriodMasterPageHeader />
-      <Suspense>
+      <Suspense fallback={<div>Loading...</div>}>
+        <PeriodMasterPageHeader />
+
         <PeriodMasterList />
       </Suspense>
     </section>
