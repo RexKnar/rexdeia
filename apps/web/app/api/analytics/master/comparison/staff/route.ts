@@ -8,7 +8,7 @@ import { getStaffWiseMarkAnalytics } from './service';
 
 /**
  * @swagger
- * /api/analytics/master/staff:
+ * /api/analytics/master/comparison/staff:
  *     put:
  *       summary: Get All  Marks by Filter
  *       description: Get All  Marks by Filter
