@@ -13,7 +13,7 @@
     "@radix-ui/react-checkbox": "^1.0.4"
   },
   "devDependencies": {
-    "@turbo/gen": "1.13.3",
+    "@turbo/gen": "1.13.4",
     "eslint": "8.56.0",
     "eslint-config-custom": "workspace:*",
     "prettier": "3.3.1",
