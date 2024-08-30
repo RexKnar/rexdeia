@@ -8,7 +8,7 @@ import { addPeriodMode, getAllPeriodMode } from './service';
 
 /**
  * @swagger
- * /api/peroidMode:
+ * /api/periodMode:
  *     get:
  *       summary: Retrieve Period Mode
  *       description: Gets a list of all Period Mode.
@@ -44,7 +44,7 @@ export async function GET() {
 
 /**
  * @swagger
- *   /api/peroidMode:
+ *   /api/periodMode:
  *     post:
  *       summary: Add a new peroidMode
  *       description: Creates a new peroidMode with the provided details.

@@ -31,7 +31,7 @@ export function StudentList() {
   }
 
   return (
-    <section className="grid w-full grid-cols-4 justify-between gap-4 px-0">
+    <section className="grid w-full grid-cols-1 justify-between gap-4 px-0 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 ">
       {studentListResponse.map((studentItem) => (
         <div key={studentItem.id}>
           <StudentCard id={studentItem.id} name={studentItem.firstName} />

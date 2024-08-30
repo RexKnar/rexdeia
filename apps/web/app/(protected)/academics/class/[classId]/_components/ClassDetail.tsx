@@ -147,7 +147,7 @@ export function ClassDetail() {
                 </div>
               </div>
               <Tabs defaultValue="Students" className="relative mt-4 px-0 py-2">
-                <TabsList className="w-full justify-start border-b-2 border-gray-400">
+                <TabsList className="w-full justify-start overflow-auto border-b-2 border-gray-400">
                   <TabsTrigger
                     value="Subjects"
                     className="mr-2 text-base focus:border-b-4 focus:border-primary"

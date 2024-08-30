@@ -5,7 +5,7 @@ export async function addPeriodMaster(data: PeriodMasterModel) {
   return await db.periodMaster.create({
     data: {
       name: data.name,
-      order: data.order,
+      order: Number(data.order),
       isActive: data.isActive,
       periodType: {
         connect: {
@@ -36,6 +36,12 @@ export async function getAllPeriodMaster() {
     where: {
       isDeleted: false,
     },
+    include: {
+      periodType: true,
+      periodMode: true,
+      classLevel: true,
+      levelConfig: true,
+    },
   });
 }
 export async function getPeriodMasterById(id: string) {
@@ -55,7 +61,7 @@ export async function updatePeriodMasterById(
     },
     data: {
       name: data.name,
-      order: data.order,
+      order: Number(data.order),
       isActive: data.isActive,
       periodType: {
         connect: {

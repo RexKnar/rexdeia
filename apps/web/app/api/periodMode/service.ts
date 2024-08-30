@@ -32,6 +32,7 @@ export async function updatePeriodModeById(id: string, data: PeriodModeModel) {
     data: {
       name: data.name,
       isActive: data.isActive,
+      duration: data.duration,
     },
   });
 }

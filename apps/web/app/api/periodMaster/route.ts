@@ -8,7 +8,7 @@ import { addPeriodMaster, getAllPeriodMaster } from './service';
 
 /**
  * @swagger
- * /api/peroidMaster:
+ * /api/periodMaster:
  *     get:
  *       summary: Retrieve Period Master
  *       description: Gets a list of all Period Master.
@@ -44,10 +44,10 @@ export async function GET() {
 
 /**
  * @swagger
- *   /api/peroidMaster:
+ *   /api/periodMaster:
  *     post:
- *       summary: Add a new peroidMaster
- *       description: Creates a new peroidMaster with the provided details.
+ *       summary: Add a new periodMaster
+ *       description: Creates a new periodMaster with the provided details.
  *       requestBody:
  *         required: true
  *         content:

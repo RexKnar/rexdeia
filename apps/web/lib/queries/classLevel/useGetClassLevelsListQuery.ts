@@ -6,24 +6,19 @@ import {
 import { ClassLevelModel } from 'lib/domain/classLevel';
 
 import { makeAPICall } from '../../api';
-import { PaginatedResponse } from '../../domain';
 import { GET_CLASSLEVELS_LIST } from '../../endpoints';
 
 function getClassLevelList(
-  { page, limit }: { page: number; limit: number },
-  options?: UseQueryOptions<PaginatedResponse<ClassLevelModel>>
-): UseQueryOptions<PaginatedResponse<ClassLevelModel>> {
+  options?: UseQueryOptions<ClassLevelModel[]>
+): UseQueryOptions<ClassLevelModel[]> {
   return {
     ...options,
-    queryKey: [GET_CLASSLEVELS_LIST, page, limit],
+    queryKey: [GET_CLASSLEVELS_LIST],
     queryFn: async () => {
-      return await makeAPICall<PaginatedResponse<ClassLevelModel>>(
+      return await makeAPICall<ClassLevelModel[]>(
         GET_CLASSLEVELS_LIST,
+
         {},
-        {
-          page: page,
-          limit: limit,
-        },
         {}
       );
     },
@@ -31,8 +26,7 @@ function getClassLevelList(
 }
 
 export function useGetClassLevelListQuery(
-  { page, limit }: { page: number; limit: number },
-  options?: UseQueryOptions<PaginatedResponse<ClassLevelModel>>
-): UseQueryResult<PaginatedResponse<ClassLevelModel>> {
-  return useQuery(getClassLevelList({ page, limit }, options));
+  options?: UseQueryOptions<ClassLevelModel[]>
+): UseQueryResult<ClassLevelModel[]> {
+  return useQuery(getClassLevelList(options));
 }

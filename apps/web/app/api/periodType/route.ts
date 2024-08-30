@@ -8,7 +8,7 @@ import { addPeriodType, getAllPeriodType } from './service';
 
 /**
  * @swagger
- * /api/peroidType:
+ * /api/periodType:
  *     get:
  *       summary: Retrieve Period Types
  *       description: Gets a list of all Period Types.
@@ -44,7 +44,7 @@ export async function GET() {
 
 /**
  * @swagger
- *   /api/peroidType:
+ *   /api/periodType:
  *     post:
  *       summary: Add a new peroidType
  *       description: Creates a new peroidType with the provided details.

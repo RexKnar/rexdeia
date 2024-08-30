@@ -19,6 +19,7 @@ import {
 } from 'ui';
 
 import OverallAnalytics from '../../_components/OverallAnalytics';
+import SectionAnalytics from '../../_components/SectionAnalytics';
 import StudentMarkList from '../../_components/StudentMarkList';
 
 export function AnalyticStudentList() {
@@ -152,13 +153,19 @@ export function AnalyticStudentList() {
           </div>
         </div>
       </section>
-      <Tabs defaultValue="profile" className="border-0 ">
+      <Tabs defaultValue="overall" className="border-0 ">
         <TabsList className="w-full justify-start border-b-2 border-gray-100">
           <TabsTrigger
             value="overall"
             className="mr-2 text-base focus:border-b-4 focus:border-primary print:hidden"
           >
-            Overall
+            Overall-Analytics
+          </TabsTrigger>
+          <TabsTrigger
+            value="sectionAnalytics"
+            className="mr-2 text-base focus:border-b-4 focus:border-primary print:hidden"
+          >
+            Section-Analytics
           </TabsTrigger>
           <TabsTrigger
             value="markList"
@@ -174,6 +181,15 @@ export function AnalyticStudentList() {
               classId={classId}
               sectionId={sectionId}
               students={studentMarkList}
+            />
+          </section>
+        </TabsContent>
+        <TabsContent className="w-full" value="sectionAnalytics">
+          <section>
+            <SectionAnalytics
+              examId={examId}
+              classId={classId}
+              sectionId={sectionId}
             />
           </section>
         </TabsContent>

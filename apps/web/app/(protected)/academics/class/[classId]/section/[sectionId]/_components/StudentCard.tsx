@@ -23,10 +23,10 @@ export function StudentCard(props: StudentCardProps) {
   const searchParams = useSearchParams();
   return (
     <div className="flex bg-white p-3">
-      <div className="my-auto w-2/4 px-2">
+      <div className="my-auto w-3/4 px-2">
         <Text variant="base-bold">{props.name}</Text>
       </div>
-      <div className="my-auto w-2/4 ">
+      <div className="my-auto w-1/4 ">
         <div className="float-end my-auto justify-end p-1">
           <DropdownMenu>
             <DropdownMenuTrigger className="flex items-center gap-2 outline-none">

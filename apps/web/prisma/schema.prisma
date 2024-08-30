@@ -904,18 +904,19 @@ model ClassLevel {
 }
 
 model LevelConfig {
-  id           String      @id @default(uuid()) @map("_id") @db.Uuid
+  id           String         @id @default(uuid()) @map("_id") @db.Uuid
   name         String
   isActive     Boolean
   noOfSubjects String
   startTime    String
   endTime      String
   noOfPeriods  String
-  createdAt    DateTime?   @default(now())
-  updatedAt    DateTime?   @default(now())
-  isDeleted    Boolean     @default(false)
-  classLevel   ClassLevel? @relation(fields: [classLevelId], references: [id])
-  classLevelId String?     @db.Uuid
+  createdAt    DateTime?      @default(now())
+  updatedAt    DateTime?      @default(now())
+  isDeleted    Boolean        @default(false)
+  classLevel   ClassLevel?    @relation(fields: [classLevelId], references: [id])
+  classLevelId String?        @db.Uuid
+  periodMaster PeriodMaster[]
 }
 
 model Days {
@@ -950,22 +951,24 @@ model PeriodMode {
 }
 
 model PeriodMaster {
-  id           String      @id @default(uuid()) @map("_id") @db.Uuid
-  name         String
-  isActive     Boolean
-  order        Int
-  createdAt    DateTime?   @default(now())
-  updatedAt    DateTime?   @default(now())
-  isDeleted    Boolean     @default(false)
-  periodType   PeriodType? @relation(fields: [periodTypeId], references: [id])
-  days         Days?       @relation(fields: [daysId], references: [id])
-  periodTypeId String?
-  daysId       String?
-  classLevel   ClassLevel? @relation(fields: [classLevelId], references: [id])
-  periods      Periods[]
-  classLevelId String?     @db.Uuid
-  periodMode   PeriodMode? @relation(fields: [periodModeId], references: [id])
-  periodModeId String?     @db.Uuid
+  id            String       @id @default(uuid()) @map("_id") @db.Uuid
+  name          String
+  isActive      Boolean
+  order         Int
+  createdAt     DateTime?    @default(now())
+  updatedAt     DateTime?    @default(now())
+  isDeleted     Boolean      @default(false)
+  periodType    PeriodType?  @relation(fields: [periodTypeId], references: [id])
+  days          Days?        @relation(fields: [daysId], references: [id])
+  periodTypeId  String?      @db.Uuid
+  daysId        String?      @db.Uuid
+  classLevel    ClassLevel?  @relation(fields: [classLevelId], references: [id])
+  periods       Periods[]
+  classLevelId  String?      @db.Uuid
+  periodMode    PeriodMode?  @relation(fields: [periodModeId], references: [id])
+  periodModeId  String?      @db.Uuid
+  levelConfig   LevelConfig? @relation(fields: [levelConfigId], references: [id])
+  levelConfigId String?      @db.Uuid
 }
 
 model Periods {
@@ -1032,6 +1035,8 @@ enum StudentStatus {
   Pending
   Rejected
   Active
+  Discontinued
+  Transfered
 }
 
 enum StaffStatus {
