@@ -1,23 +1,34 @@
+import { getStudentMarksByFilter } from 'app/api/analytics/service';
 import { getExamSubjectsByClassSectionId } from 'app/api/exam/[id]/subject/service';
-import { getSectionsWithFilter } from 'app/api/section/service';
-import { isNumber } from 'razorpay/dist/utils/razorpay-utils';
+import { getAllSectionsByClassId } from 'app/api/section/service';
+import { authOptions } from 'lib/auth';
+import { db } from 'lib/db';
+import { getServerSession } from 'next-auth';
 
-import { getStudentMarksByFilter } from '../../service';
-import { MarkAnalyticsFilter } from './staff/service';
+import { calculatePercentage } from '../service';
 
-export async function getMasterMarkComparisonBySection(
-  filter: MarkAnalyticsFilter
-) {
+export type MarkAnalyticsFilter = {
+  classId?: string;
+  sectionId?: string;
+  examId?: string;
+  markRange?: string[];
+  filterSubjects?: any[];
+  pagination: {
+    limit: number;
+    page: number;
+  };
+};
+
+export async function getStaffWiseMarkAnalytics(filter: MarkAnalyticsFilter) {
   const { classId, examId, sectionId } = filter;
+
+  const staffList = await getStaffListByClass(classId);
+
   const examSubjectList = await getExamSubjectsByClassSectionId(
     examId,
     classId,
     sectionId
   );
-
-  const { data: sectionList } = await getSectionsWithFilter(classId, {
-    isActive: true,
-  });
 
   const subjectList = examSubjectList.map((examSubject) => examSubject.subject);
 
@@ -28,23 +39,24 @@ export async function getMasterMarkComparisonBySection(
 
   if (subjectList?.length > 0) {
     const analytics = await Promise.all(
-      subjectList.map(async (subject) => {
+      staffList.map(async (staffDetail) => {
         const sectionAnalytics = await Promise.all(
-          sectionList.map(async (section) => {
+          staffDetail.academicSubjects.map(async (academicSubject) => {
             return {
               ...analyzeSubjectPerformance(
-                subject.id,
-                section.id,
+                academicSubject?.subject?.id,
+                academicSubject?.section?.id,
                 studentsMarkList
               ),
-              section,
+              section: academicSubject?.section,
+              subject: academicSubject?.subject,
             };
           })
         );
 
         return {
-          subject,
           analytics: sectionAnalytics,
+          ...staffDetail,
         };
       })
     );
@@ -53,15 +65,82 @@ export async function getMasterMarkComparisonBySection(
 
   return [];
 }
-export const calculatePercentage = (part: number, whole: number) => {
-  if (isNumber(part) && isNumber(whole)) {
-    return whole > 0 ? (part / whole) * 100 : 0;
-  } else {
-    return 0;
-  }
-};
 
-export function analyzeSubjectPerformance(
+export async function getStaffListByClass(classId?: string) {
+  const sections = await getAllSectionsByClassId(classId);
+  const sectionIds = sections.map((x) => x.id);
+  const session = await getServerSession(authOptions);
+
+  const staffs = await db.staff.findMany({
+    where: {
+      academicSubjectForStaff: {
+        some: {
+          sectionId: {
+            in: sectionIds,
+          },
+          deletedAt: null,
+        },
+      },
+    },
+    select: {
+      id: true,
+      firstName: true,
+      middleName: true,
+      lastName: true,
+      email: true,
+      academicSubjectForStaff: {
+        where: {
+          sectionId: {
+            in: sectionIds,
+          },
+          deletedAt: null,
+          academicYearId: session.currentBatch,
+        },
+        select: {
+          isIncharge: true,
+          subject: {
+            select: {
+              name: true,
+              id: true,
+            },
+          },
+          academicYear: {
+            select: {
+              name: true,
+              id: true,
+            },
+          },
+          section: {
+            select: {
+              name: true,
+              id: true,
+              class: {
+                select: {
+                  id: true,
+                  name: true,
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+  });
+
+  const result = staffs.map(({ academicSubjectForStaff, ...rest }) => ({
+    ...rest,
+    academicSubjects: academicSubjectForStaff.filter(
+      (item) => !item.isIncharge
+    ),
+    sectionIncharge: academicSubjectForStaff
+      .filter((item) => item.isIncharge)
+      .map((section) => section.section),
+  }));
+
+  return result;
+}
+
+function analyzeSubjectPerformance(
   subjectId: string,
   sectionId: string,
   studentsMarkList: any[] = []

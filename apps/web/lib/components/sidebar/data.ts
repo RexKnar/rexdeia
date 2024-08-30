@@ -213,6 +213,12 @@ export const menuItem = {
           path: '/analytics/master',
         },
         {
+          id: 'staff-analysis',
+          label: 'Staff Analysis',
+          icon: FileText,
+          path: '/analytics/staff-analysis',
+        },
+        {
           id: 'marks',
           label: 'Marks',
           icon: FileText,
