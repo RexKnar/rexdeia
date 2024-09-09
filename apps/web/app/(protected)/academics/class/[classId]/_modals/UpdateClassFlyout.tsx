@@ -1,8 +1,8 @@
 'use client';
 
-import { UpdateClassModel } from 'lib/domain/class';
 import { useGetClassByIdQuery } from 'lib/queries/class/useGetClassByIdQuery';
 import { useUpdateClassMutationQuery } from 'lib/queries/class/useUpdateClassMutationQuery';
+import { useGetClassLevelListQuery } from 'lib/queries/classLevel/useGetClassLevelsListQuery';
 import { Loader2, PlusCircle } from 'lucide-react';
 import {
   useParams,
@@ -11,10 +11,16 @@ import {
   useSearchParams,
 } from 'next/navigation';
 import { useEffect } from 'react';
-import { useForm } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 import {
   Button,
   Input,
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
   Sheet,
   SheetContent,
   SheetHeader,
@@ -28,11 +34,14 @@ export function UpdateClassFlyout() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const params = useParams<{ classId: string }>();
+  const page = parseInt(searchParams.get('page')) || 1;
+  const limit = parseInt(searchParams.get('limit')) || 10;
   const { data: getClassByIdResponse } = useGetClassByIdQuery(params.classId, {
     enabled: !!params.classId,
   });
 
   const {
+    control,
     register,
     handleSubmit,
     setValue,
@@ -43,6 +52,7 @@ export function UpdateClassFlyout() {
     defaultValues: {
       isActive: false,
       name: getClassByIdResponse?.name || '',
+      classLevelId: getClassByIdResponse?.classLevelId || '',
     },
   });
 
@@ -50,13 +60,15 @@ export function UpdateClassFlyout() {
 
   useEffect(() => {
     if (getClassByIdResponse) {
-      const { name, isActive } = getClassByIdResponse;
+      const { name, isActive, classLevelId } = getClassByIdResponse;
 
       setValue('name', name);
       setValue('isActive', isActive);
+      setValue('classLevelId', classLevelId);
     } else {
       setValue('name', null);
       setValue('isActive', false);
+      setValue('classLevelId', null);
     }
   }, [getClassByIdResponse, setValue]);
 
@@ -64,8 +76,12 @@ export function UpdateClassFlyout() {
     isPending: isPendingUpdateClass,
     mutateAsync: mutateUpdateClassAsync,
   } = useUpdateClassMutationQuery(params.classId);
-
-  async function updateClass(payload: UpdateClassModel) {
+  const { data: ClassLevelListResponse, isLoading: isClassLevelListLoading } =
+    useGetClassLevelListQuery({
+      page,
+      limit,
+    });
+  async function updateClass(payload) {
     try {
       const updateClassPayload = {
         ...payload,
@@ -146,6 +162,40 @@ export function UpdateClassFlyout() {
                   id="name"
                   errorMessage={fieldErrors?.name?.message.toString()}
                 />
+              </div>
+              <div>
+                <label
+                  htmlFor="medium"
+                  className="text-sm font-semibold text-gray-700"
+                >
+                  Class Level
+                </label>
+                <Controller
+                  control={control}
+                  name={`classLevelId`}
+                  render={({ field }) => {
+                    return (
+                      <Select
+                        onValueChange={field.onChange}
+                        {...field}
+                        disabled={isClassLevelListLoading}
+                      >
+                        <SelectTrigger className="w-full">
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectGroup>
+                            {ClassLevelListResponse?.map((item) => (
+                              <SelectItem key={item.id} value={item.id}>
+                                {item.name}
+                              </SelectItem>
+                            ))}
+                          </SelectGroup>
+                        </SelectContent>
+                      </Select>
+                    );
+                  }}
+                ></Controller>
               </div>
               <div className="mt-10">
                 <Button

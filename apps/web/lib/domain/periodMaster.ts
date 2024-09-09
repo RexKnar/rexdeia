@@ -9,7 +9,6 @@ export type PeriodMasterModel = {
   periodsTypeId: string;
   daysId: string;
   classLevelId: string;
-  periodsId: string;
   periodModeId: string;
   batchId: string;
 };
@@ -19,7 +18,6 @@ export type CreatePeriodMasterModel = Pick<
   | 'isActive'
   | 'order'
   | 'classLevelId'
-  | 'periodsId'
   | 'periodModeId'
   | 'batchId'
   | 'daysId'
@@ -32,7 +30,6 @@ export type UpdatePeriodMasterModel = Pick<
   | 'isActive'
   | 'order'
   | 'classLevelId'
-  | 'periodsId'
   | 'periodModeId'
   | 'batchId'
   | 'daysId'

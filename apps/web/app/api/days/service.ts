@@ -6,9 +6,6 @@ export async function getAllDays() {
     where: {
       isDeleted: false,
     },
-    include: {
-      periodMaster: true,
-    },
   });
   return days;
 }
@@ -18,6 +15,9 @@ export async function getDayById(id: string) {
     where: {
       id,
       isDeleted: false,
+    },
+    include: {
+      periodMaster: true,
     },
   });
   return day;

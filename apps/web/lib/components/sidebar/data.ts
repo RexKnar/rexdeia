@@ -406,6 +406,18 @@ export const menuItem = {
           icon: null,
           path: '/timeTable/periodMaster',
         },
+        {
+          id: 'period_type',
+          label: 'Period Type',
+          icon: null,
+          path: '/timeTable/periodType',
+        },
+        {
+          id: 'mode',
+          label: 'Period Mode',
+          icon: null,
+          path: '/timeTable/periodMode',
+        },
       ],
     },
   ],

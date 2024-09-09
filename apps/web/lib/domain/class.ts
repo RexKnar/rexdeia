@@ -9,7 +9,7 @@ export type ClassModel = {
   batchId: string;
   branchId: string;
   regulationId: string;
-  classLevelId: string;
+  classLevelId?: string;
   Section: CreateSectionModel[];
 };
 

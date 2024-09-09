@@ -1,8 +1,7 @@
 'use client';
 
-import { PeriodMasterModel } from 'lib/domain/periodMaster';
 import { useGetClassLevelListQuery } from 'lib/queries/classLevel/useGetClassLevelsListQuery';
-import { useGetPeriodsListQuery } from 'lib/queries/period/useGetPeriodsListQuery';
+import { useGetDaysListQuery } from 'lib/queries/days/useGetDaysListQuery';
 import { useCreatePeriodMasterMutationQuery } from 'lib/queries/periodMaster/useCreatePeriodMasterMutationQuery';
 import { PlusCircle } from 'lucide-react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
@@ -34,7 +33,8 @@ export function AddPeriodMasterFlyout() {
   const page = parseInt(searchParams.get('page')) || 1;
   const limit = parseInt(searchParams.get('limit')) || 10;
   const isOpen = searchParams.get('isPeriodMasterFlyoutOpen') === 'true';
-
+  // const page = parseInt(getParam('page')) || 1;
+  // const limit = parseInt(getParam('limit')) || 10;
   const {
     register,
     setValue,
@@ -49,12 +49,18 @@ export function AddPeriodMasterFlyout() {
       order: null,
       classLevelId: null,
       periodId: null,
+      daysId: null,
     },
   });
 
-  const { data: classLevelListResponse } = useGetClassLevelListQuery();
-
-  const { data: periodListResponse } = useGetPeriodsListQuery();
+  const { data: classLevelListResponse } = useGetClassLevelListQuery({
+    page,
+    limit,
+  });
+  const { data: daysListResponse } = useGetDaysListQuery({
+    page,
+    limit,
+  });
   const { mutate: createPeriodMasterMutation } =
     useCreatePeriodMasterMutationQuery(page, limit);
 
@@ -65,10 +71,20 @@ export function AddPeriodMasterFlyout() {
     reset();
   };
 
-  async function savePeriodMaster(payload: PeriodMasterModel) {
-    createPeriodMasterMutation(payload);
+  async function savePeriodMaster(payload) {
+    try {
+      const requestPayload = {
+        ...payload,
+      };
+      await createPeriodMasterMutation(requestPayload);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      closePeriodMasterFlyout();
+      setValue('isActive', false);
+      reset();
+    }
   }
-
   return (
     <section>
       <Sheet open={isOpen}>
@@ -172,7 +188,7 @@ export function AddPeriodMasterFlyout() {
                   <SelectContent>
                     <SelectGroup>
                       {classLevelListResponse &&
-                        classLevelListResponse.map((item) => (
+                        classLevelListResponse?.map((item) => (
                           <SelectItem key={item.id} value={item.id}>
                             {item.name}
                           </SelectItem>
@@ -187,16 +203,16 @@ export function AddPeriodMasterFlyout() {
                 )}
               </div>
               <div className="w-full">
-                <label className="mt-1 block text-sm text-gray-700">
-                  Period
-                </label>
+                <label className="mt-1 block text-sm text-gray-700">Day</label>
                 <Select
                   autoComplete="off"
-                  value={watch('periodId')}
-                  {...register('periodId', { required: 'Period is required' })}
+                  value={watch('daysId')}
+                  {...register('daysId', {
+                    required: 'Select a day',
+                  })}
                   onValueChange={(value) => {
                     if (value) {
-                      setValue('periodId', value);
+                      setValue('daysId', value);
                     }
                   }}
                 >
@@ -205,8 +221,8 @@ export function AddPeriodMasterFlyout() {
                   </SelectTrigger>
                   <SelectContent>
                     <SelectGroup>
-                      {periodListResponse &&
-                        periodListResponse?.map((item) => (
+                      {daysListResponse &&
+                        daysListResponse?.data?.map((item) => (
                           <SelectItem key={item.id} value={item.id}>
                             {item.name}
                           </SelectItem>
@@ -214,9 +230,9 @@ export function AddPeriodMasterFlyout() {
                     </SelectGroup>
                   </SelectContent>
                 </Select>
-                {errors['periodId'] && (
-                  <p className="mb-2 h-2 p-1 text-sm text-red-600 ">
-                    {errors['periodId'].message as string}
+                {errors['daysId'] && (
+                  <p className="mb-2 h-2 p-1 text-sm text-red-600">
+                    {errors['daysId'].message as string}
                   </p>
                 )}
               </div>

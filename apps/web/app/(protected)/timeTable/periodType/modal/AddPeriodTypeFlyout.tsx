@@ -1,10 +1,9 @@
 'use client';
 
-import { CreateClassLevelModel } from 'lib/domain/classLevel';
-// import page from 'app/(protected)/enquiry/add/page';
-import { useCreateClassLevelMutationQuery } from 'lib/queries/classLevel/useCreateClassLevelMutationQuery';
-import { useGetClassLevelByIdQuery } from 'lib/queries/classLevel/useGetClassLevelByIdQuery';
-import { useUpdateClassLevelMutationQuery } from 'lib/queries/classLevel/useUpdateClassLevelMutationQuery';
+import { CreatePeriodTypeModel } from 'lib/domain/periodsType';
+import { useCreatePeriodTypeMutationQuery } from 'lib/queries/periodType/useCreatePeriodTypeMutationQuery';
+import { useGetPeriodTypeByIdQuery } from 'lib/queries/periodType/useGetPeriodTypeByIdQuery';
+import { useUpdatePeriodTypeMutationQuery } from 'lib/queries/periodType/useUpdatePeriodTypeMutationQuery';
 import { Loader2, PlusCircle } from 'lucide-react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import React, { useEffect } from 'react';
@@ -22,7 +21,7 @@ import {
 
 import { useQueryParams } from '@/hooks/useQueryParams';
 
-export function SaveClassLevelFlyout() {
+export function SavePeriodTypeFlyout() {
   const pathname = usePathname();
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -30,8 +29,8 @@ export function SaveClassLevelFlyout() {
   const page = parseInt(getParam('page')) || 1;
   const limit = parseInt(getParam('limit')) || 10;
 
-  const classLevelId = searchParams.get('classLevelId');
-  const isOpen = searchParams.get('isClassLevelFlyoutOpen') === 'true';
+  const periodTypeId = searchParams.get('periodTypeId');
+  const isOpen = searchParams.get('isPeriodTypeFlyoutOpen') === 'true';
   const {
     reset,
     register,
@@ -43,25 +42,24 @@ export function SaveClassLevelFlyout() {
     defaultValues: {
       name: null,
       isActive: false,
-      duration: null,
     },
   });
 
   const {
-    isPending: isPendingCreateClassLevel,
-    mutateAsync: mutateCreateClassLevelAsync,
-  } = useCreateClassLevelMutationQuery(page, limit);
+    isPending: isPendingCreatePeriodType,
+    mutateAsync: mutateCreatePeriodTypeAsync,
+  } = useCreatePeriodTypeMutationQuery(page, limit);
 
-  const { data: getClassLevelByIdResponse } = useGetClassLevelByIdQuery(
-    classLevelId,
+  const { data: getPeriodTypeByIdResponse } = useGetPeriodTypeByIdQuery(
+    periodTypeId,
     {
-      enabled: !!classLevelId,
+      enabled: !!periodTypeId,
     }
   );
 
   useEffect(() => {
-    if (getClassLevelByIdResponse) {
-      const { name, isActive } = getClassLevelByIdResponse;
+    if (getPeriodTypeByIdResponse) {
+      const { name, isActive } = getPeriodTypeByIdResponse;
 
       setValue('name', name);
       setValue('isActive', isActive);
@@ -69,33 +67,33 @@ export function SaveClassLevelFlyout() {
       setValue('name', null);
       setValue('isActive', false);
     }
-  }, [getClassLevelByIdResponse, setValue]);
+  }, [getPeriodTypeByIdResponse, setValue]);
 
   const {
-    isPending: isPendingUpdateClassLevel,
-    mutateAsync: mutateUpdateClassLevelAsync,
-  } = useUpdateClassLevelMutationQuery(page, limit);
+    isPending: isPendingUpdatePeriodType,
+    mutateAsync: mutateUpdatePeriodTypeAsync,
+  } = useUpdatePeriodTypeMutationQuery(page, limit);
 
   const closeFlyout = () => {
     const params = new URLSearchParams(searchParams);
-    params.set('isClassLevelFlyoutOpen', 'false');
-    params.delete('classLevelId');
+    params.set('isPeriodTypeFlyoutOpen', 'false');
+    params.delete('periodTypeId');
     router.replace(pathname + '?' + params.toString());
   };
 
-  async function savePeriodMode(payload: CreateClassLevelModel) {
+  async function savePeriodType(payload: CreatePeriodTypeModel) {
     try {
-      if (classLevelId) {
-        const updatePeriodModeRequestPayload = {
+      if (periodTypeId) {
+        const updatePeriodTypeRequestPayload = {
           ...payload,
-          id: classLevelId,
+          id: periodTypeId,
         };
-        await mutateUpdateClassLevelAsync(updatePeriodModeRequestPayload);
+        await mutateUpdatePeriodTypeAsync(updatePeriodTypeRequestPayload);
       } else {
         const requestPayload = {
           ...payload,
         };
-        await mutateCreateClassLevelAsync(requestPayload);
+        await mutateCreatePeriodTypeAsync(requestPayload);
       }
     } catch (error) {
       console.error(error);
@@ -114,14 +112,14 @@ export function SaveClassLevelFlyout() {
           className="bg-white p-10"
           onCloseClick={() => closeFlyout()}
         >
-          <form onSubmit={handleSubmit(savePeriodMode)}>
+          <form onSubmit={handleSubmit(savePeriodType)}>
             <SheetHeader>
               <SheetTitle className="mb-5">
                 <div className="sm:grid sm:grid-cols-1 sm:gap-4 md:grid md:grid-cols-1 md:gap-4 lg:grid  lg:grid-cols-[1fr_100px]">
                   <div className="flex items-center">
                     <PlusCircle size={20} strokeWidth={1.5} />
                     <Text variant="lg-semibold" className="ml-2">
-                      {classLevelId ? 'Update Period Mode' : 'Add Period Mode'}
+                      {periodTypeId ? 'Update Period Type' : 'Add Period Type'}
                     </Text>
                   </div>
                   <div className="flex items-center">
@@ -148,11 +146,11 @@ export function SaveClassLevelFlyout() {
                   htmlFor="name"
                   className="text-sm font-semibold text-gray-700"
                 >
-                  Class Level Name
+                  Period Type Name
                 </label>
                 <Input
                   {...register('name', {
-                    required: 'Period Mode Name is Required',
+                    required: 'Period Type Name is Required',
                   })}
                   autoFocus
                   className="mt-2"
@@ -165,21 +163,19 @@ export function SaveClassLevelFlyout() {
               <Button
                 size="lg"
                 variant="default"
-                disabled={
-                  isPendingCreateClassLevel || isPendingUpdateClassLevel
-                }
+                // disabled={isPendingCreatePeriodType || isPendingUpdatePeriodType}
                 aria-disabled={
-                  isPendingCreateClassLevel || isPendingUpdateClassLevel
+                  isPendingCreatePeriodType || isPendingUpdatePeriodType
                 }
                 className="mx-auto flex justify-center px-12 py-4"
               >
-                {isPendingCreateClassLevel ? (
+                {isPendingCreatePeriodType ? (
                   <div className="flex items-center justify-center">
                     <Loader2 className="mr-2 h-6 w-6 animate-spin text-white" />
                     Saving
                   </div>
                 ) : (
-                  `${classLevelId ? 'Update' : 'Save'}`
+                  `${periodTypeId ? 'Update' : 'Save'}`
                 )}
               </Button>
             </div>

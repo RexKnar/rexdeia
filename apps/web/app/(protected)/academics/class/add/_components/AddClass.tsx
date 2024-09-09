@@ -1,5 +1,6 @@
 'use client';
 
+import { useGetClassLevelListQuery } from 'lib/queries/classLevel/useGetClassLevelsListQuery';
 import { useGetGroupListQuery } from 'lib/queries/group/useGetGroupListQuery';
 import { Loader2, Plus, Trash } from 'lucide-react';
 import { useRouter, useSearchParams } from 'next/navigation';
@@ -63,6 +64,11 @@ export default function AddClass() {
       limit: 999,
       filter,
     });
+  const { data: ClassLevelListResponse, isLoading: isClassLevelListLoading } =
+    useGetClassLevelListQuery({
+      page,
+      limit,
+    });
 
   useEffect(() => {
     setValue('isActive', false);
@@ -122,6 +128,40 @@ export default function AddClass() {
                 id="name"
                 errorMessage={fieldErrors?.name?.message.toString()}
               />
+            </div>
+            <div>
+              <label
+                htmlFor="medium"
+                className="text-sm font-semibold text-gray-700"
+              >
+                Class Level
+              </label>
+              <Controller
+                control={control}
+                name={`classLevelId`}
+                render={({ field }) => {
+                  return (
+                    <Select
+                      onValueChange={field.onChange}
+                      {...field}
+                      disabled={isClassLevelListLoading}
+                    >
+                      <SelectTrigger className="w-full">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectGroup>
+                          {ClassLevelListResponse?.map((item) => (
+                            <SelectItem key={item.id} value={item.id}>
+                              {item.name}
+                            </SelectItem>
+                          ))}
+                        </SelectGroup>
+                      </SelectContent>
+                    </Select>
+                  );
+                }}
+              ></Controller>
             </div>
           </div>
           <div>

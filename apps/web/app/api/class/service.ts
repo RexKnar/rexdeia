@@ -116,11 +116,13 @@ export async function addClass(classPayload: CreateClassModel) {
           id: session.branchId,
         },
       },
-      classLevel: {
-        connect: {
-          id: classPayload.classLevelId,
-        },
-      },
+      classLevel: classPayload.classLevelId
+        ? {
+            connect: {
+              id: classPayload.classLevelId,
+            },
+          }
+        : null,
     },
   });
 
@@ -134,6 +136,7 @@ export async function addClass(classPayload: CreateClassModel) {
     };
     addSection(createSectionModel);
   });
+
   return createdClass;
 }
 

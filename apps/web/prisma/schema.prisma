@@ -958,17 +958,17 @@ model PeriodMaster {
   createdAt     DateTime?    @default(now())
   updatedAt     DateTime?    @default(now())
   isDeleted     Boolean      @default(false)
-  periodType    PeriodType?  @relation(fields: [periodTypeId], references: [id])
-  days          Days?        @relation(fields: [daysId], references: [id])
+  periodModeId  String?      @db.Uuid
+  levelConfigId String?      @db.Uuid
+  classLevelId  String?      @db.Uuid
   periodTypeId  String?      @db.Uuid
   daysId        String?      @db.Uuid
-  classLevel    ClassLevel?  @relation(fields: [classLevelId], references: [id])
   periods       Periods[]
-  classLevelId  String?      @db.Uuid
+  periodType    PeriodType?  @relation(fields: [periodTypeId], references: [id])
+  days          Days?        @relation(fields: [daysId], references: [id])
+  classLevel    ClassLevel?  @relation(fields: [classLevelId], references: [id])
   periodMode    PeriodMode?  @relation(fields: [periodModeId], references: [id])
-  periodModeId  String?      @db.Uuid
   levelConfig   LevelConfig? @relation(fields: [levelConfigId], references: [id])
-  levelConfigId String?      @db.Uuid
 }
 
 model Periods {
