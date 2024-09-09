@@ -4,23 +4,23 @@ import { authOptions } from 'lib/auth';
 import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 
-import { addPeriodType, getAllPeriodType } from './service';
+import { addPeriodMode, getAllPeriodMode } from './service';
 
 /**
  * @swagger
- * /api/periodType:
+ * /api/periodMode:
  *     get:
- *       summary: Retrieve Period Types
- *       description: Gets a list of all Period Types.
+ *       summary: Retrieve Period Mode
+ *       description: Gets a list of all Period Mode.
  *       responses:
  *         '200':
- *           description: Successfully retrieved the list of Period Types.
+ *           description: Successfully retrieved the list of Period Mode.
  *           content:
  *             application/json:
  *               schema:
  *                 type: array
  *                 items:
- *                   # Define the schema for a single  periodType here
+ *                   # Define the schema for a single  periodMode here
  */
 export async function GET() {
   const session = await getServerSession(authOptions);
@@ -30,8 +30,8 @@ export async function GET() {
     });
   }
   try {
-    const periodTypeList = await getAllPeriodType();
-    return new NextResponse(JSON.stringify(periodTypeList), {
+    const periodModeList = await getAllPeriodMode();
+    return new NextResponse(JSON.stringify(periodModeList), {
       status: StatusCodes.OK,
     });
   } catch (e) {
@@ -44,10 +44,10 @@ export async function GET() {
 
 /**
  * @swagger
- *   /api/periodType:
+ *   /api/periodMode:
  *     post:
- *       summary: Add a new peroidType
- *       description: Creates a new peroidType with the provided details.
+ *       summary: Add a new peroidMode
+ *       description: Creates a new peroidMode with the provided details.
  *       requestBody:
  *         required: true
  *         content:
@@ -57,13 +57,13 @@ export async function GET() {
  *               properties:
  *       responses:
  *         '200':
- *           description: Successfully retrieved the list of peroidType.
+ *           description: Successfully retrieved the list of peroidMode.
  *           content:
  *             application/json:
  *               schema:
  *                 type: array
  *                 items:
- *                   # Define the schema for a single peroidType here
+ *                   # Define the schema for a single peroidMode here
  *         '401':
  *           description: Unauthorized access.
  *         '400':
@@ -78,8 +78,8 @@ export async function POST(request: NextRequest) {
   }
   const payload = await request.json();
   try {
-    const createdPeriodType = await addPeriodType(payload);
-    return new NextResponse(JSON.stringify(createdPeriodType), {
+    const createdPeriodMode = await addPeriodMode(payload);
+    return new NextResponse(JSON.stringify(createdPeriodMode), {
       status: StatusCodes.CREATED,
     });
   } catch (e) {

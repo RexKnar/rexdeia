@@ -5,13 +5,11 @@ import { Button } from 'ui';
 
 import { PageTitle } from '@/components/PageTitle';
 
-const SaveClassLevelFlyout = dynamic(() =>
-  import('../_modal/SaveClassLevelFlyout').then(
-    (mod) => mod.SaveClassLevelFlyout
-  )
+const SavePeriodTypeFlyout = dynamic(() =>
+  import('../modal/AddPeriodTypeFlyout').then((mod) => mod.SavePeriodTypeFlyout)
 );
 
-export function ClassLevelPageHeader() {
+export function PeriodTypePageHeader() {
   const pathname = usePathname();
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -19,19 +17,20 @@ export function ClassLevelPageHeader() {
   return (
     <>
       <section className="flex justify-between px-2">
-        <PageTitle title="Class Level" />
+        <PageTitle title="Period Type" />
         <Button
           variant="default"
           onClick={async () => {
             const params = new URLSearchParams(searchParams);
-            params.set('isClassLevelFlyoutOpen', 'true');
+            params.set('isPeriodTypeFlyoutOpen', 'true');
+
             router.replace(pathname + '?' + params.toString());
           }}
         >
-          Add Class Level
+          Add Period Type
         </Button>
       </section>
-      <SaveClassLevelFlyout />
+      <SavePeriodTypeFlyout />
     </>
   );
 }

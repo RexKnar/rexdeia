@@ -9,16 +9,19 @@ import { makeAPICall } from '../../api';
 import { GET_CLASSLEVELS_LIST } from '../../endpoints';
 
 function getClassLevelList(
+  { page, limit }: { page: number; limit: number },
   options?: UseQueryOptions<ClassLevelModel[]>
 ): UseQueryOptions<ClassLevelModel[]> {
   return {
     ...options,
-    queryKey: [GET_CLASSLEVELS_LIST],
+    queryKey: [GET_CLASSLEVELS_LIST, page, limit],
     queryFn: async () => {
       return await makeAPICall<ClassLevelModel[]>(
         GET_CLASSLEVELS_LIST,
-
-        {},
+        {
+          page: page,
+          limit: limit,
+        },
         {}
       );
     },
@@ -26,7 +29,8 @@ function getClassLevelList(
 }
 
 export function useGetClassLevelListQuery(
+  { page, limit }: { page: number; limit: number },
   options?: UseQueryOptions<ClassLevelModel[]>
 ): UseQueryResult<ClassLevelModel[]> {
-  return useQuery(getClassLevelList(options));
+  return useQuery(getClassLevelList({ page, limit }, options));
 }

@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { PeriodTypeModel, UpdatePeriodTypeModel } from 'lib/domain/periodsType';
-import { ADD_PERIOD_TYPE, GET_PERIOD_TYPES_LIST } from 'lib/endpoints';
+import { GET_PERIOD_TYPES_LIST, UPDATE_PERIOD_TYPE_BY_ID } from 'lib/endpoints';
 
 import { makeAPICall } from '../../api';
 
@@ -10,7 +10,7 @@ export function useUpdatePeriodTypeMutationQuery(page: number, limit: number) {
   return useMutation({
     mutationFn: async (payload: UpdatePeriodTypeModel) => {
       const response = await makeAPICall<PeriodTypeModel>(
-        ADD_PERIOD_TYPE,
+        UPDATE_PERIOD_TYPE_BY_ID,
         payload,
         {},
         { id: payload.id }

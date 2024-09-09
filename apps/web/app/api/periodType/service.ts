@@ -5,14 +5,7 @@ export async function addPeriodType(data: PeriodTypeModel) {
   return await db.periodType.create({
     data: {
       name: data.name,
-      periodMode: data.periodMode,
-      periodDuration: data.periodDuration,
       isActive: data.isActive,
-      periodMaster: {
-        connect: {
-          id: data.periodMasterId,
-        },
-      },
     },
   });
 }
@@ -38,14 +31,7 @@ export async function updatePeriodTypeById(id: string, data: PeriodTypeModel) {
     },
     data: {
       name: data.name,
-      periodMode: data.periodMode,
-      periodDuration: data.periodDuration,
       isActive: data.isActive,
-      periodMaster: {
-        connect: {
-          id: data.periodMasterId,
-        },
-      },
     },
   });
 }

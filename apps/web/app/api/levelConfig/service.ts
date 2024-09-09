@@ -6,15 +6,15 @@ export async function addLevelConfig(data: LevelConfigModel) {
     data: {
       name: data.name,
       isActive: data.isActive,
+      noOfSubjects: data.noOfSubjects,
+      noOfPeriods: data.noOfPeriods,
+      startTime: data.startTime,
+      endTime: data.endTime,
       classLevel: {
         connect: {
           id: data.classLevelId,
         },
       },
-      noOfSubjects: data.noOfSubjects,
-      noOfPeriods: data.noOfPeriods,
-      startTime: data.startTime,
-      endTime: data.endTime,
     },
   });
 }

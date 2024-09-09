@@ -7,14 +7,24 @@ export async function addPeriodMaster(data: PeriodMasterModel) {
       name: data.name,
       order: Number(data.order),
       isActive: data.isActive,
-      periods: {
+      periodType: {
         connect: {
-          id: data.periodId,
+          id: data.periodsTypeId,
+        },
+      },
+      periodMode: {
+        connect: {
+          id: data.periodModeId,
         },
       },
       classLevel: {
         connect: {
           id: data.classLevelId,
+        },
+      },
+      days: {
+        connect: {
+          id: data.daysId,
         },
       },
     },
@@ -25,6 +35,12 @@ export async function getAllPeriodMaster() {
   return await db.periodMaster.findMany({
     where: {
       isDeleted: false,
+    },
+    include: {
+      periodType: true,
+      periodMode: true,
+      classLevel: true,
+      levelConfig: true,
     },
   });
 }
@@ -47,14 +63,24 @@ export async function updatePeriodMasterById(
       name: data.name,
       order: Number(data.order),
       isActive: data.isActive,
-      periods: {
+      periodType: {
         connect: {
-          id: data.periodId,
+          id: data.periodsTypeId,
+        },
+      },
+      periodMode: {
+        connect: {
+          id: data.periodModeId,
         },
       },
       classLevel: {
         connect: {
           id: data.classLevelId,
+        },
+      },
+      days: {
+        connect: {
+          id: data.daysId,
         },
       },
     },

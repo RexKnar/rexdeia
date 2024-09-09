@@ -191,6 +191,11 @@ export const GET_PERIODS_LIST = `GET_PERIODS_LIST`;
 export const GET_PERIOD_BY_ID = `GET_PERIOD_BY_ID`;
 export const UPDATE_PERIOD_BY_ID = `UPDATE_PERIOD_BY_ID`;
 export const DELETE_PERIOD_BY_ID = `DELETE_PERIOD_BY_ID`;
+export const ADD_PERIOD_MODE = `ADD_PERIOD_MODE`;
+export const GET_PERIOD_MODE_LIST = `GET_PERIOD_MODE_LIST`;
+export const GET_PERIOD_MODE_BY_ID = `GET_PERIOD_MODE_BY_ID`;
+export const UPDATE_PERIOD_MODE_BY_ID = `UPDATE_PERIOD_MODE_BY_ID`;
+export const DELETE_PERIOD_MODE_BY_ID = `DELETE_PERIOD_MODE_BY_ID`;
 
 export default <EndpointDetails>{
   ...ExamAnalyticsEndpoints,
@@ -947,5 +952,25 @@ export default <EndpointDetails>{
   [DELETE_PERIOD_BY_ID]: {
     requestType: 'DELETE',
     endpoint: '/api/period/[id]',
+  },
+  [ADD_PERIOD_MODE]: {
+    requestType: 'POST',
+    endpoint: '/api/periodMode',
+  },
+  [GET_PERIOD_MODE_LIST]: {
+    requestType: 'GET',
+    endpoint: '/api/periodMode',
+  },
+  [GET_PERIOD_MODE_BY_ID]: {
+    requestType: 'GET',
+    endpoint: '/api/periodMode/[id]',
+  },
+  [UPDATE_PERIOD_MODE_BY_ID]: {
+    requestType: 'PUT',
+    endpoint: '/api/periodMode/[id]',
+  },
+  [DELETE_PERIOD_MODE_BY_ID]: {
+    requestType: 'DELETE',
+    endpoint: '/api/periodMode/[id]',
   },
 };

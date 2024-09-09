@@ -1,15 +1,15 @@
 import { Suspense } from 'react';
 
-import { ClassLevelPageHeader } from './components/ClassLevelHeader';
-import { ClassLevelList } from './components/ClassLevelList';
+import { PeriodModePageHeader } from './components/PeriodModeHeader';
+import { PeriodModeList } from './components/PeriodModeList';
 
 export default function Page() {
   return (
     <section className="flex flex-col gap-6">
       <Suspense>
-        <ClassLevelPageHeader />
+        <PeriodModePageHeader />
         <section className="space-y-2 rounded-md bg-white p-4">
-          <ClassLevelList />
+          <PeriodModeList />
         </section>
       </Suspense>
     </section>

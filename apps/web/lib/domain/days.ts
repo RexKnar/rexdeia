@@ -1,16 +1,14 @@
+import { PeriodMasterModel } from './periodMaster';
+
 export type DaysModel = {
   id: string;
   name: string;
   isActive: boolean;
-  isDeleted: boolean;
-  periodMasterId: string;
+  periodMaster: PeriodMasterModel[];
+  createdAt: string;
+  updatedAt: string;
+  isDeleted: string;
 };
 
-export type CreateDaysModel = Pick<
-  DaysModel,
-  'name' | 'isActive' | 'periodMasterId'
->;
-export type UpdateDaysModel = Pick<
-  DaysModel,
-  'id' | 'name' | 'isActive' | 'periodMasterId'
->;
+export type CreateDaysModel = Pick<DaysModel, 'name' | 'isActive'>;
+export type UpdateDaysModel = Pick<DaysModel, 'id' | 'name' | 'isActive'>;
