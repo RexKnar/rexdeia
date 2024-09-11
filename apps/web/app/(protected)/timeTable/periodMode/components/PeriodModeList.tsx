@@ -16,14 +16,7 @@ import { Loader2, Pencil, Trash2 } from 'lucide-react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 import { When } from 'react-if';
-import {
-  Button,
-  // Pagination,
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-  useToast,
-} from 'ui';
+import { Button, Tooltip, TooltipContent, TooltipTrigger, useToast } from 'ui';
 import {
   Table,
   TableBody,
@@ -107,7 +100,6 @@ export function PeriodModeList() {
 
   const page = parseInt(searchParams.get('page')) || 1;
   const limit = parseInt(searchParams.get('limit')) || 10;
-  // const filter = {};
 
   const { data: periodmodeListResponse, isLoading: isPeriodModeListLoading } =
     useGetPeriodModeListQuery({
