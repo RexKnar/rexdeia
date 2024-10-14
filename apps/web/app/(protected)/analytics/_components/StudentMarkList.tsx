@@ -105,11 +105,12 @@ export default function StudentMarkList({
         </TableCell>
         <TableCell className="text-center print:p-0">
           {student.rank || '-'}
-
           <br />
           {!student.attendance && (
             <span className="text-red-500 print:p-0 print:text-sm">A</span>
           )}
+          <br />
+          Centum: {student.centumCount || '0'}
         </TableCell>
       </TableRow>
     );

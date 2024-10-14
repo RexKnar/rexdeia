@@ -23,6 +23,7 @@ interface Analytics {
   absent: { male: number; female: number; overall: number };
   markEntry: { male: number; female: number; overall: number };
   totalStudents: { male: number; female: number; overall: number };
+  centum: { male: number; female: number; overall: number };
 }
 
 const calculatePercentage = (part: number, whole: number) =>
@@ -62,6 +63,7 @@ export default function OverallAnalytics({
         absent: { male: 0, female: 0, overall: 0 },
         markEntry: { male: 0, female: 0, overall: 0 },
         totalStudents: { male: 0, female: 0, overall: 0 },
+        centum: { male: 0, female: 0, overall: 0 },
       };
 
       let totalMarks = { male: 0, female: 0, overall: 0 };
@@ -131,6 +133,11 @@ export default function OverallAnalytics({
         } else if (!subject.failingStatus && !subject.absentStatus) {
           result.numberOfPassStudents[gender]++;
           result.numberOfPassStudents.overall++;
+        }
+
+        if (subject.centum) {
+          result.centum[gender]++;
+          result.centum.overall++;
         }
       });
 

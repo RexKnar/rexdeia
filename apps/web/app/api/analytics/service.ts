@@ -96,10 +96,12 @@ export async function getStudentMarksByFilter(
     const [{ examSubject }] = student.section.ExamGroup;
     let subjectPassed = 0;
     let subjectFailed = 0;
+
     let totalMark = 0;
     let actualTotalMarks = 0;
     let subjectMasters = [];
     let attendance = false;
+    let centumCount = 0;
 
     const subjects = examSubject.map((examSubject) => {
       const examSubjectPartition = examSubject.examSubjectPartition;
@@ -109,6 +111,7 @@ export async function getStudentMarksByFilter(
       let failingOn = [];
       let absentStatus = true;
       let absentOn = [];
+      let centum = true;
 
       if (!subjectMasters.includes(examSubject.subject.subjectMasterId)) {
         subjectMasters.push(examSubject.subject.subjectMasterId);
@@ -134,12 +137,19 @@ export async function getStudentMarksByFilter(
             } else {
               attendance = true;
             }
+            const markValue = Number(mark.mark);
+            const totalMarksValue = Number(partition.totalMarks);
+            if (markValue !== totalMarksValue) {
+              centum = false;
+            }
+
             const actualMark =
               (Number(mark.mark) / Number(partition.totalMarks)) *
               Number(partition.convertTo);
             subjectTotalMark += Math.round(actualMark);
             mark['total'] = Math.round(actualMark);
             mark['entryStatus'] = true;
+            mark['centum'] = centum;
           } else {
             mark['entryStatus'] = false;
             mark['total'] = 0;
@@ -169,18 +179,22 @@ export async function getStudentMarksByFilter(
         absentOn,
         failingStatus,
         failingOn,
+        centum,
         subjectPassed,
         subjectFailed,
       };
 
       if (!subject.absentStatus) attendance = true;
-
+      if (centum) {
+        centumCount++;
+      }
       return subject;
     });
     subjectCount =
       subjectCount < subjects.length ? subjects.length : subjectCount;
     studentDetail['subjectMasterCount'] = subjectMasters.length;
     studentDetail['subjects'] = subjects;
+    studentDetail['centumCount'] = centumCount;
     studentDetail['totalMark'] = totalMark;
     studentDetail['totalAverage'] = totalMark / subjectMasters.length;
     studentDetail['subjectPassed'] = subjectPassed;
