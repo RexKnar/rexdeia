@@ -1,6 +1,4 @@
-import { authOptions } from 'lib/auth';
 import { db } from 'lib/db';
-import { getServerSession } from 'next-auth';
 
 type GetExamConfigFilterModel = {
   examId?: string;
@@ -12,21 +10,21 @@ type GetExamConfigFilterModel = {
 export async function getExamConfigWithSubjectPartion(
   filter: GetExamConfigFilterModel
 ) {
-  const session = await getServerSession(authOptions);
+  // const session = await getServerSession(authOptions);
   const { examId, classId, sectionId, staffId } = filter;
 
-  const [isIncharge] = staffId
-    ? await Promise.all([
-        db.academicSubjectForStaff.findFirst({
-          where: {
-            staffId: staffId,
-            isIncharge: true,
-            sectionId: sectionId,
-            academicYearId: session.currentBatch,
-          },
-        }),
-      ])
-    : [false];
+  // const [isIncharge] = staffId
+  //   ? await Promise.all([
+  //       db.academicSubjectForStaff.findFirst({
+  //         where: {
+  //           staffId: staffId,
+  //           isIncharge: true,
+  //           sectionId: sectionId,
+  //           academicYearId: session.currentBatch,
+  //         },
+  //       }),
+  //     ])
+  //   : [false];
 
   const [examConfig] = await Promise.all([
     db.studentMapping.findMany({
@@ -38,21 +36,20 @@ export async function getExamConfigWithSubjectPartion(
           ExamGroup: {
             some: {
               examId: examId,
-              examSubject:
-                staffId && !isIncharge
-                  ? {
-                      some: {
-                        subject: {
-                          academicSubjectForStaff: {
-                            some: {
-                              sectionId: sectionId,
-                              staffId: staffId,
-                            },
+              examSubject: staffId
+                ? {
+                    some: {
+                      subject: {
+                        academicSubjectForStaff: {
+                          some: {
+                            sectionId: sectionId,
+                            staffId: staffId,
                           },
                         },
                       },
-                    }
-                  : {},
+                    },
+                  }
+                : {},
             },
           },
         },
@@ -78,29 +75,27 @@ export async function getExamConfigWithSubjectPartion(
                 id: true,
                 examId: true,
                 examSubject: {
-                  where:
-                    staffId && !isIncharge
-                      ? {
-                          subject: {
-                            academicSubjectForStaff: {
-                              some: {
-                                staffId: staffId,
-                              },
+                  where: staffId
+                    ? {
+                        subject: {
+                          academicSubjectForStaff: {
+                            some: {
+                              staffId: staffId,
                             },
                           },
-                        }
-                      : {},
+                        },
+                      }
+                    : {},
                   select: {
                     id: true,
                     subject: {
                       include: {
                         academicSubjectForStaff: {
-                          where:
-                            staffId && !isIncharge
-                              ? {
-                                  staffId: staffId,
-                                }
-                              : {},
+                          where: staffId
+                            ? {
+                                staffId: staffId,
+                              }
+                            : {},
                         },
                       },
                     },

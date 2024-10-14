@@ -110,6 +110,8 @@ export default function StudentMarkList({
           {!student.attendance && (
             <span className="text-red-500 print:p-0 print:text-sm">A</span>
           )}
+          <br />
+          {student.centumCount || '0'}
         </TableCell>
       </TableRow>
     );
