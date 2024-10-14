@@ -52,9 +52,7 @@ export default function StudentMarkList({
                         A
                       </span>
                     ) : (
-                      <span className="print:hidden" key={mark.id}>
-                        {mark.total}
-                      </span>
+                      <span key={mark.id}>{mark.total}</span>
                     )
                   )}
 
@@ -141,7 +139,7 @@ export default function StudentMarkList({
                           {subject.subject.name}
                         </Text>
                       </div>
-                      <div className="flex justify-evenly print:hidden">
+                      <div className="flex justify-evenly ">
                         {subject.examSubjectPartition.map((partition) => (
                           <span
                             className="size-lg font-semibold print:text-sm"
@@ -150,7 +148,7 @@ export default function StudentMarkList({
                             {partition.assessmentFormat.name}
                           </span>
                         ))}
-                        <span className="print:hidden">Tot</span>
+                        <span>Tot</span>
                       </div>
                     </div>
                   </TableCell>
