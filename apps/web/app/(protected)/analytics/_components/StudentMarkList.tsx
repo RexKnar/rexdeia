@@ -137,7 +137,7 @@ export default function StudentMarkList({
                       return (
                         <span
                           key={mark.id}
-                          className="text-bold text-red-500 print:hidden"
+                          className="text-red-500 text-bold print:hidden"
                         >
                           A
                         </span>
@@ -208,7 +208,7 @@ export default function StudentMarkList({
   return (
     <section>
       {subjectList && (
-        <div className="mt-4 space-y-4 overflow-x-auto rounded-md bg-white p-6 print:m-0 print:p-0 ">
+        <div className="p-6 mt-4 space-y-4 overflow-x-auto bg-white rounded-md print:m-0 print:p-0 ">
           <div className="w-full">
             {pdfTableHeader?.length > 0 && (
               <PdfDocument
@@ -217,11 +217,11 @@ export default function StudentMarkList({
               />
             )}
           </div>
-          <Table className="border-1 border">
+          <Table className="border border-1">
             <TableHeader>
               <TableRow className="bg-primary-300">
                 <TableCell>
-                  <Text className="text-center text-lg font-semibold print:text-sm">
+                  <Text className="text-lg font-semibold text-center print:text-sm">
                     #{' '}
                   </Text>
                 </TableCell>
@@ -235,7 +235,7 @@ export default function StudentMarkList({
                     <TableCell key={subject.subject.id}>
                       <div className="w-full ">
                         <div className="text-center">
-                          <Text className="size-lg font-semibold print:text-sm">
+                          <Text className="font-semibold size-lg print:text-sm">
                             {subject.subject.name}
                           </Text>
                         </div>
@@ -243,7 +243,7 @@ export default function StudentMarkList({
                           {subject.examSubjectPartition.map((partition) => {
                             const partitionTitles = (
                               <span
-                                className="size-lg font-semibold print:text-sm"
+                                className="font-semibold size-lg print:text-sm"
                                 key={partition.id}
                               >
                                 {partition.assessmentFormat.name}

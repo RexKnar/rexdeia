@@ -1,4 +1,5 @@
 import { useGetExamAnalyticsSectionMasterQuery } from 'lib/queries/analytics/exam/useGetSectionAnalyticsMasterQuery';
+import { useEffect, useState } from 'react';
 import { Text } from 'ui';
 import {
   Table,
@@ -8,12 +9,13 @@ import {
   TableRow,
 } from 'ui/components/ui/Table';
 
+import PdfDocument from '../pdf/_components/PdfDocument';
+
 export default function SectionAnalytics({
   classId,
   examId,
 }: {
   classId: string;
-  sectionId?: string;
   examId: string;
 }) {
   const { data: analyticsList } = useGetExamAnalyticsSectionMasterQuery(
@@ -23,276 +25,157 @@ export default function SectionAnalytics({
     },
     { enabled: !!examId && !!classId }
   );
+
+  const [pdfTableHeader, setPdfTableHeader] = useState<any[]>([]);
+  const [pdfTableValues, setPdfTableValues] = useState<any[]>([]);
+
+  useEffect(() => {
+    if (analyticsList?.length > 0) {
+      const heading = [
+        'Section',
+        'Total Students',
+        'Pending Entry',
+        'Appeared',
+        'Absent',
+        'Average',
+        'No. of Pass',
+        'No. of Failures',
+        'Pass %',
+        'Failure %',
+        'Highest',
+        'Lowest',
+      ];
+      setPdfTableHeader(heading);
+    }
+  }, [analyticsList]);
+
+ 
+  useEffect(() => {
+    if (analyticsList?.length > 0) {
+      const finalTableValues = analyticsList.map((subjectAnalytics) => {
+        return subjectAnalytics.analytics.map((analyticsDetail) => {
+          return [
+            analyticsDetail?.section?.name,
+            analyticsDetail?.totalStudents?.overall,
+            analyticsDetail?.markEntry?.overall,
+            analyticsDetail?.attendance?.overall,
+            analyticsDetail?.absent?.overall,
+            analyticsDetail?.averageMark?.overall?.toFixed(2),
+            analyticsDetail?.numberOfPassStudents?.overall,
+            analyticsDetail?.numberOfFailStudents?.overall,
+            `${analyticsDetail?.passPercentage?.overall?.toFixed(2)}%`,
+            `${analyticsDetail?.failPercentage?.overall?.toFixed(2)}%`,
+            analyticsDetail?.highestMark?.overall,
+            analyticsDetail?.lowestMark?.overall,
+          ];
+        });
+      });
+      setPdfTableValues(finalTableValues.flat());
+    }
+  }, [analyticsList]);
+
+  const renderAnalyticsRow = (subjectAnalytics: any) => {
+    return subjectAnalytics.analytics.map((analyticsDetail: any, index: number) => {
+      return (
+        <TableRow key={analyticsDetail.section.id}>
+          {index === 0 && (
+            <TableCell className="sticky w-[100px] bg-primary-300" rowSpan={subjectAnalytics.analytics.length}>
+              <Text className="font-semibold size-lg">{subjectAnalytics.subject.name}</Text>
+            </TableCell>
+          )}
+          <TableCell className="w-[150px] text-center">
+            <Text className="font-semibold">{analyticsDetail?.section?.name}</Text>
+          </TableCell>
+          <TableCell className="w-[150px] text-center">
+            {analyticsDetail?.totalStudents?.overall}
+          </TableCell>
+          <TableCell className="w-[150px] text-center">
+            {analyticsDetail?.markEntry?.overall}
+          </TableCell>
+          <TableCell className="w-[150px] text-center">
+            {analyticsDetail?.attendance?.overall}
+          </TableCell>
+          <TableCell className="w-[150px] text-center">
+            {analyticsDetail?.absent?.overall}
+          </TableCell>
+          <TableCell className="w-[150px] text-center">
+            {analyticsDetail?.averageMark?.overall?.toFixed(2)}
+          </TableCell>
+          <TableCell className="w-[150px] text-center">
+            {analyticsDetail?.numberOfPassStudents?.overall}
+          </TableCell>
+          <TableCell className="w-[150px] text-center">
+            {analyticsDetail?.numberOfFailStudents?.overall}
+          </TableCell>
+          <TableCell className="w-[150px] text-center">
+            {`${analyticsDetail?.passPercentage?.overall?.toFixed(2)}%`}
+          </TableCell>
+          <TableCell className="w-[150px] text-center">
+            {`${analyticsDetail?.failPercentage?.overall?.toFixed(2)}%`}
+          </TableCell>
+          <TableCell className="w-[150px] text-center">
+            {analyticsDetail?.highestMark?.overall}
+          </TableCell>
+          <TableCell className="w-[150px] text-center">
+            {analyticsDetail?.lowestMark?.overall}
+          </TableCell>
+        </TableRow>
+      );
+    });
+  };
+
   return (
     <section>
       {analyticsList && (
-        <div className="mt-4 w-full space-y-4 overflow-auto rounded-md bg-white p-6 print:m-0 print:p-0">
-          <Table className="overflow-scroll ">
-            <TableHeader className=" bg-primary-300">
+        <div className="w-full p-6 mt-4 space-y-4 overflow-auto bg-white rounded-md print:m-0 print:p-0">
+          <div className="w-full">
+            {pdfTableHeader.length > 0 && (
+              <PdfDocument headingList={pdfTableHeader} tableValues={pdfTableValues} />
+            )}
+          </div>
+          <Table className="overflow-scroll">
+            <TableHeader className="bg-primary-300">
               <TableRow className="text-center">
                 <TableCell className="w-[100px] text-center"></TableCell>
-                <TableCell></TableCell>
                 <TableCell className="w-[150px] text-center">
-                  <Text className="size-lg font-semibold">Total Students</Text>
+                  <Text className="font-semibold size-lg">Section</Text>
                 </TableCell>
                 <TableCell className="w-[150px] text-center">
-                  <Text className="size-lg font-semibold">Pending Entry</Text>
+                  <Text className="font-semibold size-lg">Total Students</Text>
                 </TableCell>
                 <TableCell className="w-[150px] text-center">
-                  <Text className="size-lg font-semibold">Appeared</Text>
+                  <Text className="font-semibold size-lg">Pending Entry</Text>
                 </TableCell>
                 <TableCell className="w-[150px] text-center">
-                  <Text className="size-lg font-semibold">Absent</Text>
+                  <Text className="font-semibold size-lg">Appeared</Text>
                 </TableCell>
                 <TableCell className="w-[150px] text-center">
-                  <Text className="size-lg font-semibold">Average</Text>
+                  <Text className="font-semibold size-lg">Absent</Text>
                 </TableCell>
                 <TableCell className="w-[150px] text-center">
-                  <Text className="size-lg font-semibold">No. of Pass</Text>
+                  <Text className="font-semibold size-lg">Average</Text>
                 </TableCell>
                 <TableCell className="w-[150px] text-center">
-                  <Text className="size-lg font-semibold">No. of Failures</Text>
+                  <Text className="font-semibold size-lg">No. of Pass</Text>
                 </TableCell>
                 <TableCell className="w-[150px] text-center">
-                  <Text className="size-lg font-semibold">Pass %</Text>
+                  <Text className="font-semibold size-lg">No. of Failures</Text>
                 </TableCell>
                 <TableCell className="w-[150px] text-center">
-                  <Text className="size-lg font-semibold">Failure %</Text>
+                  <Text className="font-semibold size-lg">Pass %</Text>
                 </TableCell>
                 <TableCell className="w-[150px] text-center">
-                  <Text className="size-lg font-semibold">Highest</Text>
+                  <Text className="font-semibold size-lg">Failure %</Text>
                 </TableCell>
                 <TableCell className="w-[150px] text-center">
-                  <Text className="size-lg font-semibold">Lowest</Text>
+                  <Text className="font-semibold size-lg">Highest</Text>
+                </TableCell>
+                <TableCell className="w-[150px] text-center">
+                  <Text className="font-semibold size-lg">Lowest</Text>
                 </TableCell>
               </TableRow>
             </TableHeader>
-            <TableBody className="">
-              {analyticsList.map((detailedAnalytics) => {
-                const { subject, analytics: analyticsDetails } =
-                  detailedAnalytics;
-                return (
-                  <>
-                    {analyticsDetails.map((subjectAnalytics, index) => (
-                      <TableRow key={subject.id}>
-                        {index === 0 && (
-                          <TableCell
-                            className="sticky w-[100px] bg-primary-300"
-                            rowSpan={analyticsDetails.length}
-                          >
-                            <Text className="size-lg font-semibold">
-                              {subject.name}
-                            </Text>
-                          </TableCell>
-                        )}
-                        <TableCell className="w-[50px] bg-amber-300 text-center">
-                          <div className="flex flex-col justify-evenly">
-                            <Text className="size-lg text-center font-semibold">
-                              {subjectAnalytics?.section.name}
-                            </Text>
-                          </div>
-                        </TableCell>
-                        <TableCell className="w-[150px] text-center">
-                          <div className="flex flex-col justify-evenly">
-                            <Text className="size-lg text-center font-semibold">
-                              {subjectAnalytics?.totalStudents?.overall}
-                            </Text>
-                            <div className="flex justify-evenly">
-                              <Text className="text-primary-800">
-                                M: {subjectAnalytics?.totalStudents.male}
-                              </Text>
-                              <Text className="text-primary-800">
-                                F: {subjectAnalytics?.totalStudents.female}
-                              </Text>
-                            </div>
-                          </div>
-                        </TableCell>
-                        <TableCell className="w-[150px] text-center">
-                          <div className="flex flex-col justify-evenly">
-                            <Text className="size-lg text-center font-semibold">
-                              {subjectAnalytics?.markEntry?.overall}
-                            </Text>
-                            <div className="flex justify-evenly">
-                              <Text className="text-primary-800">
-                                M: {subjectAnalytics?.markEntry.male}
-                              </Text>
-                              <Text className="text-primary-800">
-                                F: {subjectAnalytics?.markEntry.female}
-                              </Text>
-                            </div>
-                          </div>
-                        </TableCell>
-                        <TableCell className="w-[150px] text-center">
-                          <div className="flex flex-col justify-evenly">
-                            <Text className="size-lg text-center font-semibold">
-                              {subjectAnalytics?.attendance?.overall}
-                            </Text>
-                            <div className="flex justify-evenly">
-                              <Text className="text-primary-800">
-                                M: {subjectAnalytics?.attendance.male}
-                              </Text>
-                              <Text className="text-primary-800">
-                                F: {subjectAnalytics?.attendance.female}
-                              </Text>
-                            </div>
-                          </div>
-                        </TableCell>
-                        <TableCell className="w-[150px] text-center">
-                          <div className="flex flex-col justify-evenly">
-                            <Text className="size-lg text-center font-semibold">
-                              {subjectAnalytics?.absent?.overall}
-                            </Text>
-                            <div className="flex justify-evenly">
-                              <Text className="text-primary-800">
-                                M: {subjectAnalytics?.absent.male}
-                              </Text>
-                              <Text className="text-primary-800">
-                                F: {subjectAnalytics?.absent.female}
-                              </Text>
-                            </div>
-                          </div>
-                        </TableCell>
-                        <TableCell className="w-[150px] text-center">
-                          <div className="flex flex-col justify-evenly">
-                            <Text className="size-lg text-center font-semibold">
-                              {subjectAnalytics?.averageMark?.overall.toFixed(
-                                2
-                              )}
-                            </Text>
-                            <div className="flex justify-evenly">
-                              <Text className="text-primary-800">
-                                M:{' '}
-                                {subjectAnalytics?.averageMark.male.toFixed(2)}
-                              </Text>
-                              <Text className="text-primary-800">
-                                F:{' '}
-                                {subjectAnalytics?.averageMark.female.toFixed(
-                                  2
-                                )}
-                              </Text>
-                            </div>
-                          </div>
-                        </TableCell>
-                        <TableCell className="w-[150px] text-center">
-                          <div className="flex flex-col justify-evenly">
-                            <Text className="size-lg text-center font-semibold">
-                              {subjectAnalytics?.numberOfPassStudents?.overall}
-                            </Text>
-                            <div className="flex justify-evenly">
-                              <Text className="text-primary-800">
-                                M: {subjectAnalytics?.numberOfPassStudents.male}
-                              </Text>
-                              <Text className="text-primary-800">
-                                F:{' '}
-                                {subjectAnalytics?.numberOfPassStudents.female}
-                              </Text>
-                            </div>
-                          </div>
-                        </TableCell>
-                        <TableCell className="w-[150px] text-center">
-                          <div className="flex flex-col justify-evenly">
-                            <Text className="size-lg text-center font-semibold">
-                              {subjectAnalytics?.numberOfFailStudents?.overall}
-                            </Text>
-                            <div className="flex justify-evenly">
-                              <Text className="text-primary-800">
-                                M: {subjectAnalytics?.numberOfFailStudents.male}
-                              </Text>
-                              <Text className="text-primary-800">
-                                F:{' '}
-                                {subjectAnalytics?.numberOfFailStudents.female}
-                              </Text>
-                            </div>
-                          </div>
-                        </TableCell>
-                        <TableCell className="w-[150px] text-center">
-                          <div className="flex flex-col justify-evenly">
-                            <Text className="size-lg text-center font-semibold">
-                              {subjectAnalytics?.passPercentage?.overall.toFixed(
-                                2
-                              )}
-                              %
-                            </Text>
-                            <div className="flex justify-evenly">
-                              <Text className="text-primary-800">
-                                M:{' '}
-                                {subjectAnalytics?.passPercentage.male.toFixed(
-                                  2
-                                )}
-                                %
-                              </Text>
-                              <Text className="text-primary-800">
-                                F:{' '}
-                                {subjectAnalytics?.passPercentage.female.toFixed(
-                                  2
-                                )}
-                                %
-                              </Text>
-                            </div>
-                          </div>
-                        </TableCell>
-                        <TableCell className="w-[150px] text-center">
-                          <div className="flex flex-col justify-evenly">
-                            <Text className="size-lg text-center font-semibold">
-                              {subjectAnalytics?.failPercentage?.overall.toFixed(
-                                2
-                              )}
-                              %
-                            </Text>
-                            <div className="flex justify-evenly">
-                              <Text className="text-primary-800">
-                                M:{' '}
-                                {subjectAnalytics?.failPercentage.male.toFixed(
-                                  2
-                                )}
-                                %
-                              </Text>
-                              <Text className="text-primary-800">
-                                F:{' '}
-                                {subjectAnalytics?.failPercentage.female.toFixed(
-                                  2
-                                )}
-                                %
-                              </Text>
-                            </div>
-                          </div>
-                        </TableCell>
-                        <TableCell className="w-[150px] text-center">
-                          <div className="flex flex-col justify-evenly">
-                            <Text className="size-lg text-center font-semibold">
-                              {subjectAnalytics?.highestMark?.overall}
-                            </Text>
-                            <div className="flex justify-evenly">
-                              <Text className="text-primary-800">
-                                M: {subjectAnalytics?.highestMark.male}
-                              </Text>
-                              <Text className="text-primary-800">
-                                F: {subjectAnalytics?.highestMark.female}
-                              </Text>
-                            </div>
-                          </div>
-                        </TableCell>
-                        <TableCell className="w-[150px] text-center">
-                          <div className="flex flex-col justify-evenly">
-                            <Text className="size-lg text-center font-semibold">
-                              {subjectAnalytics?.lowestMark?.overall}
-                            </Text>
-                            <div className="flex justify-evenly">
-                              <Text className="text-primary-800">
-                                M: {subjectAnalytics?.lowestMark.male}
-                              </Text>
-                              <Text className="text-primary-800">
-                                F: {subjectAnalytics?.lowestMark.female}
-                              </Text>
-                            </div>
-                          </div>
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                  </>
-                );
-              })}
-            </TableBody>
+            <TableBody>{analyticsList.map(renderAnalyticsRow)}</TableBody>
           </Table>
         </div>
       )}
