@@ -85,6 +85,10 @@ export default function OverallAnalytics({
         totalMarks.overall += mark;
         totalStudents[gender]++;
         totalStudents.overall++;
+        if (subject.centum) {
+          result.centum[gender]++;
+          result.centum.overall++;
+        }
 
         if (!subject.absentStatus && subject?.marks?.length > 0) {
           result.attendance[gender]++;
@@ -391,6 +395,21 @@ export default function OverallAnalytics({
             </div>
           </div>
         </TableCell>
+        <TableCell>
+          <div className="flex flex-col justify-evenly">
+            <Text className="size-lg text-center font-semibold">
+              {subjectAnalytics?.centum.overall}
+            </Text>
+            <div className="flex justify-evenly">
+              <Text className="text-primary-800">
+                M: {subjectAnalytics?.centum.male}
+              </Text>
+              <Text className="text-primary-800">
+                F: {subjectAnalytics?.centum.female}
+              </Text>
+            </div>
+          </div>
+        </TableCell>
       </TableRow>
     );
   };
@@ -433,6 +452,9 @@ export default function OverallAnalytics({
                 </TableCell>
                 <TableCell>
                   <Text className="size-lg font-semibold">Lowest</Text>
+                </TableCell>
+                <TableCell>
+                  <Text className="size-lg font-semibold">Centum</Text>
                 </TableCell>
               </TableRow>
             </TableHeader>
@@ -482,6 +504,9 @@ export default function OverallAnalytics({
                   <Text className="size-lg font-semibold">
                     {overallStats.lowestMark}
                   </Text>
+                </TableCell>
+                <TableCell>
+                  <Text className="size-lg font-semibold">-</Text>
                 </TableCell>
               </TableRow>
             </TableBody>
