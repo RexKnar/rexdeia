@@ -6,18 +6,17 @@ import {
 import { PeriodTypeModel } from 'lib/domain/periodsType';
 
 import { makeAPICall } from '../../api';
-import { PaginatedResponse } from '../../domain';
 import { GET_PERIOD_TYPES_LIST } from '../../endpoints';
 
 function getPeriodTypeList(
   { page, limit }: { page: number; limit: number },
-  options?: UseQueryOptions<PaginatedResponse<PeriodTypeModel>>
-): UseQueryOptions<PaginatedResponse<PeriodTypeModel>> {
+  options?: UseQueryOptions<PeriodTypeModel[]>
+): UseQueryOptions<PeriodTypeModel[]> {
   return {
     ...options,
     queryKey: [GET_PERIOD_TYPES_LIST, page, limit],
     queryFn: async () => {
-      return await makeAPICall<PaginatedResponse<PeriodTypeModel>>(
+      return await makeAPICall<PeriodTypeModel[]>(
         GET_PERIOD_TYPES_LIST,
 
         {
@@ -32,7 +31,7 @@ function getPeriodTypeList(
 
 export function useGetPeriodTypeListQuery(
   { page, limit }: { page: number; limit: number },
-  options?: UseQueryOptions<PaginatedResponse<PeriodTypeModel>>
-): UseQueryResult<PaginatedResponse<PeriodTypeModel>> {
+  options?: UseQueryOptions<PeriodTypeModel[]>
+): UseQueryResult<PeriodTypeModel[]> {
   return useQuery(getPeriodTypeList({ page, limit }, options));
 }
