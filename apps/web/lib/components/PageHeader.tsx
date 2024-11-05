@@ -129,7 +129,7 @@ export function PageHeader() {
               )}
             </div>
           </div>
-          {/* <NotificationPopover /> */}
+          <NotificationPopover />
           <UserMenu />
         </div>
       </section>
