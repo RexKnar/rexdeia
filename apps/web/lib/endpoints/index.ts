@@ -161,6 +161,7 @@ export const DELETE_STAFF_CATEGORY_BY_ID = `DELETE_STAFF_CATEGORY_BY_ID`;
 export const DELETE_DESIGNATION_BY_ID = `DELETE_DESIGNATION_BY_ID`;
 export const DELETE_NATURE_OF_POSTING_BY_ID = `DELETE_NATURE_OF_POSTING_BY_ID`;
 export const DELETE_EMPLOYMENT_TYPE_BY_ID = `DELETE_EMPLOYMENT_TYPE_BY_ID`;
+export const GET_SUBJECTS_BY_CLASS_AND_GROUP_ID = `GET_SUBJECTS_BY_CLASS_AND_GROUP_ID`;
 export const ADD_CLASSLEVEL = `ADD_CLASSLEVEL`;
 export const GET_CLASSLEVELS_LIST = `GET_CLASSLEVELS_LIST`;
 export const GET_CLASSLEVEL_BY_ID = `GET_CLASSLEVEL_BY_ID`;
@@ -832,6 +833,10 @@ export default <EndpointDetails>{
   [DELETE_STAFF_CATEGORY_BY_ID]: {
     requestType: 'DELETE',
     endpoint: '/api/staff/staff-category/[id]',
+  },
+  [GET_SUBJECTS_BY_CLASS_AND_GROUP_ID]: {
+    requestType: 'GET',
+    endpoint: '/api/group/[id]/subjects',
   },
   [ADD_CLASSLEVEL]: {
     requestType: 'POST',
