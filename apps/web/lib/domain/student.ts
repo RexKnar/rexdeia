@@ -47,6 +47,7 @@ export type Student = {
   group: GroupModel;
   medium: MediumModel;
   batch: BatchModel;
+  section: SectionModel;
   status: 'Active' | 'Rejected' | 'Pending';
 
   additionalAttributes: any;
@@ -55,7 +56,7 @@ export type Student = {
 
 export type AddStudentModel = Omit<
   Student,
-  'id' | 'motherTongue' | 'community' | 'batch' | 'studentMapping'
+  'id' | 'motherTongue' | 'community' | 'batch' | 'studentMapping ' | 'section'
 > & {
   batchId: string;
   communityId: string;

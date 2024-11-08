@@ -1,12 +1,12 @@
-/* eslint-disable @next/next/no-img-element */
-/* eslint-disable react/no-unescaped-entities */
 'use client';
 
+import { useGetStudentMarkListQuery } from 'lib/queries/analytics/student/useGetStudentMarkQuery';
 import { Loader2 } from 'lucide-react';
 import { useParams } from 'next/navigation';
 import {
   Avatar,
   AvatarImage,
+  // Button,
   Card,
   CardContent,
   CardHeader,
@@ -16,6 +16,13 @@ import {
   TabsTrigger,
   Text,
 } from 'ui';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHeader,
+  TableRow,
+} from 'ui/components/ui/Table';
 
 import { useGetStudentByIdQuery } from '../../../../../lib/queries/students/useGetStudentByIdQuery';
 
@@ -24,17 +31,24 @@ export function StudentDetail() {
 
   const { data: getStudentByIdResponse, isLoading: isGetStudentByIdLoading } =
     useGetStudentByIdQuery(id);
+  const sectionId = getStudentByIdResponse?.section?.id;
+  const classId = getStudentByIdResponse?.class?.id;
+  const groupId = getStudentByIdResponse?.group?.id;
 
+  const {
+    data: getStudentMarkListResponse,
+    isLoading: isGetStudentMarkListLoading,
+  } = useGetStudentMarkListQuery(id, sectionId, classId, groupId);
   if (isGetStudentByIdLoading) {
     return (
       <div className="flex h-20 items-center justify-center">
         <Loader2 className="mr-2 w-6 animate-spin text-black" />
-        <p className="text-black ">Fetching Student Details...</p>
+        <p className="text-black ">Loading...</p>
       </div>
     );
   }
   return (
-    <section className="mt-10 flex w-full justify-start gap-5">
+    <section className="mt-10 grid w-full grid-cols-11 justify-start gap-2">
       <section className="col-span-3 ">
         <Card className="w-72 rounded-md bg-white">
           <CardHeader>
@@ -110,7 +124,7 @@ export function StudentDetail() {
           </CardContent>
         </Card>
       </section>
-      <section className="col-span-7">
+      <section className="col-span-8">
         <Tabs defaultValue="profile" className="border-0 ">
           <TabsList className="w-full justify-start border-b-2 border-gray-100">
             <TabsTrigger
@@ -124,6 +138,12 @@ export function StudentDetail() {
               className="mr-2 text-base focus:border-b-4 focus:border-primary"
             >
               Documents
+            </TabsTrigger>
+            <TabsTrigger
+              value="report"
+              className="mr-2 text-base focus:border-b-4 focus:border-primary"
+            >
+              Report
             </TabsTrigger>
           </TabsList>
           <TabsContent className="w-full" value="profile">
@@ -265,7 +285,7 @@ export function StudentDetail() {
                   <div className="mt-2 flex flex-wrap gap-12 p-6">
                     <div>
                       <label className="text-sm font-semibold text-gray-700">
-                        Father's Name`
+                        Father&apos;s Name`
                       </label>
                       <Text variant="base-regular">
                         {getStudentByIdResponse.fatherName}
@@ -273,7 +293,7 @@ export function StudentDetail() {
                     </div>
                     <div>
                       <label className="text-sm font-semibold text-gray-700">
-                        Father's Occupation
+                        Father&apos;s Occupation
                       </label>
                       <Text variant="base-regular">
                         {getStudentByIdResponse.fatherOccupation}
@@ -281,7 +301,7 @@ export function StudentDetail() {
                     </div>
                     <div>
                       <label className="text-sm font-semibold text-gray-700">
-                        Father's Phone Number
+                        Father&apos;s Phone Number
                       </label>
                       <Text variant="base-regular">
                         {getStudentByIdResponse.fatherPhoneNumber}
@@ -289,7 +309,7 @@ export function StudentDetail() {
                     </div>
                     <div>
                       <label className="text-sm font-semibold text-gray-700">
-                        Father's Education
+                        Father&apos;s Education
                       </label>
                       <Text variant="base-regular">
                         {
@@ -300,7 +320,7 @@ export function StudentDetail() {
                     </div>
                     <div>
                       <label className="text-sm font-semibold text-gray-700">
-                        Father's Aadhar Card Number
+                        Father&apos;s Aadhar Card Number
                       </label>
                       <Text variant="base-regular">
                         {
@@ -311,7 +331,7 @@ export function StudentDetail() {
                     </div>
                     <div>
                       <label className="text-sm font-semibold text-gray-700">
-                        Mother's Name
+                        Mother&apos;s Name
                       </label>
                       <Text variant="base-regular">
                         {getStudentByIdResponse.motherName}
@@ -319,7 +339,7 @@ export function StudentDetail() {
                     </div>
                     <div>
                       <label className="text-sm font-semibold text-gray-700">
-                        Mother's Occupation
+                        Mother&apos;s Occupation
                       </label>
                       <Text variant="base-regular">
                         {getStudentByIdResponse.motherOccupation}
@@ -327,7 +347,7 @@ export function StudentDetail() {
                     </div>
                     <div>
                       <label className="text-sm font-semibold text-gray-700">
-                        Mother's Phone Number
+                        Mother&apos;s Phone Number
                       </label>
                       <Text variant="base-regular">
                         {getStudentByIdResponse.motherPhoneNumber}
@@ -335,7 +355,7 @@ export function StudentDetail() {
                     </div>
                     <div>
                       <label className="text-sm font-semibold text-gray-700">
-                        Mother's Education
+                        Mother&apos;s Education
                       </label>
                       <Text variant="base-regular">
                         {
@@ -346,7 +366,7 @@ export function StudentDetail() {
                     </div>
                     <div>
                       <label className="text-sm font-semibold text-gray-700">
-                        Mother's Aadhar Card Number
+                        Mother&apos;s Aadhar Card Number
                       </label>
                       <Text variant="base-regular">
                         {
@@ -382,12 +402,12 @@ export function StudentDetail() {
 
                 <div className="mt-4 border-t-8 border-gray-100 bg-white">
                   <Text variant="sm-semibold" className="pl-6 pt-5">
-                    {'GARDIANS DETAILS'}
+                    {'GUARDIANS DETAILS'}
                   </Text>
                   <div className="mt-2 flex flex-wrap gap-12 p-6">
                     <div>
                       <label className="text-sm font-semibold text-gray-700">
-                        Guardian's Name
+                        Guardian&apos;s Name
                       </label>
                       <Text variant="base-regular">
                         {getStudentByIdResponse.guardianName}
@@ -395,7 +415,7 @@ export function StudentDetail() {
                     </div>
                     <div>
                       <label className="text-sm font-semibold text-gray-700">
-                        Guardian's Occupation
+                        Guardian&apos;s Occupation
                       </label>
                       <Text variant="base-regular">
                         {getStudentByIdResponse.guardiansOccupation}
@@ -414,7 +434,7 @@ export function StudentDetail() {
                     </div>
                     <div>
                       <label className="text-sm font-semibold text-gray-700">
-                        Guardian's Phone Number
+                        Guardian&apos;s Phone Number
                       </label>
                       <Text variant="base-regular">
                         {getStudentByIdResponse.guardianPhoneNumber}
@@ -422,7 +442,7 @@ export function StudentDetail() {
                     </div>
                     <div>
                       <label className="text-sm font-semibold text-gray-700">
-                        Guardian's Aadhar Card Number
+                        Guardian&apos;s Aadhar Card Number
                       </label>
                       <Text variant="base-regular">
                         {
@@ -753,7 +773,7 @@ export function StudentDetail() {
               </div>
             </section>
           </TabsContent>
-          <TabsContent className="w-full" value="document">
+          <TabsContent className="w-full " value="document">
             <section className="bg-white p-5 ">
               <div>
                 <label className="pl-1">Document</label>
@@ -829,6 +849,63 @@ export function StudentDetail() {
                   </Card>
                 </div>
               </div>
+            </section>
+          </TabsContent>
+          <TabsContent className="w-full min-w-full" value="report">
+            <section className="rounded-md bg-white ">
+              {isGetStudentMarkListLoading ? (
+                <div className="flex h-20 items-center justify-center">
+                  <Loader2 className="mr-2 w-6 animate-spin text-black" />
+                  <p className="text-black ">Fetching Student Details...</p>
+                </div>
+              ) : (
+                <Table>
+                  <TableHeader>
+                    <TableRow className="mt-5 bg-primary-300 text-center print:hidden">
+                      <TableCell>
+                        <Text className="size-lg font-semibold">Exams</Text>
+                      </TableCell>
+                      {getStudentMarkListResponse.subjectList?.map(
+                        (subject) => (
+                          <TableCell key={subject.subjectId}>
+                            <Text className="size-lg font-semibold">
+                              {subject.subject.name}
+                            </Text>
+                          </TableCell>
+                        )
+                      )}
+                      <TableCell>
+                        <Text className="size-lg font-semibold">Total</Text>
+                      </TableCell>
+                    </TableRow>
+                  </TableHeader>
+                  {getStudentMarkListResponse && (
+                    <TableBody>
+                      {getStudentMarkListResponse.markList.map((exam) => (
+                        <TableRow key={exam.exam.id}>
+                          <TableCell className="mt-5 bg-green-100 text-center print:hidden">
+                            {exam.exam.name}
+                          </TableCell>
+                          {exam.subjects.map((subject) => (
+                            <TableCell key={subject.id}>
+                              {subject.subject.name}
+                              <div>
+                                {subject.examSubjectPartition.map(
+                                  (partition) => (
+                                    <div key={partition.id}>
+                                      {partition.Mark[0].mark}
+                                    </div>
+                                  )
+                                )}
+                              </div>
+                            </TableCell>
+                          ))}
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  )}
+                </Table>
+              )}
             </section>
           </TabsContent>
         </Tabs>

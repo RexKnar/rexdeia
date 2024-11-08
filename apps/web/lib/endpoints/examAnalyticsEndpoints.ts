@@ -4,6 +4,7 @@ export const EXAM_ANALYTICS = `EXAM_ANALYTICS`;
 export const EXAM_SUBJECTS_BY_CLASS_SECTION_EXAM_ID = `EXAM_SUBJECTS_BY_CLASS_SECTION_EXAM_ID`;
 export const EXAM_MARK_LIST_BY_FILTER = `EXAM_MARK_LIST_BY_FILTER`;
 export const EXAM_MARK_MASTER_BY_FILTER = `EXAM_MARK_MASTER_BY_FILTER`;
+export const EXAM_MARK_LIST_BY_STUDENT_ID = `EXAM_MARK_LIST_BY_STUDENT_ID`;
 export const EXAM_ANALYTICS_SECTION_MASTER = `EXAM_ANALYTICS_SECTION_MASTER`;
 export const EXAM_ANALYTICS_STAFF_MASTER = `EXAM_ANALYTICS_STAFF_MASTER`;
 export default <EndpointDetails>{
@@ -30,5 +31,9 @@ export default <EndpointDetails>{
   [EXAM_MARK_MASTER_BY_FILTER]: {
     requestType: `PUT`,
     endpoint: `/api/analytics/master`,
+  },
+  [EXAM_MARK_LIST_BY_STUDENT_ID]: {
+    requestType: `GET`,
+    endpoint: `/api/analytics/students/[id]`,
   },
 };
