@@ -2,6 +2,7 @@
 
 import { useGetStudentSearchListQuery } from 'lib/queries/students/useGetStudentSearchListQuery';
 import { Search } from 'lucide-react';
+import Link from 'next/dist/client/link';
 import { Suspense, useEffect, useRef, useState } from 'react';
 import { Alert, Text } from 'ui';
 
@@ -92,7 +93,8 @@ export function PageHeader() {
                         Found {studentList.total} results
                       </div>
                       {studentList.data.map((student) => (
-                        <button
+                        <Link
+                          href={`/students/${student.id}`}
                           key={student.id}
                           className="w-full px-4 py-2 text-left hover:bg-gray-50 focus:bg-gray-50 focus:outline-none"
                           onClick={() => {
@@ -121,7 +123,7 @@ export function PageHeader() {
                               </div>
                             </div>
                           </div>
-                        </button>
+                        </Link>
                       ))}
                     </div>
                   ) : null}
