@@ -139,7 +139,8 @@ export async function getStudentMarksByFilter(
             }
             const markValue = Number(mark.mark);
             const totalMarksValue = Number(partition.totalMarks);
-            if (markValue !== totalMarksValue) {
+
+            if (!failingStatus && markValue !== totalMarksValue) {
               centum = false;
             }
 
@@ -185,7 +186,7 @@ export async function getStudentMarksByFilter(
       };
 
       if (!subject.absentStatus) attendance = true;
-      if (centum) {
+      if (!failingStatus && centum) {
         centumCount++;
       }
       return subject;

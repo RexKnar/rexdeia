@@ -48,7 +48,7 @@ export default function OverallAnalytics({
   );
 
   const analyzeSubjectPerformance = useCallback(
-    (subjectId: string): Analytics => {
+    (subjectId: string, partitionCount: number): Analytics => {
       const result: Analytics = {
         numberOfPassStudents: { male: 0, female: 0, overall: 0 },
         numberOfFailStudents: { male: 0, female: 0, overall: 0 },
@@ -85,10 +85,10 @@ export default function OverallAnalytics({
         totalMarks.overall += mark;
         totalStudents[gender]++;
         totalStudents.overall++;
-        if (subject.centum) {
-          result.centum[gender]++;
-          result.centum.overall++;
-        }
+        // if (subject.centum) {
+        //   result.centum[gender]++;
+        //   result.centum.overall++;
+        // }
 
         if (!subject.absentStatus && subject?.marks?.length > 0) {
           result.attendance[gender]++;
@@ -139,7 +139,12 @@ export default function OverallAnalytics({
           result.numberOfPassStudents.overall++;
         }
 
-        if (subject.centum) {
+        if (
+          subject.centum &&
+          !subject.failingStatus &&
+          !subject.absentStatus &&
+          subject?.marks?.length === partitionCount
+        ) {
           result.centum[gender]++;
           result.centum.overall++;
         }
@@ -175,12 +180,15 @@ export default function OverallAnalytics({
       subjectList.forEach((subject) => {
         newAnalytics.set(
           subject.id,
-          analyzeSubjectPerformance(subject.subject.id)
+          analyzeSubjectPerformance(
+            subject.subject.id,
+            subject?.examSubjectPartition?.length ?? 0
+          )
         );
       });
       setAnalytics(newAnalytics);
     }
-  }, [students, subjectList, analyzeSubjectPerformance]);
+  }, [students, subjectList]);
 
   const overallStats = useMemo(() => {
     let totalMarks = 0,
