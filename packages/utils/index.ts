@@ -76,11 +76,28 @@ export function formatNumberWithSuffix(
     : value.toFixed(0) + matchingSuffix.suffix;
 }
 
-export function formatDate(isoDateString: string) {
-  const date = new Date(isoDateString);
-  const day = String(date.getDate()).padStart(2, '0'); // Add leading zero if needed
-  const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are zero-based, so add 1
-  const year = date.getFullYear();
+export function formatDate(
+  isoDateString: string,
+  format: string = 'dd/mm/yyyy'
+) {
+  let day: string, month: string, year: string;
 
-  return `${day}/${month}/${year}`;
+  const date = new Date(isoDateString);
+
+  if (isNaN(date.getDate() || date.getMonth() || date.getFullYear())) {
+    [day, month, year] = isoDateString.split('/');
+  } else {
+    day = String(date.getDate()).padStart(2, '0');
+    month = String(date.getMonth() + 1).padStart(2, '0');
+    year = String(date.getFullYear());
+  }
+
+  switch (format) {
+    case 'dd/mm/yyyy':
+      return `${day}/${month}/${year}`;
+    case 'mm/dd/yyyy':
+      return `${month}/${day}/${year}`;
+    case 'yyyy/mm/dd':
+      return `${year}-${month}-${day}`;
+  }
 }

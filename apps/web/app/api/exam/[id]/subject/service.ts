@@ -5,13 +5,12 @@ export async function getExamSubjectsByClassSectionId(
   classId?: string,
   sectionId?: string
 ) {
+  const groupWhereClause = sectionId
+    ? { examId, classId, sectionId }
+    : { examId, classId };
   const response = await db.examSubject.findMany({
     where: {
-      examGroup: {
-        examId,
-        classId,
-        sectionId,
-      },
+      examGroup: groupWhereClause,
     },
     orderBy: {
       subject: {
@@ -47,7 +46,12 @@ export async function getExamSubjectsByClassSectionId(
     },
   });
 
-  return response;
+  const distinctSubjects = response.filter(
+    (subject, index, self) =>
+      index === self.findIndex((t) => t.subject.id === subject.subject.id)
+  );
+
+  return distinctSubjects;
 }
 
 export async function getExamSubjectsByMaster(
@@ -55,13 +59,12 @@ export async function getExamSubjectsByMaster(
   classId?: string,
   sectionId?: string
 ) {
+  const groupWhereClause = sectionId
+    ? { examId, classId, sectionId }
+    : { examId, classId };
   const response = await db.examSubject.findMany({
     where: {
-      examGroup: {
-        examId,
-        classId,
-        sectionId,
-      },
+      examGroup: groupWhereClause,
     },
     orderBy: {
       subject: {

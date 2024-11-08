@@ -1,4 +1,5 @@
 'use client';
+import { useGetClassLevelByIdQuery } from 'lib/queries/classLevel/useGetClassLevelByIdQuery';
 import { useDeleteSubjectMutationQuery } from 'lib/queries/subjects/useDeleteSubjectMutationQuery';
 import { Loader2, PencilLine } from 'lucide-react';
 import dynamic from 'next/dynamic';
@@ -67,11 +68,14 @@ export function ClassDetail() {
     useGetClassByIdQuery(params.classId, {
       enabled: !!params.classId,
     });
+  const classLevelId = getClassByIdResponse?.classLevelId;
   const isOpen = searchParams.get('isDeleteConfirmationModalOpen') === 'true';
   const subjectId = searchParams.get('subjectId');
   const subjectName = searchParams.get('subjectName');
   const { isSuccess: isDeleteSuccess, mutateAsync: deleteSubjectAsync } =
     useDeleteSubjectMutationQuery(params.classId);
+
+  const { data: classLevelDetails } = useGetClassLevelByIdQuery(classLevelId);
 
   useEffect(() => {
     if (isDeleteSuccess) {
@@ -111,7 +115,7 @@ export function ClassDetail() {
                 <div className="flex">
                   <div className="my-auto inline-flex px-5">
                     <Text variant="base-bold" className="pr-5">
-                      {getClassByIdResponse.name}
+                      {getClassByIdResponse?.name}
                     </Text>
                     <span
                       className={cn(
@@ -123,6 +127,12 @@ export function ClassDetail() {
                     >
                       {getClassByIdResponse.isActive ? 'active' : 'Inactive'}
                     </span>
+                    <Text
+                      variant="base-bold"
+                      className="ml-3 rounded bg-secondary px-2.5 py-0.5 text-sm  font-medium text-white"
+                    >
+                      {classLevelDetails?.name}
+                    </Text>
                   </div>
                 </div>
                 <div className="my-auto flex gap-4 px-5">
@@ -147,7 +157,7 @@ export function ClassDetail() {
                 </div>
               </div>
               <Tabs defaultValue="Students" className="relative mt-4 px-0 py-2">
-                <TabsList className="w-full justify-start border-b-2 border-gray-400">
+                <TabsList className="w-full justify-start overflow-auto border-b-2 border-gray-400">
                   <TabsTrigger
                     value="Subjects"
                     className="mr-2 text-base focus:border-b-4 focus:border-primary"

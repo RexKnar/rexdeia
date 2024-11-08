@@ -21,6 +21,7 @@ export type SubjectModel = {
   SubjectType?: SubjectTypeModel;
   assessmentFormat: AssessmentFormatModel[];
   subjectToAssessmentFormat: SubjectToAssessmentFormatModel[];
+  subjectOrder?: number;
 };
 
 export type CreateSubjectModel = Pick<
@@ -34,6 +35,7 @@ export type CreateSubjectModel = Pick<
   | 'elective'
   | 'regulationId'
   | 'subjectMasterId'
+  | 'subjectOrder'
 >;
 
 export type UpdateSubjectModel = Pick<
@@ -49,6 +51,7 @@ export type UpdateSubjectModel = Pick<
   | 'regulationId'
   | 'subjectMasterId'
   | 'classId'
+  | 'subjectOrder'
 >;
 
 export type AssessmentFormatModel = {

@@ -1,4 +1,4 @@
-import { db } from 'lib/db';
+import { getStudentMarksByFilter, getStudentMarksByRank } from '../service';
 
 type MarkAnalyticsFilter = {
   classId?: string;
@@ -13,199 +13,35 @@ type MarkAnalyticsFilter = {
 };
 
 export async function getMasterMarksByFilter(filter: MarkAnalyticsFilter) {
-  const { classId, examId, sectionId } = filter;
+  const studentMarkList = await getStudentMarksByFilter(filter);
+  const analytics = getAnalytics(studentMarkList);
+  const rankedStudentList = await getStudentMarksByRank(studentMarkList);
+  return { markList: rankedStudentList, analytics };
+}
 
-  const mainClause = {};
-  if (sectionId) {
-    mainClause['sectionId'] = sectionId;
-  }
-  if (classId) {
-    mainClause['classId'] = classId;
-  }
+function getAnalytics(students) {
+  let totalMale = 0;
+  let totalFemale = 0;
+  let totalCount = students.length || 0;
 
-  const [studentList] = await Promise.all([
-    db.studentMapping.findMany({
-      where: {
-        ...mainClause,
-        isCurrent: true,
-      },
-      select: {
-        student: {
-          select: {
-            firstName: true,
-            middleName: true,
-            lastName: true,
-            gender: true,
-            id: true,
-          },
-        },
-        section: {
-          select: {
-            ExamGroup: {
-              where: {
-                examId,
-              },
-              select: {
-                exam: true,
-                examSubject: {
-                  orderBy: {
-                    subject: {
-                      subjectOrder: 'asc',
-                    },
-                  },
-                  select: {
-                    subject: true,
-                    examSubjectPartition: {
-                      include: {
-                        Mark: true,
-                        assessmentFormat: true,
-                      },
-                    },
-                  },
-                },
-              },
-            },
-          },
-        },
-        class: true,
-      },
-      orderBy: [
-        {
-          student: {
-            gender: 'asc',
-          },
-        },
-        {
-          student: {
-            firstName: 'asc',
-          },
-        },
-      ],
-    }),
-  ]);
+  students.forEach((student) => {
+    const gender = student.gender;
 
-  let subjectCount = 0;
-  const studentMarkList = studentList.map((student) => {
-    const studentDetail = { ...student.student };
-    const studentId = studentDetail.id;
-    const [{ examSubject }] = student.section.ExamGroup;
-    let subjectPassed = 0;
-    let subjectFailed = 0;
-    let totalMark = 0;
-    let actualTotalMarks = 0;
-    let subjectMasters = [];
-
-    const subjects = examSubject.map((examSubject) => {
-      const examSubjectPartition = examSubject.examSubjectPartition;
-
-      let subjectTotalMark = 0;
-      let failingStatus = false;
-      let failingOn = [];
-      let absentStatus = true;
-      let absentOn = [];
-      if (!subjectMasters.includes(examSubject.subject.subjectMasterId)) {
-        subjectMasters.push(examSubject.subject.subjectMasterId);
-      }
-      const marks = examSubjectPartition.reduce((acc, partition) => {
-        const subjectMarks = partition.Mark.filter(
-          (subjectMark) => subjectMark.studentId === studentId
-        );
-        actualTotalMarks += Number(partition.convertTo);
-        subjectMarks.forEach((mark) => {
-          if (mark) {
-            absentStatus = false;
-
-            if (
-              Number(mark.mark) < Number(partition.minMark) ||
-              mark.attandance
-            ) {
-              failingStatus = true;
-              failingOn.push(partition.assessmentFormat.name);
-            }
-            if (mark.attandance) {
-              absentOn.push(partition.assessmentFormat.name);
-            }
-            const actualMark =
-              (Number(mark.mark) / Number(partition.totalMarks)) *
-              Number(partition.convertTo);
-            subjectTotalMark += Math.round(actualMark);
-            mark['total'] = Math.round(actualMark);
-            mark['entryStatus'] = true;
-          } else {
-            mark['entryStatus'] = false;
-            mark['total'] = 0;
-          }
-          acc.push(mark);
-        });
-
-        return acc;
-      }, []);
-
-      if (failingStatus) {
-        subjectFailed++;
-      } else {
-        subjectPassed++;
-      }
-
-      if (marks.length == absentOn.length) {
-        absentStatus = true;
-      }
-      totalMark += subjectTotalMark;
-      const subject = {
-        ...examSubject.subject,
-        marks,
-        subjectTotalMark,
-        absentStatus,
-        absentOn,
-        failingStatus,
-        failingOn,
-        subjectPassed,
-        subjectFailed,
-      };
-
-      return subject;
-    });
-    subjectCount =
-      subjectCount < subjects.length ? subjects.length : subjectCount;
-    studentDetail['subjectMasterCount'] = subjectMasters.length;
-    studentDetail['subjects'] = subjects;
-    studentDetail['totalMark'] = totalMark;
-    studentDetail['totalAverage'] = totalMark / subjectMasters.length;
-    studentDetail['subjectPassed'] = subjectPassed;
-    studentDetail['subjectFailed'] = subjectFailed;
-    studentDetail['failingStatus'] = subjectFailed > 0 ? true : false;
-    studentDetail['totalPercentage'] = (totalMark / actualTotalMarks) * 100;
-
-    return studentDetail;
+    if (gender.toLowerCase() === 'male') {
+      totalMale++;
+    } else if (gender.toLowerCase() === 'female') {
+      totalFemale++;
+    }
   });
 
-  const findMinMaxTotalMarks = (students) => {
-    let totalMale = 0;
-    let totalFemale = 0;
-    let totalCount = students.length || 0;
+  const totalMalePercentage = (totalMale / totalCount) * 100;
+  const totalFemalePercentage = (totalFemale / totalCount) * 100;
 
-    students.forEach((student) => {
-      const gender = student.gender;
-
-      if (gender === 'Male') {
-        totalMale++;
-      } else if (gender === 'Female') {
-        totalFemale++;
-      }
-    });
-
-    const totalMalePercentage = (totalMale / totalCount) * 100;
-    const totalFemalePercentage = (totalFemale / totalCount) * 100;
-
-    return {
-      totalCount,
-      totalMale,
-      totalFemale,
-      totalFemalePercentage,
-      totalMalePercentage,
-    };
+  return {
+    totalCount,
+    totalMale,
+    totalFemale,
+    totalFemalePercentage,
+    totalMalePercentage,
   };
-
-  const analytics = findMinMaxTotalMarks(studentMarkList);
-  return { markList: studentMarkList, analytics };
 }

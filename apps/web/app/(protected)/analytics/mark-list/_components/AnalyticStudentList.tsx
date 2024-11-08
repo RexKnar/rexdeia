@@ -15,8 +15,14 @@ import {
   SelectTrigger,
   SelectValue,
   Slider,
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
 } from 'ui';
 
+import OverallAnalytics from '../../_components/OverallAnalytics';
+import SectionAnalytics from '../../_components/SectionAnalytics';
 import StudentMarkList from '../../_components/StudentMarkList';
 
 export function AnalyticStudentList() {
@@ -43,14 +49,14 @@ export function AnalyticStudentList() {
       sectionId,
     },
     {
-      enabled: !!examId && !!classId && !!sectionId,
+      enabled: !!examId && !!classId,
     }
   );
 
   const { data: examList } = useGetExamsBySectionIdQuery(
-    { classId, sectionId },
+    sectionId ? { classId, sectionId } : { classId },
     {
-      enabled: !!classId && !!sectionId,
+      enabled: !!classId,
     }
   );
   const { data: classList } = useGetClassListQuery({
@@ -70,10 +76,14 @@ export function AnalyticStudentList() {
 
   const handleSubjectCheckedChange = (subject: any) => {
     setFilterSubjects((prevSubjects) => {
-      const isPresent = prevSubjects.some((item) => item.id === subject.id);
+      const isPresent = prevSubjects.some(
+        (item) => item.subject.id === subject.subject.id
+      );
 
       if (isPresent) {
-        return prevSubjects.filter((item) => item.id !== subject.id);
+        return prevSubjects.filter(
+          (item) => item.subject.id !== subject.subject.id
+        );
       } else {
         return [...prevSubjects, subject];
       }
@@ -84,7 +94,7 @@ export function AnalyticStudentList() {
     let currentTotalMarks = 0;
     if (filterSubjects?.length > 0) {
       filterSubjects.map((subject) => {
-        currentTotalMarks += subject.convertTo;
+        currentTotalMarks += Number(subject.convertTo);
       });
     }
     setFilterTotalMarks(currentTotalMarks || 100);
@@ -241,9 +251,11 @@ export function AnalyticStudentList() {
                   {subjects.map((item, index) => (
                     <div className="flex items-center gap-2" key={index}>
                       <Checkbox
-                        value={item.id}
+                        value={item.subject.id}
                         key={index}
-                        checked={filterSubjects.some((s) => s.id === item.id)}
+                        checked={filterSubjects.some(
+                          (s) => s.subject.id === item.subject.id
+                        )}
                         onCheckedChange={() => {
                           handleSubjectCheckedChange(item);
                         }}
@@ -259,14 +271,55 @@ export function AnalyticStudentList() {
       </section>
 
       <section>
-        {studentMarkList && (
-          <StudentMarkList
-            examId={examId}
-            classId={classId}
-            sectionId={sectionId}
-            students={studentMarkList}
-          />
-        )}
+        <Tabs defaultValue="overall" className="border-0 ">
+          <TabsList className="w-full justify-start border-b-2 border-gray-100">
+            <TabsTrigger
+              value="overall"
+              className="mr-2 text-base focus:border-b-4 focus:border-primary print:hidden"
+            >
+              Overall-Analytics
+            </TabsTrigger>
+            <TabsTrigger
+              value="sectionAnalytics"
+              className="mr-2 text-base focus:border-b-4 focus:border-primary print:hidden"
+            >
+              Section-Analytics
+            </TabsTrigger>
+            <TabsTrigger
+              value="markList"
+              className="mr-2 text-base focus:border-b-4 focus:border-primary print:hidden"
+            >
+              Mark List
+            </TabsTrigger>
+          </TabsList>
+          <TabsContent className="w-full" value="overall">
+            <section>
+              <OverallAnalytics
+                examId={examId}
+                classId={classId}
+                sectionId={sectionId}
+                students={studentMarkList}
+              />
+            </section>
+          </TabsContent>
+          <TabsContent className="w-full" value="sectionAnalytics">
+            <section>
+              <SectionAnalytics examId={examId} classId={classId} />
+            </section>
+          </TabsContent>
+          <TabsContent className="w-full" value="markList">
+            <section>
+              {studentMarkList && (
+                <StudentMarkList
+                  examId={examId}
+                  classId={classId}
+                  sectionId={sectionId}
+                  students={studentMarkList}
+                />
+              )}
+            </section>
+          </TabsContent>
+        </Tabs>
       </section>
     </>
   );

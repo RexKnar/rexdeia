@@ -12,8 +12,14 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
 } from 'ui';
 
+import OverallAnalytics from '../../_components/OverallAnalytics';
+import SectionAnalytics from '../../_components/SectionAnalytics';
 import StudentMarkList from '../../_components/StudentMarkList';
 
 export function AnalyticStudentList() {
@@ -27,11 +33,12 @@ export function AnalyticStudentList() {
   const [examId, setExamId] = useState('');
 
   const { data: examList } = useGetExamsBySectionIdQuery(
-    { classId, sectionId },
+    sectionId ? { classId, sectionId } : { classId },
     {
-      enabled: !!classId && !!sectionId,
+      enabled: !!classId,
     }
   );
+
   const { data: classList } = useGetClassListQuery({
     page,
     limit,
@@ -78,6 +85,8 @@ export function AnalyticStudentList() {
             <Select
               autoComplete="off"
               onValueChange={(value) => {
+                setSectionId(null);
+                setExamId(null);
                 setClassId(value);
               }}
             >
@@ -100,7 +109,8 @@ export function AnalyticStudentList() {
             <Select
               autoComplete="off"
               onValueChange={(value) => {
-                setSectionId(value);
+                setExamId(null);
+                setSectionId(value === 'all' ? null : value);
               }}
             >
               <SelectTrigger className="w-full">
@@ -108,6 +118,7 @@ export function AnalyticStudentList() {
               </SelectTrigger>
               <SelectContent>
                 <SelectGroup>
+                  <SelectItem value="all">All</SelectItem>
                   {sectionList?.data?.map((item) => (
                     <SelectItem key={item.id} value={item.id}>
                       {item.name}
@@ -122,7 +133,7 @@ export function AnalyticStudentList() {
             <Select
               autoComplete="off"
               onValueChange={(value) => {
-                setExamId(value);
+                setExamId(value === 'all' ? null : value);
               }}
             >
               <SelectTrigger className="w-full">
@@ -130,6 +141,7 @@ export function AnalyticStudentList() {
               </SelectTrigger>
               <SelectContent>
                 <SelectGroup>
+                  <SelectItem value="all">Reset</SelectItem>
                   {examList?.map((item) => (
                     <SelectItem key={item.id} value={item.id}>
                       {item.name}
@@ -141,36 +153,59 @@ export function AnalyticStudentList() {
           </div>
         </div>
       </section>
-      {/* <section className="p-6 mt-4 space-y-4 bg-white rounded-md">
-        <div className="flex gap-2">
-          {analyticsWidgetData.map((widget, index) => (
-            <div
-              key={index + widget.percentage + widget.label}
-              className="w-full"
-            >
-              <BasicAnalyticsCardWidget
-                icon={widget.icon}
-                percentage={widget.percentage}
-                label={widget.label}
-                value={widget.value}
-                className={widget.className}
-                subData={widget.subData}
+      <Tabs defaultValue="overall" className="border-0 ">
+        <TabsList className="w-full justify-start border-b-2 border-gray-100">
+          <TabsTrigger
+            value="overall"
+            className="mr-2 text-base focus:border-b-4 focus:border-primary print:hidden"
+          >
+            Overall-Analytics
+          </TabsTrigger>
+          <TabsTrigger
+            value="sectionAnalytics"
+            className="mr-2 text-base focus:border-b-4 focus:border-primary print:hidden"
+          >
+            Section-Analytics
+          </TabsTrigger>
+          <TabsTrigger
+            value="markList"
+            className="mr-2 text-base focus:border-b-4 focus:border-primary print:hidden"
+          >
+            Mark List
+          </TabsTrigger>
+        </TabsList>
+        <TabsContent className="w-full" value="overall">
+          <section>
+            <OverallAnalytics
+              examId={examId}
+              classId={classId}
+              sectionId={sectionId}
+              students={studentMarkList}
+            />
+          </section>
+        </TabsContent>
+        <TabsContent className="w-full" value="sectionAnalytics">
+          <section>
+            <SectionAnalytics
+              examId={examId}
+              classId={classId}
+              sectionId={sectionId}
+            />
+          </section>
+        </TabsContent>
+        <TabsContent className="w-full" value="markList">
+          <section>
+            {studentMarkList && (
+              <StudentMarkList
+                examId={examId}
+                classId={classId}
+                sectionId={sectionId}
+                students={studentMarkList}
               />
-            </div>
-          ))}
-        </div>
-      </section> */}
-
-      <section>
-        {studentMarkList && (
-          <StudentMarkList
-            examId={examId}
-            classId={classId}
-            sectionId={sectionId}
-            students={studentMarkList}
-          />
-        )}
-      </section>
+            )}
+          </section>
+        </TabsContent>
+      </Tabs>
     </>
   );
 }

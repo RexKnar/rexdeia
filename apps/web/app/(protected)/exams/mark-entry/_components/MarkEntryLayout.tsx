@@ -33,7 +33,7 @@ import { ExamSubjects } from './ExamSubjects';
 
 export function MarkEntryLayout() {
   const { data: session } = useSession();
-  const [userRole, setUserRole] = useState<string>('User');
+  // const [userRole, setUserRole] = useState<string>('User');
   const [userId, setUserId] = useState<string>('');
 
   const { toast } = useToast();
@@ -100,7 +100,7 @@ export function MarkEntryLayout() {
 
   useEffect(() => {
     if (session?.user?.role) {
-      setUserRole(session?.user?.role);
+      // setUserRole(session?.user?.role);
       setUserId(session?.user?.id);
     }
     if (session?.user?.role !== 'Admin') {
@@ -220,28 +220,30 @@ export function MarkEntryLayout() {
             </SelectGroup>
           </SelectContent>
         </Select>
-        {userRole === 'Admin' ? (
-          <Select
-            value={staffId}
-            onValueChange={(value) => {
-              setStaffId(value);
-            }}
-          >
-            <SelectTrigger className="ml-4 basis-1/5">
-              <SelectValue className="text-gray-400" placeholder="Staff Name" />
-              <ChevronDown className="text-primary-400" />
-            </SelectTrigger>
-            <SelectContent className="border border-primary-200">
-              <SelectGroup>
-                {staffList?.map((staff) => (
-                  <SelectItem key={staff.id} value={staff.id}>
-                    {staff.firstName} {staff.lastName}
-                  </SelectItem>
-                ))}
-              </SelectGroup>
-            </SelectContent>
-          </Select>
-        ) : null}
+        {/* {userRole === 'Admin' ? ( */}
+
+        <Select
+          value={staffId}
+          onValueChange={(value) => {
+            setStaffId(value);
+          }}
+        >
+          <SelectTrigger className="ml-4 basis-1/5">
+            <SelectValue className="text-gray-400" placeholder="Staff Name" />
+            <ChevronDown className="text-primary-400" />
+          </SelectTrigger>
+          <SelectContent className="border border-primary-200">
+            <SelectGroup>
+              {staffList?.map((staff) => (
+                <SelectItem key={staff.id} value={staff.id}>
+                  {staff.firstName} {staff.lastName}
+                </SelectItem>
+              ))}
+            </SelectGroup>
+          </SelectContent>
+        </Select>
+
+        {/* : null} */}
       </div>
       <form onSubmit={handleSubmit(submitMarkEntry)} onKeyDown={handleKeyDown}>
         {!isMarkEntryConfigLoading ? (

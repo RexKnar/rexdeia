@@ -41,6 +41,7 @@ export function StaffList() {
             `}
             subjects={staffItem.subjects || []}
             sectionsHandled={staffItem.sections || []}
+            sectionIncharge={staffItem.sectionIncharge || []}
           />
         </div>
       ))}

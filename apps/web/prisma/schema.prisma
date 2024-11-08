@@ -215,6 +215,7 @@ model Organization {
   staff       Staff[]
   Student     Student[]
   users       UserOrganization[]
+  periods     Periods[]
 }
 
 model UserOrganization {
@@ -541,6 +542,7 @@ model Staff {
   secondarySubject             SubjectMaster?            @relation("SecondarySubject", fields: [secondarySubjectId], references: [id])
   staffCategory                StaffCategory?            @relation(fields: [staffCategoryId], references: [id])
   user                         User                      @relation(fields: [userId], references: [id])
+  periods                      Periods[]
   staffSections                StaffSection[]
 }
 
@@ -563,6 +565,7 @@ model Batch {
   students                Student[]
   StudentElectiveSubject  StudentElectiveSubject[]
   StudentMapping          StudentMapping[]
+  periods                 Periods[]
 }
 
 model Class {
@@ -579,6 +582,9 @@ model Class {
   batch          Batch?           @relation(fields: [batchId], references: [id])
   branch         Branch           @relation(fields: [branchId], references: [id])
   regulation     Regulation?      @relation(fields: [regulationId], references: [id])
+  periods        Periods[]
+  classLevel     ClassLevel?      @relation(fields: [classLevelId], references: [id])
+  classLevelId   String?          @db.Uuid
   ExamGroup      ExamGroup[]
   Section        Section[]
   studentmapping StudentMapping[]
@@ -636,6 +642,7 @@ model Section {
   staffSections           StaffSection[]
   students                Student[]
   studentMapping          StudentMapping[]
+  periods                 Periods[]
 }
 
 model SectionToGroups {
@@ -694,6 +701,7 @@ model Subject {
   subjectToAssessmentFormat SubjectToAssessmentFormat[]
   subjectToGroup            SubjectToGroup[]
   subjectToSubjectTypes     SubjectToSubjectType[]
+  periods                   Periods[]
 }
 
 model StudentElectiveSubject {
@@ -883,6 +891,109 @@ model Designation {
   staff     Staff[]
 }
 
+model ClassLevel {
+  id           String         @id @default(uuid()) @map("_id") @db.Uuid
+  name         String
+  isActive     Boolean
+  createdAt    DateTime?      @default(now())
+  updatedAt    DateTime?      @default(now())
+  isDeleted    Boolean        @default(false)
+  levelConfig  LevelConfig[]
+  periodMaster PeriodMaster[]
+  class        Class[]
+}
+
+model LevelConfig {
+  id           String         @id @default(uuid()) @map("_id") @db.Uuid
+  name         String
+  isActive     Boolean
+  noOfSubjects String
+  startTime    String
+  endTime      String
+  noOfPeriods  String
+  createdAt    DateTime?      @default(now())
+  updatedAt    DateTime?      @default(now())
+  isDeleted    Boolean        @default(false)
+  classLevel   ClassLevel?    @relation(fields: [classLevelId], references: [id])
+  classLevelId String?        @db.Uuid
+  periodMaster PeriodMaster[]
+}
+
+model Days {
+  id           String         @id @default(uuid()) @map("_id") @db.Uuid
+  name         String
+  isActive     Boolean
+  createdAt    DateTime?      @default(now())
+  updatedAt    DateTime?      @default(now())
+  isDeleted    Boolean        @default(false)
+  periodMaster PeriodMaster[]
+}
+
+model PeriodType {
+  id           String         @id @default(uuid()) @map("_id") @db.Uuid
+  name         String
+  isActive     Boolean
+  createdAt    DateTime?      @default(now())
+  updatedAt    DateTime?      @default(now())
+  isDeleted    Boolean        @default(false)
+  periodMaster PeriodMaster[]
+}
+
+model PeriodMode {
+  id           String         @id @default(uuid()) @map("_id") @db.Uuid
+  name         String
+  duration     String
+  isActive     Boolean
+  createdAt    DateTime?      @default(now())
+  updatedAt    DateTime?      @default(now())
+  isDeleted    Boolean        @default(false)
+  periodMaster PeriodMaster[]
+}
+
+model PeriodMaster {
+  id            String       @id @default(uuid()) @map("_id") @db.Uuid
+  name          String
+  isActive      Boolean
+  order         Int
+  createdAt     DateTime?    @default(now())
+  updatedAt     DateTime?    @default(now())
+  isDeleted     Boolean      @default(false)
+  periodModeId  String?      @db.Uuid
+  levelConfigId String?      @db.Uuid
+  classLevelId  String?      @db.Uuid
+  periodTypeId  String?      @db.Uuid
+  daysId        String?      @db.Uuid
+  periods       Periods[]
+  periodType    PeriodType?  @relation(fields: [periodTypeId], references: [id])
+  days          Days?        @relation(fields: [daysId], references: [id])
+  classLevel    ClassLevel?  @relation(fields: [classLevelId], references: [id])
+  periodMode    PeriodMode?  @relation(fields: [periodModeId], references: [id])
+  levelConfig   LevelConfig? @relation(fields: [levelConfigId], references: [id])
+}
+
+model Periods {
+  id             String        @id @default(uuid()) @map("_id") @db.Uuid
+  name           String
+  isActive       Boolean
+  createdAt      DateTime?     @default(now())
+  updatedAt      DateTime?     @default(now())
+  isDeleted      Boolean       @default(false)
+  subjectId      String?       @db.Uuid
+  sectionId      String?       @db.Uuid
+  staffId        String?       @db.Uuid
+  classId        String?       @db.Uuid
+  periodMasterId String?       @db.Uuid
+  batchId        String?       @db.Uuid
+  organizationId String?       @db.Uuid
+  periodMaster   PeriodMaster? @relation(fields: [periodMasterId], references: [id])
+  Section        Section?      @relation(fields: [sectionId], references: [id])
+  subject        Subject?      @relation(fields: [subjectId], references: [id])
+  class          Class?        @relation(fields: [classId], references: [id])
+  staff          Staff?        @relation(fields: [staffId], references: [id])
+  batch          Batch?        @relation(fields: [batchId], references: [id])
+  organization   Organization? @relation(fields: [organizationId], references: [id])
+}
+
 model NatureOfPosting {
   id        String    @id @default(uuid()) @map("_id") @db.Uuid
   name      String
@@ -924,6 +1035,8 @@ enum StudentStatus {
   Pending
   Rejected
   Active
+  Discontinued
+  Transfered
 }
 
 enum StaffStatus {

@@ -1,53 +1,243 @@
 import { db } from 'lib/db';
+import { sortByRank } from 'lib/utils/sort';
 
-export async function getStudentsByFilter(
-  page: number,
-  limit: number,
-  filter: any
+export type MarkAnalyticsFilterModel = {
+  classId?: string;
+  sectionId?: string;
+  examId?: string;
+  markRange?: string[];
+  filterSubjects?: any[];
+  pagination: {
+    limit: number;
+    page: number;
+  };
+};
+export async function getStudentMarksByFilter(
+  filter:
+    | MarkAnalyticsFilterModel
+    | { classId: string; examId: string; sectionId?: string }
 ) {
-  const { studentId, classId } = filter;
-
-  const whereClause = {};
-
-  if (studentId !== undefined) {
-    whereClause['studentId'] = studentId;
+  const { classId, examId, sectionId } = filter;
+  const mainClause = {};
+  if (sectionId) {
+    mainClause['sectionId'] = sectionId;
   }
-  if (classId !== undefined) {
-    whereClause['classId'] = classId;
+  if (classId) {
+    mainClause['classId'] = classId;
   }
 
-  const [total, studentsList] = await Promise.all([
-    db.studentMapping.count({
-      where: { ...whereClause, isCurrent: true },
-    }),
+  const [studentList] = await Promise.all([
     db.studentMapping.findMany({
-      take: limit,
-      skip: (page - 1) * limit,
-      where: { ...whereClause, isCurrent: true },
-      select: {
-        student: true,
+      where: {
+        ...mainClause,
+        isCurrent: true,
       },
+      select: {
+        student: {
+          select: {
+            firstName: true,
+            middleName: true,
+            lastName: true,
+            gender: true,
+            id: true,
+          },
+        },
+        section: {
+          select: {
+            id: true,
+            name: true,
+            ExamGroup: {
+              where: {
+                examId,
+              },
+              select: {
+                exam: true,
+                examSubject: {
+                  orderBy: {
+                    subject: {
+                      subjectOrder: 'asc',
+                    },
+                  },
+                  select: {
+                    subject: true,
+                    examSubjectPartition: {
+                      include: {
+                        Mark: true,
+                        assessmentFormat: true,
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+        class: true,
+      },
+      orderBy: [
+        {
+          student: {
+            gender: 'asc',
+          },
+        },
+        {
+          student: {
+            firstName: 'asc',
+          },
+        },
+      ],
     }),
   ]);
 
-  let male: number = 0;
-  let female: number = 0;
+  let subjectCount = 0;
+  const studentMarkList = studentList.map((student) => {
+    const studentDetail = { ...student.student };
+    const studentId = studentDetail.id;
+    const [{ examSubject }] = student.section.ExamGroup;
+    let subjectPassed = 0;
+    let subjectFailed = 0;
 
-  let studentList = studentsList.map((item) => {
-    if (item.student.gender === 'male') {
-      male++;
-    } else if (item.student.gender === 'female') {
-      female++;
-    }
-    return item.student;
+    let totalMark = 0;
+    let actualTotalMarks = 0;
+    let subjectMasters = [];
+    let attendance = false;
+    let centumCount = 0;
+
+    const subjects = examSubject.map((examSubject) => {
+      const examSubjectPartition = examSubject.examSubjectPartition;
+
+      let subjectTotalMark = 0;
+      let failingStatus = false;
+      let failingOn = [];
+      let absentStatus = true;
+      let absentOn = [];
+      let centum = true;
+
+      if (!subjectMasters.includes(examSubject.subject.subjectMasterId)) {
+        subjectMasters.push(examSubject.subject.subjectMasterId);
+      }
+      const marks = examSubjectPartition.reduce((acc, partition) => {
+        const subjectMarks = partition.Mark.filter(
+          (subjectMark) => subjectMark.studentId === studentId
+        );
+        actualTotalMarks += Number(partition.convertTo);
+
+        subjectMarks.forEach((mark) => {
+          if (mark) {
+            absentStatus = false;
+            if (
+              Number(mark.mark) < Number(partition.minMark) ||
+              mark.attandance
+            ) {
+              failingStatus = true;
+              failingOn.push(partition.assessmentFormat.name);
+            }
+            if (mark.attandance) {
+              absentOn.push(partition.assessmentFormat.name);
+            } else {
+              attendance = true;
+            }
+            const markValue = Number(mark.mark);
+            const totalMarksValue = Number(partition.totalMarks);
+
+            if (!failingStatus && markValue !== totalMarksValue) {
+              centum = false;
+            }
+
+            const actualMark =
+              (Number(mark.mark) / Number(partition.totalMarks)) *
+              Number(partition.convertTo);
+            subjectTotalMark += Math.round(actualMark);
+            mark['total'] = Math.round(actualMark);
+            mark['entryStatus'] = true;
+            mark['centum'] = centum;
+          } else {
+            mark['entryStatus'] = false;
+            mark['total'] = 0;
+          }
+          acc.push(mark);
+        });
+
+        return acc;
+      }, []);
+
+      if (failingStatus) {
+        subjectFailed++;
+      } else {
+        subjectPassed++;
+      }
+
+      if (marks.length == absentOn.length) {
+        absentStatus = true;
+      }
+      totalMark += subjectTotalMark;
+
+      const subject = {
+        ...examSubject.subject,
+        marks,
+        subjectTotalMark,
+        absentStatus,
+        absentOn,
+        failingStatus,
+        failingOn,
+        centum,
+        subjectPassed,
+        subjectFailed,
+      };
+
+      if (!subject.absentStatus) attendance = true;
+      if (!failingStatus && centum) {
+        centumCount++;
+      }
+      return subject;
+    });
+    subjectCount =
+      subjectCount < subjects.length ? subjects.length : subjectCount;
+    studentDetail['subjectMasterCount'] = subjectMasters.length;
+    studentDetail['subjects'] = subjects;
+    studentDetail['centumCount'] = centumCount;
+    studentDetail['totalMark'] = totalMark;
+    studentDetail['totalAverage'] = totalMark / subjectMasters.length;
+    studentDetail['subjectPassed'] = subjectPassed;
+    studentDetail['subjectFailed'] = subjectFailed;
+    studentDetail['failingStatus'] = subjectFailed > 0 ? true : false;
+    studentDetail['totalPercentage'] = (totalMark / actualTotalMarks) * 100;
+    studentDetail['attendance'] = attendance;
+    studentDetail['section'] = {
+      id: student.section.id || null,
+      name: student.section.name || null,
+    };
+
+    return studentDetail;
   });
 
-  return {
-    total,
-    page,
-    limit,
-    male,
-    female,
-    data: studentList,
-  };
+  return studentMarkList;
+}
+
+export async function getStudentMarksByRank(studentList) {
+  const passedStudents = studentList
+    .filter((student) => !student.failingStatus)
+    .sort((a, b) => b.totalMark - a.totalMark);
+
+  let rank = 1;
+  let prevMark = null;
+  let skipRanks = 0;
+
+  const rankList = passedStudents.map((student) => {
+    if (student.totalMark !== prevMark) {
+      rank = rank + skipRanks;
+      skipRanks = 1;
+    } else {
+      skipRanks++;
+    }
+    prevMark = student.totalMark;
+    return { ...student, rank };
+  });
+
+  const rankedStudentList = studentList.map((student) => {
+    const rank = rankList.find((s) => s.id === student.id)?.rank || 0;
+    return { ...student, rank };
+  });
+
+  return rankedStudentList.sort(sortByRank);
 }

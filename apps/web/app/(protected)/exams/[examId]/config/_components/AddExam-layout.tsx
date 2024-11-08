@@ -68,6 +68,7 @@ export function AddExamLayout() {
   const [subjectId, setSubjectId] = useState('');
   const [subjectIds, setSubjectIds] = useState([]);
   const [subjectTypeId, setSubjectTypeId] = useState('');
+  const [subjectTypeList, setSubjectTypeList] = useState([]);
   const [subjectList, setSubjectList] = useState([]);
   const [examSubjectPartition, setExamSubjectPartition] = useState([]);
   const [openFlyout, setOpenFlyout] = useState(false);
@@ -126,6 +127,12 @@ export function AddExamLayout() {
       filter,
     });
 
+  useEffect(() => {
+    if (subjectTypeListResponse?.data) {
+      setSubjectTypeList(subjectTypeListResponse?.data || []);
+    }
+  }, [subjectTypeListResponse]);
+
   const {
     data: subjectListResponse,
     isLoading: isSubjectListLoading,
@@ -183,6 +190,29 @@ export function AddExamLayout() {
     }
   }, [subjectId, refetchSubjectConfigList]);
 
+  useEffect(() => {
+    params.delete('subjectId');
+    router.replace(pathname + '?' + params.toString());
+    setSubjectId('');
+  }, [sectionId, subjectTypeId, classId]);
+
+  useEffect(() => {
+    params.delete('subjectId');
+    router.replace(pathname + '?' + params.toString());
+    setSubjectId('');
+
+    setSubjectList([]);
+  }, [sectionId]);
+
+  useEffect(() => {
+    params.delete('subjectId');
+    router.replace(pathname + '?' + params.toString());
+    setSectionId('');
+    setSubjectTypeId('');
+    setSubjectId('');
+    setSubjectList([]);
+  }, [classId]);
+
   function hideDeleteConfirmationModal() {
     params.set('isDeleteConfigModal', 'false');
     params.delete('configId');
@@ -207,14 +237,6 @@ export function AddExamLayout() {
   const handleClassClick = (classId) => {
     setClassId(classId);
   };
-
-  useEffect(() => {
-    setSubjectId('');
-  }, [classId]);
-  useEffect(() => {
-    setSectionId('');
-    setSubjectId('');
-  }, [classId]);
 
   return (
     <>
@@ -338,7 +360,7 @@ export function AddExamLayout() {
               <div>
                 {!isSubjectTypeListLoading ? (
                   <div>
-                    {subjectTypeListResponse?.data.map((cardData) => (
+                    {subjectTypeList.map((cardData) => (
                       <ExamConfigurationNameCard
                         currentValue={subjectTypeId}
                         cardValue={cardData.id}

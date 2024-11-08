@@ -85,7 +85,10 @@ export async function getExamAnalyticsByClass(filter: MarkAnalyticsFilter) {
         );
 
         subjectMarks.forEach((mark) => {
-          if (mark.mark < partition.minMark || mark.attandance) {
+          if (
+            Number(mark.mark) < Number(partition.minMark) ||
+            mark.attandance
+          ) {
             failingStatus = true;
             failingOn.push(partition.assessmentFormat.name);
           }
@@ -193,25 +196,25 @@ export async function getExamAnalyticsByClass(filter: MarkAnalyticsFilter) {
 
       if (isFailing) {
         totalFailCount++;
-        if (gender === 'Male' || gender === 'male') {
+        if (gender.toLowerCase() === 'male') {
           maleFailCount++;
-        } else if (gender === 'female' || gender === 'Female') {
+        } else if (gender.toLowerCase() === 'female') {
           femaleFailCount++;
         }
       } else {
         totalPassCount++;
-        if (gender === 'male' || gender === 'Male') {
+        if (gender.toLowerCase() === 'male') {
           malePassCount++;
-        } else if (gender === 'female' || gender === 'Female') {
+        } else if (gender.toLowerCase() === 'female') {
           femalePassCount++;
         }
       }
 
       if (isAbsent) {
         totalAbsentCount++;
-        if (gender === 'male' || gender === 'Male') {
+        if (gender.toLowerCase() === 'male') {
           maleAbsentCount++;
-        } else if (gender === 'female' || gender === 'Female') {
+        } else if (gender.toLowerCase() === 'female') {
           femaleAbsentCount++;
         }
       }
@@ -263,7 +266,7 @@ export async function getExamAnalyticsByClass(filter: MarkAnalyticsFilter) {
       students.forEach((student) => {
         if (
           student['subjectPassed'] == i + 1 &&
-          (student['gender'] == 'male' || student['gender'] == 'Male')
+          student['gender'].toLowerCase() === 'male'
         ) {
           malePassCount += 1;
         }
@@ -275,13 +278,13 @@ export async function getExamAnalyticsByClass(filter: MarkAnalyticsFilter) {
         }
         if (
           student['subjectFailed'] == i + 1 &&
-          (student['gender'] == 'male' || student['gender'] == 'Male')
+          student['gender'].toLowerCase() === 'male'
         ) {
           maleFailCount += 1;
         }
         if (
           student['subjectFailed'] == i + 1 &&
-          (student['gender'] == 'female' || student['gender'] == 'Female')
+          student['gender'].toLowerCase() === 'female'
         ) {
           femaleFailCount += 1;
         }

@@ -162,6 +162,41 @@ export const DELETE_DESIGNATION_BY_ID = `DELETE_DESIGNATION_BY_ID`;
 export const DELETE_NATURE_OF_POSTING_BY_ID = `DELETE_NATURE_OF_POSTING_BY_ID`;
 export const DELETE_EMPLOYMENT_TYPE_BY_ID = `DELETE_EMPLOYMENT_TYPE_BY_ID`;
 export const GET_SUBJECTS_BY_CLASS_AND_GROUP_ID = `GET_SUBJECTS_BY_CLASS_AND_GROUP_ID`;
+export const ADD_CLASSLEVEL = `ADD_CLASSLEVEL`;
+export const GET_CLASSLEVELS_LIST = `GET_CLASSLEVELS_LIST`;
+export const GET_CLASSLEVEL_BY_ID = `GET_CLASSLEVEL_BY_ID`;
+export const UPDATE_CLASSLEVEL_BY_ID = `UPDATE_CLASSLEVEL_BY_ID`;
+export const DELETE_CLASSLEVEL_BY_ID = `DELETE_CLASSLEVEL_BY_ID`;
+export const ADD_LEVELCONFIG = `ADD_LEVELCONFIG`;
+export const GET_LEVELCONFIG_LIST = `GET_LEVELCONFIG_LIST`;
+export const GET_LEVELCONFIG_BY_ID = `GET_LEVELCONFIG_BY_ID`;
+export const UPDATE_LEVELCONFIG_BY_ID = `UPDATE_LEVELCONFIG_BY_ID`;
+export const DELETE_LEVELCONFIG_BY_ID = `DELETE_LEVELCONFIG_BY_ID`;
+export const ADD_DAYS = `ADD_DAYS`;
+export const GET_DAYS_LIST = `GET_DAYS_LIST`;
+export const GET_DAYS_BY_ID = `GET_DAYS_BY_ID`;
+export const UPDATE_DAYS_BY_ID = `UPDATE_DAYS_BY_ID`;
+export const DELETE_DAYS_BY_ID = `DELETE_DAYS_BY_ID`;
+export const ADD_PERIOD_TYPE = `ADD_PERIOD_TYPE`;
+export const GET_PERIOD_TYPES_LIST = `GET_PERIOD_TYPES_LIST`;
+export const GET_PERIOD_TYPE_BY_ID = `GET_PERIOD_TYPE_BY_ID`;
+export const UPDATE_PERIOD_TYPE_BY_ID = `UPDATE_PERIOD_TYPE_BY_ID`;
+export const DELETE_PERIOD_TYPE_BY_ID = `DELETE_PERIOD_TYPE_BY_ID`;
+export const ADD_PERIOD_MASTER = `ADD_PERIOD_MASTER`;
+export const GET_PERIOD_MASTERS_LIST = `GET_PERIOD_MASTERS_LIST`;
+export const GET_PERIOD_MASTER_BY_ID = `GET_PERIOD_MASTER_BY_ID`;
+export const UPDATE_PERIOD_MASTER_BY_ID = `UPDATE_PERIOD_MASTER_BY_ID`;
+export const DELETE_PERIOD_MASTER_BY_ID = `DELETE_PERIOD_MASTER_BY_ID`;
+export const ADD_PERIOD = `ADD_PERIOD`;
+export const GET_PERIODS_LIST = `GET_PERIODS_LIST`;
+export const GET_PERIOD_BY_ID = `GET_PERIOD_BY_ID`;
+export const UPDATE_PERIOD_BY_ID = `UPDATE_PERIOD_BY_ID`;
+export const DELETE_PERIOD_BY_ID = `DELETE_PERIOD_BY_ID`;
+export const ADD_PERIOD_MODE = `ADD_PERIOD_MODE`;
+export const GET_PERIOD_MODE_LIST = `GET_PERIOD_MODE_LIST`;
+export const GET_PERIOD_MODE_BY_ID = `GET_PERIOD_MODE_BY_ID`;
+export const UPDATE_PERIOD_MODE_BY_ID = `UPDATE_PERIOD_MODE_BY_ID`;
+export const DELETE_PERIOD_MODE_BY_ID = `DELETE_PERIOD_MODE_BY_ID`;
 
 export default <EndpointDetails>{
   ...ExamAnalyticsEndpoints,
@@ -802,5 +837,145 @@ export default <EndpointDetails>{
   [GET_SUBJECTS_BY_CLASS_AND_GROUP_ID]: {
     requestType: 'GET',
     endpoint: '/api/group/[id]/subjects',
+  },
+  [ADD_CLASSLEVEL]: {
+    requestType: 'POST',
+    endpoint: '/api/classLevel',
+  },
+  [GET_CLASSLEVELS_LIST]: {
+    requestType: 'GET',
+    endpoint: '/api/classLevel',
+  },
+  [GET_CLASSLEVEL_BY_ID]: {
+    requestType: 'GET',
+    endpoint: '/api/classLevel/[id]',
+  },
+  [UPDATE_CLASSLEVEL_BY_ID]: {
+    requestType: 'PUT',
+    endpoint: '/api/classLevel/[id]',
+  },
+  [DELETE_CLASSLEVEL_BY_ID]: {
+    requestType: 'DELETE',
+    endpoint: '/api/classLevel/[id]',
+  },
+  [ADD_LEVELCONFIG]: {
+    requestType: 'POST',
+    endpoint: '/api/levelConfig',
+  },
+  [GET_LEVELCONFIG_LIST]: {
+    requestType: 'GET',
+    endpoint: '/api/levelConfig',
+  },
+  [GET_LEVELCONFIG_BY_ID]: {
+    requestType: 'GET',
+    endpoint: '/api/levelConfig/[id]',
+  },
+  [UPDATE_LEVELCONFIG_BY_ID]: {
+    requestType: 'PUT',
+    endpoint: '/api/levelConfig/[id]',
+  },
+  [DELETE_LEVELCONFIG_BY_ID]: {
+    requestType: 'DELETE',
+    endpoint: '/api/levelConfig/[id]',
+  },
+  [ADD_DAYS]: {
+    requestType: 'POST',
+    endpoint: '/api/days',
+  },
+  [GET_DAYS_LIST]: {
+    requestType: 'GET',
+    endpoint: '/api/days',
+  },
+  [GET_DAYS_BY_ID]: {
+    requestType: 'GET',
+    endpoint: '/api/days/[id]',
+  },
+  [UPDATE_DAYS_BY_ID]: {
+    requestType: 'PUT',
+    endpoint: '/api/days/[id]',
+  },
+  [DELETE_DAYS_BY_ID]: {
+    requestType: 'DELETE',
+    endpoint: '/api/days/[id]',
+  },
+  [ADD_PERIOD_TYPE]: {
+    requestType: 'POST',
+    endpoint: '/api/periodType',
+  },
+  [GET_PERIOD_TYPES_LIST]: {
+    requestType: 'GET',
+    endpoint: '/api/periodType',
+  },
+  [GET_PERIOD_TYPE_BY_ID]: {
+    requestType: 'GET',
+    endpoint: '/api/periodType/[id]',
+  },
+  [UPDATE_PERIOD_TYPE_BY_ID]: {
+    requestType: 'PUT',
+    endpoint: '/api/periodType/[id]',
+  },
+  [DELETE_PERIOD_TYPE_BY_ID]: {
+    requestType: 'DELETE',
+    endpoint: '/api/periodType/[id]',
+  },
+  [ADD_PERIOD_MASTER]: {
+    requestType: 'POST',
+    endpoint: '/api/periodMaster',
+  },
+  [GET_PERIOD_MASTERS_LIST]: {
+    requestType: 'GET',
+    endpoint: '/api/periodMaster',
+  },
+  [GET_PERIOD_MASTER_BY_ID]: {
+    requestType: 'GET',
+    endpoint: '/api/periodMaster/[id]',
+  },
+  [UPDATE_PERIOD_MASTER_BY_ID]: {
+    requestType: 'PUT',
+    endpoint: '/api/periodMaster/[id]',
+  },
+  [DELETE_PERIOD_MASTER_BY_ID]: {
+    requestType: 'DELETE',
+    endpoint: '/api/periodMaster/[id]',
+  },
+  [ADD_PERIOD]: {
+    requestType: 'POST',
+    endpoint: '/api/period',
+  },
+  [GET_PERIODS_LIST]: {
+    requestType: 'GET',
+    endpoint: '/api/period',
+  },
+  [GET_PERIOD_BY_ID]: {
+    requestType: 'GET',
+    endpoint: '/api/period/[id]',
+  },
+  [UPDATE_PERIOD_BY_ID]: {
+    requestType: 'PUT',
+    endpoint: '/api/period/[id]',
+  },
+  [DELETE_PERIOD_BY_ID]: {
+    requestType: 'DELETE',
+    endpoint: '/api/period/[id]',
+  },
+  [ADD_PERIOD_MODE]: {
+    requestType: 'POST',
+    endpoint: '/api/periodMode',
+  },
+  [GET_PERIOD_MODE_LIST]: {
+    requestType: 'GET',
+    endpoint: '/api/periodMode',
+  },
+  [GET_PERIOD_MODE_BY_ID]: {
+    requestType: 'GET',
+    endpoint: '/api/periodMode/[id]',
+  },
+  [UPDATE_PERIOD_MODE_BY_ID]: {
+    requestType: 'PUT',
+    endpoint: '/api/periodMode/[id]',
+  },
+  [DELETE_PERIOD_MODE_BY_ID]: {
+    requestType: 'DELETE',
+    endpoint: '/api/periodMode/[id]',
   },
 };

@@ -10,7 +10,22 @@ type GetExamConfigFilterModel = {
 export async function getExamConfigWithSubjectPartion(
   filter: GetExamConfigFilterModel
 ) {
+  // const session = await getServerSession(authOptions);
   const { examId, classId, sectionId, staffId } = filter;
+
+  // const [isIncharge] = staffId
+  //   ? await Promise.all([
+  //       db.academicSubjectForStaff.findFirst({
+  //         where: {
+  //           staffId: staffId,
+  //           isIncharge: true,
+  //           sectionId: sectionId,
+  //           academicYearId: session.currentBatch,
+  //         },
+  //       }),
+  //     ])
+  //   : [false];
+
   const [examConfig] = await Promise.all([
     db.studentMapping.findMany({
       where: {
@@ -27,6 +42,7 @@ export async function getExamConfigWithSubjectPartion(
                       subject: {
                         academicSubjectForStaff: {
                           some: {
+                            sectionId: sectionId,
                             staffId: staffId,
                           },
                         },

@@ -213,6 +213,12 @@ export const menuItem = {
           path: '/analytics/master',
         },
         {
+          id: 'staff-analysis',
+          label: 'Staff Analysis',
+          icon: FileText,
+          path: '/analytics/staff-analysis',
+        },
+        {
           id: 'marks',
           label: 'Marks',
           icon: FileText,
@@ -379,6 +385,38 @@ export const menuItem = {
           label: 'Student Attendance',
           icon: null,
           path: '/academics/student-attendance',
+        },
+      ],
+    },
+    {
+      id: 'timetable-page',
+      label: 'Timetable',
+      icon: FileText,
+      path: '',
+      children: [
+        {
+          id: 'class-level',
+          label: 'Class Level',
+          icon: null,
+          path: '/timeTable/classLevel',
+        },
+        {
+          id: 'period_master',
+          label: 'Period Master',
+          icon: null,
+          path: '/timeTable/periodMaster',
+        },
+        {
+          id: 'period_type',
+          label: 'Period Type',
+          icon: null,
+          path: '/timeTable/periodType',
+        },
+        {
+          id: 'mode',
+          label: 'Period Mode',
+          icon: null,
+          path: '/timeTable/periodMode',
         },
       ],
     },

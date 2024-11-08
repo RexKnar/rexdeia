@@ -16,17 +16,17 @@ type StaffCardProps = {
   name: string;
   subjects?: SubjectModel[];
   sectionsHandled?: SectionModel[];
+  sectionIncharge?: SectionModel[];
 };
 
 export function StaffCard(props: StaffCardProps) {
-  const { id, name = '', subjects, sectionsHandled } = props;
+  const { id, name = '', subjects, sectionsHandled, sectionIncharge } = props;
   const pathname = usePathname();
   const router = useRouter();
   const searchParams = useSearchParams();
-
   return (
-    <div className="flex bg-white p-3">
-      <div className="my-auto w-2/4 px-2">
+    <div className="flex flex-wrap bg-white p-3">
+      <div className="my-auto w-3/4 px-2">
         <Text variant="base-bold">{name}</Text>
         {sectionsHandled.map((section, sectionIndex) => (
           <div key={sectionIndex} className="inline-flex items-center">
@@ -47,7 +47,7 @@ export function StaffCard(props: StaffCardProps) {
         )}
         {!subjects.length && <Text variant="base-regular">No Subjects</Text>}
       </div>
-      <div className="my-auto w-3/4 ">
+      <div className="my-auto w-1/4 ">
         <div className="float-end my-auto justify-end p-1">
           <DropdownMenu>
             <DropdownMenuTrigger className="flex items-center gap-2 outline-none">
@@ -79,6 +79,21 @@ export function StaffCard(props: StaffCardProps) {
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
+      </div>
+      <div className="mt-1">
+        {sectionIncharge.length > 0 && (
+          <div className="flex gap-2">
+            <Text>Incharge</Text>
+            {sectionIncharge.map((section) => (
+              <span
+                key={section.id}
+                className="rounded-md bg-green-300 px-2 text-white"
+              >
+                {section.name}
+              </span>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );

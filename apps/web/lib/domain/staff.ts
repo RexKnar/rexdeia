@@ -96,6 +96,7 @@ export type Staff = {
   additionalAttributes: any;
   subjects?: SubjectModel[];
   sections?: SectionModel[];
+  sectionIncharge?: SectionModel[];
 };
 
 export type AddStaffModel = Omit<

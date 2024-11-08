@@ -56,6 +56,7 @@ export async function updateSubjectById(
       elective: +updateSubject.elective,
       regulationId: updateSubject.regulationId,
       subjectMasterId: updateSubject.subjectMasterId,
+      subjectOrder: Number(updateSubject.subjectOrder),
     },
   });
   await updateSubjectToSubjectType(id, updateSubject.subjectTypeId);
@@ -72,13 +73,30 @@ export async function addSubjects(id: string, subjects: CreateSubjectModel[]) {
     const createdSubject = await db.subject.create({
       data: {
         name: subject.name,
-        branchId: session.branchId,
+        branch: {
+          connect: {
+            id: session.branchId,
+          },
+        },
         isActive: subject.isActive,
         description: subject.description,
         elective: +subject.elective,
-        regulationId: subject.regulationId,
-        subjectMasterId: subject.subjectMasterId,
-        classId: id,
+        regulation: {
+          connect: {
+            id: subject.regulationId,
+          },
+        },
+        subjectMaster: {
+          connect: {
+            id: subject.subjectMasterId,
+          },
+        },
+        class: {
+          connect: {
+            id: id,
+          },
+        },
+        subjectOrder: Number(subject.subjectOrder),
       },
     });
 

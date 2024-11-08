@@ -1,26 +1,18 @@
 import { db } from 'lib/db';
 
-type MarkAnalyticsFilter = {
-  classId?: string;
-  sectionId?: string;
-  examId?: string;
-  markRange?: string[];
-  filterSubjects?: any[];
-  pagination: {
-    limit: number;
-    page: number;
-  };
-};
+import { MarkAnalyticsFilterModel } from '../service';
 
-export async function getMarksByFilter(filter: MarkAnalyticsFilter) {
+export async function getMarksByFilter(filter: MarkAnalyticsFilterModel) {
   const { classId, examId, sectionId, filterSubjects, markRange } = filter;
 
   let subjectArray = [];
   if (filterSubjects.length) {
-    subjectArray = filterSubjects.map((subject) => subject.id);
+    subjectArray = filterSubjects.map((subject) => subject.subject.id);
   }
 
-  let subjectWhere = subjectArray.length ? { id: { in: subjectArray } } : {};
+  let subjectWhere = subjectArray.length
+    ? { subjectId: { in: subjectArray } }
+    : {};
 
   const mainClause = {};
   if (sectionId) {
@@ -56,8 +48,14 @@ export async function getMarksByFilter(filter: MarkAnalyticsFilter) {
                 exam: true,
                 examSubject: {
                   where: subjectWhere,
+                  orderBy: {
+                    subject: {
+                      subjectOrder: 'asc',
+                    },
+                  },
                   select: {
                     subject: true,
+                    subjectId: true,
                     examSubjectPartition: {
                       include: {
                         Mark: true,
@@ -72,6 +70,18 @@ export async function getMarksByFilter(filter: MarkAnalyticsFilter) {
         },
         class: true,
       },
+      orderBy: [
+        {
+          student: {
+            gender: 'asc',
+          },
+        },
+        {
+          student: {
+            firstName: 'asc',
+          },
+        },
+      ],
     }),
   ]);
 
@@ -105,7 +115,10 @@ export async function getMarksByFilter(filter: MarkAnalyticsFilter) {
         subjectMarks.forEach((mark) => {
           if (mark) {
             absentStatus = false;
-            if (mark.mark < partition.minMark || mark.attandance) {
+            if (
+              Number(mark.mark) < Number(partition.minMark) ||
+              mark.attandance
+            ) {
               failingStatus = true;
               failingOn.push(partition.assessmentFormat.name);
             }
@@ -133,6 +146,7 @@ export async function getMarksByFilter(filter: MarkAnalyticsFilter) {
       } else {
         subjectPassed++;
       }
+
       totalMark += subjectTotalMark;
       const subject = {
         ...examSubject.subject,
@@ -205,5 +219,5 @@ export async function getMarksByFilter(filter: MarkAnalyticsFilter) {
   };
 
   const analytics = findMinMaxTotalMarks(markList);
-  return { markList, analytics };
+  return { markList, analytics, studentList };
 }

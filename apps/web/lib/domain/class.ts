@@ -9,6 +9,7 @@ export type ClassModel = {
   batchId: string;
   branchId: string;
   regulationId: string;
+  classLevelId?: string;
   Section: CreateSectionModel[];
 };
 
@@ -18,14 +19,14 @@ export type CreateSectionModel = Pick<
 >;
 export type CreateClassModel = Pick<
   ClassModel,
-  'name' | 'isActive' | 'branchId'
+  'name' | 'isActive' | 'branchId' | 'classLevelId'
 > & {
   section: CreateSectionModel[];
 };
 
 export type UpdateClassModel = Pick<
   ClassModel,
-  'id' | 'name' | 'isActive' | 'branchId'
+  'id' | 'name' | 'isActive' | 'branchId' | 'classLevelId'
 >;
 
 export type AddSubjectsToClassRequestModel =
