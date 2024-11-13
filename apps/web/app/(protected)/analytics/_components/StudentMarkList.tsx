@@ -8,7 +8,7 @@ import {
   useReactTable,
 } from '@tanstack/react-table';
 import { useGetExamSubjectsByClassSectionIdQuery } from 'lib/queries/exams/subject/useGetExamSubjectsByClassSectionIdQuery';
-import { ArrowUpDown } from 'lucide-react';
+import { ArrowUpDown, TableIcon } from 'lucide-react';
 import { useCallback, useEffect, useState } from 'react';
 import { Button, Text } from 'ui';
 import {
@@ -18,6 +18,7 @@ import {
   TableHeader,
   TableRow,
 } from 'ui/components/ui/Table';
+import { utils as XLSX_utils, writeFile as XLSX_writeFile } from 'xlsx';
 
 import PdfDocument from '../pdf/_components/PdfDocument';
 
@@ -35,6 +36,7 @@ export default function StudentMarkList({
   const [sorting, setSorting] = useState<SortingState>([]);
   const [pdfTableHeader, setPdfTableHeader] = useState([]);
   const [pdfTableValues, setPdfTableValues] = useState([]);
+  const [xlsxTableHeader, setXlsxTableHeader] = useState([]);
 
   const { data: subjectList } = useGetExamSubjectsByClassSectionIdQuery(
     sectionId ? { examId, classId, sectionId } : { examId, classId },
@@ -42,12 +44,10 @@ export default function StudentMarkList({
   );
 
   const customStudentSort: SortingFn<any> = (rowA, rowB) => {
-    // First sort by gender (females first)
     const genderOrder = { Female: 0, Male: 1 };
     const genderCompare =
       genderOrder[rowA.original.gender] - genderOrder[rowB.original.gender];
 
-    // If gender is the same, sort by full name
     if (genderCompare === 0) {
       const nameA =
         `${rowA.original.firstName} ${rowA.original.lastName}`.toLowerCase();
@@ -84,29 +84,11 @@ export default function StudentMarkList({
           <div className="text-center">{Number(row.index) + 1}</div>
         ),
       },
-      // {
-      //   id: 'fullName',
-      //   accessorFn: (row) => `${row.firstName} ${row.lastName}`,
-      //   header: ({ column }) => {
-      //     return (
-      //       <Button
-      //         variant="ghost"
-      //         onClick={() =>
-      //           column.toggleSorting(column.getIsSorted() === 'asc')
-      //         }
-      //         className="w-full"
-      //       >
-      //         Student Name
-      //         <ArrowUpDown className="w-4 h-4 ml-2" />
-      //       </Button>
-      //     );
-      //   },
-      //   cell: ({ row }) => `${row.original.firstName} ${row.original.lastName}`,
-      // },
+
       {
         id: 'fullName',
         accessorFn: (row) => `${row.firstName} ${row.lastName}`,
-        sortingFn: customStudentSort, // Use our custom sorting function
+        sortingFn: customStudentSort,
         header: ({ column }) => {
           return (
             <Button
@@ -307,24 +289,22 @@ export default function StudentMarkList({
           'Tot',
         ],
       }));
+      let excelHeading = ['', ''];
+      let excelSubHeading = ['#', 'Student Name'];
+      subjectList?.forEach((subject) => {
+        excelHeading.push(subject.subject.name);
+        subject.examSubjectPartition.forEach((partition) => {
+          // excelHeading.push(null);
+          excelSubHeading.push(partition.assessmentFormat.name);
+        });
+        excelSubHeading.push('Tot');
+      });
+      excelHeading.push('');
+      excelHeading.push('');
+      excelSubHeading.push('Total');
+      excelSubHeading.push('Rank');
 
-      heading?.length > 0
-        ? setPdfTableHeader([...heading])
-        : setPdfTableHeader([]);
-    }
-  }, [subjectList]);
-
-  useEffect(() => {
-    if (subjectList?.length > 0) {
-      let heading = subjectList?.map((subject) => ({
-        subjectName: subject.subject.name,
-        subTitle: [
-          ...subject.examSubjectPartition.map(
-            (partition) => partition.assessmentFormat.name
-          ),
-          'Tot',
-        ],
-      }));
+      setXlsxTableHeader([excelHeading, excelSubHeading]);
 
       heading?.length > 0
         ? setPdfTableHeader([...heading])
@@ -346,22 +326,35 @@ export default function StudentMarkList({
             let failingStatus = false;
 
             await Promise.all(
-              student.subjects.map(async (subject) => {
+              subjectList.map(async (subject) => {
                 const studentDetail = await getStudentSubject(
                   student,
-                  subject?.id
+                  subject?.subject?.id
                 );
 
                 if (studentDetail?.marks?.length > 0) {
-                  studentDetail.marks.forEach((mark) => {
-                    if (mark?.attandance) {
-                      tableValues.push('A');
-                    } else {
-                      const markTotal = Number(mark.total) || 0;
-                      tableValues.push(markTotal.toString());
-                      totalMark += markTotal;
+                  subject.examSubjectPartition.forEach(
+                    (examSubjectPartition) => {
+                      const mark =
+                        studentDetail.marks.find(
+                          (obj) =>
+                            obj.examSubjectPartitionId ===
+                            examSubjectPartition.id
+                        ) || null;
+
+                      if (mark) {
+                        if (mark?.attandance) {
+                          tableValues.push('A');
+                        } else {
+                          const markTotal = Number(mark.total) || 0;
+                          tableValues.push(markTotal.toString());
+                          totalMark += markTotal;
+                        }
+                      } else {
+                        tableValues.push('-');
+                      }
                     }
-                  });
+                  );
 
                   if (!studentDetail.absentStatus) {
                     const subjectTotal =
@@ -376,6 +369,12 @@ export default function StudentMarkList({
                     tableValues.push('A');
                   }
                 } else {
+                  subject.examSubjectPartition.forEach(
+                    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                    () => {
+                      tableValues.push('-');
+                    }
+                  );
                   tableValues.push('-');
                 }
               })
@@ -394,7 +393,48 @@ export default function StudentMarkList({
     };
 
     processStudents();
-  }, [students]);
+  }, [getStudentSubject, students, subjectList]);
+
+  function downloadCSV() {
+    const wb = XLSX_utils.book_new();
+    const ws = XLSX_utils.aoa_to_sheet(xlsxTableHeader);
+    console.log(xlsxTableHeader);
+
+    pdfTableValues.forEach((row) => {
+      XLSX_utils.sheet_add_aoa(ws, [row], { origin: -1 });
+    });
+
+    ws['!merges'] = [];
+    let columnStart = 2;
+    pdfTableHeader.forEach((row) => {
+      let columnEnd = columnStart + (row.subTitle?.length || 1);
+      ws['!merges'].push({
+        s: { r: 0, c: columnStart },
+        e: { r: 0, c: columnEnd },
+      });
+      columnStart = columnEnd;
+    });
+    // ws['!merges'] = [
+    //   { s: { r: 0, c: 1 }, e: { r: 0, c: 3 } },
+    //   { s: { r: 0, c: 4 }, e: { r: 0, c: 6 } },
+    //   { s: { r: 0, c: 7 }, e: { r: 0, c: 9 } },
+    //   { s: { r: 0, c: 10 }, e: { r: 0, c: 12 } },
+    //   { s: { r: 0, c: 13 }, e: { r: 0, c: 15 } },
+    //   { s: { r: 0, c: 16 }, e: { r: 0, c: 18 } },
+    //   { s: { r: 0, c: 19 }, e: { r: 0, c: 21 } },
+    //   { s: { r: 0, c: 22 }, e: { r: 0, c: 24 } },
+    //   { s: { r: 0, c: 25 }, e: { r: 0, c: 27 } },
+    //   { s: { r: 0, c: 28 }, e: { r: 0, c: 30 } },
+    //   { s: { r: 0, c: 31 }, e: { r: 0, c: 33 } },
+    //   { s: { r: 0, c: 34 }, e: { r: 0, c: 36 } },
+    // ];
+
+    ws['!cols'] = [{ wch: 15 }, { wch: 8 }, { wch: 8 }];
+
+    XLSX_utils.book_append_sheet(wb, ws, 'Results');
+
+    XLSX_writeFile(wb, 'results_detailed.xlsx');
+  }
 
   return (
     <section>
@@ -407,6 +447,9 @@ export default function StudentMarkList({
                 tableValues={pdfTableValues}
               />
             )}
+            <Button variant="outline" onClick={downloadCSV}>
+              Download XLSX <TableIcon className="ml-2 h-4 w-4" />
+            </Button>
           </div>
           <Table className="border-1 border">
             <TableHeader>
