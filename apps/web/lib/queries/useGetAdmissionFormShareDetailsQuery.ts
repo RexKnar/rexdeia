@@ -6,7 +6,7 @@ import { GET_ADMISSIONS_FORM_SHARE_DETAILS } from '../endpoints';
 
 export function useGetAdmissionFormShareDetailsQuery(
   formId: string,
-  options?: UseQueryOptions<ShareModal[]>
+  options?: UseQueryOptions
 ) {
   return useQuery({
     ...options,

@@ -9,10 +9,7 @@ type GetExamPayloadModel = {
   sectionId?: string;
 };
 
-function getExamsBySectionId(
-  filter: GetExamPayloadModel,
-  options?: Partial<UseQueryOptions<ExamModel[]>>
-) {
+function getExamsBySectionId(filter: GetExamPayloadModel, options?: Partial) {
   return {
     ...options,
     queryKey: [GET_EXAM_BY_SECTION_ID, filter],
@@ -29,7 +26,7 @@ function getExamsBySectionId(
 
 export function useGetExamsBySectionIdQuery(
   filter: GetExamPayloadModel,
-  options?: Partial<UseQueryOptions<ExamModel[]>>
+  options?: Partial
 ) {
   return useQuery(getExamsBySectionId(filter, options));
 }

@@ -10,8 +10,8 @@ import { GET_SUBJECT_TYPE_BY_ID } from '../../endpoints';
 
 function getSubjectTypeById(
   subjectTypeId: string,
-  options?: Partial<UseQueryOptions<SubjectTypeModel>>
-): UseQueryOptions<SubjectTypeModel> {
+  options?: Partial
+): UseQueryOptions {
   return {
     ...options,
     queryKey: [GET_SUBJECT_TYPE_BY_ID, subjectTypeId],
@@ -27,7 +27,7 @@ function getSubjectTypeById(
 }
 export function useGetSubjectTypeByIdQuery(
   id: string,
-  options?: Partial<UseQueryOptions<SubjectTypeModel>>
-): UseQueryResult<SubjectTypeModel> {
+  options?: Partial
+): UseQueryResult {
   return useQuery(getSubjectTypeById(id, options));
 }

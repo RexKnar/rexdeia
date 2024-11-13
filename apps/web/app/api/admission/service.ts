@@ -45,10 +45,7 @@ export async function addAdmission(student: AddStudentModel, formId: string) {
     },
   });
 
-  const studentWithoutBatchId: Omit<
-    AddStudentModel,
-    'batchId' | 'motherTongueId' | 'communityId' | 'studentMapping'
-  > = {
+  const studentWithoutBatchId: Omit = {
     ...student,
   };
   delete studentWithoutBatchId['batchId'];

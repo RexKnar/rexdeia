@@ -3,9 +3,7 @@ import { makeAPICall } from 'lib/api';
 import { EmploymentTypeModel } from 'lib/domain/employmentType';
 import { GET_EMPLOYMENT_TYPE_LIST } from 'lib/endpoints';
 
-function getEmploymentTypeList(
-  options?: Partial<UseQueryOptions<EmploymentTypeModel[]>>
-) {
+function getEmploymentTypeList(options?: Partial) {
   return {
     ...options,
     queryKey: [GET_EMPLOYMENT_TYPE_LIST],
@@ -20,8 +18,6 @@ function getEmploymentTypeList(
   };
 }
 
-export function useGetEmploymentTypeListQuery(
-  options?: Partial<UseQueryOptions<EmploymentTypeModel[]>>
-) {
+export function useGetEmploymentTypeListQuery(options?: Partial) {
   return useQuery(getEmploymentTypeList(options));
 }

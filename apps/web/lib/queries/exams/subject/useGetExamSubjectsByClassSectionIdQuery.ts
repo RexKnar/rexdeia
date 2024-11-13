@@ -2,12 +2,6 @@ import { useQuery, UseQueryOptions } from '@tanstack/react-query';
 import { makeAPICall } from 'lib/api';
 import { EXAM_SUBJECTS_BY_CLASS_SECTION_EXAM_ID } from 'lib/endpoints/examAnalyticsEndpoints';
 
-// type SubjectExamConfigModel = {
-//   id: string;
-//   subject: CommonGetModel;
-//   examConfiguration: assessmentFormatConfiguration[];
-// };
-
 type getSubjectInputModel = {
   examId: string;
   classId?: string;
@@ -16,8 +10,8 @@ type getSubjectInputModel = {
 
 function getExamSubjectsByClassSectionId(
   { examId, classId, sectionId }: getSubjectInputModel,
-  options?: Partial<UseQueryOptions<any[]>>
-): UseQueryOptions<any[]> {
+  options?: Partial<any>
+): UseQueryOptions {
   sectionId = sectionId || '';
   return {
     ...options,
@@ -40,7 +34,7 @@ function getExamSubjectsByClassSectionId(
 
 export function useGetExamSubjectsByClassSectionIdQuery(
   { examId, classId, sectionId }: getSubjectInputModel,
-  options?: Partial<UseQueryOptions<any[]>>
+  options?: Partial<any>
 ) {
   return useQuery(
     getExamSubjectsByClassSectionId({ examId, classId, sectionId }, options)

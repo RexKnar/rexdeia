@@ -7,13 +7,13 @@ import { GET_ALL_SECTIONS_BY_CLASS_ID } from '../../endpoints';
 
 function getAllSectionByClassId(
   { classId, filter }: { classId: string; filter: { isActive?: boolean } },
-  options?: Partial<UseQueryOptions<PaginatedResponse<SectionModel>>>
+  options?: Partial
 ) {
   return {
     ...options,
     queryKey: [GET_ALL_SECTIONS_BY_CLASS_ID, classId],
     queryFn: async () => {
-      return await makeAPICall<PaginatedResponse<SectionModel>>(
+      return await makeAPICall<PaginatedResponse>(
         GET_ALL_SECTIONS_BY_CLASS_ID,
         filter,
         {},
@@ -25,7 +25,7 @@ function getAllSectionByClassId(
 
 export function useGetAllSectionByClassIdQuery(
   { classId, filter }: { classId: string; filter: { isActive?: boolean } },
-  options?: Partial<UseQueryOptions<PaginatedResponse<SectionModel>>>
+  options?: Partial
 ) {
   return useQuery(getAllSectionByClassId({ classId, filter }, options));
 }

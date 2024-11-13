@@ -13,7 +13,7 @@ export function DepartmentForm({ branchId, organizationId }) {
     handleSubmit,
     formState: { errors, isSubmitting },
   } = useForm();
-  async function addDepartmentHandler(data: Record<string, unknown>) {
+  async function addDepartmentHandler(data: Record) {
     data.isActive = data.isActive == 'true' ? true : false;
     data.branchId = branchId;
     data.organizationId = organizationId;

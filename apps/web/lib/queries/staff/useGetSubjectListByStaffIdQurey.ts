@@ -10,8 +10,8 @@ import { SubjectHandledByStaff } from '../../domain/staff';
 
 function getSubjectByStaffId(
   staffId: string,
-  options?: Partial<UseQueryOptions<SubjectHandledByStaff[]>>
-): UseQueryOptions<SubjectHandledByStaff[]> {
+  options?: Partial
+): UseQueryOptions {
   return {
     ...options,
     queryKey: [GET_SUBJECT_LIST_BY_STAFF_ID, staffId],
@@ -27,7 +27,7 @@ function getSubjectByStaffId(
 }
 export function useGetSubjectByStaffIdQuery(
   staffId: string,
-  options?: Partial<UseQueryOptions<SubjectHandledByStaff[]>>
-): UseQueryResult<SubjectHandledByStaff[]> {
+  options?: Partial
+): UseQueryResult {
   return useQuery(getSubjectByStaffId(staffId, options));
 }

@@ -37,7 +37,7 @@ import { useDeleteBatchMutationQuery } from '../../../../../lib/queries/batches/
 import { usePrefetchBatch } from '../../../../../lib/queries/batches/useGetBatchByIdQuery';
 import { useGetBatchesListQuery } from '../../../../../lib/queries/batches/useGetBatchesListQuery';
 
-const columns: ColumnDef<BatchModel>[] = [
+const columns: ColumnDef[] = [
   {
     accessorKey: 'name',
     header: ({ column }) => {

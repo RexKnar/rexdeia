@@ -99,33 +99,8 @@ export type Staff = {
   sectionIncharge?: SectionModel[];
 };
 
-export type AddStaffModel = Omit<
-  Staff,
-  | 'id'
-  | 'motherTongue'
-  | 'community'
-  | 'natureOfPosting'
-  | 'employmentType'
-  | 'staffCategory'
-  | 'designation'
-  | 'status'
-  | 'subjects'
-  | 'sections'
->;
-export type UpdateStaffModel = Omit<
-  Staff,
-  | 'motherTongue'
-  | 'community'
-  | 'natureOfPosting'
-  | 'employmentType'
-  | 'staffCategory'
-  | 'designation'
-  | 'status'
-  | 'subjects'
-  | 'sections'
-  | 'enrollmentNumber'
-  | 'enrollmentId'
->;
+export type AddStaffModel = Omit;
+export type UpdateStaffModel = Omit;
 
 export type StaffSubjectList = {
   sectionId: string;

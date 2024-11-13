@@ -54,16 +54,13 @@ export type Student = {
   studentMapping?: StudentMappingModel[];
 };
 
-export type AddStudentModel = Omit<
-  Student,
-  'id' | 'motherTongue' | 'community' | 'batch' | 'studentMapping ' | 'section'
-> & {
+export type AddStudentModel = Omit & {
   batchId: string;
   communityId: string;
   motherTongueId: string;
 };
 
-export type UpdateStudentModel = Pick<Student, 'id'>;
+export type UpdateStudentModel = Pick;
 
 export type GetStudentListModel = {
   page: number;

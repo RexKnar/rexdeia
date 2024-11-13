@@ -12,8 +12,8 @@ function getStaffSubjectListByClassId(
   classId: string,
   staffId: string,
   academicYearId: string,
-  options?: Partial<UseQueryOptions<StaffSubjectList[]>>
-): UseQueryOptions<StaffSubjectList[]> {
+  options?: Partial
+): UseQueryOptions {
   return {
     ...options,
     queryKey: [GET_STAFF_SUBJECT_LIST_BY_CLASS_ID, classId],
@@ -31,8 +31,8 @@ export function useGetStaffSubjectListByClassIdQuery(
   classId: string,
   staffId: string,
   academicYearId: string,
-  options?: Partial<UseQueryOptions<StaffSubjectList[]>>
-): UseQueryResult<StaffSubjectList[]> {
+  options?: Partial
+): UseQueryResult {
   return useQuery(
     getStaffSubjectListByClassId(classId, staffId, academicYearId, options)
   );

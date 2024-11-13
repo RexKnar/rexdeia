@@ -109,7 +109,7 @@ export function StudentAttendanceListTable() {
       name: 'rakes',
     },
   ];
-  const columns: ColumnDef<Students>[] = [
+  const columns: ColumnDef[] = [
     {
       accessorKey: 'name',
 

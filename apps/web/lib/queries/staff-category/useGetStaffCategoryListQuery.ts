@@ -3,9 +3,7 @@ import { makeAPICall } from 'lib/api';
 import { StaffCategoryModel } from 'lib/domain/staffCategory';
 import { GET_STAFF_CATEGORY_LIST } from 'lib/endpoints';
 
-function getStaffCategoryList(
-  options?: Partial<UseQueryOptions<StaffCategoryModel[]>>
-) {
+function getStaffCategoryList(options?: Partial) {
   return {
     ...options,
     queryKey: [GET_STAFF_CATEGORY_LIST],
@@ -20,8 +18,6 @@ function getStaffCategoryList(
   };
 }
 
-export function useGetStaffCategoryListQuery(
-  options?: Partial<UseQueryOptions<StaffCategoryModel[]>>
-) {
+export function useGetStaffCategoryListQuery(options?: Partial) {
   return useQuery(getStaffCategoryList(options));
 }

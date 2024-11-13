@@ -10,8 +10,8 @@ import { GET_CLASSLEVELS_LIST } from '../../endpoints';
 
 function getClassLevelList(
   { page, limit }: { page: number; limit: number },
-  options?: UseQueryOptions<ClassLevelModel[]>
-): UseQueryOptions<ClassLevelModel[]> {
+  options?: UseQueryOptions
+): UseQueryOptions {
   return {
     ...options,
     queryKey: [GET_CLASSLEVELS_LIST, page, limit],
@@ -30,7 +30,7 @@ function getClassLevelList(
 
 export function useGetClassLevelListQuery(
   { page, limit }: { page: number; limit: number },
-  options?: UseQueryOptions<ClassLevelModel[]>
-): UseQueryResult<ClassLevelModel[]> {
+  options?: UseQueryOptions
+): UseQueryResult {
   return useQuery(getClassLevelList({ page, limit }, options));
 }

@@ -11,7 +11,7 @@ type GetMarkEntryFormStructureFilter = {
 
 function getMarkWithMarkEntry(
   filter: GetMarkEntryFormStructureFilter,
-  options?: Partial<UseQueryOptions<any[]>>
+  options?: Partial
 ) {
   return {
     ...options,
@@ -29,7 +29,7 @@ function getMarkWithMarkEntry(
 
 export function useGetMarkWithMarkEntryQuery(
   filter: GetMarkEntryFormStructureFilter,
-  options?: Partial<UseQueryOptions<any[]>>
+  options?: Partial
 ) {
   return useQuery(getMarkWithMarkEntry(filter, options));
 }

@@ -101,33 +101,30 @@ export async function getExamSubjectsByMaster(
   });
 
   // Group subjects by subjectMaster
-  const groupedSubjects = response.reduce(
-    (acc, examSubject) => {
-      const subjectMasterId = examSubject.subject.subjectMaster.id;
-      const subjectMasterName = examSubject.subject.subjectMaster.name;
+  const groupedSubjects = response.reduce((acc, examSubject) => {
+    const subjectMasterId = examSubject.subject.subjectMaster.id;
+    const subjectMasterName = examSubject.subject.subjectMaster.name;
 
-      if (!acc[subjectMasterId]) {
-        acc[subjectMasterId] = {
-          id: subjectMasterId,
-          name: subjectMasterName,
-          subjects: [],
-        };
-      }
+    if (!acc[subjectMasterId]) {
+      acc[subjectMasterId] = {
+        id: subjectMasterId,
+        name: subjectMasterName,
+        subjects: [],
+      };
+    }
 
-      acc[subjectMasterId].subjects.push({
-        id: examSubject.id,
-        name: examSubject.subject.name,
-        totalMarks: examSubject.totalMarks,
-        convertTo: examSubject.convertTo,
-        minMark: examSubject.minMark,
-        subjectOrder: examSubject.subject.subjectOrder,
-        examSubjectPartition: examSubject.examSubjectPartition,
-      });
+    acc[subjectMasterId].subjects.push({
+      id: examSubject.id,
+      name: examSubject.subject.name,
+      totalMarks: examSubject.totalMarks,
+      convertTo: examSubject.convertTo,
+      minMark: examSubject.minMark,
+      subjectOrder: examSubject.subject.subjectOrder,
+      examSubjectPartition: examSubject.examSubjectPartition,
+    });
 
-      return acc;
-    },
-    {} as Record<string, { id: string; name: string; subjects: any[] }>
-  );
+    return acc;
+  }, {} as Record);
 
   // Convert the grouped subjects object to an array
   return Object.values(groupedSubjects);

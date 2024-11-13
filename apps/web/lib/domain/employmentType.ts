@@ -13,12 +13,6 @@ export type EmploymentTypeModel = {
   staff?: Staff[];
 };
 
-export type CreateEmploymentTypeRequestModel = Pick<
-  EmploymentTypeModel,
-  'name' | 'isActive'
->;
+export type CreateEmploymentTypeRequestModel = Pick;
 
-export type UpdateEmploymentTypeRequestModel = Pick<
-  EmploymentTypeModel,
-  'id' | 'name' | 'isActive'
->;
+export type UpdateEmploymentTypeRequestModel = Pick;

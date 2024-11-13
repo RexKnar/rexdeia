@@ -24,13 +24,15 @@ export function useUpdateSubjectTypeMutationQuery(page: number, limit: number) {
         queryKey: [GET_SUBJECT_TYPE_LIST, page, limit],
       });
 
-      const previousSubjectType = queryClient.getQueryData<
-        PaginatedResponse<SubjectTypeModel>
-      >([GET_SUBJECT_TYPE_LIST, page, limit]);
+      const previousSubjectType = queryClient.getQueryData<PaginatedResponse>([
+        GET_SUBJECT_TYPE_LIST,
+        page,
+        limit,
+      ]);
 
       queryClient.setQueryData(
         [GET_SUBJECT_TYPE_LIST, page, limit],
-        (existingSubjectType: PaginatedResponse<SubjectTypeModel>) => {
+        (existingSubjectType: PaginatedResponse) => {
           return {
             ...existingSubjectType,
             data: [

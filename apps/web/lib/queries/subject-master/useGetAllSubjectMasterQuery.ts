@@ -21,13 +21,13 @@ function getSubjectMasterList(
       isActive?: boolean;
     };
   },
-  options?: UseQueryOptions<PaginatedResponse<SubjectMasterModel>>
-): UseQueryOptions<PaginatedResponse<SubjectMasterModel>> {
+  options?: UseQueryOptions
+): UseQueryOptions {
   return {
     ...options,
     queryKey: [GET_SUBJECT_MASTER_LIST, page, limit, filter],
     queryFn: async () => {
-      return await makeAPICall<PaginatedResponse<SubjectMasterModel>>(
+      return await makeAPICall<PaginatedResponse>(
         GET_SUBJECT_MASTER_LIST,
         filter,
         {
@@ -52,7 +52,7 @@ export function useGetSubjectMasterListQuery(
       isActive?: boolean;
     };
   },
-  options?: UseQueryOptions<PaginatedResponse<SubjectMasterModel>>
-): UseQueryResult<PaginatedResponse<SubjectMasterModel>> {
+  options?: UseQueryOptions
+): UseQueryResult {
   return useQuery(getSubjectMasterList({ page, limit, filter }, options));
 }

@@ -8,7 +8,7 @@ import { ADD_ENQUIRY } from '../../endpoints';
 
 type EnquiryFormProps = {
   formId: string;
-  formConfig: Record<string, any>;
+  formConfig: Record;
 };
 
 export function EnquiryForm({ formConfig, formId }: EnquiryFormProps) {
@@ -18,7 +18,7 @@ export function EnquiryForm({ formConfig, formId }: EnquiryFormProps) {
     formState: { errors, isSubmitting },
   } = useForm();
 
-  async function addEnquiryHandler(data: Record<string, unknown>) {
+  async function addEnquiryHandler(data: Record) {
     try {
       await makeAPICall(
         ADD_ENQUIRY,

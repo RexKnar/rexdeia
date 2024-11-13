@@ -11,13 +11,13 @@ import { GET_LEVELCONFIG_LIST } from '../../endpoints';
 
 function getLevelConfigList(
   { page, limit }: { page: number; limit: number },
-  options?: UseQueryOptions<PaginatedResponse<LevelConfigModel>>
-): UseQueryOptions<PaginatedResponse<LevelConfigModel>> {
+  options?: UseQueryOptions
+): UseQueryOptions {
   return {
     ...options,
     queryKey: [GET_LEVELCONFIG_LIST, page, limit],
     queryFn: async () => {
-      return await makeAPICall<PaginatedResponse<LevelConfigModel>>(
+      return await makeAPICall<PaginatedResponse>(
         GET_LEVELCONFIG_LIST,
         {},
         {
@@ -32,7 +32,7 @@ function getLevelConfigList(
 
 export function useGetLevelConfigListQuery(
   { page, limit }: { page: number; limit: number },
-  options?: UseQueryOptions<PaginatedResponse<LevelConfigModel>>
-): UseQueryResult<PaginatedResponse<LevelConfigModel>> {
+  options?: UseQueryOptions
+): UseQueryResult {
   return useQuery(getLevelConfigList({ page, limit }, options));
 }

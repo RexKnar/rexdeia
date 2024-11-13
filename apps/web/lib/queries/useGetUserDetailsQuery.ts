@@ -4,9 +4,7 @@ import { makeAPICall } from '../api';
 import { GetUserDetailsByIdModel } from '../domain/user';
 import { GET_USER_DETAILS } from '../endpoints';
 
-export function useGetUserDetailsQuery(
-  options?: UseQueryOptions<GetUserDetailsByIdModel>
-) {
+export function useGetUserDetailsQuery(options?: UseQueryOptions) {
   return useQuery({
     ...options,
     queryKey: [GET_USER_DETAILS],

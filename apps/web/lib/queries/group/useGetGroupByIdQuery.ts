@@ -8,10 +8,7 @@ import { makeAPICall } from '../../api';
 import { GroupModel } from '../../domain/group';
 import { GET_GROUP_BY_ID } from '../../endpoints';
 
-function getGroupById(
-  groupId: string,
-  options?: Partial<UseQueryOptions<GroupModel>>
-): UseQueryOptions<GroupModel> {
+function getGroupById(groupId: string, options?: Partial): UseQueryOptions {
   return {
     ...options,
     queryKey: [GET_GROUP_BY_ID, groupId],
@@ -27,7 +24,7 @@ function getGroupById(
 }
 export function useGetGroupByIdQuery(
   id: string,
-  options?: Partial<UseQueryOptions<GroupModel>>
-): UseQueryResult<GroupModel> {
+  options?: Partial
+): UseQueryResult {
   return useQuery(getGroupById(id, options));
 }

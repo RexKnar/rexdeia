@@ -9,9 +9,6 @@ export type MediumModel = {
   isNewlyAdded?: boolean;
 };
 
-export type CreateMediumRequestModel = Pick<MediumModel, 'name' | 'isActive'>;
+export type CreateMediumRequestModel = Pick;
 
-export type UpdateMediumRequestModel = Pick<
-  MediumModel,
-  'id' | 'name' | 'isActive'
->;
+export type UpdateMediumRequestModel = Pick;

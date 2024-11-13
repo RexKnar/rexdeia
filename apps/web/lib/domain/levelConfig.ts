@@ -12,24 +12,5 @@ export type LevelConfigModel = {
   classLevelId: string;
 };
 
-export type CreateLevelConfigModel = Pick<
-  LevelConfigModel,
-  | 'name'
-  | 'isActive'
-  | 'classLevelId'
-  | 'noOfSubjects'
-  | 'noOfPeriods'
-  | 'startTime'
-  | 'endTime'
->;
-export type UpdateLevelConfigModel = Pick<
-  LevelConfigModel,
-  | 'id'
-  | 'name'
-  | 'isActive'
-  | 'classLevelId'
-  | 'noOfSubjects'
-  | 'noOfPeriods'
-  | 'startTime'
-  | 'endTime'
->;
+export type CreateLevelConfigModel = Pick;
+export type UpdateLevelConfigModel = Pick;

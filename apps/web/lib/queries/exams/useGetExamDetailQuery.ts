@@ -6,8 +6,8 @@ import { GET_EXAM_DETAIL_BY_EXAM_ID } from '../../endpoints';
 
 function getExamDetail(
   { examId }: { examId: string },
-  options?: Partial<UseQueryOptions<ExamModel>>
-): UseQueryOptions<ExamModel> {
+  options?: Partial
+): UseQueryOptions {
   return {
     ...options,
     queryKey: [GET_EXAM_DETAIL_BY_EXAM_ID, examId],
@@ -24,7 +24,7 @@ function getExamDetail(
 
 export function useGetExamDetailQuery(
   { examId }: { examId: string },
-  options?: Partial<UseQueryOptions<ExamModel>>
+  options?: Partial
 ) {
   return useQuery(getExamDetail({ examId }, options));
 }

@@ -37,7 +37,7 @@ import { SubjectTypeModel } from '../../../../../../lib/domain/subject';
 import { useDeleteSubjectTypeMutationQuery } from '../../../../../../lib/queries/subject-type/useDeleteSubjectTypeMutationQuery';
 import { useGetSubjectTypeList } from '../../../../../../lib/queries/subject-type/useGetSubjectTypeQuery';
 
-const columns: ColumnDef<SubjectTypeModel>[] = [
+const columns: ColumnDef[] = [
   {
     accessorKey: 'name',
     header: ({ column }) => {

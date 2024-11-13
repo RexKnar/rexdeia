@@ -9,8 +9,8 @@ import { GET_EXAM_CONFIG_BY_ID } from 'lib/endpoints';
 
 function getExamPartitionById(
   payload: { id: string; configId: string },
-  options?: Partial<UseQueryOptions<ExamSubjectPartitionModel>>
-): UseQueryOptions<ExamSubjectPartitionModel> {
+  options?: Partial
+): UseQueryOptions {
   return {
     ...options,
     queryKey: [GET_EXAM_CONFIG_BY_ID, payload],
@@ -27,7 +27,7 @@ function getExamPartitionById(
 
 export function useGetExamPartitionByIdIdQuery(
   payload: { id: string; configId: string },
-  options?: Partial<UseQueryOptions<ExamSubjectPartitionModel>>
-): UseQueryResult<ExamSubjectPartitionModel> {
+  options?: Partial
+): UseQueryResult {
   return useQuery(getExamPartitionById(payload, options));
 }

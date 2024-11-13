@@ -14,8 +14,8 @@ export type sectionFieldsType = {
   optionValue?: string;
   label: string;
   visible: boolean;
-  options: Record<string, string>[];
-  validationRules: Record<string, string | boolean | number>;
+  options: Record[];
+  validationRules: Record;
 };
 
 const staffForm: staffFormSectionType[] = [

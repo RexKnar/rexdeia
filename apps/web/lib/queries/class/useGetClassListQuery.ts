@@ -15,13 +15,13 @@ function getClassList(
     limit,
     filter,
   }: { page: number; limit: number; filter: { isActive?: boolean } },
-  options?: UseQueryOptions<PaginatedResponse<ClassModel>>
-): UseQueryOptions<PaginatedResponse<ClassModel>> {
+  options?: UseQueryOptions
+): UseQueryOptions {
   return {
     ...options,
     queryKey: [GET_CLASS_LIST, page, limit, filter],
     queryFn: async () => {
-      return await makeAPICall<PaginatedResponse<ClassModel>>(
+      return await makeAPICall<PaginatedResponse>(
         GET_CLASS_LIST,
         filter,
         {
@@ -40,7 +40,7 @@ export function useGetClassListQuery(
     limit,
     filter,
   }: { page: number; limit: number; filter: { isActive?: boolean } },
-  options?: UseQueryOptions<PaginatedResponse<ClassModel>>
-): UseQueryResult<PaginatedResponse<ClassModel>> {
+  options?: UseQueryOptions
+): UseQueryResult {
   return useQuery(getClassList({ page, limit, filter }, options));
 }

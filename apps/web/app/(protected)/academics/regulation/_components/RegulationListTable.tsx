@@ -37,7 +37,7 @@ import { RegulationModel } from '../../../../../lib/domain/regulation';
 import { useDeleteRegulationMutationQuery } from '../../../../../lib/queries/regulations/useDeleteRegulationMutationQuery';
 import { useGetRegulationListQuery } from '../../../../../lib/queries/regulations/useGetRegulationListQuery';
 
-const columns: ColumnDef<RegulationModel>[] = [
+const columns: ColumnDef[] = [
   {
     accessorKey: 'regulationName',
     header: ({ column }) => {

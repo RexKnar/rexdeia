@@ -8,7 +8,7 @@ function getStudentMarkListQuery(
   sectionId: string,
   classId?: string,
   groupId?: string,
-  options?: Partial<UseQueryOptions<any>>
+  options?: Partial
 ) {
   return {
     ...options,
@@ -29,7 +29,7 @@ export function useGetStudentMarkListQuery(
   sectionId: string,
   classId?: string,
   groupId?: string,
-  options?: Partial<UseQueryOptions<any>>
+  options?: Partial
 ) {
   return useQuery(
     getStudentMarkListQuery(id, sectionId, classId, groupId, options)

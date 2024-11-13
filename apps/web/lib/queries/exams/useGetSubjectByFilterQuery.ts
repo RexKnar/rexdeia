@@ -8,7 +8,7 @@ import { makeAPICall } from '../../api';
 export function useGetSubjectListByFilter() {
   return useMutation({
     mutationFn: async (payload: any) => {
-      return await makeAPICall<PaginatedResponse<SubjectModel>>(
+      return await makeAPICall<PaginatedResponse>(
         GET_SUBJECT_LIST_BY_FILTER,
         payload,
         {},

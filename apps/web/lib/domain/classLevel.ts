@@ -14,8 +14,5 @@ export type ClassLevelModel = {
   isDeleted: string;
 };
 
-export type CreateClassLevelModel = Pick<ClassLevelModel, 'name' | 'isActive'>;
-export type UpdateClassLevelModel = Pick<
-  ClassLevelModel,
-  'id' | 'name' | 'isActive'
->;
+export type CreateClassLevelModel = Pick;
+export type UpdateClassLevelModel = Pick;

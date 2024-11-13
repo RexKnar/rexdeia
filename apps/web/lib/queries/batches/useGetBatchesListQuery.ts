@@ -12,13 +12,13 @@ function getBatchesList(
     limit,
     filter,
   }: { page: number; limit: number; filter: { isActive?: boolean } },
-  options?: UseQueryOptions<PaginatedResponse<BatchModel>>
-): UseQueryOptions<PaginatedResponse<BatchModel>> {
+  options?: UseQueryOptions
+): UseQueryOptions {
   return {
     ...options,
     queryKey: [GET_BATCHES_LIST, page, limit, filter],
     queryFn: async () => {
-      return await makeAPICall<PaginatedResponse<BatchModel>>(
+      return await makeAPICall<PaginatedResponse>(
         GET_BATCHES_LIST,
         filter,
         {
@@ -37,7 +37,7 @@ export function useGetBatchesListQuery(
     limit,
     filter,
   }: { page: number; limit: number; filter: { isActive?: boolean } },
-  options?: UseQueryOptions<PaginatedResponse<BatchModel>>
+  options?: UseQueryOptions
 ) {
   const response = useQuery(getBatchesList({ page, limit, filter }, options));
 

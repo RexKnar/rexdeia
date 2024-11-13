@@ -19,13 +19,13 @@ function getAssessmentFormatList(
     limit: number;
     filter: { isActive?: boolean; hasMarkEntry?: boolean };
   },
-  options?: UseQueryOptions<PaginatedResponse<AssessmentFormatModel>>
-): UseQueryOptions<PaginatedResponse<AssessmentFormatModel>> {
+  options?: UseQueryOptions
+): UseQueryOptions {
   return {
     ...options,
     queryKey: [GET_ASSESSMENT_FORMAT_LIST, page, limit],
     queryFn: async () => {
-      return await makeAPICall<PaginatedResponse<AssessmentFormatModel>>(
+      return await makeAPICall<PaginatedResponse>(
         GET_ASSESSMENT_FORMAT_LIST,
         filter,
         {
@@ -44,7 +44,7 @@ export function useGetAssessmentFormatList(
     limit,
     filter,
   }: { page: number; limit: number; filter: { isActive?: boolean } },
-  options?: UseQueryOptions<PaginatedResponse<AssessmentFormatModel>>
-): UseQueryResult<PaginatedResponse<AssessmentFormatModel>> {
+  options?: UseQueryOptions
+): UseQueryResult {
   return useQuery(getAssessmentFormatList({ page, limit, filter }, options));
 }

@@ -10,8 +10,8 @@ import { GET_REGULATION_BY_ID } from '../../endpoints';
 
 function getRegulationById(
   regulationId: string,
-  options?: UseQueryOptions<RegulationModel>
-): UseQueryOptions<RegulationModel> {
+  options?: UseQueryOptions
+): UseQueryOptions {
   return {
     ...options,
     queryKey: [GET_REGULATION_BY_ID, regulationId],
@@ -27,7 +27,7 @@ function getRegulationById(
 }
 export function useGetRegulationByIdQuery(
   id: string,
-  options?: UseQueryOptions<RegulationModel>
-): UseQueryResult<RegulationModel> {
+  options?: UseQueryOptions
+): UseQueryResult {
   return useQuery(getRegulationById(id, options));
 }

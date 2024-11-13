@@ -11,7 +11,7 @@ type GetExamsByClassSectionFilter = {
 
 function getExamsByClassSection(
   filter: GetExamsByClassSectionFilter,
-  options?: Partial<UseQueryOptions<ExamModel[]>>
+  options?: Partial
 ) {
   return {
     ...options,
@@ -29,7 +29,7 @@ function getExamsByClassSection(
 
 export function useGetExamsByClassSectionQuery(
   filter: GetExamsByClassSectionFilter,
-  options?: Partial<UseQueryOptions<ExamModel[]>>
+  options?: Partial
 ) {
   return useQuery(getExamsByClassSection(filter, options));
 }

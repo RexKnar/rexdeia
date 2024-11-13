@@ -13,21 +13,12 @@ export type ClassModel = {
   Section: CreateSectionModel[];
 };
 
-export type CreateSectionModel = Pick<
-  SectionModel,
-  'name' | 'mediumId' | 'groupIds'
->;
-export type CreateClassModel = Pick<
-  ClassModel,
-  'name' | 'isActive' | 'branchId' | 'classLevelId'
-> & {
+export type CreateSectionModel = Pick;
+export type CreateClassModel = Pick & {
   section: CreateSectionModel[];
 };
 
-export type UpdateClassModel = Pick<
-  ClassModel,
-  'id' | 'name' | 'isActive' | 'branchId' | 'classLevelId'
->;
+export type UpdateClassModel = Pick;
 
 export type AddSubjectsToClassRequestModel =
   | {

@@ -11,13 +11,13 @@ import { GET_GRADE_LIST } from '../../endpoints';
 
 function getGradeList(
   { page, limit }: { page: number; limit: number },
-  options?: UseQueryOptions<PaginatedResponse<GradeModel>>
-): UseQueryOptions<PaginatedResponse<GradeModel>> {
+  options?: UseQueryOptions
+): UseQueryOptions {
   return {
     ...options,
     queryKey: [GET_GRADE_LIST, page, limit],
     queryFn: async () => {
-      return await makeAPICall<PaginatedResponse<GradeModel>>(
+      return await makeAPICall<PaginatedResponse>(
         GET_GRADE_LIST,
         {},
         {
@@ -32,7 +32,7 @@ function getGradeList(
 
 export function useGetGradeList(
   { page, limit }: { page: number; limit: number },
-  options?: UseQueryOptions<PaginatedResponse<GradeModel>>
-): UseQueryResult<PaginatedResponse<GradeModel>> {
+  options?: UseQueryOptions
+): UseQueryResult {
   return useQuery(getGradeList({ page, limit }, options));
 }

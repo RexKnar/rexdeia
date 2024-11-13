@@ -25,13 +25,16 @@ export function useUpdateGroupMutationQuery(
         queryKey: [GET_GROUP_LIST, page, limit, filter],
       });
 
-      const previousGroup = queryClient.getQueryData<
-        PaginatedResponse<GroupModel>
-      >([GET_GROUP_LIST, page, limit, filter]);
+      const previousGroup = queryClient.getQueryData<PaginatedResponse>([
+        GET_GROUP_LIST,
+        page,
+        limit,
+        filter,
+      ]);
 
       queryClient.setQueryData(
         [GET_GROUP_LIST, page, limit, filter],
-        (existingGroup: PaginatedResponse<GroupModel>) => {
+        (existingGroup: PaginatedResponse) => {
           return {
             ...existingGroup,
             data: [

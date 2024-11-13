@@ -24,13 +24,15 @@ export function useCreateRegulationsMutationQuery(page: number, limit: number) {
         queryKey: [GET_REGULATION_LIST, page, limit],
       });
 
-      const previousRegulations = queryClient.getQueryData<
-        PaginatedResponse<RegulationModel>
-      >([GET_REGULATION_LIST, page, limit]);
+      const previousRegulations = queryClient.getQueryData<PaginatedResponse>([
+        GET_REGULATION_LIST,
+        page,
+        limit,
+      ]);
 
       queryClient.setQueryData(
         [GET_REGULATION_LIST, page, limit],
-        (existingRegulations: PaginatedResponse<RegulationModel>) => {
+        (existingRegulations: PaginatedResponse) => {
           return {
             ...existingRegulations,
             data: [

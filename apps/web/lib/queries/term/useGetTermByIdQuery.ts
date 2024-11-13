@@ -8,10 +8,7 @@ import { GET_TERM_BY_ID } from 'lib/endpoints';
 
 import { makeAPICall } from '../../api';
 
-function getTermById(
-  termId: string,
-  options?: Partial<UseQueryOptions<TermModel>>
-): UseQueryOptions<TermModel> {
+function getTermById(termId: string, options?: Partial): UseQueryOptions {
   return {
     ...options,
     queryKey: [GET_TERM_BY_ID, termId],
@@ -27,7 +24,7 @@ function getTermById(
 }
 export function useGetTermByIdQuery(
   id: string,
-  options?: Partial<UseQueryOptions<TermModel>>
-): UseQueryResult<TermModel> {
+  options?: Partial
+): UseQueryResult {
   return useQuery(getTermById(id, options));
 }

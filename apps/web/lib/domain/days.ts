@@ -10,5 +10,5 @@ export type DaysModel = {
   isDeleted: string;
 };
 
-export type CreateDaysModel = Pick<DaysModel, 'name' | 'isActive'>;
-export type UpdateDaysModel = Pick<DaysModel, 'id' | 'name' | 'isActive'>;
+export type CreateDaysModel = Pick;
+export type UpdateDaysModel = Pick;

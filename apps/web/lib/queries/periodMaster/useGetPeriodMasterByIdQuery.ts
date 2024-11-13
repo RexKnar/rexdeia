@@ -8,10 +8,7 @@ import { PeriodMasterModel } from 'lib/domain/periodMaster';
 import { makeAPICall } from '../../api';
 import { GET_PERIOD_MASTER_BY_ID } from '../../endpoints';
 
-function getPeriodMasterById(
-  Id: string,
-  options?: Partial<UseQueryOptions<PeriodMasterModel>>
-): UseQueryOptions<PeriodMasterModel> {
+function getPeriodMasterById(Id: string, options?: Partial): UseQueryOptions {
   return {
     ...options,
     queryKey: [GET_PERIOD_MASTER_BY_ID, Id],
@@ -27,7 +24,7 @@ function getPeriodMasterById(
 }
 export function useGetPeriodMasterByIdQuery(
   id: string,
-  options?: Partial<UseQueryOptions<PeriodMasterModel>>
-): UseQueryResult<PeriodMasterModel> {
+  options?: Partial
+): UseQueryResult {
   return useQuery(getPeriodMasterById(id, options));
 }

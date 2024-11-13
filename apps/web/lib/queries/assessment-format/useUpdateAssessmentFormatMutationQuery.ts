@@ -30,15 +30,16 @@ export function useUpdateAssessmentFormatMutationQuery(
         queryKey: [GET_ASSESSMENT_FORMAT_LIST, page, limit],
       });
 
-      const previousAssessmentFormat = queryClient.getQueryData<
-        PaginatedResponse<AssessmentFormatModel>
-      >([GET_ASSESSMENT_FORMAT_LIST, page, limit]);
+      const previousAssessmentFormat =
+        queryClient.getQueryData<PaginatedResponse>([
+          GET_ASSESSMENT_FORMAT_LIST,
+          page,
+          limit,
+        ]);
 
       queryClient.setQueryData(
         [GET_ASSESSMENT_FORMAT_LIST, page, limit],
-        (
-          existingAssessmentFormat: PaginatedResponse<AssessmentFormatModel>
-        ) => {
+        (existingAssessmentFormat: PaginatedResponse) => {
           return {
             ...existingAssessmentFormat,
             data: [

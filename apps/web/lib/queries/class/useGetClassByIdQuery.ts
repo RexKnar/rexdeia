@@ -8,10 +8,7 @@ import { makeAPICall } from '../../api';
 import { ClassModel } from '../../domain/class';
 import { GET_CLASS_BY_ID } from '../../endpoints';
 
-function getClassById(
-  classId: string,
-  options?: Partial<UseQueryOptions<ClassModel>>
-): UseQueryOptions<ClassModel> {
+function getClassById(classId: string, options?: Partial): UseQueryOptions {
   return {
     ...options,
     queryKey: [GET_CLASS_BY_ID, classId],
@@ -27,7 +24,7 @@ function getClassById(
 }
 export function useGetClassByIdQuery(
   id: string,
-  options?: Partial<UseQueryOptions<ClassModel>>
-): UseQueryResult<ClassModel> {
+  options?: Partial
+): UseQueryResult {
   return useQuery(getClassById(id, options));
 }

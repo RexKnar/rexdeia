@@ -11,7 +11,7 @@ type SubjectsWithFormatsFilter = {
 
 function getSubjectsWithFormats(
   filter: SubjectsWithFormatsFilter,
-  options?: Partial<UseQueryOptions<any[]>>
+  options?: Partial
 ) {
   return {
     ...options,
@@ -29,7 +29,7 @@ function getSubjectsWithFormats(
 
 export function useGetSubjectsWithFormatsQuery(
   filter: SubjectsWithFormatsFilter,
-  options?: Partial<UseQueryOptions<any[]>>
+  options?: Partial
 ) {
   return useQuery(getSubjectsWithFormats(filter, options));
 }

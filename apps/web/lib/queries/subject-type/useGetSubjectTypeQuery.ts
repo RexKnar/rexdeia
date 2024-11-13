@@ -15,13 +15,13 @@ function getSubjectTypeList(
     limit,
     filter,
   }: { page: number; limit: number; filter: { isActive?: boolean } },
-  options?: UseQueryOptions<PaginatedResponse<SubjectTypeModel>>
-): UseQueryOptions<PaginatedResponse<SubjectTypeModel>> {
+  options?: UseQueryOptions
+): UseQueryOptions {
   return {
     ...options,
     queryKey: [GET_SUBJECT_TYPE_LIST, page, limit],
     queryFn: async () => {
-      return await makeAPICall<PaginatedResponse<SubjectTypeModel>>(
+      return await makeAPICall<PaginatedResponse>(
         GET_SUBJECT_TYPE_LIST,
         filter,
         {
@@ -40,7 +40,7 @@ export function useGetSubjectTypeList(
     limit,
     filter,
   }: { page: number; limit: number; filter: { isActive?: boolean } },
-  options?: UseQueryOptions<PaginatedResponse<SubjectTypeModel>>
-): UseQueryResult<PaginatedResponse<SubjectTypeModel>> {
+  options?: UseQueryOptions
+): UseQueryResult {
   return useQuery(getSubjectTypeList({ page, limit, filter }, options));
 }

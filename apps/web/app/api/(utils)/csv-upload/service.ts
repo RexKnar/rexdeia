@@ -9,7 +9,7 @@ import { parse } from 'csv-parse';
  * @returns A promise that resolves to an array of parsed CSV data.
  */
 const fileHandler = async (fileName: string, fileBuffer: Buffer) => {
-  const results: Array<{ [key: string]: string }> = [];
+  const results: Array = [];
 
   return new Promise((resolve, reject) => {
     const parser = parse({ columns: true });

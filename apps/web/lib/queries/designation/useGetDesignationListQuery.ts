@@ -3,9 +3,7 @@ import { makeAPICall } from 'lib/api';
 import { DesignationModel } from 'lib/domain/designation';
 import { GET_DESIGNATION_LIST } from 'lib/endpoints';
 
-function getDesignationList(
-  options?: Partial<UseQueryOptions<DesignationModel[]>>
-) {
+function getDesignationList(options?: Partial) {
   return {
     ...options,
     queryKey: [GET_DESIGNATION_LIST],
@@ -20,8 +18,6 @@ function getDesignationList(
   };
 }
 
-export function useGetDesignationListQuery(
-  options?: Partial<UseQueryOptions<DesignationModel[]>>
-) {
+export function useGetDesignationListQuery(options?: Partial) {
   return useQuery(getDesignationList(options));
 }

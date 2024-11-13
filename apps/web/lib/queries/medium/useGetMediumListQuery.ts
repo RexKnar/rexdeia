@@ -21,13 +21,13 @@ function getMediumList(
       isActive?: boolean;
     };
   },
-  options?: UseQueryOptions<PaginatedResponse<MediumModel>>
-): UseQueryOptions<PaginatedResponse<MediumModel>> {
+  options?: UseQueryOptions
+): UseQueryOptions {
   return {
     ...options,
     queryKey: [GET_MEDIUM_LIST, page, limit, filter],
     queryFn: async () => {
-      return await makeAPICall<PaginatedResponse<MediumModel>>(
+      return await makeAPICall<PaginatedResponse>(
         GET_MEDIUM_LIST,
 
         filter,
@@ -53,7 +53,7 @@ export function useGetMediumListQuery(
       isActive?: boolean;
     };
   },
-  options?: UseQueryOptions<PaginatedResponse<MediumModel>>
-): UseQueryResult<PaginatedResponse<MediumModel>> {
+  options?: UseQueryOptions
+): UseQueryResult {
   return useQuery(getMediumList({ page, limit, filter }, options));
 }

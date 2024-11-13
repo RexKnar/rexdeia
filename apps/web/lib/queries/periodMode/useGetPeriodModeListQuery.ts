@@ -10,8 +10,8 @@ import { GET_PERIOD_MODE_LIST } from '../../endpoints';
 
 function getPeriodModeList(
   { page, limit }: { page: number; limit: number },
-  options?: UseQueryOptions<PeriodModeModel[]>
-): UseQueryOptions<PeriodModeModel[]> {
+  options?: UseQueryOptions
+): UseQueryOptions {
   return {
     ...options,
     queryKey: [GET_PERIOD_MODE_LIST, page, limit],
@@ -30,7 +30,7 @@ function getPeriodModeList(
 
 export function useGetPeriodModeListQuery(
   { page, limit }: { page: number; limit: number },
-  options?: UseQueryOptions<PeriodModeModel[]>
-): UseQueryResult<PeriodModeModel[]> {
+  options?: UseQueryOptions
+): UseQueryResult {
   return useQuery(getPeriodModeList({ page, limit }, options));
 }

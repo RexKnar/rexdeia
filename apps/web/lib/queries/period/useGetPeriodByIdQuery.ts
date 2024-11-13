@@ -8,10 +8,7 @@ import { PeriodModel } from 'lib/domain/period';
 import { makeAPICall } from '../../api';
 import { GET_PERIOD_BY_ID } from '../../endpoints';
 
-function getPeriodById(
-  Id: string,
-  options?: Partial<UseQueryOptions<PeriodModel>>
-): UseQueryOptions<PeriodModel> {
+function getPeriodById(Id: string, options?: Partial): UseQueryOptions {
   return {
     ...options,
     queryKey: [GET_PERIOD_BY_ID, Id],
@@ -22,7 +19,7 @@ function getPeriodById(
 }
 export function useGetPeriodByIdQuery(
   id: string,
-  options?: Partial<UseQueryOptions<PeriodModel>>
-): UseQueryResult<PeriodModel> {
+  options?: Partial
+): UseQueryResult {
   return useQuery(getPeriodById(id, options));
 }

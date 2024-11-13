@@ -7,12 +7,7 @@ import { Button, Input } from 'ui';
 import { Footer } from '../Footer';
 
 export function OtpVerifyForm() {
-  const inputRefs: RefObject<HTMLInputElement>[] = [
-    useRef(),
-    useRef(),
-    useRef(),
-    useRef(),
-  ];
+  const inputRefs: RefObject[] = [useRef(), useRef(), useRef(), useRef()];
   const handleInput = (e, index) => {
     if (index < inputRefs.length - 1 && e.target.value) {
       inputRefs[index + 1]?.current?.focus();

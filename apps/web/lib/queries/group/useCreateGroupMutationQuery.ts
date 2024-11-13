@@ -16,13 +16,16 @@ export function useCreateGroupMutationQuery(page: number, limit: number) {
         queryKey: [GET_GROUP_LIST, page, limit],
       });
 
-      const previousGroup = queryClient.getQueryData<
-        PaginatedResponse<GroupModel>
-      >([GET_GROUP_LIST, page, limit, {}]);
+      const previousGroup = queryClient.getQueryData<PaginatedResponse>([
+        GET_GROUP_LIST,
+        page,
+        limit,
+        {},
+      ]);
 
       queryClient.setQueryData(
         [GET_GROUP_LIST, page, limit, {}],
-        (existingGroup: PaginatedResponse<GroupModel>) => {
+        (existingGroup: PaginatedResponse) => {
           return {
             ...existingGroup,
             data: [

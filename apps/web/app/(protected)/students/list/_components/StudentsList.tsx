@@ -60,7 +60,7 @@ export function StudentsList() {
     useState(false);
   const [selectedStudent, setSelectedStudent] = useState<Student | null>(null);
 
-  const columns: ColumnDef<Student>[] = [
+  const columns: ColumnDef[] = [
     {
       accessorKey: 'firstName',
       header: ({ column }) => {

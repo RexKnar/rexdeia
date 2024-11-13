@@ -11,7 +11,7 @@ type GetStudentsMarksFilter = {
 
 function getStudentsMarksByClassIdAndExamId(
   filter: GetStudentsMarksFilter,
-  options?: Partial<UseQueryOptions<StudentsMarksForAnalytics[]>>
+  options?: Partial
 ) {
   return {
     ...options,
@@ -33,7 +33,7 @@ function getStudentsMarksByClassIdAndExamId(
 
 export function useGetStudentsMarksByClassIdAndExamIdQuery(
   filter: GetStudentsMarksFilter,
-  options?: Partial<UseQueryOptions<StudentsMarksForAnalytics[]>>
+  options?: Partial
 ) {
   return useQuery(getStudentsMarksByClassIdAndExamId(filter, options));
 }

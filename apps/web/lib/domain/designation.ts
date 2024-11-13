@@ -13,12 +13,6 @@ export type DesignationModel = {
   staff?: Staff[];
 };
 
-export type CreateDesignationRequestModel = Pick<
-  DesignationModel,
-  'name' | 'isActive'
->;
+export type CreateDesignationRequestModel = Pick;
 
-export type UpdateDesignationRequestModel = Pick<
-  DesignationModel,
-  'id' | 'name' | 'isActive'
->;
+export type UpdateDesignationRequestModel = Pick;

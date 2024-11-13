@@ -35,4 +35,4 @@ export const saveBatchSchema = z
     { message: 'Start year should be less than end year', path: ['refine'] }
   );
 
-export type SaveBatchSchemaType = z.infer<typeof saveBatchSchema>;
+export type SaveBatchSchemaType = z.infer;

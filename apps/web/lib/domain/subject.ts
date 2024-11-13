@@ -24,35 +24,9 @@ export type SubjectModel = {
   subjectOrder?: number;
 };
 
-export type CreateSubjectModel = Pick<
-  SubjectModel,
-  | 'name'
-  | 'isActive'
-  | 'description'
-  | 'subjectTypeId'
-  | 'assessmentFormatIds'
-  | 'groupIds'
-  | 'elective'
-  | 'regulationId'
-  | 'subjectMasterId'
-  | 'subjectOrder'
->;
+export type CreateSubjectModel = Pick;
 
-export type UpdateSubjectModel = Pick<
-  SubjectModel,
-  | 'id'
-  | 'name'
-  | 'isActive'
-  | 'description'
-  | 'subjectTypeId'
-  | 'assessmentFormatIds'
-  | 'groupIds'
-  | 'elective'
-  | 'regulationId'
-  | 'subjectMasterId'
-  | 'classId'
-  | 'subjectOrder'
->;
+export type UpdateSubjectModel = Pick;
 
 export type AssessmentFormatModel = {
   assessmentFormat: AssessmentFormatModel;
@@ -67,17 +41,11 @@ export type AssessmentFormatModel = {
   isNewlyAdded?: boolean;
 };
 
-export type CreateAssessmentFormatModel = Pick<
-  AssessmentFormatModel,
-  'name' | 'isActive' | 'parentId' | 'hasMarkEntry'
->;
+export type CreateAssessmentFormatModel = Pick;
 
-export type UpdateAssessmentFormatModel = Pick<
-  AssessmentFormatModel,
-  'id' | 'name' | 'isActive' | 'parentId' | 'hasMarkEntry'
->;
+export type UpdateAssessmentFormatModel = Pick;
 
-export type DeleteAssessmentFormatModel = Pick<AssessmentFormatModel, 'id'>;
+export type DeleteAssessmentFormatModel = Pick;
 
 export type SubjectTypeModel = {
   id: string;
@@ -89,15 +57,9 @@ export type SubjectTypeModel = {
   isNewlyAdded?: boolean;
 };
 
-export type CreateSubjectTypeModel = Pick<
-  SubjectTypeModel,
-  'name' | 'isActive'
->;
+export type CreateSubjectTypeModel = Pick;
 
-export type UpdateSubjectTypeModel = Pick<
-  SubjectTypeModel,
-  'name' | 'isActive' | 'id'
->;
+export type UpdateSubjectTypeModel = Pick;
 
 export type SubjectMasterModel = {
   id: string;
@@ -110,15 +72,9 @@ export type SubjectMasterModel = {
   isNewlyAdded?: boolean;
 };
 
-export type CreateSubjectMasterModel = Pick<
-  SubjectMasterModel,
-  'name' | 'isActive'
->;
+export type CreateSubjectMasterModel = Pick;
 
-export type UpdateSubjectMasterModel = Pick<
-  SubjectMasterModel,
-  'id' | 'name' | 'isActive'
->;
+export type UpdateSubjectMasterModel = Pick;
 
 export type SubjectToAssessmentFormatModel = {
   assessmentFormatId: string;

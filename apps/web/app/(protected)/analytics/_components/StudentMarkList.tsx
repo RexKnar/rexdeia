@@ -3,7 +3,6 @@ import {
   flexRender,
   getCoreRowModel,
   getSortedRowModel,
-  SortingFn,
   SortingState,
   useReactTable,
 } from '@tanstack/react-table';
@@ -41,13 +40,11 @@ export default function StudentMarkList({
     { enabled: !!examId && !!classId }
   );
 
-  const customStudentSort: SortingFn<any> = (rowA, rowB) => {
-    // First sort by gender (females first)
+  const customStudentSort = (rowA, rowB) => {
     const genderOrder = { Female: 0, Male: 1 };
     const genderCompare =
       genderOrder[rowA.original.gender] - genderOrder[rowB.original.gender];
 
-    // If gender is the same, sort by full name
     if (genderCompare === 0) {
       const nameA =
         `${rowA.original.firstName} ${rowA.original.lastName}`.toLowerCase();
@@ -84,25 +81,6 @@ export default function StudentMarkList({
           <div className="text-center">{Number(row.index) + 1}</div>
         ),
       },
-      // {
-      //   id: 'fullName',
-      //   accessorFn: (row) => `${row.firstName} ${row.lastName}`,
-      //   header: ({ column }) => {
-      //     return (
-      //       <Button
-      //         variant="ghost"
-      //         onClick={() =>
-      //           column.toggleSorting(column.getIsSorted() === 'asc')
-      //         }
-      //         className="w-full"
-      //       >
-      //         Student Name
-      //         <ArrowUpDown className="w-4 h-4 ml-2" />
-      //       </Button>
-      //     );
-      //   },
-      //   cell: ({ row }) => `${row.original.firstName} ${row.original.lastName}`,
-      // },
       {
         id: 'fullName',
         accessorFn: (row) => `${row.firstName} ${row.lastName}`,
@@ -315,24 +293,6 @@ export default function StudentMarkList({
   }, [subjectList]);
 
   useEffect(() => {
-    if (subjectList?.length > 0) {
-      let heading = subjectList?.map((subject) => ({
-        subjectName: subject.subject.name,
-        subTitle: [
-          ...subject.examSubjectPartition.map(
-            (partition) => partition.assessmentFormat.name
-          ),
-          'Tot',
-        ],
-      }));
-
-      heading?.length > 0
-        ? setPdfTableHeader([...heading])
-        : setPdfTableHeader([]);
-    }
-  }, [subjectList]);
-
-  useEffect(() => {
     const processStudents = async () => {
       if (students?.length !== 0) {
         const finalTableValues = await Promise.all(
@@ -346,22 +306,34 @@ export default function StudentMarkList({
             let failingStatus = false;
 
             await Promise.all(
-              student.subjects.map(async (subject) => {
+              subjectList?.map(async (subject) => {
                 const studentDetail = await getStudentSubject(
                   student,
-                  subject?.id
+                  subject?.subject?.id
                 );
-
                 if (studentDetail?.marks?.length > 0) {
-                  studentDetail.marks.forEach((mark) => {
-                    if (mark?.attandance) {
-                      tableValues.push('A');
-                    } else {
-                      const markTotal = Number(mark.total) || 0;
-                      tableValues.push(markTotal.toString());
-                      totalMark += markTotal;
+                  subject.examSubjectPartition.forEach(
+                    (examSubjectPartition) => {
+                      const mark =
+                        studentDetail.marks.find(
+                          (obj) =>
+                            obj.examSubjectPartitionId ===
+                            examSubjectPartition.id
+                        ) || null;
+
+                      if (mark) {
+                        if (mark?.attandance) {
+                          tableValues.push('A');
+                        } else {
+                          const markTotal = Number(mark.total) || 0;
+                          tableValues.push(markTotal.toString());
+                          totalMark += markTotal;
+                        }
+                      } else {
+                        tableValues.push('-');
+                      }
                     }
-                  });
+                  );
 
                   if (!studentDetail.absentStatus) {
                     const subjectTotal =
@@ -376,6 +348,12 @@ export default function StudentMarkList({
                     tableValues.push('A');
                   }
                 } else {
+                  subject.examSubjectPartition.forEach(
+                    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                    () => {
+                      tableValues.push('-');
+                    }
+                  );
                   tableValues.push('-');
                 }
               })
@@ -394,7 +372,7 @@ export default function StudentMarkList({
     };
 
     processStudents();
-  }, [students]);
+  }, [students, subjectList]);
 
   return (
     <section>

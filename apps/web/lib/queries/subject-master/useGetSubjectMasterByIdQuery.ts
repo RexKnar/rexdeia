@@ -10,8 +10,8 @@ import { GET_SUBJECT_MASTER_BY_ID } from '../../endpoints';
 
 function getSubjectMasterById(
   subjectMasterId: string,
-  options?: Partial<UseQueryOptions<SubjectMasterModel>>
-): UseQueryOptions<SubjectMasterModel> {
+  options?: Partial
+): UseQueryOptions {
   return {
     ...options,
     queryKey: [GET_SUBJECT_MASTER_BY_ID, subjectMasterId],
@@ -27,7 +27,7 @@ function getSubjectMasterById(
 }
 export function useGetSubjectMasterByIdQuery(
   id: string,
-  options?: Partial<UseQueryOptions<SubjectMasterModel>>
-): UseQueryResult<SubjectMasterModel> {
+  options?: Partial
+): UseQueryResult {
   return useQuery(getSubjectMasterById(id, options));
 }

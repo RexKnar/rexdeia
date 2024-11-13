@@ -52,7 +52,7 @@ export function StaffList() {
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
-  const columns: ColumnDef<Staff>[] = [
+  const columns: ColumnDef[] = [
     {
       accessorKey: 'firstName',
       header: ({ column }) => {

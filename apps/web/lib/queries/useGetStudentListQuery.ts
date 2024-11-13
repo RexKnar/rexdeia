@@ -11,7 +11,7 @@ type GetStudentListRequestPayload = {
 
 export function useGetStudentListQuery(
   payload: GetStudentListRequestPayload,
-  options?: UseQueryOptions<GetStudentListModel>
+  options?: UseQueryOptions
 ) {
   return useQuery({
     ...options,

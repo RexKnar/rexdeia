@@ -17,13 +17,13 @@ function getPeriodMasterList(
     page: number;
     limit: number;
   },
-  options?: UseQueryOptions<PaginatedResponse<PeriodMasterModel>>
-): UseQueryOptions<PaginatedResponse<PeriodMasterModel>> {
+  options?: UseQueryOptions
+): UseQueryOptions {
   return {
     ...options,
     queryKey: [GET_PERIOD_MASTERS_LIST, page, limit],
     queryFn: async () => {
-      return await makeAPICall<PaginatedResponse<PeriodMasterModel>>(
+      return await makeAPICall<PaginatedResponse>(
         GET_PERIOD_MASTERS_LIST,
         {},
         {
@@ -44,7 +44,7 @@ export function useGetPeriodMasterListQuery(
     page: number;
     limit: number;
   },
-  options?: UseQueryOptions<PaginatedResponse<PeriodMasterModel>>
-): UseQueryResult<PaginatedResponse<PeriodMasterModel>> {
+  options?: UseQueryOptions
+): UseQueryResult {
   return useQuery(getPeriodMasterList({ page, limit }, options));
 }

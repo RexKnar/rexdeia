@@ -15,13 +15,13 @@ function getTermsList(
     limit,
     filter,
   }: { page: number; limit: number; filter: { isActive?: boolean } },
-  options?: UseQueryOptions<PaginatedResponse<TermModel>>
-): UseQueryOptions<PaginatedResponse<TermModel>> {
+  options?: UseQueryOptions
+): UseQueryOptions {
   return {
     ...options,
     queryKey: [GET_TERM_LIST, page, limit, filter],
     queryFn: async () => {
-      return await makeAPICall<PaginatedResponse<TermModel>>(
+      return await makeAPICall<PaginatedResponse>(
         GET_TERM_LIST,
         filter,
         {
@@ -40,7 +40,7 @@ export function useGetTermsListQuery(
     limit,
     filter,
   }: { page: number; limit: number; filter: { isActive?: boolean } },
-  options?: UseQueryOptions<PaginatedResponse<TermModel>>
-): UseQueryResult<PaginatedResponse<TermModel>> {
+  options?: UseQueryOptions
+): UseQueryResult {
   return useQuery(getTermsList({ page, limit, filter }, options));
 }

@@ -17,7 +17,7 @@ type GetExamAnalyticsFilter = {
 
 function getMarkListWithFilter(
   filter: GetExamAnalyticsFilter,
-  options?: Partial<UseQueryOptions<any>>
+  options?: Partial
 ) {
   return {
     ...options,
@@ -35,7 +35,7 @@ function getMarkListWithFilter(
 
 export function useGetMarkListWithFilterQuery(
   filter: GetExamAnalyticsFilter,
-  options?: Partial<UseQueryOptions<any>>
+  options?: Partial
 ) {
   return useQuery(getMarkListWithFilter(filter, options));
 }

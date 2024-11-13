@@ -134,10 +134,7 @@ export async function addStudent(student: AddStudentModel) {
     },
   });
 
-  const studentWithoutBatchId: Omit<
-    AddStudentModel,
-    'batchId' | 'motherTongueId' | 'communityId'
-  > = {
+  const studentWithoutBatchId: Omit = {
     ...student,
   };
   delete studentWithoutBatchId['batchId'];

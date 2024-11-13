@@ -10,8 +10,8 @@ import { GET_SECTION_BY_CLASS_GROUP } from '../../endpoints';
 
 function getSectionsByClassIdSubjectIdQuery(
   { classId, subjectId }: { classId: string; subjectId: string },
-  options?: Partial<UseQueryOptions<SectionModel[]>>
-): UseQueryOptions<SectionModel[]> {
+  options?: Partial
+): UseQueryOptions {
   return {
     ...options,
     queryKey: [GET_SECTION_BY_CLASS_GROUP, classId, subjectId],
@@ -27,8 +27,8 @@ function getSectionsByClassIdSubjectIdQuery(
 }
 export function useGetSectionsByClassIdSubjectIdQuery(
   { classId, subjectId }: { classId: string; subjectId: string },
-  options?: Partial<UseQueryOptions<SectionModel[]>>
-): UseQueryResult<SectionModel[]> {
+  options?: Partial
+): UseQueryResult {
   return useQuery(
     getSectionsByClassIdSubjectIdQuery({ classId, subjectId }, options)
   );

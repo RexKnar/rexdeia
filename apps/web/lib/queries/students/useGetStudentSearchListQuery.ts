@@ -10,15 +10,12 @@ interface SearchParams {
   pageSize: number;
 }
 
-function getStudentSearchList(
-  payload: SearchParams,
-  options?: Partial<UseQueryOptions<PaginatedResponse<Student>>>
-) {
+function getStudentSearchList(payload: SearchParams, options?: Partial) {
   return {
     ...options,
     queryKey: [GET_STUDENT_SEARCH_LIST, payload],
     queryFn: async () => {
-      return await makeAPICall<PaginatedResponse<Student>>(
+      return await makeAPICall<PaginatedResponse>(
         GET_STUDENT_SEARCH_LIST,
         {},
         { ...payload },
@@ -30,7 +27,7 @@ function getStudentSearchList(
 
 export function useGetStudentSearchListQuery(
   payload: SearchParams,
-  options?: Partial<UseQueryOptions<PaginatedResponse<Student>>>
+  options?: Partial
 ) {
   return useQuery(getStudentSearchList(payload, options));
 }

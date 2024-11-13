@@ -10,7 +10,7 @@ type GetStaffsBySectionFilter = {
 
 function getStaffsBySection(
   filter: GetStaffsBySectionFilter,
-  options?: Partial<UseQueryOptions<Staff[]>>
+  options?: Partial
 ) {
   return {
     ...options,
@@ -28,7 +28,7 @@ function getStaffsBySection(
 
 export function useGetStaffsBySectionQuery(
   filter: GetStaffsBySectionFilter,
-  options?: Partial<UseQueryOptions<Staff[]>>
+  options?: Partial
 ) {
   return useQuery(getStaffsBySection(filter, options));
 }

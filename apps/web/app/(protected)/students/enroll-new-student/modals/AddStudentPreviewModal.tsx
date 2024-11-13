@@ -13,9 +13,9 @@ import { formatStudentPayload } from '../../../../../lib/utils/formatters';
 
 type AddStudentPreviewModalProps = {
   open: boolean;
-  formData: Record<string, any>;
+  formData: Record;
   onOpenChange(open: boolean): void;
-  formSections: Record<string, any>[];
+  formSections: Record[];
 };
 
 export function AddStudentPreviewModal({

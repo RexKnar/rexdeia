@@ -10,7 +10,7 @@ interface LayoutProps {
   children: ReactNode;
 }
 
-const Providers: FC<LayoutProps> = ({ children }) => {
+const Providers: FC = ({ children }) => {
   const [queryClient] = useState(
     () =>
       new QueryClient({

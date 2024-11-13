@@ -36,9 +36,7 @@ export const CreateFormRequestPayloadSchema = z.object({
   formSections: z.array(FormSection),
 });
 
-export type CreateFormRequestPayload = z.infer<
-  typeof CreateFormRequestPayloadSchema
->;
+export type CreateFormRequestPayload = z.infer;
 
 export type FormModel = {
   id: string;

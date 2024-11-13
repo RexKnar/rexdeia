@@ -8,13 +8,13 @@ import { GET_SUBJECT_LIST } from '../../endpoints';
 
 function getSubjectList(
   { page, limit }: { page: number; limit: number },
-  options?: UseQueryOptions<PaginatedResponse<SubjectModel>>
-): UseQueryOptions<PaginatedResponse<SubjectModel>> {
+  options?: UseQueryOptions
+): UseQueryOptions {
   return {
     ...options,
     queryKey: [GET_SUBJECT_LIST, page, limit],
     queryFn: async () => {
-      return await makeAPICall<PaginatedResponse<SubjectModel>>(
+      return await makeAPICall<PaginatedResponse>(
         GET_SUBJECT_LIST,
         {},
         {
@@ -29,7 +29,7 @@ function getSubjectList(
 
 export function useGetSubjectListQuery(
   { page, limit }: { page: number; limit: number },
-  options?: UseQueryOptions<PaginatedResponse<SubjectModel>>
-): UseQueryResult<PaginatedResponse<SubjectModel>> {
+  options?: UseQueryOptions
+): UseQueryResult {
   return useQuery(getSubjectList({ page, limit }, options));
 }

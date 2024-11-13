@@ -16,14 +16,16 @@ export function useCreateClassMutationQuery(page: number, limit: number) {
         queryKey: [GET_CLASS_LIST, page, limit],
       });
 
-      const previousClasses = queryClient.getQueryData<
-        PaginatedResponse<ClassModel>
-      >([GET_CLASS_LIST, page, limit]);
+      const previousClasses = queryClient.getQueryData<PaginatedResponse>([
+        GET_CLASS_LIST,
+        page,
+        limit,
+      ]);
 
       if (previousClasses) {
         queryClient.setQueryData(
           [GET_CLASS_LIST, page, limit],
-          (existingClass: PaginatedResponse<ClassModel>) => {
+          (existingClass: PaginatedResponse) => {
             return {
               ...existingClass,
               data: [

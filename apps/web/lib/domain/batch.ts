@@ -16,24 +16,6 @@ export type BatchModel = {
   periodMaster: PeriodMasterModel[];
 };
 
-export type CreateBatchModel = Pick<
-  BatchModel,
-  | 'name'
-  | 'isActive'
-  | 'description'
-  | 'startYear'
-  | 'endYear'
-  | 'currentAcademicYear'
->;
+export type CreateBatchModel = Pick;
 
-export type UpdateBatchModel = Pick<
-  BatchModel,
-  | 'id'
-  | 'name'
-  | 'isActive'
-  | 'description'
-  | 'startYear'
-  | 'endYear'
-  | 'students'
-  | 'currentAcademicYear'
->;
+export type UpdateBatchModel = Pick;

@@ -18,13 +18,13 @@ function getRegulationList(
       isActive?: boolean;
     };
   },
-  options?: UseQueryOptions<PaginatedResponse<RegulationModel>>
-): UseQueryOptions<PaginatedResponse<RegulationModel>> {
+  options?: UseQueryOptions
+): UseQueryOptions {
   return {
     ...options,
     queryKey: [GET_REGULATION_LIST, page, limit],
     queryFn: async () => {
-      return await makeAPICall<PaginatedResponse<RegulationModel>>(
+      return await makeAPICall<PaginatedResponse>(
         GET_REGULATION_LIST,
         filter,
         {
@@ -49,7 +49,7 @@ export function useGetRegulationListQuery(
       isActive?: boolean;
     };
   },
-  options?: UseQueryOptions<PaginatedResponse<RegulationModel>>
-): UseQueryResult<PaginatedResponse<RegulationModel>> {
+  options?: UseQueryOptions
+): UseQueryResult {
   return useQuery(getRegulationList({ page, limit, filter }, options));
 }

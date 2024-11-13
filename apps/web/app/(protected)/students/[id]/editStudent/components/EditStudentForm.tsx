@@ -251,7 +251,7 @@ export function EditStudentDetail() {
     }
   }, [studentDetail]);
 
-  const handleOnFormSubmit = async (data: Record<string, unknown>) => {
+  const handleOnFormSubmit = async (data: Record) => {
     const payload = formatStudentPayload(data);
     const response = await updateStudentMutationAsync({
       id: id,

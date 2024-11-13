@@ -12,26 +12,5 @@ export type PeriodMasterModel = {
   periodModeId: string;
   batchId: string;
 };
-export type CreatePeriodMasterModel = Pick<
-  PeriodMasterModel,
-  | 'name'
-  | 'isActive'
-  | 'order'
-  | 'classLevelId'
-  | 'periodModeId'
-  | 'batchId'
-  | 'daysId'
-  | 'periodsTypeId'
->;
-export type UpdatePeriodMasterModel = Pick<
-  PeriodMasterModel,
-  | 'id'
-  | 'name'
-  | 'isActive'
-  | 'order'
-  | 'classLevelId'
-  | 'periodModeId'
-  | 'batchId'
-  | 'daysId'
-  | 'periodsTypeId'
->;
+export type CreatePeriodMasterModel = Pick;
+export type UpdatePeriodMasterModel = Pick;

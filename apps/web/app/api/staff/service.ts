@@ -86,18 +86,7 @@ export async function addStaff(staff: AddStaffModel) {
     },
   });
 
-  const staffDetails: Omit<
-    AddStaffModel,
-    | 'motherTongueId'
-    | 'communityId'
-    | 'staffCategoryId'
-    | 'employmentTypeId'
-    | 'designationId'
-    | 'natureOfPostingId'
-    | 'staffCategory'
-    | 'enrollmentNumber'
-    | 'enrollmentId'
-  > = {
+  const staffDetails: Omit = {
     ...staff,
   };
   delete staffDetails['communityId'];

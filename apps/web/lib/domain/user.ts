@@ -42,7 +42,4 @@ export type UserModal = {
   userOrganizations: UserOrganizationModal[];
 };
 
-export type GetUserDetailsByIdModel = Pick<
-  UserModal,
-  'id' | 'name' | 'email' | 'image' | 'userOrganizations'
->;
+export type GetUserDetailsByIdModel = Pick;

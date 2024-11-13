@@ -4,10 +4,7 @@ import { makeAPICall } from '../../api';
 import { Staff } from '../../domain/staff';
 import { GET_STAFF_LIST_BY_CLASS_ID } from '../../endpoints';
 
-function getStaffListByClassId(
-  id: string,
-  options?: Partial<UseQueryOptions<Staff[]>>
-) {
+function getStaffListByClassId(id: string, options?: Partial) {
   return {
     ...options,
     queryKey: [GET_STAFF_LIST_BY_CLASS_ID, id],
@@ -22,9 +19,6 @@ function getStaffListByClassId(
   };
 }
 
-export function useGetStaffListByClassIdQuery(
-  id: string,
-  options?: Partial<UseQueryOptions<Staff[]>>
-) {
+export function useGetStaffListByClassIdQuery(id: string, options?: Partial) {
   return useQuery(getStaffListByClassId(id, options));
 }

@@ -11,8 +11,8 @@ import { GET_SUBJECTS_BY_CLASS_AND_GROUP_ID } from '../../endpoints';
 function getSubjectList(
   id: string,
   classId: string,
-  options?: UseQueryOptions<SubjectToGroupModel>
-): UseQueryOptions<SubjectToGroupModel> {
+  options?: UseQueryOptions
+): UseQueryOptions {
   return {
     ...options,
     queryKey: [GET_SUBJECTS_BY_CLASS_AND_GROUP_ID, id, classId],
@@ -30,7 +30,7 @@ function getSubjectList(
 export function useGetSubjectToStudentByClassAndGroupId(
   id: string,
   classId: string,
-  options?: UseQueryOptions<SubjectToGroupModel>
-): UseQueryResult<SubjectToGroupModel> {
+  options?: UseQueryOptions
+): UseQueryResult {
   return useQuery(getSubjectList(id, classId, options));
 }

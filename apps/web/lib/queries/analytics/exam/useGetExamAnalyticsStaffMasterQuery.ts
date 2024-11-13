@@ -11,7 +11,7 @@ type GetMarkAnalyticsFilter = {
 
 function getExamAnalyticsStaffMaster(
   filter: GetMarkAnalyticsFilter,
-  options?: Partial<UseQueryOptions<any>>
+  options?: Partial
 ) {
   return {
     ...options,
@@ -29,7 +29,7 @@ function getExamAnalyticsStaffMaster(
 
 export function useGetExamAnalyticsStaffMasterQuery(
   filter: GetMarkAnalyticsFilter,
-  options?: Partial<UseQueryOptions<any>>
+  options?: Partial
 ) {
   return useQuery(getExamAnalyticsStaffMaster(filter, options));
 }

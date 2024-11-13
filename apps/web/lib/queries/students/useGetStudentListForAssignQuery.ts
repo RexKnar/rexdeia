@@ -7,7 +7,7 @@ import { GET_STUDENTS_LIST_FOR_ASSIGN } from '../../endpoints';
 function getStudentListByClassId(
   id: string,
   groupId: string,
-  options?: Partial<UseQueryOptions<Student[]>>
+  options?: Partial
 ) {
   return {
     ...options,
@@ -26,7 +26,7 @@ function getStudentListByClassId(
 export function useGetStudentListForAssignQuery(
   id: string,
   groupId: string,
-  options?: Partial<UseQueryOptions<Student[]>>
+  options?: Partial
 ) {
   return useQuery(getStudentListByClassId(id, groupId, options));
 }

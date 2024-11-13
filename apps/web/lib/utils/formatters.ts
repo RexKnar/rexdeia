@@ -11,8 +11,8 @@ import { Student } from '../domain';
  * Matching keys are directly assigned to the resulting object, while non-matching
  * keys are grouped under `additionalAttributes`.
  */
-export function formatStudentPayload(data: Record<string, unknown>) {
-  const studentKeys: Set<keyof Student> = new Set<keyof Student>([
+export function formatStudentPayload(data: Record) {
+  const studentKeys: Set = new Set<keyof Student>([
     'id',
     'dob',
     'status',
@@ -50,7 +50,7 @@ export function formatStudentPayload(data: Record<string, unknown>) {
     return studentKeys.has(key as keyof Student);
   }
 
-  const student: Partial<Student> = { additionalAttributes: {} };
+  const student: Partial = { additionalAttributes: {} };
 
   Object.keys(data).forEach((key) => {
     if (isStudentKey(key)) {

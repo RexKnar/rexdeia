@@ -26,7 +26,7 @@ import { cn } from 'utils';
 import { makeAPICall } from '../../../../../lib/api';
 import { GET_ADMISSIONS_LIST } from '../../../../../lib/endpoints';
 
-const columns: ColumnDef<any>[] = [
+const columns: ColumnDef[] = [
   {
     accessorKey: 'student.firstName',
     header: ({ column }) => {

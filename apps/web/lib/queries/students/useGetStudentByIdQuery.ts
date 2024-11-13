@@ -8,10 +8,7 @@ import { makeAPICall } from '../../api';
 import { Student } from '../../domain/student';
 import { GET_STUDENT_BY_ID } from '../../endpoints';
 
-function getStudentById(
-  studentId: string,
-  options?: Partial<UseQueryOptions<Student>>
-): UseQueryOptions<Student> {
+function getStudentById(studentId: string, options?: Partial): UseQueryOptions {
   return {
     ...options,
     queryKey: [GET_STUDENT_BY_ID, studentId],
@@ -27,7 +24,7 @@ function getStudentById(
 }
 export function useGetStudentByIdQuery(
   studentId: string,
-  options?: Partial<UseQueryOptions<Student>>
-): UseQueryResult<Student> {
+  options?: Partial
+): UseQueryResult {
   return useQuery(getStudentById(studentId, options));
 }

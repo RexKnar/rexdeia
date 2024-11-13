@@ -15,7 +15,7 @@ type GetMarkAnalyticsFilter = {
 
 function getMarkListWithFilter(
   filter: GetMarkAnalyticsFilter,
-  options?: Partial<UseQueryOptions<any>>
+  options?: Partial
 ) {
   return {
     ...options,
@@ -33,7 +33,7 @@ function getMarkListWithFilter(
 
 export function useGetMarkMasterWithFilterQuery(
   filter: GetMarkAnalyticsFilter,
-  options?: Partial<UseQueryOptions<any>>
+  options?: Partial
 ) {
   return useQuery(getMarkListWithFilter(filter, options));
 }

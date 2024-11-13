@@ -8,10 +8,7 @@ import { DaysModel } from 'lib/domain/days';
 import { makeAPICall } from '../../api';
 import { GET_DAYS_BY_ID } from '../../endpoints';
 
-function getDaysById(
-  Id: string,
-  options?: Partial<UseQueryOptions<DaysModel>>
-): UseQueryOptions<DaysModel> {
+function getDaysById(Id: string, options?: Partial): UseQueryOptions {
   return {
     ...options,
     queryKey: [GET_DAYS_BY_ID, Id],
@@ -22,7 +19,7 @@ function getDaysById(
 }
 export function useGetDaysByIdQuery(
   id: string,
-  options?: Partial<UseQueryOptions<DaysModel>>
-): UseQueryResult<DaysModel> {
+  options?: Partial
+): UseQueryResult {
   return useQuery(getDaysById(id, options));
 }

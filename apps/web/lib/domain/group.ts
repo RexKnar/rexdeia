@@ -10,6 +10,6 @@ export type GroupModel = {
   subject: SubjectModel[];
 };
 
-export type CreateGroupModel = Pick<GroupModel, 'name' | 'isActive'>;
+export type CreateGroupModel = Pick;
 
-export type UpdateGroupModel = Pick<GroupModel, 'id' | 'name' | 'isActive'>;
+export type UpdateGroupModel = Pick;

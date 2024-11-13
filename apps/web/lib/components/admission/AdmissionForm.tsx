@@ -13,7 +13,7 @@ import { formatStudentPayload } from '../../utils/formatters';
 
 type AdmissionFormProps = {
   formId: string;
-  formConfig: Record<string, any>;
+  formConfig: Record;
 };
 
 const AdmissionPreviewFlyout = dynamic(() =>
@@ -81,7 +81,7 @@ export function AdmissionForm({ formId, formConfig }: AdmissionFormProps) {
     setCurrentStep(index);
   };
 
-  async function addAdmissionHandler(data: Record<string, unknown>) {
+  async function addAdmissionHandler(data: Record) {
     try {
       const payload = formatStudentPayload(data);
       await makeAPICall(

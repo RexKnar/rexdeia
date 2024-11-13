@@ -15,13 +15,13 @@ function getExamTypeList(
     limit,
     filter,
   }: { page: number; limit: number; filter: { isActive?: boolean } },
-  options?: UseQueryOptions<PaginatedResponse<ExamTypeModel>>
-): UseQueryOptions<PaginatedResponse<ExamTypeModel>> {
+  options?: UseQueryOptions
+): UseQueryOptions {
   return {
     ...options,
     queryKey: [GET_EXAM_TYPE_LIST, page, limit, filter],
     queryFn: async () => {
-      return await makeAPICall<PaginatedResponse<ExamTypeModel>>(
+      return await makeAPICall<PaginatedResponse>(
         GET_EXAM_TYPE_LIST,
         filter,
         {
@@ -40,7 +40,7 @@ export function useGetExamTypeListQuery(
     limit,
     filter,
   }: { page: number; limit: number; filter: { isActive?: boolean } },
-  options?: UseQueryOptions<PaginatedResponse<ExamTypeModel>>
-): UseQueryResult<PaginatedResponse<ExamTypeModel>> {
+  options?: UseQueryOptions
+): UseQueryResult {
   return useQuery(getExamTypeList({ page, limit, filter }, options));
 }

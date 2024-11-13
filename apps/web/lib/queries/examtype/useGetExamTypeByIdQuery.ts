@@ -10,8 +10,8 @@ import { GET_EXAM_TYPE_BY_ID } from '../../endpoints';
 
 function getExamTypeById(
   examTypeId: string,
-  options?: Partial<UseQueryOptions<ExamTypeModel>>
-): UseQueryOptions<ExamTypeModel> {
+  options?: Partial
+): UseQueryOptions {
   return {
     ...options,
     queryKey: [GET_EXAM_TYPE_BY_ID, examTypeId],
@@ -27,7 +27,7 @@ function getExamTypeById(
 }
 export function useGetExamTypeByIdQuery(
   id: string,
-  options?: Partial<UseQueryOptions<ExamTypeModel>>
-): UseQueryResult<ExamTypeModel> {
+  options?: Partial
+): UseQueryResult {
   return useQuery(getExamTypeById(id, options));
 }

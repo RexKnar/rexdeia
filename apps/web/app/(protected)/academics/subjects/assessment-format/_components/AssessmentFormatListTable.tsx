@@ -37,7 +37,7 @@ import { AssessmentFormatModel } from '../../../../../../lib/domain/subject';
 import { useDeleteAssessmentFormatMutationQuery } from '../../../../../../lib/queries/assessment-format/useDeleteAssessmentFormatMutationQuery';
 import { useGetAssessmentFormatList } from '../../../../../../lib/queries/assessment-format/useGetAssessmentFormatList';
 
-const columns: ColumnDef<AssessmentFormatModel>[] = [
+const columns: ColumnDef[] = [
   {
     accessorKey: 'parentAssessmentFormat.name',
     header: ({ column }) => {

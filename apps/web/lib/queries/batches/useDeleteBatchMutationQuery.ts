@@ -17,13 +17,16 @@ export function useDeleteBatchMutationQuery(page: number, limit: number) {
         queryKey: [GET_BATCHES_LIST, page, limit, filter],
       });
 
-      const previousBatches = queryClient.getQueryData<
-        PaginatedResponse<BatchModel>
-      >([GET_BATCHES_LIST, page, limit, filter]);
+      const previousBatches = queryClient.getQueryData<PaginatedResponse>([
+        GET_BATCHES_LIST,
+        page,
+        limit,
+        filter,
+      ]);
 
       queryClient.setQueryData(
         [GET_BATCHES_LIST, page, limit, filter],
-        (currentPaginatedBatches: PaginatedResponse<BatchModel>) => {
+        (currentPaginatedBatches: PaginatedResponse) => {
           return {
             ...currentPaginatedBatches,
             data: currentPaginatedBatches.data.map((batch) => {

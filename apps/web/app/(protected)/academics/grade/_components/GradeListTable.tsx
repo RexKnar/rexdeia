@@ -37,7 +37,7 @@ export function GradeListTable() {
   const pathname = usePathname();
   const router = useRouter();
   const searchParams = useSearchParams();
-  const columns: ColumnDef<GradeModel>[] = [
+  const columns: ColumnDef[] = [
     {
       accessorKey: 'name',
       header: () => {

@@ -20,13 +20,16 @@ export function useDeleteGroupMutationQuery(
         queryKey: [GET_GROUP_LIST, page, limit, filter],
       });
 
-      const previousGroups = queryClient.getQueryData<
-        PaginatedResponse<GroupModel>
-      >([GET_GROUP_LIST, page, limit, filter]);
+      const previousGroups = queryClient.getQueryData<PaginatedResponse>([
+        GET_GROUP_LIST,
+        page,
+        limit,
+        filter,
+      ]);
 
       queryClient.setQueryData(
         [GET_GROUP_LIST, page, limit, filter],
-        (currentPaginatedGroups: PaginatedResponse<GroupModel>) => {
+        (currentPaginatedGroups: PaginatedResponse) => {
           return {
             ...currentPaginatedGroups,
             data: currentPaginatedGroups.data.map((group) => {

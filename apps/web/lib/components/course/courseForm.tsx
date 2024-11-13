@@ -14,7 +14,7 @@ export function CourseForm() {
     handleSubmit,
     formState: { errors, isSubmitting },
   } = useForm();
-  async function addCourseHandler(data: Record<string, unknown>) {
+  async function addCourseHandler(data: Record) {
     data.isActive = data.isActive == 'true' ? true : false;
     try {
       await makeAPICall(ADD_COURSE, {

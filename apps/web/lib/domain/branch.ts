@@ -20,16 +20,4 @@ export type BranchModal = {
   organization: OrganizationModal;
 };
 
-export type UpdateBranchByIdModel = Omit<
-  BranchModal,
-  | 'createdAt'
-  | 'updatedAt'
-  | 'createdBy'
-  | 'organization'
-  | 'users'
-  | 'forms'
-  | 'department'
-  | 'organizationId'
-  | 'createdById'
-  | 'isActivated'
->;
+export type UpdateBranchByIdModel = Omit;

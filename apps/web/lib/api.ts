@@ -2,10 +2,10 @@ import endpointInfo from './endpoints';
 
 export async function makeAPICall<T>(
   apiName: string,
-  payload: Record<string, unknown> = {},
-  params: Record<string, string | number | boolean> = {},
-  substitutions: Record<string, string> = {}
-): Promise<T> {
+  payload: Record = {},
+  params: Record = {},
+  substitutions: Record = {}
+): Promise {
   let { endpoint, requestType } = endpointInfo[apiName];
 
   Object.keys(substitutions).forEach((key) => {
@@ -29,5 +29,5 @@ export async function makeAPICall<T>(
     const error = await response.json();
     return Promise.reject(error);
   }
-  return response.json() as Promise<T>;
+  return response.json() as Promise;
 }

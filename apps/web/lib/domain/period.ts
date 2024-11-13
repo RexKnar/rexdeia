@@ -13,26 +13,5 @@ export type PeriodModel = {
   batchId: string;
 };
 
-export type CreatePeriodModel = Pick<
-  PeriodModel,
-  | 'name'
-  | 'isActive'
-  | 'subjectId'
-  | 'periodMasterId'
-  | 'sectionId'
-  | 'classId'
-  | 'staffId'
-  | 'batchId'
->;
-export type UpdatePeriodModel = Pick<
-  PeriodModel,
-  | 'id'
-  | 'name'
-  | 'isActive'
-  | 'subjectId'
-  | 'periodMasterId'
-  | 'sectionId'
-  | 'classId'
-  | 'staffId'
-  | 'batchId'
->;
+export type CreatePeriodModel = Pick;
+export type UpdatePeriodModel = Pick;

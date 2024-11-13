@@ -10,7 +10,7 @@ type GetMarksWithFormatByExamFilter = {
 
 function getStudentsMarksByFilter(
   filter: GetMarksWithFormatByExamFilter,
-  options?: Partial<UseQueryOptions<any[]>>
+  options?: Partial
 ) {
   return {
     ...options,
@@ -28,7 +28,7 @@ function getStudentsMarksByFilter(
 
 export function useGetStudentsMarksByClassIdExamIdQuery(
   filter: GetMarksWithFormatByExamFilter,
-  options?: Partial<UseQueryOptions<any[]>>
+  options?: Partial
 ) {
   return useQuery(getStudentsMarksByFilter(filter, options));
 }

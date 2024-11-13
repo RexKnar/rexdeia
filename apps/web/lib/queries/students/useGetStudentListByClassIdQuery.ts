@@ -4,10 +4,7 @@ import { makeAPICall } from '../../api';
 import { Student } from '../../domain';
 import { GET_STUDENT_LIST_BY_CLASS_ID } from '../../endpoints';
 
-function getStudentListByClassId(
-  id: string,
-  options?: Partial<UseQueryOptions<Student[]>>
-) {
+function getStudentListByClassId(id: string, options?: Partial) {
   return {
     ...options,
     queryKey: [GET_STUDENT_LIST_BY_CLASS_ID, id],
@@ -22,9 +19,6 @@ function getStudentListByClassId(
   };
 }
 
-export function useGetStudentListByClassIdQuery(
-  id: string,
-  options?: Partial<UseQueryOptions<Student[]>>
-) {
+export function useGetStudentListByClassIdQuery(id: string, options?: Partial) {
   return useQuery(getStudentListByClassId(id, options));
 }

@@ -31,7 +31,7 @@ export function Form({ formConfig }) {
       setSelectedSectionIndex(currentStep - 1);
     }
   };
-  async function addAdmissionHandler(data: Record<string, unknown>) {
+  async function addAdmissionHandler(data: Record) {
     try {
       await makeAPICall(ADD_ADMISSION, {
         ...data,

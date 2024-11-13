@@ -22,7 +22,7 @@ import { useGetStateByCountryCodeQuery } from '../../../../../lib/queries/common
 import { admissionForm } from '../data';
 import { AddStudentPreviewModal } from '../modals/AddStudentPreviewModal';
 
-const formConfig: Record<string, any> = admissionForm;
+const formConfig: Record = admissionForm;
 
 export function AddStudentForm() {
   const pathname = usePathname();
@@ -45,7 +45,7 @@ export function AddStudentForm() {
 
   const totalSteps = formConfig.formSections.length;
 
-  const [formData, setFormData] = useState({} as Record<string, unknown>);
+  const [formData, setFormData] = useState({} as Record);
   const [isPreviewModalOpen, setIsPreviewModalOpen] = useState(false);
   const [visitedSteps, setVisitedSteps] = useState([]);
   const [residentialCountryCode, setCurrentCountryCode] = useState('');
@@ -117,7 +117,7 @@ export function AddStudentForm() {
     motherTongueId: getLanguageListResponse || [],
   };
 
-  const handleOnFormSubmit = async (data: Record<string, unknown>) => {
+  const handleOnFormSubmit = async (data: Record) => {
     setFormData(data);
     setIsPreviewModalOpen(true);
   };

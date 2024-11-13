@@ -8,9 +8,7 @@ import { PeriodModel } from 'lib/domain/period';
 import { makeAPICall } from '../../api';
 import { GET_PERIODS_LIST } from '../../endpoints';
 
-function getPeriodsList(
-  options?: Partial<UseQueryOptions<PeriodModel[]>>
-): UseQueryOptions<PeriodModel[]> {
+function getPeriodsList(options?: Partial): UseQueryOptions {
   return {
     ...options,
     queryKey: [GET_PERIODS_LIST],
@@ -19,8 +17,6 @@ function getPeriodsList(
     },
   };
 }
-export function useGetPeriodsListQuery(
-  options?: Partial<UseQueryOptions<PeriodModel[]>>
-): UseQueryResult<PeriodModel[]> {
+export function useGetPeriodsListQuery(options?: Partial): UseQueryResult {
   return useQuery(getPeriodsList(options));
 }

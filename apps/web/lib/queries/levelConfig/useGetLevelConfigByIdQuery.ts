@@ -8,10 +8,7 @@ import { LevelConfigModel } from 'lib/domain/levelConfig';
 import { makeAPICall } from '../../api';
 import { GET_LEVELCONFIG_BY_ID } from '../../endpoints';
 
-function getLevelConfigById(
-  Id: string,
-  options?: Partial<UseQueryOptions<LevelConfigModel>>
-): UseQueryOptions<LevelConfigModel> {
+function getLevelConfigById(Id: string, options?: Partial): UseQueryOptions {
   return {
     ...options,
     queryKey: [GET_LEVELCONFIG_BY_ID, Id],
@@ -27,7 +24,7 @@ function getLevelConfigById(
 }
 export function useGetLevelConfigByIdQuery(
   id: string,
-  options?: Partial<UseQueryOptions<LevelConfigModel>>
-): UseQueryResult<LevelConfigModel> {
+  options?: Partial
+): UseQueryResult {
   return useQuery(getLevelConfigById(id, options));
 }

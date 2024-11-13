@@ -3,9 +3,7 @@ import { makeAPICall } from 'lib/api';
 import { CommunityModel } from 'lib/domain/community';
 import { GET_COMMUNITY_LIST } from 'lib/endpoints';
 
-function getCommunityList(
-  options?: Partial<UseQueryOptions<CommunityModel[]>>
-) {
+function getCommunityList(options?: Partial) {
   return {
     ...options,
     queryKey: [GET_COMMUNITY_LIST],
@@ -20,8 +18,6 @@ function getCommunityList(
   };
 }
 
-export function useGetCommunityListQuery(
-  options?: Partial<UseQueryOptions<CommunityModel[]>>
-) {
+export function useGetCommunityListQuery(options?: Partial) {
   return useQuery(getCommunityList(options));
 }

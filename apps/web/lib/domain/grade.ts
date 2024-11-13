@@ -12,12 +12,9 @@ export type GetGrade = {
   gradeScales: AddGradeScalesModel[];
 };
 
-export type AddGradeModel = Pick<
-  GradeModel,
-  'name' | 'isActive' | 'gradeScales'
->;
+export type AddGradeModel = Pick;
 
-export type UpdateGradeModel = Pick<GradeModel, 'id' | 'name' | 'isActive'> & {
+export type UpdateGradeModel = Pick & {
   gradeScales: AddGradeScalesModel[];
 };
 
@@ -32,12 +29,6 @@ export type gradeScales = {
   isDeleting?: boolean;
 };
 
-export type AddGradeScalesModel = Pick<
-  gradeScales,
-  'startValue' | 'endValue' | 'gradeName' | 'remark' | 'gradeId'
->;
+export type AddGradeScalesModel = Pick;
 
-export type UpdateGradeScalesModel = Pick<
-  gradeScales,
-  'id' | 'startValue' | 'endValue' | 'gradeName' | 'remark'
->;
+export type UpdateGradeScalesModel = Pick;

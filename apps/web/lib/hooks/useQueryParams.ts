@@ -33,7 +33,7 @@ export function useQueryParams() {
    * setParams({ isFlyoutOpen: 'true' });
    */
   const setParams = useCallback(
-    (params: Record<string, string>) => {
+    (params: Record) => {
       const urlSearchParams = new URLSearchParams(params);
       Object.entries(params).forEach(([key, value]) => {
         urlSearchParams.set(key, value);

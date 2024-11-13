@@ -8,8 +8,8 @@ import { GET_SUBJECTS_BY_SECTION_IDS } from 'lib/endpoints';
 
 function getSectionByIdQuery(
   { sectionIds, subjectTypeId, classId },
-  options?: Partial<UseQueryOptions<any>>
-): UseQueryOptions<any> {
+  options?: Partial
+): UseQueryOptions {
   return {
     ...options,
     queryKey: [GET_SUBJECTS_BY_SECTION_IDS, sectionIds],
@@ -27,7 +27,7 @@ export function useGetSubjectsBySectionIdsMutationQuery(
   sectionIds: string[],
   subjectTypeId: string,
   classId: string,
-  options?: Partial<UseQueryOptions>
+  options?: Partial
 ): UseQueryResult {
   return useQuery(
     getSectionByIdQuery({ sectionIds, subjectTypeId, classId }, options)

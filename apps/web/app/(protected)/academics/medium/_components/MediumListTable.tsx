@@ -37,7 +37,7 @@ import { MediumModel } from '../../../../../lib/domain/medium';
 import { useDeleteMediumMutationQuery } from '../../../../../lib/queries/medium/useDeleteMediumMutationQuery';
 import { useGetMediumListQuery } from '../../../../../lib/queries/medium/useGetMediumListQuery';
 
-const columns: ColumnDef<MediumModel>[] = [
+const columns: ColumnDef[] = [
   {
     accessorKey: 'name',
     header: ({ column }) => {

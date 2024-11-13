@@ -10,8 +10,8 @@ import { GET_PERIOD_TYPES_LIST } from '../../endpoints';
 
 function getPeriodTypeList(
   { page, limit }: { page: number; limit: number },
-  options?: UseQueryOptions<PeriodTypeModel[]>
-): UseQueryOptions<PeriodTypeModel[]> {
+  options?: UseQueryOptions
+): UseQueryOptions {
   return {
     ...options,
     queryKey: [GET_PERIOD_TYPES_LIST, page, limit],
@@ -31,7 +31,7 @@ function getPeriodTypeList(
 
 export function useGetPeriodTypeListQuery(
   { page, limit }: { page: number; limit: number },
-  options?: UseQueryOptions<PeriodTypeModel[]>
-): UseQueryResult<PeriodTypeModel[]> {
+  options?: UseQueryOptions
+): UseQueryResult {
   return useQuery(getPeriodTypeList({ page, limit }, options));
 }

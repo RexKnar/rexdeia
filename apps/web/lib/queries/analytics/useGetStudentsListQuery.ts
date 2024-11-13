@@ -6,7 +6,7 @@ import { GET_STUDENT_LIST_BY_FILTER_WITH_PAGINATION } from '../../endpoints';
 
 function getStudentListByFilterWithPagination(
   { filter, page, pageSize }: { filter: any; page: number; pageSize: number },
-  options?: Partial<UseQueryOptions<PaginatedResponse<Student[]>>>
+  options?: Partial
 ) {
   return {
     ...options,
@@ -17,7 +17,7 @@ function getStudentListByFilterWithPagination(
       pageSize,
     ],
     queryFn: async () => {
-      return await makeAPICall<PaginatedResponse<Student[]>>(
+      return await makeAPICall<PaginatedResponse>(
         GET_STUDENT_LIST_BY_FILTER_WITH_PAGINATION,
         filter,
         { page: page, limit: pageSize },
@@ -29,7 +29,7 @@ function getStudentListByFilterWithPagination(
 
 export function useGetStudentListByFilterQuery(
   { filter, page, pageSize }: { filter: any; page: number; pageSize: number },
-  options?: Partial<UseQueryOptions<PaginatedResponse<Student[]>>>
+  options?: Partial
 ) {
   return useQuery(
     getStudentListByFilterWithPagination({ filter, page, pageSize }, options)

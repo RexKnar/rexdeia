@@ -10,8 +10,5 @@ export type PeriodTypeModel = {
   periodMaster: PeriodMasterModel[];
 };
 
-export type CreatePeriodTypeModel = Pick<PeriodTypeModel, 'name' | 'isActive'>;
-export type UpdatePeriodTypeModel = Pick<
-  PeriodTypeModel,
-  'id' | 'name' | 'isActive'
->;
+export type CreatePeriodTypeModel = Pick;
+export type UpdatePeriodTypeModel = Pick;

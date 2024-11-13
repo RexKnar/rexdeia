@@ -10,4 +10,4 @@ export const saveAssessmentSchema = z.object({
   hasMarkEntry: z.boolean().default(false),
 });
 
-export type SaveAssessmentSchemaType = z.infer<typeof saveAssessmentSchema>;
+export type SaveAssessmentSchemaType = z.infer;

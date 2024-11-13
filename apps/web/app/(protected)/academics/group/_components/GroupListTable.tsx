@@ -37,7 +37,7 @@ import { GroupModel } from '../../../../../lib/domain/group';
 import { useDeleteGroupMutationQuery } from '../../../../../lib/queries/group/useDeleteGroupMutationQuery';
 import { useGetGroupListQuery } from '../../../../../lib/queries/group/useGetGroupListQuery';
 
-const columns: ColumnDef<GroupModel>[] = [
+const columns: ColumnDef[] = [
   {
     accessorKey: 'name',
     header: ({ column }) => {

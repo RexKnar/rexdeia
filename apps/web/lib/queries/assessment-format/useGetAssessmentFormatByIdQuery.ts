@@ -10,8 +10,8 @@ import { GET_ASSESSMENT_FORMAT_BY_ID } from '../../endpoints';
 
 function getAssessmentFormatById(
   assessmentId: string,
-  options?: Partial<UseQueryOptions<AssessmentFormatModel>>
-): UseQueryOptions<AssessmentFormatModel> {
+  options?: Partial
+): UseQueryOptions {
   return {
     ...options,
     queryKey: [GET_ASSESSMENT_FORMAT_BY_ID, assessmentId],
@@ -27,7 +27,7 @@ function getAssessmentFormatById(
 }
 export function useGetAssessmentFormatByIdQuery(
   id: string,
-  options?: Partial<UseQueryOptions<AssessmentFormatModel>>
-): UseQueryResult<AssessmentFormatModel> {
+  options?: Partial
+): UseQueryResult {
   return useQuery(getAssessmentFormatById(id, options));
 }

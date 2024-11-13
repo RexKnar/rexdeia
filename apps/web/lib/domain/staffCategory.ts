@@ -13,12 +13,6 @@ export type StaffCategoryModel = {
   staff?: Staff[];
 };
 
-export type CreateStaffCategoryRequestModel = Pick<
-  StaffCategoryModel,
-  'name' | 'isActive'
->;
+export type CreateStaffCategoryRequestModel = Pick;
 
-export type UpdateStaffCategoryRequestModel = Pick<
-  StaffCategoryModel,
-  'id' | 'name' | 'isActive'
->;
+export type UpdateStaffCategoryRequestModel = Pick;

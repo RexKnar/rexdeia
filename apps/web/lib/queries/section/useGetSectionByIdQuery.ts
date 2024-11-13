@@ -10,8 +10,8 @@ import { GET_SECTION_BY_ID } from '../../endpoints';
 
 function getSectionByIdQuery(
   sectionId: string,
-  options?: Partial<UseQueryOptions<SectionModel>>
-): UseQueryOptions<SectionModel> {
+  options?: Partial
+): UseQueryOptions {
   return {
     ...options,
     queryKey: [GET_SECTION_BY_ID, sectionId],
@@ -27,7 +27,7 @@ function getSectionByIdQuery(
 }
 export function useGetSectionByIdQuery(
   sectionId: string,
-  options?: Partial<UseQueryOptions<SectionModel>>
-): UseQueryResult<SectionModel> {
+  options?: Partial
+): UseQueryResult {
   return useQuery(getSectionByIdQuery(sectionId, options));
 }

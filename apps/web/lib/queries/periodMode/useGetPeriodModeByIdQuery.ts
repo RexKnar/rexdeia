@@ -8,10 +8,7 @@ import { PeriodModeModel } from 'lib/domain/periodMode';
 import { makeAPICall } from '../../api';
 import { GET_PERIOD_MODE_BY_ID } from '../../endpoints';
 
-function getPeriodModeById(
-  id: string,
-  options?: Partial<UseQueryOptions<PeriodModeModel>>
-): UseQueryOptions<PeriodModeModel> {
+function getPeriodModeById(id: string, options?: Partial): UseQueryOptions {
   return {
     ...options,
     queryKey: [GET_PERIOD_MODE_BY_ID, id],
@@ -27,7 +24,7 @@ function getPeriodModeById(
 }
 export function useGetPeriodModeByIdQuery(
   id: string,
-  options?: Partial<UseQueryOptions<PeriodModeModel>>
-): UseQueryResult<PeriodModeModel> {
+  options?: Partial
+): UseQueryResult {
   return useQuery(getPeriodModeById(id, options));
 }

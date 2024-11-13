@@ -11,13 +11,13 @@ import { GET_DAYS_LIST } from '../../endpoints';
 
 function getDaysList(
   { page, limit }: { page: number; limit: number },
-  options?: UseQueryOptions<PaginatedResponse<DaysModel>>
-): UseQueryOptions<PaginatedResponse<DaysModel>> {
+  options?: UseQueryOptions
+): UseQueryOptions {
   return {
     ...options,
     queryKey: [GET_DAYS_LIST, page, limit],
     queryFn: async () => {
-      return await makeAPICall<PaginatedResponse<DaysModel>>(
+      return await makeAPICall<PaginatedResponse>(
         GET_DAYS_LIST,
 
         {
@@ -32,7 +32,7 @@ function getDaysList(
 
 export function useGetDaysListQuery(
   { page, limit }: { page: number; limit: number },
-  options?: UseQueryOptions<PaginatedResponse<DaysModel>>
-): UseQueryResult<PaginatedResponse<DaysModel>> {
+  options?: UseQueryOptions
+): UseQueryResult {
   return useQuery(getDaysList({ page, limit }, options));
 }

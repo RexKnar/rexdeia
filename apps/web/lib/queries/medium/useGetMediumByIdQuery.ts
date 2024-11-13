@@ -8,10 +8,7 @@ import { makeAPICall } from '../../api';
 import { MediumModel } from '../../domain/medium';
 import { GET_MEDIUM_BY_ID } from '../../endpoints';
 
-function getMediumById(
-  mediumId: string,
-  options?: Partial<UseQueryOptions<MediumModel>>
-): UseQueryOptions<MediumModel> {
+function getMediumById(mediumId: string, options?: Partial): UseQueryOptions {
   return {
     ...options,
     queryKey: [GET_MEDIUM_BY_ID, mediumId],
@@ -27,7 +24,7 @@ function getMediumById(
 }
 export function useGetMediumByIdQuery(
   id: string,
-  options?: Partial<UseQueryOptions<MediumModel>>
-): UseQueryResult<MediumModel> {
+  options?: Partial
+): UseQueryResult {
   return useQuery(getMediumById(id, options));
 }

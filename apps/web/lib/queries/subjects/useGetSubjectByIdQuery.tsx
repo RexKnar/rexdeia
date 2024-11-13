@@ -8,10 +8,7 @@ import { makeAPICall } from '../../api';
 import { SubjectModel } from '../../domain/subject';
 import { GET_SUBJECT_BY_ID } from '../../endpoints';
 
-function getSubjectById(
-  id: string,
-  options?: Partial<UseQueryOptions<SubjectModel>>
-) {
+function getSubjectById(id: string, options?: Partial) {
   return {
     ...options,
     queryKey: [GET_SUBJECT_BY_ID, id],
@@ -21,10 +18,7 @@ function getSubjectById(
   };
 }
 
-export function useGetSubjectByIdQuery(
-  id: string,
-  options?: Partial<UseQueryOptions<SubjectModel>>
-) {
+export function useGetSubjectByIdQuery(id: string, options?: Partial) {
   return useQuery(getSubjectById(id, options));
 }
 

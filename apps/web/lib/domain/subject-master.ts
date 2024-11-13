@@ -9,12 +9,6 @@ export type SubjectMasterModel = {
   isNewlyAdded?: boolean;
 };
 
-export type CreateSubjectMasterModel = Pick<
-  SubjectMasterModel,
-  'name' | 'isActive'
->;
+export type CreateSubjectMasterModel = Pick;
 
-export type UpdateSubjectMasterModel = Pick<
-  SubjectMasterModel,
-  'id' | 'name' | 'isActive'
->;
+export type UpdateSubjectMasterModel = Pick;

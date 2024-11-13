@@ -11,7 +11,7 @@ type GetMarkAnalyticsFilter = {
 
 function getExamAnalyticsSectionMaster(
   filter: GetMarkAnalyticsFilter,
-  options?: Partial<UseQueryOptions<any>>
+  options?: Partial
 ) {
   return {
     ...options,
@@ -29,7 +29,7 @@ function getExamAnalyticsSectionMaster(
 
 export function useGetExamAnalyticsSectionMasterQuery(
   filter: GetMarkAnalyticsFilter,
-  options?: Partial<UseQueryOptions<any>>
+  options?: Partial
 ) {
   return useQuery(getExamAnalyticsSectionMaster(filter, options));
 }

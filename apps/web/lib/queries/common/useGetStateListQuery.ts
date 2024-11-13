@@ -9,7 +9,7 @@ import { GET_STATE_BY_COUNTRY_CODE } from '../../endpoints';
 
 function getStateByCountryCode(
   countryCode: string,
-  options?: Partial<UseQueryOptions>
+  options?: Partial
 ): UseQueryOptions {
   return {
     ...options,
@@ -26,7 +26,7 @@ function getStateByCountryCode(
 }
 export function useGetStateByCountryCodeQuery(
   countryCode: string,
-  options?: Partial<UseQueryOptions>
+  options?: Partial
 ): UseQueryResult {
   return useQuery(getStateByCountryCode(countryCode, options));
 }

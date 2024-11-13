@@ -15,12 +15,6 @@ export type CommunityModel = {
   student?: Student[];
 };
 
-export type CreateCommunityRequestModel = Pick<
-  CommunityModel,
-  'name' | 'isActive'
->;
+export type CreateCommunityRequestModel = Pick;
 
-export type UpdateCommunityRequestModel = Pick<
-  CommunityModel,
-  'id' | 'name' | 'isActive'
->;
+export type UpdateCommunityRequestModel = Pick;

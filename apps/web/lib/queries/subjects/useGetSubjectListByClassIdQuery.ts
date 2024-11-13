@@ -4,10 +4,7 @@ import { makeAPICall } from '../../api';
 import { SubjectModel } from '../../domain/subject';
 import { GET_SUBJECT_LIST_BY_CLASS_ID } from '../../endpoints';
 
-function getSubjectListByClassId(
-  id: string,
-  options?: Partial<UseQueryOptions<SubjectModel[]>>
-) {
+function getSubjectListByClassId(id: string, options?: Partial) {
   return {
     ...options,
     queryKey: [GET_SUBJECT_LIST_BY_CLASS_ID, id],
@@ -22,9 +19,6 @@ function getSubjectListByClassId(
   };
 }
 
-export function useGetSubjectListByClassIdQuery(
-  id: string,
-  options?: Partial<UseQueryOptions<SubjectModel[]>>
-) {
+export function useGetSubjectListByClassIdQuery(id: string, options?: Partial) {
   return useQuery(getSubjectListByClassId(id, options));
 }

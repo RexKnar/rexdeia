@@ -8,10 +8,7 @@ import { makeAPICall } from '../../api';
 import { BatchModel } from '../../domain/batch';
 import { GET_BATCH_BY_ID } from '../../endpoints';
 
-function getBatchById(
-  id: string,
-  options?: Partial<UseQueryOptions<BatchModel>>
-) {
+function getBatchById(id: string, options?: Partial) {
   return {
     ...options,
     queryKey: [GET_BATCH_BY_ID, id],
@@ -21,10 +18,7 @@ function getBatchById(
   };
 }
 
-export function useGetBatchByIdQuery(
-  id: string,
-  options?: Partial<UseQueryOptions<BatchModel>>
-) {
+export function useGetBatchByIdQuery(id: string, options?: Partial) {
   return useQuery(getBatchById(id, options));
 }
 

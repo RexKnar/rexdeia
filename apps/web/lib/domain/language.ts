@@ -14,12 +14,6 @@ export type LanguageModel = {
   isNewlyAdded?: boolean;
 };
 
-export type CreateLanguageRequestModel = Pick<
-  LanguageModel,
-  'name' | 'isActive'
->;
+export type CreateLanguageRequestModel = Pick;
 
-export type UpdateLanguageRequestModel = Pick<
-  LanguageModel,
-  'id' | 'name' | 'isActive'
->;
+export type UpdateLanguageRequestModel = Pick;

@@ -19,13 +19,13 @@ function getGroupList(
     limit: number;
     filter: { isActive?: boolean; classId: string; sectionId: string };
   },
-  options?: Partial<UseQueryOptions<PaginatedResponse<GroupModel>>>
-): UseQueryOptions<PaginatedResponse<GroupModel>> {
+  options?: Partial
+): UseQueryOptions {
   return {
     ...options,
     queryKey: [GET_GROUP_LIST, page, limit, filter],
     queryFn: async () => {
-      return await makeAPICall<PaginatedResponse<GroupModel>>(
+      return await makeAPICall<PaginatedResponse>(
         GET_GROUP_LIST,
         filter,
         {
@@ -48,7 +48,7 @@ export function useGetGroupByClassIdQuery(
     limit: number;
     filter: { isActive?: boolean; classId: string; sectionId: string };
   },
-  options?: Partial<UseQueryOptions<PaginatedResponse<GroupModel>>>
-): UseQueryResult<PaginatedResponse<GroupModel>> {
+  options?: Partial
+): UseQueryResult {
   return useQuery(getGroupList({ page, limit, filter }, options));
 }

@@ -18,8 +18,8 @@ type getSubjectInputModel = {
 
 function getSubjectExamDetail(
   { examId, sectionId, subjectId }: getSubjectInputModel,
-  options?: Partial<UseQueryOptions<SubjectExamConfigModel>>
-): UseQueryOptions<SubjectExamConfigModel> {
+  options?: Partial
+): UseQueryOptions {
   return {
     ...options,
     queryKey: [GET_SUBJECT_EXAM_CONFIG_DETAIL, examId, sectionId, subjectId],
@@ -36,7 +36,7 @@ function getSubjectExamDetail(
 
 export function useGetSubjectExamDetailQuery(
   { examId, sectionId, subjectId }: getSubjectInputModel,
-  options?: Partial<UseQueryOptions<SubjectExamConfigModel>>
+  options?: Partial
 ) {
   return useQuery(
     getSubjectExamDetail({ examId, sectionId, subjectId }, options)

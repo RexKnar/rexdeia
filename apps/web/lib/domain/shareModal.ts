@@ -12,22 +12,6 @@ export type ShareModal = {
   discountAmount?: number | null;
 };
 
-export type CreateShareModal = Pick<
-  ShareModal,
-  | 'formId'
-  | 'actualAmount'
-  | 'activeToDate'
-  | 'acceptPayment'
-  | 'activeFromDate'
-  | 'discountAmount'
->;
+export type CreateShareModal = Pick;
 
-export type UpdateShareModal = Pick<
-  ShareModal,
-  | 'formId'
-  | 'actualAmount'
-  | 'activeToDate'
-  | 'acceptPayment'
-  | 'activeFromDate'
-  | 'discountAmount'
->;
+export type UpdateShareModal = Pick;

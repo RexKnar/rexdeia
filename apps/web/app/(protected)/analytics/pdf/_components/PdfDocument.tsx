@@ -13,10 +13,10 @@ interface StudentMarksPDFGeneratorProps {
   tableValues: string[];
 }
 
-const StudentMarksPDFGenerator: React.FC<StudentMarksPDFGeneratorProps> = ({
+const StudentMarksPDFGenerator: React.FC = ({
   headingList,
   tableValues,
-}) => {
+}: StudentMarksPDFGeneratorProps) => {
   const generatePDF = () => {
     const doc = new jsPDF({
       orientation: 'landscape',
@@ -41,7 +41,7 @@ const StudentMarksPDFGenerator: React.FC<StudentMarksPDFGeneratorProps> = ({
               { content: '#', rowSpan: 2 },
               { content: 'Student Name', rowSpan: 2 },
               ...headingList.map((heading) => ({
-                content: heading.subjectName + heading.subTitle?.length,
+                content: heading.subjectName,
                 colSpan: heading.subTitle?.length || 2,
               })),
               { content: 'Total', rowSpan: 2 },
@@ -51,7 +51,6 @@ const StudentMarksPDFGenerator: React.FC<StudentMarksPDFGeneratorProps> = ({
           ]
         : [];
 
-    // Generate the table
     autoTable(doc, {
       head: complexHeaders,
       body: (tableValues as any[]) || [],

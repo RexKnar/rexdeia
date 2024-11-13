@@ -11,13 +11,13 @@ import { GET_EXAM_LIST } from '../../endpoints';
 
 function getExamList(
   { page, limit }: { page: number; limit: number },
-  options?: UseQueryOptions<PaginatedResponse<ExamModel>>
-): UseQueryOptions<PaginatedResponse<ExamModel>> {
+  options?: UseQueryOptions
+): UseQueryOptions {
   return {
     ...options,
     queryKey: [GET_EXAM_LIST, page, limit],
     queryFn: async () => {
-      return await makeAPICall<PaginatedResponse<ExamModel>>(
+      return await makeAPICall<PaginatedResponse>(
         GET_EXAM_LIST,
         {},
         {
@@ -32,7 +32,7 @@ function getExamList(
 
 export function useGetExamListQuery(
   { page, limit }: { page: number; limit: number },
-  options?: UseQueryOptions<PaginatedResponse<ExamModel>>
-): UseQueryResult<PaginatedResponse<ExamModel>> {
+  options?: UseQueryOptions
+): UseQueryResult {
   return useQuery(getExamList({ page, limit }, options));
 }

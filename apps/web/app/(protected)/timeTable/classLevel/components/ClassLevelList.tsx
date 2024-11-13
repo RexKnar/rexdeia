@@ -29,7 +29,7 @@ import { cn } from 'utils';
 
 import { DeleteConfirmationModal } from '@/components/modals/DeleteConfirmationModal';
 
-const columns: ColumnDef<ClassLevelModel>[] = [
+const columns: ColumnDef[] = [
   {
     accessorKey: 'name',
     header: ({ column }) => {

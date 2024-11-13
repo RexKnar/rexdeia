@@ -16,12 +16,6 @@ export type NatureOfPostingModel = {
   staff?: Staff[];
 };
 
-export type CreateNatureOfPostingRequestModel = Pick<
-  NatureOfPostingModel,
-  'name' | 'isActive'
->;
+export type CreateNatureOfPostingRequestModel = Pick;
 
-export type UpdateNatureOfPostingRequestModel = Pick<
-  NatureOfPostingModel,
-  'id' | 'name' | 'isActive'
->;
+export type UpdateNatureOfPostingRequestModel = Pick;

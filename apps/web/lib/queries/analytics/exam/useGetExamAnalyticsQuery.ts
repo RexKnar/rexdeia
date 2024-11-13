@@ -13,10 +13,7 @@ type analyticsResponseModel = {
   subjectWiseCount: any[];
 };
 
-function getExamAnalytics(
-  filter: GetExamAnalyticsFilter,
-  options?: Partial<UseQueryOptions<analyticsResponseModel>>
-) {
+function getExamAnalytics(filter: GetExamAnalyticsFilter, options?: Partial) {
   return {
     ...options,
     queryKey: [EXAM_ANALYTICS, filter.classId, filter.examId],
@@ -33,7 +30,7 @@ function getExamAnalytics(
 
 export function useExamAnalyticsQuery(
   filter: GetExamAnalyticsFilter,
-  options?: Partial<UseQueryOptions<analyticsResponseModel>>
+  options?: Partial
 ) {
   return useQuery(getExamAnalytics(filter, options));
 }

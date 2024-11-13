@@ -4,8 +4,8 @@ import React from 'react';
 import { cn } from 'utils';
 
 export interface LinkButtonProps
-  extends React.ButtonHTMLAttributes<HTMLButtonElement>,
-    VariantProps<typeof linkButtonVariants> {
+  extends React.ButtonHTMLAttributes,
+    VariantProps {
   asChild?: boolean;
   url: string;
 }
@@ -34,12 +34,7 @@ const linkButtonVariants = cva(
   }
 );
 
-export function LinkButton({
-  url,
-  variant,
-  className,
-  children,
-}: Readonly<LinkButtonProps>) {
+export function LinkButton({ url, variant, className, children }: Readonly) {
   return (
     <Link href={url} className={cn(linkButtonVariants({ variant, className }))}>
       {children}

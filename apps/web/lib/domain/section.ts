@@ -18,26 +18,11 @@ export type SectionModel = {
   students: string[];
 };
 
-export type GetMediumModel = Pick<MediumModel, 'name' | 'isActive' | 'id'>;
+export type GetMediumModel = Pick;
 
-export type CreateSectionModel = Pick<
-  SectionModel,
-  'name' | 'isActive' | 'mediumId' | 'classId' | 'groupIds'
->;
+export type CreateSectionModel = Pick;
 
-export type UpdateSectionModel = Pick<
-  SectionModel,
-  | 'name'
-  | 'isActive'
-  | 'mediumId'
-  | 'classId'
-  | 'groupIds'
-  | 'faculty'
-  | 'subjects'
-  | 'staffs'
-  | 'students'
-  | 'description'
->;
+export type UpdateSectionModel = Pick;
 
 export type AddSubjectsToSectionRequestModel =
   | {
