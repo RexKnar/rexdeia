@@ -398,7 +398,6 @@ export default function StudentMarkList({
   function downloadCSV() {
     const wb = XLSX_utils.book_new();
     const ws = XLSX_utils.aoa_to_sheet(xlsxTableHeader);
-    console.log(xlsxTableHeader);
 
     pdfTableValues.forEach((row) => {
       XLSX_utils.sheet_add_aoa(ws, [row], { origin: -1 });
