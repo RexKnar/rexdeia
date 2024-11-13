@@ -40,6 +40,7 @@ const StudentMarksPDFGenerator: React.FC<StudentMarksPDFGeneratorProps> = ({
             [
               { content: '#', rowSpan: 2 },
               { content: 'Student Name', rowSpan: 2 },
+              { content: 'Section', rowSpan: 2 },
               ...headingList.map((heading) => ({
                 content: heading.subjectName,
                 colSpan: heading.subTitle?.length || 2,

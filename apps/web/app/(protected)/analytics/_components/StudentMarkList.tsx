@@ -289,18 +289,18 @@ export default function StudentMarkList({
           'Tot',
         ],
       }));
-      let excelHeading = ['', ''];
-      let excelSubHeading = ['#', 'Student Name'];
+      let excelHeading = ['', '', ''];
+      let excelSubHeading = ['#', 'Student Name', 'Section'];
       subjectList?.forEach((subject) => {
         excelHeading.push(subject.subject.name);
         subject.examSubjectPartition.forEach((partition) => {
-          // excelHeading.push(null);
+          excelHeading.push(null);
           excelSubHeading.push(partition.assessmentFormat.name);
         });
         excelSubHeading.push('Tot');
       });
-      excelHeading.push('');
-      excelHeading.push('');
+      excelHeading.push('Total');
+      excelHeading.push('Rank');
       excelSubHeading.push('Total');
       excelSubHeading.push('Rank');
 
@@ -321,6 +321,7 @@ export default function StudentMarkList({
             const indexValue = index + 1;
             tableValues.push(indexValue.toString());
             tableValues.push(`${student?.firstName} ${student?.lastName}`);
+            tableValues.push(student.section?.name);
 
             let totalMark = 0;
             let failingStatus = false;
@@ -404,31 +405,21 @@ export default function StudentMarkList({
     });
 
     ws['!merges'] = [];
-    let columnStart = 2;
+    let columnStart = 3;
     pdfTableHeader.forEach((row) => {
-      let columnEnd = columnStart + (row.subTitle?.length || 1);
+      const subtitleLength = row.subTitle?.length || 1;
+
+      let columnEnd = columnStart + subtitleLength - 1;
+
       ws['!merges'].push({
         s: { r: 0, c: columnStart },
         e: { r: 0, c: columnEnd },
       });
-      columnStart = columnEnd;
-    });
-    // ws['!merges'] = [
-    //   { s: { r: 0, c: 1 }, e: { r: 0, c: 3 } },
-    //   { s: { r: 0, c: 4 }, e: { r: 0, c: 6 } },
-    //   { s: { r: 0, c: 7 }, e: { r: 0, c: 9 } },
-    //   { s: { r: 0, c: 10 }, e: { r: 0, c: 12 } },
-    //   { s: { r: 0, c: 13 }, e: { r: 0, c: 15 } },
-    //   { s: { r: 0, c: 16 }, e: { r: 0, c: 18 } },
-    //   { s: { r: 0, c: 19 }, e: { r: 0, c: 21 } },
-    //   { s: { r: 0, c: 22 }, e: { r: 0, c: 24 } },
-    //   { s: { r: 0, c: 25 }, e: { r: 0, c: 27 } },
-    //   { s: { r: 0, c: 28 }, e: { r: 0, c: 30 } },
-    //   { s: { r: 0, c: 31 }, e: { r: 0, c: 33 } },
-    //   { s: { r: 0, c: 34 }, e: { r: 0, c: 36 } },
-    // ];
 
-    ws['!cols'] = [{ wch: 15 }, { wch: 8 }, { wch: 8 }];
+      columnStart = columnEnd + 1;
+    });
+
+    // ws['!cols'] = [{ wch: 15 }, { wch: 8 }, { wch: 8 }];
 
     XLSX_utils.book_append_sheet(wb, ws, 'Results');
 
