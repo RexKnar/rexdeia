@@ -1,5 +1,6 @@
 module.exports = {
   reactStrictMode: true,
+  output: 'standalone',
   transpilePackages: ['ui'],
   swcMinify: true,
    webpack: (config, { isServer }) => {
