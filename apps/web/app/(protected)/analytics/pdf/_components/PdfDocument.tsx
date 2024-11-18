@@ -32,6 +32,65 @@ const StudentMarksPDFGenerator: React.FC<StudentMarksPDFGeneratorProps> = ({
       creator: 'Student Management System',
     });
 
+    // Get page dimensions
+    const pageWidth = doc.internal.pageSize.getWidth();
+    const pageHeight = doc.internal.pageSize.getHeight();
+
+    // Header function
+    const addHeader = (doc: jsPDF) => {
+      // Add school logo (if needed)
+      // doc.addImage(logoData, 'PNG', 14, 10, 20, 20);
+
+      // School name and address
+      doc.setFontSize(16);
+      doc.setFont('helvetica', 'bold');
+      doc.text('AMMAHSS', pageWidth / 2, 15, { align: 'center' });
+
+      doc.setFontSize(12);
+      doc.setFont('helvetica', 'normal');
+      doc.text('Thiruvatar', pageWidth / 2, 22, { align: 'center' });
+
+      // Title
+      doc.setFontSize(14);
+      doc.setFont('helvetica', 'bold');
+      doc.text('Student Marks Table', pageWidth / 2, 30, { align: 'center' });
+
+      // Add horizontal line
+      doc.setDrawColor(0);
+      doc.setLineWidth(0.5);
+      doc.line(10, 35, pageWidth - 10, 35);
+    };
+
+    // Footer function
+    const addFooter = (doc: jsPDF) => {
+      const totalPages = (doc as any).internal.getNumberOfPages();
+      for (let i = 1; i <= totalPages; i++) {
+        doc.setPage(i);
+
+        // Add horizontal line
+        doc.setDrawColor(0);
+        doc.setLineWidth(0.5);
+        doc.line(10, pageHeight - 15, pageWidth - 10, pageHeight - 15);
+
+        // Add page number
+        doc.setFontSize(10);
+        doc.setFont('helvetica', 'normal');
+        doc.text(
+          `Page ${i} of ${totalPages}`,
+          pageWidth - 20,
+          pageHeight - 10,
+          { align: 'right' }
+        );
+
+        // Add timestamp
+        const timestamp = new Date().toLocaleString();
+        doc.text(`Generated on: ${timestamp}`, 14, pageHeight - 10);
+      }
+    };
+
+    // Add initial header
+    addHeader(doc);
+
     doc.setFontSize(16);
     doc.text('Student Marks Table', 14, 10);
     const complexHeaders =
@@ -88,8 +147,13 @@ const StudentMarksPDFGenerator: React.FC<StudentMarksPDFGeneratorProps> = ({
           cell.y + cell.height
         );
       },
+      didDrawPage: (_data) => {
+        // Add header and footer on each new page
+        addHeader(doc);
+      },
     });
 
+    addFooter(doc);
     doc.save('student-marks-table.pdf');
   };
 
