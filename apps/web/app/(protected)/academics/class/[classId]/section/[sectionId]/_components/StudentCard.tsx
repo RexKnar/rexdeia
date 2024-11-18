@@ -59,6 +59,21 @@ export function StudentCard(props: StudentCardProps) {
                   </button>
                 </span>
               </DropdownMenuItem>
+              <DropdownMenuItem className="flex cursor-pointer items-center">
+                <span className="flex-1">
+                  <button
+                    onClick={() => {
+                      const params = new URLSearchParams(searchParams);
+                      params.set('isArchiveStudentFlyoutOpen', 'true');
+                      params.set('studentId', props.id);
+
+                      router.replace(pathname + '?' + params.toString());
+                    }}
+                  >
+                    Archive/Transfer
+                  </button>
+                </span>
+              </DropdownMenuItem>
               <DropdownMenuSeparator className="bg-gray-100 text-gray-500" />
             </DropdownMenuContent>
           </DropdownMenu>

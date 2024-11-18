@@ -4,7 +4,9 @@ import { Loader2 } from 'lucide-react';
 import { useParams } from 'next/navigation';
 
 import { useGetStudentListByClassIdQuery } from '../../../../../../lib/queries/students/useGetStudentListByClassIdQuery';
+import { ArchiveStudentFlyout } from '../_modals/ArchiveStudentFlyout';
 import { StudentCard } from '../section/[sectionId]/_components/StudentCard';
+import { ReassignStudentFlyout } from '../section/[sectionId]/_modals/ReassignStudentFlyout';
 
 export function StudentList() {
   const params = useParams<{ classId: string }>();
@@ -37,6 +39,8 @@ export function StudentList() {
           <StudentCard id={studentItem.id} name={studentItem.firstName} />
         </div>
       ))}
+      <ReassignStudentFlyout />
+      <ArchiveStudentFlyout />
     </section>
   );
 }
