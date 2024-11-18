@@ -83,6 +83,7 @@ export const GET_BLOOD_GROUP_LIST = `GET_BLOOD_GROUP_LIST`;
 export const GET_CITY_BY_STATE_CODE = `GET_CITY_BY_STATE_CODE`;
 export const GET_STAFF_LIST_BY_SECTION_ID = `GET_STAFF_LIST_BY_SECTION_ID`;
 export const GET_STUDENT_LIST_BY_SECTION_ID = `GET_STUDENT_LIST_BY_SECTION_ID`;
+export const ARCHIVE_STUDENT_BY_ID = `ARCHIVE_STUDENT_BY_ID`;
 export const GET_STAFF_LIST_BY_CLASS_ID = `GET_STAFF_LIST_BY_CLASS_ID`;
 export const GET_STUDENT_LIST_BY_CLASS_ID = `GET_STUDENT_LIST_BY_CLASS_ID`;
 export const ASSIGN_STAFF_BY_CLASS_ID = `ASSIGN_STAFF_BY_CLASS_ID`;
@@ -536,6 +537,10 @@ export default <EndpointDetails>{
   [GET_STAFF_LIST_BY_CLASS_ID]: {
     requestType: `GET`,
     endpoint: `/api/class/[id]/staffs`,
+  },
+  [ARCHIVE_STUDENT_BY_ID]: {
+    requestType: `PUT`,
+    endpoint: `/api/student/[id]/archive`,
   },
   [GET_STUDENT_LIST_BY_CLASS_ID]: {
     requestType: `GET`,

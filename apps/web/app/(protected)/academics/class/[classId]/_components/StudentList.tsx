@@ -5,6 +5,8 @@ import { useParams } from 'next/navigation';
 
 import { useGetStudentListByClassIdQuery } from '../../../../../../lib/queries/students/useGetStudentListByClassIdQuery';
 import { StudentCard } from '../section/[sectionId]/_components/StudentCard';
+import { ArchiveStudentFlyout } from '../section/[sectionId]/_modals/ArchiveStudentFlyout';
+import { ReassignStudentFlyout } from '../section/[sectionId]/_modals/ReassignStudentFlyout';
 
 export function StudentList() {
   const params = useParams<{ classId: string }>();
@@ -37,6 +39,8 @@ export function StudentList() {
           <StudentCard id={studentItem.id} name={studentItem.firstName} />
         </div>
       ))}
+      <ReassignStudentFlyout />
+      <ArchiveStudentFlyout />
     </section>
   );
 }

@@ -34,7 +34,7 @@ export function UnassignStaffFlyout() {
   const staffId = searchParams.get('staffId');
   const academicYearId =
     searchParams.get('academicYearId') || session.currentBatch;
-  const { data: getStaffSubjectListResponse } =
+  const { data: getStaffSubjectListResponse, isLoading } =
     useGetStaffSubjectListByClassIdQuery(
       params.classId,
       staffId,
@@ -109,78 +109,84 @@ export function UnassignStaffFlyout() {
             </SheetTitle>
             <hr className="border-t border-gray-300"></hr>
           </SheetHeader>
-          <form onSubmit={handleSubmit(onsubmit)}>
-            <div className="mt-6">
-              {fields.map((section, index) => {
-                return (
-                  <div className="mt-2" key={section.id}>
-                    <label
-                      htmlFor="subjectName"
-                      className="text-sm font-semibold text-gray-700"
-                    >
-                      {getStaffSubjectListResponse[index]?.sectionName}
-                    </label>
-                    <div className="me-6 mt-2 flex flex-wrap items-center">
-                      {getStaffSubjectListResponse[index]?.subjects.map(
-                        (subject) => {
-                          return (
-                            <Controller
-                              key={subject.id}
-                              control={control}
-                              name={`sections.${index}.subjects`}
-                              render={({ field }) => (
-                                <>
-                                  <Checkbox
-                                    className="me-2 items-center space-x-2 rounded border border-primary-500"
-                                    checked={field.value.includes(subject.id)}
-                                    onCheckedChange={(checked) => {
-                                      if (checked) {
-                                        field.onChange([
-                                          ...field.value,
-                                          subject.id,
-                                        ]);
-                                      } else {
-                                        field.onChange(
-                                          field.value.filter(
-                                            (id) => id !== subject.id
-                                          )
-                                        );
-                                      }
-                                    }}
-                                  >
-                                    {subject.name}
-                                  </Checkbox>
-                                  <label className="me-5">
-                                    <span>{subject.name}</span>
-                                  </label>
-                                </>
-                              )}
-                            />
-                          );
-                        }
-                      )}
+          {isLoading ? (
+            <Text className="text-center text-lg text-primary-800">
+              <Loader2 className="mr-2 h-6 w-6 animate-spin text-white" />
+            </Text>
+          ) : (
+            <form onSubmit={handleSubmit(onsubmit)}>
+              <div className="mt-6">
+                {fields.map((section, index) => {
+                  return (
+                    <div className="mt-2" key={section.id}>
+                      <label
+                        htmlFor="subjectName"
+                        className="text-sm font-semibold text-gray-700"
+                      >
+                        {getStaffSubjectListResponse[index]?.sectionName}
+                      </label>
+                      <div className="me-6 mt-2 flex flex-wrap items-center">
+                        {getStaffSubjectListResponse[index]?.subjects.map(
+                          (subject) => {
+                            return (
+                              <Controller
+                                key={subject.id}
+                                control={control}
+                                name={`sections.${index}.subjects`}
+                                render={({ field }) => (
+                                  <>
+                                    <Checkbox
+                                      className="me-2 items-center space-x-2 rounded border border-primary-500"
+                                      checked={field.value.includes(subject.id)}
+                                      onCheckedChange={(checked) => {
+                                        if (checked) {
+                                          field.onChange([
+                                            ...field.value,
+                                            subject.id,
+                                          ]);
+                                        } else {
+                                          field.onChange(
+                                            field.value.filter(
+                                              (id) => id !== subject.id
+                                            )
+                                          );
+                                        }
+                                      }}
+                                    >
+                                      {subject.name}
+                                    </Checkbox>
+                                    <label className="me-5">
+                                      <span>{subject.name}</span>
+                                    </label>
+                                  </>
+                                )}
+                              />
+                            );
+                          }
+                        )}
+                      </div>
                     </div>
+                  );
+                })}
+              </div>
+              <Button
+                type="submit"
+                size="lg"
+                variant="default"
+                className="mx-auto mt-8 flex justify-center px-12 py-4"
+              >
+                {' '}
+                {isUnAssignStaffPending ? (
+                  <div className="flex items-center justify-center">
+                    <Loader2 className="mr-2 h-6 w-6 animate-spin text-white" />
+                    removing
                   </div>
-                );
-              })}
-            </div>
-            <Button
-              type="submit"
-              size="lg"
-              variant="default"
-              className="mx-auto mt-8 flex justify-center px-12 py-4"
-            >
-              {' '}
-              {isUnAssignStaffPending ? (
-                <div className="flex items-center justify-center">
-                  <Loader2 className="mr-2 h-6 w-6 animate-spin text-white" />
-                  removing
-                </div>
-              ) : (
-                'remove'
-              )}
-            </Button>
-          </form>
+                ) : (
+                  'remove'
+                )}
+              </Button>
+            </form>
+          )}
         </SheetContent>
       </Sheet>
     </section>

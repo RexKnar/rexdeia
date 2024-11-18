@@ -435,7 +435,7 @@ export async function getAllStudentByClassIdForAssigning(id: string) {
     where: {
       classId: id,
       section: null,
-      isCurrent: true,
+      isCurrent: false,
     },
     select: {
       student: {
