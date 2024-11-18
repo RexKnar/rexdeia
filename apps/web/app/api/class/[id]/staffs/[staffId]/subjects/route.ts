@@ -8,39 +8,6 @@ import { authOptions } from 'lib/auth';
 import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 
-/**
- * @swagger
- * /api/class/{id}/staffs/{id}/subjects:
- *     get:
- *       summary: Get All Subjects of a Staff in a class
- *       description: Get All Subjects of a Staff in a class
- *       parameters:
- *         - name: id
- *           in: path
- *           required: true
- *           description: Unique identifier of the class.
- *           schema:
- *             type: string
- *          - name: staffId
- *           in: path
- *           required: true
- *           description: Unique identifier of the class.
- *           schema:
- *             type: string
- *       responses:
- *         '200':
- *           description: Staffs details are fetched successfully.
- *           content:
- *             application/json:
- *               schema:
- *                 # Define the schema of your class object here
- *         '400':
- *           description: Bad request due to validation error.
- *         '401':
- *           description: Unauthorized access.
- *         '500':
- *           description: Internal server error.
- */
 export async function GET(request: NextRequest, { params: { id, staffId } }) {
   const session = await getServerSession(authOptions);
   if (!session) {
