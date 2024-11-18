@@ -197,6 +197,7 @@ export const GET_PERIOD_MODE_LIST = `GET_PERIOD_MODE_LIST`;
 export const GET_PERIOD_MODE_BY_ID = `GET_PERIOD_MODE_BY_ID`;
 export const UPDATE_PERIOD_MODE_BY_ID = `UPDATE_PERIOD_MODE_BY_ID`;
 export const DELETE_PERIOD_MODE_BY_ID = `DELETE_PERIOD_MODE_BY_ID`;
+export const ARCHIVE_STUDENT_BY_ID = `ARCHIVE_STUDENT_BY_ID`;
 
 export default <EndpointDetails>{
   ...ExamAnalyticsEndpoints,
@@ -536,6 +537,10 @@ export default <EndpointDetails>{
   [GET_STAFF_LIST_BY_CLASS_ID]: {
     requestType: `GET`,
     endpoint: `/api/class/[id]/staffs`,
+  },
+  [ARCHIVE_STUDENT_BY_ID]: {
+    requestType: `PUT`,
+    endpoint: `/api/student/[id]/archive`,
   },
   [GET_STUDENT_LIST_BY_CLASS_ID]: {
     requestType: `GET`,

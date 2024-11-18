@@ -14,6 +14,7 @@ import { PageTitle } from '@/components/PageTitle';
 
 import { useGetSectionByIdQuery } from '../../../../../../../lib/queries/section/useGetSectionByIdQuery';
 import { AddSubjectFlyout } from '../../_modals/AddSubjectFlyout';
+import { UnassignStaffFlyout } from '../../_modals/UnassignStaffFlyout';
 import { StaffList } from './_components/StaffList';
 import { StudentList } from './_components/StudentList';
 import { SubjectList } from './_components/SubjectList';
@@ -176,6 +177,7 @@ export default function Page() {
       <SaveSectionFlyout />
       <AssignStudentFlyout />
       <SaveAssignStaffFlyout />
+      <UnassignStaffFlyout />
     </section>
   );
 }

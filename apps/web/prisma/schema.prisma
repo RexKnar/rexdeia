@@ -432,6 +432,7 @@ model StudentMapping {
   mediumId  String?  @db.Uuid
   batchId   String?  @db.Uuid
   isCurrent Boolean  @default(true)
+  remark    String?  @default("")
   batch     Batch?   @relation(fields: [batchId], references: [id])
   class     Class    @relation(fields: [classId], references: [id])
   group     Group    @relation(fields: [groupId], references: [id])

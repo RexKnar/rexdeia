@@ -93,4 +93,5 @@ export type StudentMappingModel = {
   classId?: string;
   sectionId?: string;
   batchId?: string;
+  remark?: string;
 };

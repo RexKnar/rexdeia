@@ -4,6 +4,7 @@ import { Loader2 } from 'lucide-react';
 import { useParams } from 'next/navigation';
 
 import { useGetStudentListBySectionIdQuery } from '../../../../../../../../lib/queries/students/useGetStudentListBySectionIdQuery';
+import { ArchiveStudentFlyout } from '../../../_modals/ArchiveStudentFlyout';
 import { ReassignStudentFlyout } from '../_modals/ReassignStudentFlyout';
 import { StudentCard } from './StudentCard';
 
@@ -39,6 +40,7 @@ export function StudentList() {
         </div>
       ))}
       <ReassignStudentFlyout />
+      <ArchiveStudentFlyout />
     </section>
   );
 }
