@@ -147,7 +147,8 @@ const StudentMarksPDFGenerator: React.FC<StudentMarksPDFGeneratorProps> = ({
           cell.y + cell.height
         );
       },
-      didDrawPage: (_data) => {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      didDrawPage: () => {
         // Add header and footer on each new page
         addHeader(doc);
       },
