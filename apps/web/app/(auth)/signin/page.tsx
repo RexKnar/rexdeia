@@ -30,7 +30,14 @@ export default async function Page() {
         style={{
           backgroundImage: 'url(/assets/images/signin-banner.png)',
         }}
-      ></section>
+      >
+        <h1>Simplify. Streamline. Succeed.</h1>
+        <p>
+          From attendance to assessments, our school management system makes it
+          easy to handle it all—so you can focus on what truly matters: student
+          success.
+        </p>
+      </section>
       <section className="flex h-screen translate-y-0 transform flex-col overflow-x-hidden px-20 opacity-100 transition-all duration-500 ease-in-out sm:w-2/3 md:w-1/2 md:justify-between lg:w-1/2 xl:w-1/3 xl:justify-between 2xl:justify-center">
         <div>
           <Image src={logo} className="pt-10" alt={'logo'} width={100}></Image>
