@@ -11,6 +11,8 @@ import {
 } from 'ui/components/ui/Table';
 import { utils as XLSX_utils, writeFile as XLSX_writeFile } from 'xlsx';
 
+import SubjectwiseCountAnalysisTable from './SubjectwiseCountAnalysisTable';
+
 interface Analytics {
   numberOfPassStudents: { male: number; female: number; overall: number };
   numberOfFailStudents: { male: number; female: number; overall: number };
@@ -569,107 +571,117 @@ export default function OverallAnalytics({
   };
 
   return (
-    <section>
-      {subjectList && (
-        <div className="mt-4 space-y-4 overflow-x-auto rounded-md bg-white p-6 print:m-0 print:p-0 ">
-          <Button variant="outline" onClick={downloadCSV}>
-            Download XLSX <TableIcon className="ml-2 h-4 w-4" />
-          </Button>
-          <Table>
-            <TableHeader>
-              <TableRow className="mt-5 bg-primary-300 text-center">
-                <TableCell></TableCell>
-                <TableCell className="text-center">Total Count</TableCell>
-                <TableCell>
-                  <Text className="size-lg font-semibold">Pending Entry</Text>
-                </TableCell>
-                <TableCell>
-                  <Text className="size-lg font-semibold">Appeared</Text>
-                </TableCell>
-                <TableCell className="text-center">
-                  <Text className="size-lg font-semibold">Absent</Text>
-                </TableCell>
-                <TableCell>
-                  <Text className="size-lg font-semibold">Average</Text>
-                </TableCell>
-                <TableCell>
-                  <Text className="size-lg font-semibold">No. of Pass</Text>
-                </TableCell>
-                <TableCell>
-                  <Text className="size-lg font-semibold">No. of Failures</Text>
-                </TableCell>
-                <TableCell>
-                  <Text className="size-lg font-semibold">Pass %</Text>
-                </TableCell>
-                <TableCell>
-                  <Text className="size-lg font-semibold">Failure %</Text>
-                </TableCell>
-                <TableCell>
-                  <Text className="size-lg font-semibold">Highest</Text>
-                </TableCell>
-                <TableCell>
-                  <Text className="size-lg font-semibold">Lowest</Text>
-                </TableCell>
-                <TableCell>
-                  <Text className="size-lg font-semibold">Centum</Text>
-                </TableCell>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {subjectList.map(renderSubjectRow)}
-              <TableRow className="mt-5 bg-green-100 text-center ">
-                <TableCell>
-                  <Text className="text-center text-lg font-semibold">
-                    Overall
-                  </Text>
-                </TableCell>
-                <TableCell className=""></TableCell>
-                <TableCell className=""></TableCell>
-                <TableCell className=""></TableCell>
-                <TableCell className=""></TableCell>
-                <TableCell>
-                  <Text className="size-lg font-semibold">
-                    {overallStats.avgMark?.toFixed(2)}
-                  </Text>
-                </TableCell>
-                <TableCell>
-                  <Text className="size-lg font-semibold">
-                    {overallStats.passCount}
-                  </Text>
-                </TableCell>
-                <TableCell>
-                  <Text className="size-lg font-semibold">
-                    {overallStats.failCount}
-                  </Text>
-                </TableCell>
-                <TableCell>
-                  <Text className="size-lg font-semibold">
-                    {overallStats.passPercentage?.toFixed(2)}%
-                  </Text>
-                </TableCell>
-                <TableCell>
-                  <Text className="size-lg font-semibold">
-                    {overallStats.failPercentage?.toFixed(2)}%
-                  </Text>
-                </TableCell>
-                <TableCell>
-                  <Text className="size-lg font-semibold">
-                    {overallStats.highestMark}
-                  </Text>
-                </TableCell>
-                <TableCell>
-                  <Text className="size-lg font-semibold">
-                    {overallStats.lowestMark}
-                  </Text>
-                </TableCell>
-                <TableCell>
-                  <Text className="size-lg font-semibold">-</Text>
-                </TableCell>
-              </TableRow>
-            </TableBody>
-          </Table>
-        </div>
-      )}
-    </section>
+    <>
+      <section>
+        {subjectList && (
+          <div className="mt-4 space-y-4 overflow-x-auto rounded-md bg-white p-6 print:m-0 print:p-0 ">
+            <Button variant="outline" onClick={downloadCSV}>
+              Download XLSX <TableIcon className="ml-2 h-4 w-4" />
+            </Button>
+            <Table>
+              <TableHeader>
+                <TableRow className="mt-5 bg-primary-300 text-center">
+                  <TableCell></TableCell>
+                  <TableCell className="text-center">Total Count</TableCell>
+                  <TableCell>
+                    <Text className="size-lg font-semibold">Pending Entry</Text>
+                  </TableCell>
+                  <TableCell>
+                    <Text className="size-lg font-semibold">Appeared</Text>
+                  </TableCell>
+                  <TableCell className="text-center">
+                    <Text className="size-lg font-semibold">Absent</Text>
+                  </TableCell>
+                  <TableCell>
+                    <Text className="size-lg font-semibold">Average</Text>
+                  </TableCell>
+                  <TableCell>
+                    <Text className="size-lg font-semibold">No. of Pass</Text>
+                  </TableCell>
+                  <TableCell>
+                    <Text className="size-lg font-semibold">
+                      No. of Failures
+                    </Text>
+                  </TableCell>
+                  <TableCell>
+                    <Text className="size-lg font-semibold">Pass %</Text>
+                  </TableCell>
+                  <TableCell>
+                    <Text className="size-lg font-semibold">Failure %</Text>
+                  </TableCell>
+                  <TableCell>
+                    <Text className="size-lg font-semibold">Highest</Text>
+                  </TableCell>
+                  <TableCell>
+                    <Text className="size-lg font-semibold">Lowest</Text>
+                  </TableCell>
+                  <TableCell>
+                    <Text className="size-lg font-semibold">Centum</Text>
+                  </TableCell>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {subjectList.map(renderSubjectRow)}
+                <TableRow className="mt-5 bg-green-100 text-center ">
+                  <TableCell>
+                    <Text className="text-center text-lg font-semibold">
+                      Overall
+                    </Text>
+                  </TableCell>
+                  <TableCell className=""></TableCell>
+                  <TableCell className=""></TableCell>
+                  <TableCell className=""></TableCell>
+                  <TableCell className=""></TableCell>
+                  <TableCell>
+                    <Text className="size-lg font-semibold">
+                      {overallStats.avgMark?.toFixed(2)}
+                    </Text>
+                  </TableCell>
+                  <TableCell>
+                    <Text className="size-lg font-semibold">
+                      {overallStats.passCount}
+                    </Text>
+                  </TableCell>
+                  <TableCell>
+                    <Text className="size-lg font-semibold">
+                      {overallStats.failCount}
+                    </Text>
+                  </TableCell>
+                  <TableCell>
+                    <Text className="size-lg font-semibold">
+                      {overallStats.passPercentage?.toFixed(2)}%
+                    </Text>
+                  </TableCell>
+                  <TableCell>
+                    <Text className="size-lg font-semibold">
+                      {overallStats.failPercentage?.toFixed(2)}%
+                    </Text>
+                  </TableCell>
+                  <TableCell>
+                    <Text className="size-lg font-semibold">
+                      {overallStats.highestMark}
+                    </Text>
+                  </TableCell>
+                  <TableCell>
+                    <Text className="size-lg font-semibold">
+                      {overallStats.lowestMark}
+                    </Text>
+                  </TableCell>
+                  <TableCell>
+                    <Text className="size-lg font-semibold">-</Text>
+                  </TableCell>
+                </TableRow>
+              </TableBody>
+            </Table>
+          </div>
+        )}
+      </section>
+      <section>
+        <SubjectwiseCountAnalysisTable
+          students={students}
+          subjectCount={subjectList?.length}
+        />
+      </section>
+    </>
   );
 }
