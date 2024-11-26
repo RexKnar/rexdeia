@@ -76,6 +76,9 @@ export async function getSectionsWithFilter(
     }),
     db.section.findMany({
       where: whereClause,
+      orderBy: {
+        name: 'asc',
+      },
     }),
   ]);
   return { total, data };

@@ -1,3 +1,4 @@
+import { useGetExamSubjectMasterByClassSectionIdQuery } from 'lib/queries/exams/subject/useGetExamSubjectMasterByClassSectionIdQuery';
 import { useEffect, useState } from 'react';
 import { Text } from 'ui';
 import {
@@ -10,10 +11,15 @@ import {
 
 export default function SubjectwiseCountAnalysisTable({
   students,
-  subjectCount,
+  classId,
+  examId,
+  sectionId,
 }: {
   students: any[];
   subjectCount: number;
+  classId: string;
+  sectionId?: string;
+  examId: string;
 }) {
   interface AnalyticsModel {
     numberOfPassStudents: { male: number; female: number; overall: number };
@@ -22,9 +28,15 @@ export default function SubjectwiseCountAnalysisTable({
   const [subjectCountWiseStatusCount, setSubjectCountWiseStatusCount] =
     useState([]);
 
+  const { data: subjectMasterList } =
+    useGetExamSubjectMasterByClassSectionIdQuery(
+      sectionId ? { examId, classId, sectionId } : { examId, classId },
+      { enabled: !!examId && !!classId }
+    );
+
   useEffect(() => {
     let overallStatusCount = [];
-    for (let i = 0; i < subjectCount; i++) {
+    for (let i = 0; i < subjectMasterList?.length; i++) {
       let subjectWiseStatusCount: AnalyticsModel = {
         numberOfPassStudents: { male: 0, female: 0, overall: 0 },
         numberOfFailStudents: { male: 0, female: 0, overall: 0 },
@@ -51,7 +63,7 @@ export default function SubjectwiseCountAnalysisTable({
     }
 
     setSubjectCountWiseStatusCount(overallStatusCount);
-  }, [students, subjectCount]);
+  }, [students, subjectMasterList]);
 
   return (
     subjectCountWiseStatusCount && (

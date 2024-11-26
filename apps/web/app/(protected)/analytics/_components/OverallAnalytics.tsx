@@ -538,6 +538,9 @@ export default function OverallAnalytics({
         <SubjectwiseCountAnalysisTable
           students={students}
           subjectCount={subjectList?.length}
+          classId={classId}
+          sectionId={sectionId}
+          examId={examId}
         />
       </section>
     </>

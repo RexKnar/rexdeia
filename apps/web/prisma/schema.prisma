@@ -661,6 +661,7 @@ model SubjectMaster {
   id                     String                   @id @default(uuid()) @map("_id") @db.Uuid
   name                   String
   isActive               Boolean
+  order                  Int                      @default(0)
   branchId               String?                  @db.Uuid
   isDeleted              Boolean                  @default(false)
   createdAt              DateTime?                @default(now())
@@ -672,7 +673,7 @@ model SubjectMaster {
   StudentElectiveSubject StudentElectiveSubject[]
   subject                Subject[]
   branch                 Branch?                  @relation(fields: [branchId], references: [id])
-} 
+}
 
 model Subject {
   id                        String                      @id @default(uuid()) @map("_id") @db.Uuid

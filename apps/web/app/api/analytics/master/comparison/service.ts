@@ -29,18 +29,20 @@ export async function getMasterMarkComparisonBySection(
   if (subjectList?.length > 0) {
     const analytics = await Promise.all(
       subjectList.map(async (subject) => {
-        const sectionAnalytics = await Promise.all(
-          sectionList.map(async (section) => {
-            return {
-              ...analyzeSubjectPerformance(
-                subject.id,
-                section.id,
-                studentsMarkList
-              ),
+        let sectionAnalytics = [];
+        sectionList.forEach((section) => {
+          const sectionAnalyticsForSubject = analyzeSubjectPerformance(
+            subject.id,
+            section.id,
+            studentsMarkList
+          );
+          if (sectionAnalyticsForSubject.totalStudents.overall > 0) {
+            sectionAnalytics.push({
+              ...sectionAnalyticsForSubject,
               section,
-            };
-          })
-        );
+            });
+          }
+        });
 
         return {
           subject,
