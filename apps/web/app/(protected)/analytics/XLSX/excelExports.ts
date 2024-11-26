@@ -5,6 +5,7 @@ export function downloadSubjectWiseOverallXLSX(
   analytics: any,
   examDetails: { name: any },
   classDetails: { name: any },
+  overallStats: any,
   sectionDetails: { name: any }
 ) {
   const ws = XLSX_utils.aoa_to_sheet([
@@ -17,6 +18,21 @@ export function downloadSubjectWiseOverallXLSX(
       classDetails.name || '',
       'Section  ',
       sectionDetails?.name || 'All',
+
+      `Overall Avg.`,
+      ` ${overallStats.avgMark?.toFixed(2)} `,
+      'Overall Pass Count',
+      ` ${overallStats.passCount} `,
+      'Overall Fail Count',
+      ` ${overallStats.failCount}`,
+      'Overall Pass Percentage',
+      ` ${overallStats.passPercentage?.toFixed(2)} %`,
+      'Overall Fail Percentage',
+      ` ${overallStats.failPercentage?.toFixed(2)}%`,
+      'Overall Highest Mark',
+      ` ${overallStats.highestMark} `,
+      'Overall Lowest Mark',
+      ` ${overallStats.lowestMark}`,
     ],
     [
       'Subject',

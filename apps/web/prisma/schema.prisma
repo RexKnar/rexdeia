@@ -212,10 +212,10 @@ model Organization {
   branches    Branch[]
   forms       Form[]
   createdBy   User               @relation(fields: [createdById], references: [id])
+  periods     Periods[]
   staff       Staff[]
   Student     Student[]
   users       UserOrganization[]
-  periods     Periods[]
 }
 
 model UserOrganization {
@@ -529,6 +529,7 @@ model Staff {
   udiseNumber                  String?
   enrollmentNumber             Int                       @default(autoincrement())
   academicSubjectForStaff      AcademicSubjectForStaff[]
+  periods                      Periods[]
   sections                     Section[]
   Branch                       Branch?                   @relation(fields: [branchId], references: [id])
   community                    Community?                @relation(fields: [communityId], references: [id])
@@ -543,7 +544,6 @@ model Staff {
   secondarySubject             SubjectMaster?            @relation("SecondarySubject", fields: [secondarySubjectId], references: [id])
   staffCategory                StaffCategory?            @relation(fields: [staffCategoryId], references: [id])
   user                         User                      @relation(fields: [userId], references: [id])
-  periods                      Periods[]
   staffSections                StaffSection[]
 }
 
@@ -563,10 +563,10 @@ model Batch {
   branch                  Branch                    @relation(fields: [branchId], references: [id])
   class                   Class[]
   exams                   Exam[]
+  periods                 Periods[]
   students                Student[]
   StudentElectiveSubject  StudentElectiveSubject[]
   StudentMapping          StudentMapping[]
-  periods                 Periods[]
 }
 
 model Class {
@@ -580,13 +580,13 @@ model Class {
   regulationId   String?          @db.Uuid
   createdAt      DateTime?        @default(now())
   updatedAt      DateTime?        @default(now())
+  classLevelId   String?          @db.Uuid
   batch          Batch?           @relation(fields: [batchId], references: [id])
   branch         Branch           @relation(fields: [branchId], references: [id])
-  regulation     Regulation?      @relation(fields: [regulationId], references: [id])
-  periods        Periods[]
   classLevel     ClassLevel?      @relation(fields: [classLevelId], references: [id])
-  classLevelId   String?          @db.Uuid
+  regulation     Regulation?      @relation(fields: [regulationId], references: [id])
   ExamGroup      ExamGroup[]
+  periods        Periods[]
   Section        Section[]
   studentmapping StudentMapping[]
   subjects       Subject[]
@@ -635,6 +635,7 @@ model Section {
   isDeleted               Boolean                   @default(false)
   academicSubjectForStaff AcademicSubjectForStaff[]
   ExamGroup               ExamGroup[]
+  periods                 Periods[]
   class                   Class                     @relation(fields: [classId], references: [id])
   medium                  Medium                    @relation(fields: [mediumId], references: [id])
   staff                   Staff?                    @relation(fields: [staffId], references: [id])
@@ -643,7 +644,6 @@ model Section {
   staffSections           StaffSection[]
   students                Student[]
   studentMapping          StudentMapping[]
-  periods                 Periods[]
 }
 
 model SectionToGroups {
@@ -661,7 +661,6 @@ model SubjectMaster {
   id                     String                   @id @default(uuid()) @map("_id") @db.Uuid
   name                   String
   isActive               Boolean
-  order                  Int                      @default(0)
   branchId               String?                  @db.Uuid
   isDeleted              Boolean                  @default(false)
   createdAt              DateTime?                @default(now())
@@ -694,6 +693,7 @@ model Subject {
   ExamSubject               ExamSubject[]
   ExamSubjectPartition      ExamSubjectPartition[]
   marks                     Mark[]
+  periods                   Periods[]
   Section                   Section[]
   StudentElectiveSubject    StudentElectiveSubject[]
   branch                    Branch?                     @relation(fields: [branchId], references: [id])
@@ -703,7 +703,6 @@ model Subject {
   subjectToAssessmentFormat SubjectToAssessmentFormat[]
   subjectToGroup            SubjectToGroup[]
   subjectToSubjectTypes     SubjectToSubjectType[]
-  periods                   Periods[]
 }
 
 model StudentElectiveSubject {
@@ -900,9 +899,9 @@ model ClassLevel {
   createdAt    DateTime?      @default(now())
   updatedAt    DateTime?      @default(now())
   isDeleted    Boolean        @default(false)
+  class        Class[]
   levelConfig  LevelConfig[]
   periodMaster PeriodMaster[]
-  class        Class[]
 }
 
 model LevelConfig {
@@ -916,8 +915,8 @@ model LevelConfig {
   createdAt    DateTime?      @default(now())
   updatedAt    DateTime?      @default(now())
   isDeleted    Boolean        @default(false)
-  classLevel   ClassLevel?    @relation(fields: [classLevelId], references: [id])
   classLevelId String?        @db.Uuid
+  classLevel   ClassLevel?    @relation(fields: [classLevelId], references: [id])
   periodMaster PeriodMaster[]
 }
 
@@ -960,17 +959,17 @@ model PeriodMaster {
   createdAt     DateTime?    @default(now())
   updatedAt     DateTime?    @default(now())
   isDeleted     Boolean      @default(false)
-  periodModeId  String?      @db.Uuid
-  levelConfigId String?      @db.Uuid
   classLevelId  String?      @db.Uuid
-  periodTypeId  String?      @db.Uuid
   daysId        String?      @db.Uuid
-  periods       Periods[]
-  periodType    PeriodType?  @relation(fields: [periodTypeId], references: [id])
-  days          Days?        @relation(fields: [daysId], references: [id])
+  periodModeId  String?      @db.Uuid
+  periodTypeId  String?      @db.Uuid
+  levelConfigId String?      @db.Uuid
   classLevel    ClassLevel?  @relation(fields: [classLevelId], references: [id])
-  periodMode    PeriodMode?  @relation(fields: [periodModeId], references: [id])
+  days          Days?        @relation(fields: [daysId], references: [id])
   levelConfig   LevelConfig? @relation(fields: [levelConfigId], references: [id])
+  periodMode    PeriodMode?  @relation(fields: [periodModeId], references: [id])
+  periodType    PeriodType?  @relation(fields: [periodTypeId], references: [id])
+  periods       Periods[]
 }
 
 model Periods {
@@ -981,19 +980,19 @@ model Periods {
   updatedAt      DateTime?     @default(now())
   isDeleted      Boolean       @default(false)
   subjectId      String?       @db.Uuid
+  batchId        String?       @db.Uuid
+  classId        String?       @db.Uuid
+  organizationId String?       @db.Uuid
+  periodMasterId String?       @db.Uuid
   sectionId      String?       @db.Uuid
   staffId        String?       @db.Uuid
-  classId        String?       @db.Uuid
-  periodMasterId String?       @db.Uuid
-  batchId        String?       @db.Uuid
-  organizationId String?       @db.Uuid
+  batch          Batch?        @relation(fields: [batchId], references: [id])
+  class          Class?        @relation(fields: [classId], references: [id])
+  organization   Organization? @relation(fields: [organizationId], references: [id])
   periodMaster   PeriodMaster? @relation(fields: [periodMasterId], references: [id])
   Section        Section?      @relation(fields: [sectionId], references: [id])
-  subject        Subject?      @relation(fields: [subjectId], references: [id])
-  class          Class?        @relation(fields: [classId], references: [id])
   staff          Staff?        @relation(fields: [staffId], references: [id])
-  batch          Batch?        @relation(fields: [batchId], references: [id])
-  organization   Organization? @relation(fields: [organizationId], references: [id])
+  subject        Subject?      @relation(fields: [subjectId], references: [id])
 }
 
 model NatureOfPosting {

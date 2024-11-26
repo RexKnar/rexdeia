@@ -430,6 +430,7 @@ export default function OverallAnalytics({
                   analytics,
                   examDetails,
                   classDetails,
+                  overallStats,
                   sectionDetails
                 )
               }
