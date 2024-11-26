@@ -1,3 +1,7 @@
+import { getClassById } from 'app/api/class/service';
+import { getExamById } from 'app/api/exam/[id]/service';
+import { getSectionById } from 'app/api/section/service';
+
 import { getStudentMarksByFilter, getStudentMarksByRank } from '../service';
 
 type MarkAnalyticsFilter = {
@@ -13,10 +17,28 @@ type MarkAnalyticsFilter = {
 };
 
 export async function getMasterMarksByFilter(filter: MarkAnalyticsFilter) {
-  const studentMarkList = await getStudentMarksByFilter(filter);
-  const analytics = getAnalytics(studentMarkList);
-  const rankedStudentList = await getStudentMarksByRank(studentMarkList);
-  return { markList: rankedStudentList, analytics };
+  try {
+    const classDetails = await getClassById(filter.classId);
+    let sectionDetails = null;
+    if (filter.sectionId) {
+      sectionDetails = await getSectionById(filter.sectionId);
+    }
+    const examDetails = await getExamById(filter.examId);
+    const studentMarkList = await getStudentMarksByFilter(filter);
+    const analytics = getAnalytics(studentMarkList);
+    const rankedStudentList = await getStudentMarksByRank(studentMarkList);
+
+    return {
+      markList: rankedStudentList,
+      analytics,
+      class: classDetails,
+      section: sectionDetails,
+      exam: examDetails,
+    };
+  } catch (error) {
+    // console.log(error);
+    return { markList: [], analytics: {}, error };
+  }
 }
 
 function getAnalytics(students) {

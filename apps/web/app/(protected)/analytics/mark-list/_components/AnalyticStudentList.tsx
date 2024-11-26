@@ -36,6 +36,9 @@ export function AnalyticStudentList() {
   const [examId, setExamId] = useState('');
   const [filterSubjects, setFilterSubjects] = useState([]);
   const [filterTotalMarks, setFilterTotalMarks] = useState(100);
+  const [examDetail, setExamDetail] = useState('');
+  const [sectionDetail, setSectionDetail] = useState('');
+  const [classDetail, setClassDetail] = useState('');
 
   const [sliderValues, setSliderValues] = useState([0, 100]);
   const handleValueChange = (newValue) => {
@@ -128,8 +131,12 @@ export function AnalyticStudentList() {
 
   useEffect(() => {
     if (markDetails) {
-      const { markList } = markDetails;
+      const { markList, exam, section, classDetails } = markDetails;
       setStudentMarkList(markList);
+      setStudentMarkList(markList);
+      setExamDetail(exam);
+      setSectionDetail(section);
+      setClassDetail(classDetails);
     }
   }, [markDetails]);
 
@@ -299,6 +306,9 @@ export function AnalyticStudentList() {
                 classId={classId}
                 sectionId={sectionId}
                 students={studentMarkList}
+                examDetails={examDetail}
+                sectionDetails={sectionDetail}
+                classDetails={classDetail}
               />
             </section>
           </TabsContent>
@@ -315,6 +325,9 @@ export function AnalyticStudentList() {
                   classId={classId}
                   sectionId={sectionId}
                   students={studentMarkList}
+                  examDetails={examDetail}
+                  sectionDetails={sectionDetail}
+                  classDetails={classDetail}
                 />
               )}
             </section>

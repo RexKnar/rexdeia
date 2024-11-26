@@ -18,20 +18,26 @@ import {
   TableHeader,
   TableRow,
 } from 'ui/components/ui/Table';
-import { utils as XLSX_utils, writeFile as XLSX_writeFile } from 'xlsx';
 
 import PdfDocument from '../pdf/_components/PdfDocument';
+import { downloadMarkListXLSX } from '../XLSX/excelExports';
 
 export default function StudentMarkList({
   students,
   classId,
   examId,
   sectionId,
+  examDetails,
+  sectionDetails,
+  classDetails,
 }: {
   students: any[];
   classId: string;
   sectionId?: string;
   examId: string;
+  examDetails: any;
+  sectionDetails: any;
+  classDetails: any;
 }) {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [pdfTableHeader, setPdfTableHeader] = useState([]);
@@ -42,6 +48,12 @@ export default function StudentMarkList({
     sectionId ? { examId, classId, sectionId } : { examId, classId },
     { enabled: !!examId && !!classId }
   );
+
+  // const { data: subjectMasterList } =
+  //   useGetExamSubjectMasterByClassSectionIdQuery(
+  //     sectionId ? { examId, classId, sectionId } : { examId, classId },
+  //     { enabled: !!examId && !!classId }
+  //   );
 
   const customStudentSort: SortingFn<any> = (rowA, rowB) => {
     const genderOrder = { Female: 0, Male: 1 };
@@ -396,36 +408,6 @@ export default function StudentMarkList({
     processStudents();
   }, [getStudentSubject, students, subjectList]);
 
-  function downloadCSV() {
-    const wb = XLSX_utils.book_new();
-    const ws = XLSX_utils.aoa_to_sheet(xlsxTableHeader);
-
-    pdfTableValues.forEach((row) => {
-      XLSX_utils.sheet_add_aoa(ws, [row], { origin: -1 });
-    });
-
-    ws['!merges'] = [];
-    let columnStart = 3;
-    pdfTableHeader.forEach((row) => {
-      const subtitleLength = row.subTitle?.length || 1;
-
-      let columnEnd = columnStart + subtitleLength - 1;
-
-      ws['!merges'].push({
-        s: { r: 0, c: columnStart },
-        e: { r: 0, c: columnEnd },
-      });
-
-      columnStart = columnEnd + 1;
-    });
-
-    // ws['!cols'] = [{ wch: 15 }, { wch: 8 }, { wch: 8 }];
-
-    XLSX_utils.book_append_sheet(wb, ws, 'Results');
-
-    XLSX_writeFile(wb, 'results_detailed.xlsx');
-  }
-
   return (
     <section>
       {subjectList && (
@@ -435,9 +417,24 @@ export default function StudentMarkList({
               <PdfDocument
                 headingList={pdfTableHeader as any}
                 tableValues={pdfTableValues}
+                examDetails={examDetails}
+                classDetails={classDetails}
+                sectionDetails={sectionDetails}
               />
             )}
-            <Button variant="outline" onClick={downloadCSV}>
+            <Button
+              variant="outline"
+              onClick={() =>
+                downloadMarkListXLSX(
+                  xlsxTableHeader,
+                  pdfTableHeader,
+                  pdfTableValues,
+                  examDetails,
+                  classDetails,
+                  sectionDetails
+                )
+              }
+            >
               Download XLSX <TableIcon className="ml-2 h-4 w-4" />
             </Button>
           </div>

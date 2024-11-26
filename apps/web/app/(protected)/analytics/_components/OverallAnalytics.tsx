@@ -9,8 +9,8 @@ import {
   TableHeader,
   TableRow,
 } from 'ui/components/ui/Table';
-import { utils as XLSX_utils, writeFile as XLSX_writeFile } from 'xlsx';
 
+import { downloadSubjectWiseOverallXLSX } from '../XLSX/excelExports';
 import SubjectwiseCountAnalysisTable from './SubjectwiseCountAnalysisTable';
 
 interface Analytics {
@@ -38,11 +38,17 @@ export default function OverallAnalytics({
   classId,
   examId,
   sectionId,
+  examDetails,
+  sectionDetails,
+  classDetails,
 }: {
   students: any[];
   classId: string;
   sectionId?: string;
   examId: string;
+  examDetails: any;
+  sectionDetails: any;
+  classDetails: any;
 }) {
   const [analytics, setAnalytics] = useState<Map<string, Analytics>>(new Map());
 
@@ -89,10 +95,6 @@ export default function OverallAnalytics({
         totalMarks.overall += mark;
         totalStudents[gender]++;
         totalStudents.overall++;
-        // if (subject.centum) {
-        //   result.centum[gender]++;
-        //   result.centum.overall++;
-        // }
 
         if (!subject.absentStatus && subject?.marks?.length > 0) {
           result.attendance[gender]++;
@@ -222,161 +224,6 @@ export default function OverallAnalytics({
       lowestMark,
     };
   }, [students]);
-
-  function downloadCSV() {
-    const wb = XLSX_utils.book_new();
-    const ws = XLSX_utils.aoa_to_sheet([
-      [
-        'Subject',
-        'Total Count',
-        null,
-        null,
-        'Pending Entry',
-        null,
-        null,
-        'Appeared',
-        null,
-        null,
-        'Absent',
-        null,
-        null,
-        'Average',
-        null,
-        null,
-        'No. of Pass',
-        null,
-        null,
-        'No. of Failures',
-        null,
-        null,
-        'Pass %',
-        null,
-        null,
-        'Failure %',
-        null,
-        null,
-        'Highest',
-        null,
-        null,
-        'Lowest',
-        null,
-        null,
-        'Centum',
-        null,
-        null,
-      ],
-      [
-        '',
-        'Overall',
-        'M',
-        'F',
-        'Overall',
-        'M',
-        'F',
-        'Overall',
-        'M',
-        'F',
-        'Overall',
-        'M',
-        'F',
-        'Overall',
-        'M',
-        'F',
-        'Overall',
-        'M',
-        'F',
-        'Overall',
-        'M',
-        'F',
-        'Overall',
-        'M',
-        'F',
-        'Overall',
-        'M',
-        'F',
-        'Overall',
-        'M',
-        'F',
-        'Overall',
-        'M',
-        'F',
-        'Overall',
-        'M',
-        'F',
-      ],
-    ]);
-
-    subjectList.map((subject) => {
-      const row = analytics.get(subject.id);
-
-      XLSX_utils.sheet_add_aoa(
-        ws,
-        [
-          [
-            subject.subject.name,
-            `${row?.totalStudents.overall}`,
-            ` ${row.totalStudents.male} `,
-            ` ${row.totalStudents.female}`,
-            `${row.markEntry.overall} `,
-            ` ${row.markEntry.male} `,
-            ` ${row.markEntry.female}`,
-            `${row.attendance.overall} `,
-            ` ${row.attendance.male} `,
-            ` ${row.attendance.female}`,
-            `${row.absent.overall} `,
-            ` ${row.absent.male} `,
-            ` ${row.absent.female}`,
-            `${((row.averageMark.male + row.averageMark.female) / 2).toFixed(2)} `,
-            ` ${row.averageMark.male.toFixed(2)} `,
-            ` ${row.averageMark.female.toFixed(2)}`,
-            `${row.numberOfPassStudents.overall} `,
-            ` ${row.numberOfPassStudents.male} `,
-            ` ${row.numberOfPassStudents.female}`,
-            `${row.numberOfFailStudents.overall} `,
-            ` ${row.numberOfFailStudents.male} `,
-            ` ${row.numberOfFailStudents.female}`,
-            `${row.passPercentage.overall.toFixed(2)}%`,
-            ` ${row.passPercentage.male.toFixed(2)}% `,
-            `${row.passPercentage.female.toFixed(2)}%`,
-            `${row.failPercentage.overall.toFixed(2)}% `,
-            ` ${row.failPercentage.male.toFixed(2)}% `,
-            ` ${row.failPercentage.female.toFixed(2)}%`,
-            `${Math.max(row.highestMark.overall)} `,
-            ` ${row.highestMark.male} `,
-            ` ${row.highestMark.female}`,
-            `${Math.min(row.lowestMark.overall)} `,
-            ` ${row.lowestMark.male} `,
-            ` ${row.lowestMark.female}`,
-            `${row.centum.overall} `,
-            ` ${row.centum.male} `,
-            ` ${row.centum.female}`,
-          ],
-        ],
-        { origin: -1 }
-      );
-    });
-
-    ws['!merges'] = [
-      { s: { r: 0, c: 1 }, e: { r: 0, c: 3 } },
-      { s: { r: 0, c: 4 }, e: { r: 0, c: 6 } },
-      { s: { r: 0, c: 7 }, e: { r: 0, c: 9 } },
-      { s: { r: 0, c: 10 }, e: { r: 0, c: 12 } },
-      { s: { r: 0, c: 13 }, e: { r: 0, c: 15 } },
-      { s: { r: 0, c: 16 }, e: { r: 0, c: 18 } },
-      { s: { r: 0, c: 19 }, e: { r: 0, c: 21 } },
-      { s: { r: 0, c: 22 }, e: { r: 0, c: 24 } },
-      { s: { r: 0, c: 25 }, e: { r: 0, c: 27 } },
-      { s: { r: 0, c: 28 }, e: { r: 0, c: 30 } },
-      { s: { r: 0, c: 31 }, e: { r: 0, c: 33 } },
-      { s: { r: 0, c: 34 }, e: { r: 0, c: 36 } },
-    ];
-
-    ws['!cols'] = [{ wch: 15 }, { wch: 8 }, { wch: 8 }];
-
-    XLSX_utils.book_append_sheet(wb, ws, 'Results');
-
-    XLSX_writeFile(wb, 'results_detailed.xlsx');
-  }
 
   const renderSubjectRow = (subject) => {
     const subjectAnalytics = analytics.get(subject.id);
@@ -575,7 +422,18 @@ export default function OverallAnalytics({
       <section>
         {subjectList && (
           <div className="mt-4 space-y-4 overflow-x-auto rounded-md bg-white p-6 print:m-0 print:p-0 ">
-            <Button variant="outline" onClick={downloadCSV}>
+            <Button
+              variant="outline"
+              onClick={() =>
+                downloadSubjectWiseOverallXLSX(
+                  subjectList,
+                  analytics,
+                  examDetails,
+                  classDetails,
+                  sectionDetails
+                )
+              }
+            >
               Download XLSX <TableIcon className="ml-2 h-4 w-4" />
             </Button>
             <Table>
