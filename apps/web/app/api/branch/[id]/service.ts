@@ -33,5 +33,8 @@ export async function getBranchById(id: string) {
     where: {
       id: id,
     },
+    include: {
+      organization: true,
+    },
   });
 }

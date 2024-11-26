@@ -31,6 +31,9 @@ export function AnalyticStudentList() {
   const [classId, setClassId] = useState('');
   const [sectionId, setSectionId] = useState('');
   const [examId, setExamId] = useState('');
+  const [examDetail, setExamDetail] = useState('');
+  const [sectionDetail, setSectionDetail] = useState('');
+  const [classDetail, setClassDetail] = useState('');
 
   const { data: examList } = useGetExamsBySectionIdQuery(
     sectionId ? { classId, sectionId } : { classId },
@@ -71,8 +74,11 @@ export function AnalyticStudentList() {
 
   useEffect(() => {
     if (markDetails) {
-      const { markList } = markDetails;
+      const { markList, exam, section, class: classDetails } = markDetails;
       setStudentMarkList(markList);
+      setExamDetail(exam);
+      setSectionDetail(section);
+      setClassDetail(classDetails);
     }
   }, [markDetails]);
 
@@ -181,6 +187,9 @@ export function AnalyticStudentList() {
               classId={classId}
               sectionId={sectionId}
               students={studentMarkList}
+              examDetails={examDetail}
+              sectionDetails={sectionDetail}
+              classDetails={classDetail}
             />
           </section>
         </TabsContent>
@@ -201,6 +210,9 @@ export function AnalyticStudentList() {
                 classId={classId}
                 sectionId={sectionId}
                 students={studentMarkList}
+                examDetails={examDetail}
+                sectionDetails={sectionDetail}
+                classDetails={classDetail}
               />
             )}
           </section>

@@ -18,6 +18,7 @@ export async function getStudentMarksByFilter(
     | { classId: string; examId: string; sectionId?: string }
 ) {
   const { classId, examId, sectionId } = filter;
+
   const mainClause = {};
   if (sectionId) {
     mainClause['sectionId'] = sectionId;

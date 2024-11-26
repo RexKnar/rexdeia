@@ -38,10 +38,12 @@ export async function getSectionById(id: string) {
       },
     },
   });
-  sectionDetails['group'] = sectionDetails.sectionToGroups.map((item) => {
-    return item.group;
-  });
-  delete sectionDetails.sectionToGroups;
+  if (sectionDetails?.sectionToGroups) {
+    sectionDetails['group'] = sectionDetails.sectionToGroups.map((item) => {
+      return item.group;
+    });
+    delete sectionDetails.sectionToGroups;
+  }
   return sectionDetails;
 }
 

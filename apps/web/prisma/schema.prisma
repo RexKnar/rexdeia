@@ -672,7 +672,7 @@ model SubjectMaster {
   StudentElectiveSubject StudentElectiveSubject[]
   subject                Subject[]
   branch                 Branch?                  @relation(fields: [branchId], references: [id])
-}
+} 
 
 model Subject {
   id                        String                      @id @default(uuid()) @map("_id") @db.Uuid
