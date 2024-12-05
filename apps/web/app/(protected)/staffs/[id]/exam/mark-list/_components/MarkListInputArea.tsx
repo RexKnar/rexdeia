@@ -17,18 +17,10 @@ export default function MarkListInputArea() {
   const { id } = useParams<{ id: string }>();
   const { data: subjectListResponse } = useGetSubjectByStaffIdQuery(id);
 
-  // const [studentMarkList, setStudentMarkList] = useState([]);
-
-  // const page = 1;
-  // const limit = 999;
-  // const filter = {};
   const [classId, setClassId] = useState('');
   const [sectionId, setSectionId] = useState('');
   const [subjectId, setSubjectId] = useState('');
   const [examId, setExamId] = useState('');
-  // const [examDetail, setExamDetail] = useState('');
-  // const [sectionDetail, setSectionDetail] = useState('');
-  // const [classDetail, setClassDetail] = useState('');
   const [classList, setClassList] = useState([]);
   const [sectionList, setSectionList] = useState({});
   const [subjectList, setSubjectList] = useState({});
@@ -40,23 +32,7 @@ export default function MarkListInputArea() {
     }
   );
 
-  // const { data: classList } = useGetClassListQuery({
-  //   page,
-  //   limit,
-  //   filter,
-  // });
-  // const { data: sectionList } = useGetAllSectionByClassIdQuery(
-  //   {
-  //     filter,
-  //     classId,
-  //   },
-  //   {
-  //     enabled: !!classId,
-  //   }
-  // );
-
   useEffect(() => {
-    console.log(subjectListResponse);
     let classes = [];
     let sections = {};
     let subjects = {};
@@ -89,8 +65,9 @@ export default function MarkListInputArea() {
   }, [subjectListResponse]);
 
   useEffect(() => {
-    console.log(classList, sectionList, subjectList);
-  }, [classList, sectionList, subjectList]);
+    // eslint-disable-next-line no-console
+    console.log(classList, sectionList, subjectList, subjectId, examId);
+  }, [classList, sectionList, subjectList, subjectId, examId]);
   return (
     <section className="space-y-2 rounded-md bg-white p-6">
       <div className="flex gap-4">
