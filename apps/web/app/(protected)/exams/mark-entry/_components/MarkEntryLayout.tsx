@@ -8,6 +8,7 @@ import { useGetExamsBySectionIdQuery } from 'lib/queries/exams/useGetExamBySecti
 import { useGetStaffsBySectionQuery } from 'lib/queries/mark-entry/useGetStaffsBySectionQuery';
 import { useGetAllSectionByClassIdQuery } from 'lib/queries/section/useGetAllSectionsByClassIdQuery';
 import { ChevronDown, Loader2 } from 'lucide-react';
+import { redirect } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 import { useEffect, useState } from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
@@ -95,6 +96,9 @@ export function MarkEntryLayout() {
         variant: 'default',
         description: 'Mark Entered successfully',
       });
+      redirect(
+        `/staffs/${staffId}/exam/mark-list?examId=${examId}&sectionId=${sectionId}&classId=${classId}`
+      );
     }
   }, [isMarkEntrySuccess, toast]);
 

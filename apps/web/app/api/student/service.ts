@@ -319,31 +319,34 @@ export async function getRecentlyAddedStudentsList({
 }
 export async function getAllStudentsBySectionIdWithGroup(sectionId: string) {
   const session = await getServerSession(authOptions);
-  // const students = await db.student.findMany({
+  // const studentMappings = await db.studentMapping.findMany({
   //   where: {
-  //     branchId: session.branchId,
-  //     organizationId: session.organizationId,
-  //     studentMapping: {
-  //       some: {
-  //         sectionId: sectionId,
-  //         isCurrent: true,
-  //       },
+  //     sectionId: sectionId,
+  //     isCurrent: true,
+  //     student: {
+  //       branchId: session.branchId,
+  //       organizationId: session.organizationId,
+  //       status: 'Active',
+  //       isDeleted: false,
   //     },
   //   },
   //   include: {
-  //     studentMapping: {
+  //     student: {
   //       include: {
-  //         group: true,
+  //         community: true,
   //       },
   //     },
+  //     group: true,
+  //     batch: true,
+  //     class: true,
+  //     section: true,
   //   },
+  //   orderBy: [
+  //     {
+  //       rollNumber: 'asc',
+  //     },
+  //   ],
   // });
-
-  // const result = students.map(({ studentMapping, ...rest }) => ({
-  //   ...rest,
-  //   group: studentMapping.map((group) => group.group),
-  // }));
-
   const studentMappings = await db.studentMapping.findMany({
     where: {
       sectionId: sectionId,
@@ -369,6 +372,16 @@ export async function getAllStudentsBySectionIdWithGroup(sectionId: string) {
     orderBy: [
       {
         rollNumber: 'asc',
+      },
+      {
+        student: {
+          gender: 'asc',
+        },
+      },
+      {
+        student: {
+          firstName: 'asc',
+        },
       },
     ],
   });

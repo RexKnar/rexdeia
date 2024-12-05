@@ -429,20 +429,14 @@ export const menuItem = {
       path: '',
       children: [
         {
-          id: 'dashboard',
-          label: 'Dashboard',
-          icon: FileText,
-          path: '/analytics',
-        },
-        {
           id: 'master-marks',
-          label: 'Master',
+          label: 'Master Marks',
           icon: FileText,
-          path: '/analytics/master',
+          path: '/staffs/00ea7e77-1a3a-484f-b027-da560b2ddb3d/exam/mark-list',
         },
         {
-          id: 'marks',
-          label: 'Marks',
+          id: 'range',
+          label: 'Range',
           icon: FileText,
           path: '/analytics/mark-list',
         },
