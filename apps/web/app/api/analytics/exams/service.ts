@@ -59,6 +59,11 @@ export async function getExamAnalyticsByClass(filter: MarkAnalyticsFilter) {
         },
         class: true,
       },
+      orderBy: [
+        {
+          rollNumber: 'asc',
+        },
+      ],
     }),
   ]);
   let subjectCount = 0;

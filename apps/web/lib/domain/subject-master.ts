@@ -1,6 +1,7 @@
 export type SubjectMasterModel = {
   id: string;
   name: string;
+  order: number;
   createdAt: string;
   updatedAt: string;
   isActive: boolean;

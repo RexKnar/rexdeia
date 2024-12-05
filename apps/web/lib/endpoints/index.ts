@@ -198,6 +198,7 @@ export const GET_PERIOD_MODE_BY_ID = `GET_PERIOD_MODE_BY_ID`;
 export const UPDATE_PERIOD_MODE_BY_ID = `UPDATE_PERIOD_MODE_BY_ID`;
 export const DELETE_PERIOD_MODE_BY_ID = `DELETE_PERIOD_MODE_BY_ID`;
 export const ARCHIVE_STUDENT_BY_ID = `ARCHIVE_STUDENT_BY_ID`;
+export const UPDATE_ROLLNUMBERS = `UPDATE_ROLLNUMBERS`;
 
 export default <EndpointDetails>{
   ...ExamAnalyticsEndpoints,
@@ -982,5 +983,9 @@ export default <EndpointDetails>{
   [DELETE_PERIOD_MODE_BY_ID]: {
     requestType: 'DELETE',
     endpoint: '/api/periodMode/[id]',
+  },
+  [UPDATE_ROLLNUMBERS]: {
+    requestType: 'PUT',
+    endpoint: '/api/class/[id]/sections/[sectionId]/roll-number',
   },
 };

@@ -445,6 +445,11 @@ export async function getAllStudentByClassIdForAssigning(id: string) {
         },
       },
     },
+    orderBy: [
+      {
+        rollNumber: 'asc',
+      },
+    ],
   });
   const studentResponse = studentList.map((students) => students.student);
   return studentResponse;

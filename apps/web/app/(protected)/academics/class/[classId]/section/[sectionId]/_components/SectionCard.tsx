@@ -11,9 +11,10 @@ import {
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-  Text,
 } from 'ui';
 import { cn } from 'utils';
+
+import { LinkButton } from '@/components/LinkButton';
 
 type SectionCardProps = {
   id: string;
@@ -41,7 +42,12 @@ export function SectionCard({ classId, id, name }: SectionCardProps) {
     >
       <div className="flex">
         <div className="my-auto w-2/4 px-2">
-          <Text variant="base-bold">{name}</Text>
+          <LinkButton
+            className={'base-bold'}
+            url={`/academics/class/${classId}/section/${id}`}
+          >
+            {name}
+          </LinkButton>
         </div>
 
         <div className="my-auto w-2/4 ">
