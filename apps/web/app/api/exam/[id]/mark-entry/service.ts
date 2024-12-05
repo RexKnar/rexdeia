@@ -55,6 +55,7 @@ export async function getExamConfigWithSubjectPartion(
         },
       },
       select: {
+        rollNumber: true,
         student: {
           select: {
             id: true,
@@ -121,6 +122,9 @@ export async function getExamConfigWithSubjectPartion(
         },
       },
       orderBy: [
+        {
+          rollNumber: 'asc',
+        },
         {
           student: {
             gender: 'desc',
