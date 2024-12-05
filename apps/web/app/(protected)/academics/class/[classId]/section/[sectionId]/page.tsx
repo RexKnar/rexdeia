@@ -10,6 +10,7 @@ import {
 } from 'next/navigation';
 import { Button, Tabs, TabsContent, TabsList, TabsTrigger, Text } from 'ui';
 
+import { LinkButton } from '@/components/LinkButton';
 import { PageTitle } from '@/components/PageTitle';
 
 import { useGetSectionByIdQuery } from '../../../../../../../lib/queries/section/useGetSectionByIdQuery';
@@ -39,7 +40,10 @@ export default function Page() {
   const pathname = usePathname();
   const router = useRouter();
   const searchParams = useSearchParams();
-  const { sectionId } = useParams<{ sectionId: string }>();
+  const { sectionId, classId } = useParams<{
+    sectionId: string;
+    classId: string;
+  }>();
 
   const { data: getSectionResponse, isLoading: isGetSectionResponseLoading } =
     useGetSectionByIdQuery(sectionId);
@@ -138,17 +142,25 @@ export default function Page() {
         </TabsContent>
         <TabsContent value="Students">
           <section className="pt-5">
-            <Button
-              variant="default"
-              onClick={async () => {
-                const params = new URLSearchParams(searchParams);
-                params.set('isAssignStudentFlyoutOpen', 'true');
-                router.replace(pathname + '?' + params.toString());
-              }}
-              className="absolute right-0 top-0"
-            >
-              Assign Student
-            </Button>
+            <section className="absolute right-0 top-0 flex gap-3 ">
+              <LinkButton
+                variant="outline"
+                url={`/academics/class/assign-roll-number?classId=${classId}&sectionId=${sectionId}`}
+              >
+                Assign Role Number
+              </LinkButton>
+              <Button
+                variant="default"
+                onClick={async () => {
+                  const params = new URLSearchParams(searchParams);
+                  params.set('isAssignStudentFlyoutOpen', 'true');
+                  router.replace(pathname + '?' + params.toString());
+                }}
+                className=""
+              >
+                Assign Students
+              </Button>
+            </section>
             <StudentList />
           </section>
         </TabsContent>

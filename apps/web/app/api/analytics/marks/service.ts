@@ -72,6 +72,9 @@ export async function getMarksByFilter(filter: MarkAnalyticsFilterModel) {
       },
       orderBy: [
         {
+          rollNumber: 'asc',
+        },
+        {
           student: {
             gender: 'asc',
           },

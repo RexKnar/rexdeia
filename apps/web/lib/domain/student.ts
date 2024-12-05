@@ -52,6 +52,7 @@ export type Student = {
 
   additionalAttributes: any;
   studentMapping?: StudentMappingModel[];
+  academicDetails?: any;
 };
 
 export type AddStudentModel = Omit<

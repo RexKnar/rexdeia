@@ -424,21 +424,22 @@ model Student {
 }
 
 model StudentMapping {
-  studentId String   @db.Uuid
-  classId   String   @db.Uuid
-  sectionId String?  @db.Uuid
-  groupId   String   @db.Uuid
-  id        String   @id @default(uuid()) @map("_id") @db.Uuid
-  mediumId  String?  @db.Uuid
-  batchId   String?  @db.Uuid
-  isCurrent Boolean  @default(true)
-  remark    String?  @default("")
-  batch     Batch?   @relation(fields: [batchId], references: [id])
-  class     Class    @relation(fields: [classId], references: [id])
-  group     Group    @relation(fields: [groupId], references: [id])
-  medium    Medium?  @relation(fields: [mediumId], references: [id])
-  section   Section? @relation(fields: [sectionId], references: [id])
-  student   Student  @relation(fields: [studentId], references: [id])
+  studentId  String   @db.Uuid
+  classId    String   @db.Uuid
+  sectionId  String?  @db.Uuid
+  groupId    String   @db.Uuid
+  id         String   @id @default(uuid()) @map("_id") @db.Uuid
+  mediumId   String?  @db.Uuid
+  batchId    String?  @db.Uuid
+  isCurrent  Boolean  @default(true)
+  rollNumber Int?     @default(0)
+  remark     String?  @default("")
+  batch      Batch?   @relation(fields: [batchId], references: [id])
+  class      Class    @relation(fields: [classId], references: [id])
+  group      Group    @relation(fields: [groupId], references: [id])
+  medium     Medium?  @relation(fields: [mediumId], references: [id])
+  section    Section? @relation(fields: [sectionId], references: [id])
+  student    Student  @relation(fields: [studentId], references: [id])
 }
 
 model Staff {
@@ -660,6 +661,7 @@ model SectionToGroups {
 model SubjectMaster {
   id                     String                   @id @default(uuid()) @map("_id") @db.Uuid
   name                   String
+  order                  Int?                     @default(1)
   isActive               Boolean
   branchId               String?                  @db.Uuid
   isDeleted              Boolean                  @default(false)

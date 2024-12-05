@@ -77,6 +77,9 @@ export async function getStudentMarksByFilter(
       },
       orderBy: [
         {
+          rollNumber: 'asc',
+        },
+        {
           student: {
             gender: 'asc',
           },

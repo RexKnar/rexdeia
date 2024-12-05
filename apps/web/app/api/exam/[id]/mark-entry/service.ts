@@ -81,6 +81,7 @@ export async function getExamConfigWithSubjectPartion(
                           academicSubjectForStaff: {
                             some: {
                               staffId: staffId,
+                              sectionId: sectionId,
                             },
                           },
                         },
