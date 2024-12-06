@@ -1,5 +1,4 @@
 import { db } from 'lib/db';
-import { sortByRank } from 'lib/utils/sort';
 
 export type MarkAnalyticsFilterModel = {
   classId?: string;
@@ -243,5 +242,5 @@ export async function getStudentMarksByRank(studentList) {
     return { ...student, rank };
   });
 
-  return rankedStudentList.sort(sortByRank);
+  return rankedStudentList;
 }
