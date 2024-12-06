@@ -49,12 +49,6 @@ export default function StudentMarkList({
     { enabled: !!examId && !!classId }
   );
 
-  // const { data: subjectMasterList } =
-  //   useGetExamSubjectMasterByClassSectionIdQuery(
-  //     sectionId ? { examId, classId, sectionId } : { examId, classId },
-  //     { enabled: !!examId && !!classId }
-  //   );
-
   const customStudentSort: SortingFn<any> = (rowA, rowB) => {
     const genderOrder = { Female: 0, Male: 1 };
     const genderCompare =
