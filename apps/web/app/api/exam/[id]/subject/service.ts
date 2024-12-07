@@ -36,6 +36,7 @@ export async function getExamSubjectsByClassSectionId(
           name: true,
           subjectOrder: true,
           subjectMaster: true,
+          academicSubjectForStaff: true,
         },
       },
       examSubjectPartition: {
@@ -100,7 +101,6 @@ export async function getExamSubjectsByMaster(
     },
   });
 
-  // Group subjects by subjectMaster
   const groupedSubjects = response.reduce(
     (acc, examSubject) => {
       const subjectMasterId = examSubject.subject.subjectMaster.id;
@@ -129,6 +129,5 @@ export async function getExamSubjectsByMaster(
     {} as Record<string, { id: string; name: string; subjects: any[] }>
   );
 
-  // Convert the grouped subjects object to an array
   return Object.values(groupedSubjects);
 }
