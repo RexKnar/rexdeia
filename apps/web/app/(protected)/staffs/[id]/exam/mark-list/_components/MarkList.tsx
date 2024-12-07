@@ -1,5 +1,6 @@
 'use client';
 import { useGetMarkMasterWithFilterQuery } from 'lib/queries/analytics/exam/useGetMarkMasterWithFilterQuery';
+import { useGetAnalyticsSubjectsForStaffQuery } from 'lib/queries/analytics/subject/useGetAnalyticsSubjectsForStaffQuery';
 import { useGetExamsBySectionIdQuery } from 'lib/queries/exams/useGetExamBySectionIdQuery';
 import { useGetSubjectByStaffIdQuery } from 'lib/queries/staff/useGetSubjectListByStaffIdQurey';
 import { useParams, useSearchParams } from 'next/navigation';
@@ -37,7 +38,7 @@ export default function MarkList() {
   const [examId, setExamId] = useState('');
   const [classList, setClassList] = useState([]);
   const [sectionList, setSectionList] = useState({});
-  const [subjectList, setSubjectList] = useState({});
+  // const [subjectList, setSubjectList] = useState({});
   const [examDetail, setExamDetail] = useState('');
   const [sectionDetail, setSectionDetail] = useState('');
   const [classDetail, setClassDetail] = useState('');
@@ -98,7 +99,7 @@ export default function MarkList() {
 
       setClassList(classes);
       setSectionList(sections);
-      setSubjectList(subjects);
+      // setSubjectList(subjects);
     }
   }, [subjectListResponse]);
 
@@ -114,6 +115,15 @@ export default function MarkList() {
     },
     {
       enabled: !!examId,
+    }
+  );
+
+  const { data: subjectList } = useGetAnalyticsSubjectsForStaffQuery(
+    staffId || id,
+    sectionId,
+
+    {
+      enabled: !!sectionId,
     }
   );
 
@@ -200,8 +210,8 @@ export default function MarkList() {
               <SelectContent>
                 <SelectGroup>
                   <SelectItem value="all">All</SelectItem>
-                  {subjectList[sectionId]
-                    ? subjectList[sectionId]?.map((item) => (
+                  {subjectList
+                    ? subjectList?.map((item) => (
                         <SelectItem key={item.id} value={item.id}>
                           {item.name}
                         </SelectItem>
@@ -259,7 +269,7 @@ export default function MarkList() {
               examDetails={examDetail}
               sectionDetails={sectionDetail}
               classDetails={classDetail}
-              subjectList={subjectList[sectionId]}
+              subjectList={subjectList}
             />
           </section>
         </TabsContent>
@@ -272,7 +282,7 @@ export default function MarkList() {
                 examDetails={examDetail}
                 sectionDetails={sectionDetail}
                 classDetails={classDetail}
-                subjectList={subjectList[sectionId]}
+                subjectList={subjectList}
               />
             )}
           </section>
