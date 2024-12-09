@@ -5,6 +5,7 @@ import { getServerSession } from 'next-auth';
 export async function getAnalyticsSubjectByStaffId(staffId, sectionId) {
   const session = await getServerSession(authOptions);
   const currentBatch = session?.currentBatch;
+
   const [isIncharge] = staffId
     ? await Promise.all([
         db.academicSubjectForStaff.findFirst({
@@ -17,6 +18,7 @@ export async function getAnalyticsSubjectByStaffId(staffId, sectionId) {
         }),
       ])
     : [false];
+
   const subjectResponse = await db.academicSubjectForStaff.findMany({
     where: isIncharge
       ? { academicYearId: currentBatch, isIncharge: false, sectionId }
@@ -28,13 +30,25 @@ export async function getAnalyticsSubjectByStaffId(staffId, sectionId) {
         },
 
     select: {
-      subject: true,
+      subject: {
+        include: {
+          subjectMaster: true,
+        },
+      },
     },
   });
 
-  const response = subjectResponse.flatMap((academicSubject) => {
-    return academicSubject.subject;
+  const subjects = subjectResponse.flatMap(
+    (academicSubject) => academicSubject.subject
+  );
+
+  const uniqueSubjects = Array.from(
+    new Map(subjects.map((subject) => [subject.id, subject])).values()
+  );
+
+  const sortedSubjects = uniqueSubjects.sort((a, b) => {
+    return a.subjectMaster.order - b.subjectMaster.order;
   });
 
-  return response;
+  return sortedSubjects;
 }

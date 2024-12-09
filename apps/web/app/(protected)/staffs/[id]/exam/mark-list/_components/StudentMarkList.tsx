@@ -7,7 +7,6 @@ import {
   SortingState,
   useReactTable,
 } from '@tanstack/react-table';
-import PdfDocument from 'app/(protected)/analytics/pdf/_components/PdfDocument';
 import { downloadMarkListXLSX } from 'app/(protected)/analytics/XLSX/excelExports';
 import { ArrowUpDown, TableIcon } from 'lucide-react';
 import { useCallback, useEffect, useState } from 'react';
@@ -19,6 +18,8 @@ import {
   TableHeader,
   TableRow,
 } from 'ui/components/ui/Table';
+
+import StudentMarksPDFGenerator from '../pdf/StaffMarkPdfDoc';
 
 export default function StudentMarkList({
   students,
@@ -39,12 +40,6 @@ export default function StudentMarkList({
   const [pdfTableHeader, setPdfTableHeader] = useState([]);
   const [pdfTableValues, setPdfTableValues] = useState([]);
   const [xlsxTableHeader, setXlsxTableHeader] = useState([]);
-
-  // const { data: subjectMasterList } =
-  //   useGetExamSubjectMasterByClassSectionIdQuery(
-  //     sectionId ? { examId, classId, sectionId } : { examId, classId },
-  //     { enabled: !!examId && !!classId }
-  //   );
 
   const customStudentSort: SortingFn<any> = (rowA, rowB) => {
     const genderOrder = { Female: 0, Male: 1 };
@@ -170,6 +165,117 @@ export default function StudentMarkList({
           },
         });
       });
+      if (subjectList.length > 1) {
+        baseColumns.push(
+          {
+            accessorKey: 'totalMark',
+            header: ({ column }) => (
+              <Button
+                variant="ghost"
+                onClick={() =>
+                  column.toggleSorting(column.getIsSorted() === 'asc')
+                }
+                className="w-full"
+              >
+                Total
+                <ArrowUpDown className="ml-2 h-4 w-4" />
+              </Button>
+            ),
+            cell: ({ row }) => (
+              <div>
+                {row.original.failingStatus ? (
+                  <>
+                    <p className="text-red-500 print:p-0 print:text-sm">(F)</p>
+                    <p className="text-red-500 print:p-0 print:text-sm">
+                      {row.original.totalMark}(
+                      {row.original.totalPercentage?.toFixed(2)}%)
+                    </p>
+                  </>
+                ) : (
+                  <>
+                    <p className="text-green-500 print:p-0 print:text-sm">
+                      (P)
+                    </p>
+                    <p className="text-green-500 print:p-0 print:text-sm">
+                      {row.original.totalMark}(
+                      {row.original.totalPercentage?.toFixed(2)}%)
+                    </p>
+                  </>
+                )}
+              </div>
+            ),
+          },
+          {
+            accessorKey: 'rank',
+            header: ({ column }) => (
+              <Button
+                variant="ghost"
+                onClick={() =>
+                  column.toggleSorting(column.getIsSorted() === 'asc')
+                }
+                className="w-full"
+              >
+                Rank
+                <ArrowUpDown className="ml-2 h-4 w-4" />
+              </Button>
+            ),
+            cell: ({ row }) => (
+              <div className="text-center">
+                {row.original.rank || '-'}
+                <br />
+                {!row.original.attendance && (
+                  <span className="text-red-500 print:p-0 print:text-sm">
+                    A
+                  </span>
+                )}
+                <br />
+                Centum: {row.original.centumCount || '0'}
+              </div>
+            ),
+            sortingFn: (rowA, rowB, columnId) => {
+              const valueA = rowA.getValue(columnId);
+              const valueB = rowB.getValue(columnId);
+
+              if (valueA === 'A' && valueB === 'A') return 0;
+              if (valueA === 'A') return 1;
+              if (valueB === 'A') return -1;
+
+              if (valueA === '-' && valueB === '-') return 0;
+              if (valueA === '-') return 1;
+              if (valueB === '-') return -1;
+
+              const numA =
+                typeof valueA === 'number'
+                  ? valueA
+                  : typeof valueA === 'string'
+                    ? parseFloat(valueA)
+                    : NaN;
+
+              const numB =
+                typeof valueB === 'number'
+                  ? valueB
+                  : typeof valueB === 'string'
+                    ? parseFloat(valueB)
+                    : NaN;
+
+              const isValidRankA = !isNaN(numA) && numA >= 1 && numA <= 99;
+              const isValidRankB = !isNaN(numB) && numB >= 1 && numB <= 99;
+
+              if (isValidRankA && isValidRankB) {
+                return numA - numB;
+              }
+
+              if (isValidRankA) return -1;
+              if (isValidRankB) return 1;
+
+              if (valueA == null || valueA === '') return 1;
+              if (valueB == null || valueB === '') return -1;
+
+              return 0;
+            },
+          }
+        );
+      }
     }
 
     return baseColumns;
@@ -194,13 +300,16 @@ export default function StudentMarkList({
         subjectName: subject.name,
         subTitle: [],
       }));
-      let excelHeading = ['', '', ''];
-      let excelSubHeading = ['#', 'Student Name', 'Section'];
+      let excelHeading = ['#', 'Student Name'];
       subjectList?.forEach((subject) => {
         excelHeading.push(subject.name);
       });
+      if (subjectList.length > 1) {
+        excelHeading.push('Total');
+        excelHeading.push('Rank');
+      }
 
-      setXlsxTableHeader([excelHeading, excelSubHeading]);
+      setXlsxTableHeader([excelHeading]);
 
       heading?.length > 0
         ? setPdfTableHeader([...heading])
@@ -217,10 +326,9 @@ export default function StudentMarkList({
             const indexValue = index + 1;
             tableValues.push(indexValue.toString());
             tableValues.push(`${student?.firstName} ${student?.lastName}`);
-            tableValues.push(student.section?.name);
 
-            let totalMark = 0;
-            let failingStatus = false;
+            // let totalMark = 0;
+            // let failingStatus = false;
 
             await Promise.all(
               subjectList.map(async (subject) => {
@@ -234,7 +342,6 @@ export default function StudentMarkList({
                     Number(studentDetail?.subjectTotalMark) || 0;
                   if (studentDetail?.failingStatus) {
                     tableValues.push(`${subjectTotal}(F)`);
-                    failingStatus = true;
                   } else {
                     tableValues.push(`${subjectTotal}(P)`);
                   }
@@ -243,9 +350,14 @@ export default function StudentMarkList({
                 }
               })
             );
-            const finalTotal = totalMark | 0;
-            const finalStatus = failingStatus ? 'F' : 'P';
-            tableValues.push(`${finalTotal}(${finalStatus})`);
+
+            const finalTotal = student.totalMark | 0;
+            const finalStatus = student.failingStatus ? 'F' : 'P';
+
+            if (subjectList.length > 1) {
+              tableValues.push(`${finalTotal}(${finalStatus})`);
+              tableValues.push(student.rank.toString());
+            }
 
             return tableValues;
           })
@@ -264,12 +376,13 @@ export default function StudentMarkList({
         <div className="mt-4 space-y-4 overflow-x-auto rounded-md bg-white p-6 print:m-0 print:p-0">
           <div className="w-full">
             {pdfTableHeader?.length > 0 && (
-              <PdfDocument
+              <StudentMarksPDFGenerator
                 headingList={pdfTableHeader as any}
                 tableValues={pdfTableValues}
                 examDetails={examDetails}
                 classDetails={classDetails}
                 sectionDetails={sectionDetails}
+                subjectList={subjectList}
               />
             )}
             <Button

@@ -114,14 +114,14 @@ export function downloadSubjectWiseOverallXLSX(
     ],
   ]);
 
-  subjectList.map((subject: { id: any; subject: { name: any } }) => {
+  subjectList.map((subject: any) => {
     const row = analytics.get(subject.id);
 
     XLSX_utils.sheet_add_aoa(
       ws,
       [
         [
-          subject.subject.name,
+          subject?.subject?.name || subject?.name,
           `${row?.totalStudents.overall}`,
           ` ${row.totalStudents.male} `,
           ` ${row.totalStudents.female}`,
