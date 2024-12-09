@@ -79,6 +79,8 @@ export async function getStaffListByClass(classId?: string) {
             in: sectionIds,
           },
           deletedAt: null,
+          isIncharge: false,
+          academicYearId: session.currentBatch,
         },
       },
     },
@@ -94,7 +96,13 @@ export async function getStaffListByClass(classId?: string) {
             in: sectionIds,
           },
           deletedAt: null,
+          isIncharge: false,
           academicYearId: session.currentBatch,
+        },
+        orderBy: {
+          section: {
+            name: 'asc',
+          },
         },
         select: {
           isIncharge: true,
@@ -102,6 +110,13 @@ export async function getStaffListByClass(classId?: string) {
             select: {
               name: true,
               id: true,
+              subjectMaster: {
+                select: {
+                  name: true,
+                  id: true,
+                  order: true,
+                },
+              },
             },
           },
           academicYear: {
@@ -127,17 +142,22 @@ export async function getStaffListByClass(classId?: string) {
     },
   });
 
-  const result = staffs.map(({ academicSubjectForStaff, ...rest }) => ({
-    ...rest,
-    academicSubjects: academicSubjectForStaff.filter(
-      (item) => !item.isIncharge
-    ),
-    sectionIncharge: academicSubjectForStaff
-      .filter((item) => item.isIncharge)
-      .map((section) => section.section),
-  }));
+  const result = staffs
+    .map(({ academicSubjectForStaff, ...rest }) => ({
+      ...rest,
+      academicSubjects: academicSubjectForStaff.sort(
+        (a, b) =>
+          (a.subject?.subjectMaster?.order || 0) -
+          (b.subject?.subjectMaster?.order || 0)
+      ),
 
-  return result;
+      sortOrder:
+        academicSubjectForStaff[0]?.subject?.subjectMaster?.order ?? Infinity,
+    }))
+    .sort((a, b) => a.sortOrder - b.sortOrder);
+
+  // eslint-disable-next-line no-unused-vars
+  return result.map(({ sortOrder, ...staffDetails }) => staffDetails);
 }
 
 function analyzeSubjectPerformance(

@@ -2,6 +2,7 @@
 
 import { useGetStudentSearchListQuery } from 'lib/queries/students/useGetStudentSearchListQuery';
 import { Search } from 'lucide-react';
+import Link from 'next/link';
 import { Suspense, useEffect, useRef, useState } from 'react';
 import { Alert, Text } from 'ui';
 
@@ -92,36 +93,38 @@ export function PageHeader() {
                         Found {studentList.total} results
                       </div>
                       {studentList.data.map((student) => (
-                        <button
-                          key={student.id}
-                          className="w-full px-4 py-2 text-left hover:bg-gray-50 focus:bg-gray-50 focus:outline-none"
-                          onClick={() => {
-                            setIsDropdownOpen(false);
-                          }}
-                        >
-                          <div className="flex items-center gap-3">
-                            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gray-200">
-                              {student.firstName[0]}
-                            </div>
-                            <div>
-                              <div className="font-medium">
-                                <Text variant="xs-medium">
-                                  {student.firstName} {student.lastName}
-                                </Text>
+                        <Link href={`/students/${student.id}`} key={student.id}>
+                          <button
+                            key={student.id}
+                            className="w-full px-4 py-2 text-left hover:bg-gray-50 focus:bg-gray-50 focus:outline-none"
+                            onClick={() => {
+                              setIsDropdownOpen(false);
+                            }}
+                          >
+                            <div className="flex items-center gap-3">
+                              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gray-200">
+                                {student.firstName[0]}
                               </div>
-                              <div className="text-sm text-gray-500">
-                                {student?.studentMapping.map(
-                                  (academics, index) => (
-                                    <span key={index}>
-                                      <b>{academics?.class?.name}</b> -{' '}
-                                      <b>{academics?.section?.name}</b>
-                                    </span>
-                                  )
-                                )}
+                              <div>
+                                <div className="font-medium">
+                                  <Text variant="xs-medium">
+                                    {student.firstName} {student.lastName}
+                                  </Text>
+                                </div>
+                                <div className="text-sm text-gray-500">
+                                  {student?.studentMapping.map(
+                                    (academics, index) => (
+                                      <span key={index}>
+                                        <b>{academics?.class?.name}</b> -{' '}
+                                        <b>{academics?.section?.name}</b>
+                                      </span>
+                                    )
+                                  )}
+                                </div>
                               </div>
                             </div>
-                          </div>
-                        </button>
+                          </button>
+                        </Link>
                       ))}
                     </div>
                   ) : null}

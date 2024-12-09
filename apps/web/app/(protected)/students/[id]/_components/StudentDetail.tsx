@@ -1,12 +1,9 @@
 'use client';
 
-import { useGetStudentMarkListQuery } from 'lib/queries/analytics/student/useGetStudentMarkQuery';
+// import { useGetStudentMarkListQuery } from 'lib/queries/analytics/student/useGetStudentMarkQuery';
 import { Loader2 } from 'lucide-react';
 import { useParams } from 'next/navigation';
 import {
-  Avatar,
-  AvatarImage,
-  // Button,
   Card,
   CardContent,
   CardHeader,
@@ -16,13 +13,6 @@ import {
   TabsTrigger,
   Text,
 } from 'ui';
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHeader,
-  TableRow,
-} from 'ui/components/ui/Table';
 
 import { useGetStudentByIdQuery } from '../../../../../lib/queries/students/useGetStudentByIdQuery';
 
@@ -31,14 +21,14 @@ export function StudentDetail() {
 
   const { data: getStudentByIdResponse, isLoading: isGetStudentByIdLoading } =
     useGetStudentByIdQuery(id);
-  const sectionId = getStudentByIdResponse?.section?.id;
-  const classId = getStudentByIdResponse?.class?.id;
-  const groupId = getStudentByIdResponse?.group?.id;
+  // const sectionId = getStudentByIdResponse?.section?.id;
+  // const classId = getStudentByIdResponse?.class?.id;
+  // const groupId = getStudentByIdResponse?.group?.id;
 
-  const {
-    data: getStudentMarkListResponse,
-    isLoading: isGetStudentMarkListLoading,
-  } = useGetStudentMarkListQuery(id, sectionId, classId, groupId);
+  // const {
+  //   data: getStudentMarkListResponse,
+  //   isLoading: isGetStudentMarkListLoading,
+  // } = useGetStudentMarkListQuery(id, sectionId, classId, groupId);
   if (isGetStudentByIdLoading) {
     return (
       <div className="flex h-20 items-center justify-center">
@@ -54,9 +44,9 @@ export function StudentDetail() {
           <CardHeader>
             <div className="">
               <div className="flex justify-center">
-                <Avatar className="h-20 w-20 cursor-pointer border-2 border-violet-200">
-                  <AvatarImage src="https://png.pngtree.com/thumb_back/fh260/background/20230612/pngtree-man-wearing-glasses-is-wearing-colorful-background-image_2905240.jpg" />
-                </Avatar>
+                <div className="flex h-20 w-20 items-center justify-center rounded-full bg-gray-200">
+                  <Text variant="xl-bold">{`${getStudentByIdResponse.firstName[0]} ${getStudentByIdResponse?.lastName[0] || getStudentByIdResponse.firstName[1]}`}</Text>
+                </div>
               </div>
               <div className="my-auto flex justify-center px-5 pb-2 pt-3">
                 <Text variant="base-bold">
@@ -64,24 +54,30 @@ export function StudentDetail() {
                 </Text>
               </div>
               <div className="flex justify-center">
-                <Text
-                  variant="base-regular"
-                  className="mx-2 rounded-lg border bg-violet-100 px-2"
-                >
-                  {getStudentByIdResponse.additionalAttributes?.admissionNumber}
-                </Text>
-                <Text
-                  variant="base-regular"
-                  className="rounded-lg border bg-violet-100 px-2"
-                >
-                  {getStudentByIdResponse.additionalAttributes?.age}
-                </Text>
-                <Text
-                  variant="base-regular"
-                  className="mx-2 rounded-lg border bg-violet-100 px-2"
-                >
-                  {getStudentByIdResponse.bloodGroup}
-                </Text>
+                {getStudentByIdResponse?.admissionNumber && (
+                  <Text
+                    variant="base-regular"
+                    className="mx-2 rounded-lg border bg-violet-100 px-2"
+                  >
+                    {getStudentByIdResponse?.admissionNumber}
+                  </Text>
+                )}
+                {getStudentByIdResponse.additionalAttributes?.age && (
+                  <Text
+                    variant="base-regular"
+                    className="rounded-lg border bg-violet-100 px-2"
+                  >
+                    {getStudentByIdResponse.additionalAttributes?.age} 44
+                  </Text>
+                )}
+                {getStudentByIdResponse.bloodGroup && (
+                  <Text
+                    variant="base-regular"
+                    className="mx-2 rounded-lg border bg-violet-100 px-2"
+                  >
+                    {getStudentByIdResponse.bloodGroup}
+                  </Text>
+                )}
               </div>
             </div>
           </CardHeader>
@@ -852,30 +848,30 @@ export function StudentDetail() {
             </section>
           </TabsContent>
           <TabsContent className="w-full min-w-full" value="report">
-            <section className="rounded-md bg-white ">
+            {/* <section className="bg-white rounded-md ">
               {isGetStudentMarkListLoading ? (
-                <div className="flex h-20 items-center justify-center">
-                  <Loader2 className="mr-2 w-6 animate-spin text-black" />
+                <div className="flex items-center justify-center h-20">
+                  <Loader2 className="w-6 mr-2 text-black animate-spin" />
                   <p className="text-black ">Fetching Student Details...</p>
                 </div>
               ) : (
                 <Table>
                   <TableHeader>
-                    <TableRow className="mt-5 bg-primary-300 text-center print:hidden">
+                    <TableRow className="mt-5 text-center bg-primary-300 print:hidden">
                       <TableCell>
-                        <Text className="size-lg font-semibold">Exams</Text>
+                        <Text className="font-semibold size-lg">Exams</Text>
                       </TableCell>
                       {getStudentMarkListResponse.subjectList?.map(
                         (subject) => (
                           <TableCell key={subject.subjectId}>
-                            <Text className="size-lg font-semibold">
+                            <Text className="font-semibold size-lg">
                               {subject.subject.name}
                             </Text>
                           </TableCell>
                         )
-                      )}
+                      )} 
                       <TableCell>
-                        <Text className="size-lg font-semibold">Total</Text>
+                        <Text className="font-semibold size-lg">Total</Text>
                       </TableCell>
                     </TableRow>
                   </TableHeader>
@@ -883,7 +879,7 @@ export function StudentDetail() {
                     <TableBody>
                       {getStudentMarkListResponse.markList.map((exam) => (
                         <TableRow key={exam.exam.id}>
-                          <TableCell className="mt-5 bg-green-100 text-center print:hidden">
+                          <TableCell className="mt-5 text-center bg-green-100 print:hidden">
                             {exam.exam.name}
                           </TableCell>
                           {exam.subjects.map((subject) => (
@@ -906,7 +902,7 @@ export function StudentDetail() {
                   )}
                 </Table>
               )}
-            </section>
+            </section> */}
           </TabsContent>
         </Tabs>
       </section>
