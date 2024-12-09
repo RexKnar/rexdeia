@@ -466,55 +466,57 @@ export default function OverallDetails({
             </TableHeader>
             <TableBody>
               {subjectList.map(renderSubjectRow)}
-              <TableRow className="mt-5 bg-green-100 text-center ">
-                <TableCell>
-                  <Text className="text-center text-lg font-semibold">
-                    Overall
-                  </Text>
-                </TableCell>
-                <TableCell className=""></TableCell>
-                <TableCell className=""></TableCell>
-                <TableCell className=""></TableCell>
-                <TableCell className=""></TableCell>
-                <TableCell>
-                  <Text className="size-lg font-semibold">
-                    {overallStats.avgMark?.toFixed(2)}
-                  </Text>
-                </TableCell>
-                <TableCell>
-                  <Text className="size-lg font-semibold">
-                    {overallStats.passCount}
-                  </Text>
-                </TableCell>
-                <TableCell>
-                  <Text className="size-lg font-semibold">
-                    {overallStats.failCount}
-                  </Text>
-                </TableCell>
-                <TableCell>
-                  <Text className="size-lg font-semibold">
-                    {overallStats.passPercentage?.toFixed(2)}%
-                  </Text>
-                </TableCell>
-                <TableCell>
-                  <Text className="size-lg font-semibold">
-                    {overallStats.failPercentage?.toFixed(2)}%
-                  </Text>
-                </TableCell>
-                <TableCell>
-                  <Text className="size-lg font-semibold">
-                    {overallStats.highestMark}
-                  </Text>
-                </TableCell>
-                <TableCell>
-                  <Text className="size-lg font-semibold">
-                    {overallStats.lowestMark}
-                  </Text>
-                </TableCell>
-                <TableCell>
-                  <Text className="size-lg font-semibold">-</Text>
-                </TableCell>
-              </TableRow>
+              {subjectList.length > 1 && (
+                <TableRow className="mt-5 bg-green-100 text-center ">
+                  <TableCell>
+                    <Text className="text-center text-lg font-semibold">
+                      Overall
+                    </Text>
+                  </TableCell>
+                  <TableCell className=""></TableCell>
+                  <TableCell className=""></TableCell>
+                  <TableCell className=""></TableCell>
+                  <TableCell className=""></TableCell>
+                  <TableCell>
+                    <Text className="size-lg font-semibold">
+                      {overallStats.avgMark?.toFixed(2)}
+                    </Text>
+                  </TableCell>
+                  <TableCell>
+                    <Text className="size-lg font-semibold">
+                      {overallStats.passCount}
+                    </Text>
+                  </TableCell>
+                  <TableCell>
+                    <Text className="size-lg font-semibold">
+                      {overallStats.failCount}
+                    </Text>
+                  </TableCell>
+                  <TableCell>
+                    <Text className="size-lg font-semibold">
+                      {overallStats.passPercentage?.toFixed(2)}%
+                    </Text>
+                  </TableCell>
+                  <TableCell>
+                    <Text className="size-lg font-semibold">
+                      {overallStats.failPercentage?.toFixed(2)}%
+                    </Text>
+                  </TableCell>
+                  <TableCell>
+                    <Text className="size-lg font-semibold">
+                      {overallStats.highestMark}
+                    </Text>
+                  </TableCell>
+                  <TableCell>
+                    <Text className="size-lg font-semibold">
+                      {overallStats.lowestMark}
+                    </Text>
+                  </TableCell>
+                  <TableCell>
+                    <Text className="size-lg font-semibold">-</Text>
+                  </TableCell>
+                </TableRow>
+              )}
             </TableBody>
           </Table>
         </div>
