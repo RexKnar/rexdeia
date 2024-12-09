@@ -182,7 +182,11 @@ export default function StaffAnalysisTable({
                           {index === 0 && (
                             <TableCell
                               className="sticky w-[100px] bg-primary-300"
-                              rowSpan={staffAnalytics.length + 1}
+                              rowSpan={
+                                staffAnalytics.length > 1
+                                  ? staffAnalytics.length + 1
+                                  : 1
+                              }
                             >
                               <Text className="size-lg font-semibold">
                                 {detailedAnalytics.firstName +
@@ -196,10 +200,10 @@ export default function StaffAnalysisTable({
                           <TableCell className="w-[50px] bg-amber-300 text-center">
                             <div className="flex flex-col justify-evenly">
                               <Text className="size-lg text-center font-semibold">
-                                {subjectAnalytics?.section.name}
+                                {subjectAnalytics?.section?.name}
                               </Text>
                               <Text className="size-lg text-center font-semibold">
-                                {subjectAnalytics?.subject.name}
+                                {subjectAnalytics?.subject?.name}
                               </Text>
                             </div>
                           </TableCell>
@@ -417,207 +421,209 @@ export default function StaffAnalysisTable({
                         </TableRow>
                       );
                     })}
-                    <TableRow className="bg-green-300">
-                      <TableCell className="w-[50px] text-center">
-                        <div className="flex flex-col justify-evenly">
-                          <Text className="size-lg text-center font-semibold">
-                            Overall
-                          </Text>
-                        </div>
-                      </TableCell>
-                      <TableCell className="w-[150px] text-center">
-                        <div className="flex flex-col justify-evenly">
-                          <Text className="size-lg text-center font-semibold">
-                            {staffOverall?.totalStudents?.overall}
-                          </Text>
-                          <div className="flex justify-evenly">
-                            <Text className="text-primary-800">
-                              M: {staffOverall?.totalStudents.male}
-                            </Text>
-                            <Text className="text-primary-800">
-                              F: {staffOverall?.totalStudents.female}
+                    {staffAnalytics.length > 1 && (
+                      <TableRow className="bg-green-300">
+                        <TableCell className="w-[50px] text-center">
+                          <div className="flex flex-col justify-evenly">
+                            <Text className="size-lg text-center font-semibold">
+                              Overall
                             </Text>
                           </div>
-                        </div>
-                      </TableCell>
-                      <TableCell className="w-[150px] text-center">
-                        <div className="flex flex-col justify-evenly">
-                          <Text className="size-lg text-center font-semibold">
-                            {staffOverall?.markEntry?.overall}
-                          </Text>
-                          <div className="flex justify-evenly">
-                            <Text className="text-primary-800">
-                              M: {staffOverall?.markEntry.male}
+                        </TableCell>
+                        <TableCell className="w-[150px] text-center">
+                          <div className="flex flex-col justify-evenly">
+                            <Text className="size-lg text-center font-semibold">
+                              {staffOverall?.totalStudents?.overall}
                             </Text>
-                            <Text className="text-primary-800">
-                              F: {staffOverall?.markEntry.female}
-                            </Text>
+                            <div className="flex justify-evenly">
+                              <Text className="text-primary-800">
+                                M: {staffOverall?.totalStudents.male}
+                              </Text>
+                              <Text className="text-primary-800">
+                                F: {staffOverall?.totalStudents.female}
+                              </Text>
+                            </div>
                           </div>
-                        </div>
-                      </TableCell>
-                      <TableCell className="w-[150px] text-center">
-                        <div className="flex flex-col justify-evenly">
-                          <Text className="size-lg text-center font-semibold">
-                            {staffOverall?.attendance?.overall}
-                          </Text>
-                          <div className="flex justify-evenly">
-                            <Text className="text-primary-800">
-                              M: {staffOverall?.attendance.male}
+                        </TableCell>
+                        <TableCell className="w-[150px] text-center">
+                          <div className="flex flex-col justify-evenly">
+                            <Text className="size-lg text-center font-semibold">
+                              {staffOverall?.markEntry?.overall}
                             </Text>
-                            <Text className="text-primary-800">
-                              F: {staffOverall?.attendance.female}
-                            </Text>
+                            <div className="flex justify-evenly">
+                              <Text className="text-primary-800">
+                                M: {staffOverall?.markEntry.male}
+                              </Text>
+                              <Text className="text-primary-800">
+                                F: {staffOverall?.markEntry.female}
+                              </Text>
+                            </div>
                           </div>
-                        </div>
-                      </TableCell>
-                      <TableCell className="w-[150px] text-center">
-                        <div className="flex flex-col justify-evenly">
-                          <Text className="size-lg text-center font-semibold">
-                            {staffOverall?.absent?.overall}
-                          </Text>
-                          <div className="flex justify-evenly">
-                            <Text className="text-primary-800">
-                              M: {staffOverall?.absent.male}
+                        </TableCell>
+                        <TableCell className="w-[150px] text-center">
+                          <div className="flex flex-col justify-evenly">
+                            <Text className="size-lg text-center font-semibold">
+                              {staffOverall?.attendance?.overall}
                             </Text>
-                            <Text className="text-primary-800">
-                              F: {staffOverall?.absent.female}
-                            </Text>
+                            <div className="flex justify-evenly">
+                              <Text className="text-primary-800">
+                                M: {staffOverall?.attendance.male}
+                              </Text>
+                              <Text className="text-primary-800">
+                                F: {staffOverall?.attendance.female}
+                              </Text>
+                            </div>
                           </div>
-                        </div>
-                      </TableCell>
-                      <TableCell className="w-[150px] text-center">
-                        <div className="flex flex-col justify-evenly">
-                          <Text className="size-lg text-center font-semibold">
-                            {staffOverall?.averageMark?.overall.toFixed(2)}
-                          </Text>
-                          <div className="flex justify-evenly">
-                            <Text className="text-primary-800">
-                              M: {staffOverall?.averageMark.male.toFixed(2)}
+                        </TableCell>
+                        <TableCell className="w-[150px] text-center">
+                          <div className="flex flex-col justify-evenly">
+                            <Text className="size-lg text-center font-semibold">
+                              {staffOverall?.absent?.overall}
                             </Text>
-                            <Text className="text-primary-800">
-                              F: {staffOverall?.averageMark.female.toFixed(2)}
-                            </Text>
+                            <div className="flex justify-evenly">
+                              <Text className="text-primary-800">
+                                M: {staffOverall?.absent.male}
+                              </Text>
+                              <Text className="text-primary-800">
+                                F: {staffOverall?.absent.female}
+                              </Text>
+                            </div>
                           </div>
-                        </div>
-                      </TableCell>
-                      <TableCell className="w-[150px] text-center">
-                        <div className="flex flex-col justify-evenly">
-                          <Text className="size-lg text-center font-semibold">
-                            {staffOverall?.numberOfPassStudents?.overall}
-                          </Text>
-                          <div className="flex justify-evenly">
-                            <Text className="text-primary-800">
-                              M: {staffOverall?.numberOfPassStudents.male}
+                        </TableCell>
+                        <TableCell className="w-[150px] text-center">
+                          <div className="flex flex-col justify-evenly">
+                            <Text className="size-lg text-center font-semibold">
+                              {staffOverall?.averageMark?.overall.toFixed(2)}
                             </Text>
-                            <Text className="text-primary-800">
-                              F: {staffOverall?.numberOfPassStudents.female}
-                            </Text>
+                            <div className="flex justify-evenly">
+                              <Text className="text-primary-800">
+                                M: {staffOverall?.averageMark.male.toFixed(2)}
+                              </Text>
+                              <Text className="text-primary-800">
+                                F: {staffOverall?.averageMark.female.toFixed(2)}
+                              </Text>
+                            </div>
                           </div>
-                        </div>
-                      </TableCell>
-                      <TableCell className="w-[150px] text-center">
-                        <div className="flex flex-col justify-evenly">
-                          <Text className="size-lg text-center font-semibold">
-                            {staffOverall?.numberOfFailStudents?.overall}
-                          </Text>
-                          <div className="flex justify-evenly">
-                            <Text className="text-primary-800">
-                              M: {staffOverall?.numberOfFailStudents.male}
+                        </TableCell>
+                        <TableCell className="w-[150px] text-center">
+                          <div className="flex flex-col justify-evenly">
+                            <Text className="size-lg text-center font-semibold">
+                              {staffOverall?.numberOfPassStudents?.overall}
                             </Text>
-                            <Text className="text-primary-800">
-                              F: {staffOverall?.numberOfFailStudents.female}
-                            </Text>
+                            <div className="flex justify-evenly">
+                              <Text className="text-primary-800">
+                                M: {staffOverall?.numberOfPassStudents.male}
+                              </Text>
+                              <Text className="text-primary-800">
+                                F: {staffOverall?.numberOfPassStudents.female}
+                              </Text>
+                            </div>
                           </div>
-                        </div>
-                      </TableCell>
-                      <TableCell className="w-[150px] text-center">
-                        <div className="flex flex-col justify-evenly">
-                          <Text className="size-lg text-center font-semibold">
-                            {(
-                              staffOverall?.passPercentage?.overall /
-                              staffAnalytics.length
-                            ).toFixed(2)}
-                            %
-                          </Text>
-                          <div className="flex justify-evenly">
-                            <Text className="text-primary-800">
-                              M:{' '}
+                        </TableCell>
+                        <TableCell className="w-[150px] text-center">
+                          <div className="flex flex-col justify-evenly">
+                            <Text className="size-lg text-center font-semibold">
+                              {staffOverall?.numberOfFailStudents?.overall}
+                            </Text>
+                            <div className="flex justify-evenly">
+                              <Text className="text-primary-800">
+                                M: {staffOverall?.numberOfFailStudents.male}
+                              </Text>
+                              <Text className="text-primary-800">
+                                F: {staffOverall?.numberOfFailStudents.female}
+                              </Text>
+                            </div>
+                          </div>
+                        </TableCell>
+                        <TableCell className="w-[150px] text-center">
+                          <div className="flex flex-col justify-evenly">
+                            <Text className="size-lg text-center font-semibold">
                               {(
-                                staffOverall?.passPercentage.male /
+                                staffOverall?.passPercentage?.overall /
                                 staffAnalytics.length
                               ).toFixed(2)}
                               %
                             </Text>
-                            <Text className="text-primary-800">
-                              F:{' '}
-                              {(
-                                staffOverall?.passPercentage.female /
-                                staffAnalytics.length
-                              ).toFixed(2)}
-                            </Text>
+                            <div className="flex justify-evenly">
+                              <Text className="text-primary-800">
+                                M:{' '}
+                                {(
+                                  staffOverall?.passPercentage.male /
+                                  staffAnalytics.length
+                                ).toFixed(2)}
+                                %
+                              </Text>
+                              <Text className="text-primary-800">
+                                F:{' '}
+                                {(
+                                  staffOverall?.passPercentage.female /
+                                  staffAnalytics.length
+                                ).toFixed(2)}
+                              </Text>
+                            </div>
                           </div>
-                        </div>
-                      </TableCell>
-                      <TableCell className="w-[150px] text-center">
-                        <div className="flex flex-col justify-evenly">
-                          <Text className="size-lg text-center font-semibold">
-                            {(
-                              staffOverall?.failPercentage?.overall /
-                              staffAnalytics.length
-                            ).toFixed(2)}
-                            %
-                          </Text>
-                          <div className="flex justify-evenly">
-                            <Text className="text-primary-800">
-                              M:{' '}
+                        </TableCell>
+                        <TableCell className="w-[150px] text-center">
+                          <div className="flex flex-col justify-evenly">
+                            <Text className="size-lg text-center font-semibold">
                               {(
-                                staffOverall?.failPercentage.male /
-                                staffAnalytics.length
-                              ).toFixed(2)}
-                              %
-                            </Text>
-                            <Text className="text-primary-800">
-                              F:{' '}
-                              {(
-                                staffOverall?.failPercentage.female /
+                                staffOverall?.failPercentage?.overall /
                                 staffAnalytics.length
                               ).toFixed(2)}
                               %
                             </Text>
+                            <div className="flex justify-evenly">
+                              <Text className="text-primary-800">
+                                M:{' '}
+                                {(
+                                  staffOverall?.failPercentage.male /
+                                  staffAnalytics.length
+                                ).toFixed(2)}
+                                %
+                              </Text>
+                              <Text className="text-primary-800">
+                                F:{' '}
+                                {(
+                                  staffOverall?.failPercentage.female /
+                                  staffAnalytics.length
+                                ).toFixed(2)}
+                                %
+                              </Text>
+                            </div>
                           </div>
-                        </div>
-                      </TableCell>
-                      <TableCell className="w-[150px] text-center">
-                        <div className="flex flex-col justify-evenly">
-                          <Text className="size-lg text-center font-semibold">
-                            {staffOverall?.highestMark?.overall}
-                          </Text>
-                          <div className="flex justify-evenly">
-                            <Text className="text-primary-800">
-                              M: {staffOverall?.highestMark.male}
+                        </TableCell>
+                        <TableCell className="w-[150px] text-center">
+                          <div className="flex flex-col justify-evenly">
+                            <Text className="size-lg text-center font-semibold">
+                              {staffOverall?.highestMark?.overall}
                             </Text>
-                            <Text className="text-primary-800">
-                              F: {staffOverall?.highestMark.female}
-                            </Text>
+                            <div className="flex justify-evenly">
+                              <Text className="text-primary-800">
+                                M: {staffOverall?.highestMark.male}
+                              </Text>
+                              <Text className="text-primary-800">
+                                F: {staffOverall?.highestMark.female}
+                              </Text>
+                            </div>
                           </div>
-                        </div>
-                      </TableCell>
-                      <TableCell className="w-[150px] text-center">
-                        <div className="flex flex-col justify-evenly">
-                          <Text className="size-lg text-center font-semibold">
-                            {staffOverall?.lowestMark?.overall}
-                          </Text>
-                          <div className="flex justify-evenly">
-                            <Text className="text-primary-800">
-                              M: {staffOverall?.lowestMark.male}
+                        </TableCell>
+                        <TableCell className="w-[150px] text-center">
+                          <div className="flex flex-col justify-evenly">
+                            <Text className="size-lg text-center font-semibold">
+                              {staffOverall?.lowestMark?.overall}
                             </Text>
-                            <Text className="text-primary-800">
-                              F: {staffOverall?.lowestMark.female}
-                            </Text>
+                            <div className="flex justify-evenly">
+                              <Text className="text-primary-800">
+                                M: {staffOverall?.lowestMark.male}
+                              </Text>
+                              <Text className="text-primary-800">
+                                F: {staffOverall?.lowestMark.female}
+                              </Text>
+                            </div>
                           </div>
-                        </div>
-                      </TableCell>
-                    </TableRow>
+                        </TableCell>
+                      </TableRow>
+                    )}
                   </>
                 );
               })}
