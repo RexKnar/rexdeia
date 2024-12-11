@@ -39,9 +39,9 @@ export default function RangeAnalyticsTable({
           if (subject.id === subjectID) {
             const mark = parseFloat(subject.subjectTotalMark);
             if (mark >= startValue && mark <= endValue) {
-              if (student.gender === 'Female') {
+              if (student.gender.toLowerCase() === 'female') {
                 femaleCount++;
-              } else if (student.gender === 'Male') {
+              } else if (student.gender.toLowerCase() === 'male') {
                 maleCount++;
               }
               totalCount++;
@@ -57,9 +57,9 @@ export default function RangeAnalyticsTable({
       };
     } else {
       return {
-        totalCount,
-        maleCount,
-        femaleCount,
+        totalCount: 0,
+        maleCount: 0,
+        femaleCount: 0,
       };
     }
   };
@@ -168,7 +168,19 @@ export default function RangeAnalyticsTable({
                   const studentDetail = getTotalRangeValue(range);
                   return (
                     <TableCell key={index}>
-                      <Text className="size-lg font-semibold">{`${studentDetail?.totalCount}`}</Text>
+                      <div className="flex flex-col justify-evenly">
+                        <Text className="size-lg text-center font-semibold">
+                          {`${studentDetail?.totalCount}`}
+                        </Text>
+                        <div className="flex justify-evenly">
+                          <Text className="text-primary-800">
+                            M: {`${studentDetail?.maleCount}`}
+                          </Text>
+                          <Text className="text-primary-800">
+                            F: {`${studentDetail?.femaleCount}`}
+                          </Text>
+                        </div>
+                      </div>
                     </TableCell>
                   );
                 })}

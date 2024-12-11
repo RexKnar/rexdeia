@@ -14,6 +14,7 @@ import {
   SheetHeader,
   SheetTitle,
   Slider,
+  Switch,
   Text,
 } from 'ui';
 
@@ -22,14 +23,15 @@ export function AddRangeScaleFlyout() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const isOpen = searchParams.get('isRangeScaleFlyoutOpen') === 'true';
-  const [sliderValues, setSliderValues] = useState([[0, 100]]);
+  const [sliderValues, setSliderValues] = useState([[0, 600]]);
   const [errorMessages, setErrorMessages] = useState([false]);
+  const [rangeType, setRangeType] = useState('SubjectMarks');
 
   const {
     control,
     handleSubmit,
     watch,
-    // setValue,
+    setValue,
     reset,
     register,
     formState: { errors: fieldErrors },
@@ -83,13 +85,13 @@ export function AddRangeScaleFlyout() {
     // params.set('isRangeScaleFlyoutOpen', 'false');
     params.delete('isRangeScaleFlyoutOpen');
     router.replace(pathname + '?' + params.toString());
-    setSliderValues([[0, 100]]);
+    setSliderValues([[0, 600]]);
     setErrorMessages([false]);
   };
 
   const SaveGrade = async () => {
     const hasDefaultValues = sliderValues.some(
-      (value) => value[0] === 0 && value[1] === 100
+      (value) => value[0] === 0 && value[1] === 600
     );
     if (hasDefaultValues || errorMessages.some(Boolean)) {
       return;
@@ -135,22 +137,26 @@ export function AddRangeScaleFlyout() {
                 <hr className="border-t border-gray-300"></hr>
               </SheetHeader>
               <div className="mt-5 flex gap-2">
-                <div className="w-full">
-                  <label
-                    htmlFor="name"
-                    className="text-sm font-semibold text-gray-700"
-                  >
-                    SCale Type
-                  </label>
-                  <Input
-                    {...register('rangeOf', {
-                      required: 'Scale Type is Required',
-                    })}
-                    autoFocus
-                    className="mt-2"
-                    id="rangeOf"
-                    errorMessage={fieldErrors?.rangeOf?.message.toString()}
-                  />
+                <div className="mt-5 flex gap-2">
+                  <div className="items-right float-right flex">
+                    <Switch
+                      id="rangeType"
+                      checked={rangeType === 'SubjectMarks'}
+                      {...register('rangeOf')}
+                      onCheckedChange={(value) => {
+                        const typeValue = value ? 'SubjectMarks' : 'TotalMarks';
+                        setRangeType(typeValue);
+                        setValue('rangeOf', typeValue);
+                      }}
+                    />
+
+                    <label
+                      htmlFor="isActive"
+                      className="ml-2 text-sm font-semibold"
+                    >
+                      {rangeType}
+                    </label>
+                  </div>
                 </div>
                 <div className="mt-8">
                   {fields.length === 0 && (
@@ -160,7 +166,7 @@ export function AddRangeScaleFlyout() {
                       size="sm"
                       onClick={() => {
                         append({ grade: 'grade' });
-                        setSliderValues([...sliderValues, [0, 100]]);
+                        setSliderValues([...sliderValues, [0, 600]]);
                         setErrorMessages([...errorMessages, false]);
                       }}
                     >
@@ -253,7 +259,7 @@ export function AddRangeScaleFlyout() {
                           size="sm"
                           onClick={() => {
                             append({ grade: 'grade' });
-                            setSliderValues([...sliderValues, [0, 100]]);
+                            setSliderValues([...sliderValues, [0, 600]]);
                             setErrorMessages([...errorMessages, false]);
                           }}
                         >

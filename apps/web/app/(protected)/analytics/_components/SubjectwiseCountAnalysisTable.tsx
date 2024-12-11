@@ -70,7 +70,7 @@ export default function SubjectwiseCountAnalysisTable({
       <section>
         <Table>
           <TableHeader>
-            <TableRow className="mt-5 bg-green-100  text-center ">
+            <TableRow className="mt-5 bg-primary-300 text-center">
               <TableCell></TableCell>
               <TableCell className="text-center font-semibold">
                 Fail Count
