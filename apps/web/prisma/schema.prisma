@@ -568,6 +568,7 @@ model Batch {
   students                Student[]
   StudentElectiveSubject  StudentElectiveSubject[]
   StudentMapping          StudentMapping[]
+  RangeScales             RangeScales[]
 }
 
 model Class {
@@ -842,6 +843,17 @@ model GradeScales {
   grade      Grade?    @relation(fields: [gradeId], references: [id])
 }
 
+model RangeScales {
+  id         String    @id @default(uuid()) @map("_id") @db.Uuid
+  startValue String
+  endValue   String
+  order      Int       @default(1)
+  batchId    String    @db.Uuid
+  batch      Batch     @relation(fields: [batchId], references: [id])
+  rangeOf    RangeType @default(SubjectMarks)
+  createdAt  DateTime? @default(now())
+}
+
 model Community {
   id        String    @id @default(uuid()) @map("_id") @db.Uuid
   name      String
@@ -1061,4 +1073,9 @@ enum AdmissionStatus {
   Enrolled
   Archived
   DirectStudentEntry
+}
+
+enum RangeType {
+  SubjectMarks
+  TotalMarks
 }

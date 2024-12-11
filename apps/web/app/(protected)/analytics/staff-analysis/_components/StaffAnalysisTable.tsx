@@ -1,4 +1,5 @@
 import { useGetExamAnalyticsStaffMasterQuery } from 'lib/queries/analytics/exam/useGetExamAnalyticsStaffMasterQuery';
+import { useSearchParams } from 'next/navigation';
 import { Text } from 'ui';
 import {
   Table,
@@ -8,14 +9,11 @@ import {
   TableRow,
 } from 'ui/components/ui/Table';
 
-export default function StaffAnalysisTable({
-  classId,
-  examId,
-}: {
-  classId: string;
-  sectionId?: string;
-  examId: string;
-}) {
+export default function StaffAnalysisTable() {
+  const searchParams = useSearchParams();
+  const classId = searchParams.get('classId');
+  const examId = searchParams.get('examId');
+
   const { data: analyticsList } = useGetExamAnalyticsStaffMasterQuery(
     {
       examId,

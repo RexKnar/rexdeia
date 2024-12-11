@@ -1,5 +1,6 @@
 import { useGetExamSubjectsByClassSectionIdQuery } from 'lib/queries/exams/subject/useGetExamSubjectsByClassSectionIdQuery';
 import { TableIcon } from 'lucide-react';
+import Image from 'next/image';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Button, Text } from 'ui';
 import {
@@ -10,8 +11,8 @@ import {
   TableRow,
 } from 'ui/components/ui/Table';
 
+import noClassListImage from '../../../../public/assets/images/options.svg';
 import { downloadSubjectWiseOverallXLSX } from '../XLSX/excelExports';
-import SubjectwiseCountAnalysisTable from './SubjectwiseCountAnalysisTable';
 
 interface Analytics {
   numberOfPassStudents: { male: number; female: number; overall: number };
@@ -418,132 +419,131 @@ export default function OverallAnalytics({
   };
 
   return (
-    <>
-      <section>
-        {subjectList && (
-          <div className="mt-4 space-y-4 overflow-x-auto rounded-md bg-white p-6 print:m-0 print:p-0 ">
-            <Button
-              variant="outline"
-              onClick={() =>
-                downloadSubjectWiseOverallXLSX(
-                  subjectList,
-                  analytics,
-                  examDetails,
-                  classDetails,
-                  overallStats,
-                  sectionDetails
-                )
-              }
-            >
-              Download XLSX <TableIcon className="ml-2 h-4 w-4" />
-            </Button>
-            <Table>
-              <TableHeader>
-                <TableRow className="mt-5 bg-primary-300 text-center">
-                  <TableCell></TableCell>
-                  <TableCell className="text-center">Total Count</TableCell>
-                  <TableCell>
-                    <Text className="size-lg font-semibold">Pending Entry</Text>
-                  </TableCell>
-                  <TableCell>
-                    <Text className="size-lg font-semibold">Appeared</Text>
-                  </TableCell>
-                  <TableCell className="text-center">
-                    <Text className="size-lg font-semibold">Absent</Text>
-                  </TableCell>
-                  <TableCell>
-                    <Text className="size-lg font-semibold">Average</Text>
-                  </TableCell>
-                  <TableCell>
-                    <Text className="size-lg font-semibold">No. of Pass</Text>
-                  </TableCell>
-                  <TableCell>
-                    <Text className="size-lg font-semibold">
-                      No. of Failures
-                    </Text>
-                  </TableCell>
-                  <TableCell>
-                    <Text className="size-lg font-semibold">Pass %</Text>
-                  </TableCell>
-                  <TableCell>
-                    <Text className="size-lg font-semibold">Failure %</Text>
-                  </TableCell>
-                  <TableCell>
-                    <Text className="size-lg font-semibold">Highest</Text>
-                  </TableCell>
-                  <TableCell>
-                    <Text className="size-lg font-semibold">Lowest</Text>
-                  </TableCell>
-                  <TableCell>
-                    <Text className="size-lg font-semibold">Centum</Text>
-                  </TableCell>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {subjectList.map(renderSubjectRow)}
-                <TableRow className="mt-5 bg-green-100 text-center ">
-                  <TableCell>
-                    <Text className="text-center text-lg font-semibold">
-                      Overall
-                    </Text>
-                  </TableCell>
-                  <TableCell className=""></TableCell>
-                  <TableCell className=""></TableCell>
-                  <TableCell className=""></TableCell>
-                  <TableCell className=""></TableCell>
-                  <TableCell>
-                    <Text className="size-lg font-semibold">
-                      {overallStats.avgMark?.toFixed(2)}
-                    </Text>
-                  </TableCell>
-                  <TableCell>
-                    <Text className="size-lg font-semibold">
-                      {overallStats.passCount}
-                    </Text>
-                  </TableCell>
-                  <TableCell>
-                    <Text className="size-lg font-semibold">
-                      {overallStats.failCount}
-                    </Text>
-                  </TableCell>
-                  <TableCell>
-                    <Text className="size-lg font-semibold">
-                      {overallStats.passPercentage?.toFixed(2)}%
-                    </Text>
-                  </TableCell>
-                  <TableCell>
-                    <Text className="size-lg font-semibold">
-                      {overallStats.failPercentage?.toFixed(2)}%
-                    </Text>
-                  </TableCell>
-                  <TableCell>
-                    <Text className="size-lg font-semibold">
-                      {overallStats.highestMark}
-                    </Text>
-                  </TableCell>
-                  <TableCell>
-                    <Text className="size-lg font-semibold">
-                      {overallStats.lowestMark}
-                    </Text>
-                  </TableCell>
-                  <TableCell>
-                    <Text className="size-lg font-semibold">-</Text>
-                  </TableCell>
-                </TableRow>
-              </TableBody>
-            </Table>
+    <section>
+      {subjectList ? (
+        <div className="mt-4 space-y-4 overflow-x-auto rounded-md bg-white p-6 print:m-0 print:p-0 ">
+          <Button
+            variant="outline"
+            onClick={() =>
+              downloadSubjectWiseOverallXLSX(
+                subjectList,
+                analytics,
+                examDetails,
+                classDetails,
+                overallStats,
+                sectionDetails
+              )
+            }
+          >
+            Download XLSX <TableIcon className="ml-2 h-4 w-4" />
+          </Button>
+          <Table>
+            <TableHeader>
+              <TableRow className="mt-5 bg-primary-300 text-center">
+                <TableCell></TableCell>
+                <TableCell className="text-center">Total Count</TableCell>
+                <TableCell>
+                  <Text className="size-lg font-semibold">Pending Entry</Text>
+                </TableCell>
+                <TableCell>
+                  <Text className="size-lg font-semibold">Appeared</Text>
+                </TableCell>
+                <TableCell className="text-center">
+                  <Text className="size-lg font-semibold">Absent</Text>
+                </TableCell>
+                <TableCell>
+                  <Text className="size-lg font-semibold">Average</Text>
+                </TableCell>
+                <TableCell>
+                  <Text className="size-lg font-semibold">No. of Pass</Text>
+                </TableCell>
+                <TableCell>
+                  <Text className="size-lg font-semibold">No. of Failures</Text>
+                </TableCell>
+                <TableCell>
+                  <Text className="size-lg font-semibold">Pass %</Text>
+                </TableCell>
+                <TableCell>
+                  <Text className="size-lg font-semibold">Failure %</Text>
+                </TableCell>
+                <TableCell>
+                  <Text className="size-lg font-semibold">Highest</Text>
+                </TableCell>
+                <TableCell>
+                  <Text className="size-lg font-semibold">Lowest</Text>
+                </TableCell>
+                <TableCell>
+                  <Text className="size-lg font-semibold">Centum</Text>
+                </TableCell>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {subjectList.map(renderSubjectRow)}
+              <TableRow className="mt-5 bg-green-100 text-center ">
+                <TableCell>
+                  <Text className="text-center text-lg font-semibold">
+                    Overall
+                  </Text>
+                </TableCell>
+                <TableCell className=""></TableCell>
+                <TableCell className=""></TableCell>
+                <TableCell className=""></TableCell>
+                <TableCell className=""></TableCell>
+                <TableCell>
+                  <Text className="size-lg font-semibold">
+                    {overallStats.avgMark?.toFixed(2)}
+                  </Text>
+                </TableCell>
+                <TableCell>
+                  <Text className="size-lg font-semibold">
+                    {overallStats.passCount}
+                  </Text>
+                </TableCell>
+                <TableCell>
+                  <Text className="size-lg font-semibold">
+                    {overallStats.failCount}
+                  </Text>
+                </TableCell>
+                <TableCell>
+                  <Text className="size-lg font-semibold">
+                    {overallStats.passPercentage?.toFixed(2)}%
+                  </Text>
+                </TableCell>
+                <TableCell>
+                  <Text className="size-lg font-semibold">
+                    {overallStats.failPercentage?.toFixed(2)}%
+                  </Text>
+                </TableCell>
+                <TableCell>
+                  <Text className="size-lg font-semibold">
+                    {overallStats.highestMark}
+                  </Text>
+                </TableCell>
+                <TableCell>
+                  <Text className="size-lg font-semibold">
+                    {overallStats.lowestMark}
+                  </Text>
+                </TableCell>
+                <TableCell>
+                  <Text className="size-lg font-semibold">-</Text>
+                </TableCell>
+              </TableRow>
+            </TableBody>
+          </Table>
+        </div>
+      ) : (
+        <div className="flex flex-col items-center gap-6 p-6 align-middle">
+          <Image alt="icon" width={320} height={320} src={noClassListImage} />
+          <div className="flex flex-col items-center gap-1 text-sm">
+            <p className="text-base">
+              It looks like there are no options selected at the moment.
+            </p>
+            <p className="text-gray-800">
+              Please choose Class/Section/Exam to view the analytics.
+            </p>
           </div>
-        )}
-      </section>
-      <section>
-        <SubjectwiseCountAnalysisTable
-          students={students}
-          subjectCount={subjectList?.length}
-          classId={classId}
-          sectionId={sectionId}
-          examId={examId}
-        />
-      </section>
-    </>
+        </div>
+      )}
+    </section>
   );
 }

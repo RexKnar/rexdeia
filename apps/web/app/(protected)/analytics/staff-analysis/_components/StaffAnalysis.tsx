@@ -2,8 +2,7 @@
 
 import { useGetClassListQuery } from 'lib/queries/class/useGetClassListQuery';
 import { useGetExamsBySectionIdQuery } from 'lib/queries/exams/useGetExamBySectionIdQuery';
-import { useGetAllSectionByClassIdQuery } from 'lib/queries/section/useGetAllSectionsByClassIdQuery';
-import { useState } from 'react';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import {
   Select,
   SelectContent,
@@ -23,12 +22,16 @@ export function StaffAnalysis() {
   const page = 1;
   const limit = 999;
   const filter = {};
-  const [classId, setClassId] = useState('');
-  const [sectionId, setSectionId] = useState('');
-  const [examId, setExamId] = useState('');
+
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const pathname = usePathname();
+  const params = new URLSearchParams(searchParams);
+  const classId = searchParams.get('classId');
+  const examId = searchParams.get('examId');
 
   const { data: examList } = useGetExamsBySectionIdQuery(
-    sectionId ? { classId, sectionId } : { classId },
+    { classId },
     {
       enabled: !!classId,
     }
@@ -39,15 +42,6 @@ export function StaffAnalysis() {
     limit,
     filter,
   });
-  const { data: sectionList } = useGetAllSectionByClassIdQuery(
-    {
-      filter,
-      classId,
-    },
-    {
-      enabled: !!classId,
-    }
-  );
 
   return (
     <>
@@ -57,10 +51,11 @@ export function StaffAnalysis() {
             <label className="mt-1 block text-sm text-gray-700">Class</label>
             <Select
               autoComplete="off"
+              value={classId}
               onValueChange={(value) => {
-                setSectionId(null);
-                setExamId(null);
-                setClassId(value);
+                params.set('classId', value);
+
+                router.replace(pathname + '?' + params.toString());
               }}
             >
               <SelectTrigger className="w-full">
@@ -78,35 +73,14 @@ export function StaffAnalysis() {
             </Select>
           </div>
           <div className="w-4/12">
-            <label className="mt-1 block text-sm text-gray-700">Section</label>
-            <Select
-              autoComplete="off"
-              onValueChange={(value) => {
-                setExamId(null);
-                setSectionId(value === 'all' ? null : value);
-              }}
-            >
-              <SelectTrigger className="w-full">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectGroup>
-                  <SelectItem value="all">All</SelectItem>
-                  {sectionList?.data?.map((item) => (
-                    <SelectItem key={item.id} value={item.id}>
-                      {item.name}
-                    </SelectItem>
-                  ))}
-                </SelectGroup>
-              </SelectContent>
-            </Select>
-          </div>
-          <div className="w-4/12">
             <label className="mt-1 block text-sm text-gray-700">Exam</label>
             <Select
               autoComplete="off"
+              value={examId ?? 'all'}
               onValueChange={(value) => {
-                setExamId(value === 'all' ? null : value);
+                params.set('examId', value);
+
+                router.replace(pathname + '?' + params.toString());
               }}
             >
               <SelectTrigger className="w-full">
@@ -114,7 +88,7 @@ export function StaffAnalysis() {
               </SelectTrigger>
               <SelectContent>
                 <SelectGroup>
-                  <SelectItem value="all">Reset</SelectItem>
+                  <SelectItem value="all">Choose a Exam</SelectItem>
                   {examList?.map((item) => (
                     <SelectItem key={item.id} value={item.id}>
                       {item.name}
@@ -138,11 +112,7 @@ export function StaffAnalysis() {
 
         <TabsContent className="w-full" value="sectionAnalytics">
           <section>
-            <StaffAnalysisTable
-              examId={examId}
-              classId={classId}
-              sectionId={sectionId}
-            />
+            <StaffAnalysisTable />
           </section>
         </TabsContent>
       </Tabs>
