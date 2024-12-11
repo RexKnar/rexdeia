@@ -8,6 +8,10 @@ export const EXAM_MARK_MASTER_BY_FILTER = `EXAM_MARK_MASTER_BY_FILTER`;
 export const EXAM_MARK_LIST_BY_STUDENT_ID = `EXAM_MARK_LIST_BY_STUDENT_ID`;
 export const EXAM_ANALYTICS_SECTION_MASTER = `EXAM_ANALYTICS_SECTION_MASTER`;
 export const EXAM_ANALYTICS_STAFF_MASTER = `EXAM_ANALYTICS_STAFF_MASTER`;
+export const GET_RANGE_SCALES = `GET_RANGE_SCALES`;
+export const GET_RANGE_SCALES_BY_ID = `GET_RANGE_SCALES_BY_ID`;
+export const ADD_RANGE_SCALES = `ADD_RANGE_SCALES`;
+export const DELETE_RANGE_BY_ID = `DELETE_RANGE_BY_ID`;
 export default <EndpointDetails>{
   [EXAM_ANALYTICS]: {
     requestType: `PUT`,
@@ -40,5 +44,21 @@ export default <EndpointDetails>{
   [EXAM_MARK_LIST_BY_STUDENT_ID]: {
     requestType: `GET`,
     endpoint: `/api/analytics/students/[id]`,
+  },
+  [ADD_RANGE_SCALES]: {
+    requestType: `POST`,
+    endpoint: `/api/analytics/range`,
+  },
+  [GET_RANGE_SCALES]: {
+    requestType: `GET`,
+    endpoint: `/api/analytics/range`,
+  },
+  [GET_RANGE_SCALES_BY_ID]: {
+    requestType: `GET`,
+    endpoint: `/api/analytics/range/[id]`,
+  },
+  [DELETE_RANGE_BY_ID]: {
+    requestType: `DELETE`,
+    endpoint: '/api/analytics/range/[id]',
   },
 };

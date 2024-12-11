@@ -2,8 +2,10 @@
 
 import { useGetMarkMasterWithFilterQuery } from 'lib/queries/analytics/exam/useGetMarkMasterWithFilterQuery';
 import { useGetClassListQuery } from 'lib/queries/class/useGetClassListQuery';
+import { useGetExamSubjectsByClassSectionIdQuery } from 'lib/queries/exams/subject/useGetExamSubjectsByClassSectionIdQuery';
 import { useGetExamsBySectionIdQuery } from 'lib/queries/exams/useGetExamBySectionIdQuery';
 import { useGetAllSectionByClassIdQuery } from 'lib/queries/section/useGetAllSectionsByClassIdQuery';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 import {
   Select,
@@ -19,8 +21,11 @@ import {
 } from 'ui';
 
 import OverallAnalytics from '../../_components/OverallAnalytics';
+import RangeAnalyticsTable from '../../_components/RangeAnalyticsTable';
 import SectionAnalytics from '../../_components/SectionAnalytics';
 import StudentMarkList from '../../_components/StudentMarkList';
+import SubjectwiseCountAnalysisTable from '../../_components/SubjectwiseCountAnalysisTable';
+import StaffAnalysisTable from '../../staff-analysis/_components/StaffAnalysisTable';
 
 export function AnalyticStudentList() {
   const [studentMarkList, setStudentMarkList] = useState([]);
@@ -28,9 +33,14 @@ export function AnalyticStudentList() {
   const page = 1;
   const limit = 999;
   const filter = {};
-  const [classId, setClassId] = useState('');
-  const [sectionId, setSectionId] = useState('');
-  const [examId, setExamId] = useState('');
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const pathname = usePathname();
+  const params = new URLSearchParams(searchParams);
+  const classId = searchParams.get('classId');
+  const examId = searchParams.get('examId');
+  const sectionId = searchParams.get('sectionId');
+
   const [examDetail, setExamDetail] = useState('');
   const [sectionDetail, setSectionDetail] = useState('');
   const [classDetail, setClassDetail] = useState('');
@@ -54,6 +64,16 @@ export function AnalyticStudentList() {
     },
     {
       enabled: !!classId,
+    }
+  );
+  const { data: subjects } = useGetExamSubjectsByClassSectionIdQuery(
+    {
+      examId,
+      classId,
+      sectionId,
+    },
+    {
+      enabled: !!examId && !!classId,
     }
   );
 
@@ -90,10 +110,11 @@ export function AnalyticStudentList() {
             <label className="mt-1 block text-sm text-gray-700">Class</label>
             <Select
               autoComplete="off"
+              value={classId}
               onValueChange={(value) => {
-                setSectionId(null);
-                setExamId(null);
-                setClassId(value);
+                params.set('classId', value);
+                params.delete('sectionId');
+                router.replace(pathname + '?' + params.toString());
               }}
             >
               <SelectTrigger className="w-full">
@@ -114,9 +135,15 @@ export function AnalyticStudentList() {
             <label className="mt-1 block text-sm text-gray-700">Section</label>
             <Select
               autoComplete="off"
+              value={sectionId ?? 'all'}
               onValueChange={(value) => {
-                setExamId(null);
-                setSectionId(value === 'all' ? null : value);
+                value === 'all'
+                  ? params.delete('sectionId')
+                  : params.set('sectionId', value);
+
+                router.replace(pathname + '?' + params.toString());
+                // setExamId(null);
+                // setSectionId(value === 'all' ? null : value);
               }}
             >
               <SelectTrigger className="w-full">
@@ -138,8 +165,14 @@ export function AnalyticStudentList() {
             <label className="mt-1 block text-sm text-gray-700">Exam</label>
             <Select
               autoComplete="off"
+              value={examId ?? 'all'}
               onValueChange={(value) => {
-                setExamId(value === 'all' ? null : value);
+                value === 'all'
+                  ? params.delete('examId')
+                  : params.set('examId', value);
+
+                router.replace(pathname + '?' + params.toString());
+                // setExamId(value === 'all' ? null : value);
               }}
             >
               <SelectTrigger className="w-full">
@@ -147,7 +180,7 @@ export function AnalyticStudentList() {
               </SelectTrigger>
               <SelectContent>
                 <SelectGroup>
-                  <SelectItem value="all">Reset</SelectItem>
+                  <SelectItem value="all">Choose a Exam</SelectItem>
                   {examList?.map((item) => (
                     <SelectItem key={item.id} value={item.id}>
                       {item.name}
@@ -172,6 +205,18 @@ export function AnalyticStudentList() {
             className="mr-2 text-base focus:border-b-4 focus:border-primary print:hidden"
           >
             Section-Analytics
+          </TabsTrigger>
+          <TabsTrigger
+            value="staffAnalytics"
+            className="mr-2 text-base focus:border-b-4 focus:border-primary print:hidden"
+          >
+            Staff-Analytics
+          </TabsTrigger>
+          <TabsTrigger value="rangeAnalytics" className="mr-2 text-base">
+            Range Analytics
+          </TabsTrigger>
+          <TabsTrigger value="subjectCountAnalytics" className="mr-2 text-base">
+            Subject Count Analytics
           </TabsTrigger>
           <TabsTrigger
             value="markList"
@@ -199,6 +244,30 @@ export function AnalyticStudentList() {
               examId={examId}
               classId={classId}
               sectionId={sectionId}
+            />
+          </section>
+        </TabsContent>
+        <TabsContent className="w-full" value="staffAnalytics">
+          <section>
+            <StaffAnalysisTable />
+          </section>
+        </TabsContent>
+        <TabsContent className="w-full" value="rangeAnalytics">
+          <section>
+            <RangeAnalyticsTable
+              markList={studentMarkList}
+              subjectList={subjects}
+            />
+          </section>
+        </TabsContent>
+        <TabsContent className="w-full" value="subjectCountAnalytics">
+          <section>
+            <SubjectwiseCountAnalysisTable
+              students={studentMarkList}
+              subjectCount={subjects?.length}
+              classId={classId}
+              sectionId={sectionId}
+              examId={examId}
             />
           </section>
         </TabsContent>

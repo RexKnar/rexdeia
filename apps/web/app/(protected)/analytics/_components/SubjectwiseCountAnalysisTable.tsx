@@ -68,12 +68,9 @@ export default function SubjectwiseCountAnalysisTable({
   return (
     subjectCountWiseStatusCount && (
       <section>
-        <h1 className="text-center text-xl font-semibold">
-          Subjectwise Count Analysis
-        </h1>
         <Table>
           <TableHeader>
-            <TableRow className="mt-5 bg-primary-300 text-center">
+            <TableRow className="mt-5 bg-green-100  text-center ">
               <TableCell></TableCell>
               <TableCell className="text-center font-semibold">
                 Fail Count
@@ -85,10 +82,7 @@ export default function SubjectwiseCountAnalysisTable({
           </TableHeader>
           <TableBody>
             {subjectCountWiseStatusCount.map((subject) => (
-              <TableRow
-                className="mt-5 bg-green-100 text-center "
-                key={subject.id}
-              >
+              <TableRow className="mt-5 text-center" key={subject.id}>
                 <TableCell className="bg-primary-300">
                   <Text className="size-lg font-semibold">
                     {subject.subjectCount} Subject(s)

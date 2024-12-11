@@ -370,13 +370,19 @@ export const menuItem = {
         },
         {
           id: 'academics-term',
-          label: 'Term',
+          label: 'Terms',
           icon: null,
           path: '/academics/term',
         },
         {
+          id: 'academics-range-scale',
+          label: 'Range Scales',
+          icon: null,
+          path: '/academics/range-scales',
+        },
+        {
           id: 'academics-grade',
-          label: 'Grade',
+          label: 'Grades',
           icon: null,
           path: '/academics/grade',
         },
