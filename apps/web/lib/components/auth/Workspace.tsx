@@ -1,8 +1,11 @@
 'use client';
 
+import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 import { useEffect } from 'react';
+
+import signupGif from '../../../public/assets/images/signin.gif';
 
 type WorkspaceProps = {
   branchId: string;
@@ -28,6 +31,9 @@ export function Workspace({ branchId, organizationId }: WorkspaceProps) {
 
   return (
     <div className="flex h-screen flex-col items-center justify-center">
+      <div className="mt-36 flex justify-center">
+        <Image src={signupGif} alt={'logo'} width={400}></Image>
+      </div>
       <h1 className="mb-4 text-2xl font-bold">Workspace</h1>
       <p className="text-sm text-gray-500">
         Design Required! This is the workspace page.

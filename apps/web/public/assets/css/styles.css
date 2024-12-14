@@ -1,5 +1,6 @@
 @keyframes upAndDown {
-  0%, 100% {
+  0%,
+  100% {
     transform: translateY(0); /* Start and end at the same position */
   }
   50% {
@@ -7,6 +8,6 @@
   }
 }
 
-.flying-plane {
+.animate-updown {
   animation: upAndDown 2s linear infinite; /* Adjust the duration and timing as needed */
 }

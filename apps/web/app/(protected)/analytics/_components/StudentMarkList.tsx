@@ -19,8 +19,10 @@ import {
   TableRow,
 } from 'ui/components/ui/Table';
 
+import dataSegmentationGif from '../../../../public/assets/images/data-segmentation.gif';
 import PdfDocument from '../pdf/_components/PdfDocument';
 import { downloadMarkListXLSX } from '../XLSX/excelExports';
+import { DataLoadingPlaceholder } from './DataLoadingPlaceholder';
 
 export default function StudentMarkList({
   students,
@@ -44,10 +46,11 @@ export default function StudentMarkList({
   const [pdfTableValues, setPdfTableValues] = useState([]);
   const [xlsxTableHeader, setXlsxTableHeader] = useState([]);
 
-  const { data: subjectList } = useGetExamSubjectsByClassSectionIdQuery(
-    sectionId ? { examId, classId, sectionId } : { examId, classId },
-    { enabled: !!examId && !!classId }
-  );
+  const { data: subjectList, isLoading: isSubjectListLoading } =
+    useGetExamSubjectsByClassSectionIdQuery(
+      sectionId ? { examId, classId, sectionId } : { examId, classId },
+      { enabled: !!examId && !!classId }
+    );
 
   const customStudentSort: SortingFn<any> = (rowA, rowB) => {
     const genderOrder = { Female: 0, Male: 1 };
@@ -403,68 +406,77 @@ export default function StudentMarkList({
   }, [getStudentSubject, students, subjectList]);
 
   return (
-    <section>
-      {subjectList && (
-        <div className="mt-4 space-y-4 overflow-x-auto rounded-md bg-white p-6 print:m-0 print:p-0">
-          <div className="w-full">
-            {pdfTableHeader?.length > 0 && (
-              <PdfDocument
-                headingList={pdfTableHeader as any}
-                tableValues={pdfTableValues}
-                examDetails={examDetails}
-                classDetails={classDetails}
-                sectionDetails={sectionDetails}
-              />
-            )}
-            <Button
-              variant="outline"
-              onClick={() =>
-                downloadMarkListXLSX(
-                  xlsxTableHeader,
-                  pdfTableHeader,
-                  pdfTableValues,
-                  examDetails,
-                  classDetails,
-                  sectionDetails
-                )
-              }
-            >
-              Download XLSX <TableIcon className="ml-2 h-4 w-4" />
-            </Button>
-          </div>
-          <Table className="border-1 border">
-            <TableHeader>
-              {table.getHeaderGroups().map((headerGroup) => (
-                <TableRow key={headerGroup.id} className="bg-primary-300">
-                  {headerGroup.headers.map((header) => (
-                    <TableCell key={header.id}>
-                      {header.isPlaceholder
-                        ? null
-                        : flexRender(
-                            header.column.columnDef.header,
-                            header.getContext()
+    <section className="space-y-2 rounded-md bg-white p-6">
+      {!isSubjectListLoading ? (
+        <section>
+          {subjectList && (
+            <div className="mt-4 space-y-4 overflow-x-auto rounded-md bg-white p-6 print:m-0 print:p-0">
+              <div className="w-full">
+                {pdfTableHeader?.length > 0 && (
+                  <PdfDocument
+                    headingList={pdfTableHeader as any}
+                    tableValues={pdfTableValues}
+                    examDetails={examDetails}
+                    classDetails={classDetails}
+                    sectionDetails={sectionDetails}
+                  />
+                )}
+                <Button
+                  variant="outline"
+                  onClick={() =>
+                    downloadMarkListXLSX(
+                      xlsxTableHeader,
+                      pdfTableHeader,
+                      pdfTableValues,
+                      examDetails,
+                      classDetails,
+                      sectionDetails
+                    )
+                  }
+                >
+                  Download XLSX <TableIcon className="ml-2 h-4 w-4" />
+                </Button>
+              </div>
+              <Table className="border-1 border">
+                <TableHeader>
+                  {table.getHeaderGroups().map((headerGroup) => (
+                    <TableRow key={headerGroup.id} className="bg-primary-300">
+                      {headerGroup.headers.map((header) => (
+                        <TableCell key={header.id}>
+                          {header.isPlaceholder
+                            ? null
+                            : flexRender(
+                                header.column.columnDef.header,
+                                header.getContext()
+                              )}
+                        </TableCell>
+                      ))}
+                    </TableRow>
+                  ))}
+                </TableHeader>
+                <TableBody>
+                  {table.getRowModel().rows.map((row) => (
+                    <TableRow key={row.id}>
+                      {row.getVisibleCells().map((cell) => (
+                        <TableCell key={cell.id}>
+                          {flexRender(
+                            cell.column.columnDef.cell,
+                            cell.getContext()
                           )}
-                    </TableCell>
+                        </TableCell>
+                      ))}
+                    </TableRow>
                   ))}
-                </TableRow>
-              ))}
-            </TableHeader>
-            <TableBody>
-              {table.getRowModel().rows.map((row) => (
-                <TableRow key={row.id}>
-                  {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id}>
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext()
-                      )}
-                    </TableCell>
-                  ))}
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </div>
+                </TableBody>
+              </Table>
+            </div>
+          )}
+        </section>
+      ) : (
+        <DataLoadingPlaceholder
+          image={dataSegmentationGif}
+          description="Please wait while we fetch the data for you..."
+        />
       )}
     </section>
   );

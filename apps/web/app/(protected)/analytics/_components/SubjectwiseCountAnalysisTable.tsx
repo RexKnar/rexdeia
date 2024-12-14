@@ -8,6 +8,7 @@ import {
   TableHeader,
   TableRow,
 } from 'ui/components/ui/Table';
+// import dataSegmentationGif from '../../../../public/assets/images/data-segmentation.gif';
 
 export default function SubjectwiseCountAnalysisTable({
   students,
@@ -67,7 +68,7 @@ export default function SubjectwiseCountAnalysisTable({
 
   return (
     subjectCountWiseStatusCount && (
-      <section>
+      <section className="space-y-2 rounded-md bg-white p-6">
         <Table>
           <TableHeader>
             <TableRow className="mt-5 bg-primary-300 text-center">
