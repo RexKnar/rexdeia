@@ -1,6 +1,6 @@
 import { useGetExamSubjectsByClassSectionIdQuery } from 'lib/queries/exams/subject/useGetExamSubjectsByClassSectionIdQuery';
 import { TableIcon } from 'lucide-react';
-import Image from 'next/image';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Button, Text } from 'ui';
 import {
@@ -11,25 +11,12 @@ import {
   TableRow,
 } from 'ui/components/ui/Table';
 
-import noClassListImage from '../../../../public/assets/images/options.svg';
+import noDataFoundSvg from '../../../../public/assets/images/analytics-empty-state_Artboard_1.svg';
+import dataSegmentationGif from '../../../../public/assets/images/data-segmentation.gif';
+import { OverallStudentListDialog } from '../_modals/OverallStudentListDialog';
+import { Analytics } from '../typeDefinition/Analytics';
 import { downloadSubjectWiseOverallXLSX } from '../XLSX/excelExports';
-
-interface Analytics {
-  numberOfPassStudents: { male: number; female: number; overall: number };
-  numberOfFailStudents: { male: number; female: number; overall: number };
-  highestMark: { male: number; female: number; overall: number };
-  highestMarkStudentName: { male: string; female: string; overall: string };
-  lowestMark: { male: number; female: number; overall: number };
-  lowestMarkStudentName: { male: string; female: string; overall: string };
-  averageMark: { male: number; female: number; overall: number };
-  passPercentage: { male: number; female: number; overall: number };
-  failPercentage: { male: number; female: number; overall: number };
-  attendance: { male: number; female: number; overall: number };
-  absent: { male: number; female: number; overall: number };
-  markEntry: { male: number; female: number; overall: number };
-  totalStudents: { male: number; female: number; overall: number };
-  centum: { male: number; female: number; overall: number };
-}
+import { DataLoadingPlaceholder } from './DataLoadingPlaceholder';
 
 const calculatePercentage = (part: number, whole: number) =>
   whole > 0 ? (part / whole) * 100 : 0;
@@ -43,7 +30,7 @@ export default function OverallAnalytics({
   sectionDetails,
   classDetails,
 }: {
-  students: any[];
+  students: any;
   classId: string;
   sectionId?: string;
   examId: string;
@@ -52,36 +39,115 @@ export default function OverallAnalytics({
   classDetails: any;
 }) {
   const [analytics, setAnalytics] = useState<Map<string, Analytics>>(new Map());
+  const [modalStudentList, setModalStudentList] = useState([]);
+  const [modalTitle, setModalTitle] = useState('');
+  const [modalSubTitle, setModalSubTitle] = useState('');
+  const pathname = usePathname();
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const params = new URLSearchParams(searchParams);
 
-  const { data: subjectList } = useGetExamSubjectsByClassSectionIdQuery(
-    sectionId ? { examId, classId, sectionId } : { examId, classId },
-    { enabled: !!examId && !!classId }
-  );
+  const { data: subjectList, isLoading: isSubjectLoading } =
+    useGetExamSubjectsByClassSectionIdQuery(
+      sectionId ? { examId, classId, sectionId } : { examId, classId },
+      { enabled: !!examId && !!classId }
+    );
 
   const analyzeSubjectPerformance = useCallback(
     (subjectId: string, partitionCount: number): Analytics => {
       const result: Analytics = {
-        numberOfPassStudents: { male: 0, female: 0, overall: 0 },
-        numberOfFailStudents: { male: 0, female: 0, overall: 0 },
-        highestMark: { male: 0, female: 0, overall: 0 },
-        highestMarkStudentName: { male: '', female: '', overall: '' },
-        lowestMark: { male: Infinity, female: Infinity, overall: Infinity },
-        lowestMarkStudentName: { male: '', female: '', overall: '' },
-        averageMark: { male: 0, female: 0, overall: 0 },
-        passPercentage: { male: 0, female: 0, overall: 0 },
-        failPercentage: { male: 0, female: 0, overall: 0 },
-        attendance: { male: 0, female: 0, overall: 0 },
-        absent: { male: 0, female: 0, overall: 0 },
-        markEntry: { male: 0, female: 0, overall: 0 },
-        totalStudents: { male: 0, female: 0, overall: 0 },
-        centum: { male: 0, female: 0, overall: 0 },
+        numberOfPassStudents: {
+          male: 0,
+          female: 0,
+          overall: 0,
+          studentList: { male: [], female: [], overall: [] },
+        },
+        numberOfFailStudents: {
+          male: 0,
+          female: 0,
+          overall: 0,
+          studentList: { male: [], female: [], overall: [] },
+        },
+        highestMark: {
+          male: 0,
+          female: 0,
+          overall: 0,
+          studentList: { male: [], female: [], overall: [] },
+        },
+        highestMarkStudentName: {
+          male: '',
+          female: '',
+          overall: '',
+          studentList: { male: [], female: [], overall: [] },
+        },
+        lowestMark: {
+          male: Infinity,
+          female: Infinity,
+          overall: Infinity,
+          studentList: { male: [], female: [], overall: [] },
+        },
+        lowestMarkStudentName: {
+          male: '',
+          female: '',
+          overall: '',
+          studentList: { male: [], female: [], overall: [] },
+        },
+        averageMark: {
+          male: 0,
+          female: 0,
+          overall: 0,
+          studentList: { male: [], female: [], overall: [] },
+        },
+        passPercentage: {
+          male: 0,
+          female: 0,
+          overall: 0,
+          studentList: { male: [], female: [], overall: [] },
+        },
+        failPercentage: {
+          male: 0,
+          female: 0,
+          overall: 0,
+          studentList: { male: [], female: [], overall: [] },
+        },
+        attendance: {
+          male: 0,
+          female: 0,
+          overall: 0,
+          studentList: { male: [], female: [], overall: [] },
+        },
+        absent: {
+          male: 0,
+          female: 0,
+          overall: 0,
+          studentList: { male: [], female: [], overall: [] },
+        },
+        markEntry: {
+          male: 0,
+          female: 0,
+          overall: 0,
+          studentList: { male: [], female: [], overall: [] },
+        },
+        totalStudents: {
+          male: 0,
+          female: 0,
+          overall: 0,
+          studentList: { male: [], female: [], overall: [] },
+        },
+        centum: {
+          male: 0,
+          female: 0,
+          overall: 0,
+          studentList: { male: [], female: [], overall: [] },
+        },
       };
 
       let totalMarks = { male: 0, female: 0, overall: 0 };
       let totalStudents = { male: 0, female: 0, overall: 0 };
 
       students.forEach((student) => {
-        const subject = student.subjects.find((subj) => subj.id === subjectId);
+        const { subjects: studentSubjects, ...rest } = student;
+        const subject = studentSubjects.find((subj) => subj.id === subjectId);
         if (!subject) return;
 
         const gender =
@@ -95,44 +161,61 @@ export default function OverallAnalytics({
         totalMarks[gender] += mark;
         totalMarks.overall += mark;
         totalStudents[gender]++;
+        result.totalStudents.studentList[gender].push(rest);
         totalStudents.overall++;
 
         if (!subject.absentStatus && subject?.marks?.length > 0) {
           result.attendance[gender]++;
           result.attendance.overall++;
+          result.attendance.studentList.overall.push(rest);
+          result.attendance.studentList[gender].push(rest);
         } else if (subject.absentStatus && subject?.marks?.length > 0) {
           result.absent[gender]++;
           result.absent.overall++;
+          result.absent.studentList.overall.push(rest);
+          result.absent.studentList[gender].push(rest);
         }
         if (subject?.marks?.length === 0) {
           result.markEntry[gender]++;
           result.markEntry.overall++;
+          result.markEntry.studentList.overall.push(rest);
+          result.markEntry.studentList[gender].push(rest);
         }
 
         if (mark > result.highestMark[gender]) {
           result.highestMark[gender] = mark;
           result.highestMarkStudentName[gender] = studentFullName;
+
+          result.highestMark.studentList[gender].push(rest);
         }
         if (mark < result.lowestMark[gender] && !subject.absentStatus) {
           result.lowestMark[gender] = mark;
           result.lowestMarkStudentName[gender] = studentFullName;
+
+          result.lowestMark.studentList[gender].push(rest);
         }
 
         if (mark > result.highestMark['overall']) {
           result.highestMark['overall'] = mark;
           result.highestMarkStudentName['overall'] = studentFullName;
+          result.highestMark.studentList.overall.push(rest);
         }
         if (mark < result.lowestMark['overall'] && !subject.absentStatus) {
           result.lowestMark['overall'] = mark;
           result.lowestMarkStudentName['overall'] = studentFullName;
+          result.lowestMark.studentList.overall.push(rest);
         }
 
         if (subject.failingStatus && !subject.absentStatus) {
           result.numberOfFailStudents[gender]++;
           result.numberOfFailStudents.overall++;
+          result.numberOfFailStudents.studentList.overall.push(rest);
+          result.numberOfFailStudents.studentList[gender].push(rest);
         } else if (!subject.failingStatus && !subject.absentStatus) {
           result.numberOfPassStudents[gender]++;
           result.numberOfPassStudents.overall++;
+          result.numberOfPassStudents.studentList.overall.push(rest);
+          result.numberOfPassStudents.studentList[gender].push(rest);
         }
 
         if (
@@ -143,6 +226,8 @@ export default function OverallAnalytics({
         ) {
           result.centum[gender]++;
           result.centum.overall++;
+          result.centum.studentList.overall.push(rest);
+          result.centum.studentList[gender].push(rest);
         }
       });
 
@@ -226,6 +311,19 @@ export default function OverallAnalytics({
     };
   }, [students]);
 
+  function handleOpenStudentListDialog(
+    students: any,
+    title: string,
+    subTitle: string
+  ) {
+    params.set('isListDialogOpen', 'true');
+    setModalStudentList(students);
+    setModalTitle(title);
+    setModalSubTitle(subTitle);
+
+    router.replace(pathname + '?' + params.toString());
+  }
+
   const renderSubjectRow = (subject) => {
     const subjectAnalytics = analytics.get(subject.id);
     return (
@@ -239,58 +337,163 @@ export default function OverallAnalytics({
               {subjectAnalytics?.totalStudents.overall}
             </Text>
             <div className="flex justify-evenly">
-              <Text className="text-primary-800">
+              <Button
+                variant="ghost"
+                className="size-lg text-center font-semibold text-primary-800"
+                onClick={() =>
+                  handleOpenStudentListDialog(
+                    subjectAnalytics.totalStudents.studentList.male,
+                    'Total Students',
+                    'Male'
+                  )
+                }
+              >
                 M: {subjectAnalytics?.totalStudents.male}
-              </Text>
-              <Text className="text-primary-800">
+              </Button>
+              <Button
+                variant="ghost"
+                className="size-lg text-center font-semibold text-primary-800"
+                onClick={() =>
+                  handleOpenStudentListDialog(
+                    subjectAnalytics.totalStudents.studentList.female,
+                    'Total Students',
+                    'Female'
+                  )
+                }
+              >
                 F: {subjectAnalytics?.totalStudents.female}
-              </Text>
+              </Button>
             </div>
           </div>
         </TableCell>
         <TableCell>
           <div className="flex flex-col justify-evenly">
-            <Text className="size-lg text-center font-semibold">
+            <Button
+              variant="ghost"
+              className="size-lg text-center font-semibold"
+              onClick={() =>
+                handleOpenStudentListDialog(
+                  subjectAnalytics.markEntry.studentList.overall,
+                  'Pending Mark Entry List',
+                  'Overall'
+                )
+              }
+            >
               {subjectAnalytics?.markEntry.overall}
-            </Text>
-            <div className="flex justify-evenly">
-              <Text className="text-primary-800">
+            </Button>
+            <div className="size-lg flex justify-evenly text-center text-primary-800">
+              <Button
+                variant="ghost"
+                onClick={() =>
+                  handleOpenStudentListDialog(
+                    subjectAnalytics.markEntry.studentList.male,
+                    'Pending Mark Entry List',
+                    'Male'
+                  )
+                }
+              >
                 M: {subjectAnalytics?.markEntry.male}
-              </Text>
-              <Text className="text-primary-800">
+              </Button>
+              <Button
+                variant="ghost"
+                onClick={() =>
+                  handleOpenStudentListDialog(
+                    subjectAnalytics.markEntry.studentList.female,
+                    'Pending Mark Entry List',
+                    'Female'
+                  )
+                }
+              >
                 F: {subjectAnalytics?.markEntry.female}
-              </Text>
+              </Button>
             </div>
           </div>
         </TableCell>
 
         <TableCell>
           <div className="flex flex-col justify-evenly">
-            <Text className="size-lg text-center font-semibold">
-              {subjectAnalytics?.attendance.overall}
-            </Text>
-            <div className="flex justify-evenly">
-              <Text className="text-primary-800">
+            <Button
+              variant="ghost"
+              onClick={() =>
+                handleOpenStudentListDialog(
+                  subjectAnalytics.attendance.studentList.overall,
+                  'Appeared Students List',
+                  'Overall'
+                )
+              }
+            >
+              <Text className="size-lg text-center font-semibold">
+                {subjectAnalytics?.attendance.overall}
+              </Text>
+            </Button>
+            <div className="flex justify-evenly text-primary-800">
+              <Button
+                variant="ghost"
+                onClick={() =>
+                  handleOpenStudentListDialog(
+                    subjectAnalytics.attendance.studentList.male,
+                    'Appeared Students List',
+                    'Male'
+                  )
+                }
+              >
                 M: {subjectAnalytics?.attendance.male}
-              </Text>
-              <Text className="text-primary-800">
+              </Button>
+              <Button
+                variant="ghost"
+                onClick={() =>
+                  handleOpenStudentListDialog(
+                    subjectAnalytics.attendance.studentList.female,
+                    'Appeared Students List',
+                    'Female'
+                  )
+                }
+              >
                 F: {subjectAnalytics?.attendance.female}
-              </Text>
+              </Button>
             </div>
           </div>
         </TableCell>
         <TableCell className="text-center">
           <div className="flex flex-col justify-evenly">
-            <Text className="size-lg text-center font-semibold">
+            <Button
+              variant="ghost"
+              className="size-lg text-center font-semibold"
+              onClick={() =>
+                handleOpenStudentListDialog(
+                  subjectAnalytics.absent.studentList.overall,
+                  'Absent Students List',
+                  'Overall'
+                )
+              }
+            >
               {subjectAnalytics?.absent.overall}
-            </Text>
-            <div className="flex justify-evenly">
-              <Text className="text-primary-800">
+            </Button>
+            <div className="flex justify-evenly text-primary-800">
+              <Button
+                variant="ghost"
+                onClick={() =>
+                  handleOpenStudentListDialog(
+                    subjectAnalytics.absent.studentList.male,
+                    'Absent Students List',
+                    'Male'
+                  )
+                }
+              >
                 M: {subjectAnalytics?.absent.male}
-              </Text>
-              <Text className="text-primary-800">
+              </Button>
+              <Button
+                variant="ghost"
+                onClick={() =>
+                  handleOpenStudentListDialog(
+                    subjectAnalytics.absent.studentList.female,
+                    'Absent Students List',
+                    'Female'
+                  )
+                }
+              >
                 F: {subjectAnalytics?.absent.female}
-              </Text>
+              </Button>
             </div>
           </div>
         </TableCell>
@@ -311,31 +514,88 @@ export default function OverallAnalytics({
         </TableCell>
         <TableCell>
           <div className="flex flex-col justify-evenly">
-            <Text className="size-lg text-center font-semibold">
-              {subjectAnalytics?.numberOfPassStudents.overall}
-            </Text>
-            <div className="flex justify-evenly">
-              <Text className="text-primary-800">
+            <Button
+              variant="ghost"
+              onClick={() =>
+                handleOpenStudentListDialog(
+                  subjectAnalytics.numberOfPassStudents.studentList.overall,
+                  'Passed Students List',
+                  'Overall'
+                )
+              }
+            >
+              <Text className="size-lg text-center font-semibold">
+                {subjectAnalytics?.numberOfPassStudents.overall}
+              </Text>
+            </Button>
+            <div className="flex justify-evenly text-primary-800">
+              <Button
+                variant="ghost"
+                onClick={() =>
+                  handleOpenStudentListDialog(
+                    subjectAnalytics.numberOfPassStudents.studentList.male,
+                    'Passed Students List',
+                    'Male'
+                  )
+                }
+              >
                 M: {subjectAnalytics?.numberOfPassStudents.male}
-              </Text>
-              <Text className="text-primary-800">
+              </Button>
+              <Button
+                variant="ghost"
+                onClick={() =>
+                  handleOpenStudentListDialog(
+                    subjectAnalytics.numberOfPassStudents.studentList.male,
+                    'Passed Students List',
+                    'Female'
+                  )
+                }
+              >
                 F: {subjectAnalytics?.numberOfPassStudents.female}
-              </Text>
+              </Button>
             </div>
           </div>
         </TableCell>
         <TableCell>
           <div className="flex flex-col justify-evenly">
-            <Text className="size-lg text-center font-semibold">
+            <Button
+              variant="ghost"
+              className="size-lg text-center font-semibold"
+              onClick={() =>
+                handleOpenStudentListDialog(
+                  subjectAnalytics.numberOfFailStudents.studentList.overall,
+                  'Failed Students List',
+                  'Overall'
+                )
+              }
+            >
               {subjectAnalytics?.numberOfFailStudents.overall}
-            </Text>
-            <div className="flex justify-evenly">
-              <Text className="text-primary-800">
+            </Button>
+            <div className="flex justify-evenly text-primary-800">
+              <Button
+                variant="ghost"
+                onClick={() =>
+                  handleOpenStudentListDialog(
+                    subjectAnalytics.numberOfFailStudents.studentList.male,
+                    'Failed Students List',
+                    'Male'
+                  )
+                }
+              >
                 M: {subjectAnalytics?.numberOfFailStudents.male}
-              </Text>
-              <Text className="text-primary-800">
+              </Button>
+              <Button
+                variant="ghost"
+                onClick={() =>
+                  handleOpenStudentListDialog(
+                    subjectAnalytics.numberOfFailStudents.studentList.female,
+                    'Failed Students List',
+                    'Female'
+                  )
+                }
+              >
                 F: {subjectAnalytics?.numberOfFailStudents.female}
-              </Text>
+              </Button>
             </div>
           </div>
         </TableCell>
@@ -371,46 +631,133 @@ export default function OverallAnalytics({
         </TableCell>
         <TableCell>
           <div className="flex flex-col justify-evenly">
-            <Text className="size-lg text-center font-semibold">
-              {subjectAnalytics?.highestMark.overall}
-            </Text>
+            <Button
+              variant="ghost"
+              onClick={() =>
+                handleOpenStudentListDialog(
+                  subjectAnalytics.highestMark.studentList.overall,
+                  'Highest Mark List',
+                  'Overall'
+                )
+              }
+            >
+              <Text className="size-lg text-center font-semibold">
+                {subjectAnalytics?.highestMark.overall}
+              </Text>
+            </Button>
             <div className="flex justify-evenly">
-              <Text className="text-primary-800">
+              <Button
+                variant="ghost"
+                onClick={() =>
+                  handleOpenStudentListDialog(
+                    subjectAnalytics.highestMark.studentList.male,
+                    'Highest Mark List',
+                    'Male'
+                  )
+                }
+              >
                 M: {subjectAnalytics?.highestMark.male}
-              </Text>
-              <Text className="text-primary-800">
+              </Button>
+              <Button
+                variant="ghost"
+                onClick={() =>
+                  handleOpenStudentListDialog(
+                    subjectAnalytics.highestMark.studentList.female,
+                    'Highest Mark List',
+                    'Female'
+                  )
+                }
+              >
                 F: {subjectAnalytics?.highestMark.female}
-              </Text>
+              </Button>
             </div>
           </div>
         </TableCell>
         <TableCell>
           <div className="flex flex-col justify-evenly">
-            <Text className="size-lg text-center font-semibold">
-              {subjectAnalytics?.lowestMark.overall}
-            </Text>
-            <div className="flex justify-evenly">
-              <Text className="text-primary-800">
+            <Button
+              variant="ghost"
+              onClick={() =>
+                handleOpenStudentListDialog(
+                  subjectAnalytics.lowestMark.studentList.overall,
+                  'Lowest Mark List',
+                  'Overall'
+                )
+              }
+            >
+              <Text className="size-lg text-center font-semibold">
+                {subjectAnalytics?.lowestMark.overall}
+              </Text>
+            </Button>
+            <div className="flex justify-evenly text-primary-800">
+              <Button
+                variant="ghost"
+                onClick={() =>
+                  handleOpenStudentListDialog(
+                    subjectAnalytics.lowestMark.studentList.male,
+                    'Lowest Mark List',
+                    'Male'
+                  )
+                }
+              >
                 M: {subjectAnalytics?.lowestMark.male}
-              </Text>
-              <Text className="text-primary-800">
+              </Button>
+              <Button
+                variant="ghost"
+                onClick={() =>
+                  handleOpenStudentListDialog(
+                    subjectAnalytics.lowestMark.studentList.female,
+                    'Lowest Mark List',
+                    'Female'
+                  )
+                }
+              >
                 F: {subjectAnalytics?.lowestMark.female}
-              </Text>
+              </Button>
             </div>
           </div>
         </TableCell>
         <TableCell>
           <div className="flex flex-col justify-evenly">
-            <Text className="size-lg text-center font-semibold">
-              {subjectAnalytics?.centum.overall}
-            </Text>
-            <div className="flex justify-evenly">
-              <Text className="text-primary-800">
+            <Button
+              variant="ghost"
+              onClick={() =>
+                handleOpenStudentListDialog(
+                  subjectAnalytics.centum.studentList.overall,
+                  'Centum List',
+                  'Overall'
+                )
+              }
+            >
+              <Text className="size-lg text-center font-semibold">
+                {subjectAnalytics?.centum.overall}
+              </Text>
+            </Button>
+            <div className="flex justify-evenly text-primary-800">
+              <Button
+                variant="ghost"
+                onClick={() =>
+                  handleOpenStudentListDialog(
+                    subjectAnalytics.centum.studentList.male,
+                    'Centum List',
+                    'Male'
+                  )
+                }
+              >
                 M: {subjectAnalytics?.centum.male}
-              </Text>
-              <Text className="text-primary-800">
+              </Button>
+              <Button
+                variant="ghost"
+                onClick={() =>
+                  handleOpenStudentListDialog(
+                    subjectAnalytics.centum.studentList.female,
+                    'Centum List',
+                    'Female'
+                  )
+                }
+              >
                 F: {subjectAnalytics?.centum.female}
-              </Text>
+              </Button>
             </div>
           </div>
         </TableCell>
@@ -419,131 +766,142 @@ export default function OverallAnalytics({
   };
 
   return (
-    <section>
-      {subjectList ? (
-        <div className="mt-4 space-y-4 overflow-x-auto rounded-md bg-white p-6 print:m-0 print:p-0 ">
-          <Button
-            variant="outline"
-            onClick={() =>
-              downloadSubjectWiseOverallXLSX(
-                subjectList,
-                analytics,
-                examDetails,
-                classDetails,
-                overallStats,
-                sectionDetails
-              )
-            }
-          >
-            Download XLSX <TableIcon className="ml-2 h-4 w-4" />
-          </Button>
-          <Table>
-            <TableHeader>
-              <TableRow className="mt-5 bg-primary-300 text-center">
-                <TableCell></TableCell>
-                <TableCell className="text-center">Total Count</TableCell>
-                <TableCell>
-                  <Text className="size-lg font-semibold">Pending Entry</Text>
-                </TableCell>
-                <TableCell>
-                  <Text className="size-lg font-semibold">Appeared</Text>
-                </TableCell>
-                <TableCell className="text-center">
-                  <Text className="size-lg font-semibold">Absent</Text>
-                </TableCell>
-                <TableCell>
-                  <Text className="size-lg font-semibold">Average</Text>
-                </TableCell>
-                <TableCell>
-                  <Text className="size-lg font-semibold">No. of Pass</Text>
-                </TableCell>
-                <TableCell>
-                  <Text className="size-lg font-semibold">No. of Failures</Text>
-                </TableCell>
-                <TableCell>
-                  <Text className="size-lg font-semibold">Pass %</Text>
-                </TableCell>
-                <TableCell>
-                  <Text className="size-lg font-semibold">Failure %</Text>
-                </TableCell>
-                <TableCell>
-                  <Text className="size-lg font-semibold">Highest</Text>
-                </TableCell>
-                <TableCell>
-                  <Text className="size-lg font-semibold">Lowest</Text>
-                </TableCell>
-                <TableCell>
-                  <Text className="size-lg font-semibold">Centum</Text>
-                </TableCell>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {subjectList.map(renderSubjectRow)}
-              <TableRow className="mt-5 bg-green-100 text-center ">
-                <TableCell>
-                  <Text className="text-center text-lg font-semibold">
-                    Overall
-                  </Text>
-                </TableCell>
-                <TableCell className=""></TableCell>
-                <TableCell className=""></TableCell>
-                <TableCell className=""></TableCell>
-                <TableCell className=""></TableCell>
-                <TableCell>
-                  <Text className="size-lg font-semibold">
-                    {overallStats.avgMark?.toFixed(2)}
-                  </Text>
-                </TableCell>
-                <TableCell>
-                  <Text className="size-lg font-semibold">
-                    {overallStats.passCount}
-                  </Text>
-                </TableCell>
-                <TableCell>
-                  <Text className="size-lg font-semibold">
-                    {overallStats.failCount}
-                  </Text>
-                </TableCell>
-                <TableCell>
-                  <Text className="size-lg font-semibold">
-                    {overallStats.passPercentage?.toFixed(2)}%
-                  </Text>
-                </TableCell>
-                <TableCell>
-                  <Text className="size-lg font-semibold">
-                    {overallStats.failPercentage?.toFixed(2)}%
-                  </Text>
-                </TableCell>
-                <TableCell>
-                  <Text className="size-lg font-semibold">
-                    {overallStats.highestMark}
-                  </Text>
-                </TableCell>
-                <TableCell>
-                  <Text className="size-lg font-semibold">
-                    {overallStats.lowestMark}
-                  </Text>
-                </TableCell>
-                <TableCell>
-                  <Text className="size-lg font-semibold">-</Text>
-                </TableCell>
-              </TableRow>
-            </TableBody>
-          </Table>
-        </div>
+    <section className="space-y-2 rounded-md bg-white p-6">
+      {!isSubjectLoading ? (
+        <section>
+          {subjectList ? (
+            <div className="mt-4 space-y-4 overflow-x-auto rounded-md bg-white p-6 print:m-0 print:p-0 ">
+              <Button
+                variant="outline"
+                onClick={() =>
+                  downloadSubjectWiseOverallXLSX(
+                    subjectList,
+                    analytics,
+                    examDetails,
+                    classDetails,
+                    overallStats,
+                    sectionDetails
+                  )
+                }
+              >
+                Download XLSX <TableIcon className="ml-2 h-4 w-4" />
+              </Button>
+              <Table>
+                <TableHeader>
+                  <TableRow className="mt-5 bg-primary-300 text-center">
+                    <TableCell></TableCell>
+                    <TableCell className="text-center">Total Count</TableCell>
+                    <TableCell>
+                      <Text className="size-lg font-semibold">
+                        Pending Entry
+                      </Text>
+                    </TableCell>
+                    <TableCell>
+                      <Text className="size-lg font-semibold">Appeared</Text>
+                    </TableCell>
+                    <TableCell className="text-center">
+                      <Text className="size-lg font-semibold">Absent</Text>
+                    </TableCell>
+                    <TableCell>
+                      <Text className="size-lg font-semibold">Average</Text>
+                    </TableCell>
+                    <TableCell>
+                      <Text className="size-lg font-semibold">No. of Pass</Text>
+                    </TableCell>
+                    <TableCell>
+                      <Text className="size-lg font-semibold">
+                        No. of Failures
+                      </Text>
+                    </TableCell>
+                    <TableCell>
+                      <Text className="size-lg font-semibold">Pass %</Text>
+                    </TableCell>
+                    <TableCell>
+                      <Text className="size-lg font-semibold">Failure %</Text>
+                    </TableCell>
+                    <TableCell>
+                      <Text className="size-lg font-semibold">Highest</Text>
+                    </TableCell>
+                    <TableCell>
+                      <Text className="size-lg font-semibold">Lowest</Text>
+                    </TableCell>
+                    <TableCell>
+                      <Text className="size-lg font-semibold">Centum</Text>
+                    </TableCell>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {subjectList.map(renderSubjectRow)}
+                  <TableRow className="mt-5 bg-green-100 text-center ">
+                    <TableCell>
+                      <Text className="text-center text-lg font-semibold">
+                        Overall
+                      </Text>
+                    </TableCell>
+                    <TableCell className=""></TableCell>
+                    <TableCell className=""></TableCell>
+                    <TableCell className=""></TableCell>
+                    <TableCell className=""></TableCell>
+                    <TableCell>
+                      <Text className="size-lg font-semibold">
+                        {overallStats.avgMark?.toFixed(2)}
+                      </Text>
+                    </TableCell>
+                    <TableCell>
+                      <Text className="size-lg font-semibold">
+                        {overallStats.passCount}
+                      </Text>
+                    </TableCell>
+                    <TableCell>
+                      <Text className="size-lg font-semibold">
+                        {overallStats.failCount}
+                      </Text>
+                    </TableCell>
+                    <TableCell>
+                      <Text className="size-lg font-semibold">
+                        {overallStats.passPercentage?.toFixed(2)}%
+                      </Text>
+                    </TableCell>
+                    <TableCell>
+                      <Text className="size-lg font-semibold">
+                        {overallStats.failPercentage?.toFixed(2)}%
+                      </Text>
+                    </TableCell>
+                    <TableCell>
+                      <Text className="size-lg font-semibold">
+                        {overallStats.highestMark}
+                      </Text>
+                    </TableCell>
+                    <TableCell>
+                      <Text className="size-lg font-semibold">
+                        {overallStats.lowestMark}
+                      </Text>
+                    </TableCell>
+                    <TableCell>
+                      <Text className="size-lg font-semibold">-</Text>
+                    </TableCell>
+                  </TableRow>
+                </TableBody>
+              </Table>
+            </div>
+          ) : (
+            <DataLoadingPlaceholder
+              image={noDataFoundSvg}
+              description="It looks like there are no analytics details available at the moment."
+            />
+          )}
+        </section>
       ) : (
-        <div className="flex flex-col items-center gap-6 p-6 align-middle">
-          <Image alt="icon" width={320} height={320} src={noClassListImage} />
-          <div className="flex flex-col items-center gap-1 text-sm">
-            <p className="text-base">
-              It looks like there are no options selected at the moment.
-            </p>
-            <p className="text-gray-800">
-              Please choose Class/Section/Exam to view the analytics.
-            </p>
-          </div>
-        </div>
+        <DataLoadingPlaceholder
+          image={dataSegmentationGif}
+          description="Please wait while we fetch the data for you..."
+        />
       )}
+      <OverallStudentListDialog
+        studentList={modalStudentList}
+        title={modalTitle}
+        subTitle={modalSubTitle}
+      />
     </section>
   );
 }

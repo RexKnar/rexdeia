@@ -18,8 +18,12 @@ import {
   TabsContent,
   TabsList,
   TabsTrigger,
+  Text,
 } from 'ui';
 
+import dataSegmentationGif from '../../../../../public/assets/images/data-segmentation.gif';
+import noClassListImage from '../../../../../public/assets/images/options.svg';
+import { DataLoadingPlaceholder } from '../../_components/DataLoadingPlaceholder';
 import OverallAnalytics from '../../_components/OverallAnalytics';
 import RangeAnalyticsTable from '../../_components/RangeAnalyticsTable';
 import SectionAnalytics from '../../_components/SectionAnalytics';
@@ -45,27 +49,29 @@ export function AnalyticStudentList() {
   const [sectionDetail, setSectionDetail] = useState('');
   const [classDetail, setClassDetail] = useState('');
 
-  const { data: examList } = useGetExamsBySectionIdQuery(
-    sectionId ? { classId, sectionId } : { classId },
-    {
-      enabled: !!classId,
-    }
-  );
+  const { data: examList, isLoading: isExamLoading } =
+    useGetExamsBySectionIdQuery(
+      sectionId ? { classId, sectionId } : { classId },
+      {
+        enabled: !!classId,
+      }
+    );
 
-  const { data: classList } = useGetClassListQuery({
+  const { data: classList, isLoading: isClassLoading } = useGetClassListQuery({
     page,
     limit,
     filter,
   });
-  const { data: sectionList } = useGetAllSectionByClassIdQuery(
-    {
-      filter,
-      classId,
-    },
-    {
-      enabled: !!classId,
-    }
-  );
+  const { data: sectionList, isLoading: isSectionLoading } =
+    useGetAllSectionByClassIdQuery(
+      {
+        filter,
+        classId,
+      },
+      {
+        enabled: !!classId,
+      }
+    );
   const { data: subjects } = useGetExamSubjectsByClassSectionIdQuery(
     {
       examId,
@@ -77,20 +83,21 @@ export function AnalyticStudentList() {
     }
   );
 
-  const { data: markDetails } = useGetMarkMasterWithFilterQuery(
-    {
-      classId,
-      sectionId,
-      examId,
-      pagination: {
-        page: 1,
-        limit: 10,
+  const { data: markDetails, isLoading: isStudentDetailsLoading } =
+    useGetMarkMasterWithFilterQuery(
+      {
+        classId,
+        sectionId,
+        examId,
+        pagination: {
+          page: 1,
+          limit: 10,
+        },
       },
-    },
-    {
-      enabled: !!examId,
-    }
-  );
+      {
+        enabled: !!examId,
+      }
+    );
 
   useEffect(() => {
     if (markDetails) {
@@ -118,7 +125,7 @@ export function AnalyticStudentList() {
               }}
             >
               <SelectTrigger className="w-full">
-                <SelectValue />
+                {isClassLoading ? <Text>Loading...</Text> : <SelectValue />}
               </SelectTrigger>
               <SelectContent>
                 <SelectGroup>
@@ -142,12 +149,10 @@ export function AnalyticStudentList() {
                   : params.set('sectionId', value);
 
                 router.replace(pathname + '?' + params.toString());
-                // setExamId(null);
-                // setSectionId(value === 'all' ? null : value);
               }}
             >
               <SelectTrigger className="w-full">
-                <SelectValue />
+                {isSectionLoading ? <Text>Loading...</Text> : <SelectValue />}
               </SelectTrigger>
               <SelectContent>
                 <SelectGroup>
@@ -172,11 +177,10 @@ export function AnalyticStudentList() {
                   : params.set('examId', value);
 
                 router.replace(pathname + '?' + params.toString());
-                // setExamId(value === 'all' ? null : value);
               }}
             >
               <SelectTrigger className="w-full">
-                <SelectValue />
+                {isExamLoading ? <Text>Loading...</Text> : <SelectValue />}
               </SelectTrigger>
               <SelectContent>
                 <SelectGroup>
@@ -192,89 +196,46 @@ export function AnalyticStudentList() {
           </div>
         </div>
       </section>
-      <Tabs defaultValue="overall" className="border-0 ">
-        <TabsList className="w-full justify-start border-b-2 border-gray-100">
-          <TabsTrigger
-            value="overall"
-            className="mr-2 text-base focus:border-b-4 focus:border-primary print:hidden"
-          >
-            Overall-Analytics
-          </TabsTrigger>
-          <TabsTrigger
-            value="sectionAnalytics"
-            className="mr-2 text-base focus:border-b-4 focus:border-primary print:hidden"
-          >
-            Section-Analytics
-          </TabsTrigger>
-          <TabsTrigger
-            value="staffAnalytics"
-            className="mr-2 text-base focus:border-b-4 focus:border-primary print:hidden"
-          >
-            Staff-Analytics
-          </TabsTrigger>
-          <TabsTrigger value="rangeAnalytics" className="mr-2 text-base">
-            Range Analytics
-          </TabsTrigger>
-          <TabsTrigger value="subjectCountAnalytics" className="mr-2 text-base">
-            Subject Count Analytics
-          </TabsTrigger>
-          <TabsTrigger
-            value="markList"
-            className="mr-2 text-base focus:border-b-4 focus:border-primary print:hidden"
-          >
-            Mark List
-          </TabsTrigger>
-        </TabsList>
-        <TabsContent className="w-full" value="overall">
-          <section>
-            <OverallAnalytics
-              examId={examId}
-              classId={classId}
-              sectionId={sectionId}
-              students={studentMarkList}
-              examDetails={examDetail}
-              sectionDetails={sectionDetail}
-              classDetails={classDetail}
-            />
-          </section>
-        </TabsContent>
-        <TabsContent className="w-full" value="sectionAnalytics">
-          <section>
-            <SectionAnalytics
-              examId={examId}
-              classId={classId}
-              sectionId={sectionId}
-            />
-          </section>
-        </TabsContent>
-        <TabsContent className="w-full" value="staffAnalytics">
-          <section>
-            <StaffAnalysisTable />
-          </section>
-        </TabsContent>
-        <TabsContent className="w-full" value="rangeAnalytics">
-          <section>
-            <RangeAnalyticsTable
-              markList={studentMarkList}
-              subjectList={subjects}
-            />
-          </section>
-        </TabsContent>
-        <TabsContent className="w-full" value="subjectCountAnalytics">
-          <section>
-            <SubjectwiseCountAnalysisTable
-              students={studentMarkList}
-              subjectCount={subjects?.length}
-              classId={classId}
-              sectionId={sectionId}
-              examId={examId}
-            />
-          </section>
-        </TabsContent>
-        <TabsContent className="w-full" value="markList">
-          <section>
-            {studentMarkList && (
-              <StudentMarkList
+      {markDetails ? (
+        <Tabs defaultValue="overall" className="border-0 ">
+          <TabsList className="w-full justify-start border-b-2 border-gray-100">
+            <TabsTrigger
+              value="overall"
+              className="mr-2 text-base focus:border-b-4 focus:border-primary print:hidden"
+            >
+              Overall-Analytics
+            </TabsTrigger>
+            <TabsTrigger
+              value="sectionAnalytics"
+              className="mr-2 text-base focus:border-b-4 focus:border-primary print:hidden"
+            >
+              Section-Analytics
+            </TabsTrigger>
+            <TabsTrigger
+              value="staffAnalytics"
+              className="mr-2 text-base focus:border-b-4 focus:border-primary print:hidden"
+            >
+              Staff-Analytics
+            </TabsTrigger>
+            <TabsTrigger value="rangeAnalytics" className="mr-2 text-base">
+              Range Analytics
+            </TabsTrigger>
+            <TabsTrigger
+              value="subjectCountAnalytics"
+              className="mr-2 text-base"
+            >
+              Subject Count Analytics
+            </TabsTrigger>
+            <TabsTrigger
+              value="markList"
+              className="mr-2 text-base focus:border-b-4 focus:border-primary print:hidden"
+            >
+              Mark List
+            </TabsTrigger>
+          </TabsList>
+          <TabsContent className="w-full" value="overall">
+            <section>
+              <OverallAnalytics
                 examId={examId}
                 classId={classId}
                 sectionId={sectionId}
@@ -283,10 +244,74 @@ export function AnalyticStudentList() {
                 sectionDetails={sectionDetail}
                 classDetails={classDetail}
               />
-            )}
-          </section>
-        </TabsContent>
-      </Tabs>
+            </section>
+          </TabsContent>
+          <TabsContent className="w-full" value="sectionAnalytics">
+            <section>
+              <SectionAnalytics
+                examId={examId}
+                classId={classId}
+                sectionId={sectionId}
+              />
+            </section>
+          </TabsContent>
+          <TabsContent className="w-full" value="staffAnalytics">
+            <section>
+              <StaffAnalysisTable />
+            </section>
+          </TabsContent>
+          <TabsContent className="w-full" value="rangeAnalytics">
+            <section>
+              <RangeAnalyticsTable
+                markList={studentMarkList}
+                subjectList={subjects}
+              />
+            </section>
+          </TabsContent>
+          <TabsContent className="w-full" value="subjectCountAnalytics">
+            <section>
+              <SubjectwiseCountAnalysisTable
+                students={studentMarkList}
+                subjectCount={subjects?.length}
+                classId={classId}
+                sectionId={sectionId}
+                examId={examId}
+              />
+            </section>
+          </TabsContent>
+          <TabsContent className="w-full" value="markList">
+            <section>
+              {studentMarkList && (
+                <StudentMarkList
+                  examId={examId}
+                  classId={classId}
+                  sectionId={sectionId}
+                  students={studentMarkList}
+                  examDetails={examDetail}
+                  sectionDetails={sectionDetail}
+                  classDetails={classDetail}
+                />
+              )}
+            </section>
+          </TabsContent>
+        </Tabs>
+      ) : (
+        <section className="mt-4 space-y-4 overflow-x-auto rounded-md bg-white p-6 print:m-0 print:p-0 ">
+          {isStudentDetailsLoading ? (
+            <DataLoadingPlaceholder
+              image={dataSegmentationGif}
+              description="Please wait while we fetch the data for you..."
+            />
+          ) : (
+            <DataLoadingPlaceholder
+              title={'No Options Selected'}
+              image={noClassListImage}
+              description="It looks like there are no options selected at the moment."
+              subDescription="Please choose Class/Section/Exam to view the analytics."
+            />
+          )}
+        </section>
+      )}
     </>
   );
 }
