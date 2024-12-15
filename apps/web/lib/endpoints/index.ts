@@ -598,7 +598,7 @@ export default <EndpointDetails>{
   },
   [UPDATE_EXAM]: {
     requestType: `PUT`,
-    endpoint: `/api/exam`,
+    endpoint: `/api/exam/[id]`,
   },
   [GET_EXAM_BY_CLASS_SECTION]: {
     requestType: `PUT`,

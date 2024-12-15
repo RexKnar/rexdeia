@@ -107,8 +107,11 @@ export function SaveExamFlyout() {
   const { isPending: isPendingCreateExam, mutateAsync: mutateCreateExamAsync } =
     useCreateExamMutationQuery(page, limit);
 
-  const { isPending: isPendingUpdateExam, mutateAsync: mutateUpdateExamAsync } =
-    useUpdateExamDetailMutationQuery(page, limit);
+  const {
+    isPending: isPendingUpdateExam,
+    mutateAsync: mutateUpdateExamAsync,
+    isSuccess: isSuccessUpdateExam,
+  } = useUpdateExamDetailMutationQuery(page, limit);
 
   async function saveExam(payload: CreateExamModel) {
     try {
@@ -134,6 +137,12 @@ export function SaveExamFlyout() {
       console.error(error);
     }
   }
+
+  useEffect(() => {
+    if (isSuccessUpdateExam) {
+      closeFlyout();
+    }
+  }, [isSuccessUpdateExam]);
 
   return (
     <section>
