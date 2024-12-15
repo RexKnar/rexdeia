@@ -17,6 +17,7 @@ export type CreateExamModel = Pick<
   ExamModel,
   'name' | 'termId' | 'isActive' | 'examTypeId' | 'academicYearId' | 'id' // here id for navigation purpose only
 >;
+export type UpdateExamModel = Omit<ExamModel, 'examType' | 'batch' | 'term'>;
 
 export type ExamConfigurationModel = {
   assessmentFormatConfiguration: assessmentFormatConfiguration[];

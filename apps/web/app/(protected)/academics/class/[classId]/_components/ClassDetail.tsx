@@ -98,7 +98,7 @@ export function ClassDetail() {
   }
   const closeFlyout = async () => {
     const params = new URLSearchParams(searchParams.toString());
-    params.set('isDeleteConfirmationModalOpen', 'false');
+    params.delete('isDeleteConfirmationModalOpen');
     params.delete('subjectId');
     params.delete('subjectName');
     router.replace(pathname + '?' + params.toString());

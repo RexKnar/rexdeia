@@ -98,6 +98,7 @@ export const GET_SECTION_BY_CLASS_GROUP = `GET_SECTION_BY_CLASS_GROUP`;
 export const ADD_EXAM_CONFIGURATION_BY_EXAM_ID = `ADD_EXAM_CONFIGURATION_BY_EXAM_ID`;
 export const GET_EXAM_LIST = `GET_EXAM_LIST`;
 export const ADD_EXAM = `ADD_EXAM`;
+export const UPDATE_EXAM = `UPDATE_EXAM`;
 export const GET_EXAM_BY_CLASS_SECTION = `GET_EXAM_BY_CLASS_SECTION`;
 export const GET_EXAM_BY_SECTION_ID = `GET_EXAM_BY_SECTION_ID`; //new
 export const GET_SUBJECTS_WITH_FORMATS_BY_EXAM = `GET_SUBJECTS_WITH_FORMATS_BY_EXAM`;
@@ -594,6 +595,10 @@ export default <EndpointDetails>{
   [ADD_EXAM]: {
     requestType: `POST`,
     endpoint: `/api/exam`,
+  },
+  [UPDATE_EXAM]: {
+    requestType: `PUT`,
+    endpoint: `/api/exam/[id]`,
   },
   [GET_EXAM_BY_CLASS_SECTION]: {
     requestType: `PUT`,

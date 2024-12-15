@@ -37,11 +37,11 @@ export function ExamsList() {
       <div className="container flex flex-wrap p-4">
         {examListResponse?.data?.map((exam, index) => (
           <ExamCard
-            key={exam.id}
-            examId={exam.id}
-            examName={exam.name}
-            termName={exam.term.name}
-            academicYear={exam.batch.name}
+            key={exam?.id}
+            examId={exam?.id}
+            examName={exam?.name}
+            termName={exam?.term?.name}
+            academicYear={exam?.batch?.name}
             isActive={exam.isActive}
             className="m-2 w-1/4"
             cardColor={cardColors[index % cardColors.length]}

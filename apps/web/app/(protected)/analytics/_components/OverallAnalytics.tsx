@@ -770,7 +770,7 @@ export default function OverallAnalytics({
       {!isSubjectLoading ? (
         <section>
           {subjectList ? (
-            <div className="mt-4 space-y-4 overflow-x-auto rounded-md bg-white p-6 print:m-0 print:p-0 ">
+            <div className="space-y-4 overflow-x-auto rounded-md bg-white p-6  print:m-0 print:p-0">
               <Button
                 variant="outline"
                 onClick={() =>
