@@ -1,9 +1,12 @@
 'use client';
 
+import { PencilIcon } from 'lucide-react';
 import React from 'react';
+import { Button } from 'ui';
 import { cn } from 'utils';
 
 import { LinkButton } from '@/components/LinkButton';
+import { useQueryParams } from '@/hooks/useQueryParams';
 
 type ExamCardProps = {
   examId: string;
@@ -24,6 +27,7 @@ export function ExamCard({
   className,
   cardColor,
 }: ExamCardProps) {
+  const { setParams } = useQueryParams();
   return (
     <div className={cn(`border-1 rounded-xl border p-4`, cardColor, className)}>
       <div className="flex justify-between">
@@ -36,6 +40,14 @@ export function ExamCard({
         >
           {isActive ? 'Active' : 'Inactive'}
         </p>
+        <Button
+          variant="ghost"
+          onClick={() =>
+            setParams({ isSaveExamFlyoutOpen: 'true', examId: examId })
+          }
+        >
+          <PencilIcon className="ml-2 h-4 w-4 text-primary-900" />
+        </Button>
       </div>
       <div className="flex flex-wrap">
         <p className="py-3">
