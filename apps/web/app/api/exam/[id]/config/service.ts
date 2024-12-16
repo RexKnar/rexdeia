@@ -63,6 +63,7 @@ export async function createExamConfig(
       const existingExamSubject = await db.examSubject.findFirst({
         where: { subjectId: subject.subjectId, examGroupId },
       });
+
       const { id: examSubjectId } =
         existingExamSubject ??
         (await db.examSubject.create({
@@ -76,27 +77,27 @@ export async function createExamConfig(
         }));
 
       if (examSubjectId) {
-        return await db.$transaction(async (prisma) => {
-          return await Promise.all(
-            configDetail.map(async (config) => {
-              await prisma.examSubjectPartition.create({
-                data: {
-                  subjectId: subject.subjectId,
-                  examSubjectId: examSubjectId,
-                  assessmentFormatId: config.assessmentFormatId,
-                  minMark: +config.minMark,
-                  convertTo: +config.convertTo,
-                  totalMarks: +config.totalMarks,
-                  examGroupId: examGroupId,
-                  dateToConduct: new Date(config.dateToConduct),
-                },
-              });
-            })
-          );
-        });
+        await Promise.all(
+          configDetail.map(async (config) => {
+            await db.examSubjectPartition.create({
+              data: {
+                subjectId: subject.subjectId,
+                examSubjectId: examSubjectId,
+                assessmentFormatId: config.assessmentFormatId,
+                minMark: +config.minMark,
+                convertTo: +config.convertTo,
+                totalMarks: +config.totalMarks,
+                examGroupId: examGroupId,
+                dateToConduct: new Date(config.dateToConduct),
+              },
+            });
+          })
+        );
       }
     }
   }
+
+  return { success: true };
 }
 
 export async function editExamPartition(config: any, configId: string) {

@@ -1,6 +1,6 @@
 'use client';
 import { useGetClassListQuery } from 'lib/queries/class/useGetClassListQuery';
-import { useGetExamConfigSubjectDetailQuery } from 'lib/queries/exams/configuration/subject/useGetExamConfigSubjectDetailQuery';
+import { useGetExamConfigSubjectDetailsBySectionIdsQuery } from 'lib/queries/exams/configuration/subject/useGetExamConfigSubjectDetailsBySectionIdsQuery';
 import { useDeleteExamSubjectConfigMutationQuery } from 'lib/queries/exams/configuration/useDeleteExamConfigMutationQuery';
 import { useGetExamDetailQuery } from 'lib/queries/exams/useGetExamDetailQuery';
 import { useGetExamListQuery } from 'lib/queries/exams/useGetExamListQuery';
@@ -64,12 +64,13 @@ export function AddExamLayout() {
   });
   const { toast } = useToast();
   const [classId, setClassId] = useState('');
-  const [sectionId, setSectionId] = useState('');
+  const [sectionIds, setSectionIds] = useState([]);
   const [subjectId, setSubjectId] = useState('');
   const [subjectIds, setSubjectIds] = useState([]);
   const [subjectTypeId, setSubjectTypeId] = useState('');
   const [subjectTypeList, setSubjectTypeList] = useState([]);
   const [subjectList, setSubjectList] = useState([]);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars, no-unused-vars
   const [examSubjectPartition, setExamSubjectPartition] = useState([]);
   const [openFlyout, setOpenFlyout] = useState(false);
   const { data: examDetail, isLoading: isExamDetailLoading } =
@@ -97,16 +98,16 @@ export function AddExamLayout() {
     data: subjectConfigListResponse,
     isLoading: isSubjectConfigListLoading,
     refetch: refetchSubjectConfigList,
-  } = useGetExamConfigSubjectDetailQuery(
-    { examId, sectionId, subjectId },
+  } = useGetExamConfigSubjectDetailsBySectionIdsQuery(
+    { examId, sectionIds: sectionIds, subjectId },
     {
-      enabled: !!subjectId && !!sectionId,
+      enabled: !!subjectId && !!sectionIds,
     }
   );
 
   useEffect(() => {
     if (subjectId) {
-      subjectConfigListResponse?.examSubjectPartition?.length
+      subjectConfigListResponse?.length
         ? setOpenFlyout(false)
         : setOpenFlyout(true);
     }
@@ -138,11 +139,11 @@ export function AddExamLayout() {
     isLoading: isSubjectListLoading,
     refetch: refetchSubjectList,
   } = useGetSubjectsBySectionIdsMutationQuery(
-    [sectionId],
+    sectionIds,
     subjectTypeId,
     classId,
     {
-      enabled: !!sectionId && !!subjectTypeId,
+      enabled: !!sectionIds && !!subjectTypeId,
     }
   );
 
@@ -150,7 +151,11 @@ export function AddExamLayout() {
     isError: isConfigDeleteError,
     isSuccess: isConfigDeleteSuccess,
     mutateAsync: deleteExamSubjectConfigAsync,
-  } = useDeleteExamSubjectConfigMutationQuery(examId, sectionId, subjectId);
+  } = useDeleteExamSubjectConfigMutationQuery(
+    examId,
+    (sectionIds[0] as string) || '',
+    subjectId
+  );
 
   useEffect(() => {
     if (isConfigDeleteError) {
@@ -178,11 +183,6 @@ export function AddExamLayout() {
       setSubjectList(subjectListResponse as any[]);
     }
   }, [subjectListResponse]);
-  useEffect(() => {
-    const subjectConfigResponse =
-      subjectConfigListResponse?.examSubjectPartition || [];
-    setExamSubjectPartition(subjectConfigResponse);
-  }, [subjectConfigListResponse]);
 
   useEffect(() => {
     if (subjectId) {
@@ -194,20 +194,20 @@ export function AddExamLayout() {
     params.delete('subjectId');
     router.replace(pathname + '?' + params.toString());
     setSubjectId('');
-  }, [sectionId, subjectTypeId, classId]);
+  }, [sectionIds, subjectTypeId, classId]);
 
   useEffect(() => {
     params.delete('subjectId');
     router.replace(pathname + '?' + params.toString());
-    setSubjectId('');
+    // setSubjectId('');
 
     setSubjectList([]);
-  }, [sectionId]);
+  }, [sectionIds]);
 
   useEffect(() => {
     params.delete('subjectId');
     router.replace(pathname + '?' + params.toString());
-    setSectionId('');
+    setSectionIds([]);
     setSubjectTypeId('');
     setSubjectId('');
     setSubjectList([]);
@@ -219,8 +219,14 @@ export function AddExamLayout() {
     router.replace(pathname + '?' + params.toString());
   }
 
-  const handleSectionChange = (sectionId) => {
-    setSectionId(sectionId);
+  const handleSectionChange = (localSectionId) => {
+    setSectionIds((prevSectionIds) => {
+      if (prevSectionIds.includes(localSectionId)) {
+        return prevSectionIds.filter((id) => id !== localSectionId);
+      } else {
+        return [...prevSectionIds, localSectionId];
+      }
+    });
   };
 
   const handleSubjectClick = (subjectDetail) => {
@@ -334,7 +340,7 @@ export function AddExamLayout() {
                         key={cardData.id}
                         sectionId={cardData.id}
                         name={cardData.name}
-                        currentSectionId={sectionId}
+                        currentSectionIds={sectionIds}
                         onClick={handleSectionChange}
                       />
                     ))}
@@ -356,7 +362,7 @@ export function AddExamLayout() {
         <div className="basis-2/6 bg-blue-50 text-center">
           <div className="p-2">Subject Type</div>
           <div>
-            {sectionId ? (
+            {sectionIds?.length > 0 ? (
               <div>
                 {!isSubjectTypeListLoading ? (
                   <div>
@@ -432,11 +438,20 @@ export function AddExamLayout() {
           <div>
             {!isSubjectConfigListLoading ? (
               <div>
-                {examSubjectPartition?.map((cardData) => {
-                  return cardData.assessmentFormat ? (
-                    <AssessmentFormatDetailCard {...cardData} />
-                  ) : null;
-                })}
+                {subjectConfigListResponse?.map((subjectConfig) => (
+                  <div key={subjectConfig.id}>
+                    <h2>
+                      {subjectConfig.subjectName}({subjectConfig?.section?.name}
+                      )
+                    </h2>
+                    {subjectConfig?.examSubjectPartition?.map((cardData) => {
+                      return cardData.assessmentFormat ? (
+                        <AssessmentFormatDetailCard {...cardData} />
+                      ) : null;
+                    })}
+                    <hr />
+                  </div>
+                ))}
               </div>
             ) : (
               <div className="flex justify-center pt-36">
@@ -461,13 +476,13 @@ export function AddExamLayout() {
         </div>
       </section>
       <ExamConfigureFlyout
-        sectionId={sectionId}
+        sectionIds={sectionIds}
         subjects={subjectIds}
         classId={classId}
         examSubjectPartition={examSubjectPartition || []}
       />
       <EditExamPartitionFlyout
-        sectionId={sectionId}
+        sectionIds={sectionIds}
         subjects={subjectIds}
         classId={classId}
       />
