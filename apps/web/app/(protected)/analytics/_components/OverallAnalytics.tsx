@@ -204,7 +204,7 @@ export default function OverallAnalytics({
         if (mark < result.lowestMark['overall'] && !subject.absentStatus) {
           result.lowestMark['overall'] = mark;
           result.lowestMarkStudentName['overall'] = studentFullName;
-          result.lowestMark.studentList.overall.push(student);
+          result.lowestMark.studentList.overall = [student];
         }
 
         if (subject.failingStatus && !subject.absentStatus) {
