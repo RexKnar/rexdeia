@@ -23,7 +23,7 @@ import {
 } from 'ui';
 
 export function ExamConfigureFlyout(props) {
-  const { classId, sectionId, subjects, examSubjectPartition } = props;
+  const { classId, sectionIds, subjects, examSubjectPartition } = props;
   const pathname = usePathname();
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -97,7 +97,7 @@ export function ExamConfigureFlyout(props) {
     payload.examId = examId;
     payload.subjectTotalMarks = subjectTotalMarks;
     payload.subjectMarksToConvert = subjectMarksToConvert;
-    payload.sectionIds = [sectionId];
+    payload.sectionIds = sectionIds;
     const createdExamConfiguration =
       await mutateCreateExamConfigurationAsync(payload);
 

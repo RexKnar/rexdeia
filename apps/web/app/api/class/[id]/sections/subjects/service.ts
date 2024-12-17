@@ -50,19 +50,33 @@ export async function getSubjectsBySectionIds(
       },
     },
   });
-  const subjectsWithGroup = sectionToGroups
+
+  const uniqueSubjectsMap = new Map();
+
+  const processedGroups = sectionToGroups
     .map((groupData) => {
-      const groupInfo = {
+      const group = {
         id: groupData.group.id,
         name: groupData.group.name,
-        subject: groupData.group.subjectToGroup.map((subjectGroup) => ({
+        subject: [],
+      };
+
+      groupData.group.subjectToGroup.forEach((subjectGroup) => {
+        const subject = {
           id: subjectGroup.subject.id,
           name: subjectGroup.subject.name,
-        })),
-      };
-      return groupInfo;
-    })
-    .flat();
+        };
 
-  return subjectsWithGroup;
+        if (!uniqueSubjectsMap.has(subject.id)) {
+          group.subject.push(subject);
+          uniqueSubjectsMap.set(subject.id, subject);
+        }
+      });
+
+      return group;
+    })
+
+    .filter((group) => group.subject.length > 0);
+
+  return processedGroups;
 }
