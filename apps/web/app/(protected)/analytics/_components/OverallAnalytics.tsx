@@ -40,6 +40,7 @@ export default function OverallAnalytics({
 }) {
   const [analytics, setAnalytics] = useState<Map<string, Analytics>>(new Map());
   const [modalStudentList, setModalStudentList] = useState([]);
+  const [modalSubjectList, setModalSubjectList] = useState([]);
   const [modalTitle, setModalTitle] = useState('');
   const [modalSubTitle, setModalSubTitle] = useState('');
   const pathname = usePathname();
@@ -161,61 +162,61 @@ export default function OverallAnalytics({
         totalMarks[gender] += mark;
         totalMarks.overall += mark;
         totalStudents[gender]++;
-        result.totalStudents.studentList[gender].push(rest);
+        result.totalStudents.studentList[gender].push(student);
         totalStudents.overall++;
 
         if (!subject.absentStatus && subject?.marks?.length > 0) {
           result.attendance[gender]++;
           result.attendance.overall++;
-          result.attendance.studentList.overall.push(rest);
-          result.attendance.studentList[gender].push(rest);
+          result.attendance.studentList.overall.push(student);
+          result.attendance.studentList[gender].push(student);
         } else if (subject.absentStatus && subject?.marks?.length > 0) {
           result.absent[gender]++;
           result.absent.overall++;
-          result.absent.studentList.overall.push(rest);
-          result.absent.studentList[gender].push(rest);
+          result.absent.studentList.overall.push(student);
+          result.absent.studentList[gender].push(student);
         }
         if (subject?.marks?.length === 0) {
           result.markEntry[gender]++;
           result.markEntry.overall++;
-          result.markEntry.studentList.overall.push(rest);
-          result.markEntry.studentList[gender].push(rest);
+          result.markEntry.studentList.overall.push(student);
+          result.markEntry.studentList[gender].push(student);
         }
 
         if (mark > result.highestMark[gender]) {
           result.highestMark[gender] = mark;
           result.highestMarkStudentName[gender] = studentFullName;
 
-          result.highestMark.studentList[gender].push(rest);
+          result.highestMark.studentList[gender] = [student];
         }
         if (mark < result.lowestMark[gender] && !subject.absentStatus) {
           result.lowestMark[gender] = mark;
           result.lowestMarkStudentName[gender] = studentFullName;
 
-          result.lowestMark.studentList[gender].push(rest);
+          result.lowestMark.studentList[gender] = [student];
         }
 
         if (mark > result.highestMark['overall']) {
           result.highestMark['overall'] = mark;
           result.highestMarkStudentName['overall'] = studentFullName;
-          result.highestMark.studentList.overall.push(rest);
+          result.highestMark.studentList.overall = [student];
         }
         if (mark < result.lowestMark['overall'] && !subject.absentStatus) {
           result.lowestMark['overall'] = mark;
           result.lowestMarkStudentName['overall'] = studentFullName;
-          result.lowestMark.studentList.overall.push(rest);
+          result.lowestMark.studentList.overall.push(student);
         }
 
         if (subject.failingStatus && !subject.absentStatus) {
           result.numberOfFailStudents[gender]++;
           result.numberOfFailStudents.overall++;
-          result.numberOfFailStudents.studentList.overall.push(rest);
-          result.numberOfFailStudents.studentList[gender].push(rest);
+          result.numberOfFailStudents.studentList.overall.push(student);
+          result.numberOfFailStudents.studentList[gender].push(student);
         } else if (!subject.failingStatus && !subject.absentStatus) {
           result.numberOfPassStudents[gender]++;
           result.numberOfPassStudents.overall++;
-          result.numberOfPassStudents.studentList.overall.push(rest);
-          result.numberOfPassStudents.studentList[gender].push(rest);
+          result.numberOfPassStudents.studentList.overall.push(student);
+          result.numberOfPassStudents.studentList[gender].push(student);
         }
 
         if (
@@ -275,9 +276,13 @@ export default function OverallAnalytics({
     let totalMarks = 0,
       totalStudents = 0,
       totalPass = 0,
+      totalPassStudents = [],
       totalFail = 0,
+      totalFailStudents = [],
       highestMark = 0,
+      highestMarkStudents = [],
       lowestMark = 0,
+      lowestMarkStudents = [],
       isFirst = true;
 
     students.forEach((student) => {
@@ -285,10 +290,15 @@ export default function OverallAnalytics({
       totalStudents++;
       if (student.failingStatus) {
         totalFail++;
+        totalFailStudents.push(student);
       } else {
         totalPass++;
+        totalPassStudents.push(student);
       }
       highestMark = Math.max(highestMark, student.totalMark);
+      if (highestMark == student.totalMark) {
+        highestMarkStudents = [student];
+      }
 
       if (student.attendance) {
         if (isFirst) {
@@ -296,16 +306,23 @@ export default function OverallAnalytics({
           isFirst = false;
         } else {
           lowestMark = Math.min(lowestMark, student.totalMark);
+          if (lowestMark == student.totalMark) {
+            lowestMarkStudents = [student];
+          }
         }
       }
     });
 
     return {
       avgMark: totalStudents > 0 ? totalMarks / totalStudents : 0,
+      totalPass: { count: totalPass, students: totalPassStudents },
+      totalFail: { count: totalFail, students: totalFailStudents },
       passCount: totalPass,
       failCount: totalFail,
       passPercentage: calculatePercentage(totalPass, totalStudents),
       failPercentage: calculatePercentage(totalFail, totalStudents),
+      highest: { mark: highestMark, students: highestMarkStudents },
+      lowest: { mark: lowestMark, students: lowestMarkStudents },
       highestMark,
       lowestMark,
     };
@@ -314,12 +331,14 @@ export default function OverallAnalytics({
   function handleOpenStudentListDialog(
     students: any,
     title: string,
-    subTitle: string
+    subTitle: string,
+    subjectList?: any
   ) {
-    params.set('isListDialogOpen', 'true');
     setModalStudentList(students);
     setModalTitle(title);
     setModalSubTitle(subTitle);
+    setModalSubjectList(subjectList);
+    params.set('isListDialogOpen', 'true');
 
     router.replace(pathname + '?' + params.toString());
   }
@@ -344,7 +363,8 @@ export default function OverallAnalytics({
                   handleOpenStudentListDialog(
                     subjectAnalytics.totalStudents.studentList.male,
                     'Total Students',
-                    'Male'
+                    'Male',
+                    [subject]
                   )
                 }
               >
@@ -357,7 +377,8 @@ export default function OverallAnalytics({
                   handleOpenStudentListDialog(
                     subjectAnalytics.totalStudents.studentList.female,
                     'Total Students',
-                    'Female'
+                    'Female',
+                    [subject]
                   )
                 }
               >
@@ -375,7 +396,8 @@ export default function OverallAnalytics({
                 handleOpenStudentListDialog(
                   subjectAnalytics.markEntry.studentList.overall,
                   'Pending Mark Entry List',
-                  'Overall'
+                  'Overall',
+                  [subject]
                 )
               }
             >
@@ -388,7 +410,8 @@ export default function OverallAnalytics({
                   handleOpenStudentListDialog(
                     subjectAnalytics.markEntry.studentList.male,
                     'Pending Mark Entry List',
-                    'Male'
+                    'Male',
+                    [subject]
                   )
                 }
               >
@@ -400,7 +423,8 @@ export default function OverallAnalytics({
                   handleOpenStudentListDialog(
                     subjectAnalytics.markEntry.studentList.female,
                     'Pending Mark Entry List',
-                    'Female'
+                    'Female',
+                    [subject]
                   )
                 }
               >
@@ -418,7 +442,8 @@ export default function OverallAnalytics({
                 handleOpenStudentListDialog(
                   subjectAnalytics.attendance.studentList.overall,
                   'Appeared Students List',
-                  'Overall'
+                  'Overall',
+                  [subject]
                 )
               }
             >
@@ -433,7 +458,8 @@ export default function OverallAnalytics({
                   handleOpenStudentListDialog(
                     subjectAnalytics.attendance.studentList.male,
                     'Appeared Students List',
-                    'Male'
+                    'Male',
+                    [subject]
                   )
                 }
               >
@@ -445,7 +471,8 @@ export default function OverallAnalytics({
                   handleOpenStudentListDialog(
                     subjectAnalytics.attendance.studentList.female,
                     'Appeared Students List',
-                    'Female'
+                    'Female',
+                    [subject]
                   )
                 }
               >
@@ -463,7 +490,8 @@ export default function OverallAnalytics({
                 handleOpenStudentListDialog(
                   subjectAnalytics.absent.studentList.overall,
                   'Absent Students List',
-                  'Overall'
+                  'Overall',
+                  [subject]
                 )
               }
             >
@@ -476,7 +504,8 @@ export default function OverallAnalytics({
                   handleOpenStudentListDialog(
                     subjectAnalytics.absent.studentList.male,
                     'Absent Students List',
-                    'Male'
+                    'Male',
+                    [subject]
                   )
                 }
               >
@@ -488,7 +517,8 @@ export default function OverallAnalytics({
                   handleOpenStudentListDialog(
                     subjectAnalytics.absent.studentList.female,
                     'Absent Students List',
-                    'Female'
+                    'Female',
+                    [subject]
                   )
                 }
               >
@@ -520,7 +550,8 @@ export default function OverallAnalytics({
                 handleOpenStudentListDialog(
                   subjectAnalytics.numberOfPassStudents.studentList.overall,
                   'Passed Students List',
-                  'Overall'
+                  'Overall',
+                  [subject]
                 )
               }
             >
@@ -535,7 +566,8 @@ export default function OverallAnalytics({
                   handleOpenStudentListDialog(
                     subjectAnalytics.numberOfPassStudents.studentList.male,
                     'Passed Students List',
-                    'Male'
+                    'Male',
+                    [subject]
                   )
                 }
               >
@@ -547,7 +579,8 @@ export default function OverallAnalytics({
                   handleOpenStudentListDialog(
                     subjectAnalytics.numberOfPassStudents.studentList.male,
                     'Passed Students List',
-                    'Female'
+                    'Female',
+                    [subject]
                   )
                 }
               >
@@ -565,7 +598,8 @@ export default function OverallAnalytics({
                 handleOpenStudentListDialog(
                   subjectAnalytics.numberOfFailStudents.studentList.overall,
                   'Failed Students List',
-                  'Overall'
+                  'Overall',
+                  [subject]
                 )
               }
             >
@@ -578,7 +612,8 @@ export default function OverallAnalytics({
                   handleOpenStudentListDialog(
                     subjectAnalytics.numberOfFailStudents.studentList.male,
                     'Failed Students List',
-                    'Male'
+                    'Male',
+                    [subject]
                   )
                 }
               >
@@ -590,7 +625,8 @@ export default function OverallAnalytics({
                   handleOpenStudentListDialog(
                     subjectAnalytics.numberOfFailStudents.studentList.female,
                     'Failed Students List',
-                    'Female'
+                    'Female',
+                    [subject]
                   )
                 }
               >
@@ -637,7 +673,8 @@ export default function OverallAnalytics({
                 handleOpenStudentListDialog(
                   subjectAnalytics.highestMark.studentList.overall,
                   'Highest Mark List',
-                  'Overall'
+                  'Overall',
+                  [subject]
                 )
               }
             >
@@ -652,7 +689,8 @@ export default function OverallAnalytics({
                   handleOpenStudentListDialog(
                     subjectAnalytics.highestMark.studentList.male,
                     'Highest Mark List',
-                    'Male'
+                    'Male',
+                    [subject]
                   )
                 }
               >
@@ -664,7 +702,8 @@ export default function OverallAnalytics({
                   handleOpenStudentListDialog(
                     subjectAnalytics.highestMark.studentList.female,
                     'Highest Mark List',
-                    'Female'
+                    'Female',
+                    [subject]
                   )
                 }
               >
@@ -681,7 +720,8 @@ export default function OverallAnalytics({
                 handleOpenStudentListDialog(
                   subjectAnalytics.lowestMark.studentList.overall,
                   'Lowest Mark List',
-                  'Overall'
+                  'Overall',
+                  [subject]
                 )
               }
             >
@@ -696,7 +736,8 @@ export default function OverallAnalytics({
                   handleOpenStudentListDialog(
                     subjectAnalytics.lowestMark.studentList.male,
                     'Lowest Mark List',
-                    'Male'
+                    'Male',
+                    [subject]
                   )
                 }
               >
@@ -708,7 +749,8 @@ export default function OverallAnalytics({
                   handleOpenStudentListDialog(
                     subjectAnalytics.lowestMark.studentList.female,
                     'Lowest Mark List',
-                    'Female'
+                    'Female',
+                    [subject]
                   )
                 }
               >
@@ -725,7 +767,8 @@ export default function OverallAnalytics({
                 handleOpenStudentListDialog(
                   subjectAnalytics.centum.studentList.overall,
                   'Centum List',
-                  'Overall'
+                  'Overall',
+                  [subject]
                 )
               }
             >
@@ -740,7 +783,8 @@ export default function OverallAnalytics({
                   handleOpenStudentListDialog(
                     subjectAnalytics.centum.studentList.male,
                     'Centum List',
-                    'Male'
+                    'Male',
+                    [subject]
                   )
                 }
               >
@@ -752,7 +796,8 @@ export default function OverallAnalytics({
                   handleOpenStudentListDialog(
                     subjectAnalytics.centum.studentList.female,
                     'Centum List',
-                    'Female'
+                    'Female',
+                    [subject]
                   )
                 }
               >
@@ -770,7 +815,7 @@ export default function OverallAnalytics({
       {!isSubjectLoading ? (
         <section>
           {subjectList ? (
-            <div className="space-y-4 overflow-x-auto rounded-md bg-white p-6  print:m-0 print:p-0">
+            <div className="space-y-4 overflow-x-auto rounded-md bg-white p-6 print:m-0 print:p-0">
               <Button
                 variant="outline"
                 onClick={() =>
@@ -848,14 +893,38 @@ export default function OverallAnalytics({
                       </Text>
                     </TableCell>
                     <TableCell>
-                      <Text className="size-lg font-semibold">
-                        {overallStats.passCount}
-                      </Text>
+                      <Button
+                        variant="ghost"
+                        onClick={() =>
+                          handleOpenStudentListDialog(
+                            overallStats.totalPass.students,
+                            'Total Pass List',
+                            'Overall',
+                            subjectList
+                          )
+                        }
+                      >
+                        <Text className="size-lg font-semibold">
+                          {overallStats.totalPass.count}
+                        </Text>
+                      </Button>
                     </TableCell>
                     <TableCell>
-                      <Text className="size-lg font-semibold">
-                        {overallStats.failCount}
-                      </Text>
+                      <Button
+                        variant="ghost"
+                        onClick={() =>
+                          handleOpenStudentListDialog(
+                            overallStats.totalFail.students,
+                            'Total Fail List',
+                            'Overall',
+                            subjectList
+                          )
+                        }
+                      >
+                        <Text className="size-lg font-semibold">
+                          {overallStats.totalFail.count}
+                        </Text>
+                      </Button>
                     </TableCell>
                     <TableCell>
                       <Text className="size-lg font-semibold">
@@ -868,14 +937,38 @@ export default function OverallAnalytics({
                       </Text>
                     </TableCell>
                     <TableCell>
-                      <Text className="size-lg font-semibold">
-                        {overallStats.highestMark}
-                      </Text>
+                      <Button
+                        variant="ghost"
+                        onClick={() =>
+                          handleOpenStudentListDialog(
+                            overallStats.highest.students,
+                            'Highest Mark List',
+                            'Overall',
+                            subjectList
+                          )
+                        }
+                      >
+                        <Text className="size-lg font-semibold">
+                          {overallStats.highest.mark}
+                        </Text>
+                      </Button>
                     </TableCell>
                     <TableCell>
-                      <Text className="size-lg font-semibold">
-                        {overallStats.lowestMark}
-                      </Text>
+                      <Button
+                        variant="ghost"
+                        onClick={() =>
+                          handleOpenStudentListDialog(
+                            overallStats.lowest.students,
+                            'Lowest Mark List',
+                            'Overall',
+                            subjectList
+                          )
+                        }
+                      >
+                        <Text className="size-lg font-semibold">
+                          {overallStats.lowest.mark}
+                        </Text>
+                      </Button>
                     </TableCell>
                     <TableCell>
                       <Text className="size-lg font-semibold">-</Text>
@@ -901,6 +994,7 @@ export default function OverallAnalytics({
         studentList={modalStudentList}
         title={modalTitle}
         subTitle={modalSubTitle}
+        subjectList={modalSubjectList}
       />
     </section>
   );
