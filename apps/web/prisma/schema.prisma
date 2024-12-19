@@ -27,21 +27,25 @@ model Account {
 }
 
 model Exam {
-  id         String      @id @default(uuid()) @map("_id") @db.Uuid
-  name       String
-  createdAt  DateTime    @default(now())
-  examTypeId String      @db.Uuid
-  updatedAt  DateTime    @default(now())
-  isDeleted  Boolean     @default(false)
-  branchId   String      @db.Uuid
-  isActive   Boolean
-  termId     String      @db.Uuid
-  batchId    String      @db.Uuid
-  batch      Batch       @relation(fields: [batchId], references: [id])
-  branch     Branch      @relation(fields: [branchId], references: [id])
-  examType   ExamType    @relation(fields: [examTypeId], references: [id])
-  term       Term        @relation(fields: [termId], references: [id])
-  examGroup  ExamGroup[]
+  id                      String      @id @default(uuid()) @map("_id") @db.Uuid
+  name                    String
+  createdAt               DateTime    @default(now())
+  examTypeId              String      @db.Uuid
+  updatedAt               DateTime    @default(now())
+  isDeleted               Boolean     @default(false)
+  branchId                String      @db.Uuid
+  isActive                Boolean
+  markEntryOpenDate       DateTime?
+  markEntryEndDate        DateTime?
+  markEntryCorrectionDate DateTime?
+  blockMarkEntry          Boolean     @default(false)
+  termId                  String      @db.Uuid
+  batchId                 String      @db.Uuid
+  batch                   Batch       @relation(fields: [batchId], references: [id])
+  branch                  Branch      @relation(fields: [branchId], references: [id])
+  examType                ExamType    @relation(fields: [examTypeId], references: [id])
+  term                    Term        @relation(fields: [termId], references: [id])
+  examGroup               ExamGroup[]
 }
 
 model ExamType {

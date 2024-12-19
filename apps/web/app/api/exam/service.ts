@@ -52,6 +52,9 @@ export async function getExamsList(page: number, limit: number) {
 export async function createExam(examPayload: CreateExamModel) {
   const session = await getServerSession(authOptions);
   const { name, examTypeId, termId, academicYearId, isActive } = examPayload;
+  const markEntryOpenDate = new Date(examPayload.markEntryOpenDate);
+  const markEntryEndDate = new Date(examPayload.markEntryEndDate);
+  const markEntryCorrectionDate = new Date(examPayload.markEntryCorrectionDate);
 
   const [examType, term, academicYear] = await db.$transaction([
     db.examType.findUnique({ where: { id: examTypeId } }),
@@ -74,6 +77,9 @@ export async function createExam(examPayload: CreateExamModel) {
       data: {
         name: name,
         isActive: isActive,
+        markEntryCorrectionDate,
+        markEntryEndDate,
+        markEntryOpenDate,
         branch: {
           connect: {
             id: session.branchId,

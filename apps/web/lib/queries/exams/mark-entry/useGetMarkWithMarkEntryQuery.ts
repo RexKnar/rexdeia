@@ -9,15 +9,23 @@ type GetMarkEntryFormStructureFilter = {
   staffId: string;
 };
 
+type MarKEntryResponse = {
+  data: any[];
+  permissions: {
+    canEnterMarks: boolean;
+    message?: string;
+  };
+};
+
 function getMarkWithMarkEntry(
   filter: GetMarkEntryFormStructureFilter,
-  options?: Partial<UseQueryOptions<any[]>>
+  options?: Partial<UseQueryOptions<MarKEntryResponse>>
 ) {
   return {
     ...options,
     queryKey: [GET_MARK_WITH_MARK_ENTRY_CONFIGS, filter],
     queryFn: async () => {
-      return await makeAPICall<any[]>(
+      return await makeAPICall<MarKEntryResponse>(
         GET_MARK_WITH_MARK_ENTRY_CONFIGS,
         { ...filter },
         {},
@@ -29,7 +37,7 @@ function getMarkWithMarkEntry(
 
 export function useGetMarkWithMarkEntryQuery(
   filter: GetMarkEntryFormStructureFilter,
-  options?: Partial<UseQueryOptions<any[]>>
+  options?: Partial<UseQueryOptions<MarKEntryResponse>>
 ) {
   return useQuery(getMarkWithMarkEntry(filter, options));
 }

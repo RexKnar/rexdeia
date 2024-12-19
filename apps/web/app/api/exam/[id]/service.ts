@@ -51,6 +51,9 @@ export async function getExamById(examId: string) {
 export async function updateExamById(id: string, payload: UpdateExamModel) {
   const session = await getServerSession(authOptions);
   const { name, isActive } = payload;
+  const markEntryOpenDate = new Date(payload.markEntryOpenDate);
+  const markEntryEndDate = new Date(payload.markEntryEndDate);
+  const markEntryCorrectionDate = new Date(payload.markEntryCorrectionDate);
   return db.exam.update({
     where: {
       id: id,
@@ -58,6 +61,9 @@ export async function updateExamById(id: string, payload: UpdateExamModel) {
     data: {
       name,
       isActive,
+      markEntryCorrectionDate,
+      markEntryEndDate,
+      markEntryOpenDate,
       branch: {
         connect: {
           id: session.branchId,
