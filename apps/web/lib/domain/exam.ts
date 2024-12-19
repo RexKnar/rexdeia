@@ -11,12 +11,17 @@ export type ExamModel = {
   termId: string;
   batch: BatchModel;
   academicYearId: string;
+  markEntryOpenDate?: Date;
+  markEntryEndDate?: Date;
+  markEntryCorrectionDate?: Date;
+  blockMarkEntry?: Boolean;
 };
 
-export type CreateExamModel = Pick<
+export type CreateExamModel = Omit<
   ExamModel,
-  'name' | 'termId' | 'isActive' | 'examTypeId' | 'academicYearId' | 'id' // here id for navigation purpose only
+  'examType' | 'batch' | 'term' | 'id'
 >;
+
 export type UpdateExamModel = Omit<ExamModel, 'examType' | 'batch' | 'term'>;
 
 export type ExamConfigurationModel = {

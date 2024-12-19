@@ -18,6 +18,9 @@ export async function getExamsBySectionId(
         select: {
           id: true,
           name: true,
+          markEntryCorrectionDate: true,
+          markEntryEndDate: true,
+          markEntryOpenDate: true,
           term: {
             select: {
               id: true,

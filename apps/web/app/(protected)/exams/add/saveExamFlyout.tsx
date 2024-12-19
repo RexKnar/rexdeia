@@ -47,6 +47,7 @@ export function SaveExamFlyout() {
 
   const handleOnOpenChange = (open: boolean) => {
     if (!open) {
+      reset();
       closeFlyout();
     }
   };
@@ -64,6 +65,9 @@ export function SaveExamFlyout() {
       termId: '',
       examTypeId: '',
       academicYearId: '',
+      markEntryCorrectionDate: null,
+      markEntryEndDate: null,
+      markEntryOpenDate: null,
     },
   });
 
@@ -101,6 +105,27 @@ export function SaveExamFlyout() {
       setValue('examTypeId', examDetail.examType.id);
       setValue('academicYearId', examDetail.batch.id);
       setValue('isActive', examDetail.isActive);
+
+      setValue(
+        'markEntryOpenDate',
+        examDetail.markEntryOpenDate
+          ? new Date(examDetail.markEntryOpenDate).toISOString().split('T')[0]
+          : ''
+      );
+      setValue(
+        'markEntryEndDate',
+        examDetail.markEntryEndDate
+          ? new Date(examDetail.markEntryEndDate).toISOString().split('T')[0]
+          : ''
+      );
+      setValue(
+        'markEntryCorrectionDate',
+        examDetail.markEntryCorrectionDate
+          ? new Date(examDetail.markEntryCorrectionDate)
+              .toISOString()
+              .split('T')[0]
+          : ''
+      );
     }
   }, [examDetail]);
 
@@ -338,6 +363,67 @@ export function SaveExamFlyout() {
                         Loading...
                       </h2>
                     )}
+                  </div>
+                  <div className="mt-4">
+                    <label
+                      htmlFor="markEntryOpenDate"
+                      className="text-sm font-semibold text-gray-700"
+                    >
+                      Mark Entry Open Date
+                    </label>
+
+                    <Input
+                      value={watch('markEntryOpenDate')}
+                      type={'date'}
+                      {...register(`markEntryOpenDate`, {
+                        required: 'Mark Entry Open Date  is Required',
+                      })}
+                      id="markEntryOpenDate"
+                      autoFocus
+                      className="mt-2"
+                      placeholder="Mark Entry Open Date"
+                      errorMessage={fieldErrors?.markEntryOpenDate?.message.toString()}
+                    />
+                  </div>
+                  <div className="mt-4">
+                    <label
+                      htmlFor="markEntryEndDate"
+                      className="text-sm font-semibold text-gray-700"
+                    >
+                      Mark Entry End Date
+                    </label>
+                    <Input
+                      value={watch('markEntryEndDate')}
+                      type={'date'}
+                      {...register(`markEntryEndDate`, {
+                        required: 'Mark Entry End Date  is Required',
+                      })}
+                      id="markEntryOpenDate"
+                      autoFocus
+                      className="mt-2"
+                      placeholder="Mark Entry End Date"
+                      errorMessage={fieldErrors?.markEntryEndDate?.message.toString()}
+                    />
+                  </div>
+                  <div className="mt-4">
+                    <label
+                      htmlFor="markEntryOpenDate"
+                      className="text-sm font-semibold text-gray-700"
+                    >
+                      Mark Entry Correction Date
+                    </label>
+                    <Input
+                      value={watch('markEntryCorrectionDate')}
+                      type={'date'}
+                      {...register(`markEntryCorrectionDate`, {
+                        required: 'Mark Entry Correction Date is Required',
+                      })}
+                      id="markEntryCorrectionDate"
+                      autoFocus
+                      className="mt-2"
+                      placeholder="Mark Entry Correction Date"
+                      errorMessage={fieldErrors?.markEntryCorrectionDate?.message.toString()}
+                    />
                   </div>
                   <div className="mt-10">
                     <Button

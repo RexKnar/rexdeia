@@ -1,6 +1,7 @@
 'use client';
 
 /* eslint-disable react-hooks/exhaustive-deps */
+import { DataLoadingPlaceholder } from 'app/(protected)/analytics/_components/DataLoadingPlaceholder';
 import { useGetClassListQuery } from 'lib/queries/class/useGetClassListQuery';
 import { useGetMarkWithMarkEntryQuery } from 'lib/queries/exams/mark-entry/useGetMarkWithMarkEntryQuery';
 import { useNewMarkEntryQuery } from 'lib/queries/exams/mark-entry/useNewMarkEntryQuery';
@@ -30,12 +31,15 @@ import {
   TableRow,
 } from 'ui/components/ui/Table';
 
+import dateOverPlaceholderSVG from '../../../../../public/assets/images/date-over.svg';
+import noClassListImage from '../../../../../public/assets/images/options.svg';
 import { ExamSubjects } from './ExamSubjects';
 
 export function MarkEntryLayout() {
   const { data: session } = useSession();
   // const [userRole, setUserRole] = useState<string>('User');
   const [userId, setUserId] = useState<string>('');
+  const [markEntryPermissions, setMarkEntryPermissions] = useState<any>({});
 
   const { toast } = useToast();
   const page = 1;
@@ -120,7 +124,10 @@ export function MarkEntryLayout() {
     mutateNewMarkEntryAsync(markEntryPayload);
   }
   useEffect(() => {
-    setMarkEntryResponse(markEntryConfigResponse);
+    if (markEntryConfigResponse) {
+      setMarkEntryResponse(markEntryConfigResponse?.data);
+      setMarkEntryPermissions(markEntryConfigResponse?.permissions);
+    }
   }, [markEntryConfigResponse]);
 
   const {
@@ -246,102 +253,132 @@ export function MarkEntryLayout() {
             </SelectGroup>
           </SelectContent>
         </Select>
-
-        {/* : null} */}
       </div>
-      <form onSubmit={handleSubmit(submitMarkEntry)} onKeyDown={handleKeyDown}>
-        {!isMarkEntryConfigLoading ? (
-          <>
-            {markEntryResponse?.length ? (
-              <div className="">
-                <Table className="w-auto min-w-full divide-gray-200 shadow-md">
-                  <TableHeader className=" bg-gray-50">
-                    <TableRow>
-                      <TableCell className="sticky left-0 z-10 w-[20px] bg-gray-50 lg:w-[50px]">
-                        #
-                      </TableCell>
-                      <TableCell className="sticky left-[20px] z-10 w-[20px] bg-gray-50 py-3  text-left text-xs font-medium uppercase tracking-wider text-black lg:left-[50px] lg:w-[300px] lg:px-6">
-                        Student
-                      </TableCell>
-                      {markEntryResponse[0]?.examSubjects.map(
-                        (examSubject, subjectIndex) => (
-                          <TableCell
-                            key={examSubject.id}
-                            className={`w-2/3 justify-start py-3 text-start text-xs font-medium uppercase tracking-wider text-black lg:w-[300px] lg:px-6 ${subjectIndex === 0 ? 'ml-[350px]' : ''}`}
-                          >
-                            <div className="border-1 flex w-full space-x-2 border border-b-primary-200">
-                              <p className="flex-1 text-center ">
-                                {examSubject.subject.name}
-                              </p>
-                            </div>
-                            <div className="flex w-full space-x-2">
-                              {examSubject.examSubjectPartition
-                                .filter(
-                                  (config) => config.assessmentFormat !== null
-                                )
-                                .map((formatItem, index) => {
-                                  return (
-                                    <div
-                                      key={index}
-                                      className="flex-1 text-center"
-                                    >
-                                      {formatItem.assessmentFormat.name || ''}
-                                    </div>
-                                  );
-                                })}
-                            </div>
-                          </TableCell>
-                        )
-                      )}
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody className="divide-y divide-gray-200 bg-white">
-                    {studentFields.map((student, studentIndex) => {
-                      return (
-                        <TableRow key={student.id} className="group relative">
-                          <TableCell className=" sticky left-0 z-10 w-[20px] bg-white group-hover:bg-gray-50 lg:w-[50px]">
-                            {studentIndex + 1}
-                          </TableCell>
-                          <TableCell className="sticky left-[20px] z-10 w-[20px] whitespace-nowrap bg-white py-4 text-xs  group-hover:bg-gray-50 lg:left-[50px] lg:w-[300px] lg:px-6">
-                            {student['name']}
-                          </TableCell>
-                          <ExamSubjects
-                            nestIndex={studentIndex}
-                            examSubjects={
-                              markEntryResponse[studentIndex]?.examSubjects
-                            }
-                            {...{ control, register }}
-                          />
-                        </TableRow>
-                      );
-                    })}
-                  </TableBody>
-                </Table>
-              </div>
-            ) : (
-              <div className="flex items-center justify-center">
-                <p className="text-black ">No Data Found</p>
-              </div>
-            )}
+      {markEntryConfigResponse ? (
+        <div>
+          {markEntryPermissions.canEnterMarks ? (
+            <form
+              onSubmit={handleSubmit(submitMarkEntry)}
+              onKeyDown={handleKeyDown}
+            >
+              {!isMarkEntryConfigLoading ? (
+                <>
+                  {markEntryResponse?.length ? (
+                    <div className="">
+                      <Table className="w-auto min-w-full divide-gray-200 shadow-md">
+                        <TableHeader className=" bg-gray-50">
+                          <TableRow>
+                            <TableCell className="sticky left-0 z-10 w-[20px] bg-gray-50 lg:w-[50px]">
+                              #
+                            </TableCell>
+                            <TableCell className="sticky left-[20px] z-10 w-[20px] bg-gray-50 py-3  text-left text-xs font-medium uppercase tracking-wider text-black lg:left-[50px] lg:w-[300px] lg:px-6">
+                              Student
+                            </TableCell>
+                            {markEntryResponse[0]?.examSubjects.map(
+                              (examSubject, subjectIndex) => (
+                                <TableCell
+                                  key={examSubject.id}
+                                  className={`w-2/3 justify-start py-3 text-start text-xs font-medium uppercase tracking-wider text-black lg:w-[300px] lg:px-6 ${subjectIndex === 0 ? 'ml-[350px]' : ''}`}
+                                >
+                                  <div className="border-1 flex w-full space-x-2 border border-b-primary-200">
+                                    <p className="flex-1 text-center ">
+                                      {examSubject.subject.name}
+                                    </p>
+                                  </div>
+                                  <div className="flex w-full space-x-2">
+                                    {examSubject.examSubjectPartition
+                                      .filter(
+                                        (config) =>
+                                          config.assessmentFormat !== null
+                                      )
+                                      .map((formatItem, index) => {
+                                        return (
+                                          <div
+                                            key={index}
+                                            className="flex-1 text-center"
+                                          >
+                                            {formatItem.assessmentFormat.name ||
+                                              ''}
+                                          </div>
+                                        );
+                                      })}
+                                  </div>
+                                </TableCell>
+                              )
+                            )}
+                          </TableRow>
+                        </TableHeader>
+                        <TableBody className="divide-y divide-gray-200 bg-white">
+                          {studentFields.map((student, studentIndex) => {
+                            return (
+                              <TableRow
+                                key={student.id}
+                                className="group relative"
+                              >
+                                <TableCell className=" sticky left-0 z-10 w-[20px] bg-white group-hover:bg-gray-50 lg:w-[50px]">
+                                  {studentIndex + 1}
+                                </TableCell>
+                                <TableCell className="sticky left-[20px] z-10 w-[20px] whitespace-nowrap bg-white py-4 text-xs  group-hover:bg-gray-50 lg:left-[50px] lg:w-[300px] lg:px-6">
+                                  {student['name']}
+                                </TableCell>
+                                <ExamSubjects
+                                  nestIndex={studentIndex}
+                                  examSubjects={
+                                    markEntryResponse[studentIndex]
+                                      ?.examSubjects
+                                  }
+                                  {...{ control, register }}
+                                />
+                              </TableRow>
+                            );
+                          })}
+                        </TableBody>
+                      </Table>
+                    </div>
+                  ) : (
+                    <div className="flex items-center justify-center">
+                      <p className="text-black ">No Data Found</p>
+                    </div>
+                  )}
 
-            <Button className="text-center" type="submit">
-              {isPendingCreateMarkEntry ? (
-                <div className="flex items-center justify-center">
-                  <Loader2 className="mr-2 h-6 w-6 animate-spin text-white" />
-                  Saving
-                </div>
+                  <Button className="text-center" type="submit">
+                    {isPendingCreateMarkEntry ? (
+                      <div className="flex items-center justify-center">
+                        <Loader2 className="mr-2 h-6 w-6 animate-spin text-white" />
+                        Saving
+                      </div>
+                    ) : (
+                      'Submit'
+                    )}
+                  </Button>
+                </>
               ) : (
-                'Submit'
+                <div className="flex items-center justify-center">
+                  <Loader2 className="mr-2 h-6 w-6 animate-spin text-black" />
+                  <p className="text-black ">Fetching Data...</p>
+                </div>
               )}
-            </Button>
-          </>
-        ) : (
-          <div className="flex items-center justify-center">
-            <Loader2 className="mr-2 h-6 w-6 animate-spin text-black" />
-            <p className="text-black ">Fetching Data...</p>
-          </div>
-        )}
-      </form>
+            </form>
+          ) : (
+            <section>
+              <DataLoadingPlaceholder
+                image={dateOverPlaceholderSVG}
+                title="Dates Closed!"
+                subDescription="Please conduct your admin to enable mark entry. Thank you!"
+              />
+            </section>
+          )}
+        </div>
+      ) : (
+        <section>
+          <DataLoadingPlaceholder
+            title={'No Options Selected'}
+            image={noClassListImage}
+            description="It looks like there are no options selected at the moment."
+            subDescription="Please choose Class/Section/Exam to enable mark entry option."
+          />
+        </section>
+      )}
     </>
   );
 }
