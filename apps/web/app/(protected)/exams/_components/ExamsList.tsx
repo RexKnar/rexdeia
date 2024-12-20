@@ -2,7 +2,9 @@
 
 import { useGetExamListQuery } from 'lib/queries/exams/useGetExamListQuery';
 import { Loader2 } from 'lucide-react';
+import { useState } from 'react';
 
+import { DeleteConfirmationModal } from '@/components/modals/DeleteConfirmationModal';
 import { useQueryParams } from '@/hooks/useQueryParams';
 
 import { ExamCard } from './ExamCard';
@@ -19,9 +21,17 @@ export function ExamsList() {
 
   const page = parseInt(getParam('page')) || 1;
   const limit = parseInt(getParam('limit')) || 999;
+  const [showBlockConfirmationModal, setShowBlockConfirmationModal] =
+    useState(false);
+  const [selectedExam, setSelectedExam] = useState<any>();
 
   const { data: examListResponse, isLoading: isExamListLoading } =
     useGetExamListQuery({ page, limit });
+
+  const handleSelectedExam = (exam: any) => {
+    setSelectedExam(exam);
+    setShowBlockConfirmationModal(true);
+  };
 
   if (isExamListLoading) {
     return (
@@ -34,7 +44,7 @@ export function ExamsList() {
   return (
     <div>
       <h2 className="mb-4 text-sm font-semibold text-gray-600">Exams</h2>
-      <div className="container flex flex-wrap p-4">
+      <div className="container flex flex-wrap gap-4 ">
         {examListResponse?.data?.map((exam, index) => (
           <ExamCard
             key={exam?.id}
@@ -43,11 +53,26 @@ export function ExamsList() {
             termName={exam?.term?.name}
             academicYear={exam?.batch?.name}
             isActive={exam.isActive}
-            className="m-2 w-1/4"
+            isClosed={exam?.blockMarkEntry}
+            className="lg:w-[32.2%] "
             cardColor={cardColors[index % cardColors.length]}
+            setSelectedExam={handleSelectedExam}
           />
         ))}
       </div>
+      <DeleteConfirmationModal
+        open={showBlockConfirmationModal}
+        description={`Are you sure you want to ${selectedExam?.id} "${selectedExam?.name}"`}
+        onDeleteClick={async () => {
+          if (selectedExam) {
+            // await deleteBatchAsync(exam?.id);
+            setShowBlockConfirmationModal(false);
+          }
+        }}
+        onCancelClick={() => {
+          setShowBlockConfirmationModal(false);
+        }}
+      />
     </div>
   );
 }

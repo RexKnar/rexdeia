@@ -134,7 +134,7 @@ export function downloadSubjectWiseOverallXLSX(
           `${row.absent.overall} `,
           ` ${row.absent.male} `,
           ` ${row.absent.female}`,
-          `${((row.averageMark.male + row.averageMark.female) / 2).toFixed(2)} `,
+          `${row.averageMark.overall.toFixed(2)} `,
           ` ${row.averageMark.male.toFixed(2)} `,
           ` ${row.averageMark.female.toFixed(2)}`,
           `${row.numberOfPassStudents.overall} `,

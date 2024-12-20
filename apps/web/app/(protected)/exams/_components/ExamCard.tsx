@@ -1,8 +1,9 @@
 'use client';
 
 import { PencilIcon } from 'lucide-react';
-import React from 'react';
-import { Button } from 'ui';
+import { useEffect } from 'react';
+import { useForm } from 'react-hook-form';
+import { Button, Switch } from 'ui';
 import { cn } from 'utils';
 
 import { LinkButton } from '@/components/LinkButton';
@@ -16,6 +17,8 @@ type ExamCardProps = {
   isActive: boolean;
   className?: string;
   cardColor?: string;
+  isClosed?: Boolean;
+  setSelectedExam?: any;
 };
 
 export function ExamCard({
@@ -26,8 +29,15 @@ export function ExamCard({
   isActive,
   className,
   cardColor,
+  isClosed,
+  setSelectedExam,
 }: ExamCardProps) {
   const { setParams } = useQueryParams();
+  const { watch, setValue, register } = useForm();
+  useEffect(() => {
+    setValue('isClosed', isClosed);
+    setSelectedExam({ id: examId, name: examName });
+  }, [isClosed]);
   return (
     <div className={cn(`border-1 rounded-xl border p-4`, cardColor, className)}>
       <div className="flex justify-between">
@@ -75,6 +85,17 @@ export function ExamCard({
           >
             Enter Mark
           </LinkButton>
+          <div className="flex items-center">
+            <Switch
+              id="isClosed"
+              checked={!watch('isClosed')}
+              {...register('isClosed')}
+              onCheckedChange={(value) => setValue('isClosed', !value)}
+            />
+            <label htmlFor="isClosed" className="ml-2 text-sm font-semibold">
+              {watch('isClosed') ? 'Closed' : 'Open'}
+            </label>
+          </div>
         </div>
       </div>
     </div>
