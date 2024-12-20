@@ -18,7 +18,7 @@ type ExamCardProps = {
   className?: string;
   cardColor?: string;
   isClosed?: Boolean;
-  setSelectedExam: any;
+  setSelectedExam?: any;
 };
 
 export function ExamCard({

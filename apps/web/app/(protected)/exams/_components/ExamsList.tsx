@@ -23,7 +23,7 @@ export function ExamsList() {
   const limit = parseInt(getParam('limit')) || 999;
   const [showBlockConfirmationModal, setShowBlockConfirmationModal] =
     useState(false);
-  const [selectedExam, setSelectedExam] = useState<any>(null);
+  const [selectedExam, setSelectedExam] = useState<any>();
 
   const { data: examListResponse, isLoading: isExamListLoading } =
     useGetExamListQuery({ page, limit });
