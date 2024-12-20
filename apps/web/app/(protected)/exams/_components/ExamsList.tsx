@@ -28,6 +28,11 @@ export function ExamsList() {
   const { data: examListResponse, isLoading: isExamListLoading } =
     useGetExamListQuery({ page, limit });
 
+  const handleSelectedExam = (exam: any) => {
+    setSelectedExam(exam);
+    setShowBlockConfirmationModal(true);
+  };
+
   if (isExamListLoading) {
     return (
       <div className="flex items-center justify-center">
@@ -51,7 +56,7 @@ export function ExamsList() {
             isClosed={exam?.blockMarkEntry}
             className="lg:w-[32.2%] "
             cardColor={cardColors[index % cardColors.length]}
-            setSelectedExam={setSelectedExam}
+            setSelectedExam={handleSelectedExam}
           />
         ))}
       </div>
