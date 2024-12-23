@@ -10,6 +10,6 @@ module.exports = {
   trailingComma: 'es5',
   plugins: [
     require.resolve('prettier-plugin-packagejson'),
-    require.resolve('prettier-plugin-tailwindcss')
-  ]
+    require.resolve('prettier-plugin-tailwindcss'),
+  ],
 };

@@ -36,7 +36,6 @@ export function ExamCard({
   const { watch, setValue, register } = useForm();
   useEffect(() => {
     setValue('isClosed', isClosed);
-    setSelectedExam({ id: examId, name: examName });
   }, [isClosed]);
   return (
     <div className={cn(`border-1 rounded-xl border p-4`, cardColor, className)}>
@@ -90,7 +89,10 @@ export function ExamCard({
               id="isClosed"
               checked={!watch('isClosed')}
               {...register('isClosed')}
-              onCheckedChange={(value) => setValue('isClosed', !value)}
+              onCheckedChange={(value) => {
+                setValue('isClosed', !value);
+                setSelectedExam({ id: examId, name: examName });
+              }}
             />
             <label htmlFor="isClosed" className="ml-2 text-sm font-semibold">
               {watch('isClosed') ? 'Closed' : 'Open'}

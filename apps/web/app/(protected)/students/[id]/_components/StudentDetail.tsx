@@ -1,7 +1,7 @@
 'use client';
 
-// import { useGetStudentMarkListQuery } from 'lib/queries/analytics/student/useGetStudentMarkQuery';
 import { Loader2 } from 'lucide-react';
+import Image from 'next/image';
 import { useParams } from 'next/navigation';
 import {
   Card,
@@ -15,6 +15,7 @@ import {
 } from 'ui';
 
 import { useGetStudentByIdQuery } from '../../../../../lib/queries/students/useGetStudentByIdQuery';
+import ProfilePicture from './ProfilePicture';
 
 export function StudentDetail() {
   const { id } = useParams<{ id: string }>();
@@ -42,15 +43,19 @@ export function StudentDetail() {
       <section className="col-span-3 ">
         <Card className="w-72 rounded-md bg-white">
           <CardHeader>
-            <div className="">
-              <div className="flex justify-center">
-                <div className="flex h-20 w-20 items-center justify-center rounded-full bg-gray-200">
-                  <Text variant="xl-bold">{`${getStudentByIdResponse.firstName[0]} ${getStudentByIdResponse?.lastName[0] || getStudentByIdResponse.firstName[1]}`}</Text>
-                </div>
-              </div>
+            <div>
+              <ProfilePicture
+                firstName={getStudentByIdResponse?.firstName}
+                lastName={getStudentByIdResponse?.lastName}
+                profileImage={
+                  getStudentByIdResponse?.user?.image ||
+                  getStudentByIdResponse?.profileImage
+                }
+                studentId={getStudentByIdResponse?.id}
+              />
               <div className="my-auto flex justify-center px-5 pb-2 pt-3">
                 <Text variant="base-bold">
-                  {getStudentByIdResponse.firstName}
+                  {getStudentByIdResponse?.firstName}
                 </Text>
               </div>
               <div className="flex justify-center">
@@ -779,15 +784,16 @@ export function StudentDetail() {
                   <Card className="w-40 max-w-60">
                     <CardContent className="p-0">
                       <div className="flex justify-center bg-indigo-100 pb-3 pt-3">
-                        <img className="" src="/pdf.png" alt="" />
+                        <Image
+                          className=""
+                          src="/pdf.png"
+                          height={250}
+                          width={250}
+                          alt=""
+                        />
                       </div>
                       <div className="grid grid-cols-2 bg-white p-2">
                         <Text>{'Document'}</Text>
-                        <img
-                          className="justify-self-end"
-                          src="/dots.png"
-                          alt=""
-                        />
                       </div>
                     </CardContent>
                   </Card>
@@ -796,15 +802,16 @@ export function StudentDetail() {
                   <Card className="w-40 max-w-60">
                     <CardContent className="p-0 ">
                       <div className="flex justify-center bg-indigo-100 pb-3 pt-3">
-                        <img className="" src="/pdf.png" alt="" />
+                        <Image
+                          className=""
+                          src="/pdf.png"
+                          height={250}
+                          width={250}
+                          alt=""
+                        />
                       </div>
                       <div className="grid grid-cols-2 bg-white p-2">
                         <Text>{'Document'}</Text>
-                        <img
-                          className="justify-self-end"
-                          src="/dots.png"
-                          alt=""
-                        />
                       </div>
                     </CardContent>
                   </Card>
@@ -814,15 +821,16 @@ export function StudentDetail() {
                   <Card className="w-40 max-w-60">
                     <CardContent className="p-0 ">
                       <div className="flex justify-center bg-indigo-100 pb-3 pt-3">
-                        <img className="" src="/pdf.png" alt="" />
+                        <Image
+                          className=""
+                          src="/pdf.png"
+                          height={250}
+                          width={250}
+                          alt=""
+                        />
                       </div>
                       <div className="grid grid-cols-2 bg-white p-2">
                         <Text>{'Document'}</Text>
-                        <img
-                          className="justify-self-end"
-                          src="/dots.png"
-                          alt=""
-                        />
                       </div>
                     </CardContent>
                   </Card>
@@ -831,15 +839,16 @@ export function StudentDetail() {
                   <Card className="w-40 max-w-60">
                     <CardContent className="p-0 ">
                       <div className="flex justify-center bg-indigo-100 pb-3 pt-3">
-                        <img className="" src="/pdf.png" alt="" />
+                        <Image
+                          className=""
+                          src="/pdf.png"
+                          height={250}
+                          width={250}
+                          alt=""
+                        />
                       </div>
                       <div className="grid grid-cols-2 bg-white p-2">
                         <Text>{'Document'}</Text>
-                        <img
-                          className="justify-self-end"
-                          src="/dots.png"
-                          alt=""
-                        />
                       </div>
                     </CardContent>
                   </Card>
