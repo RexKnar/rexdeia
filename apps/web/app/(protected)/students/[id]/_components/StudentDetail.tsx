@@ -1,6 +1,7 @@
 'use client';
 
 import { Loader2 } from 'lucide-react';
+import Image from 'next/image';
 import { useParams } from 'next/navigation';
 import {
   Card,
@@ -783,15 +784,16 @@ export function StudentDetail() {
                   <Card className="w-40 max-w-60">
                     <CardContent className="p-0">
                       <div className="flex justify-center bg-indigo-100 pb-3 pt-3">
-                        <img className="" src="/pdf.png" alt="" />
+                        <Image
+                          className=""
+                          src="/pdf.png"
+                          height={250}
+                          width={250}
+                          alt=""
+                        />
                       </div>
                       <div className="grid grid-cols-2 bg-white p-2">
                         <Text>{'Document'}</Text>
-                        <img
-                          className="justify-self-end"
-                          src="/dots.png"
-                          alt=""
-                        />
                       </div>
                     </CardContent>
                   </Card>
@@ -800,15 +802,16 @@ export function StudentDetail() {
                   <Card className="w-40 max-w-60">
                     <CardContent className="p-0 ">
                       <div className="flex justify-center bg-indigo-100 pb-3 pt-3">
-                        <img className="" src="/pdf.png" alt="" />
+                        <Image
+                          className=""
+                          src="/pdf.png"
+                          height={250}
+                          width={250}
+                          alt=""
+                        />
                       </div>
                       <div className="grid grid-cols-2 bg-white p-2">
                         <Text>{'Document'}</Text>
-                        <img
-                          className="justify-self-end"
-                          src="/dots.png"
-                          alt=""
-                        />
                       </div>
                     </CardContent>
                   </Card>
@@ -818,15 +821,16 @@ export function StudentDetail() {
                   <Card className="w-40 max-w-60">
                     <CardContent className="p-0 ">
                       <div className="flex justify-center bg-indigo-100 pb-3 pt-3">
-                        <img className="" src="/pdf.png" alt="" />
+                        <Image
+                          className=""
+                          src="/pdf.png"
+                          height={250}
+                          width={250}
+                          alt=""
+                        />
                       </div>
                       <div className="grid grid-cols-2 bg-white p-2">
                         <Text>{'Document'}</Text>
-                        <img
-                          className="justify-self-end"
-                          src="/dots.png"
-                          alt=""
-                        />
                       </div>
                     </CardContent>
                   </Card>
@@ -835,15 +839,16 @@ export function StudentDetail() {
                   <Card className="w-40 max-w-60">
                     <CardContent className="p-0 ">
                       <div className="flex justify-center bg-indigo-100 pb-3 pt-3">
-                        <img className="" src="/pdf.png" alt="" />
+                        <Image
+                          className=""
+                          src="/pdf.png"
+                          height={250}
+                          width={250}
+                          alt=""
+                        />
                       </div>
                       <div className="grid grid-cols-2 bg-white p-2">
                         <Text>{'Document'}</Text>
-                        <img
-                          className="justify-self-end"
-                          src="/dots.png"
-                          alt=""
-                        />
                       </div>
                     </CardContent>
                   </Card>

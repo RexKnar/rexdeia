@@ -105,7 +105,7 @@ const ProfilePicture = ({
     <Dialog>
       <div className="flex justify-center">
         {isUploading ? (
-          <div className="flex items-center justify-center w-20 h-20 bg-gray-200 rounded-full">
+          <div className="flex h-20 w-20 items-center justify-center rounded-full bg-gray-200">
             <span className="text-xl font-bold">Loading...</span>
           </div>
         ) : (
@@ -116,24 +116,24 @@ const ProfilePicture = ({
           >
             {profileImage ? (
               <DialogTrigger>
-                <div className="w-20 h-20 overflow-hidden rounded-full">
+                <div className="h-20 w-20 overflow-hidden rounded-full">
                   <Image
                     src={`${profileImage}`}
                     objectFit="cover"
                     layout="fill"
                     alt="Profile"
-                    className="object-cover w-full h-full"
+                    className="h-full w-full object-cover"
                   />
                 </div>
               </DialogTrigger>
             ) : (
-              <div className="flex items-center justify-center w-20 h-20 bg-gray-200 rounded-full">
+              <div className="flex h-20 w-20 items-center justify-center rounded-full bg-gray-200">
                 <span className="text-xl font-bold">{initials}</span>
               </div>
             )}
 
             {imageHover && (
-              <div className="absolute inset-0 flex items-center justify-center transition-all duration-200 bg-black bg-opacity-50 rounded-full cursor-pointer">
+              <div className="absolute inset-0 flex cursor-pointer items-center justify-center rounded-full bg-black bg-opacity-50 transition-all duration-200">
                 <DialogTrigger>
                   <ZoomIn className="text-white" />
                 </DialogTrigger>
@@ -145,8 +145,8 @@ const ProfilePicture = ({
 
       <DialogContent className="max-w-3xl">
         <div className="relative">
-          <label className="absolute p-2 transition-colors bg-white rounded-full shadow-lg cursor-pointer right-2 top-2 hover:bg-gray-100">
-            <Camera className="w-5 h-5" />
+          <label className="absolute right-2 top-2 cursor-pointer rounded-full bg-white p-2 shadow-lg transition-colors hover:bg-gray-100">
+            <Camera className="h-5 w-5" />
             <input
               type="file"
               className="hidden"
@@ -157,23 +157,23 @@ const ProfilePicture = ({
           {!isUploading ? (
             <span>
               {profileImage ? (
-                <div className="w-full aspect-square">
+                <div className="aspect-square w-full">
                   <Image
                     src={`${profileImage}`}
                     objectFit="cover"
                     layout="fill"
                     alt="Profile"
-                    className="object-contain w-full h-full"
+                    className="h-full w-full object-contain"
                   />
                 </div>
               ) : (
-                <div className="flex items-center justify-center w-full bg-gray-200 aspect-square">
+                <div className="flex aspect-square w-full items-center justify-center bg-gray-200">
                   <span className="text-6xl font-bold">{initials}</span>
                 </div>
               )}
             </span>
           ) : (
-            <div className="flex items-center justify-center w-full bg-gray-200 aspect-square">
+            <div className="flex aspect-square w-full items-center justify-center bg-gray-200">
               <span className="text-6xl font-bold">Uploading...</span>
             </div>
           )}
