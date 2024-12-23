@@ -45,3 +45,18 @@ export async function deleteFileFromGCS(bucketName: string, filePath: string) {
   const file = bucket.file(filePath);
   await file.delete();
 }
+
+export async function generateSignedUrl(fileName: string) {
+  const bucketName = process.env.NEXT_GCLOUD_STORAGE_BUCKET;
+  const bucket = storage.bucket(bucketName);
+  const file = bucket.file(fileName);
+  const expirationDate = new Date();
+  expirationDate.setHours(expirationDate.getHours() + 1);
+
+  const [url] = await file.getSignedUrl({
+    action: 'read',
+    expires: expirationDate, // Set expiration time for the URL
+  });
+
+  return url;
+}

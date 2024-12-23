@@ -5,6 +5,7 @@ import { GroupModel } from './group';
 import { LanguageModel } from './language';
 import { MediumModel } from './medium';
 import { SectionModel } from './section';
+import { UserModal } from './user';
 
 export type Student = {
   id: string;
@@ -19,6 +20,7 @@ export type Student = {
   religion: string;
   firstName: string;
   phoneNumber: string;
+  profileImage?: string;
   fatherName: string;
   bloodGroup: string;
   middleName: string;
@@ -49,7 +51,7 @@ export type Student = {
   batch: BatchModel;
   section: SectionModel;
   status: 'Active' | 'Rejected' | 'Pending';
-
+  user?: UserModal;
   additionalAttributes: any;
   studentMapping?: StudentMappingModel[];
   academicDetails?: any;

@@ -4,6 +4,8 @@ import { db } from 'lib/db';
 import { AddStudentModel, UpdateStudentModel } from 'lib/domain/student';
 import { getServerSession } from 'next-auth';
 
+import { generateSignedUrl } from '../upload/service';
+
 export async function getStudentById(id: string) {
   const session = await getServerSession(authOptions);
 
@@ -54,37 +56,15 @@ export async function getStudentById(id: string) {
       },
     },
   });
+  const { studentMapping, profileImage, ...restOfStudent } = student;
 
-  // if (!student) {
-  //   return null;
-  // }
+  const profileImageUrl = profileImage
+    ? await generateSignedUrl(profileImage)
+    : null;
 
-  // if (format === 'form') {
-  //   const studentDefaultPropsMap = new Map(Object.entries(student));
-  //   const additionalPropsMap = new Map(
-  //     Object.entries(student.additionalAttributes)
-  //   );
-
-  //   const form = await db.form.findFirst({
-  //     where: {
-  //       id: student.formId,
-  //     },
-  //   });
-
-  //   // @ts-ignore
-  //   form.json.formSections.forEach((section) => {
-  //     section.sectionFields.forEach((field) => {
-  //       field.value =
-  //         studentDefaultPropsMap.get(field.name) == undefined
-  //           ? additionalPropsMap.get(field.name)
-  //           : studentDefaultPropsMap.get(field.name);
-  //     });
-  //   });
-  //   return form.json;
-  // }
-  const { studentMapping, ...restOfStudent } = student;
   const studentDetails = {
     ...restOfStudent,
+    profileImage: profileImageUrl,
     group: studentMapping.length > 0 ? studentMapping[0].group : null,
     class: studentMapping.length > 0 ? studentMapping[0].class : null,
     medium: studentMapping.length > 0 ? studentMapping[0].medium : null,

@@ -2,13 +2,16 @@ module.exports = {
   reactStrictMode: true,
   transpilePackages: ['ui'],
   swcMinify: true,
-   webpack: (config, { isServer }) => {
+  images: {
+    domains: ['storage.googleapis.com'],
+  },
+  webpack: (config, { isServer }) => {
     if (!isServer) {
       config.resolve.fallback = {
         ...config.resolve.fallback,
         fs: false,
         stream: false,
-        canvas: false
+        canvas: false,
       };
     }
     return config;
