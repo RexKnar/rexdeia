@@ -105,7 +105,7 @@ const ProfilePicture = ({
     <Dialog>
       <div className="flex justify-center">
         {isUploading ? (
-          <div className="flex h-20 w-20 items-center justify-center rounded-full bg-gray-200">
+          <div className="flex h-60 w-60 items-center justify-center bg-gray-200">
             <span className="text-xl font-bold">Loading...</span>
           </div>
         ) : (
@@ -116,7 +116,7 @@ const ProfilePicture = ({
           >
             {profileImage ? (
               <DialogTrigger>
-                <div className="h-20 w-20 overflow-hidden rounded-full">
+                <div className="h-60 w-60 overflow-hidden ">
                   <Image
                     src={`${profileImage}`}
                     objectFit="cover"
@@ -127,17 +127,17 @@ const ProfilePicture = ({
                 </div>
               </DialogTrigger>
             ) : (
-              <div className="flex h-20 w-20 items-center justify-center rounded-full bg-gray-200">
+              <div className="flex h-60 w-60 items-center justify-center bg-gray-200">
                 <span className="text-xl font-bold">{initials}</span>
               </div>
             )}
 
             {imageHover && (
-              <div className="absolute inset-0 flex cursor-pointer items-center justify-center rounded-full bg-black bg-opacity-50 transition-all duration-200">
-                <DialogTrigger>
+              <DialogTrigger>
+                <div className="absolute inset-0 flex cursor-pointer items-center justify-center bg-black bg-opacity-50 transition-all duration-200">
                   <ZoomIn className="text-white" />
-                </DialogTrigger>
-              </div>
+                </div>
+              </DialogTrigger>
             )}
           </div>
         )}
@@ -145,7 +145,7 @@ const ProfilePicture = ({
 
       <DialogContent className="max-w-3xl">
         <div className="relative">
-          <label className="absolute right-2 top-2 cursor-pointer rounded-full bg-white p-2 shadow-lg transition-colors hover:bg-gray-100">
+          <label className="absolute right-2 top-2 z-50 cursor-pointer rounded-full bg-white p-2 shadow-lg transition-colors hover:bg-gray-100">
             <Camera className="h-5 w-5" />
             <input
               type="file"

@@ -46,14 +46,16 @@ export function MarkFields({
     <div className="flex w-full space-x-2">
       {fields.map((field, formatIndex) => {
         return (
-          <MarkInput
-            key={field.id}
-            control={control}
-            attendance={field['attendance']}
-            validationData={examSubjectPartition[formatIndex]}
-            registerKey={`studentsMarkDetails.${nestIndex}.subjects.${subjectIndex}.marks.${formatIndex}`}
-            fieldName={field['assessmentFormatName']}
-          />
+          examSubjectPartition && (
+            <MarkInput
+              key={field.id}
+              control={control}
+              attendance={field['attendance']}
+              validationData={examSubjectPartition[formatIndex]}
+              registerKey={`studentsMarkDetails.${nestIndex}.subjects.${subjectIndex}.marks.${formatIndex}`}
+              fieldName={field['assessmentFormatName']}
+            />
+          )
         );
       })}
     </div>
