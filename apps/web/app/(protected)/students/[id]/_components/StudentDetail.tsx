@@ -22,6 +22,7 @@ export function StudentDetail() {
 
   const { data: getStudentByIdResponse, isLoading: isGetStudentByIdLoading } =
     useGetStudentByIdQuery(id);
+
   // const sectionId = getStudentByIdResponse?.section?.id;
   // const classId = getStudentByIdResponse?.class?.id;
   // const groupId = getStudentByIdResponse?.group?.id;
@@ -59,31 +60,24 @@ export function StudentDetail() {
                 </Text>
               </div>
               <div className="flex justify-center">
-                {getStudentByIdResponse?.admissionNumber && (
+                {getStudentByIdResponse?.class && (
                   <Text
                     variant="base-regular"
                     className="mx-2 rounded-lg border bg-violet-100 px-2"
                   >
-                    {getStudentByIdResponse?.admissionNumber}
+                    {getStudentByIdResponse?.class?.name}
                   </Text>
                 )}
-                {getStudentByIdResponse.additionalAttributes?.age && (
-                  <Text
-                    variant="base-regular"
-                    className="rounded-lg border bg-violet-100 px-2"
-                  >
-                    {getStudentByIdResponse.additionalAttributes?.age} 44
-                  </Text>
-                )}
-                {getStudentByIdResponse.bloodGroup && (
+                {getStudentByIdResponse?.section && (
                   <Text
                     variant="base-regular"
                     className="mx-2 rounded-lg border bg-violet-100 px-2"
                   >
-                    {getStudentByIdResponse.bloodGroup}
+                    {getStudentByIdResponse?.section?.name}
                   </Text>
                 )}
               </div>
+              <div className="flex justify-center">{}</div>
             </div>
           </CardHeader>
           <CardContent className="pl-0">
@@ -92,6 +86,22 @@ export function StudentDetail() {
                 <Text className="w-18 pt-1 text-xs text-gray-800">{'DOB'}</Text>
                 <Text className="col-span-2">
                   {getStudentByIdResponse.dob?.toString()}
+                </Text>
+              </div>
+              <div className="ml-5 grid grid-cols-3 pt-3 ">
+                <Text className="w-18 pt-1 text-xs text-gray-800">
+                  {'Father'}
+                </Text>
+                <Text className="col-span-2">
+                  {getStudentByIdResponse?.fatherName}
+                </Text>
+              </div>
+              <div className="ml-5 grid grid-cols-3 pt-3 ">
+                <Text className="w-18 pt-1 text-xs text-gray-800">
+                  {'Mother'}
+                </Text>
+                <Text className="col-span-2">
+                  {getStudentByIdResponse?.motherName}
                 </Text>
               </div>
               <div className="ml-5 grid grid-cols-3 pt-3">

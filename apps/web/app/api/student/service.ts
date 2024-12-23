@@ -28,6 +28,7 @@ export async function getStudentById(id: string) {
           isCurrent: true,
         },
         select: {
+          rollNumber: true,
           group: {
             select: {
               id: true,
@@ -69,6 +70,7 @@ export async function getStudentById(id: string) {
     class: studentMapping.length > 0 ? studentMapping[0].class : null,
     medium: studentMapping.length > 0 ? studentMapping[0].medium : null,
     section: studentMapping.length > 0 ? studentMapping[0].section : null,
+    rollNumber: studentMapping.length > 0 ? studentMapping[0].rollNumber : null,
   };
   return studentDetails;
 }
