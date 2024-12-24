@@ -114,9 +114,10 @@ const ProfilePicture = ({
             onMouseEnter={() => setImageHover(true)}
             onMouseLeave={() => setImageHover(false)}
           >
-            {profileImage ? (
-              <DialogTrigger>
-                <div className="h-60 w-60 overflow-hidden ">
+            {/* {profileImage ? ( */}
+            <DialogTrigger>
+              <div className="flex h-60 w-60 items-center justify-center overflow-hidden bg-gray-200 ">
+                {profileImage ? (
                   <Image
                     src={`${profileImage}`}
                     objectFit="cover"
@@ -124,21 +125,18 @@ const ProfilePicture = ({
                     alt="Profile"
                     className="h-full w-full object-cover"
                   />
-                </div>
-              </DialogTrigger>
-            ) : (
-              <div className="flex h-60 w-60 items-center justify-center bg-gray-200">
-                <span className="text-xl font-bold">{initials}</span>
+                ) : (
+                  <div className="flex h-60 w-60 items-center justify-center bg-gray-200">
+                    <span className="text-xl font-bold">{initials}</span>
+                  </div>
+                )}
+                {imageHover && (
+                  <div className="absolute inset-0 flex h-60 w-60 cursor-pointer items-center justify-center bg-black bg-opacity-50 transition-all duration-200">
+                    <ZoomIn className="text-white" />
+                  </div>
+                )}
               </div>
-            )}
-
-            {imageHover && (
-              <DialogTrigger>
-                <div className="absolute inset-0 flex cursor-pointer items-center justify-center bg-black bg-opacity-50 transition-all duration-200">
-                  <ZoomIn className="text-white" />
-                </div>
-              </DialogTrigger>
-            )}
+            </DialogTrigger>
           </div>
         )}
       </div>
