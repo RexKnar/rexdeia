@@ -36,7 +36,6 @@ export async function getMasterMarksByFilter(filter: MarkAnalyticsFilter) {
       exam: examDetails,
     };
   } catch (error) {
-    // console.log(error);
     return { markList: [], analytics: {}, error };
   }
 }

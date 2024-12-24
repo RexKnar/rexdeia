@@ -1,7 +1,7 @@
 'use client';
 
+import { useGetStudentMarkListQuery } from 'lib/queries/analytics/student/useGetStudentMarkQuery';
 import { Loader2 } from 'lucide-react';
-import Image from 'next/image';
 import { useParams } from 'next/navigation';
 import {
   Card,
@@ -15,6 +15,7 @@ import {
 } from 'ui';
 
 import { useGetStudentByIdQuery } from '../../../../../lib/queries/students/useGetStudentByIdQuery';
+import MarkList from './MarkList';
 import ProfilePicture from './ProfilePicture';
 
 export function StudentDetail() {
@@ -23,14 +24,14 @@ export function StudentDetail() {
   const { data: getStudentByIdResponse, isLoading: isGetStudentByIdLoading } =
     useGetStudentByIdQuery(id);
 
-  // const sectionId = getStudentByIdResponse?.section?.id;
-  // const classId = getStudentByIdResponse?.class?.id;
-  // const groupId = getStudentByIdResponse?.group?.id;
+  const sectionId = getStudentByIdResponse?.section?.id;
+  const classId = getStudentByIdResponse?.class?.id;
+  const groupId = getStudentByIdResponse?.group?.id;
 
-  // const {
-  //   data: getStudentMarkListResponse,
-  //   isLoading: isGetStudentMarkListLoading,
-  // } = useGetStudentMarkListQuery(id, sectionId, classId, groupId);
+  const {
+    data: getStudentMarkListResponse,
+    isLoading: isGetStudentMarkListLoading,
+  } = useGetStudentMarkListQuery(id, sectionId, classId, groupId);
   if (isGetStudentByIdLoading) {
     return (
       <div className="flex h-20 items-center justify-center">
@@ -144,12 +145,7 @@ export function StudentDetail() {
             >
               Personal Information
             </TabsTrigger>
-            <TabsTrigger
-              value="document"
-              className="mr-2 text-base focus:border-b-4 focus:border-primary"
-            >
-              Documents
-            </TabsTrigger>
+
             <TabsTrigger
               value="report"
               className="mr-2 text-base focus:border-b-4 focus:border-primary"
@@ -158,7 +154,7 @@ export function StudentDetail() {
             </TabsTrigger>
           </TabsList>
           <TabsContent className="w-full" value="profile">
-            <section className="max-h-[60vh] overflow-y-auto">
+            <section className="max-h-[60vh] overflow-y-auto bg-white">
               <div className="rounded-md bg-white ">
                 <Text className="pl-5 pt-5" variant="sm-semibold">
                   {'BASIC DETAILS'}
@@ -784,144 +780,17 @@ export function StudentDetail() {
               </div>
             </section>
           </TabsContent>
-          <TabsContent className="w-full " value="document">
-            <section className="bg-white p-5 ">
-              <div>
-                <label className="pl-1">Document</label>
-              </div>
-              <div className=" max-h-[60vh]overflow-y-auto flex flex-wrap gap-5 p-0 pl-2">
-                <div className="mt-4 rounded-md bg-white">
-                  <Card className="w-40 max-w-60">
-                    <CardContent className="p-0">
-                      <div className="flex justify-center bg-indigo-100 pb-3 pt-3">
-                        <Image
-                          className=""
-                          src="/pdf.png"
-                          height={250}
-                          width={250}
-                          alt=""
-                        />
-                      </div>
-                      <div className="grid grid-cols-2 bg-white p-2">
-                        <Text>{'Document'}</Text>
-                      </div>
-                    </CardContent>
-                  </Card>
-                </div>
-                <div className="mt-4 rounded-md bg-white">
-                  <Card className="w-40 max-w-60">
-                    <CardContent className="p-0 ">
-                      <div className="flex justify-center bg-indigo-100 pb-3 pt-3">
-                        <Image
-                          className=""
-                          src="/pdf.png"
-                          height={250}
-                          width={250}
-                          alt=""
-                        />
-                      </div>
-                      <div className="grid grid-cols-2 bg-white p-2">
-                        <Text>{'Document'}</Text>
-                      </div>
-                    </CardContent>
-                  </Card>
-                </div>
-
-                <div className="mt-4 rounded-md bg-white">
-                  <Card className="w-40 max-w-60">
-                    <CardContent className="p-0 ">
-                      <div className="flex justify-center bg-indigo-100 pb-3 pt-3">
-                        <Image
-                          className=""
-                          src="/pdf.png"
-                          height={250}
-                          width={250}
-                          alt=""
-                        />
-                      </div>
-                      <div className="grid grid-cols-2 bg-white p-2">
-                        <Text>{'Document'}</Text>
-                      </div>
-                    </CardContent>
-                  </Card>
-                </div>
-                <div className="mt-4 rounded-md bg-white">
-                  <Card className="w-40 max-w-60">
-                    <CardContent className="p-0 ">
-                      <div className="flex justify-center bg-indigo-100 pb-3 pt-3">
-                        <Image
-                          className=""
-                          src="/pdf.png"
-                          height={250}
-                          width={250}
-                          alt=""
-                        />
-                      </div>
-                      <div className="grid grid-cols-2 bg-white p-2">
-                        <Text>{'Document'}</Text>
-                      </div>
-                    </CardContent>
-                  </Card>
-                </div>
-              </div>
-            </section>
-          </TabsContent>
           <TabsContent className="w-full min-w-full" value="report">
-            {/* <section className="bg-white rounded-md ">
+            <section className="bg-white p-5 ">
               {isGetStudentMarkListLoading ? (
-                <div className="flex items-center justify-center h-20">
-                  <Loader2 className="w-6 mr-2 text-black animate-spin" />
-                  <p className="text-black ">Fetching Student Details...</p>
+                <div className="flex h-20 items-center justify-center">
+                  <Loader2 className="mr-2 w-6 animate-spin text-black" />
+                  <p className="text-black ">Loading...</p>
                 </div>
               ) : (
-                <Table>
-                  <TableHeader>
-                    <TableRow className="mt-5 text-center bg-primary-300 print:hidden">
-                      <TableCell>
-                        <Text className="font-semibold size-lg">Exams</Text>
-                      </TableCell>
-                      {getStudentMarkListResponse.subjectList?.map(
-                        (subject) => (
-                          <TableCell key={subject.subjectId}>
-                            <Text className="font-semibold size-lg">
-                              {subject.subject.name}
-                            </Text>
-                          </TableCell>
-                        )
-                      )} 
-                      <TableCell>
-                        <Text className="font-semibold size-lg">Total</Text>
-                      </TableCell>
-                    </TableRow>
-                  </TableHeader>
-                  {getStudentMarkListResponse && (
-                    <TableBody>
-                      {getStudentMarkListResponse.markList.map((exam) => (
-                        <TableRow key={exam.exam.id}>
-                          <TableCell className="mt-5 text-center bg-green-100 print:hidden">
-                            {exam.exam.name}
-                          </TableCell>
-                          {exam.subjects.map((subject) => (
-                            <TableCell key={subject.id}>
-                              {subject.subject.name}
-                              <div>
-                                {subject.examSubjectPartition.map(
-                                  (partition) => (
-                                    <div key={partition.id}>
-                                      {partition.Mark[0].mark}
-                                    </div>
-                                  )
-                                )}
-                              </div>
-                            </TableCell>
-                          ))}
-                        </TableRow>
-                      ))}
-                    </TableBody>
-                  )}
-                </Table>
+                <MarkList markDetails={getStudentMarkListResponse} />
               )}
-            </section> */}
+            </section>
           </TabsContent>
         </Tabs>
       </section>

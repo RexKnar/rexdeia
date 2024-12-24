@@ -1,16 +1,21 @@
 import { db } from 'lib/db';
 
 export async function getSubjectToStudentByGroupAndClassId(
-  id: string,
+  groupId: string,
   classId: string
 ) {
   return db.subjectToGroup.findMany({
     where: {
-      groupId: id,
+      groupId: groupId,
       classId,
     },
     include: {
       subject: true,
+    },
+    orderBy: {
+      subject: {
+        subjectOrder: 'asc',
+      },
     },
   });
 }
