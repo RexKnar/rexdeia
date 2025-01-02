@@ -15,6 +15,7 @@ import {
 } from 'ui';
 
 import { useGetStudentByIdQuery } from '../../../../../lib/queries/students/useGetStudentByIdQuery';
+import AcademicHistoryList from './AcademicHistoryList';
 import MarkList from './MarkList';
 import ProfilePicture from './ProfilePicture';
 
@@ -151,6 +152,12 @@ export function StudentDetail() {
               className="mr-2 text-base focus:border-b-4 focus:border-primary"
             >
               Report
+            </TabsTrigger>
+            <TabsTrigger
+              value="academicHistory"
+              className="mr-2 text-base focus:border-b-4 focus:border-primary"
+            >
+              Academic History
             </TabsTrigger>
           </TabsList>
           <TabsContent className="w-full" value="profile">
@@ -790,6 +797,11 @@ export function StudentDetail() {
               ) : (
                 <MarkList markDetails={getStudentMarkListResponse} />
               )}
+            </section>
+          </TabsContent>
+          <TabsContent value="academicHistory">
+            <section className="bg-white p-5 ">
+              <AcademicHistoryList />
             </section>
           </TabsContent>
         </Tabs>

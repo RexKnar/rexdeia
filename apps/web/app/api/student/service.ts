@@ -301,34 +301,7 @@ export async function getRecentlyAddedStudentsList({
 }
 export async function getAllStudentsBySectionIdWithGroup(sectionId: string) {
   const session = await getServerSession(authOptions);
-  // const studentMappings = await db.studentMapping.findMany({
-  //   where: {
-  //     sectionId: sectionId,
-  //     isCurrent: true,
-  //     student: {
-  //       branchId: session.branchId,
-  //       organizationId: session.organizationId,
-  //       status: 'Active',
-  //       isDeleted: false,
-  //     },
-  //   },
-  //   include: {
-  //     student: {
-  //       include: {
-  //         community: true,
-  //       },
-  //     },
-  //     group: true,
-  //     batch: true,
-  //     class: true,
-  //     section: true,
-  //   },
-  //   orderBy: [
-  //     {
-  //       rollNumber: 'asc',
-  //     },
-  //   ],
-  // });
+
   const studentMappings = await db.studentMapping.findMany({
     where: {
       sectionId: sectionId,
