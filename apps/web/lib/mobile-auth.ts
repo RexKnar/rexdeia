@@ -135,7 +135,7 @@ export async function verifyToken(token: string) {
       currentBatch: payload.currentBatch as string,
     };
   } catch (error) {
-    throw new Error('Invalid token');
+    throw new Error('Invalid token', error);
   }
 }
 
