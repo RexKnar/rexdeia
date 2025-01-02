@@ -10,7 +10,8 @@
     "NEXT_GCLOUD_STORAGE_BUCKET",
     "NEXT_GCLOUD_PROJECT_ID",
     "SENTRY_DSN",
-    "NEXT_PUBLIC_SENTRY_DSN"
+    "NEXT_PUBLIC_SENTRY_DSN",
+    "JWT_SECRET"
   ],
   "pipeline": {
     "build": {
