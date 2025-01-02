@@ -67,6 +67,6 @@ export async function refreshAccessToken(refreshToken: string) {
 
     return { accessToken: newAccessToken };
   } catch (error) {
-    throw new Error('Invalid refresh token');
+    throw new Error('Invalid refresh token', error);
   }
 }
