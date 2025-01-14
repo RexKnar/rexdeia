@@ -56,6 +56,9 @@ export async function getMarksByFilter(filter: MarkAnalyticsFilterModel) {
                   select: {
                     subject: true,
                     subjectId: true,
+                    minMark: true,
+                    totalMarks: true,
+                    convertTo: true,
                     examSubjectPartition: {
                       include: {
                         Mark: true,
@@ -122,7 +125,10 @@ export async function getMarksByFilter(filter: MarkAnalyticsFilterModel) {
               Number(mark.mark) < Number(partition.minMark) ||
               mark.attandance
             ) {
-              failingStatus = true;
+              if (!partition.excludeSubjectValidation) {
+                failingStatus = true;
+              }
+
               failingOn.push(partition.assessmentFormat.name);
             }
             if (mark.attandance) {
@@ -134,6 +140,8 @@ export async function getMarksByFilter(filter: MarkAnalyticsFilterModel) {
             subjectTotalMark += Math.round(actualMark);
             mark['total'] = Math.round(actualMark);
             mark['entryStatus'] = true;
+            mark['excludeSubjectValidation'] =
+              partition.excludeSubjectValidation;
           } else {
             mark['entryStatus'] = false;
             mark['total'] = 0;

@@ -102,21 +102,22 @@ model ExamSubject {
 }
 
 model ExamSubjectPartition {
-  id                 String           @id @default(uuid()) @map("_id") @db.Uuid
-  subjectId          String           @db.Uuid
-  minMark            Decimal          @db.Decimal
-  totalMarks         Decimal          @db.Decimal
-  partitionName      String?
-  examSubjectId      String           @db.Uuid
-  assessmentFormatId String           @db.Uuid
-  convertTo          Decimal          @db.Decimal
-  dateToConduct      DateTime
-  examGroupId        String           @db.Uuid
-  assessmentFormat   AssessmentFormat @relation(fields: [assessmentFormatId], references: [id])
-  examGroup          ExamGroup        @relation(fields: [examGroupId], references: [id])
-  examSubject        ExamSubject      @relation(fields: [examSubjectId], references: [id])
-  subject            Subject          @relation(fields: [subjectId], references: [id])
-  Mark               Mark[]
+  id                       String           @id @default(uuid()) @map("_id") @db.Uuid
+  subjectId                String           @db.Uuid
+  minMark                  Decimal          @db.Decimal
+  totalMarks               Decimal          @db.Decimal
+  partitionName            String?
+  examSubjectId            String           @db.Uuid
+  assessmentFormatId       String           @db.Uuid
+  convertTo                Decimal          @db.Decimal
+  excludeSubjectValidation Boolean          @default(false)
+  dateToConduct            DateTime
+  examGroupId              String           @db.Uuid
+  assessmentFormat         AssessmentFormat @relation(fields: [assessmentFormatId], references: [id])
+  examGroup                ExamGroup        @relation(fields: [examGroupId], references: [id])
+  examSubject              ExamSubject      @relation(fields: [examSubjectId], references: [id])
+  subject                  Subject          @relation(fields: [subjectId], references: [id])
+  Mark                     Mark[]
 }
 
 model Mark {
