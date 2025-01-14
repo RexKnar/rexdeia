@@ -1,45 +1,115 @@
 pipeline {
     agent any
-
+    
     environment {
-        DOCKER_IMAGE = "rexdeia"           // Image name
-        DOCKER_TAG = "latest"                  // Tag for the image
+        DOCKER_IMAGE = "rexdeia"
+        DOCKER_TAG = "latest"
+        CONTAINER_NAME = "rexdeia-container"
+        APP_PORT = "3000"
     }
-
+    
     stages {
-        stage('Clone Repository') {
+        stage('Checkout') {
             steps {
-                // Clone the repository
-                git 'https://github.com/RexKnar/rexdeia.git'
+                // Clean workspace before build
+                cleanWs()
+                git branch: 'main',
+                    url: 'https://github.com/RexKnar/rexdeia.git'
             }
         }
-
+        
         stage('Build Docker Image') {
             steps {
                 script {
-                    // Build Docker image locally
-                    sh 'docker build -t $DOCKER_IMAGE:$DOCKER_TAG .'
+                    try {
+                        sh """
+                            docker build -t ${DOCKER_IMAGE}:${DOCKER_TAG} \
+                            --build-arg NODE_ENV=production \
+                            .
+                        """
+                    } catch (Exception e) {
+                        error "Docker build failed: ${e.getMessage()}"
+                    }
                 }
             }
         }
-
-        stage('Deploy on Local Server') {
+        
+        stage('Stop & Remove Existing Container') {
             steps {
                 script {
-                    // Directly deploy the Docker container on the same machine
+                    try {
+                        sh """
+                            if docker ps -a | grep -q ${CONTAINER_NAME}; then
+                                docker stop ${CONTAINER_NAME} || true
+                                docker rm ${CONTAINER_NAME} || true
+                            fi
+                        """
+                    } catch (Exception e) {
+                        echo "Warning: Could not remove existing container: ${e.getMessage()}"
+                    }
+                }
+            }
+        }
+        
+        stage('Deploy Container') {
+            steps {
+                script {
+                    try {
+                        sh """
+                            docker run -d \
+                            --name ${CONTAINER_NAME} \
+                            -p ${APP_PORT}:${APP_PORT} \
+                            --restart unless-stopped \
+                            ${DOCKER_IMAGE}:${DOCKER_TAG}
+                        """
+                    } catch (Exception e) {
+                        error "Deployment failed: ${e.getMessage()}"
+                    }
+                }
+            }
+        }
+        
+        stage('Health Check') {
+            steps {
+                script {
+                    // Wait for application to be ready
                     sh """
-                        docker stop rexdeia-container || true
-                        docker rm rexdeia-container || true
-                        docker run -d -p 3000:3000 --name rexdeia-container $DOCKER_IMAGE:$DOCKER_TAG
+                        for i in `seq 1 30`; do
+                            if curl -s http://localhost:${APP_PORT} >/dev/null; then
+                                echo 'Application is up!'
+                                exit 0
+                            fi
+                            echo 'Waiting for application to be ready...'
+                            sleep 2
+                        done
+                        echo 'Application failed to start!'
+                        exit 1
                     """
                 }
             }
         }
     }
-
+    
     post {
+        success {
+            echo 'Deployment successful!'
+        }
+        failure {
+            script {
+                echo 'Deployment failed!'
+                // Rollback on failure
+                sh """
+                    docker stop ${CONTAINER_NAME} || true
+                    docker rm ${CONTAINER_NAME} || true
+                """
+            }
+        }
         always {
-            // Clean up if necessary
+            // Clean up old images
+            sh """
+                docker system prune -f
+                docker image prune -f
+            """
             cleanWs()
         }
     }
