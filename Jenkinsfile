@@ -12,10 +12,8 @@ pipeline {
             steps {
                 // Clean workspace before build
                 cleanWs()
-                // Clone the repository using SSH
-                git credentialsId: 'rexdeia_ssh_key', // Replace with your Jenkins SSH credentials ID
-                    branch: 'main',
-                    url: 'git@github.com:RexKnar/rexdeia.git' // SSH URL for the repository
+                // Jenkins will use the branch and credentials from job configuration
+                git url: 'git@github.com:RexKnar/rexdeia.git'
             }
         }
         
@@ -23,7 +21,6 @@ pipeline {
             steps {
                 script {
                     try {
-                        // Run docker build on the host system (outside the container)
                         sh """
                             docker build -t ${DOCKER_IMAGE}:${DOCKER_TAG} \
                             --build-arg NODE_ENV=production \
@@ -40,10 +37,11 @@ pipeline {
             steps {
                 script {
                     try {
-                        // Run the application directly (outside of Docker)
-                        // Assuming your application is run via npm or node
                         sh """
-                            nohup npm start --port ${APP_PORT} &
+                            docker run -d \
+                            -p ${APP_PORT}:${APP_PORT} \
+                            --restart unless-stopped \
+                            ${DOCKER_IMAGE}:${DOCKER_TAG}
                         """
                     } catch (Exception e) {
                         error "Deployment failed: ${e.getMessage()}"
@@ -80,7 +78,11 @@ pipeline {
         failure {
             script {
                 echo 'Deployment failed!'
-                // Rollback on failure (if necessary)
+                // Cleanup on failure
+                sh """
+                    docker ps -q --filter "ancestor=${DOCKER_IMAGE}:${DOCKER_TAG}" | xargs -r docker stop
+                    docker ps -a -q --filter "ancestor=${DOCKER_IMAGE}:${DOCKER_TAG}" | xargs -r docker rm
+                """
             }
         }
         always {
