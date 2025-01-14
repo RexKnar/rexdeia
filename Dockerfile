@@ -19,7 +19,9 @@ COPY . .
 RUN pnpm install --frozen-lockfile
 
 # Build
-RUN pnpm turbo run build
+RUN node --max-old-space-size=4096 pnpm turbo run build
+
+# RUN pnpm turbo run build
 
 # Change to the apps/web directory
 WORKDIR /usr/src/app/apps/web
