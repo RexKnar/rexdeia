@@ -13,8 +13,9 @@ pipeline {
             steps {
                 // Clean workspace before build
                 cleanWs()
-                git branch: 'main',
-                    url: 'https://github.com/RexKnar/rexdeia.git'
+                git credentialsId: 'rexdeia_ssh_key', // Use your SSH credentials ID here
+                    branch: 'main',
+                    url: 'git@github.com:RexKnar/rexdeia.git' // SSH URL for the repository
             }
         }
         
