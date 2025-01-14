@@ -32,7 +32,7 @@ export function MarkInput({
 
     if (isValidNumber) {
       if (inputValue > validationData?.totalMarks) {
-        setErrorMessage(`${inputValue}> ${validationData?.totalMarks}`);
+        setErrorMessage(`Exceeds ${validationData?.totalMarks}`);
       } else {
         const status = inputValue >= validationData?.minMark ? 'P' : 'F';
         setErrorMessage('');
@@ -64,7 +64,18 @@ export function MarkInput({
             maxLength={validationData?.totalMarks}
             placeholder={fieldName}
             errorMessage={errorMessage}
-            {...control.register(`${registerKey}.mark`)}
+            {...control.register(`${registerKey}.mark`, {
+              validate: (value) => {
+                const inputValue = parseFloat(value);
+                if (isNaN(inputValue)) {
+                  return 'Value must be a number';
+                }
+                if (inputValue > validationData?.totalMarks) {
+                  return `Exceeds ${validationData?.totalMarks}`;
+                }
+                return true;
+              },
+            })}
           />
         </div>
         <div className="flex items-center gap-1">

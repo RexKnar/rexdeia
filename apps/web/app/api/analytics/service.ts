@@ -60,6 +60,9 @@ export async function getStudentMarksByFilter(
                   },
                   select: {
                     subject: true,
+                    minMark: true,
+                    totalMarks: true,
+                    convertTo: true,
                     examSubjectPartition: {
                       include: {
                         Mark: true,
@@ -110,6 +113,7 @@ export async function getStudentMarksByFilter(
       const examSubjectPartition = examSubject.examSubjectPartition;
 
       let subjectTotalMark = 0;
+      let conductedSubjectTotalMark = 0;
       let failingStatus = false;
       let failingOn = [];
       let absentStatus = true;
@@ -132,7 +136,9 @@ export async function getStudentMarksByFilter(
               Number(mark.mark) < Number(partition.minMark) ||
               mark.attandance
             ) {
-              failingStatus = true;
+              if (!partition.excludeSubjectValidation) {
+                failingStatus = true;
+              }
               failingOn.push(partition.assessmentFormat.name);
             }
             if (mark.attandance) {
@@ -140,6 +146,7 @@ export async function getStudentMarksByFilter(
             } else {
               attendance = true;
             }
+            conductedSubjectTotalMark += Number(mark.mark);
             const markValue = Number(mark.mark);
             const totalMarksValue = Number(partition.totalMarks);
 
@@ -150,6 +157,7 @@ export async function getStudentMarksByFilter(
             const actualMark =
               (Number(mark.mark) / Number(partition.totalMarks)) *
               Number(partition.convertTo);
+
             subjectTotalMark += Math.round(actualMark);
             mark['total'] = Math.round(actualMark);
             mark['entryStatus'] = true;
@@ -163,6 +171,10 @@ export async function getStudentMarksByFilter(
 
         return acc;
       }, []);
+
+      if (conductedSubjectTotalMark < Number(examSubject.minMark)) {
+        failingStatus = true;
+      }
 
       if (failingStatus) {
         subjectFailed++;

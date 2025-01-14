@@ -37,6 +37,7 @@ export default function RangeAnalyticsTable({
     let totalCount = 0;
     if (rangeType === 'SubjectMarks') {
       markList.forEach((student) => {
+        console.log(student);
         student.subjects.forEach((subject) => {
           if (subject.id === subjectID) {
             const mark = parseFloat(subject.subjectTotalMark);

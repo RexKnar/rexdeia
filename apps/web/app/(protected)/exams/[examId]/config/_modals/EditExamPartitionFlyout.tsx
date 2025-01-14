@@ -17,6 +17,7 @@ import {
   SheetContent,
   SheetHeader,
   SheetTitle,
+  Switch,
   Text,
 } from 'ui';
 
@@ -35,6 +36,8 @@ export function EditExamPartitionFlyout(props) {
     reset,
     register,
     handleSubmit,
+    watch,
+    setValue,
     formState: { errors: fieldErrors },
   } = useForm();
 
@@ -47,8 +50,13 @@ export function EditExamPartitionFlyout(props) {
 
   useEffect(() => {
     if (examPartitionDetailResponse) {
-      const { minMark, convertTo, totalMarks, dateToConduct } =
-        examPartitionDetailResponse;
+      const {
+        minMark,
+        convertTo,
+        totalMarks,
+        dateToConduct,
+        excludeSubjectValidation,
+      } = examPartitionDetailResponse;
       const formattedDate = dateToConduct.split('T')[0];
 
       const partitionValues = {
@@ -56,6 +64,7 @@ export function EditExamPartitionFlyout(props) {
         convertTo: convertTo,
         totalMarks: totalMarks,
         dateToConduct: formattedDate,
+        excludeSubjectValidation: excludeSubjectValidation,
       };
       reset(partitionValues);
     }
@@ -112,10 +121,18 @@ export function EditExamPartitionFlyout(props) {
               </SheetHeader>
 
               <div className="mt-5 p-1">
-                <div>
-                  <label htmlFor="name" className="text-sm font-semibold">
-                    Dummy
+                <div className="flex gap-2">
+                  <label htmlFor="name" className="text-sm font-semibold ">
+                    Exclude in Pass Criteria
                   </label>
+                  <Switch
+                    id="excludeSubjectValidation"
+                    {...register('excludeSubjectValidation')}
+                    onCheckedChange={(value) =>
+                      setValue('excludeSubjectValidation', value)
+                    }
+                    checked={watch('excludeSubjectValidation')}
+                  />
                 </div>
                 <div className="mt-4">
                   <label

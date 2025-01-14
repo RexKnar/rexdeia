@@ -16,6 +16,7 @@ type CreateExamConfigModel = {
     convertTo: number;
     dateToConduct: string;
     assessmentFormatId: string;
+    excludeSubjectValidation: boolean;
   }[];
   subjectTotalMarks: string;
   subjectMarksToConvert: string;
@@ -89,6 +90,7 @@ export async function createExamConfig(
                 totalMarks: +config.totalMarks,
                 examGroupId: examGroupId,
                 dateToConduct: new Date(config.dateToConduct),
+                excludeSubjectValidation: config.excludeSubjectValidation,
               },
             });
           })
@@ -101,7 +103,13 @@ export async function createExamConfig(
 }
 
 export async function editExamPartition(config: any, configId: string) {
-  const { minMark, convertTo, totalMarks, dateToConduct } = config;
+  const {
+    minMark,
+    convertTo,
+    totalMarks,
+    dateToConduct,
+    excludeSubjectValidation,
+  } = config;
   return db.examSubjectPartition.update({
     where: {
       id: configId,
@@ -112,6 +120,7 @@ export async function editExamPartition(config: any, configId: string) {
       convertTo: +convertTo,
       totalMarks: +totalMarks,
       dateToConduct: new Date(dateToConduct),
+      excludeSubjectValidation: excludeSubjectValidation,
     },
   });
 }
