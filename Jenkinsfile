@@ -4,7 +4,6 @@ pipeline {
     environment {
         DOCKER_IMAGE = "rexdeia"
         DOCKER_TAG = "latest"
-        CONTAINER_NAME = "rexdeia-container"
         APP_PORT = "3000"
     }
     
@@ -13,7 +12,8 @@ pipeline {
             steps {
                 // Clean workspace before build
                 cleanWs()
-                git credentialsId: 'rexdeia_ssh_key', // Use your SSH credentials ID here
+                // Clone the repository using SSH
+                git credentialsId: 'rexdeia_ssh_key', // Replace with your Jenkins SSH credentials ID
                     branch: 'main',
                     url: 'git@github.com:RexKnar/rexdeia.git' // SSH URL for the repository
             }
@@ -23,6 +23,7 @@ pipeline {
             steps {
                 script {
                     try {
+                        // Run docker build on the host system (outside the container)
                         sh """
                             docker build -t ${DOCKER_IMAGE}:${DOCKER_TAG} \
                             --build-arg NODE_ENV=production \
@@ -35,33 +36,14 @@ pipeline {
             }
         }
         
-        stage('Stop & Remove Existing Container') {
+        stage('Deploy Application') {
             steps {
                 script {
                     try {
+                        // Run the application directly (outside of Docker)
+                        // Assuming your application is run via npm or node
                         sh """
-                            if docker ps -a | grep -q ${CONTAINER_NAME}; then
-                                docker stop ${CONTAINER_NAME} || true
-                                docker rm ${CONTAINER_NAME} || true
-                            fi
-                        """
-                    } catch (Exception e) {
-                        echo "Warning: Could not remove existing container: ${e.getMessage()}"
-                    }
-                }
-            }
-        }
-        
-        stage('Deploy Container') {
-            steps {
-                script {
-                    try {
-                        sh """
-                            docker run -d \
-                            --name ${CONTAINER_NAME} \
-                            -p ${APP_PORT}:${APP_PORT} \
-                            --restart unless-stopped \
-                            ${DOCKER_IMAGE}:${DOCKER_TAG}
+                            nohup npm start --port ${APP_PORT} &
                         """
                     } catch (Exception e) {
                         error "Deployment failed: ${e.getMessage()}"
@@ -98,11 +80,7 @@ pipeline {
         failure {
             script {
                 echo 'Deployment failed!'
-                // Rollback on failure
-                sh """
-                    docker stop ${CONTAINER_NAME} || true
-                    docker rm ${CONTAINER_NAME} || true
-                """
+                // Rollback on failure (if necessary)
             }
         }
         always {
