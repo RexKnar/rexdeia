@@ -2,7 +2,7 @@
 FROM node:20
 
 # Set the working directory
-WORKDIR /usr/src/app
+WORKDIR /usr/src/app/apps/web
 
 # Install pnpm
 RUN npm install -g pnpm
@@ -19,9 +19,9 @@ COPY . .
 RUN pnpm install --frozen-lockfile
 
 # Build
-RUN node --max-old-space-size=4096 node_modules/.bin/turbo run build
+# RUN node --max-old-space-size=4096 node_modules/.bin/turbo run build
 
-# RUN pnpm turbo run build
+RUN pnpm turbo run build
 
 # Change to the apps/web directory
 WORKDIR /usr/src/app/apps/web
