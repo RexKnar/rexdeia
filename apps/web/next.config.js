@@ -1,46 +1,97 @@
-module.exports = {
-  reactStrictMode: true,
-  transpilePackages: ['ui'],
-};
-
-// Injected content via Sentry wizard below
-
+/** @type {import('next').NextConfig} */
 const { withSentryConfig } = require('@sentry/nextjs');
 
-module.exports = withSentryConfig(
-  module.exports,
-  {
-    // For all available options, see:
-    // https://github.com/getsentry/sentry-webpack-plugin#options
+const nextConfig = {
+  reactStrictMode: true,
+  transpilePackages: ['ui'],
+  
+  // Add memory optimizations
+  swcMinify: true,
+  poweredByHeader: false,
+  productionBrowserSourceMaps: false,
 
-    // Suppresses source map uploading logs during build
-    silent: true,
-    org: 'test-dev-a7',
-    project: 'javascript-nextjs',
+  // Optimize image handling
+  images: {
+    minimumCacheTTL: 60,
+    deviceSizes: [640, 768, 1024],
+    imageSizes: [16, 32, 48, 64],
   },
-  {
-    // For all available options, see:
-    // https://docs.sentry.io/platforms/javascript/guides/nextjs/manual-setup/
 
-    // Upload a larger set of source maps for prettier stack traces (increases build time)
-    widenClientFileUpload: true,
+  // Add experimental optimizations
+  experimental: {
+    optimizeCss: true,
+    optimizePackageImports: ['@sentry/nextjs', 'ui'],
+    turbotrace: {
+      memoryLimit: 1500, // Reduced for 2GB environment
+      logLevel: 'error'
+    }
+  },
 
-    // Transpiles SDK to be compatible with IE11 (increases bundle size)
-    transpileClientSDK: true,
+  // Optimize webpack configuration
+  webpack: (config, { isServer }) => {
+    // Optimize chunk size
+    config.optimization = {
+      ...config.optimization,
+      moduleIds: 'deterministic',
+      chunkIds: 'deterministic',
+      splitChunks: {
+        chunks: 'all',
+        minSize: 20000,
+        maxSize: 40000,
+        cacheGroups: {
+          default: false,
+          vendors: false,
+          commons: {
+            name: 'commons',
+            chunks: 'all',
+            minChunks: 2,
+            reuseExistingChunk: true,
+          },
+          lib: {
+            test: /[\\/]node_modules[\\/]/,
+            name(module) {
+              const packageName = module.context.match(
+                /[\\/]node_modules[\\/](.*?)([\\/]|$)/
+              )[1];
+              return `npm.${packageName.replace('@', '')}`;
+            },
+            chunks: 'all',
+          },
+        },
+      },
+    };
 
-    // Routes browser requests to Sentry through a Next.js rewrite to circumvent ad-blockers (increases server load)
-    tunnelRoute: '/monitoring',
+    // Reduce bundle size
+    if (!isServer) {
+      config.optimization.minimize = true;
+    }
 
-    // Hides source maps from generated client bundles
-    hideSourceMaps: true,
-
-    // Automatically tree-shake Sentry logger statements to reduce bundle size
-    disableLogger: true,
-
-    // Enables automatic instrumentation of Vercel Cron Monitors.
-    // See the following for more information:
-    // https://docs.sentry.io/product/crons/
-    // https://vercel.com/docs/cron-jobs
-    automaticVercelMonitors: true,
+    return config;
   }
-);
+};
+
+// Optimize Sentry config
+const sentryWebpackPluginOptions = {
+  silent: true,
+  org: 'test-dev-a7',
+  project: 'javascript-nextjs',
+  
+  // Reduce memory usage during source map generation
+  setCommits: false,
+  sourcemaps: {
+    assets: '.next/static/**/*.js',
+    stripPrefix: ['webpack://_N_E/'],
+  }
+};
+
+const sentryOptions = {
+  widenClientFileUpload: false, // Disable for memory optimization
+  transpileClientSDK: false,    // Disable if you don't need IE11 support
+  tunnelRoute: '/monitoring',
+  hideSourceMaps: true,
+  disableLogger: true,
+  automaticVercelMonitors: true,
+};
+
+// Export with memory-optimized settings
+module.exports = withSentryConfig(nextConfig, sentryWebpackPluginOptions, sentryOptions);
