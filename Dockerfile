@@ -19,7 +19,7 @@ COPY . .
 RUN pnpm install --frozen-lockfile
 
 # Build
-RUN node --max-old-space-size=1536 pnpm  run build
+RUN node --max-old-space-size=1950 pnpm  run build
 
 # RUN pnpm turbo run build
 
