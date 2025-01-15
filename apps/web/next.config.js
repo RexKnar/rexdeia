@@ -1,21 +1,6 @@
 module.exports = {
   reactStrictMode: true,
   transpilePackages: ['ui'],
-  swcMinify: true,
-  images: {
-    domains: ['storage.googleapis.com'],
-  },
-  webpack: (config, { isServer }) => {
-    if (!isServer) {
-      config.resolve.fallback = {
-        ...config.resolve.fallback,
-        fs: false,
-        stream: false,
-        canvas: false,
-      };
-    }
-    return config;
-  },
 };
 
 // Injected content via Sentry wizard below
