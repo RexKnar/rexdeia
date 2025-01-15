@@ -16,7 +16,26 @@ pipeline {
                 git url: 'git@github.com:RexKnar/rexdeia.git'
             }
         }
-        
+        stage('Clear Project Cache') {
+            steps {
+                sh '''
+                    # Remove project specific caches
+                    rm -rf .turbo
+                    rm -rf .next
+                    rm -rf node_modules
+                    
+                    # Clear pnpm cache
+                    pnpm store prune
+                    
+                    # Remove any existing containers
+                    docker stop web-app || true
+                    docker rm web-app || true
+                    
+                    # Remove old images
+                    docker rmi $(docker images -q) || true
+                '''
+            }
+        }
         stage('Build Docker Image') {
             steps {
                 script {
