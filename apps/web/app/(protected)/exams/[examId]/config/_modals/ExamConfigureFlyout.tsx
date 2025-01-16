@@ -43,17 +43,23 @@ export function ExamConfigureFlyout(props) {
     reset,
     register,
     handleSubmit,
+    watch,
+    setValue,
     formState: { errors: fieldErrors },
   } = useForm();
 
   const [subjectTotalMarks, setsubjectTotalMarks] = useState();
   const [subjectMarksToConvert, setSubjectMarksToConvert] = useState();
+  const [minPassMark, setMinPassMark] = useState();
 
   const handleTotalMarks = (e) => {
     setsubjectTotalMarks(e.target.value);
   };
-  const marksToConvert = (f) => {
+  const handleMarksToConvert = (f) => {
     setSubjectMarksToConvert(f.target.value);
+  };
+  const handleMinPassMark = (f) => {
+    setMinPassMark(f.target.value);
   };
   const { fields, append, remove } = useFieldArray({
     control,
@@ -97,6 +103,7 @@ export function ExamConfigureFlyout(props) {
     payload.examId = examId;
     payload.subjectTotalMarks = subjectTotalMarks;
     payload.subjectMarksToConvert = subjectMarksToConvert;
+    payload.minPassMark = minPassMark;
     payload.sectionIds = sectionIds;
     const createdExamConfiguration =
       await mutateCreateExamConfigurationAsync(payload);
@@ -150,11 +157,23 @@ export function ExamConfigureFlyout(props) {
                     Marks to Convert
                   </label>
                   <Input
-                    onChange={marksToConvert}
+                    onChange={handleMarksToConvert}
                     autoFocus
                     type="text"
                     className="mt-2"
                     placeholder="Marks to Convert"
+                  />
+                </div>
+                <div className="mt-2">
+                  <label className="text-sm font-semibold text-gray-700">
+                    Min Pass Mark
+                  </label>
+                  <Input
+                    onChange={handleMinPassMark}
+                    autoFocus
+                    type="text"
+                    className="mt-2"
+                    placeholder="Min. Pass Mark"
                   />
                 </div>
               </div>
@@ -195,6 +214,19 @@ export function ExamConfigureFlyout(props) {
                     <label htmlFor="name" className="text-sm font-semibold">
                       {field['name']}
                     </label>
+                  </div>
+                  <div className="flex gap-2">
+                    <label htmlFor="name" className="text-sm font-semibold ">
+                      Exclude in Pass Criteria
+                    </label>
+                    <Switch
+                      id="excludeSubjectValidation"
+                      {...register('excludeSubjectValidation')}
+                      onCheckedChange={(value) =>
+                        setValue('excludeSubjectValidation', value)
+                      }
+                      checked={watch('excludeSubjectValidation')}
+                    />
                   </div>
                   <div className="mt-4">
                     <label

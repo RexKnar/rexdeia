@@ -76,6 +76,7 @@ export type ExamSubjectPartitionModel = {
   convertTo: number;
   dateToConduct: string;
   totalMarks: number;
+  excludeSubjectValidation?: boolean;
   academicExamId: string;
   assessmentFormat?: AssessmentFormatModel;
 };

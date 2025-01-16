@@ -65,6 +65,7 @@ export interface Mark {
   staffId: string;
   examSubjectId: string;
   examSubjectPartitionId: string;
+  excludeSubjectValidation?: boolean;
   subjectId: string;
   assessmentFormatId: string;
 }
