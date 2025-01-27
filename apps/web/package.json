@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "build": "NODE_OPTIONS='--max-old-space-size=4096' next build",
+    "build": "next build",
     "dev": "next dev",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "postinstall": "prisma generate",

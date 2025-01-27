@@ -2,7 +2,7 @@
   "name": "rexdeia",
   "private": true,
   "scripts": {
-    "build": "NODE_OPTIONS='--max-old-space-size=4096' turbo run build",
+    "build": " turbo run build",
     "clean": "rm -rf packages/node_modules",
     "dev": "turbo run dev",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
