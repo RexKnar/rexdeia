@@ -11,6 +11,7 @@ export function AssessmentFormatDetailCard(props) {
     totalMarks,
     convertTo,
     minMark,
+    excludeSubjectValidation,
     id: configId,
   } = props;
   const pathname = usePathname();
@@ -37,6 +38,10 @@ export function AssessmentFormatDetailCard(props) {
       <div className="flex flex-wrap text-left">
         <span className="w-1/2">Covert To</span>
         <span className="w-1/2">{convertTo}</span>
+      </div>
+      <div className="flex flex-wrap text-left">
+        <span className="w-1/2">Override Pass Criteria</span>
+        <span className="w-1/2">{excludeSubjectValidation ? 'Yes' : 'No'}</span>
       </div>
       <div className="item-center flex justify-center gap-2">
         <Button

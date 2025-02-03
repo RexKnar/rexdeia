@@ -133,7 +133,9 @@ export const GET_STAFF_SUBJECT_LIST_BY_CLASS_ID = `GET_STAFF_SUBJECT_LIST_BY_CLA
 export const GET_STUDENTS_LIST_FOR_ASSIGN = `GET_STUDENTS_LIST_FOR_ASSIGN`;
 export const GET_EXAM_DETAIL_BY_EXAM_ID = `GET_EXAM_DETAIL_BY_EXAM_ID`;
 export const GET_SUBJECT_EXAM_CONFIG_DETAIL = `GET_SUBJECT_EXAM_CONFIG_DETAIL`;
+export const EDIT_EXAM_SUBJECT_CONFIG_BY_ID = `EDIT_EXAM_SUBJECT_CONFIG_BY_ID`;
 export const GET_EXAM_CONFIG_SUBJECT_DETAIL_BY_SECTION_IDS = `GET_EXAM_CONFIG_SUBJECT_DETAIL_BY_SECTION_IDS`;
+export const GET_EXAM_SUBJECT_CONFIG_DETAIL_BY_ID = `GET_EXAM_SUBJECT_CONFIG_DETAIL_BY_ID`;
 export const ADD_EXAM_CONFIG = `ADD_EXAM_CONFIG`;
 export const GET_EXAM_CONFIG_SUBJECT_DETAIL = `GET_EXAM_CONFIG_SUBJECT_DETAIL`;
 export const EXAM_MARK_ENTRY = `EXAM_MARK_ENTRY`;
@@ -715,10 +717,7 @@ export default <EndpointDetails>{
     requestType: `PUT`,
     endpoint: `/api/class/[id]/students`,
   },
-  [GET_SUBJECT_EXAM_CONFIG_DETAIL]: {
-    requestType: `GET`,
-    endpoint: `/api/exam/[id]/subject/[subjectId]`,
-  },
+
   [GET_EXAM_CONFIG_SUBJECT_DETAIL]: {
     requestType: `GET`,
     endpoint: `/api/exam/[id]/config/subject/[subjectId]`,
@@ -726,6 +725,14 @@ export default <EndpointDetails>{
   [GET_EXAM_CONFIG_SUBJECT_DETAIL_BY_SECTION_IDS]: {
     requestType: `PUT`,
     endpoint: `/api/exam/[id]/config/subject/[subjectId]`,
+  },
+  [GET_EXAM_SUBJECT_CONFIG_DETAIL_BY_ID]: {
+    requestType: `GET`,
+    endpoint: `/api/exam/exam-subject/[examSubjectId]`,
+  },
+  [EDIT_EXAM_SUBJECT_CONFIG_BY_ID]: {
+    requestType: `PUT`,
+    endpoint: `/api/exam/exam-subject/[examSubjectId]`,
   },
   [DELETE_EXAM_CONFIG_BY_ID]: {
     requestType: `DELETE`,

@@ -89,6 +89,9 @@ export async function getConfigDetailBySectionIdsAndSubjectId(
               name: true,
             },
           },
+          convertTo: true,
+          minMark: true,
+          totalMarks: true,
           examSubjectPartition: {
             include: {
               assessmentFormat: true,
@@ -110,7 +113,11 @@ export async function getConfigDetailBySectionIdsAndSubjectId(
 
   const responseData = filteredSubjects.map((subject) => ({
     subjectId: subject.subject?.id,
+    examSubjectId: subject.id,
     subjectName: subject.subject?.name,
+    convertTo: subject.convertTo,
+    minMark: subject.minMark,
+    totalMarks: subject.totalMarks,
     section: {
       id: subject.section?.id,
       name: subject.section?.name,

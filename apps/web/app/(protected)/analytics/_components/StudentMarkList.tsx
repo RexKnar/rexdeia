@@ -437,12 +437,23 @@ export default function StudentMarkList({
                   Download XLSX <TableIcon className="ml-2 h-4 w-4" />
                 </Button>
               </div>
-              <Table className="border-1 border">
-                <TableHeader>
+              {/* <div className="relative "> */}
+              <Table className="border-1 h-[80vh] overflow-y-auto">
+                <TableHeader className="sticky top-0 z-20 bg-primary-300">
                   {table.getHeaderGroups().map((headerGroup) => (
-                    <TableRow key={headerGroup.id} className="bg-primary-300">
-                      {headerGroup.headers.map((header) => (
-                        <TableCell key={header.id}>
+                    <TableRow
+                      key={headerGroup.id}
+                      className="sticky top-0 z-20 bg-primary-300"
+                    >
+                      {headerGroup.headers.map((header, index) => (
+                        <TableCell
+                          key={header.id}
+                          className={`
+            ${index === 0 ? 'sticky left-0 z-30 bg-primary-300 ' : ''}
+            ${index === 1 ? 'sticky left-16 z-30 bg-primary-300 ' : ''}
+            p-4 text-sm
+          `}
+                        >
                           {header.isPlaceholder
                             ? null
                             : flexRender(
@@ -457,8 +468,15 @@ export default function StudentMarkList({
                 <TableBody>
                   {table.getRowModel().rows.map((row) => (
                     <TableRow key={row.id}>
-                      {row.getVisibleCells().map((cell) => (
-                        <TableCell key={cell.id}>
+                      {row.getVisibleCells().map((cell, index) => (
+                        <TableCell
+                          key={cell.id}
+                          className={`
+            ${index === 0 ? 'sticky left-0  z-10 bg-white ' : ''}
+            ${index === 1 ? 'sticky left-16 z-10 bg-white ' : ''}
+            p-4 text-sm
+          `}
+                        >
                           {flexRender(
                             cell.column.columnDef.cell,
                             cell.getContext()
@@ -469,6 +487,7 @@ export default function StudentMarkList({
                   ))}
                 </TableBody>
               </Table>
+              {/* </div> */}
             </div>
           )}
         </section>
