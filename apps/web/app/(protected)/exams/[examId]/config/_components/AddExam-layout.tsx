@@ -7,7 +7,7 @@ import { useGetExamListQuery } from 'lib/queries/exams/useGetExamListQuery';
 import { useGetSubjectsBySectionIdsMutationQuery } from 'lib/queries/section/subjects/useGetSubjectsBySectionIdsQuery';
 import { useGetAllSectionByClassIdQuery } from 'lib/queries/section/useGetAllSectionsByClassIdQuery';
 import { useGetSubjectTypeList } from 'lib/queries/subject-type/useGetSubjectTypeQuery';
-import { Loader2 } from 'lucide-react';
+import { Loader2, Pencil } from 'lucide-react';
 import dynamic from 'next/dynamic';
 import {
   useParams,
@@ -24,6 +24,7 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
+  Text,
   useToast,
 } from 'ui';
 
@@ -43,6 +44,11 @@ export function AddExamLayout() {
   const EditExamPartitionFlyout = dynamic(() =>
     import('../_modals/EditExamPartitionFlyout').then(
       (mod) => mod.EditExamPartitionFlyout
+    )
+  );
+  const EditExamSubjectConfigFlyout = dynamic(() =>
+    import('../_modals/EditExamSubjectConfigFlyout').then(
+      (mod) => mod.EditExamSubjectConfigFlyout
     )
   );
   const page = 1;
@@ -255,7 +261,7 @@ export function AddExamLayout() {
             Exam Name :
           </label>
           {routeParams && (
-            <text>{isExamDetailLoading ? 'Loading...' : examDetail?.name}</text>
+            <Text>{isExamDetailLoading ? 'Loading...' : examDetail?.name}</Text>
           )}
 
           {!routeParams && (
@@ -296,9 +302,9 @@ export function AddExamLayout() {
             Term :
           </label>
           {routeParams.examId && (
-            <text>
+            <Text>
               {isExamDetailLoading ? 'Loading...' : examDetail?.term.name}
-            </text>
+            </Text>
           )}
         </div>
       </section>
@@ -433,20 +439,60 @@ export function AddExamLayout() {
             )}
           </div>
         </div>
-        <div className="basis-2/6 bg-slate-200 px-1 text-center">
+        <div className="basis-2/6 overflow-y-scroll bg-slate-200 px-1 text-center">
           <div className="p-2">Config Details</div>
           <div>
             {!isSubjectConfigListLoading ? (
               <div>
                 {subjectConfigListResponse?.map((subjectConfig) => (
                   <div key={subjectConfig.id}>
-                    <h2>
-                      {subjectConfig.subjectName}({subjectConfig?.section?.name}
-                      )
-                    </h2>
+                    <div className="rounded-2 border-2 border-white bg-blue-200 p-2 ">
+                      <h2>
+                        {subjectConfig.subjectName}(
+                        {subjectConfig?.section?.name})
+                      </h2>
+                      <div className="flex flex-wrap text-left">
+                        <span className="w-1/2">Total Marks</span>
+                        <span className="w-1/2">
+                          {subjectConfig?.totalMarks.toString()}
+                        </span>
+                      </div>
+                      <div className="flex flex-wrap text-left">
+                        <span className="w-1/2">Convert To</span>
+                        <span className="w-1/2">
+                          {subjectConfig?.convertTo.toString()}
+                        </span>
+                      </div>
+                      <div className="flex flex-wrap text-left">
+                        <span className="w-1/2">Min-Mark</span>
+                        <span className="w-1/2">
+                          {subjectConfig?.minMark.toString()}
+                        </span>
+                      </div>
+                      <div className="flex justify-center py-3 ">
+                        <Button
+                          className="h-auto bg-primary-600 px-3 py-1 text-white"
+                          variant="mild"
+                          onClick={() => {
+                            params.set('isEditSubjectConfigFlyoutOpen', 'true');
+                            params.set(
+                              'examSubjectId',
+                              subjectConfig.examSubjectId
+                            );
+                            router.replace(pathname + '?' + params.toString());
+                          }}
+                        >
+                          <Pencil size={12} className="text-center" />
+                        </Button>
+                      </div>
+                    </div>
+
                     {subjectConfig?.examSubjectPartition?.map((cardData) => {
                       return cardData.assessmentFormat ? (
-                        <AssessmentFormatDetailCard {...cardData} />
+                        <AssessmentFormatDetailCard
+                          key={cardData.id}
+                          {...cardData}
+                        />
                       ) : null;
                     })}
                     <hr />
@@ -484,6 +530,11 @@ export function AddExamLayout() {
       <EditExamPartitionFlyout
         sectionIds={sectionIds}
         subjects={subjectIds}
+        classId={classId}
+      />
+      <EditExamSubjectConfigFlyout
+        subjects={subjectIds}
+        sectionIds={sectionIds}
         classId={classId}
       />
       <DeleteConfirmationModal

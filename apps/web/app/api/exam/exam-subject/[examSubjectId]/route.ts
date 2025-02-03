@@ -4,27 +4,24 @@ import { authOptions } from 'lib/auth';
 import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 
-import {
-  getConfigDetailBySectionIdsAndSubjectId,
-  getConfigDetailBySectionSubjectId,
-} from './service';
+import { editExamSubject, getExamSubjectDetailById } from '../service';
 
 /**
  * @swagger
- * /api/exam/{id}/config/subject/{id}:
+ * /api/exam/exam-subject/[examSubjectId]
  *     get:
- *       summary: Fetch config details By subjectId
- *       description: Fetch configuration details of subject By subjectId
+ *       summary: Fetch Exam Subject Details By Id
+ *       description: Fetch Exam Subject Details By Id
  *       parameters:
  *         - name: id
  *           in: path
  *           required: true
- *           description: Unique identifier of the subject.
+ *           description: Unique identifier of the config.
  *           schema:
  *             type: string
  *       responses:
  *         '200':
- *           description: Subject configuration is fetched successfully.
+ *           description: Exam Subject Details is fetched successfully.
  *           content:
  *             application/json:
  *               schema:
@@ -36,7 +33,7 @@ import {
  *         '500':
  *           description: Internal server error.
  */
-export async function GET(request: NextRequest, { params: { id, subjectId } }) {
+export async function GET(request: NextRequest, { params: { examSubjectId } }) {
   const session = await getServerSession(authOptions);
   if (!session) {
     return new NextResponse(JSON.stringify({ error: 'UNAUTHORIZED' }), {
@@ -45,14 +42,9 @@ export async function GET(request: NextRequest, { params: { id, subjectId } }) {
   }
 
   try {
-    const sectionId = request.nextUrl.searchParams.get('sectionId');
-    const subjectConfigDetail = await getConfigDetailBySectionSubjectId(
-      id,
-      subjectId,
-      sectionId
-    );
+    const examSubjectDetail = await getExamSubjectDetailById(examSubjectId);
 
-    return new NextResponse(JSON.stringify(subjectConfigDetail), {
+    return new NextResponse(JSON.stringify(examSubjectDetail), {
       status: StatusCodes.OK,
     });
   } catch (e) {
@@ -68,10 +60,10 @@ export async function GET(request: NextRequest, { params: { id, subjectId } }) {
 
 /**
  * @swagger
- * /api/exam/{id}/config/subject/{id}:
+ * /api/exam/exam-subject/[examSubjectId]:
  *     put:
- *       summary: Fetch config details By subjectId ans section array
- *       description: Fetch config details By subjectId ans section array
+ *       summary: Edit  Exam Configuration
+ *       description: Edit Exam Configuration
  *       parameters:
  *         - name: id
  *           in: path
@@ -87,7 +79,7 @@ export async function GET(request: NextRequest, { params: { id, subjectId } }) {
  *               type: object
  *       responses:
  *         '200':
- *           description: Exam Configuration's details fetched successfully.
+ *           description: Exam Configuration's details added successfully.
  *           content:
  *             application/json:
  *               schema:
@@ -99,34 +91,25 @@ export async function GET(request: NextRequest, { params: { id, subjectId } }) {
  *         '500':
  *           description: Internal server error.
  */
-export async function PUT(request: Request, { params: { id, subjectId } }) {
-  const payload = await request.json();
-
+export async function PUT(request: NextRequest, { params: { examSubjectId } }) {
   const session = await getServerSession(authOptions);
   if (!session) {
     return new NextResponse(JSON.stringify({ error: 'UNAUTHORIZED' }), {
       status: StatusCodes.UNAUTHORIZED,
     });
   }
+  const payload = await request.json();
 
   try {
-    const { sectionIds } = payload;
-    const subjectConfigDetail = await getConfigDetailBySectionIdsAndSubjectId(
-      id,
-      subjectId,
-      sectionIds
-    );
+    const updateExamSubject = await editExamSubject(payload, examSubjectId);
 
-    return new NextResponse(JSON.stringify(subjectConfigDetail), {
-      status: StatusCodes.OK,
+    return new NextResponse(JSON.stringify(updateExamSubject), {
+      status: StatusCodes.CREATED,
     });
   } catch (e) {
     captureException(e);
-    return new NextResponse(JSON.stringify({ error: e.message }), {
-      status:
-        e.message === 'VALIDATION_ERROR'
-          ? StatusCodes.BAD_REQUEST
-          : StatusCodes.INTERNAL_SERVER_ERROR,
+    return new NextResponse(e, {
+      status: StatusCodes.BAD_REQUEST,
     });
   }
 }

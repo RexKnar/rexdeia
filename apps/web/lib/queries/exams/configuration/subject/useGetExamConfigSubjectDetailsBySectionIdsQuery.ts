@@ -7,9 +7,13 @@ import { GET_EXAM_CONFIG_SUBJECT_DETAIL_BY_SECTION_IDS } from 'lib/endpoints';
 type ExamConfigSubjectModel = {
   subjectName: string;
   id: string;
+  examSubjectId: string;
   subject: CommonGetModel;
   section: Section;
   examSubjectPartition: any;
+  convertTo: Number;
+  minMark: Number;
+  totalMarks: Number;
 };
 
 type getSubjectInputModel = {
