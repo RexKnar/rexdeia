@@ -9,8 +9,9 @@ import {
 } from '@tanstack/react-table';
 import { useGetExamSubjectsByClassSectionIdQuery } from 'lib/queries/exams/subject/useGetExamSubjectsByClassSectionIdQuery';
 import { ArrowUpDown, TableIcon } from 'lucide-react';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useCallback, useEffect, useState } from 'react';
-import { Button, Text } from 'ui';
+import { Button, Input, Text } from 'ui';
 import {
   Table,
   TableBody,
@@ -20,6 +21,7 @@ import {
 } from 'ui/components/ui/Table';
 
 import dataSegmentationGif from '../../../../public/assets/images/data-segmentation.gif';
+import { OverallStudentListDialog } from '../_modals/OverallStudentListDialog';
 import PdfDocument from '../pdf/_components/PdfDocument';
 import { downloadMarkListXLSX } from '../XLSX/excelExports';
 import { DataLoadingPlaceholder } from './DataLoadingPlaceholder';
@@ -45,6 +47,13 @@ export default function StudentMarkList({
   const [pdfTableHeader, setPdfTableHeader] = useState([]);
   const [pdfTableValues, setPdfTableValues] = useState([]);
   const [xlsxTableHeader, setXlsxTableHeader] = useState([]);
+  const [modalStudentList, setModalStudentList] = useState([]);
+  const [modalTitle, setModalTitle] = useState('Student List');
+  const [modalSubTitle, setModalSubTitle] = useState('');
+  const pathname = usePathname();
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const params = new URLSearchParams(searchParams);
 
   const { data: subjectList, isLoading: isSubjectListLoading } =
     useGetExamSubjectsByClassSectionIdQuery(
@@ -405,6 +414,54 @@ export default function StudentMarkList({
     processStudents();
   }, [getStudentSubject, students, subjectList]);
 
+  const [filteredTopStudentList, setFilteredTopStudentList] = useState([]);
+  const [filteredBottomStudentList, setFilteredBottomStudentList] = useState(
+    []
+  );
+  const filterValidRanks = (students) => {
+    return students.filter((student) => {
+      return (
+        student.rank && student.rank >= 1 // rank should be greater than or equal to 1
+      );
+    });
+  };
+  const getTopNStudents = (n) => {
+    const validStudents = filterValidRanks([...students]);
+    const sortedStudents = validStudents.sort((a, b) => a.rank - b.rank);
+    return sortedStudents.slice(0, n);
+  };
+
+  const getBottomNStudents = (n) => {
+    const validStudents = filterValidRanks([...students]);
+    const sortedStudents = validStudents.sort((a, b) => a.rank - b.rank);
+    const bottomStudents = sortedStudents.slice(-n);
+    return bottomStudents.reverse();
+  };
+
+  const handleCountChange = (event) => {
+    const count = parseInt(event.target.value) || 5;
+    const topStudentList = getTopNStudents(count || 5);
+    setFilteredTopStudentList(topStudentList);
+    const bottomStudentList = getBottomNStudents(count || 5);
+    setFilteredBottomStudentList(bottomStudentList);
+  };
+
+  const showTopStudentsList = () => {
+    setModalStudentList(filteredTopStudentList);
+    setModalTitle('Top Students');
+    setModalSubTitle('Top students based on Rank');
+    params.set('isListDialogOpen', 'true');
+
+    router.replace(pathname + '?' + params.toString());
+  };
+  const showBottomStudentsList = () => {
+    setModalStudentList(filteredBottomStudentList);
+    setModalTitle('Bottom Students');
+    setModalSubTitle('Bottom students based on Rank');
+    params.set('isListDialogOpen', 'true');
+
+    router.replace(pathname + '?' + params.toString());
+  };
   return (
     <section className="space-y-2 rounded-md bg-white p-6">
       {!isSubjectListLoading ? (
@@ -412,30 +469,49 @@ export default function StudentMarkList({
           {subjectList && (
             <div className="mt-4 space-y-4 overflow-x-auto rounded-md bg-white p-6 print:m-0 print:p-0">
               <div className="w-full">
-                {pdfTableHeader?.length > 0 && (
-                  <PdfDocument
-                    headingList={pdfTableHeader as any}
-                    tableValues={pdfTableValues}
-                    examDetails={examDetails}
-                    classDetails={classDetails}
-                    sectionDetails={sectionDetails}
-                  />
-                )}
-                <Button
-                  variant="outline"
-                  onClick={() =>
-                    downloadMarkListXLSX(
-                      xlsxTableHeader,
-                      pdfTableHeader,
-                      pdfTableValues,
-                      examDetails,
-                      classDetails,
-                      sectionDetails
-                    )
-                  }
-                >
-                  Download XLSX <TableIcon className="ml-2 h-4 w-4" />
-                </Button>
+                <div className="flex gap-3">
+                  <div>
+                    <Input
+                      type="number"
+                      placeholder="Enter number of students"
+                      onKeyUp={handleCountChange}
+                    />
+                  </div>
+                  <div className="flex gap-3">
+                    <Button onClick={showTopStudentsList}>
+                      Show top students
+                    </Button>
+                    <Button onClick={showBottomStudentsList}>
+                      Show bottom students
+                    </Button>
+                  </div>
+                  <div className="flex gap-3">
+                    {pdfTableHeader?.length > 0 && (
+                      <PdfDocument
+                        headingList={pdfTableHeader as any}
+                        tableValues={pdfTableValues}
+                        examDetails={examDetails}
+                        classDetails={classDetails}
+                        sectionDetails={sectionDetails}
+                      />
+                    )}
+                    <Button
+                      variant="outline"
+                      onClick={() =>
+                        downloadMarkListXLSX(
+                          xlsxTableHeader,
+                          pdfTableHeader,
+                          pdfTableValues,
+                          examDetails,
+                          classDetails,
+                          sectionDetails
+                        )
+                      }
+                    >
+                      Download XLSX <TableIcon className="ml-2 h-4 w-4" />
+                    </Button>
+                  </div>
+                </div>
               </div>
               {/* <div className="relative "> */}
               <Table className="border-1 h-[80vh] overflow-y-auto">
@@ -497,6 +573,12 @@ export default function StudentMarkList({
           description="Please wait while we fetch the data for you..."
         />
       )}
+      <OverallStudentListDialog
+        studentList={modalStudentList}
+        title={modalTitle}
+        subTitle={modalSubTitle}
+        subjectList={subjectList}
+      />
     </section>
   );
 }
