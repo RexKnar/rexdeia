@@ -414,7 +414,6 @@ export default function StudentMarkList({
     processStudents();
   }, [getStudentSubject, students, subjectList]);
 
-  const [filterStudentCount, setFilterStudentCount] = useState(5); // default to 5
   const [filteredTopStudentList, setFilteredTopStudentList] = useState([]);
   const [filteredBottomStudentList, setFilteredBottomStudentList] = useState(
     []
@@ -445,7 +444,6 @@ export default function StudentMarkList({
     setFilteredTopStudentList(topStudentList);
     const bottomStudentList = getBottomNStudents(count || 5);
     setFilteredBottomStudentList(bottomStudentList);
-    setFilterStudentCount(count);
   };
 
   const showTopStudentsList = () => {
