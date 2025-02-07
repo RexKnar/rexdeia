@@ -5,7 +5,6 @@ import {
   flexRender,
   getCoreRowModel,
   getFilteredRowModel,
-  getPaginationRowModel,
   getSortedRowModel,
   useReactTable,
 } from '@tanstack/react-table';
@@ -15,7 +14,19 @@ import { useGetRangeScalesQuery } from 'lib/queries/analytics/rangeScales/useGet
 import { Trash2 } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { When } from 'react-if';
-import { Button, Tooltip, TooltipContent, TooltipTrigger, useToast } from 'ui';
+import {
+  Button,
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+  useToast,
+} from 'ui';
 import {
   Table,
   TableBody,
@@ -35,7 +46,21 @@ export function RangeScaleList() {
   const [selectedRange, setSelectedRange] = useState<RangeScaleModel | null>(
     null
   );
+  const [filterType, setFilterType] = useState('All');
   const columns: ColumnDef<RangeScaleModel>[] = [
+    {
+      accessorKey: 'index',
+      header: () => {
+        return (
+          <Button variant="ghost" className="w-full">
+            #
+          </Button>
+        );
+      },
+      cell: ({ row }) => (
+        <div className="text-center">{Number(row.index) + 1}</div>
+      ),
+    },
     {
       accessorKey: 'rangeOf',
       header: () => {
@@ -97,7 +122,7 @@ export function RangeScaleList() {
   const {
     data: getRangeScaleListResponse,
     isLoading: isRangeScaleListLoading,
-  } = useGetRangeScalesQuery('All');
+  } = useGetRangeScalesQuery(filterType);
 
   const table = useReactTable({
     columns,
@@ -105,7 +130,6 @@ export function RangeScaleList() {
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
   });
 
   const {
@@ -138,6 +162,35 @@ export function RangeScaleList() {
   return (
     <section>
       <div className="rounded-md ">
+        <div className="p-2">
+          <div className="mt-4">
+            <label
+              htmlFor="type"
+              className="text-sm font-semibold text-gray-700"
+            >
+              Choose Range Type
+            </label>
+            <Select
+              autoComplete="off"
+              onValueChange={(value) => {
+                if (value) {
+                  setFilterType(value);
+                }
+              }}
+            >
+              <SelectTrigger className="mt-2 w-full">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectGroup>
+                  <SelectItem value="All">All</SelectItem>
+                  <SelectItem value="SubjectMarks">SubjectMarks</SelectItem>
+                  <SelectItem value="TotalMarks">TotalMarks</SelectItem>
+                </SelectGroup>
+              </SelectContent>
+            </Select>
+          </div>
+        </div>
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
