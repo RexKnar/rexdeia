@@ -303,12 +303,6 @@ export function OverallStudentListDialog({
       excelHeading.push('Rank');
       excelSubHeading.push('Total');
       excelSubHeading.push('Rank');
-
-      // setXlsxTableHeader([excelHeading, excelSubHeading]);
-
-      // heading?.length > 0
-      //   ? setPdfTableHeader([...heading])
-      //   : setPdfTableHeader([]);
     }
   }, [subjectList]);
 
@@ -434,8 +428,15 @@ export function OverallStudentListDialog({
                             key={headerGroup.id}
                             className="bg-primary-300"
                           >
-                            {headerGroup.headers.map((header) => (
-                              <TableCell key={header.id}>
+                            {headerGroup.headers.map((header, index) => (
+                              <TableCell
+                                key={header.id}
+                                className={`
+                          ${index === 0 ? 'sticky left-0 z-10 bg-primary-300' : ''}
+                          ${index === 1 ? 'sticky left-16 z-10 bg-primary-300' : ''}
+                          whitespace-nowrap p-4 text-sm
+                        `}
+                              >
                                 {header.isPlaceholder
                                   ? null
                                   : flexRender(
@@ -450,8 +451,15 @@ export function OverallStudentListDialog({
                       <TableBody>
                         {table.getRowModel().rows.map((row) => (
                           <TableRow key={row.id}>
-                            {row.getVisibleCells().map((cell) => (
-                              <TableCell key={cell.id}>
+                            {row.getVisibleCells().map((cell, index) => (
+                              <TableCell
+                                key={cell.id}
+                                className={`
+                          ${index === 0 ? 'sticky left-0 z-10 bg-white' : ''}
+                          ${index === 1 ? 'sticky left-16 z-10 bg-white' : ''}
+                          whitespace-nowrap p-4 text-sm
+                        `}
+                              >
                                 {flexRender(
                                   cell.column.columnDef.cell,
                                   cell.getContext()

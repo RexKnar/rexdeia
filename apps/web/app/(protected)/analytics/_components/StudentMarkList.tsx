@@ -513,57 +513,117 @@ export default function StudentMarkList({
                   </div>
                 </div>
               </div>
-              {/* <div className="relative "> */}
-              <Table className="border-1 h-[80vh] overflow-y-auto">
-                <TableHeader className="sticky top-0 z-20 bg-primary-300">
-                  {table.getHeaderGroups().map((headerGroup) => (
-                    <TableRow
-                      key={headerGroup.id}
-                      className="sticky top-0 z-20 bg-primary-300"
-                    >
-                      {headerGroup.headers.map((header, index) => (
-                        <TableCell
-                          key={header.id}
-                          className={`
+              {/* <div className="relative ">
+                <div className="relative h-[50vh]">
+                  <Table className="border-1 ">
+                    <TableHeader className="sticky top-0 z-20 bg-primary-300">
+                      {table.getHeaderGroups().map((headerGroup) => (
+                        <TableRow
+                          key={headerGroup.id}
+                          className=" bg-primary-300"
+                        >
+                          {headerGroup.headers.map((header, index) => (
+                            <TableCell
+                              key={header.id}
+                              className={`
             ${index === 0 ? 'sticky left-0 z-30 bg-primary-300 ' : ''}
             ${index === 1 ? 'sticky left-16 z-30 bg-primary-300 ' : ''}
             p-4 text-sm
           `}
-                        >
-                          {header.isPlaceholder
-                            ? null
-                            : flexRender(
-                                header.column.columnDef.header,
-                                header.getContext()
-                              )}
-                        </TableCell>
+                            >
+                              {header.isPlaceholder
+                                ? null
+                                : flexRender(
+                                    header.column.columnDef.header,
+                                    header.getContext()
+                                  )}
+                            </TableCell>
+                          ))}
+                        </TableRow>
                       ))}
-                    </TableRow>
-                  ))}
-                </TableHeader>
-                <TableBody>
-                  {table.getRowModel().rows.map((row) => (
-                    <TableRow key={row.id}>
-                      {row.getVisibleCells().map((cell, index) => (
-                        <TableCell
-                          key={cell.id}
-                          className={`
+                    </TableHeader>
+                    <TableBody>
+                      {table.getRowModel().rows.map((row) => (
+                        <TableRow key={row.id}>
+                          {row.getVisibleCells().map((cell, index) => (
+                            <TableCell
+                              key={cell.id}
+                              className={`
             ${index === 0 ? 'sticky left-0  z-10 bg-white ' : ''}
             ${index === 1 ? 'sticky left-16 z-10 bg-white ' : ''}
             p-4 text-sm
           `}
-                        >
-                          {flexRender(
-                            cell.column.columnDef.cell,
-                            cell.getContext()
-                          )}
-                        </TableCell>
+                            >
+                              {flexRender(
+                                cell.column.columnDef.cell,
+                                cell.getContext()
+                              )}
+                            </TableCell>
+                          ))}
+                        </TableRow>
                       ))}
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-              {/* </div> */}
+                    </TableBody>
+                  </Table>
+                </div>
+              </div> */}
+
+              <div className="relative rounded-md border">
+                <div className="max-h-[50vh] overflow-auto">
+                  <div className="inline-block w-full align-middle">
+                    <div className="overflow-x-auto">
+                      <Table>
+                        <TableHeader>
+                          {table.getHeaderGroups().map((headerGroup) => (
+                            <TableRow
+                              key={headerGroup.id}
+                              className="sticky top-0 bg-primary-300 shadow-sm"
+                            >
+                              {headerGroup.headers.map((header, index) => (
+                                <TableCell
+                                  key={header.id}
+                                  className={`
+                          ${index === 0 ? 'sticky left-0 z-30 bg-primary-300' : ''}
+                          ${index === 1 ? 'sticky left-16 z-30 bg-primary-300' : ''}
+                          whitespace-nowrap p-4 text-sm font-medium
+                        `}
+                                >
+                                  {header.isPlaceholder
+                                    ? null
+                                    : flexRender(
+                                        header.column.columnDef.header,
+                                        header.getContext()
+                                      )}
+                                </TableCell>
+                              ))}
+                            </TableRow>
+                          ))}
+                        </TableHeader>
+                        <TableBody>
+                          {table.getRowModel().rows.map((row) => (
+                            <TableRow key={row.id}>
+                              {row.getVisibleCells().map((cell, index) => (
+                                <TableCell
+                                  key={cell.id}
+                                  className={`
+                          ${index === 0 ? 'sticky left-0 z-10 bg-white' : ''}
+                          ${index === 1 ? 'sticky left-16 z-10 bg-white' : ''}
+                          whitespace-nowrap p-4 text-sm
+                        `}
+                                >
+                                  {flexRender(
+                                    cell.column.columnDef.cell,
+                                    cell.getContext()
+                                  )}
+                                </TableCell>
+                              ))}
+                            </TableRow>
+                          ))}
+                        </TableBody>
+                      </Table>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           )}
         </section>
