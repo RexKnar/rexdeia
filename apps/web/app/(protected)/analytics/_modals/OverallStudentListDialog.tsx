@@ -391,88 +391,61 @@ export function OverallStudentListDialog({
             {title} ({subTitle})
           </DialogTitle>
           <DialogDescription>
-            <section className="max-h-[80vh] overflow-y-auto">
-              <section>
-                {subjectList && (
-                  <div className="mt-4 space-y-4 overflow-x-auto rounded-md bg-white p-6 print:m-0 print:p-0">
-                    <div className="w-full">
-                      {/* {pdfTableHeader?.length > 0 && (
-                        // <PdfDocument
-                        //   headingList={pdfTableHeader as any}
-                        //   tableValues={pdfTableValues}
-                        //   examDetails={examDetails}
-                        //   classDetails={classDetails}
-                        //   sectionDetails={sectionDetails}
-                        // />
-                      )} */}
-                      {/* <Button
-                        variant="outline"
-                        onClick={() =>
-                          // downloadMarkListXLSX(
-                          //   xlsxTableHeader,
-                          //   pdfTableHeader,
-                          //   pdfTableValues,
-                          //   examDetails,
-                          //   classDetails,
-                          //   sectionDetails
-                          // )
-                        }
-                      >
-                        Download XLSX <TableIcon className="w-4 h-4 ml-2" />
-                      </Button> */}
-                    </div>
-                    <Table className="border-1 border">
-                      <TableHeader>
-                        {table.getHeaderGroups().map((headerGroup) => (
-                          <TableRow
-                            key={headerGroup.id}
-                            className="bg-primary-300"
-                          >
-                            {headerGroup.headers.map((header, index) => (
-                              <TableCell
-                                key={header.id}
-                                className={`
+            <section>
+              {subjectList && (
+                <div className="mt-4 space-y-4 overflow-x-auto rounded-md bg-white p-6 print:m-0 print:p-0">
+                  <div className="w-full"></div>
+                  <Table className="border-1 border">
+                    <TableHeader>
+                      {table.getHeaderGroups().map((headerGroup) => (
+                        <TableRow
+                          key={headerGroup.id}
+                          className="bg-primary-300"
+                        >
+                          {headerGroup.headers.map((header, index) => (
+                            <TableCell
+                              key={header.id}
+                              className={`
                           ${index === 0 ? 'sticky left-0 z-10 bg-primary-300' : ''}
                           ${index === 1 ? 'sticky left-16 z-10 bg-primary-300' : ''}
                           whitespace-nowrap p-4 text-sm
                         `}
-                              >
-                                {header.isPlaceholder
-                                  ? null
-                                  : flexRender(
-                                      header.column.columnDef.header,
-                                      header.getContext()
-                                    )}
-                              </TableCell>
-                            ))}
-                          </TableRow>
-                        ))}
-                      </TableHeader>
-                      <TableBody>
-                        {table.getRowModel().rows.map((row) => (
-                          <TableRow key={row.id}>
-                            {row.getVisibleCells().map((cell, index) => (
-                              <TableCell
-                                key={cell.id}
-                                className={`
+                            >
+                              {header.isPlaceholder
+                                ? null
+                                : flexRender(
+                                    header.column.columnDef.header,
+                                    header.getContext()
+                                  )}
+                            </TableCell>
+                          ))}
+                        </TableRow>
+                      ))}
+                    </TableHeader>
+                    <TableBody>
+                      {table.getRowModel().rows.map((row) => (
+                        <TableRow key={row.id}>
+                          {row.getVisibleCells().map((cell, index) => (
+                            <TableCell
+                              key={cell.id}
+                              className={`
                           ${index === 0 ? 'sticky left-0 z-10 bg-white' : ''}
                           ${index === 1 ? 'sticky left-16 z-10 bg-white' : ''}
                           whitespace-nowrap p-4 text-sm
                         `}
-                              >
-                                {flexRender(
-                                  cell.column.columnDef.cell,
-                                  cell.getContext()
-                                )}
-                              </TableCell>
-                            ))}
-                          </TableRow>
-                        ))}
-                      </TableBody>
-                    </Table>
-                  </div>
-                )}
-              </section>
+                            >
+                              {flexRender(
+                                cell.column.columnDef.cell,
+                                cell.getContext()
+                              )}
+                            </TableCell>
+                          ))}
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </div>
+              )}
             </section>
           </DialogDescription>
         </DialogHeader>

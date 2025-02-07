@@ -122,7 +122,6 @@ export function RangeScaleList() {
   const {
     data: getRangeScaleListResponse,
     isLoading: isRangeScaleListLoading,
-    refetch: refetchScaleList,
   } = useGetRangeScalesQuery(filterType);
 
   const table = useReactTable({
@@ -148,10 +147,6 @@ export function RangeScaleList() {
       });
     }
   }, [isDeleteRangeError, toast]);
-
-  // useEffect(() => {
-  //   refetchScaleList;
-  // }, [filterType, refetchScaleList]);
 
   useEffect(() => {
     if (isDeleteSuccess) {

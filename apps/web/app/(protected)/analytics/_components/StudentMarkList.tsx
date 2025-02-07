@@ -568,7 +568,7 @@ export default function StudentMarkList({
               </div> */}
 
               <div className="relative rounded-md border">
-                <div className="max-h-[50vh] overflow-auto">
+                <div className="overflow-auto ">
                   <div className="inline-block w-full align-middle">
                     <div className="overflow-x-auto">
                       <Table>
