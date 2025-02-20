@@ -25,6 +25,7 @@ export default function StaffAnalysisTable() {
       },
       { enabled: !!examId && !!classId }
     );
+
   return (
     <section className="mt-4">
       {!isAnalyticsLoading ? (
