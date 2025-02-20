@@ -38,9 +38,9 @@ export async function getAnalyticsSubjectByStaffId(staffId, sectionId) {
     },
   });
 
-  const subjects = subjectResponse.flatMap(
-    (academicSubject) => academicSubject.subject
-  );
+  const subjects = subjectResponse
+    .flatMap((academicSubject) => academicSubject.subject)
+    .filter((subject) => subject != null);
 
   const uniqueSubjects = Array.from(
     new Map(subjects.map((subject) => [subject.id, subject])).values()
