@@ -1,5 +1,6 @@
 import { useGetExamAnalyticsStaffMasterQuery } from 'lib/queries/analytics/exam/useGetExamAnalyticsStaffMasterQuery';
 import { useSearchParams } from 'next/navigation';
+import { useEffect } from 'react';
 import { Text } from 'ui';
 import {
   Table,
@@ -25,6 +26,9 @@ export default function StaffAnalysisTable() {
       },
       { enabled: !!examId && !!classId }
     );
+  useEffect(() => {
+    console.log(analyticsList);
+  }, [analyticsList]);
   return (
     <section className="mt-4">
       {!isAnalyticsLoading ? (
