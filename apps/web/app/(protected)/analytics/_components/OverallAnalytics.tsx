@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { useGetExamSubjectsByClassSectionIdQuery } from 'lib/queries/exams/subject/useGetExamSubjectsByClassSectionIdQuery';
 import { TableIcon } from 'lucide-react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
@@ -239,8 +241,8 @@ export default function OverallAnalytics({
         ) {
           result.centum[gender]++;
           result.centum.overall++;
-          result.centum.studentList.overall.push(rest);
-          result.centum.studentList[gender].push(rest);
+          result.centum.studentList.overall.push(student);
+          result.centum.studentList[gender].push(student);
         }
       });
 
