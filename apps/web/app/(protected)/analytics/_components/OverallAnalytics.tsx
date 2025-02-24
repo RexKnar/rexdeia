@@ -111,6 +111,18 @@ export default function OverallAnalytics({
           overall: 0,
           studentList: { male: [], female: [], overall: [] },
         },
+        passPercentageExcludingAbsent: {
+          male: 0,
+          female: 0,
+          overall: 0,
+          studentList: { male: [], female: [], overall: [] },
+        },
+        failPercentageExcludingAbsent: {
+          male: 0,
+          female: 0,
+          overall: 0,
+          studentList: { male: [], female: [], overall: [] },
+        },
         attendance: {
           male: 0,
           female: 0,
@@ -240,6 +252,15 @@ export default function OverallAnalytics({
             result.lowestMark[category] === Infinity
               ? 0
               : result.lowestMark[category];
+          result.passPercentageExcludingAbsent[category] = calculatePercentage(
+            result.numberOfPassStudents[category],
+            result?.attendance[category]
+          );
+          result.failPercentageExcludingAbsent[category] = calculatePercentage(
+            result.numberOfFailStudents[category],
+            result?.attendance[category]
+          );
+
           result.passPercentage[category] = calculatePercentage(
             result.numberOfPassStudents[category],
             totalStudents[category]
@@ -321,6 +342,14 @@ export default function OverallAnalytics({
       failCount: totalFail,
       passPercentage: calculatePercentage(totalPass, totalStudents),
       failPercentage: calculatePercentage(totalFail, totalStudents),
+      // passPercentageExcludingAbsent: calculatePercentage(
+      //   totalPass,
+      //   totalStudents
+      // ),
+      // failPercentageExcludingAbsent: calculatePercentage(
+      //   totalFail,
+      //   totalStudents
+      // ),
       highest: { mark: highestMark, students: highestMarkStudents },
       lowest: { mark: lowestMark, students: lowestMarkStudents },
       highestMark,
@@ -667,6 +696,58 @@ export default function OverallAnalytics({
         </TableCell>
         <TableCell>
           <div className="flex flex-col justify-evenly">
+            <Text className="size-lg text-center font-semibold">
+              {subjectAnalytics?.passPercentageExcludingAbsent.overall.toFixed(
+                2
+              )}
+              %
+            </Text>
+            <div className="flex justify-evenly">
+              <Text className="text-primary-800">
+                M:{' '}
+                {subjectAnalytics?.passPercentageExcludingAbsent.male.toFixed(
+                  2
+                )}
+                %
+              </Text>
+              <Text className="text-primary-800">
+                F:{' '}
+                {subjectAnalytics?.passPercentageExcludingAbsent.female.toFixed(
+                  2
+                )}
+                %
+              </Text>
+            </div>
+          </div>
+        </TableCell>
+        <TableCell>
+          <div className="flex flex-col justify-evenly">
+            <Text className="size-lg text-center font-semibold">
+              {subjectAnalytics?.failPercentageExcludingAbsent.overall.toFixed(
+                2
+              )}
+              %
+            </Text>
+            <div className="flex justify-evenly">
+              <Text className="text-primary-800">
+                M:{' '}
+                {subjectAnalytics?.failPercentageExcludingAbsent.male.toFixed(
+                  2
+                )}
+                %
+              </Text>
+              <Text className="text-primary-800">
+                F:{' '}
+                {subjectAnalytics?.failPercentageExcludingAbsent.female.toFixed(
+                  2
+                )}
+                %
+              </Text>
+            </div>
+          </div>
+        </TableCell>
+        <TableCell>
+          <div className="flex flex-col justify-evenly">
             <Button
               variant="ghost"
               onClick={() =>
@@ -865,6 +946,14 @@ export default function OverallAnalytics({
                       <Text className="size-lg font-semibold">Failure %</Text>
                     </TableCell>
                     <TableCell>
+                      <Text className="size-lg font-semibold">Pass(A) %</Text>
+                    </TableCell>
+                    <TableCell>
+                      <Text className="size-lg font-semibold">
+                        Failure(A) %
+                      </Text>
+                    </TableCell>
+                    <TableCell>
                       <Text className="size-lg font-semibold">Highest</Text>
                     </TableCell>
                     <TableCell>
@@ -935,6 +1024,12 @@ export default function OverallAnalytics({
                       <Text className="size-lg font-semibold">
                         {overallStats.failPercentage?.toFixed(2)}%
                       </Text>
+                    </TableCell>
+                    <TableCell>
+                      <Text className="size-lg font-semibold">-</Text>
+                    </TableCell>
+                    <TableCell>
+                      <Text className="size-lg font-semibold">-</Text>
                     </TableCell>
                     <TableCell>
                       <Button

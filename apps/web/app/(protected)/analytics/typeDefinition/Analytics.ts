@@ -55,6 +55,18 @@ export interface Analytics {
     overall: number;
     studentList: { male: Student[]; female: Student[]; overall: Student[] };
   };
+  passPercentageExcludingAbsent: {
+    male: number;
+    female: number;
+    overall: number;
+    studentList: { male: Student[]; female: Student[]; overall: Student[] };
+  };
+  failPercentageExcludingAbsent: {
+    male: number;
+    female: number;
+    overall: number;
+    studentList: { male: Student[]; female: Student[]; overall: Student[] };
+  };
   attendance: {
     male: number;
     female: number;
