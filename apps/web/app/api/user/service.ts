@@ -20,3 +20,18 @@ export async function getUserDetailsById(userId: string) {
     },
   });
 }
+
+export async function getUserById(id: string) {
+  return db.user.findFirst({
+    where: {
+      id,
+    },
+    select:{
+      name:true,
+      email:true,
+      password:false,
+      image:true,
+      phoneNumber:true,
+    }
+  });
+}
