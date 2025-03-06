@@ -1,6 +1,6 @@
 'use client';
-import { useState } from 'react';
 import { Eye, EyeOff, Mail, UploadCloud } from 'lucide-react';
+import { useState } from 'react';
 import {
   Avatar,
   AvatarImage,
@@ -19,11 +19,10 @@ export function EditProfileComponent() {
   const [showPassword, setShowPassword] = useState(false);
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen p-6">
-      <section className="w-full max-w-2xl p-6 bg-white rounded-lg shadow-lg">
-    
+    <div className="flex min-h-screen flex-col items-center justify-center p-6">
+      <section className="w-full max-w-2xl rounded-lg bg-white p-6 shadow-lg">
         <div className="flex flex-col items-center">
-          <Avatar className="w-32 h-32 cursor-pointer">
+          <Avatar className="h-32 w-32 cursor-pointer">
             <AvatarImage src="https://avatars.githubusercontent.com/u/124599?v=4" />
           </Avatar>
           <Text variant="xl-bold" className="mt-4 text-center">
@@ -32,46 +31,48 @@ export function EditProfileComponent() {
           <span className="text-sm font-semibold text-gray-500">@Olivia</span>
         </div>
 
-      
-        <div className="grid grid-cols-2 gap-6 mt-6">
-          
+        <div className="mt-6 grid grid-cols-2 gap-6">
           <div>
             <label className="text-sm font-medium">Full Name</label>
             <Input placeholder="Enter your name" className="mt-2" />
           </div>
 
-         
           <div>
             <label className="text-sm font-medium">Mobile Number</label>
             <Input placeholder="Enter your number" className="mt-2" />
           </div>
 
-     
           <div className="col-span-2">
             <label className="text-sm font-medium">Email</label>
             <div className="relative">
-              <Input placeholder="Enter your email" className="pl-10 mt-2" type="email" />
-              <Mail className="absolute text-gray-500 left-3 top-3" size={18} />
+              <Input
+                placeholder="Enter your email"
+                className="mt-2 pl-10"
+                type="email"
+              />
+              <Mail className="absolute left-3 top-3 text-gray-500" size={18} />
             </div>
           </div>
 
-         
           <div>
             <label className="text-sm font-medium">Password</label>
-            <Input placeholder="Enter password" className="mt-2" type="password" />
+            <Input
+              placeholder="Enter password"
+              className="mt-2"
+              type="password"
+            />
           </div>
 
-         
           <div>
             <label className="text-sm font-medium">Confirm Password</label>
             <div className="relative">
               <Input
                 placeholder="Confirm password"
-                className="pr-10 mt-2"
+                className="mt-2 pr-10"
                 type={showPassword ? 'text' : 'password'}
               />
               <div
-                className="absolute text-gray-500 cursor-pointer right-3 top-3"
+                className="absolute right-3 top-3 cursor-pointer text-gray-500"
                 onClick={() => setShowPassword(!showPassword)}
               >
                 {showPassword ? <Eye size={18} /> : <EyeOff size={18} />}
@@ -80,29 +81,32 @@ export function EditProfileComponent() {
           </div>
         </div>
 
-      
-        <div className="flex flex-col items-center mt-6">
-          <label className="flex flex-col items-center justify-center w-full h-32 transition border-2 border-gray-300 rounded-md cursor-pointer hover:border-gray-500">
+        <div className="mt-6 flex flex-col items-center">
+          <label className="flex h-32 w-full cursor-pointer flex-col items-center justify-center rounded-md border-2 border-gray-300 transition hover:border-gray-500">
             <div className="flex flex-col items-center">
-              <div className="p-2 border-4 border-gray-400 rounded-full">
-                <UploadCloud className="w-6 h-6 text-gray-600" />
+              <div className="rounded-full border-4 border-gray-400 p-2">
+                <UploadCloud className="h-6 w-6 text-gray-600" />
               </div>
               <p className="mt-2 text-sm">
-                <span className="font-semibold text-indigo-600">Click to Upload</span> or drag & drop
+                <span className="font-semibold text-indigo-600">
+                  Click to Upload
+                </span>{' '}
+                or drag & drop
               </p>
-              <p className="text-xs text-gray-500">SVG, PNG, JPG, GIF (Max: 800x400px)</p>
+              <p className="text-xs text-gray-500">
+                SVG, PNG, JPG, GIF (Max: 800x400px)
+              </p>
             </div>
             <Input type="file" className="hidden" />
           </label>
         </div>
 
-        
         <div className="mt-6">
           <label className="text-sm font-medium">Address</label>
           <Input placeholder="Enter your address" className="mt-2" />
         </div>
 
-        <div className="grid grid-cols-2 gap-6 mt-4">
+        <div className="mt-4 grid grid-cols-2 gap-6">
           <div>
             <label className="text-sm font-medium">City</label>
             <Input placeholder="Enter city name" className="mt-2" />
@@ -118,7 +122,7 @@ export function EditProfileComponent() {
           <div>
             <label className="text-sm font-medium">Nationality</label>
             <Select>
-              <SelectTrigger className="w-full mt-2">
+              <SelectTrigger className="mt-2 w-full">
                 <SelectValue placeholder="Select nationality" />
               </SelectTrigger>
               <SelectContent>
@@ -134,10 +138,9 @@ export function EditProfileComponent() {
           </div>
         </div>
 
-        
         <div className="mt-6">
           <label className="text-sm font-semibold text-gray-700">Verify</label>
-          <div className="grid grid-cols-2 gap-6 mt-2">
+          <div className="mt-2 grid grid-cols-2 gap-6">
             <div>
               <label className="text-sm font-medium">Email</label>
               <Input placeholder="Enter email" className="mt-2" />
@@ -149,9 +152,11 @@ export function EditProfileComponent() {
           </div>
         </div>
 
-     
-        <div className="flex justify-center gap-4 mt-6">
-          <Button variant="outline" className="text-black border-gray-300 hover:bg-gray-200">
+        <div className="mt-6 flex justify-center gap-4">
+          <Button
+            variant="outline"
+            className="border-gray-300 text-black hover:bg-gray-200"
+          >
             Cancel
           </Button>
           <Button variant="default">Save</Button>

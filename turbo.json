@@ -1,8 +1,6 @@
 {
   "$schema": "https://turbo.build/schema.json",
-  "globalDependencies": [
-    "**/.env.*local"
-  ],
+  "globalDependencies": ["**/.env.*local"],
   "globalEnv": [
     "NEXT_RAZORPAY_KEY_ID",
     "NEXT_RAZORPAY_KEY_SECRET",
@@ -15,15 +13,10 @@
     "NEXT_PUBLIC_SENTRY_DSN",
     "JWT_SECRET"
   ],
-  "tasks": {
+  "pipeline": {
     "build": {
-      "dependsOn": [
-        "^build"
-      ],
-      "outputs": [
-        ".next/**",
-        "!.next/cache/**"
-      ]
+      "dependsOn": ["^build"],
+      "outputs": [".next/**", "!.next/cache/**"]
     },
     "lint": {},
     "dev": {

@@ -1,4 +1,5 @@
 import { ChevronDown, ChevronRight } from 'lucide-react';
+import Link from 'next/link';
 import { signOut } from 'next-auth/react';
 import {
   DropdownMenu,
@@ -10,7 +11,6 @@ import {
 } from 'ui';
 
 import { useGetUserDetailsQuery } from '../queries/useGetUserDetailsQuery';
-import Link from 'next/link';
 
 export function UserMenu() {
   const { data, isLoading } = useGetUserDetailsQuery();
@@ -21,39 +21,38 @@ export function UserMenu() {
         <Text variant="sm-medium" className="hidden lg:block">
           Hi, {isLoading ? 'Loading...' : data?.name}
         </Text>
-        <ChevronDown className="w-5 h-5 cursor-pointer" />
+        <ChevronDown className="h-5 w-5 cursor-pointer" />
       </DropdownMenuTrigger>
       <DropdownMenuContent className="bg-white" align="end" sideOffset={15}>
-        <DropdownMenuSeparator className="text-gray-500 bg-gray-100" />
+        <DropdownMenuSeparator className="bg-gray-100 text-gray-500" />
         <DropdownMenuItem
           onClick={async () => {
             await signOut({
               callbackUrl: '/signin',
             });
           }}
-          className="flex items-center cursor-pointer"
+          className="flex cursor-pointer items-center"
         >
           <Text variant="sm-medium" className="flex-1">
             Logout
           </Text>
           <ChevronRight
-            className="w-5 h-4 bg-gray-200 rounded-full shadow-md stroke-current text-primary"
+            className="h-4 w-5 rounded-full bg-gray-200 stroke-current text-primary shadow-md"
             stroke-width="1.5"
           />
         </DropdownMenuItem>
-        <DropdownMenuSeparator className="text-gray-500 bg-gray-100" />
-      <Link href={'/users/profile/'}>
-      <DropdownMenuItem     
-          className="flex items-center cursor-pointer"
-        >
-          <Text variant="sm-medium" className="flex-1">
-            Profile
-          </Text>
-          <ChevronRight
-            className="w-5 h-4 bg-gray-200 rounded-full shadow-md stroke-current text-primary"
-            stroke-width="1.5"
-          />
-        </DropdownMenuItem></Link>  
+        <DropdownMenuSeparator className="bg-gray-100 text-gray-500" />
+        <Link href={'/users/profile/'}>
+          <DropdownMenuItem className="flex cursor-pointer items-center">
+            <Text variant="sm-medium" className="flex-1">
+              Profile
+            </Text>
+            <ChevronRight
+              className="h-4 w-5 rounded-full bg-gray-200 stroke-current text-primary shadow-md"
+              stroke-width="1.5"
+            />
+          </DropdownMenuItem>
+        </Link>
       </DropdownMenuContent>
     </DropdownMenu>
   );

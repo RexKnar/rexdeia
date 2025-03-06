@@ -1,11 +1,10 @@
 import { captureException } from '@sentry/nextjs';
 import { StatusCodes } from 'http-status-codes';
-import { NextResponse,NextRequest } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 
 import { authOptions } from '../../../../lib/auth';
-import {  getUserDetailsById } from '../service';
-
+import { getUserDetailsById } from '../service';
 
 /**
  * @swagger

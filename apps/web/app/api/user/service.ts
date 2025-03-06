@@ -11,7 +11,7 @@ export async function getUserDetailsById(userId: string) {
       email: true,
       image: true,
       role: true,
-      phoneNumber:true,
+      phoneNumber: true,
       userOrganizations: {
         include: {
           branch: true,
