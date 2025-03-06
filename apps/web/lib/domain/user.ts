@@ -44,5 +44,5 @@ export type UserModal = {
 
 export type GetUserDetailsByIdModel = Pick<
   UserModal,
-  'id' | 'name' | 'email' | 'image' | 'userOrganizations'
+  'id' | 'name' | 'email' | 'image' | 'userOrganizations' | 'phoneNumber'
 >;

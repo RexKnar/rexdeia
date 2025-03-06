@@ -4,8 +4,8 @@ import { NextResponse,NextRequest } from 'next/server';
 import { getServerSession } from 'next-auth';
 
 import { authOptions } from '../../../../lib/auth';
-import { getUserById, getUserDetailsById } from '../service';
-import { getOrganisationsByUserId } from '../organization/service';
+import {  getUserDetailsById } from '../service';
+
 
 /**
  * @swagger
@@ -43,7 +43,7 @@ export async function GET(_: NextRequest, { params: { id } }) {
   }
 
   try {
-    const user = await getUserById(id);
+    const user = await getUserDetailsById(id);
 
     if (user) {
       return new Response(JSON.stringify(user), {
