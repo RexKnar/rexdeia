@@ -21,7 +21,7 @@ export function EditProfileComponent() {
   return (
     <div className="flex flex-col items-center justify-center min-h-screen p-6">
       <section className="w-full max-w-2xl p-6 bg-white rounded-lg shadow-lg">
-        {/* Profile Avatar */}
+    
         <div className="flex flex-col items-center">
           <Avatar className="w-32 h-32 cursor-pointer">
             <AvatarImage src="https://avatars.githubusercontent.com/u/124599?v=4" />
@@ -32,21 +32,21 @@ export function EditProfileComponent() {
           <span className="text-sm font-semibold text-gray-500">@Olivia</span>
         </div>
 
-        {/* Form Fields */}
+      
         <div className="grid grid-cols-2 gap-6 mt-6">
-          {/* Full Name */}
+          
           <div>
             <label className="text-sm font-medium">Full Name</label>
             <Input placeholder="Enter your name" className="mt-2" />
           </div>
 
-          {/* Mobile Number */}
+         
           <div>
             <label className="text-sm font-medium">Mobile Number</label>
             <Input placeholder="Enter your number" className="mt-2" />
           </div>
 
-          {/* Email */}
+     
           <div className="col-span-2">
             <label className="text-sm font-medium">Email</label>
             <div className="relative">
@@ -55,13 +55,13 @@ export function EditProfileComponent() {
             </div>
           </div>
 
-          {/* Password */}
+         
           <div>
             <label className="text-sm font-medium">Password</label>
             <Input placeholder="Enter password" className="mt-2" type="password" />
           </div>
 
-          {/* Confirm Password with Eye Icon */}
+         
           <div>
             <label className="text-sm font-medium">Confirm Password</label>
             <div className="relative">
@@ -80,7 +80,7 @@ export function EditProfileComponent() {
           </div>
         </div>
 
-        {/* Profile Picture Upload */}
+      
         <div className="flex flex-col items-center mt-6">
           <label className="flex flex-col items-center justify-center w-full h-32 transition border-2 border-gray-300 rounded-md cursor-pointer hover:border-gray-500">
             <div className="flex flex-col items-center">
@@ -96,7 +96,7 @@ export function EditProfileComponent() {
           </label>
         </div>
 
-        {/* Address Section */}
+        
         <div className="mt-6">
           <label className="text-sm font-medium">Address</label>
           <Input placeholder="Enter your address" className="mt-2" />
@@ -134,7 +134,7 @@ export function EditProfileComponent() {
           </div>
         </div>
 
-        {/* Verify Section */}
+        
         <div className="mt-6">
           <label className="text-sm font-semibold text-gray-700">Verify</label>
           <div className="grid grid-cols-2 gap-6 mt-2">
@@ -149,7 +149,7 @@ export function EditProfileComponent() {
           </div>
         </div>
 
-        {/* Buttons */}
+     
         <div className="flex justify-center gap-4 mt-6">
           <Button variant="outline" className="text-black border-gray-300 hover:bg-gray-200">
             Cancel
