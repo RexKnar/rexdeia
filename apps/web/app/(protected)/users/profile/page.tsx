@@ -2,7 +2,7 @@ import { redirect } from 'next/navigation';
 import { getServerSession } from 'next-auth';
 
 import { authOptions } from '../../../../lib/auth';
-import { ProfileDashBoard } from './_components/ProfileDashBoard';
+import { ProfileDetails } from './_components/ProfileDetails';
 import { ProfilePageHeader } from './_components/ProfilePageHeader';
 
 export default async function Page() {
@@ -14,7 +14,7 @@ export default async function Page() {
     <section className="flex flex-col gap-6">
       <ProfilePageHeader />
       <section className="space-y-2 rounded-md bg-white p-4">
-        <ProfileDashBoard />
+        <ProfileDetails />
       </section>
     </section>
   );

@@ -1,4 +1,5 @@
 import { ChevronDown, ChevronRight } from 'lucide-react';
+import Link from 'next/link';
 import { signOut } from 'next-auth/react';
 import {
   DropdownMenu,
@@ -40,6 +41,18 @@ export function UserMenu() {
             stroke-width="1.5"
           />
         </DropdownMenuItem>
+        <DropdownMenuSeparator className="bg-gray-100 text-gray-500" />
+        <Link href={'/users/profile/'}>
+          <DropdownMenuItem className="flex cursor-pointer items-center">
+            <Text variant="sm-medium" className="flex-1">
+              Profile
+            </Text>
+            <ChevronRight
+              className="h-4 w-5 rounded-full bg-gray-200 stroke-current text-primary shadow-md"
+              stroke-width="1.5"
+            />
+          </DropdownMenuItem>
+        </Link>
       </DropdownMenuContent>
     </DropdownMenu>
   );
