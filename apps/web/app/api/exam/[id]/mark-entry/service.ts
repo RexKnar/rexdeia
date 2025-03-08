@@ -82,21 +82,21 @@ async function checkMarkEntryPermission(
   const correctionDate = markEntryCorrectionDate?.getTime();
 
   if (isIncharge) {
-    if (now < openDate) {
+    if (now <= openDate) {
       return {
         canEnterMarks: false,
         message: 'Mark entry has not started yet',
       };
     }
 
-    if (correctionDate && now > correctionDate) {
+    if (correctionDate && now >= correctionDate) {
       return {
         canEnterMarks: false,
         message: 'Mark entry correction period has ended',
       };
     }
 
-    if (!correctionDate && now > endDate) {
+    if (!correctionDate && now >= endDate) {
       return {
         canEnterMarks: false,
         message: 'Mark entry period has ended',
