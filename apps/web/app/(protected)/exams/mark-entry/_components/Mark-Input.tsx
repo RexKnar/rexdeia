@@ -67,7 +67,7 @@ export function MarkInput({
             {...control.register(`${registerKey}.mark`, {
               validate: (value) => {
                 const inputValue = parseFloat(value);
-                if (inputValue >= 0 && currentAttendance) {
+                if (inputValue > 0 && currentAttendance) {
                   return 'Value must be a number';
                 }
                 if (inputValue > validationData?.totalMarks) {
