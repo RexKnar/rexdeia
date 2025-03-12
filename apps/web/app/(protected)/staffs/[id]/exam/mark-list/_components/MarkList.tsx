@@ -1,4 +1,5 @@
 'use client';
+import RangeAnalyticsTable from 'app/(protected)/analytics/_components/RangeAnalyticsTable';
 import { useGetMarkMasterWithFilterQuery } from 'lib/queries/analytics/exam/useGetMarkMasterWithFilterQuery';
 import { useGetAnalyticsSubjectsForStaffQuery } from 'lib/queries/analytics/subject/useGetAnalyticsSubjectsForStaffQuery';
 import { useGetExamsBySectionIdQuery } from 'lib/queries/exams/useGetExamBySectionIdQuery';
@@ -254,7 +255,9 @@ export default function MarkList() {
           >
             Overall-Analytics
           </TabsTrigger>
-
+          <TabsTrigger value="rangeAnalytics" className="mr-2 text-base">
+            Range Analytics
+          </TabsTrigger>
           <TabsTrigger
             value="markList"
             className="mr-2 text-base focus:border-b-4 focus:border-primary print:hidden"
@@ -274,6 +277,14 @@ export default function MarkList() {
           </section>
         </TabsContent>
 
+        <TabsContent className="w-full" value="rangeAnalytics">
+          <section>
+            <RangeAnalyticsTable
+              markList={studentMarkList}
+              subjectList={subjectList}
+            />
+          </section>
+        </TabsContent>
         <TabsContent className="w-full" value="markList">
           <section>
             {studentMarkList && (
