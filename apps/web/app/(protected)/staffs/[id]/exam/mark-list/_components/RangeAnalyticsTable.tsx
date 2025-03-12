@@ -12,8 +12,8 @@ import {
   TableRow,
 } from 'ui/components/ui/Table';
 
-import noDataFoundSvg from '../../../../public/assets/images/analytics-empty-state_Artboard_1.svg';
-import dataSegmentationGif from '../../../../public/assets/images/data-segmentation.gif';
+import noDataFoundSvg from '../../../../../../../public/assets/images/analytics-empty-state_Artboard_1.svg';
+import dataSegmentationGif from '../../../../../../../public/assets/images/data-segmentation.gif';
 
 export default function RangeAnalyticsTable({
   subjectList,
