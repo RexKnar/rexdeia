@@ -153,7 +153,7 @@ export function SaveExamFlyout() {
       } else {
         const response = await mutateCreateExamAsync(requestPayload);
         if (response) {
-          router.push(`/academics/exams/${response.id}/configuration/add`);
+          router.push(`/exams/${response.id}/config`);
           setValue('isActive', false);
           reset();
         }

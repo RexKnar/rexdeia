@@ -4,7 +4,7 @@ import { authOptions } from 'lib/auth';
 import { NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 
-import { getExamConfigWithSubjectPartion } from './service';
+import { getExamConfigWithSubjectPartition } from './service';
 
 /**
  * @swagger
@@ -50,7 +50,8 @@ export async function PUT(request: Request) {
   try {
     const payload = await request.json();
 
-    const formDataByClassExam = await getExamConfigWithSubjectPartion(payload);
+    const formDataByClassExam =
+      await getExamConfigWithSubjectPartition(payload);
 
     return new NextResponse(JSON.stringify(formDataByClassExam), {
       status: StatusCodes.OK,
