@@ -1,5 +1,4 @@
 'use client';
-import RangeAnalyticsTable from 'app/(protected)/analytics/_components/RangeAnalyticsTable';
 import { useGetMarkMasterWithFilterQuery } from 'lib/queries/analytics/exam/useGetMarkMasterWithFilterQuery';
 import { useGetAnalyticsSubjectsForStaffQuery } from 'lib/queries/analytics/subject/useGetAnalyticsSubjectsForStaffQuery';
 import { useGetExamsBySectionIdQuery } from 'lib/queries/exams/useGetExamBySectionIdQuery';
@@ -21,6 +20,7 @@ import {
 } from 'ui';
 
 import OverallDetails from './OverallDetails';
+import RangeAnalyticsTable from './RangeAnalyticsTable';
 import StudentMarkList from './StudentMarkList';
 
 // import MarkListInputArea from './MarkListInputArea';
