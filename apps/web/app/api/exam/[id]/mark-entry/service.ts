@@ -112,7 +112,7 @@ async function checkMarkEntryPermission(
         message: 'Mark entry has not started yet',
       };
     }
-    if (now > endDate) {
+    if (now >= endDate) {
       return {
         canEnterMarks: false,
         message: 'Mark entry period has ended',
@@ -137,7 +137,7 @@ export async function getExamConfigWithSubjectPartition(
     ? await Promise.all([
         db.academicSubjectForStaff.findFirst({
           where: {
-            staffId: staffId,
+            staffId: session?.user?.staffId,
             isIncharge: true,
             sectionId: sectionId,
             academicYearId: session.currentBatch,
