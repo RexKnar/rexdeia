@@ -100,7 +100,7 @@ const StudentMarksPDFGenerator: React.FC<StudentMarksPDFGeneratorProps> = ({
         },
         {
           content: 'Class  ',
-          colSpan: 1,
+          colSpan: headingList.length > 5 ? 2 : 1,
         },
         {
           content: classDetails?.name || '',
@@ -109,7 +109,7 @@ const StudentMarksPDFGenerator: React.FC<StudentMarksPDFGeneratorProps> = ({
 
         {
           content: `Section  `,
-          colSpan: 1,
+          colSpan: headingList.length > 5 ? 2 : 1,
         },
         {
           content: sectionDetails?.name || 'All',
@@ -138,7 +138,10 @@ const StudentMarksPDFGenerator: React.FC<StudentMarksPDFGeneratorProps> = ({
       },
       columnStyles: {
         0: { cellWidth: 8 },
-        1: { cellWidth: 30 },
+        1: { cellWidth: 45 },
+        2: { cellWidth: 8 },
+        [totalCell - 2]: { cellWidth: 15 }, // Total column
+        [totalCell - 1]: { cellWidth: 8 },
       },
       didParseCell: function (data) {
         if (data.section === 'head') {

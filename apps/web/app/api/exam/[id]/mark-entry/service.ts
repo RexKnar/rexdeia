@@ -127,13 +127,13 @@ async function checkMarkEntryPermission(
   };
 }
 
-export async function getExamConfigWithSubjectPartion(
+export async function getExamConfigWithSubjectPartition(
   filter: GetExamConfigFilterModel
 ) {
   const session = await getServerSession(authOptions);
   const { examId, classId, sectionId, staffId } = filter;
 
-  const [isIncharge] = staffId
+  const [isIncharge] = session?.user?.staffId
     ? await Promise.all([
         db.academicSubjectForStaff.findFirst({
           where: {
