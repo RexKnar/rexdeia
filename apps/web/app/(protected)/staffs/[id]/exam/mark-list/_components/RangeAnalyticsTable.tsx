@@ -143,7 +143,7 @@ export default function RangeAnalyticsTable({
                         {getRangeScaleListResponse?.map((range, index) => {
                           const studentDetail = getSubjectRangeValue(
                             range,
-                            subject?.subject?.id
+                            subject?.id
                           );
                           return (
                             <TableCell key={index} className="text-center">
