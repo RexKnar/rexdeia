@@ -129,4 +129,3 @@ export const authOptions: NextAuthOptions = {
 };
 
 export const getAuthSession = () => getServerSession(authOptions);
-// 8f1a9e8d-f94e-4ee2-95e1-199ee2e7fe19

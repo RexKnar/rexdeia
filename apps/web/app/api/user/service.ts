@@ -1,3 +1,4 @@
+import { compare, hash } from 'bcrypt';
 import { db } from 'lib/db';
 
 export async function getUserDetailsById(userId: string) {
@@ -34,10 +35,16 @@ export async function updateUserDetails(
 
 export async function updateUserPassword(
   userId: string,
-  hashedPassword: string
+  currentPassword: string,
+  newPassword: string
 ) {
+  const user = await db.user.findUnique({ where: { id: userId } });
+  if (!user || !(await compare(currentPassword, user.password))) {
+    throw new Error('INVALID_CREDENTIALS');
+  }
+
   return db.user.update({
     where: { id: userId },
-    data: { password: hashedPassword },
+    data: { password: await hash(newPassword, 10) },
   });
 }

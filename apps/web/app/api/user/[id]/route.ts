@@ -8,7 +8,7 @@ import { getUserDetailsById } from '../service';
 
 /**
  * @swagger
- * /api/user:
+ * /api/user/{id}:
  *     get:
  *       summary: Get user details
  *       description: Get the details of an user.
