@@ -1,8 +1,8 @@
 'use client';
 
-import { useState } from 'react';
 import { Lock } from 'lucide-react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { useState } from 'react';
 import {
   Button,
   Input,
@@ -37,11 +37,18 @@ const EditUserPasswordFlyOut = () => {
   return (
     <section>
       <Sheet open={isOpen}>
-        <SheetContent side="right" widthSize="sm" className="p-10 bg-white">
+        <SheetContent
+          side="right"
+          widthSize="sm"
+          className="p-10 bg-white "
+          onCloseClick={closeFlyout}
+        >
           <SheetHeader>
-            <SheetTitle className="flex items-center mb-6">
+            <SheetTitle className="flex items-center mb-6 ">
               <Lock size={20} strokeWidth={1.5} />
-              <Text variant="lg-semibold" className="ml-2">Change Password</Text>
+              <Text variant="lg-semibold" className="ml-2">
+                Change Password
+              </Text>
             </SheetTitle>
             <hr className="mb-6 border-t border-gray-300" />
           </SheetHeader>

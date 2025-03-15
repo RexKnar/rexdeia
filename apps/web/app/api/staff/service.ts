@@ -172,6 +172,13 @@ export async function addStaff(staff: AddStaffModel) {
   });
 }
 
+export async function updateStaffEmailById(staffId: string, email: string) {
+  return db.staff.update({
+    where: { id: staffId },
+    data: { email },
+  });
+}
+
 export async function getStaffList(page: number, limit: number) {
   const session = await getServerSession(authOptions);
 

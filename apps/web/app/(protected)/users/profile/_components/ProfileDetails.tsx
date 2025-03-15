@@ -35,7 +35,7 @@ export function ProfileDetails() {
     <div className="flex flex-col items-center justify-center min-h-screen p-6">
       <section className="w-full max-w-sm overflow-hidden text-center bg-white rounded-lg shadow-lg">
         <div className="h-24 bg-gradient-to-r from-blue-500 to-purple-500"></div>
-        <div className="relative flex flex-col items-center -mt-12">
+        <div className="relative flex flex-col items-center mt-12">
           <Avatar className="w-24 h-24 border-4 border-white rounded-full shadow-md">
             <AvatarImage src={userDetails.image} />
           </Avatar>
