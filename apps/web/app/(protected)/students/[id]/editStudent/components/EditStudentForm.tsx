@@ -269,7 +269,7 @@ const handleOnFormSubmit = async (data: Record<string, unknown>) => {
         description: 'Student details updated successfully!',
       });
 
-      router.push('/students/list'); 
+      router.back();
     }
   } catch (error) {
     toast({
