@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 'use client';
 /* eslint-disable react-hooks/exhaustive-deps */
 
@@ -330,8 +331,8 @@ export function EditStaffDetails() {
 
   if (isStaffDetailLoading) {
     return (
-      <div className="flex h-20 items-center justify-center">
-        <Loader2 className="mr-2 w-6 animate-spin text-black" />
+      <div className="flex items-center justify-center h-20">
+        <Loader2 className="w-6 mr-2 text-black animate-spin" />
         <p className="text-black ">Fetching Staff Details...</p>
       </div>
     );
@@ -350,7 +351,7 @@ export function EditStaffDetails() {
               type="button"
               variant="link"
               onClick={() => goToPage(1)}
-              className="cursor-pointer px-4 py-1 hover:no-underline"
+              className="px-4 py-1 cursor-pointer hover:no-underline"
             >
               <div>
                 <h2
@@ -363,7 +364,7 @@ export function EditStaffDetails() {
               </div>
             </Button>
             <div className="p-3">
-              <Check className="h-4 w-4 text-green-500 transition-opacity duration-500" />
+              <Check className="w-4 h-4 text-green-500 transition-opacity duration-500" />
             </div>
           </li>
           <li className="flex justify-between">
@@ -371,7 +372,7 @@ export function EditStaffDetails() {
               type="button"
               variant="link"
               onClick={() => goToPage(2)}
-              className="cursor-pointer px-4 py-1 hover:no-underline"
+              className="px-4 py-1 cursor-pointer hover:no-underline"
             >
               <div>
                 <h2
@@ -384,7 +385,7 @@ export function EditStaffDetails() {
               </div>
             </Button>
             <div className="p-3">
-              <Check className="h-4 w-4 text-green-500 transition-opacity duration-500" />
+              <Check className="w-4 h-4 text-green-500 transition-opacity duration-500" />
             </div>
           </li>
           <li className="flex justify-between">
@@ -392,7 +393,7 @@ export function EditStaffDetails() {
               type="button"
               variant="link"
               onClick={() => goToPage(3)}
-              className="cursor-pointer px-4 py-1 hover:no-underline"
+              className="px-4 py-1 cursor-pointer hover:no-underline"
             >
               <div>
                 <h2
@@ -405,7 +406,7 @@ export function EditStaffDetails() {
               </div>
             </Button>
             <div className="p-3">
-              <Check className="h-4 w-4 text-green-500 transition-opacity duration-500" />
+              <Check className="w-4 h-4 text-green-500 transition-opacity duration-500" />
             </div>
           </li>
           <li className="flex justify-between">
@@ -413,7 +414,7 @@ export function EditStaffDetails() {
               type="button"
               variant="link"
               onClick={() => goToPage(4)}
-              className="cursor-pointer px-4 py-1 hover:no-underline"
+              className="px-4 py-1 cursor-pointer hover:no-underline"
             >
               <div>
                 <h2
@@ -426,7 +427,7 @@ export function EditStaffDetails() {
               </div>
             </Button>
             <div className="p-3">
-              <Check className="h-4 w-4 text-green-500 transition-opacity duration-500" />
+              <Check className="w-4 h-4 text-green-500 transition-opacity duration-500" />
             </div>
           </li>
           <li className="flex justify-between">
@@ -434,7 +435,7 @@ export function EditStaffDetails() {
               type="button"
               variant="link"
               onClick={() => goToPage(5)}
-              className="cursor-pointer px-4 py-1 hover:no-underline"
+              className="px-4 py-1 cursor-pointer hover:no-underline"
             >
               <div>
                 <h2
@@ -447,7 +448,7 @@ export function EditStaffDetails() {
               </div>
             </Button>
             <div className="p-3">
-              <Check className="h-4 w-4 text-green-500 transition-opacity duration-500" />
+              <Check className="w-4 h-4 text-green-500 transition-opacity duration-500" />
             </div>
           </li>
           <li className="flex justify-between">
@@ -455,7 +456,7 @@ export function EditStaffDetails() {
               type="button"
               variant="link"
               onClick={() => goToPage(6)}
-              className="cursor-pointer px-4 py-1 hover:no-underline"
+              className="px-4 py-1 cursor-pointer hover:no-underline"
             >
               <div>
                 <h2
@@ -468,16 +469,16 @@ export function EditStaffDetails() {
               </div>
             </Button>
             <div className="p-3">
-              <Check className="h-4 w-4 text-green-500 transition-opacity duration-500" />
+              <Check className="w-4 h-4 text-green-500 transition-opacity duration-500" />
             </div>
           </li>
         </ul>
-        <section className="w-full rounded-lg bg-white p-5">
+        <section className="w-full p-5 bg-white rounded-lg">
           <section className={currentPage === 1 ? 'block' : 'hidden'}>
             <h1 className="mb-5 text-sm font-semibold">{'Personal Details'}</h1>
-            <div className="grid grid-cols-1 flex-wrap justify-between gap-4 md:grid md:grid-cols-1 lg:grid lg:grid-cols-3 ">
+            <div className="grid flex-wrap justify-between grid-cols-1 gap-4 md:grid md:grid-cols-1 lg:grid lg:grid-cols-3 ">
               <div className="w-full">
-                <label className="mt-1 block text-sm text-gray-700">
+                <label className="block mt-1 text-sm text-gray-700">
                   First Name
                   <span className="text-red-300"> *</span>
                 </label>
@@ -499,7 +500,7 @@ export function EditStaffDetails() {
                 )}
               </div>
               <div className="w-full">
-                <label className="mt-1 block text-sm text-gray-700">
+                <label className="block mt-1 text-sm text-gray-700">
                   Middle Name
                 </label>
                 <Input
@@ -509,7 +510,7 @@ export function EditStaffDetails() {
                 />
               </div>
               <div className="w-full">
-                <label className="mt-1 block text-sm text-gray-700">
+                <label className="block mt-1 text-sm text-gray-700">
                   Last Name
                 </label>
                 <Input
@@ -519,7 +520,7 @@ export function EditStaffDetails() {
                 />
               </div>
               <div className="w-full">
-                <label className="mt-1 block text-sm text-gray-700">
+                <label className="block mt-1 text-sm text-gray-700">
                   Date of Birth
                   <span className="text-red-300"> *</span>
                 </label>
@@ -540,7 +541,7 @@ export function EditStaffDetails() {
                 )}
               </div>
               <div className="w-full">
-                <label className="mt-1 block text-sm text-gray-700">Age</label>
+                <label className="block mt-1 text-sm text-gray-700">Age</label>
                 <Input
                   {...register('age')}
                   className="mt-1"
@@ -548,7 +549,7 @@ export function EditStaffDetails() {
                 />
               </div>
               <div className="w-full">
-                <label className="mt-1 block text-sm text-gray-700">
+                <label className="block mt-1 text-sm text-gray-700">
                   Gender
                 </label>
                 <Controller
@@ -558,12 +559,12 @@ export function EditStaffDetails() {
                     <RadioGroup
                       onValueChange={onChange}
                       value={value}
-                      className="mt-3 flex gap-2"
+                      className="flex gap-2 mt-3"
                     >
-                      <RadioGroupItem className="mr-1 mt-1" value={'male'} />
+                      <RadioGroupItem className="mt-1 mr-1" value={'male'} />
                       {'Male'}
                       <RadioGroupItem
-                        className="ml-3 mr-1 mt-1 "
+                        className="mt-1 ml-3 mr-1 "
                         value={'female'}
                       />
                       {'Female'}
@@ -572,7 +573,7 @@ export function EditStaffDetails() {
                 />
               </div>
               <div className="w-full">
-                <label className="mt-1 block text-sm text-gray-700">
+                <label className="block mt-1 text-sm text-gray-700">
                   Mobile Number
                 </label>
                 <Input
@@ -582,7 +583,7 @@ export function EditStaffDetails() {
                 />
               </div>
               <div className="w-full">
-                <label className="mt-1 block text-sm text-gray-700">
+                <label className="block mt-1 text-sm text-gray-700">
                   Email
                   <span className="text-red-300"> *</span>
                 </label>
@@ -604,7 +605,7 @@ export function EditStaffDetails() {
                 )}
               </div>
               <div className="w-full">
-                <label className="mt-1 block text-sm text-gray-700">
+                <label className="block mt-1 text-sm text-gray-700">
                   Blood Group
                 </label>
                 <Select
@@ -632,7 +633,7 @@ export function EditStaffDetails() {
                 </Select>
               </div>
               <div className="w-full">
-                <label className="mt-1 block text-sm text-gray-700">
+                <label className="block mt-1 text-sm text-gray-700">
                   Religion
                 </label>
                 <Select
@@ -660,7 +661,7 @@ export function EditStaffDetails() {
                 </Select>
               </div>
               <div className="w-full">
-                <label className="mt-1 block text-sm text-gray-700">
+                <label className="block mt-1 text-sm text-gray-700">
                   Community
                 </label>
                 <Select
@@ -688,7 +689,7 @@ export function EditStaffDetails() {
                 </Select>
               </div>
               <div className="w-full">
-                <label className="mt-1 block text-sm text-gray-700">
+                <label className="block mt-1 text-sm text-gray-700">
                   Nationality
                 </label>
                 <Select
@@ -716,7 +717,7 @@ export function EditStaffDetails() {
                 </Select>
               </div>
               <div className="w-full">
-                <label className="mt-1 block text-sm text-gray-700">
+                <label className="block mt-1 text-sm text-gray-700">
                   Mother Tongue
                 </label>
                 <Select
@@ -744,7 +745,7 @@ export function EditStaffDetails() {
                 </Select>
               </div>
               <div className="w-full">
-                <label className="mt-1 block text-sm text-gray-700">
+                <label className="block mt-1 text-sm text-gray-700">
                   Enrollment ID
                 </label>
                 <Input
@@ -754,7 +755,7 @@ export function EditStaffDetails() {
                 />
               </div>
               <div className="w-full">
-                <label className="mt-1 block text-sm text-gray-700">
+                <label className="block mt-1 text-sm text-gray-700">
                   Aadhar Number
                 </label>
                 <Input
@@ -764,7 +765,7 @@ export function EditStaffDetails() {
                 />
               </div>
               <div className="w-full">
-                <label className="mt-1 block text-sm text-gray-700">
+                <label className="block mt-1 text-sm text-gray-700">
                   Differently Abled
                 </label>
                 <Controller
@@ -775,12 +776,12 @@ export function EditStaffDetails() {
                     <RadioGroup
                       onValueChange={onChange}
                       value={value}
-                      className="mt-3 flex gap-2"
+                      className="flex gap-2 mt-3"
                     >
-                      <RadioGroupItem className="mr-1 mt-1" value={'true'} />
+                      <RadioGroupItem className="mt-1 mr-1" value={'true'} />
                       {'Yes'}
                       <RadioGroupItem
-                        className="ml-3 mr-1 mt-1 "
+                        className="mt-1 ml-3 mr-1 "
                         value={'false'}
                       />
                       {'No'}
@@ -789,7 +790,7 @@ export function EditStaffDetails() {
                 />
               </div>
               <div className="w-full">
-                <label className="mt-1 block text-sm text-gray-700">
+                <label className="block mt-1 text-sm text-gray-700">
                   Special Category
                 </label>
                 <Input
@@ -799,7 +800,7 @@ export function EditStaffDetails() {
                 />
               </div>
               <div className="w-full">
-                <label className="mt-1 block text-sm text-gray-700">
+                <label className="block mt-1 text-sm text-gray-700">
                   ESI/EPF NO
                 </label>
                 <Input
@@ -812,9 +813,9 @@ export function EditStaffDetails() {
           </section>
           <section className={currentPage === 2 ? 'block' : 'hidden'}>
             <h1 className="mb-5 text-sm font-semibold">{'Parent Details'}</h1>
-            <div className="grid grid-cols-1 flex-wrap justify-between gap-4 md:grid md:grid-cols-1 lg:grid lg:grid-cols-3 ">
+            <div className="grid flex-wrap justify-between grid-cols-1 gap-4 md:grid md:grid-cols-1 lg:grid lg:grid-cols-3 ">
               <div className="w-full">
-                <label className="mt-1 block text-sm text-gray-700">
+                <label className="block mt-1 text-sm text-gray-700">
                   Father Name
                 </label>
                 <Input
@@ -825,7 +826,7 @@ export function EditStaffDetails() {
                 />
               </div>
               <div className="w-full">
-                <label className="mt-1 block text-sm text-gray-700">
+                <label className="block mt-1 text-sm text-gray-700">
                   Mother Name
                 </label>
                 <Input
@@ -836,7 +837,7 @@ export function EditStaffDetails() {
                 />
               </div>
               <div className="w-full">
-                <label className="mt-1 block text-sm text-gray-700">
+                <label className="block mt-1 text-sm text-gray-700">
                   Spouse Name
                 </label>
                 <Input
@@ -850,31 +851,31 @@ export function EditStaffDetails() {
           </section>
           <section className={currentPage === 3 ? 'block' : 'hidden'}>
             <h1 className="mb-5 text-sm font-semibold">{'Address Details'}</h1>
-            <div className="grid grid-cols-1 flex-wrap justify-between gap-4 md:grid md:grid-cols-1 lg:grid lg:grid-cols-3 ">
+            <div className="grid flex-wrap justify-between grid-cols-1 gap-4 md:grid md:grid-cols-1 lg:grid lg:grid-cols-3 ">
               <div className="w-full">
-                <label className="mt-1 block text-sm text-gray-700">
+                <label className="block mt-1 text-sm text-gray-700">
                   Current Address1
                 </label>
                 <textarea
                   {...register('currentAddressLine1')}
-                  className="ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring mt-1 flex h-10 w-full rounded-md border border-gray-300 bg-transparent px-3 py-2 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                  className="flex w-full h-10 px-3 py-2 mt-1 text-sm bg-transparent border border-gray-300 rounded-md ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
                   autoComplete="off"
                   placeholder="Current Address1"
                 />
               </div>
               <div className="w-full">
-                <label className="mt-1 block text-sm text-gray-700">
+                <label className="block mt-1 text-sm text-gray-700">
                   Current Address2
                 </label>
                 <textarea
                   {...register('currentAddressLine2')}
-                  className="ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring mt-1 flex h-10 w-full rounded-md border border-gray-300 bg-transparent px-3 py-2 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                  className="flex w-full h-10 px-3 py-2 mt-1 text-sm bg-transparent border border-gray-300 rounded-md ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
                   autoComplete="off"
                   placeholder="Current Address2"
                 />
               </div>
               <div className="w-full">
-                <label className="mt-1 block text-sm text-gray-700">
+                <label className="block mt-1 text-sm text-gray-700">
                   Current Pincode
                 </label>
                 <Input
@@ -885,7 +886,7 @@ export function EditStaffDetails() {
                 />
               </div>
               <div className="w-full">
-                <label className="mt-1 block text-sm text-gray-700">
+                <label className="block mt-1 text-sm text-gray-700">
                   Current Country
                 </label>
                 <Select
@@ -914,7 +915,7 @@ export function EditStaffDetails() {
                 </Select>
               </div>
               <div className="w-full">
-                <label className="mt-1 block text-sm text-gray-700">
+                <label className="block mt-1 text-sm text-gray-700">
                   Current State
                 </label>
                 <Select
@@ -943,7 +944,7 @@ export function EditStaffDetails() {
                 </Select>
               </div>
               <div className="w-full">
-                <label className="mt-1 block text-sm text-gray-700">
+                <label className="block mt-1 text-sm text-gray-700">
                   Current City
                 </label>
                 <Select
@@ -971,31 +972,31 @@ export function EditStaffDetails() {
                 </Select>
               </div>
               <div className="w-full">
-                <label className="mt-1 block text-sm text-gray-700">
+                <label className="block mt-1 text-sm text-gray-700">
                   Permanent Address1
                 </label>
                 <textarea
                   name=""
                   id=""
                   {...register('permanentAddress1')}
-                  className="ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring mt-1 flex h-10 w-full rounded-md border border-gray-300 bg-transparent px-3 py-2 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                  className="flex w-full h-10 px-3 py-2 mt-1 text-sm bg-transparent border border-gray-300 rounded-md ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
                   autoComplete="off"
                   placeholder="Permanent Address1"
                 />
               </div>
               <div className="w-full">
-                <label className="mt-1 block text-sm text-gray-700">
+                <label className="block mt-1 text-sm text-gray-700">
                   Permanent Address2
                 </label>
                 <textarea
                   {...register('permanentAddress2')}
-                  className="ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring mt-1 flex h-10 w-full rounded-md border border-gray-300 bg-transparent px-3 py-2 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                  className="flex w-full h-10 px-3 py-2 mt-1 text-sm bg-transparent border border-gray-300 rounded-md ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
                   autoComplete="off"
                   placeholder="Permanent Address2"
                 />
               </div>
               <div className="w-full">
-                <label className="mt-1 block text-sm text-gray-700">
+                <label className="block mt-1 text-sm text-gray-700">
                   Permanent Pincode
                 </label>
                 <Input
@@ -1006,7 +1007,7 @@ export function EditStaffDetails() {
                 />
               </div>
               <div className="w-full">
-                <label className="mt-1 block text-sm text-gray-700">
+                <label className="block mt-1 text-sm text-gray-700">
                   Permanent Country
                 </label>
                 <Select
@@ -1035,7 +1036,7 @@ export function EditStaffDetails() {
                 </Select>
               </div>
               <div className="w-full">
-                <label className="mt-1 block text-sm text-gray-700">
+                <label className="block mt-1 text-sm text-gray-700">
                   Permanent State
                 </label>
                 <Select
@@ -1064,7 +1065,7 @@ export function EditStaffDetails() {
                 </Select>
               </div>
               <div className="w-full">
-                <label className="mt-1 block text-sm text-gray-700">
+                <label className="block mt-1 text-sm text-gray-700">
                   Permanent City
                 </label>
                 <Select
@@ -1095,9 +1096,9 @@ export function EditStaffDetails() {
           </section>
           <section className={currentPage === 4 ? 'block' : 'hidden'}>
             <h1 className="mb-5 text-sm font-semibold">{'Work Details'}</h1>
-            <div className="grid grid-cols-1 flex-wrap justify-between gap-4 md:grid md:grid-cols-1 lg:grid lg:grid-cols-3 ">
+            <div className="grid flex-wrap justify-between grid-cols-1 gap-4 md:grid md:grid-cols-1 lg:grid lg:grid-cols-3 ">
               <div className="w-full">
-                <label className="mt-1 block text-sm text-gray-700">
+                <label className="block mt-1 text-sm text-gray-700">
                   Category
                 </label>
                 <Select
@@ -1131,7 +1132,7 @@ export function EditStaffDetails() {
                 )}
               </div>
               <div className="w-full">
-                <label className="mt-1 block text-sm text-gray-700">
+                <label className="block mt-1 text-sm text-gray-700">
                   Employment Type
                 </label>
                 <Select
@@ -1164,7 +1165,7 @@ export function EditStaffDetails() {
                 )}
               </div>
               <div className="w-full">
-                <label className="mt-1 block text-sm text-gray-700">
+                <label className="block mt-1 text-sm text-gray-700">
                   Designation
                 </label>
                 <Select
@@ -1197,7 +1198,7 @@ export function EditStaffDetails() {
                 )}
               </div>
               <div className="w-full">
-                <label className="mt-1 block text-sm text-gray-700">
+                <label className="block mt-1 text-sm text-gray-700">
                   Date Of Joining
                   <span className="text-red-300"> *</span>
                 </label>
@@ -1218,7 +1219,7 @@ export function EditStaffDetails() {
                 )}
               </div>
               <div className="w-full">
-                <label className="mt-1 block text-sm text-gray-700">
+                <label className="block mt-1 text-sm text-gray-700">
                   Date Of Detainment
                 </label>
                 <Input
@@ -1230,7 +1231,7 @@ export function EditStaffDetails() {
                 />
               </div>
               <div className="w-full">
-                <label className="mt-1 block text-sm text-gray-700">
+                <label className="block mt-1 text-sm text-gray-700">
                   Date of Regularisation
                 </label>
                 <Input
@@ -1242,7 +1243,7 @@ export function EditStaffDetails() {
                 />
               </div>
               <div className="w-full">
-                <label className="mt-1 block text-sm text-gray-700">
+                <label className="block mt-1 text-sm text-gray-700">
                   Date of Retirement
                 </label>
                 <Input
@@ -1254,7 +1255,7 @@ export function EditStaffDetails() {
                 />
               </div>
               <div className="w-full">
-                <label className="mt-1 block text-sm text-gray-700">
+                <label className="block mt-1 text-sm text-gray-700">
                   Subject Handling
                 </label>
                 <Input
@@ -1264,7 +1265,7 @@ export function EditStaffDetails() {
                 />
               </div>
               <div className="w-full">
-                <label className="mt-1 block text-sm text-gray-700">
+                <label className="block mt-1 text-sm text-gray-700">
                   Nature Of Posting
                 </label>
                 <Select
@@ -1292,7 +1293,7 @@ export function EditStaffDetails() {
                 </Select>
               </div>
               <div className="w-full">
-                <label className="mt-1 block text-sm text-gray-700">
+                <label className="block mt-1 text-sm text-gray-700">
                   Employee Id
                 </label>
                 <Input
@@ -1302,7 +1303,7 @@ export function EditStaffDetails() {
                 />
               </div>
               <div className="w-full">
-                <label className="mt-1 block text-sm text-gray-700">CPS</label>
+                <label className="block mt-1 text-sm text-gray-700">CPS</label>
                 <Input
                   {...register('cps')}
                   className="mt-1"
@@ -1310,7 +1311,7 @@ export function EditStaffDetails() {
                 />
               </div>
               <div className="w-full">
-                <label className="mt-1 block text-sm text-gray-700">TPF</label>
+                <label className="block mt-1 text-sm text-gray-700">TPF</label>
                 <Input
                   {...register('tpf')}
                   className="mt-1"
@@ -1323,9 +1324,9 @@ export function EditStaffDetails() {
             <h1 className="mb-5 text-sm font-semibold">
               {'Education Details'}
             </h1>
-            <div className="grid grid-cols-1 flex-wrap justify-between gap-4 md:grid md:grid-cols-1 lg:grid lg:grid-cols-3 ">
+            <div className="grid flex-wrap justify-between grid-cols-1 gap-4 md:grid md:grid-cols-1 lg:grid lg:grid-cols-3 ">
               <div className="w-full">
-                <label className="mt-1 block text-sm text-gray-700">
+                <label className="block mt-1 text-sm text-gray-700">
                   College Name
                 </label>
                 <Input
@@ -1336,7 +1337,7 @@ export function EditStaffDetails() {
                 />
               </div>
               <div className="w-full">
-                <label className="mt-1 block text-sm text-gray-700">
+                <label className="block mt-1 text-sm text-gray-700">
                   Pass Out Year
                 </label>
                 <Input
@@ -1349,7 +1350,7 @@ export function EditStaffDetails() {
                 />
               </div>
               <div className="w-full">
-                <label className="mt-1 block text-sm text-gray-700">
+                <label className="block mt-1 text-sm text-gray-700">
                   Marks/Percentage Obtained
                 </label>
                 <Input
@@ -1363,9 +1364,9 @@ export function EditStaffDetails() {
           </section>
           <section className={currentPage === 6 ? 'block' : 'hidden'}>
             <h1 className="mb-5 text-sm font-semibold">{'Bank Details'}</h1>
-            <div className="grid grid-cols-1 flex-wrap justify-between gap-4 md:grid md:grid-cols-1 lg:grid lg:grid-cols-3 ">
+            <div className="grid flex-wrap justify-between grid-cols-1 gap-4 md:grid md:grid-cols-1 lg:grid lg:grid-cols-3 ">
               <div className="w-full">
-                <label className="mt-1 block text-sm text-gray-700">
+                <label className="block mt-1 text-sm text-gray-700">
                   Account Holder Name
                 </label>
                 <Input
@@ -1376,7 +1377,7 @@ export function EditStaffDetails() {
                 />
               </div>
               <div className="w-full">
-                <label className="mt-1 block text-sm text-gray-700">
+                <label className="block mt-1 text-sm text-gray-700">
                   Account Number
                 </label>
                 <Input
@@ -1387,7 +1388,7 @@ export function EditStaffDetails() {
                 />
               </div>
               <div className="w-full">
-                <label className="mt-1 block text-sm text-gray-700">
+                <label className="block mt-1 text-sm text-gray-700">
                   Branch Name
                 </label>
                 <Input
@@ -1398,7 +1399,7 @@ export function EditStaffDetails() {
                 />
               </div>
               <div className="w-full">
-                <label className="mt-1 block text-sm text-gray-700">
+                <label className="block mt-1 text-sm text-gray-700">
                   IFSC Code
                 </label>
                 <Input
@@ -1411,37 +1412,37 @@ export function EditStaffDetails() {
             </div>
           </section>
           <div className={currentPage < 6 ? 'block' : 'hidden'}>
-            <section className="mt-8 flex justify-end gap-2">
+            <section className="flex justify-end gap-2 mt-8">
               <Button
                 type="button"
                 onClick={prevPage}
                 disabled={currentPage === 1}
-                className="mr-2 rounded px-4 py-2 font-bold text-white"
+                className="px-4 py-2 mr-2 font-bold text-white rounded"
               >
                 Back
               </Button>
               <Button
                 type="button"
                 onClick={nextPage}
-                className="rounded px-4 py-2 font-bold text-white "
+                className="px-4 py-2 font-bold text-white rounded "
               >
                 Next
               </Button>
             </section>
           </div>
           <div className={currentPage === 6 ? 'block' : 'hidden'}>
-            <section className="mt-8 flex justify-end gap-2">
+            <section className="flex justify-end gap-2 mt-8">
               <Button
                 type="button"
                 onClick={prevPage}
-                className="mr-2 rounded px-4 py-2 font-bold text-white"
+                className="px-4 py-2 mr-2 font-bold text-white rounded"
               >
                 Back
               </Button>
               <Button
                 type="submit"
                 onClick={nextPage}
-                className="rounded px-4 py-2 font-bold text-white "
+                className="px-4 py-2 font-bold text-white rounded "
               >
                 Update
               </Button>
