@@ -46,3 +46,5 @@ export type GetUserDetailsByIdModel = Pick<
   UserModal,
   'id' | 'name' | 'email' | 'image' | 'userOrganizations' | 'phoneNumber'
 >;
+
+export type UpdateUserDetailsModel = Pick<UserModal, 'id'>;

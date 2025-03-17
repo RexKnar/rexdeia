@@ -1,17 +1,27 @@
 'use client';
+/* eslint-disable prettier/prettier */
+
 import { useGetUserDetailsQuery } from 'lib/queries/useGetUserDetailsQuery';
 import { Loader2, Lock, PencilLine } from 'lucide-react';
+import dynamic from 'next/dynamic';
 import Link from 'next/link';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { Avatar, AvatarImage, Button, Text } from 'ui';
 
+const EditUserPasswordFlyOut = dynamic(() =>
+  import('../_modals/EditUserPasswordFlyOut').then((mod) => mod.default)
+);
 export function ProfileDetails() {
+  const pathname = usePathname();
+  const router = useRouter();
+  const searchParams = useSearchParams();
   const { data: userDetails, isLoading, error } = useGetUserDetailsQuery();
 
   if (isLoading) {
     return (
-      <div className="flex h-screen items-center justify-center">
-        <Loader2 className="h-6 w-6 animate-spin text-black" />
-        <p className="ml-2 text-black">Loading Profile...</p>
+      <div className="flex items-center justify-center h-20">
+        <Loader2 className="w-6 mr-2 text-black animate-spin" />
+        <p className="text-black ">Fetching Staff Details...</p>
       </div>
     );
   }
@@ -23,31 +33,33 @@ export function ProfileDetails() {
   }
 
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center p-6">
-      <section className="w-full max-w-sm overflow-hidden rounded-lg bg-white text-center shadow-lg">
-        <div className="h-24 bg-gradient-to-r from-blue-500 to-purple-500"></div>
-        <div className="relative -mt-12 flex flex-col items-center">
-          <Avatar className="h-24 w-24 rounded-full border-4 border-white shadow-md">
+    <div className="flex flex-col items-center justify-center p-6">
+      <section className="w-full max-w-sm bg-white border border-gray-200 shadow-lg rounded-xl">
+        <div className="flex flex-col items-center p-6">
+          <Avatar className="relative border-4 border-white shadow-md h-28 w-28">
             <AvatarImage src={userDetails.image} />
           </Avatar>
-          <div className="mt-4 w-full px-6 text-left">
-            <div className="flex justify-between border-b pb-2">
-              <Text className="font-semibold text-gray-700">Name</Text>
-              <Text className="text-gray-600">{userDetails.name}</Text>
-            </div>
-            <div className="flex justify-between border-b pb-2">
-              <Text className="font-semibold text-gray-700">Email</Text>
-              <Text className="text-gray-600">{userDetails.email}</Text>
-            </div>
-            <div className="flex justify-between border-b pb-2">
-              <Text className="font-semibold text-gray-700">Mobile</Text>
-              <Text className="text-gray-600">{userDetails.phoneNumber}</Text>
-            </div>
+          <div className="w-full mt-4 space-y-4">
+            {[
+              { label: 'Name', value: userDetails.name },
+              { label: 'Email', value: userDetails.email },
+              { label: 'Mobile', value: userDetails.phoneNumber },
+            ].map((item, index) => (
+              <div
+                key={index}
+                className="flex justify-between pb-2 border-b border-gray-300"
+              >
+                <Text className="font-medium text-gray-700">{item.label}</Text>
+                <Text className="text-gray-600">{item.value}</Text>
+              </div>
+            ))}
           </div>
-
-          <div className="relative mb-6 flex justify-center gap-3 pt-6">
+          <div className="flex justify-center gap-4 pt-6">
             <Link href="/users/profile/editProfile">
-              <Button variant="outline">
+              <Button
+                variant="outline"
+                className="transition-all border-gray-300 hover:border-gray-400 hover:bg-gray-100"
+              >
                 <PencilLine
                   size={18}
                   strokeWidth={2}
@@ -56,15 +68,22 @@ export function ProfileDetails() {
                 <span className="pl-2 text-primary">Edit</span>
               </Button>
             </Link>
-            <Link href="/user/profile/">
-              <Button variant="outline">
-                <Lock size={18} strokeWidth={2} className="text-primary" />
-                <span className="pl-2 text-primary">Change Password</span>
-              </Button>
-            </Link>
+            <Button
+              variant="outline"
+              className="transition-all border-gray-300 hover:border-gray-400 hover:bg-gray-100"
+              onClick={() => {
+                const params = new URLSearchParams(searchParams);
+                params.set('isUserPasswordFlyoutOpen', 'true');
+                router.replace(pathname + '?' + params.toString());
+              }}
+            >
+              <Lock size={18} strokeWidth={2} className="text-primary" />
+              <span className="pl-2 text-primary">Change Password</span>
+            </Button>
           </div>
         </div>
       </section>
+      <EditUserPasswordFlyOut />
     </div>
   );
 }

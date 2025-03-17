@@ -1,4 +1,5 @@
-import { db } from '../../../lib/db';
+import { compare, hash } from 'bcrypt';
+import { db } from 'lib/db';
 
 export async function getUserDetailsById(userId: string) {
   return db.user.findUnique({
@@ -19,5 +20,35 @@ export async function getUserDetailsById(userId: string) {
         },
       },
     },
+  });
+}
+
+export async function updateUserDetails(
+  sessionUser: { id: string },
+  updateData: { name?: string; phoneNumber?: string }
+) {
+  return db.user.update({
+    where: { id: sessionUser.id },
+    data: { ...updateData },
+  });
+}
+
+export async function updateUserPassword(
+  userId: string,
+  currentPassword: string,
+  newPassword: string
+) {
+  const user = await db.user.findUnique({ where: { id: userId } });
+  if (!user) {
+    return { error: 'user not found' };
+  }
+  const isPasswordValid = await compare(currentPassword, user.password);
+  if (!isPasswordValid) {
+    return { error: 'in Valid current password' };
+  }
+  const hashedNewPassword = await hash(newPassword, 10);
+  return db.user.update({
+    where: { id: userId },
+    data: { password: hashedNewPassword },
   });
 }
