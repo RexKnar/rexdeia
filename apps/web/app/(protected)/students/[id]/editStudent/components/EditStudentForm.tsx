@@ -30,7 +30,6 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-  ToastProvider,
   useToast} from 'ui';
 import { formatDate } from 'utils';
 
@@ -321,7 +320,7 @@ const handleOnFormSubmit = async (data: Record<string, unknown>) => {
   };
 
   return (
-    <ToastProvider>
+    
     <form
       onSubmit={handleSubmit(handleOnFormSubmit)}
       autoFocus
@@ -1789,6 +1788,6 @@ const handleOnFormSubmit = async (data: Record<string, unknown>) => {
           </div>
         </section>
       </section>
-    </form></ToastProvider>
+    </form>
   );
 }
