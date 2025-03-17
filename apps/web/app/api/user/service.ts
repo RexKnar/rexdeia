@@ -39,12 +39,16 @@ export async function updateUserPassword(
   newPassword: string
 ) {
   const user = await db.user.findUnique({ where: { id: userId } });
-  if (!user || !(await compare(currentPassword, user.password))) {
-    throw new Error('INVALID_CREDENTIALS');
+  if (!user) {
+    return { error: 'user not found' };
   }
-
+  const isPasswordValid = await compare(currentPassword, user.password);
+  if (!isPasswordValid) {
+    return { error: 'in Valid current password' };
+  }
+  const hashedNewPassword = await hash(newPassword, 10);
   return db.user.update({
     where: { id: userId },
-    data: { password: await hash(newPassword, 10) },
+    data: { password: hashedNewPassword },
   });
 }

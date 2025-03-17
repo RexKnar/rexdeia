@@ -21,6 +21,7 @@ export const ADD_PAYMENT = `ADD_PAYMENT`;
 export const ADD_STUDENT = `ADD_STUDENT`;
 export const GET_USER_DETAILS = `GET_USER_DETAILS`;
 export const UPDATE_USER_DETAILS = `UPDATE_USER_DETAILS`;
+export const UPDATE_USER_PASSWORD = `UPDATE_USER_PASSWORD`;
 export const GET_ADMISSIONS_LIST = `GET_ADMISSIONS_LIST`;
 export const GET_ADMISSIONS_FORM_SHARE_DETAILS = `GET_ADMISSIONS_FORM_SHARE_DETAILS`;
 export const CREATE_SHARE_FOR_FORM = `CREATE_SHARE_FOR_FORM`;
@@ -292,6 +293,10 @@ export default <EndpointDetails>{
   [UPDATE_USER_DETAILS]: {
     requestType: `PUT`,
     endpoint: `/api/user/[userId]`,
+  },
+  [UPDATE_USER_PASSWORD]: {
+    requestType: `PUT`,
+    endpoint: `/api/user/password`,
   },
   [GET_ADMISSIONS_LIST]: {
     requestType: `GET`,

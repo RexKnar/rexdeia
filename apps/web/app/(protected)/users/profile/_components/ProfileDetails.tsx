@@ -1,4 +1,5 @@
 'use client';
+/* eslint-disable prettier/prettier */
 
 import { useGetUserDetailsQuery } from 'lib/queries/useGetUserDetailsQuery';
 import { Loader2, Lock, PencilLine } from 'lucide-react';
@@ -18,9 +19,9 @@ export function ProfileDetails() {
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center h-screen">
-        <Loader2 className="w-6 h-6 text-black animate-spin" />
-        <p className="ml-2 text-black">Loading Profile...</p>
+      <div className="flex items-center justify-center h-20">
+        <Loader2 className="w-6 mr-2 text-black animate-spin" />
+        <p className="text-black ">Fetching Staff Details...</p>
       </div>
     );
   }
@@ -32,31 +33,33 @@ export function ProfileDetails() {
   }
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen p-6">
-      <section className="w-full max-w-sm overflow-hidden text-center bg-white rounded-lg shadow-lg">
-        <div className="h-24 bg-gradient-to-r from-blue-500 to-purple-500"></div>
-        <div className="relative flex flex-col items-center mt-12">
-          <Avatar className="w-24 h-24 border-4 border-white rounded-full shadow-md">
+    <div className="flex flex-col items-center justify-center p-6">
+      <section className="w-full max-w-sm bg-white border border-gray-200 shadow-lg rounded-xl">
+        <div className="flex flex-col items-center p-6">
+          <Avatar className="relative border-4 border-white shadow-md h-28 w-28">
             <AvatarImage src={userDetails.image} />
           </Avatar>
-          <div className="w-full px-6 mt-4 text-left">
-            <div className="flex justify-between pb-2 border-b">
-              <Text className="font-semibold text-gray-700">Name</Text>
-              <Text className="text-gray-600">{userDetails.name}</Text>
-            </div>
-            <div className="flex justify-between pb-2 border-b">
-              <Text className="font-semibold text-gray-700">Email</Text>
-              <Text className="text-gray-600">{userDetails.email}</Text>
-            </div>
-            <div className="flex justify-between pb-2 border-b">
-              <Text className="font-semibold text-gray-700">Mobile</Text>
-              <Text className="text-gray-600">{userDetails.phoneNumber}</Text>
-            </div>
+          <div className="w-full mt-4 space-y-4">
+            {[
+              { label: 'Name', value: userDetails.name },
+              { label: 'Email', value: userDetails.email },
+              { label: 'Mobile', value: userDetails.phoneNumber },
+            ].map((item, index) => (
+              <div
+                key={index}
+                className="flex justify-between pb-2 border-b border-gray-300"
+              >
+                <Text className="font-medium text-gray-700">{item.label}</Text>
+                <Text className="text-gray-600">{item.value}</Text>
+              </div>
+            ))}
           </div>
-
-          <div className="relative flex justify-center gap-3 pt-6 mb-6 ">
+          <div className="flex justify-center gap-4 pt-6">
             <Link href="/users/profile/editProfile">
-              <Button variant="outline">
+              <Button
+                variant="outline"
+                className="transition-all border-gray-300 hover:border-gray-400 hover:bg-gray-100"
+              >
                 <PencilLine
                   size={18}
                   strokeWidth={2}
@@ -67,6 +70,7 @@ export function ProfileDetails() {
             </Link>
             <Button
               variant="outline"
+              className="transition-all border-gray-300 hover:border-gray-400 hover:bg-gray-100"
               onClick={() => {
                 const params = new URLSearchParams(searchParams);
                 params.set('isUserPasswordFlyoutOpen', 'true');
