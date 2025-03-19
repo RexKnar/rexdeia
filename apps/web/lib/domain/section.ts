@@ -1,8 +1,11 @@
+import { JSX } from 'react';
+
 import { GroupModel } from './group';
 import { MediumModel } from './medium';
 import { CreateSubjectModel, SubjectModel } from './subject';
 
 export type SectionModel = {
+  map(arg0: (section: any) => JSX.Element): import('react').ReactNode;
   id: string;
   name: string;
   isActive: boolean;

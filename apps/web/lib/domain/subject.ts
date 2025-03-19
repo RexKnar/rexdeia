@@ -1,4 +1,5 @@
 export type SubjectModel = {
+  academicSubjectForStaff: any;
   id: string;
   name?: string;
   isActive?: boolean;

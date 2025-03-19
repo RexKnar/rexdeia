@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { AssignStudentsToClassModel } from 'lib/domain/student';
 import uniqBy from 'lodash/uniqBy';
 import { getServerSession } from 'next-auth';
@@ -316,6 +317,14 @@ export async function unMapStaffsFromClass(
 
 export async function getAllSubjectByClassId(id: string) {
   const session = await getServerSession(authOptions);
+  const academicYearId = session.currentBatch;
+
+  if (!academicYearId) {
+    throw new Error('No active academic year found');
+  }
+
+  console.log('Using academicYearId:', academicYearId);
+
   return db.subject.findMany({
     where: {
       classId: id,
@@ -348,14 +357,21 @@ export async function getAllSubjectByClassId(id: string) {
       },
       academicSubjectForStaff: {
         where: {
-          sectionId: id,
+          academicYearId,
+          section: {
+            classId: id,
+          },
         },
+        distinct: ['staffId'],
         select: {
           staff: {
             select: {
               firstName: true,
-              middleName: true,
-              lastName: true,
+            },
+          },
+          section: {
+            select: {
+              name: true,
             },
           },
         },
