@@ -5,7 +5,7 @@ FROM node:20
 WORKDIR /usr/src/app
 
 # Install pnpm
-RUN npm install -g pnpm
+RUN npm install -g pnpm 
 
 # Copy package files needed for dependencies
 COPY pnpm-lock.yaml ./
