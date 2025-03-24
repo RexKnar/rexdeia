@@ -40,9 +40,12 @@ export function SubjectList() {
             name={subject.name}
             staffNames={subject.academicSubjectForStaff
               .map((staff) => {
-                const { firstName } = staff.staff;
+                const { firstName, middleName, lastName } = staff.staff;
+                const fullName = [firstName, middleName, lastName]
+                  .filter(Boolean)
+                  .join(' '); 
                 const sectionName = staff.section?.name;
-                return `${firstName}(${sectionName})`;
+                return `${fullName} (${sectionName})`;
               })
               .join(', ')}
           />

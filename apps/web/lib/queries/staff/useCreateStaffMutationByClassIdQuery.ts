@@ -19,15 +19,16 @@ export function useCreateStaffMutationByClassIdQuery(classId: string) {
         { id: classId }
       );
 
+      await queryClient.invalidateQueries({
+        queryKey: [GET_STAFF_LIST_BY_CLASS_ID, classId],
+      });
+
       return response;
     },
     onSuccess: async () => {
       await queryClient.invalidateQueries({
         queryKey: [GET_STAFF_LIST_BY_CLASS_ID, classId],
       });
-    },
-    onError: (error) => {
-      console.error('Error assigning staff:', error);
     },
   });
 }

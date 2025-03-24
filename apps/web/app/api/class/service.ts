@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import { AssignStudentsToClassModel } from 'lib/domain/student';
 import uniqBy from 'lodash/uniqBy';
 import { getServerSession } from 'next-auth';
@@ -348,8 +347,6 @@ export async function getAllSubjectByClassId(id: string) {
   if (!academicYearId) {
     throw new Error('No active academic year found');
   }
-
-  console.log('Using academicYearId:', academicYearId);
 
   return db.subject.findMany({
     where: {

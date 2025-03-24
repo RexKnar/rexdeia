@@ -11,7 +11,6 @@ import {
   DropdownMenuTrigger,
   Text,
 } from 'ui';
-import { cn } from 'utils';
 
 type SubjectCardProps = {
   id: string;
@@ -20,7 +19,7 @@ type SubjectCardProps = {
   assessmentFormat?: string;
   staffNames?: string;
 };
-export function SubjectCard({ id, name,staffNames }: SubjectCardProps) {
+export function SubjectCard({ id, name, staffNames }: SubjectCardProps) {
   const pathname = usePathname();
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -30,9 +29,12 @@ export function SubjectCard({ id, name,staffNames }: SubjectCardProps) {
         <div className="w-2/4 my-auto">
           <Text variant="base-bold">{name}</Text>
           <div className="inline-flex">
-            {staffNames &&
-              staffNames.split(", ").map((staff, index) => (
-                <Badge key={index} className={cn('mb-2')}>
+            {staffNames
+              ?.split(', ')
+              .map((staff) => staff.trim())
+              .filter(Boolean)
+              .map((staff, index) => (
+                <Badge key={index} className="mb-2">
                   {staff}
                 </Badge>
               ))}
