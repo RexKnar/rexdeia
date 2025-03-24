@@ -9,22 +9,25 @@ import {
 
 export function useCreateStaffMutationByClassIdQuery(classId: string) {
   const queryClient = useQueryClient();
+
   return useMutation({
     mutationFn: async (payload: MapStaffToClassModelEntity) => {
-      await makeAPICall<MapStaffToClassModelEntity>(
+      const response = await makeAPICall<MapStaffToClassModelEntity>(
         ASSIGN_STAFF_BY_CLASS_ID,
         payload,
         {},
         { id: classId }
       );
-      await queryClient.invalidateQueries({
-        queryKey: [GET_STAFF_LIST_BY_CLASS_ID],
-      });
+
+      return response;
     },
     onSuccess: async () => {
       await queryClient.invalidateQueries({
-        queryKey: [GET_STAFF_LIST_BY_CLASS_ID],
+        queryKey: [GET_STAFF_LIST_BY_CLASS_ID, classId],
       });
+    },
+    onError: (error) => {
+      console.error('Error assigning staff:', error);
     },
   });
 }
