@@ -3,6 +3,7 @@ import { MediumModel } from './medium';
 import { CreateSubjectModel, SubjectModel } from './subject';
 
 export type SectionModel = {
+  staffIncharges: staffInchargesModel[];
   id: string;
   name: string;
   isActive: boolean;
@@ -53,4 +54,11 @@ export type MapEntitiesToSectionModel = {
     staffId?: string;
     academicYearId: string;
   }[];
+};
+
+export type staffInchargesModel = {
+  id: string;
+  firstName: string;
+  middleName: string;
+  lastName: string;
 };

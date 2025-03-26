@@ -41,6 +41,7 @@ export function SectionList() {
             id={sectionItem.id}
             name={sectionItem.name}
             classId={classId}
+            staffIncharges={sectionItem.staffIncharges}
           />
         </div>
       ))}

@@ -61,7 +61,7 @@ export function StaffCard(props: StaffCardProps) {
               align="end"
               sideOffset={15}
             >
-              <DropdownMenuItem className="flex items-center cursor-pointer">
+              <DropdownMenuItem className="flex flex-col items-center cursor-pointer">
                 <Button
                   variant="link"
                   size="sm"

@@ -390,6 +390,8 @@ export async function getAllSubjectByClassId(id: string) {
           staff: {
             select: {
               firstName: true,
+              middleName: true,
+              lastName: true,
             },
           },
           section: {

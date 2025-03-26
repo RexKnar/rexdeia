@@ -21,9 +21,20 @@ type SectionCardProps = {
   id: string;
   name: string;
   classId: string;
+  staffIncharges: {
+    id: string;
+    firstName: string;
+    middleName: string;
+    lastName: string;
+  }[];
 };
 
-export function SectionCard({ classId, id, name }: SectionCardProps) {
+export function SectionCard({
+  classId,
+  id,
+  name,
+  staffIncharges,
+}: SectionCardProps) {
   const router = useRouter();
   const handleCardClick = (event: React.MouseEvent<HTMLDivElement>) => {
     router.push(`/academics/class/${classId}/section/${id}`);
@@ -103,6 +114,18 @@ export function SectionCard({ classId, id, name }: SectionCardProps) {
           'No group found'
         )}
       </div>
+      {staffIncharges.length > 0 ? (
+        <div className="mt-2">
+          <h4 className="mb-2 text-sm font-semibold">Incharge:</h4>
+          {staffIncharges.map((staff) => (
+            <Badge key={staff.id} className={cn('mb-2')}>
+              {staff.firstName} {staff.middleName} {staff.lastName}
+            </Badge>
+          ))}
+        </div>
+      ) : (
+        <p className="mt-2 text-sm text-gray-500">No Incharge Assigned</p>
+      )}
     </div>
   );
 }
