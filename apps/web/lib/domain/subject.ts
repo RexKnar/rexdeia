@@ -162,11 +162,13 @@ export type AcademicSubjectForStaffModel = {
   isIncharge: boolean;
   deletedAt: Date;
   staff?: {
+    id: string;
     firstName: string;
     middleName?: string;
     lastName: string;
   };
   section?: {
+    id: string;
     name: string;
   };
 };

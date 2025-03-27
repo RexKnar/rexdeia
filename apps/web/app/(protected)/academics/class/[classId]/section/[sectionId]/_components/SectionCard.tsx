@@ -1,4 +1,5 @@
 /* eslint-disable prettier/prettier */
+import { staffInchargesModel } from 'lib/domain/section';
 import { useGetSectionByIdQuery } from 'lib/queries/section/useGetSectionByIdQuery';
 import { useGetStudentListBySectionIdQuery } from 'lib/queries/students/useGetStudentListBySectionIdQuery';
 import { Loader2, MoreHorizontal } from 'lucide-react';
@@ -21,12 +22,7 @@ type SectionCardProps = {
   id: string;
   name: string;
   classId: string;
-  staffIncharges: {
-    id: string;
-    firstName: string;
-    middleName: string;
-    lastName: string;
-  }[];
+  staffIncharges:staffInchargesModel[];
 };
 
 export function SectionCard({
