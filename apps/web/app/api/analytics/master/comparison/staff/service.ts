@@ -179,6 +179,7 @@ function analyzeSubjectPerformance(
     absent: { male: 0, female: 0, overall: 0 },
     markEntry: { male: 0, female: 0, overall: 0 },
     totalStudents: { male: 0, female: 0, overall: 0 },
+    totalMarks: { male: 0, female: 0, overall: 0 },
   };
 
   let totalMarks = { male: 0, female: 0, overall: 0 };
@@ -261,6 +262,7 @@ function analyzeSubjectPerformance(
         result.numberOfFailStudents[category],
         totalStudents[category]
       );
+      result.totalMarks[category] = totalMarks[category];
     }
   });
 
