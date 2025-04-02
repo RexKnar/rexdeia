@@ -1,3 +1,4 @@
+'use client';
 import { useGetExamAnalyticsStaffMasterQuery } from 'lib/queries/analytics/exam/useGetExamAnalyticsStaffMasterQuery';
 import { useSearchParams } from 'next/navigation';
 import { Text } from 'ui';
@@ -107,6 +108,7 @@ export default function StaffAnalysisTable() {
                       absent: { male: 0, female: 0, overall: 0 },
                       markEntry: { male: 0, female: 0, overall: 0 },
                       totalStudents: { male: 0, female: 0, overall: 0 },
+                      totalMarks: { male: 0, female: 0, overall: 0 },
                     };
                     return (
                       <>
@@ -155,12 +157,6 @@ export default function StaffAnalysisTable() {
                             subjectAnalytics?.lowestMark?.overall
                               ? subjectAnalytics?.lowestMark?.overall
                               : staffOverall['lowestMark'].overall;
-                          staffOverall['averageMark'].male +=
-                            subjectAnalytics?.averageMark?.male || 0;
-                          staffOverall['averageMark'].female +=
-                            subjectAnalytics?.averageMark?.female || 0;
-                          staffOverall['averageMark'].overall +=
-                            subjectAnalytics?.averageMark?.overall || 0;
                           staffOverall['passPercentage'].male +=
                             subjectAnalytics?.passPercentage?.male || 0;
                           staffOverall['passPercentage'].female +=
@@ -197,6 +193,13 @@ export default function StaffAnalysisTable() {
                             subjectAnalytics?.markEntry?.female || 0;
                           staffOverall['markEntry'].overall +=
                             subjectAnalytics?.markEntry?.overall || 0;
+
+                          staffOverall['totalMarks'].male +=
+                            subjectAnalytics?.totalMarks?.male || 0;
+                          staffOverall['totalMarks'].female +=
+                            subjectAnalytics?.totalMarks?.female || 0;
+                          staffOverall['totalMarks'].overall +=
+                            subjectAnalytics?.totalMarks?.overall || 0;
 
                           return (
                             <TableRow key={subjectAnalytics.id}>
@@ -521,20 +524,25 @@ export default function StaffAnalysisTable() {
                             <TableCell className="w-[150px] text-center">
                               <div className="flex flex-col justify-evenly">
                                 <Text className="size-lg text-center font-semibold">
-                                  {staffOverall?.averageMark?.overall.toFixed(
-                                    2
-                                  )}
+                                  {(
+                                    staffOverall?.totalMarks?.overall /
+                                    staffOverall.totalStudents.overall
+                                  ).toFixed(2)}
                                 </Text>
                                 <div className="flex justify-evenly">
                                   <Text className="text-primary-800">
-                                    M:{' '}
-                                    {staffOverall?.averageMark.male.toFixed(2)}
+                                    M:
+                                    {(
+                                      staffOverall?.totalMarks?.male /
+                                      staffOverall.totalStudents.male
+                                    ).toFixed(2)}
                                   </Text>
                                   <Text className="text-primary-800">
-                                    F:{' '}
-                                    {staffOverall?.averageMark.female.toFixed(
-                                      2
-                                    )}
+                                    F:
+                                    {(
+                                      staffOverall?.totalMarks?.female /
+                                      staffOverall.totalStudents.female
+                                    ).toFixed(2)}
                                   </Text>
                                 </div>
                               </div>
@@ -575,8 +583,9 @@ export default function StaffAnalysisTable() {
                               <div className="flex flex-col justify-evenly">
                                 <Text className="size-lg text-center font-semibold">
                                   {(
-                                    staffOverall?.passPercentage?.overall /
-                                    staffAnalytics.length
+                                    (staffOverall.numberOfPassStudents.overall /
+                                      staffOverall.totalStudents.overall) *
+                                    100
                                   ).toFixed(2)}
                                   %
                                 </Text>
@@ -584,16 +593,19 @@ export default function StaffAnalysisTable() {
                                   <Text className="text-primary-800">
                                     M:{' '}
                                     {(
-                                      staffOverall?.passPercentage.male /
-                                      staffAnalytics.length
+                                      (staffOverall.numberOfPassStudents.male /
+                                        staffOverall.totalStudents.male) *
+                                      100
                                     ).toFixed(2)}
                                     %
                                   </Text>
                                   <Text className="text-primary-800">
                                     F:{' '}
                                     {(
-                                      staffOverall?.passPercentage.female /
-                                      staffAnalytics.length
+                                      (staffOverall.numberOfPassStudents
+                                        .female /
+                                        staffOverall.totalStudents.female) *
+                                      100
                                     ).toFixed(2)}
                                   </Text>
                                 </div>
@@ -603,8 +615,9 @@ export default function StaffAnalysisTable() {
                               <div className="flex flex-col justify-evenly">
                                 <Text className="size-lg text-center font-semibold">
                                   {(
-                                    staffOverall?.failPercentage?.overall /
-                                    staffAnalytics.length
+                                    (staffOverall.numberOfFailStudents.overall /
+                                      staffOverall.totalStudents.overall) *
+                                    100
                                   ).toFixed(2)}
                                   %
                                 </Text>
@@ -612,18 +625,20 @@ export default function StaffAnalysisTable() {
                                   <Text className="text-primary-800">
                                     M:{' '}
                                     {(
-                                      staffOverall?.failPercentage.male /
-                                      staffAnalytics.length
+                                      (staffOverall.numberOfFailStudents.male /
+                                        staffOverall.totalStudents.male) *
+                                      100
                                     ).toFixed(2)}
                                     %
                                   </Text>
                                   <Text className="text-primary-800">
                                     F:{' '}
                                     {(
-                                      staffOverall?.failPercentage.female /
-                                      staffAnalytics.length
+                                      (staffOverall.numberOfFailStudents
+                                        .female /
+                                        staffOverall.totalStudents.female) *
+                                      100
                                     ).toFixed(2)}
-                                    %
                                   </Text>
                                 </div>
                               </div>
