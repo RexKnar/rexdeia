@@ -39,6 +39,11 @@ export default function SectionAnalytics({
                     <TableCell className="w-[100px] text-center"></TableCell>
                     <TableCell></TableCell>
                     <TableCell className="w-[150px] text-center">
+                      <Text className="size-lg text-center font-semibold">
+                        Staff
+                      </Text>
+                    </TableCell>
+                    <TableCell className="w-[150px] text-center">
                       <Text className="size-lg font-semibold">
                         Total Students
                       </Text>
@@ -101,6 +106,14 @@ export default function SectionAnalytics({
                               <div className="flex flex-col justify-evenly">
                                 <Text className="size-lg text-center font-semibold">
                                   {subjectAnalytics?.section.name}
+                                </Text>
+                              </div>
+                            </TableCell>
+                            <TableCell className="w-[150px] text-center ">
+                              <div className="flex flex-col justify-evenly">
+                                <Text className="size-lg text-center font-semibold">
+                                  {subjectAnalytics?.section.staff?.firstName}{' '}
+                                  {subjectAnalytics?.section.staff?.lastName}
                                 </Text>
                               </div>
                             </TableCell>

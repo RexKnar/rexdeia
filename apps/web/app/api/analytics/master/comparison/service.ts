@@ -36,10 +36,13 @@ export async function getMasterMarkComparisonBySection(
             section.id,
             studentsMarkList
           );
+          const staffDetail = subject?.academicSubjectForStaff.find(
+            (item) => item.sectionId === section.id
+          );
           if (sectionAnalyticsForSubject.totalStudents.overall > 0) {
             sectionAnalytics.push({
               ...sectionAnalyticsForSubject,
-              section,
+              section: { ...section, staff: staffDetail?.staff },
             });
           }
         });
