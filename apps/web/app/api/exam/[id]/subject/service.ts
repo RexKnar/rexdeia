@@ -36,7 +36,18 @@ export async function getExamSubjectsByClassSectionId(
           name: true,
           subjectOrder: true,
           subjectMaster: true,
-          academicSubjectForStaff: true,
+          academicSubjectForStaff: {
+            include: {
+              staff: {
+                select: {
+                  id: true,
+                  firstName: true,
+                  lastName: true,
+                  middleName: true,
+                },
+              },
+            },
+          },
         },
       },
       examSubjectPartition: {
