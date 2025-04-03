@@ -314,6 +314,12 @@ export const menuItem = {
           path: '/academics/regulation',
         },
         {
+          id: 'academics-promotion',
+          label: 'Promotions',
+          icon: null,
+          path: '/academics/promotion',
+        },
+        {
           id: 'academics-year',
           label: 'Academic Year',
           icon: null,

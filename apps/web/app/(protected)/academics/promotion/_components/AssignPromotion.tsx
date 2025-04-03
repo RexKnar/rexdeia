@@ -1,4 +1,3 @@
-/* eslint-disable prettier/prettier */
 'use client';
 /* eslint-disable react-hooks/exhaustive-deps */
 import { AssignStudentsToClassModel } from 'lib/domain/student';
@@ -26,7 +25,7 @@ import {
 } from 'ui';
 import { Table, TableBody, TableCell, TableRow } from 'ui/components/ui/Table';
 
-export function AssignStudents() {
+export function AssignPromotion() {
   const searchParams = useSearchParams();
   const { classId } = useParams<{ classId: string }>();
 
@@ -49,6 +48,7 @@ export function AssignStudents() {
 
   const [groupIdToGetStudent, setGroupIdToGetStudent] = useState('');
   const [classIdToGetStudent, setClassIdToGetStudent] = useState('');
+  const [sectionIdToGetStudent, setSectionIdToGetStudent] = useState('');
   const [selectedStudentIds, setSelectedStudentIds] = useState([]);
   const [deselectedStudentIds, setDeselectedStudentIds] = useState([]);
   const [selectedStudents, setSelectedStudents] = useState([]);
@@ -60,10 +60,8 @@ export function AssignStudents() {
   }, [classId]);
 
   const { data: sectionListResponse } = useGetAllSectionByClassIdQuery(
-    { classId, filter },
-    {
-      enabled: !!classId,
-    }
+    { classId: classIdToGetStudent, filter },
+    { enabled: !!classIdToGetStudent }
   );
 
   const { data: groupListResponse } = useGetGroupListQuery({
@@ -75,8 +73,12 @@ export function AssignStudents() {
   const { data: getStudentListResponse } = useGetStudentListForAssignQuery(
     classIdToGetStudent,
     groupIdToGetStudent,
+    sectionIdToGetStudent,
     {
-      enabled: !!classIdToGetStudent || !!groupIdToGetStudent,
+      enabled:
+        !!classIdToGetStudent ||
+        !!groupIdToGetStudent ||
+        !!sectionIdToGetStudent,
     }
   );
 
@@ -210,6 +212,8 @@ export function AssignStudents() {
     const assignStudentPayload = {
       ...payload,
       classId: classId,
+      sectionId: sectionIdToGetStudent,
+      groupId: groupIdToGetStudent,
       studentIds: selectedStudents.map((x) => x.id),
     };
     await mutateCreateStudentsAsync(assignStudentPayload);
@@ -225,66 +229,115 @@ export function AssignStudents() {
     <form onSubmit={handleSubmit(assignStudent)}>
       <section className="flex flex-col">
         <section className="flex justify-between gap-8">
-          <section className="w-1/2 p-4 mt-2 mr-2 rounded-l-lg bg-zinc-50">
+          <section className="mr-2 mt-2 w-1/2 rounded-l-lg bg-zinc-50 p-4">
             <section className="p-2">
-              <section className="flex justify-between p-2 mb-2 overflow-x-auto bg-white rounded-md">
-                <Select
-                  defaultValue={classId}
-                  autoComplete="off"
-                  onValueChange={(value) => {
-                    if (value) {
-                      setClassIdToGetStudent(value);
-                    }
-                  }}
-                >
-                  <SelectTrigger className=" basis-1/2">
-                    <SelectValue
-                      className="text-gray-400"
-                      placeholder="Class"
-                    ></SelectValue>
-                    <ChevronDown className="text-gray-400" />
-                  </SelectTrigger>
-                  <SelectContent className="border border-primary-200">
-                    {' '}
-                    <SelectGroup>
-                      {getAllClassListResponse?.data?.map((classDetails) => (
-                        <SelectItem
-                          key={classDetails.id}
-                          value={classDetails.id}
-                        >
-                          {classDetails.name}
-                        </SelectItem>
-                      ))}
-                    </SelectGroup>
-                  </SelectContent>
-                </Select>
+              <section className="mb-2 flex justify-between rounded-md bg-white p-2">
+                <div className=" basis-1/2">
+                  <Select
+                    defaultValue={classId}
+                    autoComplete="off"
+                    onValueChange={(value) => {
+                      if (value) {
+                        setClassIdToGetStudent(value);
+                      }
+                    }}
+                  >
+                    <SelectTrigger className=" basis-1/2">
+                      <SelectValue
+                        className="text-gray-400"
+                        placeholder="Class"
+                      ></SelectValue>
+                      <ChevronDown className="text-gray-400" />
+                    </SelectTrigger>
+                    <SelectContent className="border border-primary-200">
+                      {' '}
+                      <SelectGroup>
+                        {getAllClassListResponse?.data?.map((classDetails) => (
+                          <SelectItem
+                            key={classDetails.id}
+                            value={classDetails.id}
+                          >
+                            {classDetails.name}
+                          </SelectItem>
+                        ))}
+                      </SelectGroup>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className=" basis-1/2">
+                  <Select
+                    autoComplete="off"
+                    {...register('sectionId', {
+                      required: ' Section is Requeired',
+                    })}
+                    value={watch('sectionId')}
+                    onValueChange={(value) => {
+                      if (value) {
+                        setValue('sectionId', value);
+                        setSectionIdToGetStudent(value);
+                      } else {
+                        setError('sectionId', {
+                          type: 'manual',
+                          message: 'Section is required',
+                        });
+                      }
+                    }}
+                  >
+                    <SelectTrigger className="ml-4 basis-1/2">
+                      <SelectValue
+                        className="text-gray-400"
+                        placeholder="Section"
+                      />{' '}
+                      <ChevronDown className="text-gray-400" />
+                    </SelectTrigger>
+                    <SelectContent className="border border-primary-200">
+                      {' '}
+                      <SelectGroup>
+                        {sectionListResponse?.data?.map((item) => (
+                          <SelectItem key={item.id} value={item.id}>
+                            {item.name}
+                          </SelectItem>
+                        ))}
+                      </SelectGroup>
+                    </SelectContent>
 
-                <Select
-                  autoComplete="off"
-                  onValueChange={(value) => {
-                    if (value) {
-                      setGroupIdToGetStudent(value);
-                    }
-                  }}
-                >
-                  <SelectTrigger className=" basis-1/2">
-                    <SelectValue
-                      className="text-gray-400"
-                      placeholder="Group"
-                    />{' '}
-                    <ChevronDown className="text-gray-400" />
-                  </SelectTrigger>
-                  <SelectContent className="border border-primary-200">
-                    {' '}
-                    <SelectGroup>
-                      {groupListResponse?.data?.map((item) => (
-                        <SelectItem key={item.id} value={item.id}>
-                          {item.name}
-                        </SelectItem>
-                      ))}
-                    </SelectGroup>
-                  </SelectContent>
-                </Select>
+                    {fieldErrors.sectionId && (
+                      <p className="ml-4 text-red-500">
+                        {fieldErrors.sectionId.message.toString()}
+                      </p>
+                    )}
+                  </Select>
+                </div>
+              </section>
+              <section className="mb-2 flex justify-between rounded-md bg-white p-2">
+                <div className=" basis-1/2">
+                  <Select
+                    autoComplete="off"
+                    onValueChange={(value) => {
+                      if (value) {
+                        setGroupIdToGetStudent(value);
+                      }
+                    }}
+                  >
+                    <SelectTrigger className=" basis-1/2">
+                      <SelectValue
+                        className="text-gray-400"
+                        placeholder="Group"
+                      />{' '}
+                      <ChevronDown className="text-gray-400" />
+                    </SelectTrigger>
+                    <SelectContent className="border border-primary-200">
+                      {' '}
+                      <SelectGroup>
+                        {groupListResponse?.data?.map((item) => (
+                          <SelectItem key={item.id} value={item.id}>
+                            {item.name}
+                          </SelectItem>
+                        ))}
+                      </SelectGroup>
+                    </SelectContent>
+                  </Select>
+                </div>
               </section>
             </section>
             <section className="flex justify-between p-2">
@@ -292,7 +345,7 @@ export function AssignStudents() {
               <div className="flex">
                 <Button variant="outline" className="h-8 px-2" type="button">
                   <Checkbox
-                    className="w-4 h-4 mr-3 border-2 border-dashed"
+                    className="mr-3 h-4 w-4 border-2 border-dashed"
                     onCheckedChange={handleSelectAll}
                   />
                   Select All
@@ -302,7 +355,7 @@ export function AssignStudents() {
                     selectedStudentIds.includes(x.id)
                   ) && (
                     <Button
-                      className="h-8 px-2 ml-3"
+                      className="ml-3 h-8 px-2"
                       onClick={handleBulkAssign}
                       type="button"
                     >
@@ -317,17 +370,17 @@ export function AssignStudents() {
                   {studentListMaster?.map((student) => (
                     <TableRow key={student.id} className="py-0">
                       <TableCell className="py-0">
-                        <div className="flex items-center mb-2">
+                        <div className="mb-2 flex items-center">
                           <Checkbox
                             className="mt-2"
                             onCheckedChange={() => {
                               handleActualStudentCheckboxChange(student.id);
                             }}
                           />
-                          <Avatar className="w-8 h-8 mt-2 ml-3 cursor-pointer ">
+                          <Avatar className="ml-3 mt-2 h-8 w-8 cursor-pointer ">
                             <AvatarImage src="https://png.pngtree.com/thumb_back/fh260/background/20230612/pngtree-man-wearing-glasses-is-wearing-colorful-background-image_2905240.jpg" />
                           </Avatar>
-                          <div className="mt-2 ml-4">
+                          <div className="ml-4 mt-2">
                             <p className="font-semibold">{student.firstName}</p>
                           </div>
                         </div>
@@ -335,11 +388,11 @@ export function AssignStudents() {
 
                       <TableCell className="flex items-center justify-end p-1">
                         <Button
-                          className="w-8 h-8 p-0 rounded-full"
+                          className="h-8 w-8 rounded-full p-0"
                           onClick={() => addSelectedStudent(student)}
                           type="button"
                         >
-                          <ChevronRight className="w-4 h-4" />
+                          <ChevronRight className="h-4 w-4" />
                         </Button>
                       </TableCell>
                     </TableRow>
@@ -357,9 +410,9 @@ export function AssignStudents() {
             </section>
           </section>
 
-          <section className="w-1/2 p-4 mt-2 ml-2 rounded-l-lg bg-zinc-50">
+          <section className="ml-2 mt-2 w-1/2 rounded-l-lg bg-zinc-50 p-4">
             <section className="p-2">
-              <section className="flex justify-between p-2 mb-2 bg-white rounded-md">
+              <section className="mb-2 flex justify-between rounded-md bg-white p-2">
                 <div className=" basis-1/2">
                   <Select
                     autoComplete="off"
@@ -438,7 +491,7 @@ export function AssignStudents() {
                   </Select>
                 </div>
               </section>
-              <section className="flex justify-between p-2 mb-2 bg-white rounded-md">
+              <section className="mb-2 flex justify-between rounded-md bg-white p-2">
                 <div className=" basis-1/2">
                   <Select
                     autoComplete="off"
@@ -521,7 +574,7 @@ export function AssignStudents() {
               </div>
               <div className="flex">
                 <Button
-                  className="h-8 px-2 text-red-500 border border-red-500 bg-zinc-50 hover:bg-zinc-50"
+                  className="h-8 border border-red-500 bg-zinc-50 px-2 text-red-500 hover:bg-zinc-50"
                   onClick={handleDeselectAll}
                   type="button"
                 >
@@ -533,7 +586,7 @@ export function AssignStudents() {
                     deselectedStudentIds.includes(x.id)
                   ) && (
                     <Button
-                      className="h-8 px-2 ml-3 text-white bg-red-500 border hover:bg-red-500"
+                      className="ml-3 h-8 border bg-red-500 px-2 text-white hover:bg-red-500"
                       onClick={handleRemoveSelected}
                       type="button"
                     >
@@ -548,7 +601,7 @@ export function AssignStudents() {
                   {selectedStudents.map((student) => (
                     <TableRow key={student.id}>
                       <TableCell className="py-0">
-                        <div className="flex items-center mb-2">
+                        <div className="mb-2 flex items-center">
                           <Checkbox
                             className="mt-2"
                             onCheckedChange={() => {
@@ -556,21 +609,21 @@ export function AssignStudents() {
                             }}
                             checked={deselectedStudentIds.includes(student.id)}
                           />
-                          <Avatar className="w-8 h-8 mt-2 ml-3 cursor-pointer">
+                          <Avatar className="ml-3 mt-2 h-8 w-8 cursor-pointer">
                             <AvatarImage src="https://png.pngtree.com/thumb_back/fh260/background/20230612/pngtree-man-wearing-glasses-is-wearing-colorful-background-image_2905240.jpg" />
                           </Avatar>
-                          <div className="mt-2 ml-4">
+                          <div className="ml-4 mt-2">
                             <p className="font-semibold">{student.firstName}</p>
                           </div>
                         </div>
                       </TableCell>
                       <TableCell className="flex items-center justify-end p-1">
                         <Button
-                          className="w-8 h-8 p-0 bg-red-500 rounded-full hover:bg-red-500"
+                          className="h-8 w-8 rounded-full bg-red-500 p-0 hover:bg-red-500"
                           onClick={() => handleRemoveStudent(student.id)}
                           type="button"
                         >
-                          <X className="w-4 h-4" />
+                          <X className="h-4 w-4" />
                         </Button>
                       </TableCell>
                     </TableRow>
@@ -578,17 +631,17 @@ export function AssignStudents() {
                 </TableBody>
               </Table>
             </section>
-            <div className="flex items-center justify-center mt-8">
+            <div className="mt-8 flex items-center justify-center">
               <Button
                 size="lg"
                 variant="default"
                 disabled={isPendingAssignStudents}
                 aria-disabled={isPendingAssignStudents}
-                className="flex justify-center px-12 py-4 mx-auto"
+                className="mx-auto flex justify-center px-12 py-4"
               >
                 {isPendingAssignStudents ? (
                   <div className="flex items-center justify-center">
-                    <Loader2 className="w-6 h-6 mr-2 text-white animate-spin" />
+                    <Loader2 className="mr-2 h-6 w-6 animate-spin text-white" />
                     Saving
                   </div>
                 ) : (
