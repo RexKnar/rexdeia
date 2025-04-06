@@ -3,6 +3,7 @@
 import { useGetClassByIdQuery } from 'lib/queries/class/useGetClassByIdQuery';
 import { useUpdateClassMutationQuery } from 'lib/queries/class/useUpdateClassMutationQuery';
 import { useGetClassLevelListQuery } from 'lib/queries/classLevel/useGetClassLevelsListQuery';
+import { useGetGradeList } from 'lib/queries/grade/useGetGradeListMutationQuery';
 import { Loader2, PlusCircle } from 'lucide-react';
 import {
   useParams,
@@ -53,6 +54,7 @@ export function UpdateClassFlyout() {
       isActive: false,
       name: getClassByIdResponse?.name || '',
       classLevelId: getClassByIdResponse?.classLevelId || '',
+      gradeId: getClassByIdResponse?.gradeId || '',
     },
   });
 
@@ -60,15 +62,17 @@ export function UpdateClassFlyout() {
 
   useEffect(() => {
     if (getClassByIdResponse) {
-      const { name, isActive, classLevelId } = getClassByIdResponse;
+      const { name, isActive, classLevelId, gradeId } = getClassByIdResponse;
 
       setValue('name', name);
       setValue('isActive', isActive);
       setValue('classLevelId', classLevelId);
+      setValue('gradeId', gradeId);
     } else {
       setValue('name', null);
       setValue('isActive', false);
       setValue('classLevelId', null);
+      setValue('gradeId', null);
     }
   }, [getClassByIdResponse, setValue]);
 
@@ -80,6 +84,12 @@ export function UpdateClassFlyout() {
     useGetClassLevelListQuery({
       page,
       limit,
+    });
+
+  const { data: gradeListResponse, isLoading: isGradeListLoading } =
+    useGetGradeList({
+      page: 1,
+      limit: 999,
     });
   async function updateClass(payload) {
     try {
@@ -186,6 +196,40 @@ export function UpdateClassFlyout() {
                         <SelectContent>
                           <SelectGroup>
                             {ClassLevelListResponse?.map((item) => (
+                              <SelectItem key={item.id} value={item.id}>
+                                {item.name}
+                              </SelectItem>
+                            ))}
+                          </SelectGroup>
+                        </SelectContent>
+                      </Select>
+                    );
+                  }}
+                ></Controller>
+              </div>
+              <div>
+                <label
+                  htmlFor="medium"
+                  className="text-sm font-semibold text-gray-700"
+                >
+                  Grade System(for marks)
+                </label>
+                <Controller
+                  control={control}
+                  name={`gradeId`}
+                  render={({ field }) => {
+                    return (
+                      <Select
+                        onValueChange={field.onChange}
+                        {...field}
+                        disabled={isGradeListLoading}
+                      >
+                        <SelectTrigger className="w-full">
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectGroup>
+                            {gradeListResponse?.data?.map((item) => (
                               <SelectItem key={item.id} value={item.id}>
                                 {item.name}
                               </SelectItem>

@@ -1,5 +1,7 @@
 import { db } from 'lib/db';
 
+import { getGradeByClassId } from '../grade/service';
+
 export type MarkAnalyticsFilterModel = {
   classId?: string;
   sectionId?: string;
@@ -17,6 +19,7 @@ export async function getStudentMarksByFilter(
     | { classId: string; examId: string; sectionId?: string }
 ) {
   const { classId, examId, sectionId } = filter;
+  const { gradeScales } = await getGradeByClassId(classId);
 
   const mainClause = {};
   if (sectionId) {
@@ -187,6 +190,18 @@ export async function getStudentMarksByFilter(
       }
       totalMark += subjectTotalMark;
 
+      let subjectGrade = '';
+      if (gradeScales?.length > 0) {
+        gradeScales.forEach((gradeScale) => {
+          const startValue = Number(gradeScale.startValue);
+          const endValue = Number(gradeScale.endValue);
+
+          if (subjectTotalMark >= startValue && subjectTotalMark <= endValue) {
+            subjectGrade = gradeScale.gradeName;
+          }
+        });
+      }
+
       const subject = {
         ...examSubject.subject,
         marks,
@@ -198,6 +213,7 @@ export async function getStudentMarksByFilter(
         centum,
         subjectPassed,
         subjectFailed,
+        grade: subjectGrade,
       };
 
       if (!subject.absentStatus) attendance = true;
@@ -229,7 +245,9 @@ export async function getStudentMarksByFilter(
   return studentMarkList;
 }
 
-export async function getStudentMarksByRank(studentList) {
+export async function getStudentMarksByRank(studentList, classId) {
+  const { gradeScales } = await getGradeByClassId(classId);
+  // console.log(gradeScales);
   const passedStudents = studentList
     .filter((student) => !student.failingStatus)
     .sort((a, b) => b.totalMark - a.totalMark);
@@ -237,6 +255,7 @@ export async function getStudentMarksByRank(studentList) {
   let rank = 1;
   let prevMark = null;
   let skipRanks = 0;
+  let grade = null;
 
   const rankList = passedStudents.map((student) => {
     if (student.totalMark !== prevMark) {
@@ -251,7 +270,20 @@ export async function getStudentMarksByRank(studentList) {
 
   const rankedStudentList = studentList.map((student) => {
     const rank = rankList.find((s) => s.id === student.id)?.rank || 0;
-    return { ...student, rank };
+    if (gradeScales?.length > 0) {
+      gradeScales.forEach((gradeScale) => {
+        const startValue = Number(gradeScale.startValue);
+        const endValue = Number(gradeScale.endValue);
+
+        if (
+          student.totalPercentage >= startValue &&
+          student.totalPercentage <= endValue
+        ) {
+          grade = gradeScale.gradeName;
+        }
+      });
+    }
+    return { ...student, rank, grade };
   });
 
   return rankedStudentList;

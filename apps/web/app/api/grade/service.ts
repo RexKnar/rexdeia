@@ -4,6 +4,7 @@ import { authOptions } from '../../../lib/auth';
 import { db } from '../../../lib/db';
 import {
   AddGradeModel,
+  AddGradeScaleModel,
   AddGradeScalesModel,
   UpdateGradeModel,
 } from '../../../lib/domain/grade';
@@ -34,6 +35,20 @@ export async function addGrade(gradePayload: AddGradeModel) {
     addGradeScale(createGradeScales);
   });
   return createdGrade;
+}
+
+export async function addGradeScales(gradePayload: AddGradeScaleModel) {
+  gradePayload.gradeScales.forEach((gradeScale) => {
+    const createGradeScales: AddGradeScalesModel = {
+      startValue: gradeScale.startValue,
+      endValue: gradeScale.endValue,
+      gradeName: gradeScale.gradeName,
+      remark: gradeScale.remark,
+      gradeId: gradePayload.id,
+    };
+    addGradeScale(createGradeScales);
+  });
+  return gradePayload;
 }
 
 export async function getAllGradeList(page: number, limit: number) {
@@ -106,4 +121,45 @@ export async function deleteGradeById(id: string) {
       updatedAt: new Date(),
     },
   });
+}
+
+export async function deleteGradeScaleById(id: string) {
+  return db.gradeScales.delete({
+    where: {
+      id: id,
+    },
+  });
+}
+export async function deleteScaleById(id: string) {
+  const session = await getServerSession(authOptions);
+  return db.grade.update({
+    where: {
+      id: id,
+      branchId: session.branchId,
+    },
+    data: {
+      isDeleted: true,
+      isActive: false,
+      updatedAt: new Date(),
+    },
+  });
+}
+export async function getGradeByClassId(classId: string) {
+  const session = await getServerSession(authOptions);
+  const response = await db.class.findUnique({
+    where: {
+      id: classId,
+      branchId: session.branchId,
+      isDeleted: false,
+    },
+    include: {
+      grade: {
+        include: {
+          gradeScales: true,
+        },
+      },
+    },
+  });
+
+  return response ? response?.grade : null;
 }
