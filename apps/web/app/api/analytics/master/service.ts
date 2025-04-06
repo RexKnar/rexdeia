@@ -26,7 +26,10 @@ export async function getMasterMarksByFilter(filter: MarkAnalyticsFilter) {
     const examDetails = await getExamById(filter.examId);
     const studentMarkList = await getStudentMarksByFilter(filter);
     const analytics = getAnalytics(studentMarkList);
-    const rankedStudentList = await getStudentMarksByRank(studentMarkList);
+    const rankedStudentList = await getStudentMarksByRank(
+      studentMarkList,
+      filter.classId
+    );
 
     return {
       markList: rankedStudentList,

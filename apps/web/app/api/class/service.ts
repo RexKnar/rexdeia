@@ -123,6 +123,13 @@ export async function addClass(classPayload: CreateClassModel) {
             },
           }
         : null,
+      grade: classPayload.gradeId
+        ? {
+            connect: {
+              id: classPayload.gradeId,
+            },
+          }
+        : null,
     },
   });
 
@@ -182,6 +189,13 @@ export async function updateClassById(
           id: updateClass.classLevelId,
         },
       },
+      grade: updateClass.gradeId
+        ? {
+            connect: {
+              id: updateClass.gradeId,
+            },
+          }
+        : null,
     },
   });
 }

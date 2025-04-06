@@ -589,9 +589,11 @@ model Class {
   createdAt      DateTime?        @default(now())
   updatedAt      DateTime?        @default(now())
   classLevelId   String?          @db.Uuid
+  gradeId        String?          @db.Uuid
   batch          Batch?           @relation(fields: [batchId], references: [id])
   branch         Branch           @relation(fields: [branchId], references: [id])
   classLevel     ClassLevel?      @relation(fields: [classLevelId], references: [id])
+  grade          Grade?           @relation(fields: [gradeId], references: [id])
   regulation     Regulation?      @relation(fields: [regulationId], references: [id])
   ExamGroup      ExamGroup[]
   periods        Periods[]
@@ -834,6 +836,7 @@ model Grade {
   isDeleted   Boolean       @default(false)
   branch      Branch        @relation(fields: [branchId], references: [id])
   gradeScales GradeScales[]
+  Class       Class[]
 }
 
 model GradeScales {
