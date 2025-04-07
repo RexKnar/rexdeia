@@ -73,13 +73,7 @@ export function AssignPromotion() {
   const { data: getStudentListResponse } = useGetStudentListForAssignQuery(
     classIdToGetStudent,
     groupIdToGetStudent,
-    sectionIdToGetStudent,
-    {
-      enabled:
-        !!classIdToGetStudent ||
-        !!groupIdToGetStudent ||
-        !!sectionIdToGetStudent,
-    }
+    { enabled: !!classIdToGetStudent && !!groupIdToGetStudent }
   );
 
   useEffect(() => {

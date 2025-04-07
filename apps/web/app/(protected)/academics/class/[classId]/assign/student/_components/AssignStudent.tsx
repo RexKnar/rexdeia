@@ -74,7 +74,6 @@ export function AssignStudents() {
   const { data: getStudentListResponse } = useGetStudentListForAssignQuery(
     classIdToGetStudent,
     groupIdToGetStudent,
-    ' ',
     {
       enabled: !!classIdToGetStudent || !!groupIdToGetStudent,
     }
