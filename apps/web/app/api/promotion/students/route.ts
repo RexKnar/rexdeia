@@ -3,7 +3,7 @@ import { authOptions } from 'lib/auth';
 import { NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 
-import { getFilteredStudents } from './service';
+import { getAllStudentByClassIdForPromotion } from './service';
 
 /**
  * @swagger
@@ -52,7 +52,11 @@ export async function PUT(req: Request) {
       );
     }
 
-    const students = await getFilteredStudents(classId, sectionId, groupId);
+    const students = await getAllStudentByClassIdForPromotion(
+      classId,
+      sectionId,
+      groupId
+    );
     return new NextResponse(JSON.stringify(students), {
       status: StatusCodes.OK,
     });

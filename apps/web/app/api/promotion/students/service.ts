@@ -1,6 +1,6 @@
 import { db } from 'lib/db';
 
-export async function getFilteredStudents(
+export async function getAllStudentByClassIdForPromotion(
   classId: string,
   sectionId?: string,
   groupId?: string
