@@ -359,8 +359,8 @@ export default function StudentMarkList({
                       const mark =
                         studentDetail.marks.find(
                           (obj) =>
-                            obj.examSubjectPartitionId ===
-                            examSubjectPartition.id
+                            obj.assessmentFormatId ===
+                            examSubjectPartition.assessmentFormatId
                         ) || null;
 
                       if (mark) {
@@ -409,6 +409,7 @@ export default function StudentMarkList({
             tableValues.push(`${finalTotal}(${student.grade})`);
 
             tableValues.push(student.rank.toString());
+
             return tableValues;
           })
         );

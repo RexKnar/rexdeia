@@ -20,6 +20,7 @@ type CreateExamConfigModel = {
   }[];
   subjectTotalMarks: string;
   subjectMarksToConvert: string;
+  minMark: string;
 };
 
 export async function createExamConfig(
@@ -72,6 +73,7 @@ export async function createExamConfig(
             subjectId: subject.subjectId,
             groupId: subject.groupId,
             examGroupId: examGroupId,
+            minMark: +configDetails.minMark,
             totalMarks: newSubjectTotalMarks,
             convertTo: newSubjectMarksToConvert,
           },
