@@ -103,7 +103,7 @@ export function ExamConfigureFlyout(props) {
     payload.examId = examId;
     payload.subjectTotalMarks = subjectTotalMarks;
     payload.subjectMarksToConvert = subjectMarksToConvert;
-    payload.minPassMark = minPassMark;
+    payload.minMark = minPassMark;
     payload.sectionIds = sectionIds;
     const createdExamConfiguration =
       await mutateCreateExamConfigurationAsync(payload);
