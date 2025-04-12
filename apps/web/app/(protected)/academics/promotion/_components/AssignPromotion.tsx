@@ -6,13 +6,14 @@ import { useGetClassListQuery } from 'lib/queries/class/useGetClassListQuery';
 import { useGetGroupListQuery } from 'lib/queries/group/useGetGroupListQuery';
 import { useGetAllSectionByClassIdQuery } from 'lib/queries/section/useGetAllSectionsByClassIdQuery';
 import { useCreateStudentMutationByClassIdQuery } from 'lib/queries/students/useCreateStudentMutationByClassIdQuery';
-import { useGetStudentListForAssignQuery } from 'lib/queries/students/useGetStudentListForAssignQuery';
+import { useGetStudentListForPromoteQuery } from 'lib/queries/students/useGetStudentListForPromoteQuery';
 import { ChevronDown, ChevronRight, Loader2, X } from 'lucide-react';
 import { useParams, useSearchParams } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import {
   Avatar,
+  AvatarFallback,
   AvatarImage,
   Button,
   Checkbox,
@@ -70,10 +71,16 @@ export function AssignPromotion() {
     filter,
   });
 
-  const { data: getStudentListResponse } = useGetStudentListForAssignQuery(
+  const { data: getStudentListResponse } = useGetStudentListForPromoteQuery(
     classIdToGetStudent,
+    sectionIdToGetStudent,
     groupIdToGetStudent,
-    { enabled: !!classIdToGetStudent && !!groupIdToGetStudent }
+    {
+      enabled:
+        !!classIdToGetStudent ||
+        !!sectionIdToGetStudent ||
+        !!groupIdToGetStudent,
+    }
   );
 
   useEffect(() => {
@@ -205,10 +212,10 @@ export function AssignPromotion() {
   const assignStudent = async (payload: AssignStudentsToClassModel) => {
     const assignStudentPayload = {
       ...payload,
-      classId: classId,
+      classId: classIdToGetStudent,
       sectionId: sectionIdToGetStudent,
       groupId: groupIdToGetStudent,
-      studentIds: selectedStudents.map((x) => x.id),
+      studentIds: selectedStudents.map((x) => x.student.id),
     };
     await mutateCreateStudentsAsync(assignStudentPayload);
 
@@ -362,20 +369,31 @@ export function AssignPromotion() {
               <Table>
                 <TableBody>
                   {studentListMaster?.map((student) => (
-                    <TableRow key={student.id} className="py-0">
+                    <TableRow key={student.student.id} className="py-0">
                       <TableCell className="py-0">
                         <div className="mb-2 flex items-center">
                           <Checkbox
                             className="mt-2"
                             onCheckedChange={() => {
-                              handleActualStudentCheckboxChange(student.id);
+                              handleActualStudentCheckboxChange(
+                                student.student.id
+                              );
                             }}
                           />
                           <Avatar className="ml-3 mt-2 h-8 w-8 cursor-pointer ">
-                            <AvatarImage src="https://png.pngtree.com/thumb_back/fh260/background/20230612/pngtree-man-wearing-glasses-is-wearing-colorful-background-image_2905240.jpg" />
+                            <AvatarImage src={student.student.profileImage} />
+                            <AvatarFallback className="bg-red-300">
+                              {student.student.firstName
+                                .charAt(0)
+                                .toUpperCase()}
+                            </AvatarFallback>
                           </Avatar>
                           <div className="ml-4 mt-2">
-                            <p className="font-semibold">{student.firstName}</p>
+                            <p className="font-semibold">
+                              {student.student.firstName}
+                              {student.student.middleName}
+                              {student.student.lastName}
+                            </p>
                           </div>
                         </div>
                       </TableCell>
@@ -410,7 +428,6 @@ export function AssignPromotion() {
                 <div className=" basis-1/2">
                   <Select
                     autoComplete="off"
-                    disabled
                     {...register('classId', { required: true })}
                     value={classId}
                     onValueChange={(value) => {
@@ -593,7 +610,7 @@ export function AssignPromotion() {
               <Table>
                 <TableBody>
                   {selectedStudents.map((student) => (
-                    <TableRow key={student.id}>
+                    <TableRow key={student.student.id}>
                       <TableCell className="py-0">
                         <div className="mb-2 flex items-center">
                           <Checkbox
@@ -603,18 +620,27 @@ export function AssignPromotion() {
                             }}
                             checked={deselectedStudentIds.includes(student.id)}
                           />
-                          <Avatar className="ml-3 mt-2 h-8 w-8 cursor-pointer">
-                            <AvatarImage src="https://png.pngtree.com/thumb_back/fh260/background/20230612/pngtree-man-wearing-glasses-is-wearing-colorful-background-image_2905240.jpg" />
+                          <Avatar className="ml-3 mt-2 h-8 w-8 cursor-pointer ">
+                            <AvatarImage src={student.student.profileImage} />
+                            <AvatarFallback className="bg-red-300">
+                              {student.student.firstName
+                                .charAt(0)
+                                .toUpperCase()}
+                            </AvatarFallback>
                           </Avatar>
                           <div className="ml-4 mt-2">
-                            <p className="font-semibold">{student.firstName}</p>
+                            <p className="font-semibold">
+                              {student.student.firstName}
+                            </p>
                           </div>
                         </div>
                       </TableCell>
                       <TableCell className="flex items-center justify-end p-1">
                         <Button
                           className="h-8 w-8 rounded-full bg-red-500 p-0 hover:bg-red-500"
-                          onClick={() => handleRemoveStudent(student.id)}
+                          onClick={() =>
+                            handleRemoveStudent(student.student.id)
+                          }
                           type="button"
                         >
                           <X className="h-4 w-4" />

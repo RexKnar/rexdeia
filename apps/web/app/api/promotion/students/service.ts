@@ -19,6 +19,7 @@ export async function getAllStudentByClassIdForPromotion(
           firstName: true,
           middleName: true,
           lastName: true,
+          profileImage: true,
         },
       },
       rollNumber: true,
@@ -27,4 +28,39 @@ export async function getAllStudentByClassIdForPromotion(
       rollNumber: 'asc',
     },
   });
+}
+
+export async function promoteStudentToNewClass(payload: {
+  studentIds: string[];
+  ClassId: string;
+  SectionId: string;
+  GroupId: string;
+  AcademicYear: string;
+}) {
+  return await db.$transaction(
+    payload.studentIds.map((studentId) =>
+      db.student.update({
+        where: {
+          id: studentId,
+        },
+        data: {
+          studentMapping: {
+            updateMany: [
+              {
+                where: {
+                  studentId: studentId,
+                },
+                data: {
+                  classId: payload.ClassId,
+                  sectionId: payload.SectionId,
+                  groupId: payload.GroupId,
+                  batchId: payload.AcademicYear,
+                },
+              },
+            ],
+          },
+        },
+      })
+    )
+  );
 }
