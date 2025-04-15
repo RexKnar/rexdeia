@@ -1,6 +1,7 @@
 import { captureException } from '@sentry/nextjs';
 import { StatusCodes } from 'http-status-codes';
 import { authOptions } from 'lib/auth';
+import { PromoteStudentsToNewClassModel } from 'lib/domain/student';
 import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 
@@ -114,13 +115,7 @@ export async function POST(request: NextRequest) {
     });
   }
 
-  const payload: {
-    studentIds: string[];
-    ClassId: string;
-    SectionId: string;
-    GroupId: string;
-    AcademicYear: string;
-  } = await request.json();
+  const payload: PromoteStudentsToNewClassModel = await request.json();
 
   try {
     const result = await promoteStudentToNewClass(payload);

@@ -1,4 +1,5 @@
 import { db } from 'lib/db';
+import { PromoteStudentsToNewClassModel } from 'lib/domain/student';
 
 export async function getAllStudentByClassIdForPromotion(
   classId: string,
@@ -30,35 +31,20 @@ export async function getAllStudentByClassIdForPromotion(
   });
 }
 
-export async function promoteStudentToNewClass(payload: {
-  studentIds: string[];
-  ClassId: string;
-  SectionId: string;
-  GroupId: string;
-  AcademicYear: string;
-}) {
+export async function promoteStudentToNewClass(
+  payload: PromoteStudentsToNewClassModel
+) {
   return await db.$transaction(
     payload.studentIds.map((studentId) =>
-      db.student.update({
-        where: {
-          id: studentId,
-        },
+      db.studentMapping.create({
         data: {
-          studentMapping: {
-            updateMany: [
-              {
-                where: {
-                  studentId: studentId,
-                },
-                data: {
-                  classId: payload.ClassId,
-                  sectionId: payload.SectionId,
-                  groupId: payload.GroupId,
-                  batchId: payload.AcademicYear,
-                },
-              },
-            ],
-          },
+          studentId: studentId,
+          classId: payload.classId,
+          sectionId: payload.sectionId,
+          groupId: payload.groupId,
+          batchId: payload.academicYear,
+          mediumId: payload.mediumId,
+          isCurrent: true,
         },
       })
     )

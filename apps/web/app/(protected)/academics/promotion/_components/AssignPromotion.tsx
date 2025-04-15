@@ -1,12 +1,13 @@
 'use client';
 /* eslint-disable react-hooks/exhaustive-deps */
-import { AssignStudentsToClassModel } from 'lib/domain/student';
+import { PromoteStudentsToNewClassModel } from 'lib/domain/student';
 import { useGetBatchesListQuery } from 'lib/queries/batches/useGetBatchesListQuery';
 import { useGetClassListQuery } from 'lib/queries/class/useGetClassListQuery';
 import { useGetGroupListQuery } from 'lib/queries/group/useGetGroupListQuery';
+import { useGetMediumListQuery } from 'lib/queries/medium/useGetMediumListQuery';
 import { useGetAllSectionByClassIdQuery } from 'lib/queries/section/useGetAllSectionsByClassIdQuery';
-import { useCreateStudentMutationByClassIdQuery } from 'lib/queries/students/useCreateStudentMutationByClassIdQuery';
 import { useGetStudentListForPromoteQuery } from 'lib/queries/students/useGetStudentListForPromoteQuery';
+import { usePromoteStudentsMutationQuery } from 'lib/queries/students/usePromoteStudentMutationQuery';
 import { ChevronDown, ChevronRight, Loader2, X } from 'lucide-react';
 import { useParams, useSearchParams } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
@@ -45,7 +46,7 @@ export function AssignPromotion() {
   const {
     isPending: isPendingAssignStudents,
     mutateAsync: mutateCreateStudentsAsync,
-  } = useCreateStudentMutationByClassIdQuery();
+  } = usePromoteStudentsMutationQuery();
 
   const [groupIdToGetStudent, setGroupIdToGetStudent] = useState('');
   const [classIdToGetStudent, setClassIdToGetStudent] = useState('');
@@ -106,6 +107,11 @@ export function AssignPromotion() {
   });
 
   const { data: getAllClassListResponse } = useGetClassListQuery({
+    page,
+    limit,
+    filter,
+  });
+  const { data: mediumListResponse } = useGetMediumListQuery({
     page,
     limit,
     filter,
@@ -209,16 +215,18 @@ export function AssignPromotion() {
     register('sectionId');
   }, [register]);
 
-  const assignStudent = async (payload: AssignStudentsToClassModel) => {
+  const assignStudent = async (payload: PromoteStudentsToNewClassModel) => {
     const assignStudentPayload = {
       ...payload,
-      classId: classIdToGetStudent,
-      sectionId: sectionIdToGetStudent,
-      groupId: groupIdToGetStudent,
+      classId: watch('classId'),
+      sectionId: watch('sectionId'),
+      groupId: watch('groupId'),
+      academicYear: watch('academicYear'),
+      mediumId: watch('mediumId'),
       studentIds: selectedStudents.map((x) => x.student.id),
     };
-    await mutateCreateStudentsAsync(assignStudentPayload);
 
+    await mutateCreateStudentsAsync(assignStudentPayload);
     setSelectedStudents([]);
   };
 
@@ -576,6 +584,45 @@ export function AssignPromotion() {
                       {fieldErrors.academicYear.message.toString()}
                     </p>
                   )}
+                </div>
+              </section>
+              <section className="mb-2 flex justify-between rounded-md bg-white p-2">
+                <div className=" basis-1/2">
+                  <Select
+                    autoComplete="off"
+                    {...register('mediumId', {
+                      required: 'Medium is  Requeired',
+                    })}
+                    value={watch('mediumId')}
+                    onValueChange={(value) => {
+                      if (value) {
+                        setValue('mediumId', value);
+                      }
+                    }}
+                  >
+                    <SelectTrigger className=" basis-1/2">
+                      <SelectValue
+                        className="text-gray-400"
+                        placeholder="Medium"
+                      />{' '}
+                      <ChevronDown className="text-gray-400" />
+                    </SelectTrigger>
+                    <SelectContent className="border border-primary-200">
+                      {' '}
+                      <SelectGroup>
+                        {mediumListResponse?.data?.map((item) => (
+                          <SelectItem key={item.id} value={item.id}>
+                            {item.name}
+                          </SelectItem>
+                        ))}
+                      </SelectGroup>
+                    </SelectContent>
+                    {fieldErrors.mediumId && (
+                      <p className="text-red-500">
+                        {fieldErrors.mediumId.message.toString()}
+                      </p>
+                    )}
+                  </Select>
                 </div>
               </section>
             </section>
