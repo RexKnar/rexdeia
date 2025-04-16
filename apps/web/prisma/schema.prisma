@@ -113,7 +113,7 @@ model ExamSubjectPartition {
   excludeSubjectValidation Boolean          @default(false)
   dateToConduct            DateTime
   examGroupId              String           @db.Uuid
-  order                    Int              @default(1)
+  order                    Int?             @default(1)
   assessmentFormat         AssessmentFormat @relation(fields: [assessmentFormatId], references: [id])
   examGroup                ExamGroup        @relation(fields: [examGroupId], references: [id])
   examSubject              ExamSubject      @relation(fields: [examSubjectId], references: [id])
