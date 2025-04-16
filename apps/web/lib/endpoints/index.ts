@@ -1,4 +1,5 @@
 import ExamAnalyticsEndpoints from './examAnalyticsEndpoints';
+import InstitutionCourseEndpoints from './institute/courseEndpoints';
 import SubjectEndpoints from './subjectEndpoints';
 import { EndpointDetails } from './types';
 
@@ -214,6 +215,7 @@ export const UPDATE_ROLLNUMBERS = `UPDATE_ROLLNUMBERS`;
 export default <EndpointDetails>{
   ...ExamAnalyticsEndpoints,
   ...SubjectEndpoints,
+  ...InstitutionCourseEndpoints,
   [REGISTER_USER]: {
     requestType: `POST`,
     endpoint: `/api/register`,

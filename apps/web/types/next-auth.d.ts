@@ -16,7 +16,8 @@ declare module 'next-auth' {
     branchId?: string | null;
     organizationId?: string | null;
     currentBatch?: string | null;
-
+    organizationName?: string | null;
+    institute?: string | null;
     user: User & {
       id: UserId;
       staffId?: string | null;

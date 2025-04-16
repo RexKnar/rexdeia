@@ -43,3 +43,10 @@ export * from './components/ui/Slider';
 export * from './components/ui/Toggle';
 
 export * from './components/ui/Dialog';
+
+export * from './components/ui/Separator';
+export * from './components/ui/Select';
+export * from './components/ui/Sidebar';
+export * from './components/ui/Skeleton';
+export * from './components/ui/Collapsible';
+export * from './components/ui/Textarea';

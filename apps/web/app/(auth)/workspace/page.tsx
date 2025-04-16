@@ -25,6 +25,8 @@ export default async function Page() {
     <Workspace
       branchId={userOrganizations[0].branchId}
       organizationId={userOrganizations[0].organizationId}
+      organizationName={userOrganizations[0].organization.name}
+      institute={userOrganizations[0].organization.institute}
     />
   ) : null;
 }

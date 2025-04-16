@@ -5,18 +5,23 @@ import { useSearchParams } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 import { useEffect, useState } from 'react';
 
-import { menuItem } from './data';
+import { instituteMenu, menuItem } from './data';
 import { SidebarFooter } from './SidebarFooter';
 import { SidebarItem } from './SidebarItem';
 
 export function Sidebar() {
   const { data: session, status } = useSession();
   const [userRole, setUserRole] = useState<string>('User');
+  const [organizationType, setOrganizationType] = useState<string>('school');
   useEffect(() => {
     setUserRole(session?.user?.role);
+    setOrganizationType(session?.institute);
   }, [session, status]);
 
-  const menus = menuItem[userRole] || [];
+  const menus =
+    organizationType == 'others'
+      ? instituteMenu[userRole] || []
+      : menuItem[userRole] || [];
   const searchParams = useSearchParams();
   const params = new URLSearchParams(searchParams);
   const isMenuOpen = params.get('isMenu') === 'false' ? false : true;

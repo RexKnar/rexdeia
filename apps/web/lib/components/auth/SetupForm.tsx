@@ -36,29 +36,26 @@ export function SetupForm({ branchId, organizationId }: SetupFormProps) {
 
   const [selected, setSelected] = useState('school');
 
-  async function onSubmit({ institute, name }) {
+  async function onSubmit({ name }) {
     try {
       const updateOrganization = makeAPICall(
         UPDATE_ORGANIZATION,
         {
           name,
-          institute,
+          institute: selected,
         },
         {},
         {
           organizationId,
         }
       );
-
       const updateBranch = makeAPICall(
         UPDATE_BRANCH,
         { name: 'Default' },
         {},
         { branchId }
       );
-
       await Promise.all([updateOrganization, updateBranch]);
-
       router.push(`/onboarding`);
     } catch (error) {
       console.error(error);
@@ -111,7 +108,6 @@ export function SetupForm({ branchId, organizationId }: SetupFormProps) {
             onClick={() => setSelected('others')}
           />
         </div>
-        <input type="hidden" {...register('institute')} value={selected} />
       </section>
 
       <section>
