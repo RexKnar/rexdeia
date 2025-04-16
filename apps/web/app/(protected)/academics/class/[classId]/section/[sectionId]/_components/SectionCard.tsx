@@ -1,3 +1,5 @@
+/* eslint-disable prettier/prettier */
+import { staffInchargesModel } from 'lib/domain/section';
 import { useGetSectionByIdQuery } from 'lib/queries/section/useGetSectionByIdQuery';
 import { useGetStudentListBySectionIdQuery } from 'lib/queries/students/useGetStudentListBySectionIdQuery';
 import { Loader2, MoreHorizontal } from 'lucide-react';
@@ -20,9 +22,15 @@ type SectionCardProps = {
   id: string;
   name: string;
   classId: string;
+  staffIncharges:staffInchargesModel[];
 };
 
-export function SectionCard({ classId, id, name }: SectionCardProps) {
+export function SectionCard({
+  classId,
+  id,
+  name,
+  staffIncharges,
+}: SectionCardProps) {
   const router = useRouter();
   const handleCardClick = (event: React.MouseEvent<HTMLDivElement>) => {
     router.push(`/academics/class/${classId}/section/${id}`);
@@ -35,13 +43,14 @@ export function SectionCard({ classId, id, name }: SectionCardProps) {
     useGetSectionByIdQuery(id, {
       enabled: !!id,
     });
+
   return (
     <div
-      className="h-full flex-col bg-white p-3"
+      className="flex-col h-full p-3 bg-white"
       onClick={(event) => handleCardClick(event)}
     >
       <div className="flex">
-        <div className="my-auto w-2/4 px-2">
+        <div className="w-2/4 px-2 my-auto">
           <LinkButton
             className={'base-bold'}
             url={`/academics/class/${classId}/section/${id}`}
@@ -50,8 +59,8 @@ export function SectionCard({ classId, id, name }: SectionCardProps) {
           </LinkButton>
         </div>
 
-        <div className="my-auto w-2/4 ">
-          <div className="float-end my-auto justify-end p-1">
+        <div className="w-2/4 my-auto ">
+          <div className="justify-end p-1 my-auto float-end">
             <DropdownMenu>
               <DropdownMenuTrigger>
                 <Button variant="mild" className="h-8 px-1">
@@ -64,14 +73,14 @@ export function SectionCard({ classId, id, name }: SectionCardProps) {
                 sideOffset={15}
               >
                 <DropdownMenuItem
-                  className="flex cursor-pointer items-center"
+                  className="flex items-center cursor-pointer"
                   onClick={() => {}}
                 >
                   <span className="flex-1">Reassign</span>
                 </DropdownMenuItem>
-                <DropdownMenuSeparator className="bg-gray-100 text-gray-500" />
+                <DropdownMenuSeparator className="text-gray-500 bg-gray-100" />
                 <DropdownMenuItem
-                  className="flex cursor-pointer items-center"
+                  className="flex items-center cursor-pointer"
                   onClick={(e) => {
                     e.stopPropagation();
                   }}
@@ -83,14 +92,14 @@ export function SectionCard({ classId, id, name }: SectionCardProps) {
           </div>
         </div>
       </div>
-      <hr className="border-1 border-gray-400" />
-      <div className="mt-2 flex flex-wrap">
+      <hr className="border-gray-400 border-1" />
+      <div className="flex flex-wrap mt-2">
         <Badge className={cn('mb-2 bg-yellow-100')}>
           Students: &nbsp;{studentList ? studentList.length : '-'}
         </Badge>
 
         {isSectionDetailsLoading ? (
-          <Loader2 className="mr-2 h-6 w-6 animate-spin justify-center text-indigo-700" />
+          <Loader2 className="justify-center w-6 h-6 mr-2 text-indigo-700 animate-spin" />
         ) : SectionDetails ? (
           SectionDetails.group.map((group) => (
             <Badge key={group.id} className={cn('mb-2')}>
@@ -101,6 +110,18 @@ export function SectionCard({ classId, id, name }: SectionCardProps) {
           'No group found'
         )}
       </div>
+      {staffIncharges.length > 0 ? (
+        <div className="mt-2">
+          <h4 className="mb-2 text-sm font-semibold">Incharge:</h4>
+          {staffIncharges.map((staff) => (
+            <Badge key={staff.id} className={cn('mb-2')}>
+              {staff.firstName} {staff.middleName} {staff.lastName}
+            </Badge>
+          ))}
+        </div>
+      ) : (
+        <p className="mt-2 text-sm text-gray-500">No Incharge Assigned</p>
+      )}
     </div>
   );
 }

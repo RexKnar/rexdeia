@@ -98,3 +98,12 @@ export type StudentMappingModel = {
   batchId?: string;
   remark?: string;
 };
+
+export type PromoteStudentsToNewClassModel = {
+  studentIds: string[];
+  classId: string;
+  sectionId: string;
+  groupId: string;
+  mediumId: string;
+  academicYear: string;
+};

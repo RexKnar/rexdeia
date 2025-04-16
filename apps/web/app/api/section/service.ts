@@ -1,4 +1,6 @@
+import { authOptions } from 'lib/auth';
 import uniqBy from 'lodash/uniqBy';
+import { getServerSession } from 'next-auth';
 
 import { db } from '../../../lib/db';
 import {
@@ -59,6 +61,13 @@ export async function getSectionsWithFilter(
   classId: string,
   filter: SectionFilter
 ) {
+  const session = await getServerSession(authOptions);
+  const academicYearId = session.currentBatch;
+
+  if (!academicYearId) {
+    throw new Error('No active academic year found');
+  }
+
   const { isActive } = filter;
 
   const whereClause = {
@@ -79,9 +88,36 @@ export async function getSectionsWithFilter(
       orderBy: {
         name: 'asc',
       },
+      select: {
+        id: true,
+        name: true,
+        academicSubjectForStaff: {
+          where: {
+            academicYearId: academicYearId,
+            deletedAt: null,
+            isIncharge: true,
+          },
+          select: {
+            staff: {
+              select: {
+                id: true,
+                firstName: true,
+                middleName: true,
+                lastName: true,
+              },
+            },
+          },
+        },
+      },
     }),
   ]);
-  return { total, data };
+
+  const transformedData = data.map((section) => ({
+    ...section,
+    staffIncharges: section.academicSubjectForStaff.map((item) => item.staff),
+  }));
+
+  return { total, data: transformedData };
 }
 
 export async function mapStaffsToSection(
@@ -130,7 +166,6 @@ export async function unMapStaffsFromSection(
 ) {
   const operations = staffIds.flatMap((staffId) => {
     const ops = [];
-    // If staffId is provided, prepare to delete the corresponding SectionSubject entry
     if (staffId) {
       ops.push(
         db.staffSection.deleteMany({

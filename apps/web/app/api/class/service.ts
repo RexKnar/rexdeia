@@ -258,40 +258,66 @@ export async function assignStaffToClassWithSubject(
   const sectionIds = payload.sectionIds || [];
   return await db.$transaction(async (prisma) => {
     return await Promise.all([
-      ...sectionIds.map((sectionId) => {
+      ...sectionIds.map(async (sectionId) => {
         if (payload.subjectId) {
+          const existingSubject =
+            await prisma.academicSubjectForStaff.findFirst({
+              where: {
+                subjectId: payload.subjectId,
+                sectionId: sectionId,
+                academicYearId: payload.academicYearId,
+                isIncharge: false,
+                staffId: payload.staffId,
+                deletedAt: null,
+              },
+            });
+          if (!existingSubject) {
+            return prisma.section.update({
+              where: { id: sectionId },
+              data: {
+                academicSubjectForStaff: {
+                  create: [
+                    {
+                      subjectId: payload.subjectId,
+                      staffId: payload.staffId,
+                      academicYearId: payload.academicYearId,
+                      isIncharge: false,
+                    },
+                  ],
+                },
+              },
+            });
+          }
+        }
+      }),
+      ...sectionInCharge.map(async (sectionInCharge) => {
+        const existingIncharge = await prisma.academicSubjectForStaff.findFirst(
+          {
+            where: {
+              sectionId: sectionInCharge,
+              academicYearId: payload.academicYearId,
+              isIncharge: true,
+              staffId: payload.staffId,
+              deletedAt: null,
+            },
+          }
+        );
+        if (!existingIncharge) {
           return prisma.section.update({
-            where: { id: sectionId },
+            where: { id: sectionInCharge },
             data: {
               academicSubjectForStaff: {
                 create: [
                   {
-                    subjectId: payload.subjectId,
                     staffId: payload.staffId,
                     academicYearId: payload.academicYearId,
-                    isIncharge: false,
+                    isIncharge: true,
                   },
                 ],
               },
             },
           });
         }
-      }),
-      ...sectionInCharge.map((sectionInCharge) => {
-        return prisma.section.update({
-          where: { id: sectionInCharge },
-          data: {
-            academicSubjectForStaff: {
-              create: [
-                {
-                  staffId: payload.staffId,
-                  academicYearId: payload.academicYearId,
-                  isIncharge: true,
-                },
-              ],
-            },
-          },
-        });
       }),
     ]);
   });
@@ -330,6 +356,12 @@ export async function unMapStaffsFromClass(
 
 export async function getAllSubjectByClassId(id: string) {
   const session = await getServerSession(authOptions);
+  const academicYearId = session.currentBatch;
+
+  if (!academicYearId) {
+    throw new Error('No active academic year found');
+  }
+
   return db.subject.findMany({
     where: {
       classId: id,
@@ -362,14 +394,23 @@ export async function getAllSubjectByClassId(id: string) {
       },
       academicSubjectForStaff: {
         where: {
-          sectionId: id,
+          academicYearId,
+          section: {
+            classId: id,
+          },
         },
+        distinct: ['staffId'],
         select: {
           staff: {
             select: {
               firstName: true,
               middleName: true,
               lastName: true,
+            },
+          },
+          section: {
+            select: {
+              name: true,
             },
           },
         },

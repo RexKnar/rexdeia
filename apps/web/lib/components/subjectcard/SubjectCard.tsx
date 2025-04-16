@@ -1,6 +1,8 @@
+/* eslint-disable prettier/prettier */
 import { MoreHorizontal } from 'lucide-react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import {
+  Badge,
   Button,
   DropdownMenu,
   DropdownMenuContent,
@@ -15,23 +17,31 @@ type SubjectCardProps = {
   name: string;
   type?: string;
   assessmentFormat?: string;
-  subjectMaster?: { id: string; name: string };
+  staffNames?: string;
 };
-export function SubjectCard({ id, name, subjectMaster }: SubjectCardProps) {
+export function SubjectCard({ id, name, staffNames }: SubjectCardProps) {
   const pathname = usePathname();
   const router = useRouter();
   const searchParams = useSearchParams();
   return (
-    <div className="rounded-lg bg-white">
+    <div className="bg-white rounded-lg">
       <div className="flex p-3 pb-0">
-        <div className="my-auto w-2/4">
+        <div className="w-2/4 my-auto">
           <Text variant="base-bold">{name}</Text>
           <div className="inline-flex">
-            <Text variant="base-regular">staff Name</Text>
+            {staffNames
+              ?.split(', ')
+              .map((staff) => staff.trim())
+              .filter(Boolean)
+              .map((staff, index) => (
+                <Badge key={index} className="mb-2">
+                  {staff}
+                </Badge>
+              ))}
           </div>
         </div>
-        <div className="my-auto w-2/4 ">
-          <div className="float-end my-auto justify-end p-1">
+        <div className="w-2/4 my-auto ">
+          <div className="justify-end p-1 my-auto float-end">
             <DropdownMenu>
               <DropdownMenuTrigger className="flex items-center gap-2 outline-none">
                 <Button variant="mild" className="h-8 px-1">
@@ -43,7 +53,7 @@ export function SubjectCard({ id, name, subjectMaster }: SubjectCardProps) {
                 align="end"
                 sideOffset={15}
               >
-                <DropdownMenuItem className="flex cursor-pointer items-center">
+                <DropdownMenuItem className="flex items-center cursor-pointer">
                   <Button
                     variant="link"
                     size="sm"
@@ -52,7 +62,6 @@ export function SubjectCard({ id, name, subjectMaster }: SubjectCardProps) {
                       const params = new URLSearchParams(searchParams);
                       params.set('isAssignSubjectToStudentFlyout', 'true');
                       params.set('subjectId', id);
-                      params.set('subjectMasterId', subjectMaster.id);
                       params.set('subjectName', name);
                       router.replace(pathname + '?' + params.toString());
                     }}
@@ -60,8 +69,8 @@ export function SubjectCard({ id, name, subjectMaster }: SubjectCardProps) {
                     Assign elective
                   </Button>
                 </DropdownMenuItem>
-                <DropdownMenuSeparator className="bg-gray-100 text-gray-500" />
-                <DropdownMenuItem className="flex cursor-pointer items-center">
+                <DropdownMenuSeparator className="text-gray-500 bg-gray-100" />
+                <DropdownMenuItem className="flex items-center cursor-pointer">
                   <Button
                     variant="link"
                     size="sm"
@@ -77,8 +86,8 @@ export function SubjectCard({ id, name, subjectMaster }: SubjectCardProps) {
                     Edit
                   </Button>
                 </DropdownMenuItem>
-                <DropdownMenuSeparator className="bg-gray-100 text-gray-500" />
-                <DropdownMenuItem className="flex cursor-pointer items-center">
+                <DropdownMenuSeparator className="text-gray-500 bg-gray-100" />
+                <DropdownMenuItem className="flex items-center cursor-pointer">
                   <Button
                     variant="link"
                     size="sm"
