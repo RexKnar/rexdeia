@@ -234,6 +234,9 @@ export async function getExamConfigWithSubjectPartition(
                         assessmentFormat: true,
                         Mark: true,
                       },
+                      orderBy: {
+                        order: 'asc',
+                      },
                     },
                   },
                   orderBy: [
