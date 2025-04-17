@@ -54,6 +54,9 @@ export async function getExamSubjectsByClassSectionId(
         include: {
           assessmentFormat: true,
         },
+        orderBy: {
+          order: 'asc',
+        },
       },
     },
   });
