@@ -1,4 +1,5 @@
 export type SubjectModel = {
+  academicSubjectForStaff: AcademicSubjectForStaffModel[];
   id: string;
   name?: string;
   isActive?: boolean;
@@ -150,4 +151,24 @@ export type AssignElectiveSubjectModel = {
   subjectId: string;
   studentId: string;
   subjectMasterId: string;
+};
+
+export type AcademicSubjectForStaffModel = {
+  id: string;
+  staffId: string;
+  subjectId: string;
+  academicYearId: string;
+  sectionId: string;
+  isIncharge: boolean;
+  deletedAt: Date;
+  staff?: {
+    id: string;
+    firstName: string;
+    middleName?: string;
+    lastName: string;
+  };
+  section?: {
+    id: string;
+    name: string;
+  };
 };

@@ -154,6 +154,11 @@ export async function getAllSubjectBySectionId(id: string, classId: string) {
                               lastName: true,
                             },
                           },
+                          section: {
+                            select: {
+                              name: true,
+                            },
+                          },
                         },
                       },
                     },
