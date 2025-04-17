@@ -10,9 +10,16 @@ import signupGif from '../../../public/assets/images/signin.gif';
 type WorkspaceProps = {
   branchId: string;
   organizationId: string;
+  organizationName: string;
+  institute: string;
 };
 
-export function Workspace({ branchId, organizationId }: WorkspaceProps) {
+export function Workspace({
+  branchId,
+  organizationId,
+  institute,
+  organizationName,
+}: WorkspaceProps) {
   const router = useRouter();
   const { update, status } = useSession();
 
@@ -21,6 +28,8 @@ export function Workspace({ branchId, organizationId }: WorkspaceProps) {
       update({
         branchId,
         organizationId,
+        institute,
+        organizationName,
       });
 
       router.push('/');

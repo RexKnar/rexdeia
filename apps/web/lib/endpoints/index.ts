@@ -1,4 +1,5 @@
 import ExamAnalyticsEndpoints from './examAnalyticsEndpoints';
+import InstitutionCourseEndpoints from './institute/courseEndpoints';
 import SubjectEndpoints from './subjectEndpoints';
 import { EndpointDetails } from './types';
 
@@ -74,6 +75,10 @@ export const GET_SUBJECT_LIST_BY_SECTION_ID = `GET_SUBJECT_LIST_BY_SECTION_ID`;
 export const DELETE_STUDENT_BY_ID = `DELETE_STUDENT_BY_ID`;
 export const ADD_GRADE = `ADD_GRADE`;
 export const GET_GRADE_LIST = `GET_GRADE_LIST`;
+export const GET_GRADE_BY_ID = `GET_GRADE_BY_ID`;
+export const UPDATE_GRADE_BY_ID = `UPDATE_GRADE_BY_ID`;
+export const ADD_SCALE_TO_GRADE = `ADD_SCALE_TO_GRADE`;
+export const DELETE_GRADE_SCALE_BY_ID = `DELETE_GRADE_SCALE_BY_ID`;
 export const ADD_STAFF = `ADD_STAFF`;
 export const GET_STAFF_LIST = `GET_STAFF_LIST`;
 export const GET_STAFF_BY_ID = `GET_STAFF_BY_ID`;
@@ -212,6 +217,7 @@ export const UPDATE_ROLLNUMBERS = `UPDATE_ROLLNUMBERS`;
 export default <EndpointDetails>{
   ...ExamAnalyticsEndpoints,
   ...SubjectEndpoints,
+  ...InstitutionCourseEndpoints,
   [REGISTER_USER]: {
     requestType: `POST`,
     endpoint: `/api/register`,
@@ -335,6 +341,22 @@ export default <EndpointDetails>{
   [GET_GRADE_LIST]: {
     requestType: `GET`,
     endpoint: `/api/grade`,
+  },
+  [UPDATE_GRADE_BY_ID]: {
+    requestType: `PUT`,
+    endpoint: `/api/grade/[id]`,
+  },
+  [GET_GRADE_BY_ID]: {
+    requestType: `GET`,
+    endpoint: `/api/grade/[id]`,
+  },
+  [ADD_SCALE_TO_GRADE]: {
+    requestType: `POST`,
+    endpoint: `/api/grade/scale`,
+  },
+  [DELETE_GRADE_SCALE_BY_ID]: {
+    requestType: `DELETE`,
+    endpoint: `/api/grade/scale/[id]`,
   },
   [GET_CLASS_LIST]: {
     requestType: `PUT`,

@@ -181,11 +181,13 @@ export default function StudentMarkList({
                       <b>
                         {studentDetail?.failingStatus ? (
                           <span className="text-red-500 print:p-0 print:text-sm">
-                            {studentDetail.subjectTotalMark || 0}(F)
+                            {studentDetail.subjectTotalMark || 0}(
+                            {studentDetail.grade})
                           </span>
                         ) : (
                           <span className="text-green-500 print:p-0 print:text-sm">
-                            {studentDetail.subjectTotalMark || 0}(P)
+                            {studentDetail.subjectTotalMark || 0}(
+                            {studentDetail.grade})
                           </span>
                         )}
                       </b>
@@ -268,7 +270,7 @@ export default function StudentMarkList({
         ),
         cell: ({ row }) => (
           <div className="text-center">
-            {row.original.rank || ''}
+            {row.original.rank || ''} ({row.original.grade || '-'})
             <br />
             {!row.original.attendance && (
               <span className="text-red-500 print:p-0 print:text-sm">A</span>
@@ -342,7 +344,7 @@ export default function StudentMarkList({
             tableValues.push(student.section?.name);
 
             let totalMark = 0;
-            let failingStatus = false;
+            // let failingStatus = false;
 
             await Promise.all(
               subjectList.map(async (subject) => {
@@ -357,8 +359,8 @@ export default function StudentMarkList({
                       const mark =
                         studentDetail.marks.find(
                           (obj) =>
-                            obj.examSubjectPartitionId ===
-                            examSubjectPartition.id
+                            obj.assessmentFormatId ===
+                            examSubjectPartition.assessmentFormatId
                         ) || null;
 
                       if (mark) {
@@ -379,10 +381,14 @@ export default function StudentMarkList({
                     const subjectTotal =
                       Number(studentDetail?.subjectTotalMark) || 0;
                     if (studentDetail?.failingStatus) {
-                      tableValues.push(`${subjectTotal}(F)`);
-                      failingStatus = true;
+                      tableValues.push(
+                        `${subjectTotal}(${studentDetail.grade})`
+                      );
+                      // failingStatus = true;
                     } else {
-                      tableValues.push(`${subjectTotal}(P)`);
+                      tableValues.push(
+                        `${subjectTotal}(${studentDetail.grade})`
+                      );
                     }
                   } else {
                     tableValues.push('A');
@@ -399,10 +405,11 @@ export default function StudentMarkList({
               })
             );
             const finalTotal = totalMark | 0;
-            const finalStatus = failingStatus ? 'F' : 'P';
-            tableValues.push(`${finalTotal}(${finalStatus})`);
+            // const finalStatus = failingStatus ? 'F' : 'P';
+            tableValues.push(`${finalTotal}(${student.grade})`);
 
             tableValues.push(student.rank.toString());
+
             return tableValues;
           })
         );

@@ -113,6 +113,7 @@ model ExamSubjectPartition {
   excludeSubjectValidation Boolean          @default(false)
   dateToConduct            DateTime
   examGroupId              String           @db.Uuid
+  order                    Int?             @default(1)
   assessmentFormat         AssessmentFormat @relation(fields: [assessmentFormatId], references: [id])
   examGroup                ExamGroup        @relation(fields: [examGroupId], references: [id])
   examSubject              ExamSubject      @relation(fields: [examSubjectId], references: [id])
@@ -202,25 +203,27 @@ model Branch {
   term             Term[]
   users            UserOrganization[]
   subjectType      subjectType[]
+  InstituteCourse  InstituteCourse[]
 }
 
 model Organization {
-  id          String             @id @default(uuid()) @map("_id") @db.Uuid
-  name        String
-  institute   String
-  description String?
-  image       String?
-  isActivated Boolean            @default(false)
-  createdAt   DateTime?          @default(now())
-  updatedAt   DateTime?          @default(now())
-  createdById String             @db.Uuid
-  branches    Branch[]
-  forms       Form[]
-  createdBy   User               @relation(fields: [createdById], references: [id])
-  periods     Periods[]
-  staff       Staff[]
-  Student     Student[]
-  users       UserOrganization[]
+  id              String             @id @default(uuid()) @map("_id") @db.Uuid
+  name            String
+  institute       String
+  description     String?
+  image           String?
+  isActivated     Boolean            @default(false)
+  createdAt       DateTime?          @default(now())
+  updatedAt       DateTime?          @default(now())
+  createdById     String             @db.Uuid
+  branches        Branch[]
+  forms           Form[]
+  createdBy       User               @relation(fields: [createdById], references: [id])
+  periods         Periods[]
+  staff           Staff[]
+  Student         Student[]
+  users           UserOrganization[]
+  InstituteCourse InstituteCourse[]
 }
 
 model UserOrganization {
@@ -317,6 +320,68 @@ model Course {
   deletedAt    DateTime?
   departmentId String?     @db.Uuid
   department   Department? @relation(fields: [departmentId], references: [id])
+}
+
+model InstituteCourse {
+  id                       String                     @id @default(uuid()) @map("_id") @db.Uuid
+  courseName               String
+  description              String?
+  tagLine                  String?
+  languageId               String                     @db.Uuid
+  language                 Language                   @relation(fields: [languageId], references: [id])
+  price                    String
+  discountPrice            String
+  order                    Int                        @default(1)
+  coverImage               String?
+  CourseCategory           CourseCategory[]           @relation("CourseCategories")
+  isActive                 Boolean                    @default(false)
+  isDeleted                Boolean                    @default(false)
+  deletedAt                DateTime?
+  branchId                 String                     @db.Uuid
+  branch                   Branch                     @relation(fields: [branchId], references: [id])
+  createdAt                DateTime                   @default(now())
+  updatedAt                DateTime                   @default(now())
+  organizationId           String                     @db.Uuid
+  organization             Organization               @relation(fields: [organizationId], references: [id])
+  InstituteCourseHighlight InstituteCourseHighlight[]
+  InstituteCourseOutcome   InstituteCourseOutcome[]
+  InstituteCourseFAQ       InstituteCourseFAQ[]
+}
+
+model InstituteCourseHighlight {
+  id                String          @id @default(uuid()) @map("_id") @db.Uuid
+  keyHighlight      String
+  description       String?
+  instituteCourseId String          @db.Uuid
+  instituteCourse   InstituteCourse @relation(fields: [instituteCourseId], references: [id])
+}
+
+model InstituteCourseOutcome {
+  id                String          @id @default(uuid()) @map("_id") @db.Uuid
+  title             String
+  description       String?
+  icon              String?
+  instituteCourseId String          @db.Uuid
+  instituteCourse   InstituteCourse @relation(fields: [instituteCourseId], references: [id])
+}
+
+model InstituteCourseFAQ {
+  id                String          @id @default(uuid()) @map("_id") @db.Uuid
+  question          String
+  answer            String
+  instituteCourseId String          @db.Uuid
+  instituteCourse   InstituteCourse @relation(fields: [instituteCourseId], references: [id])
+}
+
+model CourseCategory {
+  id                    String            @id @default(uuid()) @map("_id") @db.Uuid
+  name                  String
+  icon                  String?
+  courseCategoryId      String?           @db.Uuid
+  parentCourseCategory  CourseCategory?   @relation("CourseCategoryChild", fields: [courseCategoryId], references: [id])
+  childCourseCategories CourseCategory[]  @relation("CourseCategoryChild")
+  isActive              Boolean           @default(false)
+  InstituteCourse       InstituteCourse[] @relation("CourseCategories")
 }
 
 model Form {
@@ -589,9 +654,11 @@ model Class {
   createdAt      DateTime?        @default(now())
   updatedAt      DateTime?        @default(now())
   classLevelId   String?          @db.Uuid
+  gradeId        String?          @db.Uuid
   batch          Batch?           @relation(fields: [batchId], references: [id])
   branch         Branch           @relation(fields: [branchId], references: [id])
   classLevel     ClassLevel?      @relation(fields: [classLevelId], references: [id])
+  grade          Grade?           @relation(fields: [gradeId], references: [id])
   regulation     Regulation?      @relation(fields: [regulationId], references: [id])
   ExamGroup      ExamGroup[]
   periods        Periods[]
@@ -834,6 +901,7 @@ model Grade {
   isDeleted   Boolean       @default(false)
   branch      Branch        @relation(fields: [branchId], references: [id])
   gradeScales GradeScales[]
+  Class       Class[]
 }
 
 model GradeScales {
@@ -872,14 +940,15 @@ model Community {
 }
 
 model Language {
-  id        String    @id @default(uuid()) @map("_id") @db.Uuid
-  name      String
-  isActive  Boolean
-  createdAt DateTime? @default(now())
-  updatedAt DateTime? @default(now())
-  isDeleted Boolean   @default(false)
-  staff     Staff[]
-  student   Student[]
+  id              String            @id @default(uuid()) @map("_id") @db.Uuid
+  name            String
+  isActive        Boolean
+  createdAt       DateTime?         @default(now())
+  updatedAt       DateTime?         @default(now())
+  isDeleted       Boolean           @default(false)
+  staff           Staff[]
+  student         Student[]
+  InstituteCourse InstituteCourse[]
 }
 
 model StaffCategory {

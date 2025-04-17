@@ -3,7 +3,7 @@ module.exports = {
   transpilePackages: ['ui'],
   swcMinify: true,
   images: {
-    domains: ['storage.googleapis.com'],
+    domains: ['storage.googleapis.com','rexcoders.online', 'process.fs.teachablecdn.com'],
   },
   webpack: (config, { isServer }) => {
     if (!isServer) {

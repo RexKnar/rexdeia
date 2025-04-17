@@ -103,7 +103,7 @@ export function ExamConfigureFlyout(props) {
     payload.examId = examId;
     payload.subjectTotalMarks = subjectTotalMarks;
     payload.subjectMarksToConvert = subjectMarksToConvert;
-    payload.minPassMark = minPassMark;
+    payload.minMark = minPassMark;
     payload.sectionIds = sectionIds;
     const createdExamConfiguration =
       await mutateCreateExamConfigurationAsync(payload);
@@ -215,19 +215,39 @@ export function ExamConfigureFlyout(props) {
                       {field['name']}
                     </label>
                   </div>
-                  <div className="flex gap-2">
-                    <label htmlFor="name" className="text-sm font-semibold ">
-                      Exclude in Pass Criteria
-                    </label>
-                    <Switch
-                      id="excludeSubjectValidation"
-                      {...register('excludeSubjectValidation')}
-                      onCheckedChange={(value) =>
-                        setValue('excludeSubjectValidation', value)
-                      }
-                      checked={watch('excludeSubjectValidation')}
-                    />
+                  <div className="grid grid-cols-2 items-center justify-center gap-2">
+                    <div className="flex gap-1">
+                      <label
+                        htmlFor="name"
+                        className="flex text-sm font-semibold"
+                      >
+                        Exclude in Pass Criteria
+                      </label>
+                      <Switch
+                        id="excludeSubjectValidation"
+                        {...register('excludeSubjectValidation')}
+                        onCheckedChange={(value) =>
+                          setValue('excludeSubjectValidation', value)
+                        }
+                        checked={watch('excludeSubjectValidation')}
+                      />
+                    </div>
+                    <div className="">
+                      <label
+                        htmlFor="order"
+                        className="text-sm font-semibold text-gray-700"
+                      >
+                        Order
+                      </label>
+                      <Input
+                        type={'number'}
+                        {...register(`configDetail.${index}.order`, {
+                          required: 'order is Required',
+                        })}
+                      />
+                    </div>
                   </div>
+
                   <div className="mt-4">
                     <label
                       htmlFor="dateToConduct"

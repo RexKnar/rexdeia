@@ -45,7 +45,7 @@ export function ClassList() {
     );
   }
 
-  if (classList.data.length === 0) {
+  if (classList?.data?.length === 0) {
     return (
       <div className="flex flex-col items-center gap-6 p-6 align-middle">
         <Image alt="icon" width={320} height={320} src={noClassListImage} />

@@ -79,6 +79,7 @@ export type ExamSubjectPartitionModel = {
   excludeSubjectValidation?: boolean;
   academicExamId: string;
   assessmentFormat?: AssessmentFormatModel;
+  order: number;
 };
 
 /*---------------------------------- End of New Exam --------------------------------------- **/

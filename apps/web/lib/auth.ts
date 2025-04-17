@@ -60,6 +60,8 @@ export const authOptions: NextAuthOptions = {
         session.organizationId = token.organizationId as string;
         session.currentBatch = token.currentBatch as string;
         session.user.createdBranches = token.createdBranches as any[];
+        session.organizationName = token.organizationName as string;
+        session.institute = token.institute as string;
       }
 
       return session;
@@ -69,6 +71,8 @@ export const authOptions: NextAuthOptions = {
       if (trigger === 'update' && session.organizationId && session.branchId) {
         token.branchId = session.branchId;
         token.organizationId = session.organizationId;
+        token.organizationName = session.organizationName;
+        token.institute = session.institute;
       }
 
       const dbUser = await db.user.findFirst({

@@ -6,6 +6,8 @@ import { Button } from 'ui';
 
 import { PageTitle } from '@/components/PageTitle';
 
+import { AddScalesFlyout } from '../_modals/AddScalesFlyout';
+
 const GradeFlyout = dynamic(() =>
   import('../_modals/SaveGradeFlyout').then((mod) => mod.GradeFlyout)
 );
@@ -32,6 +34,7 @@ export function GradePageHeader() {
         </Button>
       </section>
       <GradeFlyout />
+      <AddScalesFlyout />
     </>
   );
 }
