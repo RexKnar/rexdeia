@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 'use client';
 import { useGetClassListQuery } from 'lib/queries/class/useGetClassListQuery';
 import { useGetExamConfigSubjectDetailsBySectionIdsQuery } from 'lib/queries/exams/configuration/subject/useGetExamConfigSubjectDetailsBySectionIdsQuery';
@@ -252,7 +253,7 @@ export function AddExamLayout() {
 
   return (
     <>
-      <section className="mb-4 flex flex-row gap-5 rounded-md bg-white p-4">
+      <section className="flex flex-row gap-5 p-4 mb-4 bg-white rounded-md">
         <div className=" basis-1/4">
           <label
             htmlFor="Term"
@@ -308,8 +309,8 @@ export function AddExamLayout() {
           )}
         </div>
       </section>
-      <section className="flex h-screen flex-row gap-1 rounded-xl bg-white p-1">
-        <div className="basis-1/6 rounded-l-lg bg-gray-50 text-center">
+      <section className="flex flex-row h-screen gap-1 p-1 bg-white rounded-xl">
+        <div className="text-center rounded-l-lg basis-1/6 bg-gray-50">
           <div className="p-2">Class</div>
           <div>
             <div>
@@ -327,14 +328,14 @@ export function AddExamLayout() {
                 </div>
               ) : (
                 <div className="flex justify-center pt-36 ">
-                  <Loader2 className="mr-2 h-6 w-6 animate-spin text-black" />
+                  <Loader2 className="w-6 h-6 mr-2 text-black animate-spin" />
                   <p className="text-black ">Fetching Classes...</p>
                 </div>
               )}
             </div>
           </div>
         </div>
-        <div className="basis-1/6 bg-red-50 text-center">
+        <div className="text-center basis-1/6 bg-red-50">
           <div className="p-2">Section</div>
           <div>
             {classId ? (
@@ -353,7 +354,7 @@ export function AddExamLayout() {
                   </div>
                 ) : (
                   <div className="flex justify-center pt-36">
-                    <Loader2 className="mr-2 h-6 w-6 animate-spin text-black" />
+                    <Loader2 className="w-6 h-6 mr-2 text-black animate-spin" />
                     <p className="text-black ">Fetching Sections...</p>
                   </div>
                 )}
@@ -365,7 +366,7 @@ export function AddExamLayout() {
             )}
           </div>
         </div>
-        <div className="basis-2/6 bg-blue-50 text-center">
+        <div className="text-center basis-2/6 bg-blue-50">
           <div className="p-2">Subject Type</div>
           <div>
             {sectionIds?.length > 0 ? (
@@ -386,7 +387,7 @@ export function AddExamLayout() {
                   </div>
                 ) : (
                   <div className="flex justify-center pt-36">
-                    <Loader2 className="mr-2 h-6 w-6 animate-spin text-black" />
+                    <Loader2 className="w-6 h-6 mr-2 text-black animate-spin" />
                     <p className="text-black ">Fetching Sections...</p>
                   </div>
                 )}
@@ -398,7 +399,7 @@ export function AddExamLayout() {
             )}
           </div>
         </div>
-        <div className="basis-2/6 bg-slate-200 text-center">
+        <div className="text-center basis-2/6 bg-slate-200">
           <div className="p-2">Subject</div>
           <div>
             <div>
@@ -407,7 +408,7 @@ export function AddExamLayout() {
                   return (
                     <div
                       key={groupData.id}
-                      className="border-1 border border-gray-50"
+                      className="border border-1 border-gray-50"
                     >
                       <h4 className="bg-red-100">{groupData.name}</h4>
                       {groupData.subject.map((cardData) => {
@@ -433,45 +434,45 @@ export function AddExamLayout() {
             </div>
             {isSubjectListLoading && (
               <div className="flex justify-center pt-36">
-                <Loader2 className="mr-2 h-6 w-6 animate-spin text-black" />
+                <Loader2 className="w-6 h-6 mr-2 text-black animate-spin" />
                 <p className="text-black ">Fetching Subjects...</p>
               </div>
             )}
           </div>
         </div>
-        <div className="basis-2/6 overflow-y-scroll bg-slate-200 px-1 text-center">
+        <div className="px-1 overflow-y-scroll text-center basis-2/6 bg-slate-200">
           <div className="p-2">Config Details</div>
           <div>
             {!isSubjectConfigListLoading ? (
               <div>
                 {subjectConfigListResponse?.map((subjectConfig) => (
                   <div key={subjectConfig.id}>
-                    <div className="rounded-2 border-2 border-white bg-blue-200 p-2">
+                    <div className="p-2 bg-blue-200 border-2 border-white rounded-2">
                       <h2>
                         {subjectConfig.subjectName} (
-                        {subjectConfig?.section?.name ?? '-'})
+                        {subjectConfig?.section?.name})
                       </h2>
                       <div className="flex flex-wrap text-left">
                         <span className="w-1/2">Total Marks</span>
                         <span className="w-1/2">
-                          {subjectConfig?.totalMarks?.toString() ?? '-'}
+                          {subjectConfig?.totalMarks?.toString()}
                         </span>
                       </div>
                       <div className="flex flex-wrap text-left">
                         <span className="w-1/2">Convert To</span>
                         <span className="w-1/2">
-                          {subjectConfig?.convertTo?.toString() ?? '-'}
+                          {subjectConfig?.convertTo?.toString()}
                         </span>
                       </div>
                       <div className="flex flex-wrap text-left">
                         <span className="w-1/2">Min-Mark</span>
                         <span className="w-1/2">
-                          {subjectConfig?.minMark?.toString() ?? '-'}
+                          {subjectConfig?.minMark?.toString()}
                         </span>
                       </div>
                       <div className="flex justify-center py-3">
                         <Button
-                          className="h-auto bg-primary-600 px-3 py-1 text-white"
+                          className="h-auto px-3 py-1 text-white bg-primary-600"
                           variant="mild"
                           onClick={() => {
                             params.set('isEditSubjectConfigFlyoutOpen', 'true');
@@ -503,7 +504,7 @@ export function AddExamLayout() {
               </div>
             ) : (
               <div className="flex justify-center pt-36">
-                <Loader2 className="mr-2 h-6 w-6 animate-spin text-black" />
+                <Loader2 className="w-6 h-6 mr-2 text-black animate-spin" />
                 <p className="text-black">Fetching Details...</p>
               </div>
             )}
