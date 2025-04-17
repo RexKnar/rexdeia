@@ -446,30 +446,30 @@ export function AddExamLayout() {
               <div>
                 {subjectConfigListResponse?.map((subjectConfig) => (
                   <div key={subjectConfig.id}>
-                    <div className="rounded-2 border-2 border-white bg-blue-200 p-2 ">
+                    <div className="rounded-2 border-2 border-white bg-blue-200 p-2">
                       <h2>
-                        {subjectConfig.subjectName}(
-                        {subjectConfig?.section?.name})
+                        {subjectConfig.subjectName} (
+                        {subjectConfig?.section?.name ?? '-'})
                       </h2>
                       <div className="flex flex-wrap text-left">
                         <span className="w-1/2">Total Marks</span>
                         <span className="w-1/2">
-                          {subjectConfig?.totalMarks.toString()}
+                          {subjectConfig?.totalMarks?.toString() ?? '-'}
                         </span>
                       </div>
                       <div className="flex flex-wrap text-left">
                         <span className="w-1/2">Convert To</span>
                         <span className="w-1/2">
-                          {subjectConfig?.convertTo.toString()}
+                          {subjectConfig?.convertTo?.toString() ?? '-'}
                         </span>
                       </div>
                       <div className="flex flex-wrap text-left">
                         <span className="w-1/2">Min-Mark</span>
                         <span className="w-1/2">
-                          {subjectConfig?.minMark.toString()}
+                          {subjectConfig?.minMark?.toString() ?? '-'}
                         </span>
                       </div>
-                      <div className="flex justify-center py-3 ">
+                      <div className="flex justify-center py-3">
                         <Button
                           className="h-auto bg-primary-600 px-3 py-1 text-white"
                           variant="mild"
@@ -487,27 +487,29 @@ export function AddExamLayout() {
                       </div>
                     </div>
 
-                    {subjectConfig?.examSubjectPartition?.map((cardData) => {
-                      return cardData.assessmentFormat ? (
-                        <AssessmentFormatDetailCard
-                          key={cardData.id}
-                          {...cardData}
-                        />
-                      ) : null;
-                    })}
-                    <hr />
+                    {subjectConfig?.examSubjectPartition
+                      ?.sort((a, b) => a.order - b.order)
+                      ?.map((cardData) =>
+                        cardData.assessmentFormat ? (
+                          <AssessmentFormatDetailCard
+                            {...cardData}
+                            key={cardData.id}
+                          />
+                        ) : null
+                      )}
+                    <hr className="my-4" />
                   </div>
                 ))}
               </div>
             ) : (
               <div className="flex justify-center pt-36">
                 <Loader2 className="mr-2 h-6 w-6 animate-spin text-black" />
-                <p className="text-black ">Fetching Details...</p>
+                <p className="text-black">Fetching Details...</p>
               </div>
             )}
-            <div className="flex justify-center py-3 ">
+            <div className="flex justify-center py-3">
               <Button
-                className=" text-primary"
+                className="text-primary"
                 variant="outline"
                 onClick={() => {
                   const params = new URLSearchParams(searchParams);

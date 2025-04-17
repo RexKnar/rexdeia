@@ -12,6 +12,7 @@ export function AssessmentFormatDetailCard(props) {
     convertTo,
     minMark,
     excludeSubjectValidation,
+    order,
     id: configId,
   } = props;
   const pathname = usePathname();
@@ -22,7 +23,12 @@ export function AssessmentFormatDetailCard(props) {
 
   return (
     <div className="rounded-2 border-2 border-white bg-green-200 p-2 ">
-      <h4 className="text-center">{assessmentFormat?.name || ''}</h4>
+      <div className="flex items-center justify-center gap-3">
+        <h4 className="text-center">{assessmentFormat?.name || ''}</h4>
+        <label htmlFor="order" className="text-sm font-semibold text-gray-700">
+          Order: {order}
+        </label>
+      </div>
       <div className="flex flex-wrap text-left">
         <span className="w-1/2">Date</span>
         <span className="w-1/2">{formatDate(dateToConduct, 'dd/mm/yyyy')}</span>

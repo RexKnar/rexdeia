@@ -56,6 +56,7 @@ export function EditExamPartitionFlyout(props) {
         totalMarks,
         dateToConduct,
         excludeSubjectValidation,
+        order,
       } = examPartitionDetailResponse;
       const formattedDate = dateToConduct.split('T')[0];
 
@@ -65,6 +66,7 @@ export function EditExamPartitionFlyout(props) {
         totalMarks: totalMarks,
         dateToConduct: formattedDate,
         excludeSubjectValidation: excludeSubjectValidation,
+        order: order,
       };
       reset(partitionValues);
     }
@@ -132,6 +134,20 @@ export function EditExamPartitionFlyout(props) {
                       setValue('excludeSubjectValidation', value)
                     }
                     checked={watch('excludeSubjectValidation')}
+                  />
+                </div>
+                <div className="mt-4">
+                  <label
+                    htmlFor="order"
+                    className="text-sm font-semibold text-gray-700"
+                  >
+                    Order
+                  </label>
+                  <Input
+                    type={'number'}
+                    {...register(`order`, {
+                      required: 'order is Required',
+                    })}
                   />
                 </div>
                 <div className="mt-4">
