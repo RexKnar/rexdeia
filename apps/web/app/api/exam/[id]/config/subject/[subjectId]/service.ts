@@ -30,6 +30,9 @@ export async function getConfigDetailBySectionSubjectId(
             },
           },
           examSubjectPartition: {
+            orderBy: {
+              order: 'asc',
+            },
             include: {
               assessmentFormat: true,
             },
