@@ -26,7 +26,7 @@ export function AssessmentFormatDetailCard(props) {
       <div className="flex items-center justify-center gap-3">
         <h4 className="text-center">{assessmentFormat?.name || ''}</h4>
         <label htmlFor="order" className="text-sm font-semibold text-gray-700">
-          Order: {order}
+          ({order})
         </label>
       </div>
       <div className="flex flex-wrap text-left">
