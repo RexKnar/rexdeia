@@ -1,8 +1,9 @@
 'use client';
 
 import { useGetRangeScalesQuery } from 'lib/queries/analytics/rangeScales/useGetRangeScalesQuery';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useState } from 'react';
-import { Switch, Text } from 'ui';
+import { Button, Switch, Text } from 'ui';
 import {
   Table,
   TableBody,
@@ -13,6 +14,7 @@ import {
 
 import noDataFoundSvg from '../../../../public/assets/images/analytics-empty-state_Artboard_1.svg';
 import dataSegmentationGif from '../../../../public/assets/images/data-segmentation.gif';
+import { OverallStudentListDialog } from '../_modals/OverallStudentListDialog';
 import { DataLoadingPlaceholder } from './DataLoadingPlaceholder';
 
 export default function RangeAnalyticsTable({
@@ -23,6 +25,13 @@ export default function RangeAnalyticsTable({
   markList: any[];
 }) {
   const [rangeType, setRangeType] = useState('SubjectMarks');
+  const [modalStudentList, setModalStudentList] = useState([]);
+  const [modalSubjectList, setModalSubjectList] = useState([]);
+  const [modalTitle, setModalTitle] = useState('');
+  const [modalSubTitle, setModalSubTitle] = useState('');
+  const pathname = usePathname();
+  const router = useRouter();
+  const searchParams = useSearchParams();
   const { data: getRangeScaleListResponse, isLoading: isRangeLoading } =
     useGetRangeScalesQuery(rangeType, {
       enabled: !!rangeType,
@@ -35,6 +44,9 @@ export default function RangeAnalyticsTable({
     let maleCount = 0;
     let femaleCount = 0;
     let totalCount = 0;
+    let students = [];
+    let maleStudents = [];
+    let femaleStudents = [];
     if (rangeType === 'SubjectMarks') {
       markList.forEach((student) => {
         student.subjects.forEach((subject) => {
@@ -43,10 +55,13 @@ export default function RangeAnalyticsTable({
             if (mark >= startValue && mark <= endValue) {
               if (student.gender.toLowerCase() === 'female') {
                 femaleCount++;
+                femaleStudents.push(student);
               } else if (student.gender.toLowerCase() === 'male') {
                 maleCount++;
+                maleStudents.push(student);
               }
               totalCount++;
+              students.push(student);
             }
           }
         });
@@ -56,30 +71,59 @@ export default function RangeAnalyticsTable({
         totalCount,
         maleCount,
         femaleCount,
+        students,
+        maleStudents,
+        femaleStudents,
       };
     } else {
       return {
         totalCount: 0,
         maleCount: 0,
         femaleCount: 0,
+        students: [],
+        maleStudents: [],
+        femaleStudents: [],
       };
     }
   };
+
+  function handleOpenStudentListDialog(
+    students: any,
+    title: string,
+    subTitle: string,
+    subjectList?: any[]
+  ) {
+    setModalStudentList(students);
+    setModalTitle(title);
+    setModalSubTitle(subTitle);
+    setModalSubjectList(subjectList || []);
+
+    const params = new URLSearchParams(searchParams.toString());
+    params.set('isListDialogOpen', 'true');
+
+    router.replace(pathname + '?' + params.toString());
+  }
 
   const getTotalRangeValue = ({ startValue, endValue }) => {
     let maleCount = 0;
     let femaleCount = 0;
     let totalCount = 0;
+    let students = [];
+    let maleStudents = [];
+    let femaleStudents = [];
     if (rangeType === 'TotalMarks') {
       markList.forEach((student) => {
         const mark = parseFloat(student.totalMark);
         if (mark >= startValue && mark <= endValue) {
           if (student.gender === 'Female') {
             femaleCount++;
+            femaleStudents.push(student);
           } else if (student.gender === 'Male') {
             maleCount++;
+            maleStudents.push(student);
           }
           totalCount++;
+          students.push(student);
         }
       });
 
@@ -87,12 +131,18 @@ export default function RangeAnalyticsTable({
         totalCount,
         maleCount,
         femaleCount,
+        students,
+        maleStudents,
+        femaleStudents,
       };
     } else {
       return {
         totalCount,
-        maleCount,
-        femaleCount,
+        maleCount: 0,
+        femaleCount: 0,
+        students: [],
+        maleStudents: [],
+        femaleStudents: [],
       };
     }
   };
@@ -153,10 +203,36 @@ export default function RangeAnalyticsTable({
                                 </Text>
                                 <div className="flex justify-evenly">
                                   <Text className="text-primary-800">
-                                    M: {`${studentDetail?.maleCount}`}
+                                    <Button
+                                      variant="ghost"
+                                      className="size-lg text-center font-semibold text-primary-800"
+                                      onClick={() => {
+                                        handleOpenStudentListDialog(
+                                          studentDetail.maleStudents,
+                                          `Students in ${subject.subject.name} - ${range.startValue} < Mark <= ${range.endValue}`,
+                                          `Total Students: ${studentDetail.totalCount}`,
+                                          [subject]
+                                        );
+                                      }}
+                                    >
+                                      M: {`${studentDetail?.maleCount}`}
+                                    </Button>
                                   </Text>
                                   <Text className="text-primary-800">
-                                    F: {`${studentDetail?.femaleCount}`}
+                                    <Button
+                                      variant="ghost"
+                                      className="size-lg text-center font-semibold text-primary-800"
+                                      onClick={() =>
+                                        handleOpenStudentListDialog(
+                                          studentDetail.femaleStudents,
+                                          `Students in ${subject.subject.name} - ${range.startValue} < Mark <= ${range.endValue}`,
+                                          `Total Students: ${studentDetail.femaleCount}`,
+                                          [subject]
+                                        )
+                                      }
+                                    >
+                                      F: {`${studentDetail?.femaleCount}`}
+                                    </Button>
                                   </Text>
                                 </div>
                               </div>
@@ -182,10 +258,36 @@ export default function RangeAnalyticsTable({
                               </Text>
                               <div className="flex justify-evenly">
                                 <Text className="text-primary-800">
-                                  M: {`${studentDetail?.maleCount}`}
+                                  <Button
+                                    variant="ghost"
+                                    className="size-lg text-center font-semibold text-primary-800"
+                                    onClick={() =>
+                                      handleOpenStudentListDialog(
+                                        studentDetail.maleStudents,
+                                        `Students in Total Marks - ${range.startValue} < Mark <= ${range.endValue}`,
+                                        `Total Students: ${studentDetail.totalCount}`
+                                      )
+                                    }
+                                  >
+                                    {' '}
+                                    M: {`${studentDetail?.maleCount}`}
+                                  </Button>
                                 </Text>
                                 <Text className="text-primary-800">
-                                  F: {`${studentDetail?.femaleCount}`}
+                                  <Button
+                                    variant="ghost"
+                                    className="size-lg text-center font-semibold text-primary-800"
+                                    onClick={() =>
+                                      handleOpenStudentListDialog(
+                                        studentDetail.femaleStudents,
+                                        `Students in Total Marks - ${range.startValue} < Mark <= ${range.endValue}`,
+                                        `Total Students: ${studentDetail.totalCount}`
+                                      )
+                                    }
+                                  >
+                                    {' '}
+                                    F: {`${studentDetail?.femaleCount}`}
+                                  </Button>
                                 </Text>
                               </div>
                             </div>
@@ -196,6 +298,12 @@ export default function RangeAnalyticsTable({
                   )}
                 </TableBody>
               </Table>
+              <OverallStudentListDialog
+                studentList={modalStudentList}
+                title={modalTitle}
+                subTitle={modalSubTitle}
+                subjectList={modalSubjectList}
+              />
             </>
           ) : (
             <DataLoadingPlaceholder
