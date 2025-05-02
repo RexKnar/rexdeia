@@ -205,9 +205,8 @@ export default function RangeAnalyticsTable({
                                     onClick={() => {
                                       handleOpenStudentListDialog(
                                         studentDetail.students,
-                                        `Students in ${subject.subject.name} - ${range.startValue} < Mark <= ${range.endValue}`,
-                                        `Total Students: ${studentDetail.totalCount}`,
-                                        [subject]
+                                        `Students in Total Marks - ${range.startValue} < Mark <= ${range.endValue}`,
+                                        `Total Students: ${studentDetail.totalCount}`
                                       );
                                     }}
                                   >{`${studentDetail?.totalCount}`}</Button>
@@ -220,8 +219,8 @@ export default function RangeAnalyticsTable({
                                       onClick={() => {
                                         handleOpenStudentListDialog(
                                           studentDetail.maleStudents,
-                                          `Students in ${subject.subject.name} - ${range.startValue} < Mark <= ${range.endValue}`,
-                                          `Total Students: ${studentDetail.totalCount}`,
+                                          `Male Students in ${subject.subject.name} - ${range.startValue} < Mark <= ${range.endValue}`,
+                                          `Total Male Students: ${studentDetail.maleCount}`,
                                           [subject]
                                         );
                                       }}
@@ -236,8 +235,8 @@ export default function RangeAnalyticsTable({
                                       onClick={() =>
                                         handleOpenStudentListDialog(
                                           studentDetail.femaleStudents,
-                                          `Students in ${subject.subject.name} - ${range.startValue} < Mark <= ${range.endValue}`,
-                                          `Total Students: ${studentDetail.femaleCount}`,
+                                          `Female Students in ${subject.subject.name} - ${range.startValue} < Mark <= ${range.endValue}`,
+                                          `Total Female Students: ${studentDetail.femaleCount}`,
                                           [subject]
                                         )
                                       }
@@ -285,8 +284,8 @@ export default function RangeAnalyticsTable({
                                     onClick={() =>
                                       handleOpenStudentListDialog(
                                         studentDetail.maleStudents,
-                                        `Students in Total Marks - ${range.startValue} < Mark <= ${range.endValue}`,
-                                        `Total Students: ${studentDetail.totalCount}`
+                                        `Male Students in Total Marks - ${range.startValue} < Mark <= ${range.endValue}`,
+                                        `Total Male Students: ${studentDetail.maleCount}`
                                       )
                                     }
                                   >
@@ -301,8 +300,8 @@ export default function RangeAnalyticsTable({
                                     onClick={() =>
                                       handleOpenStudentListDialog(
                                         studentDetail.femaleStudents,
-                                        `Students in Total Marks - ${range.startValue} < Mark <= ${range.endValue}`,
-                                        `Total Students: ${studentDetail.totalCount}`
+                                        `Female Students in Total Marks - ${range.startValue} < Mark <= ${range.endValue}`,
+                                        `Total Female Students: ${studentDetail.femaleCount}`
                                       )
                                     }
                                   >
