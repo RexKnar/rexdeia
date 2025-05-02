@@ -199,7 +199,18 @@ export default function RangeAnalyticsTable({
                             <TableCell key={index} className="text-center">
                               <div className="flex flex-col justify-evenly">
                                 <Text className="size-lg text-center font-semibold">
-                                  {`${studentDetail?.totalCount}`}
+                                  <Button
+                                    variant="ghost"
+                                    className="size-lg text-center font-semibold text-black"
+                                    onClick={() => {
+                                      handleOpenStudentListDialog(
+                                        studentDetail.students,
+                                        `Students in ${subject.subject.name} - ${range.startValue} < Mark <= ${range.endValue}`,
+                                        `Total Students: ${studentDetail.totalCount}`,
+                                        [subject]
+                                      );
+                                    }}
+                                  >{`${studentDetail?.totalCount}`}</Button>
                                 </Text>
                                 <div className="flex justify-evenly">
                                   <Text className="text-primary-800">
@@ -254,7 +265,17 @@ export default function RangeAnalyticsTable({
                           <TableCell key={index}>
                             <div className="flex flex-col justify-evenly">
                               <Text className="size-lg text-center font-semibold">
-                                {`${studentDetail?.totalCount}`}
+                                <Button
+                                  variant="ghost"
+                                  className="size-lg text-center font-semibold text-black"
+                                  onClick={() =>
+                                    handleOpenStudentListDialog(
+                                      studentDetail.students,
+                                      `Students in Total Marks - ${range.startValue} < Mark <= ${range.endValue}`,
+                                      `Total Students: ${studentDetail.totalCount}`
+                                    )
+                                  }
+                                >{`${studentDetail?.totalCount}`}</Button>
                               </Text>
                               <div className="flex justify-evenly">
                                 <Text className="text-primary-800">
