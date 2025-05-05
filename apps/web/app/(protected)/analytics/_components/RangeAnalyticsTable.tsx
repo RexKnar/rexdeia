@@ -93,7 +93,28 @@ export default function RangeAnalyticsTable({
     subTitle: string,
     subjectList?: any[]
   ) {
-    setModalStudentList(students);
+    let sortedStudents = [...students];
+    if (subjectList && subjectList.length > 0) {
+      const subjectIdToSortBy = subjectList[0].subject.id;
+      sortedStudents.sort((a, b) => {
+        const subjectA = a.subjects?.find(
+          (sub) => sub.id === subjectIdToSortBy
+        );
+        const subjectB = b.subjects?.find(
+          (sub) => sub.id === subjectIdToSortBy
+        );
+        const totalA = subjectA?.subjectTotalMark;
+        const totalB = subjectB?.subjectTotalMark;
+        return totalB - totalA;
+      });
+    } else {
+      sortedStudents.sort((a, b) => {
+        const totalA = parseFloat(a.totalMark);
+        const totalB = parseFloat(b.totalMark);
+        return totalB - totalA;
+      });
+    }
+    setModalStudentList(sortedStudents);
     setModalTitle(title);
     setModalSubTitle(subTitle);
     setModalSubjectList(subjectList || []);
