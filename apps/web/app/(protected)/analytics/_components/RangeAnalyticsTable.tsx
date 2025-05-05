@@ -227,7 +227,8 @@ export default function RangeAnalyticsTable({
                                       handleOpenStudentListDialog(
                                         studentDetail.students,
                                         `Students in Total Marks - ${range.startValue} < Mark <= ${range.endValue}`,
-                                        `Total Students: ${studentDetail.totalCount}`
+                                        `Total Students: ${studentDetail.totalCount}`,
+                                        [subject]
                                       );
                                     }}
                                   >{`${studentDetail?.totalCount}`}</Button>
