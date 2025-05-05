@@ -57,22 +57,6 @@ export async function POST(request: NextRequest) {
   }
 }
 
-/**
- * @swagger
- * /api/grade:
- *     get:
- *       summary: Fetch grades list
- *       description: Get a list of all Grades.
- *       responses:
- *         '200':
- *           description: Successfully retrieved the list of Grades.
- *           content:
- *             application/json:
- *               schema:
- *                 type: array
- *                 items:
- *                   # Define the schema for a single grade here
- */
 export async function GET(request: NextRequest) {
   const session = await getServerSession(authOptions);
   if (!session) {

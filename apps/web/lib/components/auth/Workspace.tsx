@@ -39,8 +39,8 @@ export function Workspace({
   }, [status, router]);
 
   return (
-    <div className="flex h-screen flex-col items-center justify-center">
-      <div className="mt-36 flex justify-center">
+    <div className="flex flex-col items-center justify-center h-screen">
+      <div className="flex justify-center mt-36">
         <Image src={signupGif} alt={'logo'} width={400}></Image>
       </div>
       <h1 className="mb-4 text-2xl font-bold">Workspace</h1>

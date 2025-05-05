@@ -40,7 +40,7 @@ export async function addInstituteCourse(payload: any) {
   const session = await getServerSession(authOptions);
   const { courseName, isActive, price, discountPrice, languageId } = payload;
 
-  return db.instituteCourse.create({
+  return await db.instituteCourse.create({
     data: {
       courseName,
       isActive,

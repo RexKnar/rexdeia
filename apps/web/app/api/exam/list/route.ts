@@ -34,6 +34,7 @@ import { getExamsBySectionId } from './service';
  */
 export async function PUT(request: Request) {
   const session = await getServerSession(authOptions);
+  console.log('exam list session', session);
   if (!session) {
     return new NextResponse(JSON.stringify({ error: 'UNAUTHORIZED' }), {
       status: StatusCodes.UNAUTHORIZED,

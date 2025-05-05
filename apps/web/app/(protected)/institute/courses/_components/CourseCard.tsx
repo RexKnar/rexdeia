@@ -45,9 +45,7 @@ export function CourseCard({
               className="flex w-full cursor-pointer justify-center"
               href={`/institute/courses/${courseId}/builder`}
             >
-              {/* <div className="flex justify-center w-full cursor-pointer"> */}
               <PencilRuler />
-              {/* </div> */}
             </Link>
             <Separator orientation="vertical" className="bg-gray-400" />
             <div className="flex w-full cursor-pointer justify-center">
@@ -55,9 +53,12 @@ export function CourseCard({
             </div>
             <Separator orientation="vertical" className="bg-gray-400" />
 
-            <div className="flex w-full cursor-pointer justify-center">
+            <Link
+              className="flex w-full cursor-pointer justify-center"
+              href={`/institute/courses/${courseId}/settings`}
+            >
               <Settings />
-            </div>
+            </Link>
           </div>
         </div>
       </div>

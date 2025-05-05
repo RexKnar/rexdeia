@@ -89,8 +89,8 @@ export async function POST(request: NextRequest) {
   const payload = await request.json();
 
   try {
-    await addInstituteCourse(payload);
-    return new NextResponse(JSON.stringify({}), {
+    const response = await addInstituteCourse(payload);
+    return new NextResponse(JSON.stringify(response), {
       status: StatusCodes.CREATED,
     });
   } catch (e) {
