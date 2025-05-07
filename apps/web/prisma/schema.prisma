@@ -174,36 +174,42 @@ model User {
 }
 
 model Branch {
-  id               String             @id @default(uuid()) @map("_id") @db.Uuid
-  name             String
-  address          String
-  organizationId   String             @db.Uuid
-  isActivated      Boolean            @default(false)
-  createdAt        DateTime?          @default(now())
-  updatedAt        DateTime?          @default(now())
-  createdById      String             @db.Uuid
-  assessmentFormat AssessmentFormat[]
-  Batch            Batch[]
-  createdBy        User               @relation(fields: [createdById], references: [id])
-  organization     Organization       @relation(fields: [organizationId], references: [id])
-  class            Class[]
-  department       Department[]
-  Exam             Exam[]
-  examType         ExamType[]
-  forms            Form[]
-  grade            Grade[]
-  group            Group[]
-  medium           Medium[]
-  natureOfPosting  NatureOfPosting[]
-  regulation       Regulation[]
-  staff            Staff[]
-  Student          Student[]
-  Subject          Subject[]
-  SsbjectMaster    SubjectMaster[]
-  term             Term[]
-  users            UserOrganization[]
-  subjectType      subjectType[]
-  InstituteCourse  InstituteCourse[]
+  id                         String                       @id @default(uuid()) @map("_id") @db.Uuid
+  name                       String
+  address                    String
+  organizationId             String                       @db.Uuid
+  isActivated                Boolean                      @default(false)
+  createdAt                  DateTime?                    @default(now())
+  updatedAt                  DateTime?                    @default(now())
+  createdById                String                       @db.Uuid
+  assessmentFormat           AssessmentFormat[]
+  Batch                      Batch[]
+  createdBy                  User                         @relation(fields: [createdById], references: [id])
+  organization               Organization                 @relation(fields: [organizationId], references: [id])
+  class                      Class[]
+  department                 Department[]
+  Exam                       Exam[]
+  examType                   ExamType[]
+  forms                      Form[]
+  grade                      Grade[]
+  group                      Group[]
+  medium                     Medium[]
+  natureOfPosting            NatureOfPosting[]
+  regulation                 Regulation[]
+  staff                      Staff[]
+  Student                    Student[]
+  Subject                    Subject[]
+  SsbjectMaster              SubjectMaster[]
+  term                       Term[]
+  users                      UserOrganization[]
+  subjectType                subjectType[]
+  InstituteCourse            InstituteCourse[]
+  CourseCategory             CourseCategory[]
+  InstituteCourseModule      InstituteCourseModule[]
+  InstituteCourseChapter     InstituteCourseChapter[]
+  InstituteCourseChapterItem InstituteCourseChapterItem[]
+
+  CourseBatch CourseBatch[]
 }
 
 model Organization {
@@ -333,19 +339,22 @@ model InstituteCourse {
   discountPrice            String
   order                    Int                        @default(1)
   coverImage               String?
+  courseType               String                     @default("Recorded")
   CourseCategory           CourseCategory[]           @relation("CourseCategories")
   isActive                 Boolean                    @default(false)
   isDeleted                Boolean                    @default(false)
   deletedAt                DateTime?
-  branchId                 String                     @db.Uuid
-  branch                   Branch                     @relation(fields: [branchId], references: [id])
+  branchId                 String?                    @db.Uuid
+  branch                   Branch?                    @relation(fields: [branchId], references: [id])
   createdAt                DateTime                   @default(now())
   updatedAt                DateTime                   @default(now())
-  organizationId           String                     @db.Uuid
-  organization             Organization               @relation(fields: [organizationId], references: [id])
+  organizationId           String?                    @db.Uuid
+  organization             Organization?              @relation(fields: [organizationId], references: [id])
   InstituteCourseHighlight InstituteCourseHighlight[]
   InstituteCourseOutcome   InstituteCourseOutcome[]
   InstituteCourseFAQ       InstituteCourseFAQ[]
+  InstituteCourseModule    InstituteCourseModule[]
+  CourseBatch              CourseBatch[]
 }
 
 model InstituteCourseHighlight {
@@ -373,6 +382,37 @@ model InstituteCourseFAQ {
   instituteCourse   InstituteCourse @relation(fields: [instituteCourseId], references: [id])
 }
 
+model CourseBatch {
+  id              String                 @id @default(uuid()) @map("_id") @db.Uuid
+  courseId        String                 @db.Uuid
+  course          InstituteCourse        @relation(fields: [courseId], references: [id])
+  startDate       DateTime
+  type            String
+  totalSeats      Int
+  totalHours      Int
+  hoursPerDay     Int
+  sessionDays     Json
+  status          String                 @default("Published")
+  createdAt       DateTime               @default(now())
+  updatedAt       DateTime               @updatedAt
+  deletedAt       DateTime?
+  branchId        String                 @db.Uuid
+  branch          Branch                 @relation(fields: [branchId], references: [id])
+  RecordedContent RecordedBatchContent[]
+}
+
+model RecordedBatchContent {
+  id           String                     @id @default(uuid()) @map("_id") @db.Uuid
+  courseItemId String                     @db.Uuid
+  courseItem   InstituteCourseChapterItem @relation(fields: [courseItemId], references: [id])
+  videoUrl     String
+  batchId      String                     @db.Uuid
+  batch        CourseBatch                @relation(fields: [batchId], references: [id])
+  createdAt    DateTime                   @default(now())
+  updatedAt    DateTime                   @updatedAt
+  deletedAt    DateTime?
+}
+
 model CourseCategory {
   id                    String            @id @default(uuid()) @map("_id") @db.Uuid
   name                  String
@@ -382,6 +422,116 @@ model CourseCategory {
   childCourseCategories CourseCategory[]  @relation("CourseCategoryChild")
   isActive              Boolean           @default(false)
   InstituteCourse       InstituteCourse[] @relation("CourseCategories")
+  createdAt             DateTime?         @default(now())
+  updatedAt             DateTime?         @default(now())
+  deletedAt             DateTime?
+  createdById           String?           @db.Uuid
+  branchId              String?           @db.Uuid
+  branch                Branch?           @relation(fields: [branchId], references: [id])
+}
+
+model InstituteCourseModule {
+  id                String                   @id @default(uuid()) @map("_id") @db.Uuid
+  name              String
+  icon              String?
+  description       String?
+  isActive          Boolean                  @default(false)
+  instituteCourseId String                   @db.Uuid
+  instituteCourse   InstituteCourse          @relation(fields: [instituteCourseId], references: [id])
+  createdAt         DateTime?                @default(now())
+  updatedAt         DateTime?                @default(now())
+  deletedAt         DateTime?
+  createdById       String                   @db.Uuid
+  branchId          String?                  @db.Uuid
+  branch            Branch?                  @relation(fields: [branchId], references: [id])
+  chapters          InstituteCourseChapter[] @relation("InstituteCourseChapterModule")
+}
+
+model InstituteCourseChapter {
+  id           String                       @id @default(uuid()) @map("_id") @db.Uuid
+  name         String
+  icon         String?
+  description  String?
+  isActive     Boolean                      @default(false)
+  createdAt    DateTime?                    @default(now())
+  updatedAt    DateTime?                    @default(now())
+  deletedAt    DateTime?
+  createdById  String                       @db.Uuid
+  branchId     String?                      @db.Uuid
+  branch       Branch?                      @relation(fields: [branchId], references: [id])
+  modules      InstituteCourseModule[]      @relation("InstituteCourseChapterModule")
+  chapterItems InstituteCourseChapterItem[]
+}
+
+model InstituteCourseChapterItem {
+  id                     String                   @id @default(uuid()) @map("_id") @db.Uuid
+  name                   String
+  icon                   String?
+  description            String?
+  itemType               String                   @default("text")
+  textContent            Json?
+  pdfUrl                 String?
+  videoUrl               String?
+  youtubeUrl             String?
+  vimeoUrl               String?
+  imageUrl               String?
+  chapterId              String                   @db.Uuid
+  chapter                InstituteCourseChapter   @relation(fields: [chapterId], references: [id])
+  languageId             String?                  @db.Uuid
+  language               Language?                @relation(fields: [languageId], references: [id])
+  createdAt              DateTime?                @default(now())
+  updatedAt              DateTime?                @default(now())
+  deletedAt              DateTime?
+  createdById            String                   @db.Uuid
+  branchId               String?                  @db.Uuid
+  branch                 Branch?                  @relation(fields: [branchId], references: [id])
+  QuizChapterItemMapping QuizChapterItemMapping[]
+  RecordedBatchContent   RecordedBatchContent[]
+}
+
+model Quiz {
+  id                     String                   @id @default(uuid()) @map("_id") @db.Uuid
+  name                   String
+  instruction            String?
+  description            String?
+  isActive               Boolean                  @default(false)
+  createdAt              DateTime?                @default(now())
+  updatedAt              DateTime?                @default(now())
+  deletedAt              DateTime?
+  QuizChapterItemMapping QuizChapterItemMapping[]
+}
+
+model QuizChapterItemMapping {
+  chapterItemId String                     @db.Uuid
+  quizId        String                     @db.Uuid
+  chapterItem   InstituteCourseChapterItem @relation(fields: [chapterItemId], references: [id])
+  quiz          Quiz                       @relation(fields: [quizId], references: [id])
+
+  @@unique([chapterItemId, quizId])
+}
+
+model QuizQuestion {
+  id             String        @id @default(uuid()) @map("_id") @db.Uuid
+  question       String
+  explanation    String?
+  maxTime        Int?
+  minTime        Int?
+  points         Int?
+  negativePoints Int?
+  isActive       Boolean       @default(false)
+  createdAt      DateTime?     @default(now())
+  updatedAt      DateTime?     @default(now())
+  deletedAt      DateTime?
+  QuizOptions    QuizOptions[]
+}
+
+model QuizOptions {
+  id             String       @id @default(uuid()) @map("_id") @db.Uuid
+  option         String
+  isCorrect      Boolean      @default(false)
+  explanation    String?
+  quizQuestionId String       @db.Uuid
+  quizQuestion   QuizQuestion @relation(fields: [quizQuestionId], references: [id])
 }
 
 model Form {
@@ -940,15 +1090,16 @@ model Community {
 }
 
 model Language {
-  id              String            @id @default(uuid()) @map("_id") @db.Uuid
-  name            String
-  isActive        Boolean
-  createdAt       DateTime?         @default(now())
-  updatedAt       DateTime?         @default(now())
-  isDeleted       Boolean           @default(false)
-  staff           Staff[]
-  student         Student[]
-  InstituteCourse InstituteCourse[]
+  id                         String                       @id @default(uuid()) @map("_id") @db.Uuid
+  name                       String
+  isActive                   Boolean
+  createdAt                  DateTime?                    @default(now())
+  updatedAt                  DateTime?                    @default(now())
+  isDeleted                  Boolean                      @default(false)
+  staff                      Staff[]
+  student                    Student[]
+  InstituteCourse            InstituteCourse[]
+  InstituteCourseChapterItem InstituteCourseChapterItem[]
 }
 
 model StaffCategory {

@@ -69,3 +69,16 @@ export type CreateCourseRequestModel = Pick<
   | 'branchId'
   | 'organizationId'
 >;
+
+export type UpdateInstituteCourseRequestModel = Pick<
+  InstituteCourseModel,
+  | 'courseName'
+  | 'description'
+  | 'tagLine'
+  | 'languageId'
+  | 'price'
+  | 'discountPrice'
+  | 'order'
+  | 'coverImage'
+  | 'isActive'
+>;

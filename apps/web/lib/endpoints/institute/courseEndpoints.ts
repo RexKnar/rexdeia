@@ -1,15 +1,80 @@
 import { EndpointDetails } from '../types';
 
 export const CREATE_INSTITUTE_COURSE = `CREATE_INSTITUTE_COURSE`;
-export const INSTITUTE_COURSE_LIST = `INSTITUTE_COURSE_LIST`;
+export const UPDATE_INSTITUTE_COURSE = `UPDATE_INSTITUTE_COURSE`;
+export const GET_INSTITUTE_COURSE_LIST = `GET_INSTITUTE_COURSE_LIST`;
+export const GET_INSTITUTE_COURSE_BY_ID = `GET_INSTITUTE_COURSE_BY_ID`;
+export const GET_INSTITUTE_COURSE_CONTENT_STRUCTURE = `GET_INSTITUTE_COURSE_CONTENT_STRUCTURE`;
+export const CREATE_INSTITUTE_COURSE_MODULE = `CREATE_INSTITUTE_COURSE_MODULE`;
+export const GET_INSTITUTE_COURSE_MODULE_LIST = `GET_INSTITUTE_COURSE_MODULE_LIST`;
+export const UPDATE_INSTITUTE_COURSE_MODULE = `UPDATE_INSTITUTE_COURSE_MODULE`;
+export const CREATE_INSTITUTE_COURSE_CHAPTER = `CREATE_INSTITUTE_COURSE_CHAPTER`;
+export const GET_INSTITUTE_COURSE_CHAPTER_LIST = `GET_INSTITUTE_COURSE_CHAPTER_LIST`;
+export const UPDATE_INSTITUTE_COURSE_CHAPTER = `UPDATE_INSTITUTE_COURSE_CHAPTER`;
+export const CREATE_INSTITUTE_COURSE_CHAPTER_ITEM = `CREATE_INSTITUTE_COURSE_CHAPTER_ITEM`;
+export const GET_INSTITUTE_COURSE_CHAPTER_ITEM_LIST = `GET_INSTITUTE_COURSE_CHAPTER_ITEM_LIST`;
+export const GET_INSTITUTE_COURSE_CHAPTER_ITEM_BY_ID = `GET_INSTITUTE_COURSE_CHAPTER_ITEM_BY_ID`;
+export const UPDATE_INSTITUTE_COURSE_CHAPTER_ITEM = `UPDATE_INSTITUTE_COURSE_CHAPTER_ITEM`;
 
 export default <EndpointDetails>{
   [CREATE_INSTITUTE_COURSE]: {
     requestType: `POST`,
     endpoint: `/api/institute/course`,
   },
-  [INSTITUTE_COURSE_LIST]: {
+  [UPDATE_INSTITUTE_COURSE]: {
+    requestType: `PUT`,
+    endpoint: `/api/institute/course/[courseId]`,
+  },
+  [GET_INSTITUTE_COURSE_LIST]: {
     requestType: `GET`,
     endpoint: `/api/institute/course`,
+  },
+  [GET_INSTITUTE_COURSE_BY_ID]: {
+    requestType: `GET`,
+    endpoint: `/api/institute/course/[courseId]`,
+  },
+  [GET_INSTITUTE_COURSE_CONTENT_STRUCTURE]: {
+    requestType: `PUT`,
+    endpoint: `/api/institute/course/[courseId]/content-structure`,
+  },
+  [CREATE_INSTITUTE_COURSE_MODULE]: {
+    requestType: `POST`,
+    endpoint: `/api/institute/course/[courseId]/module`,
+  },
+  [GET_INSTITUTE_COURSE_MODULE_LIST]: {
+    requestType: `GET`,
+    endpoint: `/api/institute/course/[courseId]/module`,
+  },
+  [UPDATE_INSTITUTE_COURSE_MODULE]: {
+    requestType: `PUT`,
+    endpoint: `/api/institute/course/[courseId]/module`,
+  },
+  [CREATE_INSTITUTE_COURSE_CHAPTER]: {
+    requestType: `POST`,
+    endpoint: `/api/institute/course/[courseId]/module/[moduleId]/chapter`,
+  },
+  [GET_INSTITUTE_COURSE_CHAPTER_LIST]: {
+    requestType: `GET`,
+    endpoint: `/api/institute/course/[courseId]/module/[moduleId]/chapter`,
+  },
+  [UPDATE_INSTITUTE_COURSE_CHAPTER]: {
+    requestType: `PUT`,
+    endpoint: `/api/institute/course/[courseId]/module/[moduleId]/chapter`,
+  },
+  [CREATE_INSTITUTE_COURSE_CHAPTER_ITEM]: {
+    requestType: `POST`,
+    endpoint: `/api/institute/course/[courseId]/module/[moduleId]/chapter/[chapterId]/chapter-item`,
+  },
+  [GET_INSTITUTE_COURSE_CHAPTER_ITEM_LIST]: {
+    requestType: `GET`,
+    endpoint: `/api/institute/course/[courseId]/module/[moduleId]/chapter/[chapterId]/chapter-item`,
+  },
+  [GET_INSTITUTE_COURSE_CHAPTER_ITEM_BY_ID]: {
+    requestType: `GET`,
+    endpoint: `/api/institute/course/[courseId]/module/[moduleId]/chapter/[chapterId]/chapter-item/[itemId]`,
+  },
+  [UPDATE_INSTITUTE_COURSE_CHAPTER_ITEM]: {
+    requestType: `PUT`,
+    endpoint: `/api/institute/course/[courseId]/module/[moduleId]/chapter/[chapterId]/chapter-item/[itemId]`,
   },
 };

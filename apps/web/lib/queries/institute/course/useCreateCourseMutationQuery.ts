@@ -6,7 +6,7 @@ import {
 } from 'lib/domain/institute/course';
 import {
   CREATE_INSTITUTE_COURSE,
-  INSTITUTE_COURSE_LIST,
+  GET_INSTITUTE_COURSE_LIST,
 } from 'lib/endpoints/institute/courseEndpoints';
 
 export function useCreateCourseMutationQuery() {
@@ -20,14 +20,14 @@ export function useCreateCourseMutationQuery() {
         {}
       );
       await queryClient.invalidateQueries({
-        queryKey: [INSTITUTE_COURSE_LIST],
+        queryKey: [GET_INSTITUTE_COURSE_LIST],
       });
 
       return response;
     },
     onSuccess: async () => {
       await queryClient.refetchQueries({
-        queryKey: [INSTITUTE_COURSE_LIST],
+        queryKey: [GET_INSTITUTE_COURSE_LIST],
       });
     },
   });

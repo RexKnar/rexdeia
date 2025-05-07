@@ -46,7 +46,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         <link rel="manifest" href="/site.webmanifest" />
         <title>Rexdeia | Elevate your academic experience</title>
       </head>
-      <body className="h-screen">
+      <body className="h-screen bg-gray-50">
         <Providers>{children}</Providers>
         <RexdeiaConsole />
       </body>
