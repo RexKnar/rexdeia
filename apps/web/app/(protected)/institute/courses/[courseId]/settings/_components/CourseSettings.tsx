@@ -86,13 +86,13 @@ export default function CourseSettings() {
     }
   }, [courseDetail]);
   return (
-    <section className="grid justify-start w-full grid-cols-11 gap-2 mt-10">
+    <section className="mt-10 grid w-full grid-cols-11 justify-start gap-2">
       <section className="relative col-span-3">
-        <Card className="sticky top-0 bg-white rounded-md w-72">
+        <Card className="sticky top-0 w-72 rounded-md bg-white">
           <CardHeader>
-            <div className="relative flex items-center justify-center bg-gray-100 rounded-md ">
-              <label className="absolute z-50 p-2 transition-colors bg-white rounded-full shadow-lg cursor-pointer right-2 top-2 hover:bg-gray-100">
-                <Camera className="w-5 h-5" />
+            <div className="relative flex items-center justify-center rounded-md bg-gray-100 ">
+              <label className="absolute right-2 top-2 z-50 cursor-pointer rounded-full bg-white p-2 shadow-lg transition-colors hover:bg-gray-100">
+                <Camera className="h-5 w-5" />
                 <input
                   type="file"
                   className="hidden"
@@ -109,10 +109,10 @@ export default function CourseSettings() {
                         objectFit="cover"
                         layout="fill"
                         alt="Profile"
-                        className="object-cover w-full h-full"
+                        className="h-full w-full object-cover"
                       />
                     ) : (
-                      <div className="flex items-center justify-center w-full h-auto bg-gray-200 min-h-60">
+                      <div className="flex h-auto min-h-60 w-full items-center justify-center bg-gray-200">
                         <span className="text-xl font-bold">
                           {courseDetail.courseName[0] || 'C'}
                         </span>
@@ -120,22 +120,22 @@ export default function CourseSettings() {
                     )}
                   </span>
                 ) : (
-                  <div className="flex items-center justify-center w-full bg-gray-200 aspect-square">
-                    <span className="font-bold text-normal">Uploading...</span>
+                  <div className="flex aspect-square w-full items-center justify-center bg-gray-200">
+                    <span className="text-normal font-bold">Uploading...</span>
                   </div>
                 )}
               </div>
             </div>
           </CardHeader>
           <CardContent className="pl-0">
-            <div className="pl-3 mt-5 ">
-              <div className="grid grid-cols-3 ml-5 ">
-                <Text className="pt-1 text-xs text-gray-800 w-18">
+            <div className="mt-5 pl-3 ">
+              <div className="ml-5 grid grid-cols-3 ">
+                <Text className="w-18 pt-1 text-xs text-gray-800">
                   {'Learners'}
                 </Text>
               </div>
-              <div className="grid grid-cols-3 pt-3 ml-5 ">
-                <Text className="pt-1 text-xs text-gray-800 w-18">
+              <div className="ml-5 grid grid-cols-3 pt-3 ">
+                <Text className="w-18 pt-1 text-xs text-gray-800">
                   {'Completed'}
                 </Text>
               </div>
@@ -145,7 +145,7 @@ export default function CourseSettings() {
       </section>
       <section className="col-span-8">
         <Tabs defaultValue="pricing" className="border-0 ">
-          <TabsList className="justify-start w-full border-b-2 border-gray-100">
+          <TabsList className="w-full justify-start border-b-2 border-gray-100">
             <TabsTrigger
               value="pricing"
               className="mr-2 text-base focus:border-b-4 focus:border-primary"
@@ -234,7 +234,7 @@ export default function CourseSettings() {
                           }
                         }}
                       >
-                        <SelectTrigger className="w-full mt-2">
+                        <SelectTrigger className="mt-2 w-full">
                           <SelectValue />
                         </SelectTrigger>
                         <SelectContent>
@@ -271,12 +271,12 @@ export default function CourseSettings() {
                       />
                     </div>
 
-                    <div className="flex justify-center gap-3 mt-10">
-                      <div className="flex justify-center gap-3 px-12 py-4 mx-auto">
+                    <div className="mt-10 flex justify-center gap-3">
+                      <div className="mx-auto flex justify-center gap-3 px-12 py-4">
                         <Button
                           size="lg"
                           variant="outline"
-                          className="flex justify-center px-12 py-4 mx-auto"
+                          className="mx-auto flex justify-center px-12 py-4"
                         >
                           Move to Draft{' '}
                         </Button>
@@ -285,11 +285,11 @@ export default function CourseSettings() {
                           variant="default"
                           disabled={isPendingUpdateCourse}
                           aria-disabled={isPendingUpdateCourse}
-                          className="flex justify-center px-12 py-4 mx-auto"
+                          className="mx-auto flex justify-center px-12 py-4"
                         >
                           {isPendingUpdateCourse ? (
                             <div className="flex items-center justify-center">
-                              <Loader2 className="w-6 h-6 mr-2 text-white animate-spin" />
+                              <Loader2 className="mr-2 h-6 w-6 animate-spin text-white" />
                               Saving
                             </div>
                           ) : (
@@ -304,7 +304,7 @@ export default function CourseSettings() {
             </section>
           </TabsContent>
           <TabsContent className="w-full min-w-full" value="seo">
-            <section className="p-5 bg-white ">SEO</section>
+            <section className="bg-white p-5 ">SEO</section>
           </TabsContent>
         </Tabs>
       </section>
