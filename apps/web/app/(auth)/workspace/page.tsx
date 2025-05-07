@@ -1,4 +1,3 @@
-import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 import { getServerSession } from 'next-auth';
 
@@ -14,16 +13,6 @@ export const metadata = {
 };
 
 export default async function Page() {
-  const allCookies = cookies(); // returns a ReadonlyRequestCookies instance
-
-  // Get all cookies as array
-  const cookieArray = allCookies.getAll();
-
-  // Or get a specific one
-  const sessionToken = allCookies.get('next-auth.session-token')?.value;
-
-  console.log('🍪 Server cookies:', cookieArray);
-  console.log('🍪 Session token:', sessionToken);
   const session = await getServerSession(authOptions);
   if (!session) {
     redirect('/signin');
