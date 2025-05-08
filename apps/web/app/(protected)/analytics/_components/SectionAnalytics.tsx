@@ -94,7 +94,7 @@ export default function SectionAnalytics({
                           <TableRow key={subject.id}>
                             {index === 0 && (
                               <TableCell
-                                className="sticky w-[100px] bg-primary-300"
+                                className="sticky left-0 z-10 w-[100px] bg-primary-300"
                                 rowSpan={analyticsDetails.length}
                               >
                                 <Text className="size-lg font-semibold">
@@ -102,7 +102,7 @@ export default function SectionAnalytics({
                                 </Text>
                               </TableCell>
                             )}
-                            <TableCell className="w-[50px] bg-amber-300 text-center">
+                            <TableCell className="sticky left-[57px] z-10 w-[50px] bg-amber-300 text-center">
                               <div className="flex flex-col justify-evenly">
                                 <Text className="size-lg text-center font-semibold">
                                   {subjectAnalytics?.section.name}
