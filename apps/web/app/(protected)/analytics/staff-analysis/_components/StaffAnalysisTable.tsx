@@ -205,7 +205,7 @@ export default function StaffAnalysisTable() {
                             <TableRow key={subjectAnalytics.id}>
                               {index === 0 && (
                                 <TableCell
-                                  className="sticky w-[100px] bg-primary-300"
+                                  className="sticky left-0 z-10 w-[100px] bg-primary-300"
                                   rowSpan={
                                     staffAnalytics.length > 1
                                       ? staffAnalytics.length + 1
@@ -221,7 +221,7 @@ export default function StaffAnalysisTable() {
                                   </Text>
                                 </TableCell>
                               )}
-                              <TableCell className="w-[50px] bg-amber-300 text-center">
+                              <TableCell className="sticky left-[62px] z-10 w-[50px] bg-amber-300 text-center">
                                 <div className="flex flex-col justify-evenly">
                                   <Text className="size-lg text-center font-semibold">
                                     {subjectAnalytics?.section?.name}
