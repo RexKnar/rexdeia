@@ -198,6 +198,7 @@ export default function CourseBuilder() {
       });
     }
   };
+
   return (
     <>
       <section className="relative flex w-full gap-2">
@@ -220,7 +221,7 @@ export default function CourseBuilder() {
                       <div className="relative h-64 w-full overflow-hidden rounded-md">
                         <Image
                           src={courseDetail.coverImage}
-                          alt={'C'}
+                          alt={courseDetail.coverImage[0]}
                           width={300}
                           height={200}
                           priority
