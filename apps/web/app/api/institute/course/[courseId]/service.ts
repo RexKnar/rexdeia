@@ -34,6 +34,7 @@ export const getCourseDetailById = async (courseId) => {
     },
     select: {
       coverImage: true,
+      courseName: true,
     },
   });
 
