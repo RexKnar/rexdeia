@@ -14,7 +14,6 @@ import {
   sortableKeyboardCoordinates,
   verticalListSortingStrategy,
 } from '@dnd-kit/sortable';
-// import { UpdateInstituteCourseRequestModel } from 'lib/domain/institute/course';
 import { InstituteCourseModuleModel } from 'lib/domain/institute/module';
 import { useGetCourseContentStructureQuery } from 'lib/queries/institute/course/contentStructure/useGetCourseContentStructureQuery';
 import { useGetInstituteCourseDetailByIdQuery } from 'lib/queries/institute/course/useGetInstituteCourseDetailByIdQuery';
