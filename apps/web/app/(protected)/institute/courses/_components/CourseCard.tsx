@@ -19,13 +19,16 @@ export function CourseCard({
       <div className="flex h-full flex-col items-center justify-between p-2">
         <div className="flex h-full w-full justify-center">
           {imgSrc ? (
-            <Image
-              src={`${imgSrc}`}
-              objectFit="cover"
-              layout="fill"
-              alt="Profile"
-              className="h-full w-full object-cover"
-            />
+            <div className="relative h-64 w-full overflow-hidden rounded-md">
+              <Image
+                src={imgSrc}
+                alt="Cover"
+                fill
+                className="object-cover"
+                sizes="100vw"
+                priority
+              />
+            </div>
           ) : (
             <div className="flex h-auto min-h-60 w-full items-center justify-center bg-gray-200">
               <span className="text-xl font-bold">{courseName[0] || 'C'}</span>
@@ -45,9 +48,7 @@ export function CourseCard({
               className="flex w-full cursor-pointer justify-center"
               href={`/institute/courses/${courseId}/builder`}
             >
-              {/* <div className="flex justify-center w-full cursor-pointer"> */}
               <PencilRuler />
-              {/* </div> */}
             </Link>
             <Separator orientation="vertical" className="bg-gray-400" />
             <div className="flex w-full cursor-pointer justify-center">
@@ -55,9 +56,12 @@ export function CourseCard({
             </div>
             <Separator orientation="vertical" className="bg-gray-400" />
 
-            <div className="flex w-full cursor-pointer justify-center">
+            <Link
+              className="flex w-full cursor-pointer justify-center"
+              href={`/institute/courses/${courseId}/settings`}
+            >
               <Settings />
-            </div>
+            </Link>
           </div>
         </div>
       </div>

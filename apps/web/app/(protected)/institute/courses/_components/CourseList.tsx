@@ -1,5 +1,5 @@
 'use client';
-import { useGetInstituteCourseListQuery } from 'lib/queries/institute/course/useGetInstituteCourseMutationQuery';
+import { useGetInstituteCourseListQuery } from 'lib/queries/institute/course/useGetInstituteCourseListMutationQuery';
 import { useSearchParams } from 'next/navigation';
 
 import { CourseCard } from './CourseCard';
@@ -28,7 +28,7 @@ export default function CourseList() {
           ))
         : isCourseListLoading
           ? 'Loading...'
-          : 'No Medium Found'}
+          : 'No Courses Found'}
     </div>
   );
 }

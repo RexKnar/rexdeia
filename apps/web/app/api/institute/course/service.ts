@@ -2,6 +2,8 @@ import { authOptions } from 'lib/auth';
 import { db } from 'lib/db';
 import { getServerSession } from 'next-auth';
 
+import { generateSignedUrl } from '../../upload/service';
+
 export async function getInstituteCourses(page: number, limit: number) {
   const { branchId } = await getServerSession(authOptions);
 
@@ -10,7 +12,7 @@ export async function getInstituteCourses(page: number, limit: number) {
     branchId,
   };
 
-  const [total, data] = await db.$transaction([
+  const [total, courses] = await db.$transaction([
     db.instituteCourse.count({
       where: whereClause,
     }),
@@ -28,6 +30,14 @@ export async function getInstituteCourses(page: number, limit: number) {
     }),
   ]);
 
+  const data = await Promise.all(
+    courses.map(async (course) => ({
+      ...course,
+      coverImage: course.coverImage
+        ? await generateSignedUrl(course.coverImage)
+        : null,
+    }))
+  );
   return {
     page,
     total,
@@ -40,7 +50,7 @@ export async function addInstituteCourse(payload: any) {
   const session = await getServerSession(authOptions);
   const { courseName, isActive, price, discountPrice, languageId } = payload;
 
-  return db.instituteCourse.create({
+  return await db.instituteCourse.create({
     data: {
       courseName,
       isActive,

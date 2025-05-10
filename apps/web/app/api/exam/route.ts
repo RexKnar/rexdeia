@@ -27,7 +27,9 @@ import { createExam, getExamsList } from './service';
  *           description: Internal server error.
  */
 export async function GET(request: NextRequest) {
+  // console.log('🍪 Incoming cookies:', request.cookies.getAll());
   const session = await getServerSession(authOptions);
+  // console.log('exam list session', session);
   if (!session) {
     return new NextResponse(JSON.stringify({ error: 'UNAUTHORIZED' }), {
       status: StatusCodes.UNAUTHORIZED,

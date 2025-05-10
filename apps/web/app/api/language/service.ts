@@ -5,7 +5,7 @@ import { db } from '../../../lib/db';
 export async function addLanguage(payload: LanguageModel) {
   const { name, isActive } = payload;
 
-  return db.language.create({
+  return await db.language.create({
     data: {
       name,
       isActive,
@@ -14,7 +14,7 @@ export async function addLanguage(payload: LanguageModel) {
 }
 
 export async function getAllLanguage() {
-  return db.language.findMany({
+  return await db.language.findMany({
     where: {
       isDeleted: false,
     },
@@ -22,7 +22,7 @@ export async function getAllLanguage() {
 }
 
 export async function getLanguageById(id: string) {
-  return db.language.findMany({
+  return await db.language.findMany({
     where: {
       id: id,
       isDeleted: false,
@@ -33,7 +33,7 @@ export async function getLanguageById(id: string) {
 export async function updateLanguageById(id: string, payload: LanguageModel) {
   const { name, isActive } = payload;
 
-  return db.language.update({
+  return await db.language.update({
     where: {
       id: id,
     },
@@ -45,7 +45,7 @@ export async function updateLanguageById(id: string, payload: LanguageModel) {
 }
 
 export async function deleteLanguageById(id: string) {
-  return db.language.update({
+  return await db.language.update({
     where: {
       id: id,
     },

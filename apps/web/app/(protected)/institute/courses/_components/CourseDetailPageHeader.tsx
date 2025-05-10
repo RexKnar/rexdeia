@@ -16,7 +16,7 @@ export function CourseDetailPageHeader() {
     <section className="flex justify-between px-2">
       <PageTitle title="Course Detail" />
       <Button variant="default" onClick={handleGoBack}>
-        Create Course
+        Back
       </Button>
     </section>
   );

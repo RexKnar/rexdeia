@@ -224,14 +224,6 @@ export function AddCourseFlyout() {
                     'Save'
                   )}
                 </Button>
-                <Button
-                  size="lg"
-                  variant="default"
-                  type="submit"
-                  className="mx-auto flex justify-center px-12 py-4"
-                >
-                  Save
-                </Button>
               </div>
             </div>
           </form>
