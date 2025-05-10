@@ -378,7 +378,7 @@ export default function OverallAnalytics({
     const subjectAnalytics = analytics.get(subject.id);
     return (
       <TableRow className="mt-5 " key={subject.id}>
-        <TableCell className="bg-primary-300">
+        <TableCell className="sticky left-0 z-10 bg-primary-300">
           <Text className="size-lg font-semibold">{subject.subject.name}</Text>
         </TableCell>
         <TableCell className="text-center">
