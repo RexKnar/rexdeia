@@ -14,9 +14,11 @@ import {
   sortableKeyboardCoordinates,
   verticalListSortingStrategy,
 } from '@dnd-kit/sortable';
+// import { UpdateInstituteCourseRequestModel } from 'lib/domain/institute/course';
 import { InstituteCourseModuleModel } from 'lib/domain/institute/module';
 import { useGetCourseContentStructureQuery } from 'lib/queries/institute/course/contentStructure/useGetCourseContentStructureQuery';
 import { useGetInstituteCourseDetailByIdQuery } from 'lib/queries/institute/course/useGetInstituteCourseDetailByIdQuery';
+import { useUpdateCourseMutationQuery } from 'lib/queries/institute/course/useUpdateCourseMutationQuery';
 import { Camera, Plus } from 'lucide-react';
 import Image from 'next/image';
 import {
@@ -26,7 +28,7 @@ import {
   useSearchParams,
 } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
-import { Button } from 'ui';
+import { Button, useToast } from 'ui';
 
 import { AddChapterItemFlyout } from '../_modals/AddChapterItemFlyout';
 import { AddCourseChapterFlyout } from '../_modals/AddCourseChapterFlyout';
@@ -36,7 +38,7 @@ import { SortableModule } from './SortableModule';
 
 export default function CourseBuilder() {
   const [modules, setModules] = useState<InstituteCourseModuleModel[]>([]);
-
+  const { toast } = useToast();
   const pathname = usePathname();
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -52,6 +54,8 @@ export default function CourseBuilder() {
       enabled: !!courseId,
     }
   );
+  const { mutateAsync: updateCourseMutationQuery } =
+    useUpdateCourseMutationQuery(courseId);
 
   const [activeModuleId, setActiveModuleId] = useState(null);
   useEffect(() => {
@@ -135,7 +139,66 @@ export default function CourseBuilder() {
       )
     );
   };
+  const handleImageUpload = async (event) => {
+    const file = event.target.files[0];
+    if (!file) return;
 
+    if (!file.type.startsWith('image/') || file.size > 5 * 1024 * 1024) {
+      toast({
+        variant: 'destructive',
+        title: 'Invalid file',
+        description: 'Only images under 5MB are allowed.',
+      });
+      return;
+    }
+
+    try {
+      const url = new URL(`${window.location.origin}/api/upload`);
+      const formData = new FormData();
+      formData.append('file', file);
+
+      const imageResponse = await fetch(url.toString(), {
+        method: 'POST',
+        body: formData,
+      });
+
+      if (!imageResponse.ok) throw new Error('Upload failed');
+
+      const { data } = await imageResponse.json();
+      const key = data?.filePath;
+
+      if (!key) {
+        toast({
+          title: 'Failed!',
+          variant: 'destructive',
+          description: 'No file key returned.',
+        });
+        return;
+      }
+      const payload = {
+        ...courseDetail,
+        coverImage: key,
+      };
+
+      const response = await updateCourseMutationQuery(payload);
+      if (response) {
+        toast({ title: 'Success', description: 'Cover image updated.' });
+      } else {
+        toast({
+          title: 'Update failed',
+          variant: 'destructive',
+          description: 'Could not save image reference.',
+        });
+      }
+    } catch (error) {
+      console.error('Upload error:', error);
+      toast({
+        variant: 'destructive',
+        title: 'Upload failed',
+        description: 'An error occurred during upload.',
+      });
+    }
+  };
   return (
     <>
       <section className="relative flex w-full gap-2">
@@ -148,20 +211,23 @@ export default function CourseBuilder() {
                   type="file"
                   className="hidden"
                   accept="image/*"
-                  // onChange={handleImageUpload}
+                  onChange={handleImageUpload}
                 />
               </label>
               <div className="relative">
                 {!isCourseDetailLoading ? (
                   <span>
                     {courseDetail?.coverImage ? (
-                      <Image
-                        src={`${courseDetail?.coverImage}`}
-                        objectFit="cover"
-                        layout="fill"
-                        alt="Profile"
-                        className="h-full w-full object-cover"
-                      />
+                      <div className="relative h-64 w-full overflow-hidden rounded-md">
+                        <Image
+                          src={courseDetail.coverImage}
+                          alt={'C'}
+                          width={300}
+                          height={200}
+                          priority
+                          objectFit="cover"
+                        />
+                      </div>
                     ) : (
                       <div className="flex h-auto min-h-60 w-full items-center justify-center bg-gray-200">
                         <span className="text-xl font-bold">
