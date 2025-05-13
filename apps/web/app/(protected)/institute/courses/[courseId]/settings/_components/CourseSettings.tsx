@@ -1,4 +1,16 @@
 'use client';
+import {
+  closestCenter,
+  DndContext,
+  PointerSensor,
+  useSensor,
+  useSensors,
+} from '@dnd-kit/core';
+import {
+  arrayMove,
+  SortableContext,
+  verticalListSortingStrategy,
+} from '@dnd-kit/sortable';
 import { useGetInstituteCourseDetailByIdQuery } from 'lib/queries/institute/course/useGetInstituteCourseDetailByIdQuery';
 import { useUpdateCourseMutationQuery } from 'lib/queries/institute/course/useUpdateCourseMutationQuery';
 import { useGetLanguageListQuery } from 'lib/queries/language/useGetLanguageListQurey';
@@ -27,7 +39,33 @@ import {
   Textarea,
 } from 'ui';
 
+import SortableFAQItem from './SortableFAQItem';
+
+const initialFaqs = [
+  {
+    id: 'faq-1',
+    question: 'What is this course about?',
+    answer:
+      'This course covers essential topics to help learners understand and master the subject in a structured way.',
+  },
+  {
+    id: 'faq-2',
+    question: 'Do I need any prior knowledge?',
+    answer:
+      'No prior experience is required. We start from the basics and gradually move to advanced topics.',
+  },
+  {
+    id: 'faq-3',
+    question: 'Will I get a certificate?',
+    answer:
+      'Yes, you will receive a certificate upon successful completion of the course.',
+  },
+];
+
 export default function CourseSettings() {
+  const [faqs, setFaqs] = useState(initialFaqs);
+  const [openId, setOpenId] = useState<string | null>(null);
+  const sensors = useSensors(useSensor(PointerSensor));
   const searchParams = useSearchParams();
   const routeParams = useParams<{
     courseId: string;
@@ -58,7 +96,6 @@ export default function CourseSettings() {
   } = useUpdateCourseMutationQuery(courseId);
 
   const { data: getLanguageListResponse } = useGetLanguageListQuery();
-
   useEffect(() => {
     if (getLanguageListResponse) {
       setLanguageList(getLanguageListResponse as any[]);
@@ -85,6 +122,27 @@ export default function CourseSettings() {
       setValue('languageId', courseDetail.languageId);
     }
   }, [courseDetail]);
+
+  const handleDragEnd = (event: any) => {
+    const { active, over } = event;
+    if (active.id !== over?.id) {
+      const oldIndex = faqs.findIndex((item) => item.id === active.id);
+      const newIndex = faqs.findIndex((item) => item.id === over?.id);
+      setFaqs(arrayMove(faqs, oldIndex, newIndex));
+    }
+  };
+  const handleAddFAQ = () => {
+    const newId = `faq-${Date.now()}`;
+    setFaqs([
+      ...faqs,
+      {
+        id: newId,
+        question: 'New Question',
+        answer: 'New answer goes here...',
+      },
+    ]);
+    setOpenId(newId);
+  };
   return (
     <section className="mt-10 grid w-full grid-cols-11 justify-start gap-2">
       <section className="relative col-span-3">
@@ -158,6 +216,13 @@ export default function CourseSettings() {
               className="mr-2 text-base focus:border-b-4 focus:border-primary"
             >
               SEO
+            </TabsTrigger>
+
+            <TabsTrigger
+              value="faq"
+              className="mr-2 text-base focus:border-b-4 focus:border-primary"
+            >
+              FAQ
             </TabsTrigger>
           </TabsList>
           <TabsContent className="w-full" value="pricing">
@@ -305,6 +370,41 @@ export default function CourseSettings() {
           </TabsContent>
           <TabsContent className="w-full min-w-full" value="seo">
             <section className="bg-white p-5 ">SEO</section>
+          </TabsContent>
+          <TabsContent className="w-full min-w-full" value="faq">
+            <section className="rounded-md bg-white p-6 shadow-sm">
+              <DndContext
+                collisionDetection={closestCenter}
+                sensors={sensors}
+                onDragEnd={handleDragEnd}
+              >
+                <SortableContext
+                  items={faqs.map((faq) => faq.id)}
+                  strategy={verticalListSortingStrategy}
+                >
+                  <div className="space-y-2">
+                    {faqs.map((faq) => (
+                      <SortableFAQItem
+                        key={faq.id}
+                        faq={faq}
+                        openId={openId}
+                        setOpenId={setOpenId}
+                      />
+                    ))}
+                  </div>
+                </SortableContext>
+              </DndContext>
+
+              <div className="mt-6 w-full">
+                <Button
+                  variant="outline"
+                  onClick={handleAddFAQ}
+                  className="w-full text-sm"
+                >
+                  + Add New Question
+                </Button>
+              </div>
+            </section>
           </TabsContent>
         </Tabs>
       </section>
