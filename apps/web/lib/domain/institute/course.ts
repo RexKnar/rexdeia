@@ -82,3 +82,8 @@ export type UpdateInstituteCourseRequestModel = Pick<
   | 'coverImage'
   | 'isActive'
 >;
+
+export type CreateCourseFAQRequestModel = Pick<
+  InstituteCourseFAQModel,
+  'question' | 'answer' | 'instituteCourseId'
+>;
