@@ -17,6 +17,8 @@ export const GET_INSTITUTE_COURSE_CHAPTER_ITEM_BY_ID = `GET_INSTITUTE_COURSE_CHA
 export const UPDATE_INSTITUTE_COURSE_CHAPTER_ITEM = `UPDATE_INSTITUTE_COURSE_CHAPTER_ITEM`;
 export const GET_INSTITUTE_COURSE_FAQ = `GET_INSTITUTE_COURSE_FAQ`;
 export const CREATE_INSTITUTE_COURSE_FAQ = `CREATE_INSTITUTE_COURSE_FAQ`;
+export const UPDATE_INSTITUTE_COURSE_FAQ = `UPDATE_INSTITUTE_COURSE_FAQ`;
+export const DELETE_INSTITUTE_COURSE_FAQ = `DELETE_INSTITUTE_COURSE_FAQ`;
 export default <EndpointDetails>{
   [CREATE_INSTITUTE_COURSE]: {
     requestType: `POST`,
@@ -45,6 +47,14 @@ export default <EndpointDetails>{
   [CREATE_INSTITUTE_COURSE_FAQ]: {
     requestType: `POST`,
     endpoint: `/api/institute/course/[courseId]/faq`,
+  },
+  [UPDATE_INSTITUTE_COURSE_FAQ]: {
+    requestType: `PUT`,
+    endpoint: `/api/institute/course/[courseId]/faq/[faqId]`,
+  },
+  [DELETE_INSTITUTE_COURSE_FAQ]: {
+    requestType: `DELETE`,
+    endpoint: `/api/institute/course/[courseId]/faq/[faqId]`,
   },
   [CREATE_INSTITUTE_COURSE_MODULE]: {
     requestType: `POST`,
