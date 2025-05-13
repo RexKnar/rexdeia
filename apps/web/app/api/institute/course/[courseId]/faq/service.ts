@@ -21,6 +21,7 @@ export const getCourseFAQ = async (courseId: string) => {
       instituteCourseId: courseId,
     },
     select: {
+      id: true,
       question: true,
       answer: true,
       instituteCourseId: true,
