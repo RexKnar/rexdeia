@@ -41,22 +41,26 @@ export async function getMasterMarksByFilter(filter: MarkAnalyticsFilter) {
     if (subjectConfigDetail?.length > 0) {
       const newAnalytics = new Map<string, Analytics>();
 
-      const analyticsResults = await Promise.all(
-        subjectConfigDetail.map((subject: any) => {
-          const analyticsData = analyzeSubjectPerformance(
-            studentMarkList,
-            subject?.subject?.id,
-            subject?.examSubjectPartition?.length ?? 0
-          );
-          return { ...subject, analyticsData: analyticsData };
-        })
-      );
+      if (filter.sectionId) {
+        const analyticsResults = await Promise.all(
+          subjectConfigDetail.map((subject: any) => {
+            const analyticsData = analyzeSubjectPerformance(
+              studentMarkList,
+              subject?.subject?.id,
+              subject?.examSubjectPartition?.length ?? 0
+            );
+            return { ...subject, analyticsData: analyticsData };
+          })
+        );
 
-      analyticsResults.forEach(({ id, data }) => {
-        newAnalytics.set(id, data);
-      });
+        analyticsResults.forEach(({ id, data }) => {
+          newAnalytics.set(id, data);
+        });
 
-      finalAnalytics = analyticsResults;
+        finalAnalytics = analyticsResults;
+      } else {
+        finalAnalytics = [];
+      }
     }
 
     return {
