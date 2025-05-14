@@ -3,7 +3,7 @@ import { db } from 'lib/db';
 export const updateCourseFAQById = async (id, payload) => {
   return await db.instituteCourseFAQ.update({
     where: {
-      id: id,
+      id,
     },
     data: {
       question: payload.question,
