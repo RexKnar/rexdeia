@@ -386,6 +386,7 @@ export default function CourseSettings() {
                               faq={faq}
                               openId={openId}
                               setOpenId={setOpenId}
+                              instituteCourseId={courseId}
                             />
                           ))}
                         </div>

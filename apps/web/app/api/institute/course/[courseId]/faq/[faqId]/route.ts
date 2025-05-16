@@ -1,4 +1,3 @@
-// pages/api/institute/course/[courseId]/faq/[faqId].ts (or .js)
 import { StatusCodes } from 'http-status-codes';
 import { authOptions } from 'lib/auth';
 import { NextResponse } from 'next/server';
