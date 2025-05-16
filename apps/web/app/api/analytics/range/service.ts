@@ -1,4 +1,5 @@
 import { RangeType } from '@prisma/client';
+import { getClassById } from 'app/api/class/service';
 import { authOptions } from 'lib/auth';
 import { db } from 'lib/db';
 import { CreateRangeScale } from 'lib/domain/analytics/rangeAnalytics';
@@ -16,22 +17,37 @@ export async function addRangeFilter(createRangePayload: {
       order: payload.order,
       batchId: session.currentBatch,
       rangeOf: payload.rangeOf,
+      classLevelId: payload.classLevelId,
     })),
   });
 }
 
-export async function getRangeScales(rangeType: string) {
+export async function getRangeScales(rangeType: string, classId?: string) {
   const session = await getServerSession(authOptions);
-  const where =
-    rangeType == 'All'
-      ? {
-          batchId: session.currentBatch,
-        }
-      : {
-          batchId: session.currentBatch,
-          rangeOf: rangeType as RangeType,
-        };
-  const rangeScales = await db.rangeScales.findMany({ where: where });
+  const classDetail = await getClassById(classId);
+  let where = {};
+  if (rangeType == 'All') {
+    where = {
+      batchId: session.currentBatch,
+    };
+  } else {
+    where = {
+      batchId: session.currentBatch,
+      rangeOf: rangeType as RangeType,
+    };
+  }
+  if (classDetail?.classLevelId) {
+    where['classLevel'] = { id: classDetail.classLevelId };
+  } else {
+    where['classLevel'] = null;
+  }
+
+  const rangeScales = await db.rangeScales.findMany({
+    where: where,
+    include: {
+      classLevel: true,
+    },
+  });
 
   return rangeScales;
 }
@@ -46,6 +62,7 @@ export async function getRangeScalesById(id: string) {
     },
     include: {
       batch: true,
+      classLevel: true,
     },
   });
 }

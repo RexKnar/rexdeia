@@ -24,9 +24,12 @@ export default function RangeAnalyticsTable({
 }) {
   const [rangeType, setRangeType] = useState('SubjectMarks');
   const { data: getRangeScaleListResponse, isLoading: isRangeLoading } =
-    useGetRangeScalesQuery(rangeType, {
-      enabled: !!rangeType,
-    });
+    useGetRangeScalesQuery(
+      { rangeType },
+      {
+        enabled: !!rangeType,
+      }
+    );
 
   const getSubjectRangeValue = (
     { startValue, endValue },

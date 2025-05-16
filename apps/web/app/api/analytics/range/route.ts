@@ -84,7 +84,8 @@ export async function GET(request: NextRequest) {
 
   try {
     const rangeType = request.nextUrl.searchParams.get('rangeType') || 'All';
-    const rangeScales = await getRangeScales(rangeType);
+    const classId = request.nextUrl.searchParams.get('classId');
+    const rangeScales = await getRangeScales(rangeType, classId);
     return new NextResponse(JSON.stringify(rangeScales), {
       status: StatusCodes.OK,
     });

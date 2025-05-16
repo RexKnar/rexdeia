@@ -2,13 +2,20 @@
 
 import { RangeType } from '@prisma/client';
 import { useAddRangeScaleMutationQuery } from 'lib/queries/analytics/rangeScales/useAddRangeScaleMutationQuery';
+import { useGetClassLevelListQuery } from 'lib/queries/classLevel/useGetClassLevelsListQuery';
 import { Plus, PlusCircle, Trash } from 'lucide-react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import React, { useState } from 'react';
-import { useFieldArray, useForm } from 'react-hook-form';
+import React, { useEffect, useState } from 'react';
+import { Controller, useFieldArray, useForm } from 'react-hook-form';
 import {
   Button,
   Input,
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
   Sheet,
   SheetContent,
   SheetHeader,
@@ -26,6 +33,7 @@ export function AddRangeScaleFlyout() {
   const [sliderValues, setSliderValues] = useState([[0, 600]]);
   const [errorMessages, setErrorMessages] = useState([false]);
   const [rangeType, setRangeType] = useState('SubjectMarks');
+  const [classLevels, setClassLevels] = useState([]);
 
   const {
     control,
@@ -38,6 +46,7 @@ export function AddRangeScaleFlyout() {
   } = useForm({
     defaultValues: {
       rangeOf: 'SubjectMarks',
+      classLevelId: null,
       scale: [
         {
           startValue: 0,
@@ -48,6 +57,11 @@ export function AddRangeScaleFlyout() {
     },
   });
 
+  const { data: ClassLevelListResponse, isLoading: isClassLevelListLoading } =
+    useGetClassLevelListQuery({
+      page: 1,
+      limit: 999,
+    });
   const handleValueChange = (index, newValue) => {
     const isOverlapping = sliderValues.some((existingRange, existingIndex) => {
       if (existingIndex === index) return false;
@@ -82,7 +96,6 @@ export function AddRangeScaleFlyout() {
 
   const closeFlyout = async () => {
     const params = new URLSearchParams(searchParams);
-    // params.set('isRangeScaleFlyoutOpen', 'false');
     params.delete('isRangeScaleFlyoutOpen');
     router.replace(pathname + '?' + params.toString());
     setSliderValues([[0, 600]]);
@@ -102,6 +115,7 @@ export function AddRangeScaleFlyout() {
         endValue: sliderValues[index][1].toString(),
         order: Number(watch(`scale.${index}.order`)) as number,
         rangeOf: watch('rangeOf') as RangeType,
+        classLevelId: watch('classLevelId') as string,
       }));
       await mutateAddRangeScaleAsync(requestPayload);
     } catch (error) {
@@ -112,6 +126,10 @@ export function AddRangeScaleFlyout() {
     }
   };
 
+  useEffect(() => {
+    if (!ClassLevelListResponse) return;
+    setClassLevels(ClassLevelListResponse);
+  }, [ClassLevelListResponse]);
   return (
     <section>
       <Sheet open={isOpen}>
@@ -137,7 +155,7 @@ export function AddRangeScaleFlyout() {
                 <hr className="border-t border-gray-300"></hr>
               </SheetHeader>
               <div className="mt-5 flex gap-2">
-                <div className="mt-5 flex gap-2">
+                <div className="mt-5 flex w-full gap-2">
                   <div className="items-right float-right flex">
                     <Switch
                       id="rangeType"
@@ -156,6 +174,44 @@ export function AddRangeScaleFlyout() {
                     >
                       {rangeType}
                     </label>
+                  </div>
+                  <div className="items-right float-right flex">
+                    <label
+                      htmlFor="isActive"
+                      className="ml-2 text-sm font-semibold"
+                    >
+                      Class Level
+                    </label>
+                    <Controller
+                      control={control}
+                      name={`classLevelId`}
+                      render={({ field }) => {
+                        return (
+                          <Select
+                            onValueChange={field.onChange}
+                            {...field}
+                            disabled={isClassLevelListLoading}
+                          >
+                            {/* <Select {...register('classLevelId')}> */}
+                            <SelectTrigger className="mt-2 w-2/3">
+                              <SelectValue />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectGroup>
+                                {classLevels.map((classLevel) => (
+                                  <SelectItem
+                                    key={classLevel.id}
+                                    value={classLevel.id}
+                                  >
+                                    {classLevel.name}
+                                  </SelectItem>
+                                ))}
+                              </SelectGroup>
+                            </SelectContent>
+                          </Select>
+                        );
+                      }}
+                    />
                   </div>
                 </div>
                 <div className="mt-8">
