@@ -1068,14 +1068,16 @@ model GradeScales {
 }
 
 model RangeScales {
-  id         String    @id @default(uuid()) @map("_id") @db.Uuid
-  startValue String
-  endValue   String
-  order      Int       @default(1)
-  batchId    String    @db.Uuid
-  batch      Batch     @relation(fields: [batchId], references: [id])
-  rangeOf    RangeType @default(SubjectMarks)
-  createdAt  DateTime? @default(now())
+  id           String      @id @default(uuid()) @map("_id") @db.Uuid
+  startValue   String
+  endValue     String
+  order        Int         @default(1)
+  batchId      String      @db.Uuid
+  batch        Batch       @relation(fields: [batchId], references: [id])
+  rangeOf      RangeType   @default(SubjectMarks)
+  classLevelId String?     @db.Uuid
+  classLevel   ClassLevel? @relation(fields: [classLevelId], references: [id])
+  createdAt    DateTime?   @default(now())
 }
 
 model Community {
@@ -1142,6 +1144,7 @@ model ClassLevel {
   class        Class[]
   levelConfig  LevelConfig[]
   periodMaster PeriodMaster[]
+  RangeScales  RangeScales[]
 }
 
 model LevelConfig {

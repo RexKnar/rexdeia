@@ -20,9 +20,11 @@ import { DataLoadingPlaceholder } from './DataLoadingPlaceholder';
 export default function RangeAnalyticsTable({
   subjectList,
   markList,
+  classId,
 }: {
   subjectList: any[];
   markList: any[];
+  classId: string;
 }) {
   const [rangeType, setRangeType] = useState('SubjectMarks');
   const [modalStudentList, setModalStudentList] = useState([]);
@@ -33,9 +35,12 @@ export default function RangeAnalyticsTable({
   const router = useRouter();
   const searchParams = useSearchParams();
   const { data: getRangeScaleListResponse, isLoading: isRangeLoading } =
-    useGetRangeScalesQuery(rangeType, {
-      enabled: !!rangeType,
-    });
+    useGetRangeScalesQuery(
+      { rangeType, classId },
+      {
+        enabled: !!rangeType,
+      }
+    );
 
   const getSubjectRangeValue = (
     { startValue, endValue },

@@ -163,12 +163,15 @@ export async function deleteClassById(id: string) {
 
 export async function getClassById(id: string) {
   const session = await getServerSession(authOptions);
-  return db.class.findFirst({
-    where: {
-      id: id,
-      branchId: session.branchId,
-    },
-  });
+  const response = id
+    ? await db.class.findUnique({
+        where: {
+          id: id,
+          branchId: session.branchId,
+        },
+      })
+    : null;
+  return response;
 }
 
 export async function updateClassById(

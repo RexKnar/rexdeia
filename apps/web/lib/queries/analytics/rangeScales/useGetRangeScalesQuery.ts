@@ -4,9 +4,10 @@ import { GetRangeScales } from 'lib/domain/analytics/rangeAnalytics';
 import { GET_RANGE_SCALES } from 'lib/endpoints/examAnalyticsEndpoints';
 
 function getRangeScales(
-  rangeType: string,
+  { rangeType, classId }: { rangeType: string; classId?: string },
   options?: Partial<UseQueryOptions<GetRangeScales[]>>
 ) {
+  const filter = classId ? { rangeType, classId } : { rangeType };
   return {
     ...options,
     queryKey: [GET_RANGE_SCALES, rangeType],
@@ -14,7 +15,7 @@ function getRangeScales(
       return await makeAPICall<GetRangeScales[]>(
         GET_RANGE_SCALES,
         {},
-        { rangeType },
+        filter,
         {}
       );
     },
@@ -22,8 +23,8 @@ function getRangeScales(
 }
 
 export function useGetRangeScalesQuery(
-  rangeType: string,
+  filter: { rangeType: string; classId?: string },
   options?: Partial<UseQueryOptions<GetRangeScales[]>>
 ) {
-  return useQuery(getRangeScales(rangeType, options));
+  return useQuery(getRangeScales(filter, options));
 }
