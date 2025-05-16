@@ -198,16 +198,25 @@ export default function OverallAnalytics({
         }
 
         if (mark > result.highestMark[gender]) {
+          let oldHighestMark = result.highestMark[gender];
           result.highestMark[gender] = mark;
           result.highestMarkStudentName[gender] = studentFullName;
-
-          result.highestMark.studentList[gender] = [student];
+          if (mark !== oldHighestMark) {
+            result.highestMark.studentList[gender] = [student];
+          } else {
+            result.highestMark.studentList[gender].push(student);
+          }
         }
         if (mark < result.lowestMark[gender] && !subject.absentStatus) {
+          let oldLowestMark = result.lowestMark[gender];
           result.lowestMark[gender] = mark;
           result.lowestMarkStudentName[gender] = studentFullName;
 
-          result.lowestMark.studentList[gender] = [student];
+          if (mark !== oldLowestMark) {
+            result.lowestMark.studentList[gender] = [student];
+          } else {
+            result.lowestMark.studentList[gender].push(student);
+          }
         }
 
         if (mark > result.highestMark['overall']) {
@@ -318,9 +327,12 @@ export default function OverallAnalytics({
         totalPass++;
         totalPassStudents.push(student);
       }
+      let oldHighestMark = highestMark;
       highestMark = Math.max(highestMark, student.totalMark);
-      if (highestMark == student.totalMark) {
+      if (highestMark !== oldHighestMark) {
         highestMarkStudents = [student];
+      } else {
+        highestMarkStudents.push(student);
       }
 
       if (student.attendance) {
@@ -328,9 +340,12 @@ export default function OverallAnalytics({
           lowestMark = student.totalMark;
           isFirst = false;
         } else {
+          let oldLowestMark = lowestMark;
           lowestMark = Math.min(lowestMark, student.totalMark);
-          if (lowestMark == student.totalMark) {
+          if (lowestMark !== oldLowestMark) {
             lowestMarkStudents = [student];
+          } else {
+            lowestMarkStudents.push(student);
           }
         }
       }

@@ -250,7 +250,7 @@ export default function RangeAnalyticsTable({
                                         [subject]
                                       );
                                     }}
-                                  >{`${studentDetail?.totalCount} (${studentDetail?.overallPercentage}%)`}</Button>
+                                  >{`${studentDetail?.totalCount} (${studentDetail?.overallPercentage.toFixed(2)}%)`}</Button>
                                 </Text>
                                 <div className="flex justify-evenly">
                                   <Text className="text-primary-800">
@@ -267,7 +267,7 @@ export default function RangeAnalyticsTable({
                                       }}
                                     >
                                       M:
-                                      {`${studentDetail?.maleCount}(${studentDetail?.malePercentage}%)`}
+                                      {`${studentDetail?.maleCount}(${studentDetail?.malePercentage.toFixed(2)}%)`}
                                     </Button>
                                   </Text>
                                   <Text className="text-primary-800">
@@ -284,7 +284,7 @@ export default function RangeAnalyticsTable({
                                       }
                                     >
                                       F:
-                                      {`${studentDetail?.femaleCount} (${studentDetail?.femalePercentage}%)`}
+                                      {`${studentDetail?.femaleCount} (${studentDetail?.femalePercentage.toFixed(2)}%)`}
                                     </Button>
                                   </Text>
                                 </div>
