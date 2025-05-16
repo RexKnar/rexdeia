@@ -11,12 +11,18 @@ import {
   SortableContext,
   verticalListSortingStrategy,
 } from '@dnd-kit/sortable';
+import { useGetCourseFAQQuery } from 'lib/queries/institute/course/faq/useGetCourseFAQMutationOuery';
 import { useGetInstituteCourseDetailByIdQuery } from 'lib/queries/institute/course/useGetInstituteCourseDetailByIdQuery';
 import { useUpdateCourseMutationQuery } from 'lib/queries/institute/course/useUpdateCourseMutationQuery';
 import { useGetLanguageListQuery } from 'lib/queries/language/useGetLanguageListQurey';
 import { Camera, Loader2 } from 'lucide-react';
 import Image from 'next/image';
-import { useParams, useSearchParams } from 'next/navigation';
+import {
+  useParams,
+  usePathname,
+  useRouter,
+  useSearchParams,
+} from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import {
@@ -39,34 +45,16 @@ import {
   Textarea,
 } from 'ui';
 
+import { AddCourseFAQFlyout } from '../_modals/AddCourseFAQFlyout';
 import SortableFAQItem from './SortableFAQItem';
 
-const initialFaqs = [
-  {
-    id: 'faq-1',
-    question: 'What is this course about?',
-    answer:
-      'This course covers essential topics to help learners understand and master the subject in a structured way.',
-  },
-  {
-    id: 'faq-2',
-    question: 'Do I need any prior knowledge?',
-    answer:
-      'No prior experience is required. We start from the basics and gradually move to advanced topics.',
-  },
-  {
-    id: 'faq-3',
-    question: 'Will I get a certificate?',
-    answer:
-      'Yes, you will receive a certificate upon successful completion of the course.',
-  },
-];
-
 export default function CourseSettings() {
-  const [faqs, setFaqs] = useState(initialFaqs);
+  const [faqs, setFaqs] = useState([]);
   const [openId, setOpenId] = useState<string | null>(null);
   const sensors = useSensors(useSensor(PointerSensor));
   const searchParams = useSearchParams();
+  const router = useRouter();
+  const pathname = usePathname();
   const routeParams = useParams<{
     courseId: string;
     chapterItemId: string;
@@ -123,6 +111,20 @@ export default function CourseSettings() {
     }
   }, [courseDetail]);
 
+  const { data: fetchedFaqs, isLoading: isFaqLoading } =
+    useGetCourseFAQQuery(courseId);
+
+  useEffect(() => {
+    if (fetchedFaqs) {
+      const mappedFaqs = fetchedFaqs.map((faq) => ({
+        id: faq.id,
+        question: faq.question,
+        answer: faq.answer,
+      }));
+      setFaqs(mappedFaqs);
+    }
+  }, [fetchedFaqs]);
+
   const handleDragEnd = (event: any) => {
     const { active, over } = event;
     if (active.id !== over?.id) {
@@ -130,18 +132,6 @@ export default function CourseSettings() {
       const newIndex = faqs.findIndex((item) => item.id === over?.id);
       setFaqs(arrayMove(faqs, oldIndex, newIndex));
     }
-  };
-  const handleAddFAQ = () => {
-    const newId = `faq-${Date.now()}`;
-    setFaqs([
-      ...faqs,
-      {
-        id: newId,
-        question: 'New Question',
-        answer: 'New answer goes here...',
-      },
-    ]);
-    setOpenId(newId);
   };
   return (
     <section className="mt-10 grid w-full grid-cols-11 justify-start gap-2">
@@ -371,41 +361,58 @@ export default function CourseSettings() {
           <TabsContent className="w-full min-w-full" value="seo">
             <section className="bg-white p-5 ">SEO</section>
           </TabsContent>
-          <TabsContent className="w-full min-w-full" value="faq">
-            <section className="rounded-md bg-white p-6 shadow-sm">
-              <DndContext
-                collisionDetection={closestCenter}
-                sensors={sensors}
-                onDragEnd={handleDragEnd}
-              >
-                <SortableContext
-                  items={faqs.map((faq) => faq.id)}
-                  strategy={verticalListSortingStrategy}
-                >
-                  <div className="space-y-2">
-                    {faqs.map((faq) => (
-                      <SortableFAQItem
-                        key={faq.id}
-                        faq={faq}
-                        openId={openId}
-                        setOpenId={setOpenId}
-                      />
-                    ))}
+          <section>
+            <TabsContent className="w-full min-w-full" value="faq">
+              <section className="rounded-md bg-white p-6 shadow-sm">
+                {isFaqLoading ? (
+                  <div className="text-center text-gray-500">
+                    Loading FAQs...
                   </div>
-                </SortableContext>
-              </DndContext>
+                ) : (
+                  fetchedFaqs && (
+                    <DndContext
+                      collisionDetection={closestCenter}
+                      sensors={sensors}
+                      onDragEnd={handleDragEnd}
+                    >
+                      <SortableContext
+                        items={faqs.map((faq) => faq.id)}
+                        strategy={verticalListSortingStrategy}
+                      >
+                        <div className="space-y-2">
+                          {faqs.map((faq) => (
+                            <SortableFAQItem
+                              key={faq.id}
+                              faq={faq}
+                              openId={openId}
+                              setOpenId={setOpenId}
+                              instituteCourseId={courseId}
+                            />
+                          ))}
+                        </div>
+                      </SortableContext>
+                    </DndContext>
+                  )
+                )}
 
-              <div className="mt-6 w-full">
-                <Button
-                  variant="outline"
-                  onClick={handleAddFAQ}
-                  className="w-full text-sm"
-                >
-                  + Add New Question
-                </Button>
-              </div>
-            </section>
-          </TabsContent>
+                <div className="mt-6 w-full">
+                  <Button
+                    variant="outline"
+                    onClick={async () => {
+                      const params = new URLSearchParams(searchParams);
+                      params.set('isAddCourseFAQFlyoutOpen', 'true');
+
+                      router.replace(pathname + '?' + params.toString());
+                    }}
+                    className="w-full text-sm"
+                  >
+                    + Add New Question
+                  </Button>
+                </div>
+              </section>
+              <AddCourseFAQFlyout />
+            </TabsContent>
+          </section>
         </Tabs>
       </section>
     </section>
