@@ -30,7 +30,8 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-  useToast} from 'ui';
+  useToast,
+} from 'ui';
 import { formatDate } from 'utils';
 
 export function EditStudentDetail() {
@@ -46,7 +47,7 @@ export function EditStudentDetail() {
   const [permanentState, setPermanentState] = useState([]);
   const [residentialCityList, setResidentialCityList] = useState([]);
   const [permanentCity, setPermanentCity] = useState([]);
-  const {toast} = useToast();
+  const { toast } = useToast();
 
   const {
     control,
@@ -253,37 +254,36 @@ export function EditStudentDetail() {
     }
   }, [studentDetail]);
 
-const handleOnFormSubmit = async (data: Record<string, unknown>) => {
-  try {
-    const payload = formatStudentPayload(data);
-    const response = await updateStudentMutationAsync({
-      id:id,
-      ...payload,
-    });
-
-    if (response) {
-      toast({
-        variant: 'success',
-        title: 'Success',
-        description: 'Student details updated successfully!',
+  const handleOnFormSubmit = async (data: Record<string, unknown>) => {
+    try {
+      const payload = formatStudentPayload(data);
+      const response = await updateStudentMutationAsync({
+        id: id,
+        ...payload,
       });
 
-      router.back();
-    }
-  } catch (error) {
-    toast({
-      variant: 'error',
-      title: 'Error',
-      description: error.message || 'Failed to update student details.',
-    });
-  }
-};
+      if (response) {
+        toast({
+          variant: 'success',
+          title: 'Success',
+          description: 'Student details updated successfully!',
+        });
 
+        router.back();
+      }
+    } catch (error) {
+      toast({
+        variant: 'error',
+        title: 'Error',
+        description: error.message || 'Failed to update student details.',
+      });
+    }
+  };
 
   if (isStudentDetailLoading) {
     return (
-      <div className="flex items-center justify-center h-20">
-        <Loader2 className="w-6 mr-2 text-black animate-spin" />
+      <div className="flex h-20 items-center justify-center">
+        <Loader2 className="mr-2 w-6 animate-spin text-black" />
         <p className="text-black ">Fetching Student Details...</p>
       </div>
     );
@@ -320,7 +320,6 @@ const handleOnFormSubmit = async (data: Record<string, unknown>) => {
   };
 
   return (
-    
     <form
       onSubmit={handleSubmit(handleOnFormSubmit)}
       autoFocus
@@ -334,7 +333,7 @@ const handleOnFormSubmit = async (data: Record<string, unknown>) => {
               type="button"
               variant="link"
               onClick={() => goToPage(1)}
-              className="px-4 py-1 cursor-pointer hover:no-underline"
+              className="cursor-pointer px-4 py-1 hover:no-underline"
             >
               <div>
                 <h2
@@ -347,7 +346,7 @@ const handleOnFormSubmit = async (data: Record<string, unknown>) => {
               </div>
             </Button>
             <div className="p-3">
-              <Check className="w-4 h-4 text-green-500 transition-opacity duration-500" />
+              <Check className="h-4 w-4 text-green-500 transition-opacity duration-500" />
             </div>
           </li>
           <li className="flex justify-between">
@@ -355,7 +354,7 @@ const handleOnFormSubmit = async (data: Record<string, unknown>) => {
               type="button"
               variant="link"
               onClick={() => goToPage(2)}
-              className="px-4 py-1 cursor-pointer hover:no-underline"
+              className="cursor-pointer px-4 py-1 hover:no-underline"
             >
               <h2
                 className={`px-2 text-left text-sm font-semibold ${
@@ -366,7 +365,7 @@ const handleOnFormSubmit = async (data: Record<string, unknown>) => {
               </h2>
             </Button>
             <div className="p-3">
-              <Check className="w-4 h-4 text-green-500 transition-opacity duration-500" />
+              <Check className="h-4 w-4 text-green-500 transition-opacity duration-500" />
             </div>
           </li>
           <li className="flex justify-between">
@@ -374,7 +373,7 @@ const handleOnFormSubmit = async (data: Record<string, unknown>) => {
               type="button"
               variant="link"
               onClick={() => goToPage(3)}
-              className="px-4 py-1 cursor-pointer hover:no-underline"
+              className="cursor-pointer px-4 py-1 hover:no-underline"
             >
               <h2
                 className={`px-2 text-left text-sm font-semibold ${
@@ -385,7 +384,7 @@ const handleOnFormSubmit = async (data: Record<string, unknown>) => {
               </h2>
             </Button>
             <div className="p-3">
-              <Check className="w-4 h-4 text-green-500 transition-opacity duration-500" />
+              <Check className="h-4 w-4 text-green-500 transition-opacity duration-500" />
             </div>
           </li>
           <li className="flex justify-between">
@@ -393,7 +392,7 @@ const handleOnFormSubmit = async (data: Record<string, unknown>) => {
               type="button"
               variant="link"
               onClick={() => goToPage(4)}
-              className="px-4 py-1 cursor-pointer hover:no-underline"
+              className="cursor-pointer px-4 py-1 hover:no-underline"
             >
               <h2
                 className={`px-2 text-left text-sm font-semibold ${
@@ -404,7 +403,7 @@ const handleOnFormSubmit = async (data: Record<string, unknown>) => {
               </h2>
             </Button>
             <div className="p-3">
-              <Check className="w-4 h-4 text-green-500 transition-opacity duration-500" />
+              <Check className="h-4 w-4 text-green-500 transition-opacity duration-500" />
             </div>
           </li>
           <li className="flex justify-between">
@@ -412,7 +411,7 @@ const handleOnFormSubmit = async (data: Record<string, unknown>) => {
               type="button"
               variant="link"
               onClick={() => goToPage(5)}
-              className="px-4 py-1 cursor-pointer hover:no-underline"
+              className="cursor-pointer px-4 py-1 hover:no-underline"
             >
               <h2
                 className={`px-2  text-sm font-semibold ${
@@ -423,7 +422,7 @@ const handleOnFormSubmit = async (data: Record<string, unknown>) => {
               </h2>
             </Button>
             <div className="p-3">
-              <Check className="w-4 h-4 text-green-500 transition-opacity duration-500" />
+              <Check className="h-4 w-4 text-green-500 transition-opacity duration-500" />
             </div>
           </li>
           <li className="flex justify-between">
@@ -431,7 +430,7 @@ const handleOnFormSubmit = async (data: Record<string, unknown>) => {
               type="button"
               variant="link"
               onClick={() => goToPage(6)}
-              className="px-4 py-1 cursor-pointer hover:no-underline"
+              className="cursor-pointer px-4 py-1 hover:no-underline"
             >
               <h2
                 className={`px-2 text-left text-sm font-semibold ${
@@ -442,7 +441,7 @@ const handleOnFormSubmit = async (data: Record<string, unknown>) => {
               </h2>
             </Button>
             <div className="p-3">
-              <Check className="w-4 h-4 text-green-500 transition-opacity duration-500" />
+              <Check className="h-4 w-4 text-green-500 transition-opacity duration-500" />
             </div>
           </li>
           <li className="flex justify-between">
@@ -450,7 +449,7 @@ const handleOnFormSubmit = async (data: Record<string, unknown>) => {
               type="button"
               variant="link"
               onClick={() => goToPage(7)}
-              className="px-4 py-1 cursor-pointer hover:no-underline"
+              className="cursor-pointer px-4 py-1 hover:no-underline"
             >
               <h2
                 className={`px-2 text-left text-sm font-semibold ${
@@ -461,16 +460,16 @@ const handleOnFormSubmit = async (data: Record<string, unknown>) => {
               </h2>
             </Button>
             <div className="p-3">
-              <Check className="w-4 h-4 text-green-500 transition-opacity duration-500" />
+              <Check className="h-4 w-4 text-green-500 transition-opacity duration-500" />
             </div>
           </li>
         </ul>
-        <section className="w-full p-5 bg-white rounded-lg">
+        <section className="w-full rounded-lg bg-white p-5">
           <div className={currentPage === 1 ? 'block' : 'hidden'}>
             <h1 className="mb-5 text-sm font-semibold">{'Personal Details'}</h1>
-            <section className="grid flex-wrap justify-between grid-cols-1 gap-4 md:grid md:grid-cols-1 lg:grid lg:grid-cols-3 ">
+            <section className="grid grid-cols-1 flex-wrap justify-between gap-4 md:grid md:grid-cols-1 lg:grid lg:grid-cols-3 ">
               <div className="w-full">
-                <label className="block mt-1 text-sm text-gray-700">
+                <label className="mt-1 block text-sm text-gray-700">
                   First Name
                   <span className="text-red-300"> *</span>
                 </label>
@@ -478,7 +477,7 @@ const handleOnFormSubmit = async (data: Record<string, unknown>) => {
                   {...register('firstName', {
                     required: 'First Name is required',
                   })}
-                  aria-invalid={errors.name ? 'true' : 'false'}
+                  aria-invalid={errors?.name ? 'true' : 'false'}
                   errorMessage={errors?.name?.message.toString()}
                   className="mt-1"
                   autoComplete="off"
@@ -492,7 +491,7 @@ const handleOnFormSubmit = async (data: Record<string, unknown>) => {
                 )}
               </div>
               <div className="w-full">
-                <label className="block mt-1 text-sm text-gray-700">
+                <label className="mt-1 block text-sm text-gray-700">
                   Middle Name
                 </label>
                 <Input
@@ -502,7 +501,7 @@ const handleOnFormSubmit = async (data: Record<string, unknown>) => {
                 />
               </div>
               <div className="w-full">
-                <label className="block mt-1 text-sm text-gray-700">
+                <label className="mt-1 block text-sm text-gray-700">
                   Last Name
                 </label>
                 <Input
@@ -512,7 +511,7 @@ const handleOnFormSubmit = async (data: Record<string, unknown>) => {
                 />
               </div>
               <div className="w-full">
-                <label className="block mt-1 text-sm text-gray-700">
+                <label className="mt-1 block text-sm text-gray-700">
                   Date of Birth
                 </label>
                 <Input
@@ -532,7 +531,7 @@ const handleOnFormSubmit = async (data: Record<string, unknown>) => {
                 )}
               </div>
               <div className="w-full">
-                <label className="block mt-1 text-sm text-gray-700">Age</label>
+                <label className="mt-1 block text-sm text-gray-700">Age</label>
                 <Input
                   {...register('age')}
                   className="mt-1"
@@ -540,7 +539,7 @@ const handleOnFormSubmit = async (data: Record<string, unknown>) => {
                 />
               </div>
               <div className="w-full">
-                <label className="block mt-1 text-sm text-gray-700">
+                <label className="mt-1 block text-sm text-gray-700">
                   Gender
                 </label>
                 <Controller
@@ -551,12 +550,12 @@ const handleOnFormSubmit = async (data: Record<string, unknown>) => {
                     <RadioGroup
                       onValueChange={onChange}
                       value={value}
-                      className="flex gap-2 mt-3"
+                      className="mt-3 flex gap-2"
                     >
-                      <RadioGroupItem className="mt-1 mr-1" value={'male'} />{' '}
+                      <RadioGroupItem className="mr-1 mt-1" value={'male'} />{' '}
                       {'Male'}
                       <RadioGroupItem
-                        className="mt-1 ml-3 mr-1 "
+                        className="ml-3 mr-1 mt-1 "
                         value={'female'}
                       />{' '}
                       {'Female'}
@@ -565,7 +564,7 @@ const handleOnFormSubmit = async (data: Record<string, unknown>) => {
                 />
               </div>
               <div className="w-full">
-                <label className="block mt-1 text-sm text-gray-700">
+                <label className="mt-1 block text-sm text-gray-700">
                   Phone Number
                 </label>
                 <Input
@@ -575,7 +574,7 @@ const handleOnFormSubmit = async (data: Record<string, unknown>) => {
                 />
               </div>
               <div className="w-full">
-                <label className="block mt-1 text-sm text-gray-700">
+                <label className="mt-1 block text-sm text-gray-700">
                   Email
                   <span className="text-red-300"> *</span>
                 </label>
@@ -597,7 +596,7 @@ const handleOnFormSubmit = async (data: Record<string, unknown>) => {
                 )}
               </div>
               <div className="w-full">
-                <label className="block mt-1 text-sm text-gray-700">
+                <label className="mt-1 block text-sm text-gray-700">
                   Blood Group
                 </label>
                 <Select
@@ -628,7 +627,7 @@ const handleOnFormSubmit = async (data: Record<string, unknown>) => {
                 </Select>
               </div>
               <div className="w-full">
-                <label className="block mt-1 text-sm text-gray-700">
+                <label className="mt-1 block text-sm text-gray-700">
                   Pickup Point
                 </label>
                 <Input
@@ -638,7 +637,7 @@ const handleOnFormSubmit = async (data: Record<string, unknown>) => {
                 />
               </div>
               <div className="w-full">
-                <label className="block mt-1 text-sm text-gray-700">
+                <label className="mt-1 block text-sm text-gray-700">
                   EMIS Number
                 </label>
                 <Input
@@ -648,7 +647,7 @@ const handleOnFormSubmit = async (data: Record<string, unknown>) => {
                 />
               </div>
               <div className="w-full">
-                <label className="block mt-1 text-sm text-gray-700">
+                <label className="mt-1 block text-sm text-gray-700">
                   Admission Number
                 </label>
                 <Input
@@ -658,7 +657,7 @@ const handleOnFormSubmit = async (data: Record<string, unknown>) => {
                 />
               </div>
               <div className="w-full">
-                <label className="block mt-1 text-sm text-gray-700">
+                <label className="mt-1 block text-sm text-gray-700">
                   Date Of Joining
                 </label>
                 <Input
@@ -670,7 +669,7 @@ const handleOnFormSubmit = async (data: Record<string, unknown>) => {
               </div>
 
               <div className="w-full">
-                <label className="block mt-1 text-sm text-gray-700">
+                <label className="mt-1 block text-sm text-gray-700">
                   Medium
                   <span className="text-red-300"> *</span>
                 </label>
@@ -691,7 +690,7 @@ const handleOnFormSubmit = async (data: Record<string, unknown>) => {
                     <SelectGroup>
                       {mediumList?.data?.map((item) => (
                         <SelectItem key={item.id} value={item.id}>
-                          {item.name}
+                          {item?.name}
                         </SelectItem>
                       ))}
                     </SelectGroup>
@@ -704,7 +703,7 @@ const handleOnFormSubmit = async (data: Record<string, unknown>) => {
                 )}
               </div>
               <div className="w-full">
-                <label className="block mt-1 text-sm text-gray-700">
+                <label className="mt-1 block text-sm text-gray-700">
                   Class
                   <span className="text-red-300"> *</span>
                 </label>
@@ -725,7 +724,7 @@ const handleOnFormSubmit = async (data: Record<string, unknown>) => {
                     <SelectGroup>
                       {classList?.data?.map((item) => (
                         <SelectItem key={item.id} value={item.id}>
-                          {item.name}
+                          {item?.name}
                         </SelectItem>
                       ))}
                     </SelectGroup>
@@ -738,7 +737,7 @@ const handleOnFormSubmit = async (data: Record<string, unknown>) => {
                 )}
               </div>
               <div className="w-full">
-                <label className="block mt-1 text-sm text-gray-700">
+                <label className="mt-1 block text-sm text-gray-700">
                   Group
                   <span className="text-red-300"> *</span>
                 </label>
@@ -759,7 +758,7 @@ const handleOnFormSubmit = async (data: Record<string, unknown>) => {
                     <SelectGroup>
                       {groupList?.data?.map((item) => (
                         <SelectItem key={item.id} value={item.id}>
-                          {item.name}
+                          {item?.name}
                         </SelectItem>
                       ))}
                     </SelectGroup>
@@ -773,7 +772,7 @@ const handleOnFormSubmit = async (data: Record<string, unknown>) => {
               </div>
 
               <div className="w-full">
-                <label className="block mt-1 text-sm text-gray-700">
+                <label className="mt-1 block text-sm text-gray-700">
                   Enrollment ID
                 </label>
                 <Input
@@ -786,9 +785,9 @@ const handleOnFormSubmit = async (data: Record<string, unknown>) => {
           </div>
           <div className={currentPage === 2 ? 'block' : 'hidden'}>
             <h1 className="mb-5 text-sm font-semibold">{'Parent’s Details'}</h1>
-            <section className="grid flex-wrap justify-between grid-cols-1 gap-4 md:grid md:grid-cols-1 lg:grid lg:grid-cols-3 ">
+            <section className="grid grid-cols-1 flex-wrap justify-between gap-4 md:grid md:grid-cols-1 lg:grid lg:grid-cols-3 ">
               <div className="w-full">
-                <label className="block mt-1 text-sm text-gray-700">
+                <label className="mt-1 block text-sm text-gray-700">
                   Father's Name
                 </label>
                 <Input
@@ -798,7 +797,7 @@ const handleOnFormSubmit = async (data: Record<string, unknown>) => {
                 />
               </div>
               <div className="w-full">
-                <label className="block mt-1 text-sm text-gray-700">
+                <label className="mt-1 block text-sm text-gray-700">
                   Father's Occupation
                 </label>
                 <Input
@@ -808,7 +807,7 @@ const handleOnFormSubmit = async (data: Record<string, unknown>) => {
                 />
               </div>
               <div className="w-full">
-                <label className="block mt-1 text-sm text-gray-700">
+                <label className="mt-1 block text-sm text-gray-700">
                   Father's Phone Number
                 </label>
                 <Input
@@ -818,7 +817,7 @@ const handleOnFormSubmit = async (data: Record<string, unknown>) => {
                 />
               </div>
               <div className="w-full">
-                <label className="block mt-1 text-sm text-gray-700">
+                <label className="mt-1 block text-sm text-gray-700">
                   Father's Education
                 </label>
                 <Input
@@ -828,7 +827,7 @@ const handleOnFormSubmit = async (data: Record<string, unknown>) => {
                 />
               </div>
               <div className="w-full">
-                <label className="block mt-1 text-sm text-gray-700">
+                <label className="mt-1 block text-sm text-gray-700">
                   Father's Aadhar Card Number
                 </label>
                 <Input
@@ -838,7 +837,7 @@ const handleOnFormSubmit = async (data: Record<string, unknown>) => {
                 />
               </div>
               <div className="w-full">
-                <label className="block mt-1 text-sm text-gray-700">
+                <label className="mt-1 block text-sm text-gray-700">
                   Fathers's Email Id
                 </label>
                 <Input
@@ -848,7 +847,7 @@ const handleOnFormSubmit = async (data: Record<string, unknown>) => {
                 />
               </div>
               <div className="w-full">
-                <label className="block mt-1 text-sm text-gray-700">
+                <label className="mt-1 block text-sm text-gray-700">
                   Father's Annual Income
                 </label>
                 <Input
@@ -858,7 +857,7 @@ const handleOnFormSubmit = async (data: Record<string, unknown>) => {
                 />
               </div>
               <div className="w-full">
-                <label className="block mt-1 text-sm text-gray-700">
+                <label className="mt-1 block text-sm text-gray-700">
                   Mother's Name
                 </label>
                 <Input
@@ -868,7 +867,7 @@ const handleOnFormSubmit = async (data: Record<string, unknown>) => {
                 />
               </div>
               <div className="w-full">
-                <label className="block mt-1 text-sm text-gray-700">
+                <label className="mt-1 block text-sm text-gray-700">
                   Mother's Occupation
                 </label>
                 <Input
@@ -878,7 +877,7 @@ const handleOnFormSubmit = async (data: Record<string, unknown>) => {
                 />
               </div>
               <div className="w-full">
-                <label className="block mt-1 text-sm text-gray-700">
+                <label className="mt-1 block text-sm text-gray-700">
                   Mother's Phone Number
                 </label>
                 <Input
@@ -888,7 +887,7 @@ const handleOnFormSubmit = async (data: Record<string, unknown>) => {
                 />
               </div>
               <div className="w-full">
-                <label className="block mt-1 text-sm text-gray-700">
+                <label className="mt-1 block text-sm text-gray-700">
                   Mother's Education
                 </label>
                 <Input
@@ -898,7 +897,7 @@ const handleOnFormSubmit = async (data: Record<string, unknown>) => {
                 />
               </div>
               <div className="w-full">
-                <label className="block mt-1 text-sm text-gray-700">
+                <label className="mt-1 block text-sm text-gray-700">
                   Mother's Aadhar Card Number
                 </label>
                 <Input
@@ -908,7 +907,7 @@ const handleOnFormSubmit = async (data: Record<string, unknown>) => {
                 />
               </div>
               <div className="w-full">
-                <label className="block mt-1 text-sm text-gray-700">
+                <label className="mt-1 block text-sm text-gray-700">
                   Mother's Email Id
                 </label>
                 <Input
@@ -918,7 +917,7 @@ const handleOnFormSubmit = async (data: Record<string, unknown>) => {
                 />
               </div>
               <div className="w-full">
-                <label className="block mt-1 text-sm text-gray-700">
+                <label className="mt-1 block text-sm text-gray-700">
                   Mother's Annual Income
                 </label>
                 <Input
@@ -928,7 +927,7 @@ const handleOnFormSubmit = async (data: Record<string, unknown>) => {
                 />
               </div>
               <div className="w-full">
-                <label className="block mt-1 text-sm text-gray-700">
+                <label className="mt-1 block text-sm text-gray-700">
                   Parents Separated
                 </label>
                 <Controller
@@ -941,12 +940,12 @@ const handleOnFormSubmit = async (data: Record<string, unknown>) => {
                     <RadioGroup
                       onValueChange={onChange}
                       value={value}
-                      className="flex gap-2 mt-3"
+                      className="mt-3 flex gap-2"
                     >
-                      <RadioGroupItem className="mt-1 mr-1" value={'yes'} />
+                      <RadioGroupItem className="mr-1 mt-1" value={'yes'} />
                       {'Yes'}
                       <RadioGroupItem
-                        className="mt-1 ml-3 mr-1 "
+                        className="ml-3 mr-1 mt-1 "
                         value={'no'}
                       />
                       {'No'}
@@ -960,9 +959,9 @@ const handleOnFormSubmit = async (data: Record<string, unknown>) => {
             <h1 className="mb-5 text-sm font-semibold">
               {'Information of Siblings'}
             </h1>
-            <section className="grid flex-wrap justify-between grid-cols-1 gap-4 md:grid md:grid-cols-1 lg:grid lg:grid-cols-3 ">
+            <section className="grid grid-cols-1 flex-wrap justify-between gap-4 md:grid md:grid-cols-1 lg:grid lg:grid-cols-3 ">
               <div className="w-full">
-                <label className="block mt-1 text-sm text-gray-700">
+                <label className="mt-1 block text-sm text-gray-700">
                   No of Siblings
                 </label>
                 <Select
@@ -991,7 +990,7 @@ const handleOnFormSubmit = async (data: Record<string, unknown>) => {
                 </Select>
               </div>
               <div className="w-full">
-                <label className="block mt-1 text-sm text-gray-700">
+                <label className="mt-1 block text-sm text-gray-700">
                   Sibling Name 1
                 </label>
                 <Input
@@ -1001,7 +1000,7 @@ const handleOnFormSubmit = async (data: Record<string, unknown>) => {
                 />
               </div>
               <div className="w-full">
-                <label className="block mt-1 text-sm text-gray-700">
+                <label className="mt-1 block text-sm text-gray-700">
                   Relation
                 </label>
                 <Controller
@@ -1014,12 +1013,12 @@ const handleOnFormSubmit = async (data: Record<string, unknown>) => {
                     <RadioGroup
                       onValueChange={onChange}
                       value={value}
-                      className="flex gap-2 mt-3"
+                      className="mt-3 flex gap-2"
                     >
-                      <RadioGroupItem className="mt-1 mr-1" value={'brother'} />
+                      <RadioGroupItem className="mr-1 mt-1" value={'brother'} />
                       {'Brother'}
                       <RadioGroupItem
-                        className="mt-1 ml-3 mr-1 "
+                        className="ml-3 mr-1 mt-1 "
                         value={'sister'}
                       />
                       {'Sister'}
@@ -1028,7 +1027,7 @@ const handleOnFormSubmit = async (data: Record<string, unknown>) => {
                 />
               </div>
               <div className="w-full">
-                <label className="block mt-1 text-sm text-gray-700">
+                <label className="mt-1 block text-sm text-gray-700">
                   Class for sibling 1
                 </label>
                 <Input
@@ -1038,7 +1037,7 @@ const handleOnFormSubmit = async (data: Record<string, unknown>) => {
                 />
               </div>
               <div className="w-full">
-                <label className="block mt-1 text-sm text-gray-700">
+                <label className="mt-1 block text-sm text-gray-700">
                   Sibling Name 2
                 </label>
                 <Input
@@ -1048,7 +1047,7 @@ const handleOnFormSubmit = async (data: Record<string, unknown>) => {
                 />
               </div>
               <div className="w-full">
-                <label className="block mt-1 text-sm text-gray-700">
+                <label className="mt-1 block text-sm text-gray-700">
                   Relation
                 </label>
                 <Controller
@@ -1061,12 +1060,12 @@ const handleOnFormSubmit = async (data: Record<string, unknown>) => {
                     <RadioGroup
                       onValueChange={onChange}
                       value={value}
-                      className="flex gap-2 mt-3"
+                      className="mt-3 flex gap-2"
                     >
-                      <RadioGroupItem className="mt-1 mr-1" value={'brother'} />
+                      <RadioGroupItem className="mr-1 mt-1" value={'brother'} />
                       {'Brother'}
                       <RadioGroupItem
-                        className="mt-1 ml-3 mr-1 "
+                        className="ml-3 mr-1 mt-1 "
                         value={'sister'}
                       />
                       {'Sister'}
@@ -1075,7 +1074,7 @@ const handleOnFormSubmit = async (data: Record<string, unknown>) => {
                 />
               </div>
               <div className="w-full">
-                <label className="block mt-1 text-sm text-gray-700">
+                <label className="mt-1 block text-sm text-gray-700">
                   Class for sibling 2
                 </label>
                 <Input
@@ -1090,9 +1089,9 @@ const handleOnFormSubmit = async (data: Record<string, unknown>) => {
             <h1 className="mb-5 text-sm font-semibold">
               {'Gurdian’s Details'}
             </h1>
-            <section className="grid flex-wrap justify-between grid-cols-1 gap-4 md:grid md:grid-cols-1 lg:grid lg:grid-cols-3 ">
+            <section className="grid grid-cols-1 flex-wrap justify-between gap-4 md:grid md:grid-cols-1 lg:grid lg:grid-cols-3 ">
               <div className="w-full">
-                <label className="block mt-1 text-sm text-gray-700">
+                <label className="mt-1 block text-sm text-gray-700">
                   Guardian's Name
                 </label>
                 <Input
@@ -1102,7 +1101,7 @@ const handleOnFormSubmit = async (data: Record<string, unknown>) => {
                 />
               </div>
               <div className="w-full">
-                <label className="block mt-1 text-sm text-gray-700">
+                <label className="mt-1 block text-sm text-gray-700">
                   Guardian's Occupation
                 </label>
                 <Input
@@ -1112,7 +1111,7 @@ const handleOnFormSubmit = async (data: Record<string, unknown>) => {
                 />
               </div>
               <div className="w-full">
-                <label className="block mt-1 text-sm text-gray-700">
+                <label className="mt-1 block text-sm text-gray-700">
                   Relationship Type
                 </label>
                 <Input
@@ -1122,7 +1121,7 @@ const handleOnFormSubmit = async (data: Record<string, unknown>) => {
                 />
               </div>
               <div className="w-full">
-                <label className="block mt-1 text-sm text-gray-700">
+                <label className="mt-1 block text-sm text-gray-700">
                   Guardian's Phone Number
                 </label>
                 <Input
@@ -1132,7 +1131,7 @@ const handleOnFormSubmit = async (data: Record<string, unknown>) => {
                 />
               </div>
               <div className="w-full">
-                <label className="block mt-1 text-sm text-gray-700">
+                <label className="mt-1 block text-sm text-gray-700">
                   Guardian's Email Id
                 </label>
                 <Input
@@ -1142,7 +1141,7 @@ const handleOnFormSubmit = async (data: Record<string, unknown>) => {
                 />
               </div>
               <div className="w-full">
-                <label className="block mt-1 text-sm text-gray-700">
+                <label className="mt-1 block text-sm text-gray-700">
                   Guardian's Aadhar Card Number
                 </label>
                 <Input
@@ -1152,7 +1151,7 @@ const handleOnFormSubmit = async (data: Record<string, unknown>) => {
                 />
               </div>
               <div className="w-full">
-                <label className="block mt-1 text-sm text-gray-700">
+                <label className="mt-1 block text-sm text-gray-700">
                   Guardian's Annual Income
                 </label>
                 <Input
@@ -1165,19 +1164,19 @@ const handleOnFormSubmit = async (data: Record<string, unknown>) => {
           </div>
           <div className={currentPage === 5 ? 'block' : 'hidden'}>
             <h1 className="mb-5 text-sm font-semibold">{'Address Details'}</h1>
-            <section className="grid flex-wrap justify-between grid-cols-1 gap-4 md:grid md:grid-cols-1 lg:grid lg:grid-cols-3 ">
+            <section className="grid grid-cols-1 flex-wrap justify-between gap-4 md:grid md:grid-cols-1 lg:grid lg:grid-cols-3 ">
               <div className="w-full">
-                <label className="block mt-1 text-sm text-gray-700">
+                <label className="mt-1 block text-sm text-gray-700">
                   Residential Address
                 </label>
                 <textarea
                   {...register('residentialAddress')}
                   autoComplete="off"
-                  className="flex w-full h-10 px-3 py-2 mt-1 text-sm bg-transparent border border-gray-300 rounded-md ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                  className="ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring mt-1 flex h-10 w-full rounded-md border border-gray-300 bg-transparent px-3 py-2 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
                 ></textarea>
               </div>
               <div className="w-full">
-                <label className="block mt-1 mb-1 text-sm text-gray-700 ">
+                <label className="mb-1 mt-1 block text-sm text-gray-700 ">
                   Residential Country
                 </label>
                 <Select
@@ -1198,7 +1197,7 @@ const handleOnFormSubmit = async (data: Record<string, unknown>) => {
                     <SelectGroup>
                       {Country?.map((item, index) => (
                         <SelectItem value={item.isoCode} key={index}>
-                          {item.name}
+                          {item?.name}
                         </SelectItem>
                       ))}
                     </SelectGroup>
@@ -1206,7 +1205,7 @@ const handleOnFormSubmit = async (data: Record<string, unknown>) => {
                 </Select>
               </div>
               <div className="w-full">
-                <label className="block mt-1 text-sm text-gray-700">
+                <label className="mt-1 block text-sm text-gray-700">
                   Residential State
                 </label>
                 <Select
@@ -1227,7 +1226,7 @@ const handleOnFormSubmit = async (data: Record<string, unknown>) => {
                     <SelectGroup>
                       {residentialState?.map((item, index) => (
                         <SelectItem value={item.isoCode} key={index}>
-                          {item.name}
+                          {item?.name}
                         </SelectItem>
                       ))}
                     </SelectGroup>
@@ -1235,7 +1234,7 @@ const handleOnFormSubmit = async (data: Record<string, unknown>) => {
                 </Select>
               </div>
               <div className="w-full">
-                <label className="block mt-1 text-sm text-gray-700">
+                <label className="mt-1 block text-sm text-gray-700">
                   Residential City
                 </label>
                 <Select
@@ -1254,8 +1253,8 @@ const handleOnFormSubmit = async (data: Record<string, unknown>) => {
                   <SelectContent>
                     <SelectGroup>
                       {residentialCityList?.map((item, index) => (
-                        <SelectItem value={item.name} key={index}>
-                          {item.name}
+                        <SelectItem value={item?.name} key={index}>
+                          {item?.name}
                         </SelectItem>
                       ))}
                     </SelectGroup>
@@ -1264,7 +1263,7 @@ const handleOnFormSubmit = async (data: Record<string, unknown>) => {
               </div>
 
               <div className="w-full">
-                <label className="block mt-1 text-sm text-gray-700">
+                <label className="mt-1 block text-sm text-gray-700">
                   Postal / ZIP Code
                 </label>
                 <Input
@@ -1274,17 +1273,17 @@ const handleOnFormSubmit = async (data: Record<string, unknown>) => {
                 />
               </div>
               <div className="w-full">
-                <label className="block mt-1 text-sm text-gray-700">
+                <label className="mt-1 block text-sm text-gray-700">
                   Permanent Address
                 </label>
                 <textarea
                   {...register('permanentAddress')}
                   autoComplete="off"
-                  className="flex w-full h-10 px-3 py-2 mt-1 text-sm bg-transparent border border-gray-300 rounded-md ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                  className="ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring mt-1 flex h-10 w-full rounded-md border border-gray-300 bg-transparent px-3 py-2 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
                 ></textarea>
               </div>
               <div className="w-full">
-                <label className="block mt-1 mb-1 text-sm text-gray-700">
+                <label className="mb-1 mt-1 block text-sm text-gray-700">
                   Permanent Country
                 </label>
                 <Select
@@ -1305,7 +1304,7 @@ const handleOnFormSubmit = async (data: Record<string, unknown>) => {
                     <SelectGroup>
                       {Country?.map((item, index) => (
                         <SelectItem value={item.isoCode} key={index}>
-                          {item.name}
+                          {item?.name}
                         </SelectItem>
                       ))}
                     </SelectGroup>
@@ -1313,7 +1312,7 @@ const handleOnFormSubmit = async (data: Record<string, unknown>) => {
                 </Select>
               </div>
               <div className="w-full">
-                <label className="block mt-1 text-sm text-gray-700">
+                <label className="mt-1 block text-sm text-gray-700">
                   Permanent State
                 </label>
                 <Select
@@ -1334,7 +1333,7 @@ const handleOnFormSubmit = async (data: Record<string, unknown>) => {
                     <SelectGroup>
                       {permanentState?.map((item, index) => (
                         <SelectItem value={item.isoCode} key={index}>
-                          {item.name}
+                          {item?.name}
                         </SelectItem>
                       ))}
                     </SelectGroup>
@@ -1342,7 +1341,7 @@ const handleOnFormSubmit = async (data: Record<string, unknown>) => {
                 </Select>
               </div>
               <div className="w-full">
-                <label className="block mt-1 text-sm text-gray-700">
+                <label className="mt-1 block text-sm text-gray-700">
                   Permanent City
                 </label>
                 <Select
@@ -1361,8 +1360,8 @@ const handleOnFormSubmit = async (data: Record<string, unknown>) => {
                   <SelectContent>
                     <SelectGroup>
                       {permanentCity?.map((item, index) => (
-                        <SelectItem value={item.name} key={index}>
-                          {item.name}
+                        <SelectItem value={item?.name} key={index}>
+                          {item?.name}
                         </SelectItem>
                       ))}
                     </SelectGroup>
@@ -1371,7 +1370,7 @@ const handleOnFormSubmit = async (data: Record<string, unknown>) => {
               </div>
 
               <div className="w-full">
-                <label className="block mt-1 text-sm text-gray-700">
+                <label className="mt-1 block text-sm text-gray-700">
                   Postal / ZIP Code
                 </label>
                 <Input
@@ -1386,9 +1385,9 @@ const handleOnFormSubmit = async (data: Record<string, unknown>) => {
             <h1 className="mb-5 text-sm font-semibold">
               {'Educational Details'}
             </h1>
-            <section className="grid flex-wrap justify-between grid-cols-1 gap-4 md:grid md:grid-cols-1 lg:grid lg:grid-cols-3 ">
+            <section className="grid grid-cols-1 flex-wrap justify-between gap-4 md:grid md:grid-cols-1 lg:grid lg:grid-cols-3 ">
               <div className="w-full">
-                <label className="block mt-1 text-sm text-gray-700">
+                <label className="mt-1 block text-sm text-gray-700">
                   School Name (10th std)
                 </label>
                 <Input
@@ -1398,7 +1397,7 @@ const handleOnFormSubmit = async (data: Record<string, unknown>) => {
                 />
               </div>
               <div className="w-full">
-                <label className="block mt-1 text-sm text-gray-700">
+                <label className="mt-1 block text-sm text-gray-700">
                   Year of Passing
                 </label>
                 <Input
@@ -1408,7 +1407,7 @@ const handleOnFormSubmit = async (data: Record<string, unknown>) => {
                 />
               </div>
               <div className="w-full">
-                <label className="block mt-1 text-sm text-gray-700">
+                <label className="mt-1 block text-sm text-gray-700">
                   Obtained Mark
                 </label>
                 <Input
@@ -1418,7 +1417,7 @@ const handleOnFormSubmit = async (data: Record<string, unknown>) => {
                 />
               </div>
               <div className="w-full">
-                <label className="block mt-1 text-sm text-gray-700">
+                <label className="mt-1 block text-sm text-gray-700">
                   Medium of Education 10th
                 </label>
                 <Input
@@ -1428,7 +1427,7 @@ const handleOnFormSubmit = async (data: Record<string, unknown>) => {
                 />
               </div>
               <div className="w-full">
-                <label className="block mt-1 text-sm text-gray-700">
+                <label className="mt-1 block text-sm text-gray-700">
                   Board of Education 10th
                 </label>
                 <Input
@@ -1438,7 +1437,7 @@ const handleOnFormSubmit = async (data: Record<string, unknown>) => {
                 />
               </div>
               <div className="w-full">
-                <label className="block mt-1 text-sm text-gray-700">
+                <label className="mt-1 block text-sm text-gray-700">
                   TC Number(10th)
                 </label>
                 <Input
@@ -1448,7 +1447,7 @@ const handleOnFormSubmit = async (data: Record<string, unknown>) => {
                 />
               </div>
               <div className="w-full">
-                <label className="block mt-1 text-sm text-gray-700">
+                <label className="mt-1 block text-sm text-gray-700">
                   School Name (11th std)
                 </label>
                 <Input
@@ -1458,7 +1457,7 @@ const handleOnFormSubmit = async (data: Record<string, unknown>) => {
                 />
               </div>
               <div className="w-full">
-                <label className="block mt-1 text-sm text-gray-700">
+                <label className="mt-1 block text-sm text-gray-700">
                   Year of Passing
                 </label>
                 <Input
@@ -1468,7 +1467,7 @@ const handleOnFormSubmit = async (data: Record<string, unknown>) => {
                 />
               </div>
               <div className="w-full">
-                <label className="block mt-1 text-sm text-gray-700">
+                <label className="mt-1 block text-sm text-gray-700">
                   Obtained Mark
                 </label>
                 <Input
@@ -1478,7 +1477,7 @@ const handleOnFormSubmit = async (data: Record<string, unknown>) => {
                 />
               </div>
               <div className="w-full">
-                <label className="block mt-1 text-sm text-gray-700">
+                <label className="mt-1 block text-sm text-gray-700">
                   Medium of Education 11th
                 </label>
                 <Input
@@ -1488,7 +1487,7 @@ const handleOnFormSubmit = async (data: Record<string, unknown>) => {
                 />
               </div>
               <div className="w-full">
-                <label className="block mt-1 text-sm text-gray-700">
+                <label className="mt-1 block text-sm text-gray-700">
                   Board of Education 11th
                 </label>
                 <Input
@@ -1503,9 +1502,9 @@ const handleOnFormSubmit = async (data: Record<string, unknown>) => {
             <h1 className="mb-5 text-sm font-semibold">
               {'Educational Details'}
             </h1>
-            <section className="grid flex-wrap justify-between grid-cols-1 gap-4 md:grid md:grid-cols-1 lg:grid lg:grid-cols-3 ">
+            <section className="grid grid-cols-1 flex-wrap justify-between gap-4 md:grid md:grid-cols-1 lg:grid lg:grid-cols-3 ">
               <div className="w-full">
-                <label className="block mt-1 text-sm text-gray-700">
+                <label className="mt-1 block text-sm text-gray-700">
                   Academic Year
                   <span className="text-red-300"> *</span>
                 </label>
@@ -1526,7 +1525,7 @@ const handleOnFormSubmit = async (data: Record<string, unknown>) => {
                     <SelectGroup>
                       {batchList?.data?.map((item) => (
                         <SelectItem key={item.id} value={item.id}>
-                          {item.name}
+                          {item?.name}
                         </SelectItem>
                       ))}
                     </SelectGroup>
@@ -1539,7 +1538,7 @@ const handleOnFormSubmit = async (data: Record<string, unknown>) => {
                 )}
               </div>
               <div className="w-full">
-                <label className="block mt-1 text-sm text-gray-700">
+                <label className="mt-1 block text-sm text-gray-700">
                   Scholarship
                 </label>
                 <Controller
@@ -1550,12 +1549,12 @@ const handleOnFormSubmit = async (data: Record<string, unknown>) => {
                     <RadioGroup
                       onValueChange={onChange}
                       value={value}
-                      className="flex gap-2 mt-3"
+                      className="mt-3 flex gap-2"
                     >
-                      <RadioGroupItem className="mt-1 mr-1" value={'yes'} />
+                      <RadioGroupItem className="mr-1 mt-1" value={'yes'} />
                       {'Yes'}
                       <RadioGroupItem
-                        className="mt-1 ml-3 mr-1 "
+                        className="ml-3 mr-1 mt-1 "
                         value={'no'}
                       />
                       {'No'}
@@ -1564,13 +1563,13 @@ const handleOnFormSubmit = async (data: Record<string, unknown>) => {
                 />
               </div>
               <div className="w-full">
-                <label className="block mt-1 text-sm text-gray-700">
+                <label className="mt-1 block text-sm text-gray-700">
                   Aadhar Card Number
                   <span className="text-red-300"> *</span>
                 </label>
                 <Input
                   {...register('aadharCardNumber')}
-                  aria-invalid={errors.name ? 'true' : 'false'}
+                  aria-invalid={errors?.name ? 'true' : 'false'}
                   errorMessage={errors?.name?.message.toString()}
                   className="mt-1"
                   autoComplete="off"
@@ -1584,7 +1583,7 @@ const handleOnFormSubmit = async (data: Record<string, unknown>) => {
               </div>
 
               <div className="w-full">
-                <label className="block mt-1 text-sm text-gray-700">
+                <label className="mt-1 block text-sm text-gray-700">
                   Mother Tongue
                 </label>
                 <Select
@@ -1604,7 +1603,7 @@ const handleOnFormSubmit = async (data: Record<string, unknown>) => {
                     <SelectGroup>
                       {languageList.map((item, index) => (
                         <SelectItem value={item.id} key={index}>
-                          {item.name}
+                          {item?.name}
                         </SelectItem>
                       ))}
                     </SelectGroup>
@@ -1612,7 +1611,7 @@ const handleOnFormSubmit = async (data: Record<string, unknown>) => {
                 </Select>
               </div>
               <div className="w-full">
-                <label className="block mt-1 text-sm text-gray-700">
+                <label className="mt-1 block text-sm text-gray-700">
                   Religion
                 </label>
                 <Select
@@ -1639,7 +1638,7 @@ const handleOnFormSubmit = async (data: Record<string, unknown>) => {
                 </Select>
               </div>
               <div className="w-full">
-                <label className="block mt-1 text-sm text-gray-700">
+                <label className="mt-1 block text-sm text-gray-700">
                   Community
                 </label>
                 <Select
@@ -1659,7 +1658,7 @@ const handleOnFormSubmit = async (data: Record<string, unknown>) => {
                     <SelectGroup>
                       {communityList.map((item, index) => (
                         <SelectItem value={item.id} key={index}>
-                          {item.name}
+                          {item?.name}
                         </SelectItem>
                       ))}
                     </SelectGroup>
@@ -1667,7 +1666,7 @@ const handleOnFormSubmit = async (data: Record<string, unknown>) => {
                 </Select>
               </div>
               <div className="w-full">
-                <label className="block mt-1 text-sm text-gray-700">
+                <label className="mt-1 block text-sm text-gray-700">
                   Caste
                 </label>
                 <Select
@@ -1691,7 +1690,7 @@ const handleOnFormSubmit = async (data: Record<string, unknown>) => {
                 </Select>
               </div>
               <div className="w-full">
-                <label className="block mt-1 text-sm text-gray-700">
+                <label className="mt-1 block text-sm text-gray-700">
                   Differently abled
                 </label>
                 <Controller
@@ -1704,12 +1703,12 @@ const handleOnFormSubmit = async (data: Record<string, unknown>) => {
                     <RadioGroup
                       onValueChange={onChange}
                       value={value}
-                      className="flex gap-2 mt-3"
+                      className="mt-3 flex gap-2"
                     >
-                      <RadioGroupItem className="mt-1 mr-1" value={'yes'} />{' '}
+                      <RadioGroupItem className="mr-1 mt-1" value={'yes'} />{' '}
                       {'Yes'}
                       <RadioGroupItem
-                        className="mt-1 ml-3 mr-1 "
+                        className="ml-3 mr-1 mt-1 "
                         value={'no'}
                       />
                       {'No'}
@@ -1718,7 +1717,7 @@ const handleOnFormSubmit = async (data: Record<string, unknown>) => {
                 />
               </div>
               <div className="w-full">
-                <label className="block mt-1 text-sm text-gray-700">
+                <label className="mt-1 block text-sm text-gray-700">
                   Type of Disability
                 </label>
                 <Input
@@ -1728,7 +1727,7 @@ const handleOnFormSubmit = async (data: Record<string, unknown>) => {
                 />
               </div>
               <div className="w-full">
-                <label className="block mt-1 text-sm text-gray-700">
+                <label className="mt-1 block text-sm text-gray-700">
                   First Language
                 </label>
                 <Input
@@ -1738,7 +1737,7 @@ const handleOnFormSubmit = async (data: Record<string, unknown>) => {
                 />
               </div>
               <div className="w-full">
-                <label className="block mt-1 text-sm text-gray-700">
+                <label className="mt-1 block text-sm text-gray-700">
                   Nationality
                 </label>
                 <Input
@@ -1750,37 +1749,37 @@ const handleOnFormSubmit = async (data: Record<string, unknown>) => {
             </section>
           </div>
           <div className={currentPage < 7 ? 'block' : 'hidden'}>
-            <section className="flex justify-end gap-2 mt-8">
+            <section className="mt-8 flex justify-end gap-2">
               <Button
                 type="button"
                 onClick={prevPage}
                 disabled={currentPage === 1}
-                className="px-4 py-2 mr-2 font-bold text-white rounded"
+                className="mr-2 rounded px-4 py-2 font-bold text-white"
               >
                 Back
               </Button>
               <Button
                 type="button"
                 onClick={nextPage}
-                className="px-4 py-2 font-bold text-white rounded "
+                className="rounded px-4 py-2 font-bold text-white "
               >
                 Next
               </Button>
             </section>
           </div>
           <div className={currentPage === 7 ? 'block' : 'hidden'}>
-            <section className="flex justify-end gap-2 mt-8">
+            <section className="mt-8 flex justify-end gap-2">
               <Button
                 type="button"
                 onClick={prevPage}
-                className="px-4 py-2 mr-2 font-bold text-white rounded"
+                className="mr-2 rounded px-4 py-2 font-bold text-white"
               >
                 Back
               </Button>
               <Button
                 type="submit"
                 onClick={nextPage}
-                className="px-4 py-2 font-bold text-white rounded "
+                className="rounded px-4 py-2 font-bold text-white "
               >
                 Update
               </Button>
