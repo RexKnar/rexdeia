@@ -703,7 +703,7 @@ export function StudentDetail() {
                         Medium
                       </label>
                       <Text variant="base-regular">
-                        {getStudentByIdResponse.medium.name}
+                        {getStudentByIdResponse?.medium?.name}
                       </Text>
                     </div>
                     <div>
@@ -711,7 +711,7 @@ export function StudentDetail() {
                         Class
                       </label>
                       <Text variant="base-regular">
-                        {getStudentByIdResponse.class.name}
+                        {getStudentByIdResponse.class?.name}
                       </Text>
                     </div>
                     <div>
@@ -719,7 +719,7 @@ export function StudentDetail() {
                         Group
                       </label>
                       <Text variant="base-regular">
-                        {getStudentByIdResponse.group.name}
+                        {getStudentByIdResponse.group?.name}
                       </Text>
                     </div>
                   </div>
