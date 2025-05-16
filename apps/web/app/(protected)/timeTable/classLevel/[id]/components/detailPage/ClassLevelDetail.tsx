@@ -1,5 +1,6 @@
 'use client';
 
+import { ClassWidget } from 'app/(protected)/academics/class/_components/ClassWidget';
 import { useGetClassLevelByIdQuery } from 'lib/queries/classLevel/useGetClassLevelByIdQuery';
 import { PencilLine } from 'lucide-react';
 import {
@@ -76,9 +77,9 @@ const ClassLevelDetail = () => {
           </Button>
         </div>
       </div>
-      <Tabs defaultValue="Students" className="relative mt-4 px-0 py-2">
+      <Tabs defaultValue="Classes" className="relative mt-4 px-0 py-2">
         <TabsList className="w-full justify-start overflow-auto border-b-2 border-gray-400">
-          {['Students', 'Staffs'].map((tab) => (
+          {['Classes', 'Students', 'Staffs'].map((tab) => (
             <TabsTrigger
               key={tab}
               value={tab}
@@ -88,6 +89,13 @@ const ClassLevelDetail = () => {
             </TabsTrigger>
           ))}
         </TabsList>
+        <TabsContent value="Classes">
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+            {classLevelDetails.class.map((cls) => (
+              <ClassWidget key={cls.id} classDetails={cls} />
+            ))}
+          </div>
+        </TabsContent>
         <TabsContent value="Students"></TabsContent>
         <TabsContent value="Staffs"></TabsContent>
       </Tabs>

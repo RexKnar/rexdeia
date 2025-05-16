@@ -53,6 +53,24 @@ export async function getClassLevelById(id: string) {
       isActive: true,
       createdAt: true,
       updatedAt: true,
+      class: {
+        where: {
+          isActive: true,
+        },
+        orderBy: { name: 'asc' },
+        select: {
+          id: true,
+          name: true,
+          isActive: true,
+          Section: {
+            select: {
+              id: true,
+              name: true,
+              isActive: true,
+            },
+          },
+        },
+      },
     },
   });
 }
