@@ -1569,7 +1569,7 @@ export function EditStudentDetail() {
                 </label>
                 <Input
                   {...register('aadharCardNumber')}
-                  aria-invalid={errors?.name ? 'true' : 'false'}
+                  aria-invalid={errors.name ? 'true' : 'false'}
                   errorMessage={errors?.name?.message.toString()}
                   className="mt-1"
                   autoComplete="off"
