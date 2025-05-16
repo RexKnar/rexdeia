@@ -227,6 +227,10 @@ export default function OverallAnalytics({
           result.lowestMark['overall'] = mark;
           result.lowestMarkStudentName['overall'] = studentFullName;
           result.lowestMark.studentList.overall = [student];
+        } else {
+          if (result.lowestMark['overall'] == mark) {
+            result.lowestMark.studentList.overall.push(student);
+          }
         }
 
         if (subject.failingStatus && !subject.absentStatus) {
