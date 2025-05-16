@@ -267,7 +267,7 @@ export default function RangeAnalyticsTable({
                                       }}
                                     >
                                       M:
-                                      {`${studentDetail?.maleCount}(${studentDetail?.malePercentage.toFixed(2)}%)`}
+                                      {`${studentDetail?.maleCount} (${studentDetail?.malePercentage.toFixed(2)}%)`}
                                     </Button>
                                   </Text>
                                   <Text className="text-primary-800">
