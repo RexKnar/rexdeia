@@ -1,10 +1,9 @@
-import DetailPage from './components/detailPage/detail';
+import ClassLevelDetail from './components/detailPage/ClassLevelDetail';
 
 export default function Page() {
   return (
     <section className="flex flex-col gap-6">
-      <h1>Level Config..</h1>
-      <DetailPage />
+      <ClassLevelDetail />
     </section>
   );
 }

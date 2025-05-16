@@ -377,7 +377,7 @@ export default function StudentMarkList({
                     }
                   );
 
-                  if (!studentDetail.absentStatus) {
+                  if (!studentDetail?.absentStatus) {
                     const subjectTotal =
                       Number(studentDetail?.subjectTotalMark) || 0;
                     if (studentDetail?.failingStatus) {

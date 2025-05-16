@@ -206,7 +206,7 @@ export default function RangeAnalyticsTable({
                   {rangeType === 'SubjectMarks' &&
                     subjectList?.map((subject, index) => (
                       <TableRow key={index} className="mt-5 ">
-                        <TableCell className="bg-primary-300">
+                        <TableCell className="sticky left-0 z-10 bg-primary-300">
                           <Text className="size-lg font-semibold">
                             {subject.subject.name}
                           </Text>
