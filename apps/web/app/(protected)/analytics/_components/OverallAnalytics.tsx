@@ -198,23 +198,22 @@ export default function OverallAnalytics({
         }
 
         if (mark > result.highestMark[gender]) {
-          let oldHighestMark = result.highestMark[gender];
           result.highestMark[gender] = mark;
           result.highestMarkStudentName[gender] = studentFullName;
-          if (mark !== oldHighestMark) {
-            result.highestMark.studentList[gender] = [student];
-          } else {
+
+          result.highestMark.studentList[gender] = [student];
+        } else {
+          if (mark == result.highestMark[gender]) {
             result.highestMark.studentList[gender].push(student);
           }
         }
         if (mark < result.lowestMark[gender] && !subject.absentStatus) {
-          let oldLowestMark = result.lowestMark[gender];
           result.lowestMark[gender] = mark;
           result.lowestMarkStudentName[gender] = studentFullName;
 
-          if (mark !== oldLowestMark) {
-            result.lowestMark.studentList[gender] = [student];
-          } else {
+          result.lowestMark.studentList[gender] = [student];
+        } else {
+          if (mark == result.lowestMark[gender]) {
             result.lowestMark.studentList[gender].push(student);
           }
         }
@@ -329,7 +328,7 @@ export default function OverallAnalytics({
       }
       let oldHighestMark = highestMark;
       highestMark = Math.max(highestMark, student.totalMark);
-      if (highestMark !== oldHighestMark) {
+      if (highestMark != oldHighestMark) {
         highestMarkStudents = [student];
       } else {
         highestMarkStudents.push(student);
@@ -342,7 +341,7 @@ export default function OverallAnalytics({
         } else {
           let oldLowestMark = lowestMark;
           lowestMark = Math.min(lowestMark, student.totalMark);
-          if (lowestMark !== oldLowestMark) {
+          if (lowestMark != oldLowestMark) {
             lowestMarkStudents = [student];
           } else {
             lowestMarkStudents.push(student);
