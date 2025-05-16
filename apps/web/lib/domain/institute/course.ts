@@ -87,3 +87,8 @@ export type CreateCourseFAQRequestModel = Pick<
   InstituteCourseFAQModel,
   'question' | 'answer' | 'instituteCourseId'
 >;
+
+export type updateCourseFAQRequestModel = Pick<
+  InstituteCourseFAQModel,
+  'id' | 'question' | 'answer' | 'instituteCourseId'
+>;
