@@ -1,6 +1,7 @@
 'use client';
 
 import { ClassWidget } from 'app/(protected)/academics/class/_components/ClassWidget';
+import { StudentCard } from 'app/(protected)/academics/class/[classId]/section/[sectionId]/_components/StudentCard';
 import { useGetClassLevelByIdQuery } from 'lib/queries/classLevel/useGetClassLevelByIdQuery';
 import { PencilLine } from 'lucide-react';
 import {
@@ -96,7 +97,25 @@ const ClassLevelDetail = () => {
             ))}
           </div>
         </TabsContent>
-        <TabsContent value="Students"></TabsContent>
+        <TabsContent value="Students">
+          <section className="grid w-full grid-cols-1 justify-between gap-4 px-0 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+            {classLevelDetails.class.flatMap((cls) =>
+              cls.studentmapping.map((sm) => {
+                const student = sm.student;
+                const fullName = [
+                  student.firstName,
+                  student.middleName,
+                  student.lastName,
+                ].join(' ');
+                return (
+                  <div key={student.id}>
+                    <StudentCard id={student.id} name={fullName} />
+                  </div>
+                );
+              })
+            )}
+          </section>
+        </TabsContent>
         <TabsContent value="Staffs"></TabsContent>
       </Tabs>
     </section>

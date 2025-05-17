@@ -1,5 +1,7 @@
+import { authOptions } from 'lib/auth';
 import { db } from 'lib/db';
 import { ClassLevelModel } from 'lib/domain/classLevel';
+import { getServerSession } from 'next-auth';
 
 export async function addClassLevel(data: ClassLevelModel) {
   return await db.classLevel.create({
@@ -42,6 +44,8 @@ export async function deleteClassLevelById(id: string) {
 }
 
 export async function getClassLevelById(id: string) {
+  const { branchId } = await getServerSession(authOptions);
+
   return await db.classLevel.findFirst({
     where: {
       id: id,
@@ -56,6 +60,7 @@ export async function getClassLevelById(id: string) {
       class: {
         where: {
           isActive: true,
+          branchId: branchId,
         },
         orderBy: { name: 'asc' },
         select: {
@@ -67,6 +72,18 @@ export async function getClassLevelById(id: string) {
               id: true,
               name: true,
               isActive: true,
+            },
+          },
+          studentmapping: {
+            select: {
+              student: {
+                select: {
+                  id: true,
+                  firstName: true,
+                  lastName: true,
+                  middleName: true,
+                },
+              },
             },
           },
         },
