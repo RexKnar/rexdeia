@@ -14,7 +14,7 @@ export async function enterMark(markEntryPayload: any, userId: string) {
           assessmentFormatId: entry.assessmentFormatId,
           examSubjectPartitionId: entry.examSubjectPartitionId,
           mark: +entry.mark,
-          attandance: entry.attendance,
+          attandance: entry.attendance ? 1 : 0,
         };
         if (entry.id) {
           await db.mark.update({

@@ -86,9 +86,9 @@ export function ClassLevelList() {
 
   const page = parseInt(searchParams.get('page')) || 1;
   const limit = parseInt(searchParams.get('limit')) || 10;
-  // const handleViewClick = (studentId) => {
-  //   router.push(`/students/${studentId}`);
-  // };
+  const handleViewClick = (classLevelId) => {
+    router.push(`/timeTable/classLevel/${classLevelId}`);
+  };
   const { data: ClassLevelListResponse, isLoading: isClassLevelListLoading } =
     useGetClassLevelListQuery({
       page,
@@ -202,12 +202,12 @@ export function ClassLevelList() {
                     <Tooltip>
                       <TooltipTrigger asChild>
                         <Button
-                          // onMouseEnter={() => {
-                          //   router.prefetch(`/students/${row.original.id}`);
-                          // }}
-                          // onClick={() => {
-                          //   handleViewClick(row.original.id);
-                          // }}
+                          onMouseEnter={() => {
+                            router.prefetch(`/students/${row.original.id}`);
+                          }}
+                          onClick={() => {
+                            handleViewClick(row.original.id);
+                          }}
                           variant="mild"
                           className="mr-3 h-auto px-3 py-2"
                         >
