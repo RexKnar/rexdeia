@@ -202,23 +202,39 @@ export default function OverallAnalytics({
           result.highestMarkStudentName[gender] = studentFullName;
 
           result.highestMark.studentList[gender] = [student];
+        } else {
+          if (mark == result.highestMark[gender]) {
+            result.highestMark.studentList[gender].push(student);
+          }
         }
         if (mark < result.lowestMark[gender] && !subject.absentStatus) {
           result.lowestMark[gender] = mark;
           result.lowestMarkStudentName[gender] = studentFullName;
 
           result.lowestMark.studentList[gender] = [student];
+        } else {
+          if (mark == result.lowestMark[gender]) {
+            result.lowestMark.studentList[gender].push(student);
+          }
         }
 
         if (mark > result.highestMark['overall']) {
           result.highestMark['overall'] = mark;
           result.highestMarkStudentName['overall'] = studentFullName;
           result.highestMark.studentList.overall = [student];
+        } else {
+          if (mark == result.highestMark['overall']) {
+            result.highestMark.studentList.overall.push(student);
+          }
         }
         if (mark < result.lowestMark['overall'] && !subject.absentStatus) {
           result.lowestMark['overall'] = mark;
           result.lowestMarkStudentName['overall'] = studentFullName;
           result.lowestMark.studentList.overall = [student];
+        } else {
+          if (result.lowestMark['overall'] == mark) {
+            result.lowestMark.studentList.overall.push(student);
+          }
         }
 
         if (subject.failingStatus && !subject.absentStatus) {
@@ -318,9 +334,12 @@ export default function OverallAnalytics({
         totalPass++;
         totalPassStudents.push(student);
       }
+      let oldHighestMark = highestMark;
       highestMark = Math.max(highestMark, student.totalMark);
-      if (highestMark == student.totalMark) {
+      if (highestMark != oldHighestMark) {
         highestMarkStudents = [student];
+      } else {
+        highestMarkStudents.push(student);
       }
 
       if (student.attendance) {
@@ -328,9 +347,12 @@ export default function OverallAnalytics({
           lowestMark = student.totalMark;
           isFirst = false;
         } else {
+          let oldLowestMark = lowestMark;
           lowestMark = Math.min(lowestMark, student.totalMark);
-          if (lowestMark == student.totalMark) {
+          if (lowestMark != oldLowestMark) {
             lowestMarkStudents = [student];
+          } else {
+            lowestMarkStudents.push(student);
           }
         }
       }
