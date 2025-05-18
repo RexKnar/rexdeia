@@ -91,6 +91,7 @@ export type SwitchStudentsToClassModel = {
 };
 
 export type StudentMappingModel = {
+  student?: Student;
   class?: ClassModel;
   section?: SectionModel;
   classId?: string;

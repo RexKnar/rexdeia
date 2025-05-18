@@ -1,7 +1,9 @@
 import { SectionModel } from './section';
+import { StudentMappingModel } from './student';
 import { CreateSubjectModel } from './subject';
 
 export type ClassModel = {
+  studentmapping: StudentMappingModel[];
   id: string;
   name: string;
   isActive: boolean;
