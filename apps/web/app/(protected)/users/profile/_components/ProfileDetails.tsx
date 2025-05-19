@@ -19,8 +19,8 @@ export function ProfileDetails() {
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center h-20">
-        <Loader2 className="w-6 mr-2 text-black animate-spin" />
+      <div className="flex h-20 items-center justify-center">
+        <Loader2 className="mr-2 w-6 animate-spin text-black" />
         <p className="text-black ">Fetching Staff Details...</p>
       </div>
     );
@@ -34,12 +34,12 @@ export function ProfileDetails() {
 
   return (
     <div className="flex flex-col items-center justify-center p-6">
-      <section className="w-full max-w-sm bg-white border border-gray-200 shadow-lg rounded-xl">
+      <section className="w-full max-w-sm rounded-xl border border-gray-200 bg-white shadow-lg">
         <div className="flex flex-col items-center p-6">
-          <Avatar className="relative border-4 border-white shadow-md h-28 w-28">
+          <Avatar className="relative h-28 w-28 border-4 border-white shadow-md">
             <AvatarImage src={userDetails.image} />
           </Avatar>
-          <div className="w-full mt-4 space-y-4">
+          <div className="mt-4 w-full space-y-4">
             {[
               { label: 'Name', value: userDetails.name },
               { label: 'Email', value: userDetails.email },
@@ -47,7 +47,7 @@ export function ProfileDetails() {
             ].map((item, index) => (
               <div
                 key={index}
-                className="flex justify-between pb-2 border-b border-gray-300"
+                className="flex justify-between border-b border-gray-300 pb-2"
               >
                 <Text className="font-medium text-gray-700">{item.label}</Text>
                 <Text className="text-gray-600">{item.value}</Text>
@@ -58,7 +58,7 @@ export function ProfileDetails() {
             <Link href="/users/profile/editProfile">
               <Button
                 variant="outline"
-                className="transition-all border-gray-300 hover:border-gray-400 hover:bg-gray-100"
+                className="border-gray-300 transition-all hover:border-gray-400 hover:bg-gray-100"
               >
                 <PencilLine
                   size={18}
@@ -70,7 +70,7 @@ export function ProfileDetails() {
             </Link>
             <Button
               variant="outline"
-              className="transition-all border-gray-300 hover:border-gray-400 hover:bg-gray-100"
+              className="border-gray-300 transition-all hover:border-gray-400 hover:bg-gray-100"
               onClick={() => {
                 const params = new URLSearchParams(searchParams);
                 params.set('isUserPasswordFlyoutOpen', 'true');

@@ -332,7 +332,7 @@ export default function RangeAnalyticsTable({
                                       `Total Students: ${studentDetail.totalCount}`
                                     )
                                   }
-                                >{`${studentDetail?.totalCount}`}</Button>
+                                >{`${studentDetail?.totalCount} (${studentDetail?.overallPercentage.toFixed(2)}%)`}</Button>
                               </Text>
                               <div className="flex justify-evenly">
                                 <Text className="text-primary-800">
