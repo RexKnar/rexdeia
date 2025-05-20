@@ -61,9 +61,6 @@ export default function RangeAnalyticsTable({
         student.subjects.forEach((subject) => {
           if (subject.id === subjectId) {
             const mark = parseFloat(subject.subjectTotalMark);
-
-            overallTotalCount++;
-
             overallTotalCount++;
             if (mark >= startValue && mark <= endValue) {
               if (student.gender.toLowerCase() === 'female') {
@@ -123,11 +120,12 @@ export default function RangeAnalyticsTable({
     if (rangeType === 'TotalMarks') {
       markList.forEach((student) => {
         const mark = parseFloat(student.totalMark);
+        overallTotalCount++;
         if (mark >= startValue && mark <= endValue) {
-          if (student.gender === 'Female') {
+          if (student.gender.toLowerCase() === 'female') {
             femaleCount++;
             femaleStudents.push(student);
-          } else if (student.gender === 'Male') {
+          } else if (student.gender.toLowerCase() === 'male') {
             maleCount++;
             maleStudents.push(student);
           }
@@ -152,7 +150,7 @@ export default function RangeAnalyticsTable({
       };
     } else {
       return {
-        totalCount,
+        totalCount: 0,
         maleCount: 0,
         femaleCount: 0,
         students: [],
@@ -347,8 +345,7 @@ export default function RangeAnalyticsTable({
                                       )
                                     }
                                   >
-                                    {' '}
-                                    M:{' '}
+                                    M:
                                     {`${studentDetail?.maleCount} (${studentDetail?.malePercentage.toFixed(2)}%)`}
                                   </Button>
                                 </Text>
@@ -364,8 +361,7 @@ export default function RangeAnalyticsTable({
                                       )
                                     }
                                   >
-                                    {' '}
-                                    F:{' '}
+                                    F:
                                     {`${studentDetail?.femaleCount} (${studentDetail?.femalePercentage.toFixed(2)}%)`}
                                   </Button>
                                 </Text>
