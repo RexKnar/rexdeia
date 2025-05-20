@@ -99,17 +99,16 @@ const ClassLevelDetail = () => {
         </TabsContent>
         <TabsContent value="Students">
           <section className="grid w-full grid-cols-1 justify-between gap-4 px-0 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-            {classLevelDetails.class.flatMap((cls) =>
-              cls.studentmapping.map((sm) => {
-                const student = sm.student;
+            {classLevelDetails.class.flatMap((item) =>
+              item.students.map((item) => {
                 const fullName = [
-                  student.firstName,
-                  student.middleName,
-                  student.lastName,
+                  item.firstName,
+                  item.middleName,
+                  item.lastName,
                 ].join(' ');
                 return (
-                  <div key={student.id}>
-                    <StudentCard id={student.id} name={fullName} />
+                  <div key={item.id}>
+                    <StudentCard id={item.id} name={fullName} />
                   </div>
                 );
               })

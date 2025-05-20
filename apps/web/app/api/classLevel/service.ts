@@ -46,7 +46,7 @@ export async function deleteClassLevelById(id: string) {
 export async function getClassLevelById(id: string) {
   const { branchId } = await getServerSession(authOptions);
 
-  return await db.classLevel.findFirst({
+  const classLevel = await db.classLevel.findFirst({
     where: {
       id: id,
       isDeleted: false,
@@ -90,4 +90,13 @@ export async function getClassLevelById(id: string) {
       },
     },
   });
+  const result = {
+    ...classLevel,
+    class: classLevel?.class.map((item) => ({
+      ...item,
+      students: item.studentmapping.map((s) => s.student),
+    })),
+  };
+
+  return result;
 }

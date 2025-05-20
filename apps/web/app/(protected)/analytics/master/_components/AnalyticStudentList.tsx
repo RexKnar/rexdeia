@@ -265,6 +265,7 @@ export function AnalyticStudentList() {
               <RangeAnalyticsTable
                 markList={studentMarkList}
                 subjectList={subjects}
+                classId={classId}
               />
             </section>
           </TabsContent>

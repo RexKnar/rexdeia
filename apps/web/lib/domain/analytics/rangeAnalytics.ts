@@ -10,13 +10,14 @@ export interface RangeScaleModel {
   batchId: string;
   batch: BatchModel;
   rangeOf: RangeType;
+  classLevelId?: string;
   createdAt?: Date;
   updatedAt?: Date;
 }
 
 export type CreateRangeScale = Pick<
   RangeScaleModel,
-  'startValue' | 'endValue' | 'order' | 'rangeOf'
+  'startValue' | 'endValue' | 'order' | 'rangeOf' | 'classLevelId'
 >;
 
 export type GetRangeScales = Omit<RangeScaleModel, 'createdAt' | 'updatedAt'>;

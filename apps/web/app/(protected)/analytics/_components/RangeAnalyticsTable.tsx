@@ -20,9 +20,11 @@ import { DataLoadingPlaceholder } from './DataLoadingPlaceholder';
 export default function RangeAnalyticsTable({
   subjectList,
   markList,
+  classId,
 }: {
   subjectList: any[];
   markList: any[];
+  classId: string;
 }) {
   const [rangeType, setRangeType] = useState('SubjectMarks');
   const [modalStudentList, setModalStudentList] = useState([]);
@@ -33,25 +35,33 @@ export default function RangeAnalyticsTable({
   const router = useRouter();
   const searchParams = useSearchParams();
   const { data: getRangeScaleListResponse, isLoading: isRangeLoading } =
-    useGetRangeScalesQuery(rangeType, {
-      enabled: !!rangeType,
-    });
+    useGetRangeScalesQuery(
+      { rangeType, classId },
+      {
+        enabled: !!rangeType,
+      }
+    );
 
   const getSubjectRangeValue = (
     { startValue, endValue },
-    subjectID?: string
+    subjectId?: string
   ) => {
     let maleCount = 0;
     let femaleCount = 0;
     let totalCount = 0;
+    let overallTotalCount = 0;
+    let femalePercentage = 0;
+    let malePercentage = 0;
+    let overallPercentage = 0;
     let students = [];
     let maleStudents = [];
     let femaleStudents = [];
     if (rangeType === 'SubjectMarks') {
       markList.forEach((student) => {
         student.subjects.forEach((subject) => {
-          if (subject.id === subjectID) {
+          if (subject.id === subjectId) {
             const mark = parseFloat(subject.subjectTotalMark);
+            overallTotalCount++;
             if (mark >= startValue && mark <= endValue) {
               if (student.gender.toLowerCase() === 'female') {
                 femaleCount++;
@@ -66,6 +76,9 @@ export default function RangeAnalyticsTable({
           }
         });
       });
+      overallPercentage = (totalCount / overallTotalCount) * 100;
+      malePercentage = (maleCount / overallTotalCount) * 100;
+      femalePercentage = (femaleCount / overallTotalCount) * 100;
 
       return {
         totalCount,
@@ -74,6 +87,9 @@ export default function RangeAnalyticsTable({
         students,
         maleStudents,
         femaleStudents,
+        overallPercentage,
+        malePercentage,
+        femalePercentage,
       };
     } else {
       return {
@@ -83,6 +99,66 @@ export default function RangeAnalyticsTable({
         students: [],
         maleStudents: [],
         femaleStudents: [],
+        overallPercentage,
+        malePercentage,
+        femalePercentage,
+      };
+    }
+  };
+
+  const getTotalRangeValue = ({ startValue, endValue }) => {
+    let maleCount = 0;
+    let femaleCount = 0;
+    let totalCount = 0;
+    let students = [];
+    let maleStudents = [];
+    let femaleStudents = [];
+    let malePercentage = 0;
+    let femalePercentage = 0;
+    let overallPercentage = 0;
+    let overallTotalCount = 0;
+    if (rangeType === 'TotalMarks') {
+      markList.forEach((student) => {
+        const mark = parseFloat(student.totalMark);
+        overallTotalCount++;
+        if (mark >= startValue && mark <= endValue) {
+          if (student.gender.toLowerCase() === 'female') {
+            femaleCount++;
+            femaleStudents.push(student);
+          } else if (student.gender.toLowerCase() === 'male') {
+            maleCount++;
+            maleStudents.push(student);
+          }
+          totalCount++;
+          students.push(student);
+        }
+      });
+
+      overallPercentage = (totalCount / overallTotalCount) * 100;
+      malePercentage = (maleCount / overallTotalCount) * 100;
+      femalePercentage = (femaleCount / overallTotalCount) * 100;
+      return {
+        totalCount,
+        maleCount,
+        femaleCount,
+        students,
+        maleStudents,
+        femaleStudents,
+        overallPercentage,
+        malePercentage,
+        femalePercentage,
+      };
+    } else {
+      return {
+        totalCount: 0,
+        maleCount: 0,
+        femaleCount: 0,
+        students: [],
+        maleStudents: [],
+        femaleStudents: [],
+        overallPercentage,
+        malePercentage,
+        femalePercentage,
       };
     }
   };
@@ -124,50 +200,6 @@ export default function RangeAnalyticsTable({
 
     router.replace(pathname + '?' + params.toString());
   }
-
-  const getTotalRangeValue = ({ startValue, endValue }) => {
-    let maleCount = 0;
-    let femaleCount = 0;
-    let totalCount = 0;
-    let students = [];
-    let maleStudents = [];
-    let femaleStudents = [];
-    if (rangeType === 'TotalMarks') {
-      markList.forEach((student) => {
-        const mark = parseFloat(student.totalMark);
-        if (mark >= startValue && mark <= endValue) {
-          if (student.gender === 'Female') {
-            femaleCount++;
-            femaleStudents.push(student);
-          } else if (student.gender === 'Male') {
-            maleCount++;
-            maleStudents.push(student);
-          }
-          totalCount++;
-          students.push(student);
-        }
-      });
-
-      return {
-        totalCount,
-        maleCount,
-        femaleCount,
-        students,
-        maleStudents,
-        femaleStudents,
-      };
-    } else {
-      return {
-        totalCount,
-        maleCount: 0,
-        femaleCount: 0,
-        students: [],
-        maleStudents: [],
-        femaleStudents: [],
-      };
-    }
-  };
-
   return (
     <section className="space-y-2 rounded-md bg-white p-6">
       {!isRangeLoading ? (
@@ -231,7 +263,7 @@ export default function RangeAnalyticsTable({
                                         [subject]
                                       );
                                     }}
-                                  >{`${studentDetail?.totalCount}`}</Button>
+                                  >{`${studentDetail?.totalCount} (${studentDetail?.overallPercentage.toFixed(2)}%)`}</Button>
                                 </Text>
                                 <div className="flex justify-evenly">
                                   <Text className="text-primary-800">
@@ -247,7 +279,8 @@ export default function RangeAnalyticsTable({
                                         );
                                       }}
                                     >
-                                      M: {`${studentDetail?.maleCount}`}
+                                      M:
+                                      {`${studentDetail?.maleCount} (${studentDetail?.malePercentage.toFixed(2)}%)`}
                                     </Button>
                                   </Text>
                                   <Text className="text-primary-800">
@@ -263,7 +296,8 @@ export default function RangeAnalyticsTable({
                                         )
                                       }
                                     >
-                                      F: {`${studentDetail?.femaleCount}`}
+                                      F:
+                                      {`${studentDetail?.femaleCount} (${studentDetail?.femalePercentage.toFixed(2)}%)`}
                                     </Button>
                                   </Text>
                                 </div>
@@ -296,7 +330,7 @@ export default function RangeAnalyticsTable({
                                       `Total Students: ${studentDetail.totalCount}`
                                     )
                                   }
-                                >{`${studentDetail?.totalCount}`}</Button>
+                                >{`${studentDetail?.totalCount} (${studentDetail?.overallPercentage.toFixed(2)}%)`}</Button>
                               </Text>
                               <div className="flex justify-evenly">
                                 <Text className="text-primary-800">
@@ -311,8 +345,8 @@ export default function RangeAnalyticsTable({
                                       )
                                     }
                                   >
-                                    {' '}
-                                    M: {`${studentDetail?.maleCount}`}
+                                    M:
+                                    {`${studentDetail?.maleCount} (${studentDetail?.malePercentage.toFixed(2)}%)`}
                                   </Button>
                                 </Text>
                                 <Text className="text-primary-800">
@@ -327,8 +361,8 @@ export default function RangeAnalyticsTable({
                                       )
                                     }
                                   >
-                                    {' '}
-                                    F: {`${studentDetail?.femaleCount}`}
+                                    F:
+                                    {`${studentDetail?.femaleCount} (${studentDetail?.femalePercentage.toFixed(2)}%)`}
                                   </Button>
                                 </Text>
                               </div>

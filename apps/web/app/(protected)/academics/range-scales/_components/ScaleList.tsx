@@ -122,7 +122,7 @@ export function RangeScaleList() {
   const {
     data: getRangeScaleListResponse,
     isLoading: isRangeScaleListLoading,
-  } = useGetRangeScalesQuery(filterType);
+  } = useGetRangeScalesQuery({ rangeType: filterType });
 
   const table = useReactTable({
     columns,
