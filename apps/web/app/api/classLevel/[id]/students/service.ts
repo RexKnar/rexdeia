@@ -4,7 +4,6 @@ import { getServerSession } from 'next-auth';
 
 export async function getStudentsByClassLevelId(classLevelId: string) {
   const session = await getServerSession(authOptions);
-  if (!session) throw new Error('UNAUTHORIZED');
 
   const { branchId } = session;
 

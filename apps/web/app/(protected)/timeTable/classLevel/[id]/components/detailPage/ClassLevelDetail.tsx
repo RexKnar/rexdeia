@@ -3,6 +3,8 @@
 import { ClassWidget } from 'app/(protected)/academics/class/_components/ClassWidget';
 import { StudentCard } from 'app/(protected)/academics/class/[classId]/section/[sectionId]/_components/StudentCard';
 import { useGetClassLevelByIdQuery } from 'lib/queries/classLevel/useGetClassLevelByIdQuery';
+import { useGetClassListByClassLevelIdQuery } from 'lib/queries/classLevel/useGetClassListByClassLevelIdQuery';
+import { useGetStudentsByClassLevelIdQuery } from 'lib/queries/classLevel/useGetStudentsByClassLevelIdQuery';
 import { PencilLine } from 'lucide-react';
 import {
   useParams,
@@ -30,6 +32,16 @@ const ClassLevelDetail = () => {
   } = useGetClassLevelByIdQuery(classLevelId, {
     enabled: !!classLevelId,
   });
+  const { data: classList } = useGetClassListByClassLevelIdQuery(classLevelId, {
+    enabled: !!classLevelId,
+  });
+
+  const { data: studentList } = useGetStudentsByClassLevelIdQuery(
+    classLevelId,
+    {
+      enabled: !!classLevelId,
+    }
+  );
 
   const openFlyout = (key: string) => {
     const newParams = new URLSearchParams(searchParams);
@@ -92,27 +104,27 @@ const ClassLevelDetail = () => {
         </TabsList>
         <TabsContent value="Classes">
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-            {classLevelDetails.class.map((cls) => (
-              <ClassWidget key={cls.id} classDetails={cls} />
+            {classList?.map((classDetail) => (
+              <ClassWidget key={classDetail.id} classDetails={classDetail} />
             ))}
           </div>
         </TabsContent>
         <TabsContent value="Students">
           <section className="grid w-full grid-cols-1 justify-between gap-4 px-0 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-            {classLevelDetails.class.flatMap((item) =>
-              item.students.map((item) => {
-                const fullName = [
-                  item.firstName,
-                  item.middleName,
-                  item.lastName,
-                ].join(' ');
-                return (
-                  <div key={item.id}>
-                    <StudentCard id={item.id} name={fullName} />
-                  </div>
-                );
-              })
-            )}
+            {studentList?.map((student) => {
+              const fullName = [
+                student.firstName,
+                student.middleName,
+                student.lastName,
+              ]
+                .filter(Boolean)
+                .join(' ');
+              return (
+                <div key={student.id}>
+                  <StudentCard id={student.id} name={fullName} />
+                </div>
+              );
+            })}
           </section>
         </TabsContent>
         <TabsContent value="Staffs"></TabsContent>
