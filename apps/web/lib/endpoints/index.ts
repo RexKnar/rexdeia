@@ -179,6 +179,8 @@ export const GET_SUBJECTS_BY_CLASS_AND_GROUP_ID = `GET_SUBJECTS_BY_CLASS_AND_GRO
 export const ADD_CLASSLEVEL = `ADD_CLASSLEVEL`;
 export const GET_CLASSLEVELS_LIST = `GET_CLASSLEVELS_LIST`;
 export const GET_CLASSLEVEL_BY_ID = `GET_CLASSLEVEL_BY_ID`;
+export const GET_CLASSES_BY_CLASSLEVEL_ID = `GET_CLASSES_BY_CLASSLEVEL_ID`;
+export const GET_STUDENTS_BY_CLASSLEVEL_ID = `GET_STUDENTS_BY_CLASSLEVEL_ID`;
 export const UPDATE_CLASSLEVEL_BY_ID = `UPDATE_CLASSLEVEL_BY_ID`;
 export const DELETE_CLASSLEVEL_BY_ID = `DELETE_CLASSLEVEL_BY_ID`;
 export const ADD_LEVELCONFIG = `ADD_LEVELCONFIG`;
@@ -920,6 +922,14 @@ export default <EndpointDetails>{
   [GET_CLASSLEVEL_BY_ID]: {
     requestType: 'GET',
     endpoint: '/api/classLevel/[id]',
+  },
+  [GET_CLASSES_BY_CLASSLEVEL_ID]: {
+    requestType: 'GET',
+    endpoint: '/api/classLevel/[id]/classes',
+  },
+  [GET_STUDENTS_BY_CLASSLEVEL_ID]: {
+    requestType: 'GET',
+    endpoint: '/api/classLevel/[id]/students',
   },
   [UPDATE_CLASSLEVEL_BY_ID]: {
     requestType: 'PUT',
