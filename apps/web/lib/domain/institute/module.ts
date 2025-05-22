@@ -14,6 +14,7 @@ export type InstituteCourseModuleModel = {
   branchId?: string;
   expanded?: boolean;
   chapters?: InstituteCourseChapterModel[];
+  courseId?: string;
 };
 
 export type CreateCourseModuleRequestModel = Pick<
@@ -24,6 +25,8 @@ export type CreateCourseModuleRequestModel = Pick<
   | 'isActive'
   | 'instituteCourseId'
   | 'branchId'
+  | 'id'
+  | 'courseId'
 >;
 
 export type UpdateCourseModuleRequestModel = Pick<

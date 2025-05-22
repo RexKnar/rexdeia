@@ -31,20 +31,20 @@ export default function MarkList({ markDetails }: { markDetails: any }) {
         <TableRow>
           <TableCell>#</TableCell>
           <TableCell>Exam Name</TableCell>
-          {subjectList.map((subject) => (
+          {subjectList?.map((subject) => (
             <TableCell key={subject.subjectId}>{subject.subjectName}</TableCell>
           ))}
           <TableCell> Total</TableCell>
         </TableRow>
       </TableHeader>
       <TableBody>
-        {calculatedMarkList.map((examDetails, index) => {
+        {calculatedMarkList?.map((examDetails, index) => {
           const { subjects: examSubjects } = examDetails;
           return (
             <TableRow key={examDetails.id}>
               <TableCell key={index}>{index + 1}</TableCell>
               <TableCell key={examDetails.id}>{examDetails?.name}</TableCell>
-              {subjectList.map((subject) => {
+              {subjectList?.map((subject) => {
                 const subjectMarks = getExamSubjectPartitionBySubjectId(
                   examSubjects,
                   subject.subjectId

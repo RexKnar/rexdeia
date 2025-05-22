@@ -132,6 +132,7 @@ export default function RangeAnalyticsTable({
           totalCount++;
           students.push(student);
         }
+        overallTotalCount++;
       });
 
       overallPercentage = (totalCount / overallTotalCount) * 100;

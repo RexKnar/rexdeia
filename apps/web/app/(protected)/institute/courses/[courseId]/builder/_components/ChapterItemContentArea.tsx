@@ -15,11 +15,16 @@ import { v4 as uuidv4 } from 'uuid';
 
 import ContentBuilder from '@/components/shared/ContentBuilder';
 import { DynamicHeading } from '@/components/shared/DynamicHeading';
+import VideoPlayer from '@/components/video/VideoPlayer';
 import { useQueryParams } from '@/hooks/useQueryParams';
 
 import VideoOptionCard from './VideoOptionCard';
 
-export default function ChapterItemContentArea() {
+export default function ChapterItemContentArea({
+  editable,
+}: {
+  editable: boolean;
+}) {
   const { getParam } = useQueryParams();
   const itemId = getParam('chapterItemId');
   const [videoType, setVideoType] = useState('youtube');
@@ -58,6 +63,56 @@ export default function ChapterItemContentArea() {
       }
     } catch (error) {
       console.error(error);
+    }
+  };
+
+  const handleVideoUpload = async (event) => {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    if (!file.type.startsWith('video/') || file.size > 100 * 1024 * 1024) {
+      toast({
+        variant: 'destructive',
+        title: 'Invalid file',
+        description: 'Only images under 100MB are allowed.',
+      });
+      return;
+    }
+
+    try {
+      const url = new URL(`${window.location.origin}/api/upload/video`);
+      const formData = new FormData();
+      formData.append('file', file);
+
+      const imageResponse = await fetch(url.toString(), {
+        method: 'POST',
+        body: formData,
+      });
+
+      if (!imageResponse.ok) throw new Error('Upload failed');
+
+      const { data } = await imageResponse.json();
+      const key = data?.filePath;
+
+      if (!key) {
+        toast({
+          title: 'Failed!',
+          variant: 'destructive',
+          description: 'No file key returned.',
+        });
+        return;
+      } else {
+        setValue('videoUrl', key);
+
+        toast({ title: 'Success', description: 'Video uploaded.' });
+      }
+    } catch (error) {
+      console.error('Upload error:', error);
+      toast({
+        variant: 'destructive',
+        title: 'Upload failed',
+        description: 'An error occurred during upload.',
+      });
     }
   };
 
@@ -149,13 +204,14 @@ export default function ChapterItemContentArea() {
                     />
                   )}
                   {videoType === 'upload' && (
-                    <Input
+                    <input
                       type="file"
+                      onChange={handleVideoUpload}
                       placeholder="Upload your video"
-                      errorMessage={fieldErrors?.videoUrl?.message.toString()}
-                      {...register('videoUrl', {
-                        required: 'Please enter a valid video url',
-                      })}
+                      // errorMessage={fieldErrors?.videoUrl?.message.toString()}
+                      // {...register('videoUrl', {
+                      //   required: 'Please enter a valid video url',
+                      // })}
                     />
                   )}
                 </div>
@@ -198,7 +254,7 @@ export default function ChapterItemContentArea() {
                   {pdfType === 'uploadPdf' && (
                     <Input
                       type="file"
-                      placeholder="Upload your video"
+                      placeholder="Upload your PDF"
                       errorMessage={fieldErrors?.pdfUrl?.message.toString()}
                       {...register('pdfUrl', {
                         required: 'Please upload a valid PDF File',
@@ -231,14 +287,16 @@ export default function ChapterItemContentArea() {
         <div className="w-full px-5">
           <div className="flex justify-between">
             <h1 className="text-xl font-bold ">{chapterItemDetails?.name}</h1>
-            <Button
-              type="button"
-              onClick={() => setIsEditable(true)}
-              variant="default"
-              size="sm"
-            >
-              Edit
-            </Button>
+            {editable && (
+              <Button
+                type="button"
+                onClick={() => setIsEditable(true)}
+                variant="default"
+                size="sm"
+              >
+                Edit
+              </Button>
+            )}
           </div>
           {chapterItemDetails?.youtubeUrl && (
             <div className="w-full pt-4">
@@ -255,6 +313,25 @@ export default function ChapterItemContentArea() {
                     />
                   </div>
                 )}
+              </div>
+            </div>
+          )}
+          {chapterItemDetails?.videoUrl && (
+            <div className="w-full pt-4">
+              <div className="flex flex-wrap gap-2">
+                {/* <iframe
+                  width="100%"
+                  height="100%"
+                  src={chapterItemDetails?.videoUrl}
+                  title="YouTube Video"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                /> */}
+                <VideoPlayer
+                  // videoSrc={chapterItemDetails?.videoUrl}
+                  filePath={chapterItemDetails?.videoUrl}
+                  watermark="Your LMS Name • User: john.doe@example.com"
+                />
               </div>
             </div>
           )}

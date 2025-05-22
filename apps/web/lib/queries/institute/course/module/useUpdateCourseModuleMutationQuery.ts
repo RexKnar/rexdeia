@@ -9,21 +9,27 @@ import {
   UPDATE_INSTITUTE_COURSE_MODULE,
 } from 'lib/endpoints/institute/courseEndpoints';
 
-export function useUpdateCourseModuleMutationQuery() {
+export function useUpdateCourseModuleMutationQuery(courseId: string) {
   const queryClient = useQueryClient();
+
   return useMutation({
     mutationFn: async (payload: UpdateCourseModuleRequestModel) => {
       const response = await makeAPICall<InstituteCourseModuleModel>(
         UPDATE_INSTITUTE_COURSE_MODULE,
         payload,
         {},
-        { id: payload.id }
+        {
+          courseId,
+          moduleId: payload.id,
+        }
       );
+
+      return response;
+    },
+    onSuccess: async () => {
       await queryClient.refetchQueries({
         queryKey: [GET_INSTITUTE_COURSE_CONTENT_STRUCTURE],
       });
-
-      return response;
     },
   });
 }

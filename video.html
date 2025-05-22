@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Secure LMS Video Player</title>
+  <style>
+    :root {
+      --primary-color: #3498db;
+      --secondary-color: #2980b9;
+      --text-color: #333;
+      --light-text: #fff;
+      --progress-bg: rgba(255, 255, 255, 0.3);
+      --progress-color: var(--primary-color);
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 20px;
+      background-color: #f5f5f5;
+      color: var(--text-color);
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 20px;
+      border-radius: 8px;
+      background-color: #fff;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: var(--primary-color);
+    }
+
+    .video-container {
+      position: relative;
+      width: 100%;
+      border-radius: 6px;
+      overflow: hidden;
+      background-color: #000;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    #videoPlayer {
+      width: 100%;
+      display: block;
+    }
+
+    .custom-controls {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: linear-gradient(to top, rgba(0, 0, 0, 0.7), transparent);
+      padding: 10px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .video-container:hover .custom-controls,
+    .custom-controls.active {
+      opacity: 1;
+    }
+
+    .progress-container {
+      flex-grow: 1;
+      height: 6px;
+      background-color: var(--progress-bg);
+      border-radius: 3px;
+      margin: 0 10px;
+      cursor: pointer;
+      position: relative;
+    }
+
+    .progress-bar {
+      height: 100%;
+      background-color: var(--progress-color);
+      border-radius: 3px;
+      width: 0;
+    }
+
+    .control-btn {
+      background: none;
+      border: none;
+      color: var(--light-text);
+      font-size: 16px;
+      cursor: pointer;
+      padding: 5px;
+      margin: 0 5px;
+      border-radius: 4px;
+      transition: background-color 0.2s;
+    }
+
+    .control-btn:hover {
+      background-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .time-display {
+      color: var(--light-text);
+      font-size: 14px;
+      margin: 0 10px;
+      min-width: 80px;
+    }
+
+    .volume-container {
+      display: flex;
+      align-items: center;
+      margin: 0 10px;
+    }
+
+    .volume-slider {
+      width: 60px;
+      cursor: pointer;
+      margin-left: 5px;
+    }
+
+    .watermark {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      color: rgba(255, 255, 255, 0.5);
+      font-size: 14px;
+      font-weight: bold;
+      pointer-events: none;
+    }
+
+    #loadingIndicator {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      color: var(--light-text);
+      font-size: 16px;
+      background-color: rgba(0, 0, 0, 0.6);
+      padding: 10px 20px;
+      border-radius: 4px;
+      display: none;
+    }
+
+    .control-row {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .settings-panel {
+      position: absolute;
+      bottom: 70px;
+      right: 10px;
+      background-color: rgba(0, 0, 0, 0.8);
+      border-radius: 4px;
+      padding: 10px;
+      display: none;
+    }
+
+    .settings-option {
+      color: var(--light-text);
+      padding: 5px 10px;
+      cursor: pointer;
+    }
+
+    .settings-option:hover {
+      background-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .playback-speed-option {
+      color: var(--light-text);
+      padding: 5px 10px;
+      cursor: pointer;
+    }
+
+    .playback-speed-option:hover,
+    .playback-speed-option.active {
+      background-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .course-title {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      background-color: rgba(0, 0, 0, 0.6);
+      color: var(--light-text);
+      padding: 5px 10px;
+      border-radius: 4px;
+      font-size: 14px;
+      max-width: 60%;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    @media (max-width: 768px) {
+      .control-row {
+        flex-wrap: wrap;
+      }
+
+      .time-display {
+        font-size: 12px;
+        min-width: 60px;
+      }
+
+      .volume-container {
+        margin-top: 5px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <h1>Secure LMS Video Player</h1>
+
+    <div class="video-container">
+      <video id="videoPlayer" playsinline disablePictureInPicture>
+        <source src="video.mkv" type="video/mp4">
+        Your browser does not support the video tag.
+      </video>
+
+      <div class="watermark">Your LMS Name</div>
+      <div class="course-title">Introduction to Web Development</div>
+
+      <div id="loadingIndicator">Loading...</div>
+
+      <div class="custom-controls">
+        <div class="control-row">
+          <button class="control-btn" id="playPauseBtn">▶</button>
+          <div class="progress-container" id="progressContainer">
+            <div class="progress-bar" id="progressBar"></div>
+          </div>
+          <div class="time-display">
+            <span id="currentTime">0:00</span> / <span id="duration">0:00</span>
+          </div>
+        </div>
+
+        <div class="control-row">
+          <div class="volume-container">
+            <button class="control-btn" id="muteBtn">🔊</button>
+            <input type="range" class="volume-slider" id="volumeSlider" min="0" max="1" step="0.1" value="1">
+          </div>
+
+          <button class="control-btn" id="settingsBtn">⚙️</button>
+          <button class="control-btn" id="fullscreenBtn">⛶</button>
+        </div>
+
+        <div class="settings-panel" id="settingsPanel">
+          <div class="settings-option" id="qualityBtn">Quality: Auto</div>
+          <div class="settings-option" id="playbackSpeedBtn">Speed: Normal</div>
+        </div>
+
+        <div class="settings-panel" id="playbackSpeedPanel">
+          <div class="playback-speed-option" data-speed="0.5">0.5x</div>
+          <div class="playback-speed-option" data-speed="0.75">0.75x</div>
+          <div class="playback-speed-option active" data-speed="1">1.0x</div>
+          <div class="playback-speed-option" data-speed="1.25">1.25x</div>
+          <div class="playback-speed-option" data-speed="1.5">1.5x</div>
+          <div class="playback-speed-option" data-speed="2">2.0x</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      // Global variables
+      const video = document.getElementById('videoPlayer');
+      const playPauseBtn = document.getElementById('playPauseBtn');
+      const progressContainer = document.getElementById('progressContainer');
+      const progressBar = document.getElementById('progressBar');
+      const currentTimeEl = document.getElementById('currentTime');
+      const durationEl = document.getElementById('duration');
+      const muteBtn = document.getElementById('muteBtn');
+      const volumeSlider = document.getElementById('volumeSlider');
+      const fullscreenBtn = document.getElementById('fullscreenBtn');
+      const settingsBtn = document.getElementById('settingsBtn');
+      const settingsPanel = document.getElementById('settingsPanel');
+      const playbackSpeedBtn = document.getElementById('playbackSpeedBtn');
+      const playbackSpeedPanel = document.getElementById('playbackSpeedPanel');
+      const controls = document.querySelector('.custom-controls');
+      const loadingIndicator = document.getElementById('loadingIndicator');
+      const videoContainer = document.querySelector('.video-container');
+
+      let controlsTimeout;
+      let isSettingsPanelOpen = false;
+      let isSpeedPanelOpen = false;
+
+      // Security Features
+
+      // 1. Disable right-click on video
+      video.addEventListener('contextmenu', e => {
+        e.preventDefault();
+        return false;
+      });
+
+      // 2. Disable keyboard shortcuts
+      document.addEventListener('keydown', e => {
+        // Allow only volume and play/pause controls
+        if (!['ArrowUp', 'ArrowDown', 'Space', 'KeyK'].includes(e.code)) {
+          if (e.ctrlKey || e.altKey || e.shiftKey || e.metaKey) {
+            e.preventDefault();
+            return false;
+          }
+        }
+      });
+
+      // 3. Encrypt video source - In real implementation, use signed URLs or tokens
+      function getEncryptedVideoSource() {
+        // Simulate encrypted URL - in production this would be a server-generated
+        // time-limited token or signed URL
+        const userId = "user123"; // Get from auth session
+        const timestamp = Date.now();
+        const videoId = "course-video-001";
+        const simulatedToken = `${videoId}_${userId}_${timestamp}_somesignature`;
+        return `/secure-videos/${videoId}?token=${simulatedToken}`;
+      }
+
+      // 4. Add user identifier as watermark
+      function setUserWatermark() {
+        const watermark = document.querySelector('.watermark');
+        // In production, get this from user session
+        watermark.textContent = "Your LMS Name • User: john.doe@example.com";
+      }
+
+      // 5. Periodically change stream token
+      let tokenRefreshInterval;
+      function startTokenRefresh() {
+        // In production, this would refresh the signed URL or token periodically
+        tokenRefreshInterval = setInterval(() => {
+          const currentTime = video.currentTime;
+          video.src = getEncryptedVideoSource();
+          video.addEventListener('loadedmetadata', () => {
+            video.currentTime = currentTime;
+          }, { once: true });
+        }, 30 * 60 * 1000); // 30 minutes
+      }
+
+      function stopTokenRefresh() {
+        clearInterval(tokenRefreshInterval);
+      }
+
+      // 6. Track user behavior for suspicious activities
+      let seekCount = 0;
+      let lastSeekTime = 0;
+      function monitorUserBehavior() {
+        video.addEventListener('seeking', () => {
+          const now = Date.now();
+          // Reset counter if seeks are not close together
+          if (now - lastSeekTime > 5000) {
+            seekCount = 0;
+          }
+          seekCount++;
+          lastSeekTime = now;
+
+          // If many rapid seeks detected, could be download attempt
+          if (seekCount > 10) {
+            // In production, log this suspicious activity
+            console.log("Suspicious seeking activity detected");
+            seekCount = 0;
+          }
+        });
+      }
+
+      // Video controls functionality
+      function togglePlay() {
+        if (video.paused || video.ended) {
+          video.play();
+          playPauseBtn.textContent = '❚❚';
+        } else {
+          video.pause();
+          playPauseBtn.textContent = '▶';
+        }
+      }
+
+      function updateProgress() {
+        const progress = (video.currentTime / video.duration) * 100;
+        progressBar.style.width = `${progress}%`;
+
+        currentTimeEl.textContent = formatTime(video.currentTime);
+        durationEl.textContent = formatTime(video.duration);
+      }
+
+      function setProgress(e) {
+        const width = progressContainer.clientWidth;
+        const clickX = e.offsetX;
+        const duration = video.duration;
+
+        video.currentTime = (clickX / width) * duration;
+      }
+
+      function formatTime(seconds) {
+        const mins = Math.floor(seconds / 60);
+        const secs = Math.floor(seconds % 60);
+        return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
+      }
+
+      function toggleMute() {
+        video.muted = !video.muted;
+        muteBtn.textContent = video.muted ? '🔇' : '🔊';
+        volumeSlider.value = video.muted ? 0 : video.volume;
+      }
+
+      function updateVolume() {
+        video.volume = volumeSlider.value;
+        video.muted = (video.volume === 0);
+        muteBtn.textContent = (video.volume === 0) ? '🔇' : '🔊';
+      }
+
+      function toggleFullscreen() {
+        if (!document.fullscreenElement) {
+          videoContainer.requestFullscreen().catch(err => {
+            console.error(`Error attempting to enable fullscreen: ${err.message}`);
+          });
+        } else {
+          document.exitFullscreen();
+        }
+      }
+
+      function toggleSettings() {
+        isSettingsPanelOpen = !isSettingsPanelOpen;
+        settingsPanel.style.display = isSettingsPanelOpen ? 'block' : 'none';
+        playbackSpeedPanel.style.display = 'none';
+        isSpeedPanelOpen = false;
+      }
+
+      function togglePlaybackSpeed() {
+        isSpeedPanelOpen = !isSpeedPanelOpen;
+        playbackSpeedPanel.style.display = isSpeedPanelOpen ? 'block' : 'none';
+
+        // Position the playback speed panel
+        playbackSpeedPanel.style.bottom = '70px';
+        playbackSpeedPanel.style.right = '10px';
+      }
+
+      function setPlaybackSpeed(speed) {
+        video.playbackRate = speed;
+        playbackSpeedBtn.textContent = `Speed: ${speed}x`;
+
+        // Update active class
+        document.querySelectorAll('.playback-speed-option').forEach(option => {
+          option.classList.remove('active');
+        });
+        document.querySelector(`.playback-speed-option[data-speed="${speed}"]`).classList.add('active');
+
+        // Close panel
+        playbackSpeedPanel.style.display = 'none';
+        isSpeedPanelOpen = false;
+      }
+
+      function hideControlsWhenInactive() {
+        clearTimeout(controlsTimeout);
+        controls.classList.add('active');
+
+        controlsTimeout = setTimeout(() => {
+          if (!video.paused && !isSettingsPanelOpen && !isSpeedPanelOpen) {
+            controls.classList.remove('active');
+          }
+        }, 3000);
+      }
+
+      function showLoading() {
+        loadingIndicator.style.display = 'block';
+      }
+
+      function hideLoading() {
+        loadingIndicator.style.display = 'none';
+      }
+
+      // Initialize player
+      function initPlayer() {
+        // Set initial source - in production would be encrypted source
+        // video.src = getEncryptedVideoSource();
+        showLoading();
+
+        // Set watermark
+        setUserWatermark();
+
+        // Monitor for suspicious behavior
+        monitorUserBehavior();
+
+        // Event listeners for video
+        video.addEventListener('timeupdate', updateProgress);
+        video.addEventListener('play', hideControlsWhenInactive);
+        video.addEventListener('click', togglePlay);
+        video.addEventListener('waiting', showLoading);
+        video.addEventListener('playing', hideLoading);
+        video.addEventListener('loadedmetadata', hideLoading);
+        video.addEventListener('loadeddata', hideLoading);
+
+        // Event listeners for controls
+        playPauseBtn.addEventListener('click', togglePlay);
+        progressContainer.addEventListener('click', setProgress);
+        muteBtn.addEventListener('click', toggleMute);
+        volumeSlider.addEventListener('input', updateVolume);
+        fullscreenBtn.addEventListener('click', toggleFullscreen);
+        settingsBtn.addEventListener('click', toggleSettings);
+        playbackSpeedBtn.addEventListener('click', togglePlaybackSpeed);
+
+        // Playback speed options
+        document.querySelectorAll('.playback-speed-option').forEach(option => {
+          option.addEventListener('click', function () {
+            const speed = parseFloat(this.getAttribute('data-speed'));
+            setPlaybackSpeed(speed);
+          });
+        });
+
+        // Hide controls when mouse is inactive
+        videoContainer.addEventListener('mousemove', hideControlsWhenInactive);
+        videoContainer.addEventListener('mouseleave', () => {
+          if (!video.paused) {
+            controls.classList.remove('active');
+          }
+        });
+
+        // Start token refresh - in production
+        // startTokenRefresh();
+
+        // Cleanup on unload
+        window.addEventListener('unload', stopTokenRefresh);
+      }
+
+      // Start the player
+      initPlayer();
+    });
+  </script>
+</body>
+
+</html>

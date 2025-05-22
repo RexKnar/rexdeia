@@ -1,7 +1,7 @@
 import { InstituteCourseChapterItemModel } from './chapterItem';
 
 export type InstituteCourseChapterModel = {
-  id: string;
+  id?: string;
   name: string;
   icon?: string;
   description?: string;
@@ -18,10 +18,10 @@ export type InstituteCourseChapterModel = {
 
 export type CreateCourseChapterRequestModel = Pick<
   InstituteCourseChapterModel,
-  'name' | 'icon' | 'description' | 'isActive' | 'branchId' | 'moduleId'
+  'name' | 'icon' | 'description' | 'isActive' | 'branchId' | 'moduleId' | 'id'
 >;
 
 export type UpdateCourseChapterRequestModel = Pick<
   InstituteCourseChapterModel,
-  'name' | 'icon' | 'description' | 'isActive'
+  'name' | 'icon' | 'description' | 'isActive' | 'moduleId' | 'id'
 >;
