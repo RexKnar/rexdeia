@@ -1,3 +1,4 @@
+// import { generateSignedUrl } from 'app/api/upload/service';
 import { db } from 'lib/db';
 
 export const updateChapterItem = async (chapterItemId, payload) => {
@@ -43,7 +44,7 @@ export const updateChapterItem = async (chapterItemId, payload) => {
 };
 
 export const getChapterItemById = async (chapterItemId) => {
-  return await db.instituteCourseChapterItem.findUnique({
+  let response = await db.instituteCourseChapterItem.findUnique({
     where: {
       id: chapterItemId,
     },
@@ -69,4 +70,9 @@ export const getChapterItemById = async (chapterItemId) => {
       },
     },
   });
+
+  // if (response?.videoUrl) {
+  //   response.videoUrl = await generateSignedUrl(response.videoUrl);
+  // }
+  return response;
 };

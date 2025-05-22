@@ -29,6 +29,8 @@ import {
 import React, { useEffect, useState } from 'react';
 import { Button, useToast } from 'ui';
 
+import { LinkButton } from '@/components/LinkButton';
+
 import { AddChapterItemFlyout } from '../_modals/AddChapterItemFlyout';
 import { AddCourseChapterFlyout } from '../_modals/AddCourseChapterFlyout';
 import { AddCourseModuleFlyout } from '../_modals/AddCourseModuleFlyout';
@@ -244,12 +246,13 @@ export default function CourseBuilder() {
               </div>
             </div>
             <div className="mt-4 flex space-x-2">
-              <Button variant="outline" size="sm" className="flex-1 text-xs">
-                Set user preview
-              </Button>
-              <Button variant="outline" size="sm" className="flex-1 text-xs">
-                Set rules
-              </Button>
+              <LinkButton
+                variant="outline"
+                className="w-full flex-1 text-xs"
+                url={`/institute/courses/${courseId}/roadmap`}
+              >
+                View Roadmap
+              </LinkButton>
             </div>
           </div>
 
@@ -310,7 +313,7 @@ export default function CourseBuilder() {
         </div>
 
         <div className="w-[70%]">
-          {chapterItemId && <ChapterItemContentArea />}
+          {chapterItemId && <ChapterItemContentArea editable />}
         </div>
       </section>
 

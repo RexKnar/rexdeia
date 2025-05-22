@@ -111,7 +111,16 @@ export const SortableChapter = ({
           </div>
           <div className="hidden items-end justify-center group-hover:block">
             <div className="flex items-center gap-2">
-              <span className="p-0 text-xs text-gray-500">
+              <span
+                className="p-0 text-xs text-gray-500"
+                onClick={async () => {
+                  const params = new URLSearchParams(searchParams);
+                  params.set('isAddCourseChapterFlyoutOpen', 'true');
+                  params.set('chapterId', id);
+
+                  router.replace(pathname + '?' + params.toString());
+                }}
+              >
                 <Edit className="mr-1 h-4 w-4 text-primary-700" />
               </span>
               <span className="p-0 text-xs text-gray-500">
