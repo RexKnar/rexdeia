@@ -80,3 +80,26 @@ export const getModulesByCourseId = async (courseId, payload) => {
     },
   });
 };
+
+export const updateCourseModule = async (moduleId, payload) => {
+  const { name, description, isActive } = payload;
+
+  return await db.instituteCourseModule.update({
+    where: {
+      id: moduleId,
+    },
+    data: {
+      name,
+      description,
+      isActive,
+    },
+  });
+};
+
+export const getModuleDetailById = async (moduleId: string) => {
+  return await db.instituteCourseModule.findUnique({
+    where: {
+      id: moduleId,
+    },
+  });
+};
