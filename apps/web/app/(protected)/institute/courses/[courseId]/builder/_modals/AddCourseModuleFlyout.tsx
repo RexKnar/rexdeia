@@ -34,7 +34,7 @@ export function AddCourseModuleFlyout() {
   } = useCreateCourseModuleMutationQuery(courseId);
 
   const closeFlyout = async () => {
-    removeParams(['isAddCourseModuleFlyoutOpen']);
+    removeParams(['isAddCourseModuleFlyoutOpen', 'moduleId']);
   };
 
   const handleOnOpenChange = (open: boolean) => {

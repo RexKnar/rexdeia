@@ -35,6 +35,11 @@ export const getCourseDetailById = async (courseId) => {
     select: {
       coverImage: true,
       courseName: true,
+      price: true,
+      discountPrice: true,
+      languageId: true,
+      description: true,
+      isActive: true,
     },
   });
 

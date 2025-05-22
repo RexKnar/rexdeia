@@ -41,3 +41,26 @@ export const addCourseChapter = async (moduleId, payload) => {
     },
   });
 };
+
+export const updateCourseChapter = async (chapterId, payload) => {
+  const { name, description, isActive } = payload;
+
+  return await db.instituteCourseChapter.update({
+    where: {
+      id: chapterId,
+    },
+    data: {
+      name,
+      description,
+      isActive,
+    },
+  });
+};
+
+export const getChapterDetailById = async (chapterId: string) => {
+  return await db.instituteCourseChapter.findUnique({
+    where: {
+      id: chapterId,
+    },
+  });
+};

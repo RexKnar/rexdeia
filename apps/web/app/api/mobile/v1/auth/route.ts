@@ -1,4 +1,3 @@
-// import { errors, jwtVerify, SignJWT } from 'jose';
 import { mobileLogin } from 'lib/mobile-auth';
 import { NextRequest, NextResponse } from 'next/server';
 

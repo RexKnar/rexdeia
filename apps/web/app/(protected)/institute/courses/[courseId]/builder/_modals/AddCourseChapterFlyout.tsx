@@ -1,6 +1,8 @@
 'use client';
 import { CreateCourseChapterRequestModel } from 'lib/domain/institute/chapter';
 import { useCreateCourseChapterMutationQuery } from 'lib/queries/institute/course/chapter/useCreateCourseChapterMutationQuery';
+import { useGetChapterDetailByIdQuery } from 'lib/queries/institute/course/chapter/useGetChapterDetailByIdQuery';
+import { useUpdateCourseChapterMutationQuery } from 'lib/queries/institute/course/chapter/useUpdateCourseChapterMutationQuery';
 import { Loader2, PlusCircle } from 'lucide-react';
 import { useParams, useSearchParams } from 'next/navigation';
 import { useEffect } from 'react';
@@ -23,20 +25,40 @@ export function AddCourseChapterFlyout() {
   const { getParam, removeParams } = useQueryParams();
   const searchParams = useSearchParams();
 
-  const routeParams = useParams<{ courseId: string; moduleId: string }>();
+  const routeParams = useParams<{
+    courseId: string;
+    moduleId: string;
+    chapterId: string;
+  }>();
 
   const courseId = searchParams.get('courseId') || routeParams.courseId;
 
   const isOpen = getParam('isAddCourseChapterFlyoutOpen') === 'true';
   const moduleId = getParam('moduleId');
+  const chapterId = getParam('chapterId');
+
+  const {
+    data: getCourseChapterDetailByIdResponse,
+    isLoading: isLoadingChapter,
+  } = useGetChapterDetailByIdQuery(chapterId, { enabled: !!chapterId });
+
+  useEffect(() => {
+    setValue('name', getCourseChapterDetailByIdResponse?.name);
+    setValue('description', getCourseChapterDetailByIdResponse?.description);
+  }, [getCourseChapterDetailByIdResponse]);
 
   const {
     isPending: isPendingCreateCourseChapter,
     mutateAsync: mutateCreateCourseChapterAsync,
   } = useCreateCourseChapterMutationQuery(courseId);
 
+  const {
+    isPending: isPendingUpdateCourseChapter,
+    mutateAsync: mutateUpdateCourseChapterAsync,
+  } = useUpdateCourseChapterMutationQuery(courseId);
+
   const closeFlyout = async () => {
-    removeParams(['isAddCourseChapterFlyoutOpen', 'moduleId']);
+    removeParams(['isAddCourseChapterFlyoutOpen', 'moduleId', 'chapterId']);
   };
 
   const handleOnOpenChange = (open: boolean) => {
@@ -69,12 +91,20 @@ export function AddCourseChapterFlyout() {
     payload: CreateCourseChapterRequestModel
   ) => {
     try {
-      const requestPayload = {
+      let response = null;
+      let requestPayload = {
         ...payload,
         isActive: true,
       };
-
-      const response = await mutateCreateCourseChapterAsync(requestPayload);
+      if (chapterId) {
+        requestPayload = {
+          ...requestPayload,
+          id: chapterId,
+        };
+        response = await mutateUpdateCourseChapterAsync(requestPayload);
+      } else {
+        response = await mutateCreateCourseChapterAsync(requestPayload);
+      }
       if (response) {
         reset();
         closeFlyout();
@@ -94,10 +124,10 @@ export function AddCourseChapterFlyout() {
             removeParams(['isAddCourseChapterFlyoutOpen']);
           }}
         >
-          {courseId == '2' ? (
+          {isLoadingChapter ? (
             <section className="flex h-96 w-full flex-col items-center justify-center gap-4">
               <Spinner />
-              <p>No data found</p>
+              {/* <p>No data found</p> */}
             </section>
           ) : (
             <form onSubmit={handleSubmit(saveCourseChapter)}>
@@ -115,7 +145,7 @@ export function AddCourseChapterFlyout() {
                 <hr className="border-t border-gray-300"></hr>
               </SheetHeader>
 
-              {courseId == '2' ? (
+              {isLoadingChapter ? (
                 <div className="flex h-96 w-full flex-col items-center justify-center gap-4">
                   <Spinner />
                   <p>Loading...</p>
@@ -167,13 +197,16 @@ export function AddCourseChapterFlyout() {
                       aria-disabled={isPendingCreateCourseChapter}
                       className="mx-auto flex justify-center px-12 py-4"
                     >
-                      {isPendingCreateCourseChapter ? (
+                      {isPendingCreateCourseChapter ||
+                      isPendingUpdateCourseChapter ? (
                         <div className="flex items-center justify-center">
                           <Loader2 className="mr-2 h-6 w-6 animate-spin text-white" />
                           Saving
                         </div>
+                      ) : chapterId ? (
+                        'Update'
                       ) : (
-                        ` Save`
+                        'Save'
                       )}
                     </Button>
                   </div>
