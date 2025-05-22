@@ -8,6 +8,7 @@ export const GET_INSTITUTE_COURSE_CONTENT_STRUCTURE = `GET_INSTITUTE_COURSE_CONT
 export const CREATE_INSTITUTE_COURSE_MODULE = `CREATE_INSTITUTE_COURSE_MODULE`;
 export const GET_INSTITUTE_COURSE_MODULE_LIST = `GET_INSTITUTE_COURSE_MODULE_LIST`;
 export const UPDATE_INSTITUTE_COURSE_MODULE = `UPDATE_INSTITUTE_COURSE_MODULE`;
+export const GET_INSTITUTE_COURSE_MODULE_BY_ID = `GET_INSTITUTE_COURSE_MODULE_BY_ID`;
 export const CREATE_INSTITUTE_COURSE_CHAPTER = `CREATE_INSTITUTE_COURSE_CHAPTER`;
 export const GET_INSTITUTE_COURSE_CHAPTER_LIST = `GET_INSTITUTE_COURSE_CHAPTER_LIST`;
 export const GET_INSTITUTE_COURSE_CHAPTER_BY_ID = `GET_INSTITUTE_COURSE_CHAPTER_BY_ID`;
@@ -67,7 +68,11 @@ export default <EndpointDetails>{
   },
   [UPDATE_INSTITUTE_COURSE_MODULE]: {
     requestType: `PUT`,
-    endpoint: `/api/institute/course/[courseId]/module`,
+    endpoint: `/api/institute/course/[courseId]/module/[moduleId]`,
+  },
+  [GET_INSTITUTE_COURSE_MODULE_BY_ID]: {
+    requestType: `GET`,
+    endpoint: `/api/institute/course/[courseId]/module/[moduleId]`,
   },
   [CREATE_INSTITUTE_COURSE_CHAPTER]: {
     requestType: `POST`,
