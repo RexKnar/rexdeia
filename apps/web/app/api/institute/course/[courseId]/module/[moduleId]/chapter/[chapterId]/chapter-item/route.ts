@@ -8,7 +8,7 @@ import { addChapterItem } from './server';
 
 /**
  * @swagger
- * /api/institute/course/{courseId}/chapter/{chapterId}/chapter-item:
+ * /api/institute/course/{courseId}/module/{moduleId}/chapter/{chapterId}/chapter-item:
  *     post:
  *       summary: Add new chapter item to  module
  *       description: Add NewChapter item to Module
