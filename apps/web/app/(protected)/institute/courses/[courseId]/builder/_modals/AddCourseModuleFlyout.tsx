@@ -37,7 +37,6 @@ export function AddCourseModuleFlyout() {
 
   const {
     reset,
-    watch,
     register,
     setValue,
     handleSubmit,
@@ -111,7 +110,7 @@ export function AddCourseModuleFlyout() {
           side="right"
           widthSize="sm"
           className="bg-white p-10"
-          onCloseClick={() => removeParams(['isAddCourseModuleFlyoutOpen'])}
+          onCloseClick={() => closeFlyout()}
         >
           {courseId === '2' ? (
             <section className="flex h-96 w-full flex-col items-center justify-center gap-4">
@@ -145,7 +144,6 @@ export function AddCourseModuleFlyout() {
                     placeholder="Enter Module Name"
                     className="mt-2"
                     {...register('name', { required: 'Name is required' })}
-                    value={watch('name')}
                     errorMessage={errors.name?.message}
                   />
                 </div>

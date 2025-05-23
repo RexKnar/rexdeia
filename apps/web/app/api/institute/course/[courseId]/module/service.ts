@@ -103,3 +103,10 @@ export const getModuleDetailById = async (moduleId: string) => {
     },
   });
 };
+
+export const deleteModuleById = async (moduleId: string) => {
+  return await db.instituteCourseModule.update({
+    where: { id: moduleId },
+    data: { deletedAt: new Date() },
+  });
+};

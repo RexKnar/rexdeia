@@ -4,7 +4,11 @@ import { authOptions } from 'lib/auth';
 import { NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 
-import { getModuleDetailById, updateCourseModule } from '../service';
+import {
+  deleteModuleById,
+  getModuleDetailById,
+  updateCourseModule,
+} from '../service';
 
 /**
  * @swagger
@@ -109,6 +113,66 @@ export async function GET(request: Request, { params: { moduleId } }) {
     const courseModuleById = await getModuleDetailById(moduleId);
 
     return new NextResponse(JSON.stringify(courseModuleById), {
+      status: StatusCodes.OK,
+    });
+  } catch (e) {
+    captureException(e);
+    return new NextResponse(JSON.stringify({ error: e.message }), {
+      status:
+        e.message === 'VALIDATION_ERROR'
+          ? StatusCodes.BAD_REQUEST
+          : StatusCodes.INTERNAL_SERVER_ERROR,
+    });
+  }
+}
+
+/**
+ * @swagger
+ * /api/institute/course/{courseId}/module/{moduleId}:
+ *   delete:
+ *     summary: Soft delete Course Module By Id
+ *     description: Marks the Course Module as deleted (soft delete).
+ *     parameters:
+ *       - name: courseId
+ *         in: path
+ *         required: true
+ *         schema:
+ *           type: string
+ *       - name: moduleId
+ *         in: path
+ *         required: true
+ *         description: Unique identifier of the Course Module.
+ *         schema:
+ *           type: string
+ *     responses:
+ *       '200':
+ *         description: Course Module soft deleted successfully.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/InstituteCourseModuleModel'
+ *       '401':
+ *         description: Unauthorized access.
+ *       '500':
+ *         description: Internal server error.
+ */
+
+export async function DELETE(
+  request: Request,
+  { params }: { params: { moduleId: string } }
+) {
+  const session = await getServerSession(authOptions);
+
+  if (!session) {
+    return new NextResponse(JSON.stringify({ error: 'UNAUTHORIZED' }), {
+      status: StatusCodes.UNAUTHORIZED,
+    });
+  }
+
+  try {
+    const deletedModule = await deleteModuleById(params.moduleId);
+
+    return new NextResponse(JSON.stringify(deletedModule), {
       status: StatusCodes.OK,
     });
   } catch (e) {
