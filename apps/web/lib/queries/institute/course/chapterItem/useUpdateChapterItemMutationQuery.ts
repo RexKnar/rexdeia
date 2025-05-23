@@ -18,7 +18,7 @@ export function useUpdateChapterItemMutationQuery(itemId: string) {
         UPDATE_INSTITUTE_COURSE_CHAPTER_ITEM,
         payload,
         {},
-        { itemId, courseId: itemId, moduleId: itemId }
+        { itemId, courseId: itemId, chapterId: itemId, moduleId: itemId }
       );
       await queryClient.refetchQueries({
         queryKey: [GET_INSTITUTE_COURSE_CHAPTER_ITEM_BY_ID, itemId],
