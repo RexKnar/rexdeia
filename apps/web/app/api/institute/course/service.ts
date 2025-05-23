@@ -4,13 +4,20 @@ import { getServerSession } from 'next-auth';
 
 import { generateSignedUrl } from '../../upload/service';
 
-export async function getInstituteCourses(page: number, limit: number) {
+export async function getInstituteCourses(
+  page: number,
+  limit: number,
+  filter?: { isActive?: boolean }
+) {
   const { branchId } = await getServerSession(authOptions);
 
   const whereClause = {
     isDeleted: false,
     branchId,
   };
+  if (filter?.isActive) {
+    whereClause['isActive'] = filter.isActive;
+  }
 
   const [total, courses] = await db.$transaction([
     db.instituteCourse.count({

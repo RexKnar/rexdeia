@@ -1,5 +1,6 @@
 import {
   BetweenHorizontalEndIcon,
+  File,
   FileText,
   GraduationCap,
   SquareUserRound,
@@ -989,24 +990,16 @@ export const instituteMenu = {
   ],
   Student: [
     {
-      id: 'analytics',
-      label: 'Analytics',
+      id: 'dashboard',
+      label: 'Dashboard',
       icon: GraduationCap,
-      path: '',
-      children: [
-        {
-          id: 'dashboard',
-          label: 'Dashboard',
-          icon: FileText,
-          path: '/analytics',
-        },
-        {
-          id: 'marks',
-          label: 'Marks',
-          icon: FileText,
-          path: '/analytics/mark-list',
-        },
-      ],
+      path: '/institute/learners/dashboard',
+    },
+    {
+      id: 'payment-history',
+      label: 'Payment History',
+      icon: File,
+      path: '/institute/learners/payment-history',
     },
   ],
 };

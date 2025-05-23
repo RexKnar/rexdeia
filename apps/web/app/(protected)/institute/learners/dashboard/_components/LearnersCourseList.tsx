@@ -1,20 +1,18 @@
 'use client';
-import { useGetInstituteCourseListQuery } from 'lib/queries/institute/course/useGetInstituteCourseListQuery';
+import { CourseCard } from 'app/(protected)/institute/courses/_components/CourseCard';
+import { useGetCourseListByLearnersIdQuery } from 'lib/queries/institute/learners/useGetCourseListByLearnersIdQuery';
 import { useSearchParams } from 'next/navigation';
 
-import { CourseCard } from './CourseCard';
-
-export default function CourseList() {
+export default function LearnersCourseList() {
   const searchParams = useSearchParams();
 
   const page = parseInt(searchParams.get('page')) || 1;
-  const limit = parseInt(searchParams.get('limit')) || 10;
+  const limit = parseInt(searchParams.get('limit')) || 5;
 
   const { data: courseListResponse, isLoading: isCourseListLoading } =
-    useGetInstituteCourseListQuery({
+    useGetCourseListByLearnersIdQuery({
       page,
       limit,
-      filter: { isActive: false },
     });
   return (
     <div className="flex flex-wrap gap-3 ">
@@ -25,7 +23,7 @@ export default function CourseList() {
               courseId={course.id}
               imgSrc={course.coverImage}
               courseName={course.courseName}
-              type="institute"
+              type="learner"
             />
           ))
         : isCourseListLoading

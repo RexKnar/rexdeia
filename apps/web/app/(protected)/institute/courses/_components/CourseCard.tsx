@@ -9,10 +9,12 @@ export function CourseCard({
   imgSrc,
   courseName,
   courseId,
+  type,
 }: {
   imgSrc: string;
   courseName: string;
   courseId: string;
+  type?: string;
 }) {
   return (
     <div className="w-full max-w-sm rounded-xl border border-gray-200 bg-white shadow-lg">
@@ -35,6 +37,7 @@ export function CourseCard({
             </div>
           )}
         </div>
+
         <div className="w-full py-3">
           <Separator className="my-4 bg-gray-400" decorative />
           <div className="p-2">
@@ -43,26 +46,31 @@ export function CourseCard({
             </Link>
           </div>
           <Separator className="my-4 bg-gray-400" decorative />
-          <div className="flex h-5 items-center justify-evenly space-x-4 text-sm">
-            <Link
-              className="flex w-full cursor-pointer justify-center"
-              href={`/institute/courses/${courseId}/builder`}
-            >
-              <PencilRuler />
-            </Link>
-            <Separator orientation="vertical" className="bg-gray-400" />
-            <div className="flex w-full cursor-pointer justify-center">
-              <Users />
-            </div>
-            <Separator orientation="vertical" className="bg-gray-400" />
+          {type !== 'learner' && (
+            <div className="flex h-5 items-center justify-evenly space-x-4 text-sm">
+              <Link
+                className="flex w-full cursor-pointer justify-center"
+                href={`/institute/courses/${courseId}/builder`}
+              >
+                <PencilRuler />
+              </Link>
+              <Separator orientation="vertical" className="bg-gray-400" />
+              <Link
+                href={`/institute/courses/${courseId}/learners`}
+                className="flex w-full cursor-pointer justify-center"
+              >
+                <Users />
+              </Link>
+              <Separator orientation="vertical" className="bg-gray-400" />
 
-            <Link
-              className="flex w-full cursor-pointer justify-center"
-              href={`/institute/courses/${courseId}/settings`}
-            >
-              <Settings />
-            </Link>
-          </div>
+              <Link
+                className="flex w-full cursor-pointer justify-center"
+                href={`/institute/courses/${courseId}/settings`}
+              >
+                <Settings />
+              </Link>
+            </div>
+          )}
         </div>
       </div>
     </div>
