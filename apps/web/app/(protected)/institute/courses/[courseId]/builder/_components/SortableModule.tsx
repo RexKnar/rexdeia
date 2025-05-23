@@ -15,6 +15,7 @@ import {
   verticalListSortingStrategy,
 } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
+import { useDeleteModuleMutation } from 'lib/queries/institute/course/module/useDeleteModuleById';
 import {
   ChevronDown,
   ChevronRight,
@@ -32,12 +33,15 @@ import {
   CollapsibleTrigger,
 } from 'ui';
 
+import { DeleteConfirmationModal } from '@/components/modals/DeleteConfirmationModal';
+
 import { SortableChapter } from './SortableChapter';
 
 export const SortableModule = ({
   id,
   title,
   chapters,
+  courseId,
   expanded,
   toggleModule,
   toggleChapter,
@@ -78,6 +82,18 @@ export const SortableModule = ({
       handleChapterDragEnd(id, active.id, over.id);
     }
     setActiveChapterId(null);
+  };
+  const deleteModule = useDeleteModuleMutation();
+
+  const [showDeleteConfirmationModal, setShowDeleteConfirmationModal] =
+    useState(false);
+  const handleDelete = async () => {
+    setShowDeleteConfirmationModal(false);
+    try {
+      await deleteModule.mutateAsync({ courseId, moduleId: id });
+    } catch (err) {
+      console.error('Failed to delete module:', err);
+    }
   };
 
   return (
@@ -125,9 +141,12 @@ export const SortableModule = ({
               >
                 <Edit className="mr-1 h-4 w-4 text-primary-700" />
               </span>
-              <span className="p-0 text-xs text-gray-500">
+              <button
+                className="text-left"
+                onClick={() => setShowDeleteConfirmationModal(true)}
+              >
                 <Trash className="mr-1 h-4 w-4 text-red-500" />
-              </span>
+              </button>
             </div>
           </div>
         </div>
@@ -182,6 +201,12 @@ export const SortableModule = ({
           </Button>
         </CollapsibleContent>
       </Collapsible>
+      <DeleteConfirmationModal
+        open={showDeleteConfirmationModal}
+        description={`Are you sure you want to delete this Module ?`}
+        onDeleteClick={handleDelete}
+        onCancelClick={() => setShowDeleteConfirmationModal(false)}
+      />
     </div>
   );
 };
