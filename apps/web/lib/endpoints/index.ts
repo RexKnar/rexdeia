@@ -1,5 +1,6 @@
 import ExamAnalyticsEndpoints from './examAnalyticsEndpoints';
 import InstitutionCourseEndpoints from './institute/courseEndpoints';
+import LearnerEndpoints from './institute/learnerEndpoints';
 import SubjectEndpoints from './subjectEndpoints';
 import { EndpointDetails } from './types';
 
@@ -218,6 +219,7 @@ export default <EndpointDetails>{
   ...ExamAnalyticsEndpoints,
   ...SubjectEndpoints,
   ...InstitutionCourseEndpoints,
+  ...LearnerEndpoints,
   [REGISTER_USER]: {
     requestType: `POST`,
     endpoint: `/api/register`,

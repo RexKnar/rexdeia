@@ -3,8 +3,8 @@ import { redirect } from 'next/navigation';
 import { getServerSession } from 'next-auth';
 import { Suspense } from 'react';
 
-import Roadmap from './_components/Roadmap';
-import { RoadmapPageHeader } from './_components/RoadmapPageHeader';
+import { LearnerListHeader } from './_components/LearnerListHeader';
+import { LearnersList } from './_components/LearnersList';
 
 export default async function Page() {
   const session = await getServerSession(authOptions);
@@ -13,11 +13,14 @@ export default async function Page() {
   }
 
   return (
-    <section className="flex flex-col gap-6 ">
-      <Suspense>
-        <RoadmapPageHeader />
-        <Roadmap />
-      </Suspense>
+    <section>
+      <div className="mx-auto my-5 rounded-md bg-white p-6">
+        <Suspense>
+          <LearnerListHeader />
+
+          <LearnersList />
+        </Suspense>
+      </div>
     </section>
   );
 }

@@ -51,7 +51,6 @@ export default function Roadmap() {
             edges.push(edge);
           } else {
             previousNode = module.id;
-            // return null;
           }
 
           let newY = y - (30 * module?.chapters.length) / 2;
@@ -74,11 +73,7 @@ export default function Roadmap() {
                 animated: true,
                 style: { strokeDasharray: '5 5' },
               };
-              // previousNode = chapter.id;
               edges.push(cedge);
-            } else {
-              // previousNode = chapter.id;
-              // return null;
             }
           });
         })
@@ -89,7 +84,6 @@ export default function Roadmap() {
   }, [courseStructure]);
   return (
     <section className="flex flex-col gap-6 ">
-      <div>Roadmap</div>
       {courseNodes?.length > 0 && (
         <FlowChart
           courseStructure={courseStructure}
