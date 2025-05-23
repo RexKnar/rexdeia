@@ -19,7 +19,7 @@ function getChapterItemById(
         GET_INSTITUTE_COURSE_CHAPTER_ITEM_BY_ID,
         {},
         {},
-        { itemId }
+        { itemId, courseId: itemId, moduleId: itemId }
       );
     },
   };
