@@ -19,7 +19,11 @@ export function useCreateChapterItemMutationQuery(courseId: string) {
         CREATE_INSTITUTE_COURSE_CHAPTER_ITEM,
         courseChapterItemDetails,
         {},
-        { courseId, chapterId: courseChapterItemDetails?.chapterId }
+        {
+          courseId,
+          chapterId: courseChapterItemDetails?.chapterId,
+          moduleId: courseId,
+        }
       );
       await queryClient.invalidateQueries({
         queryKey: [GET_INSTITUTE_COURSE_CONTENT_STRUCTURE],
