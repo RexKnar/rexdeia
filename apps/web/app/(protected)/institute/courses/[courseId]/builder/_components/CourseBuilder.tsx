@@ -270,6 +270,7 @@ export default function CourseBuilder() {
                 <div className="p-2">
                   {modules.map((mod) => (
                     <SortableModule
+                      courseId={courseId}
                       key={mod.id}
                       {...mod}
                       id={mod.id}
