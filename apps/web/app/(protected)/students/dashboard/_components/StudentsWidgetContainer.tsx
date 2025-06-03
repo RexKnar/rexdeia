@@ -38,7 +38,7 @@ const widgetList = [
 
 export function StudentsWidgetContainer() {
   return (
-    <section className="mt-4 flex w-full gap-3">
+    <section className="mt-4 w-full  gap-3 md:flex">
       {widgetList.map((widget) => (
         <DashboardWidget
           key={widget.label}

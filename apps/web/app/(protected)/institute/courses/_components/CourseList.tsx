@@ -1,5 +1,5 @@
 'use client';
-import { useGetInstituteCourseListQuery } from 'lib/queries/institute/course/useGetInstituteCourseListMutationQuery';
+import { useGetInstituteCourseListQuery } from 'lib/queries/institute/course/useGetInstituteCourseListQuery';
 import { useSearchParams } from 'next/navigation';
 
 import { CourseCard } from './CourseCard';
@@ -14,6 +14,7 @@ export default function CourseList() {
     useGetInstituteCourseListQuery({
       page,
       limit,
+      filter: { isActive: false },
     });
   return (
     <div className="flex flex-wrap gap-3 ">
@@ -24,6 +25,7 @@ export default function CourseList() {
               courseId={course.id}
               imgSrc={course.coverImage}
               courseName={course.courseName}
+              type="institute"
             />
           ))
         : isCourseListLoading

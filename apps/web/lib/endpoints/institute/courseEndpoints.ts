@@ -3,6 +3,11 @@ import { EndpointDetails } from '../types';
 export const CREATE_INSTITUTE_COURSE = `CREATE_INSTITUTE_COURSE`;
 export const UPDATE_INSTITUTE_COURSE = `UPDATE_INSTITUTE_COURSE`;
 export const GET_INSTITUTE_COURSE_LIST = `GET_INSTITUTE_COURSE_LIST`;
+export const GET_INSTITUTE_COURSE_LIST_BY_FILTER = `GET_INSTITUTE_COURSE_LIST_BY_FILTER`;
+export const GET_INSTITUTE_COURSE_LIST_BY_LEARNER_ID =
+  'GET_INSTITUTE_COURSE_LIST_BY_LEARNER_ID';
+export const GET_PAYMENT_HISTORY_BY_LEARNER_ID =
+  'GET_PAYMENT_HISTORY_BY_LEARNER_ID';
 export const GET_INSTITUTE_COURSE_BY_ID = `GET_INSTITUTE_COURSE_BY_ID`;
 export const GET_INSTITUTE_COURSE_CONTENT_STRUCTURE = `GET_INSTITUTE_COURSE_CONTENT_STRUCTURE`;
 export const CREATE_INSTITUTE_COURSE_MODULE = `CREATE_INSTITUTE_COURSE_MODULE`;
@@ -34,6 +39,18 @@ export default <EndpointDetails>{
   [GET_INSTITUTE_COURSE_LIST]: {
     requestType: `GET`,
     endpoint: `/api/institute/course`,
+  },
+  [GET_INSTITUTE_COURSE_LIST_BY_FILTER]: {
+    requestType: `PUT`,
+    endpoint: `/api/institute/course`,
+  },
+  [GET_INSTITUTE_COURSE_LIST_BY_LEARNER_ID]: {
+    requestType: `GET`,
+    endpoint: `/api/institute/learner/courses`,
+  },
+  [GET_PAYMENT_HISTORY_BY_LEARNER_ID]: {
+    requestType: `GET`,
+    endpoint: `/api/institute/learner/payments`,
   },
   [GET_INSTITUTE_COURSE_BY_ID]: {
     requestType: `GET`,

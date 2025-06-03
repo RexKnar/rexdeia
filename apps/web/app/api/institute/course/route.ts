@@ -51,7 +51,31 @@ export async function GET(request: NextRequest) {
     });
   }
 }
+export async function PUT(request: NextRequest) {
+  const session = await getServerSession(authOptions);
+  if (!session) {
+    return new NextResponse(JSON.stringify({ error: 'UNAUTHORIZED' }), {
+      status: StatusCodes.UNAUTHORIZED,
+    });
+  }
 
+  try {
+    const { searchParams } = request.nextUrl;
+    const page = parseInt(searchParams.get('page')) || 1;
+    const limit = parseInt(searchParams.get('limit')) || 10;
+    const filter = await request.json();
+    const paginatedCourseList = await getInstituteCourses(page, limit, filter);
+
+    return new NextResponse(JSON.stringify(paginatedCourseList), {
+      status: StatusCodes.OK,
+    });
+  } catch (e) {
+    captureException(e);
+    return new NextResponse(e, {
+      status: StatusCodes.BAD_REQUEST,
+    });
+  }
+}
 /**
  * @swagger
  * /api/institute/course:

@@ -6,18 +6,24 @@ import {
 import { makeAPICall } from 'lib/api';
 import { PaginatedResponse } from 'lib/domain';
 import { InstituteCourseModel } from 'lib/domain/institute/course';
-import { GET_INSTITUTE_COURSE_LIST } from 'lib/endpoints/institute/courseEndpoints';
+import { GET_INSTITUTE_COURSE_LIST_BY_LEARNER_ID } from 'lib/endpoints/institute/courseEndpoints';
 
-function getInstituteCourseList(
-  { page, limit }: { page: number; limit: number },
+function getCourseListByLearnersId(
+  {
+    page,
+    limit,
+  }: {
+    page: number;
+    limit: number;
+  },
   options?: UseQueryOptions<PaginatedResponse<InstituteCourseModel>>
 ): UseQueryOptions<PaginatedResponse<InstituteCourseModel>> {
   return {
     ...options,
-    queryKey: [GET_INSTITUTE_COURSE_LIST, page, limit],
+    queryKey: [GET_INSTITUTE_COURSE_LIST_BY_LEARNER_ID, page, limit],
     queryFn: async () => {
       return await makeAPICall<PaginatedResponse<InstituteCourseModel>>(
-        GET_INSTITUTE_COURSE_LIST,
+        GET_INSTITUTE_COURSE_LIST_BY_LEARNER_ID,
         {},
         {
           page: page,
@@ -29,9 +35,15 @@ function getInstituteCourseList(
   };
 }
 
-export function useGetInstituteCourseListQuery(
-  { page, limit }: { page: number; limit: number },
+export function useGetCourseListByLearnersIdQuery(
+  {
+    page,
+    limit,
+  }: {
+    page: number;
+    limit: number;
+  },
   options?: UseQueryOptions<PaginatedResponse<InstituteCourseModel>>
 ): UseQueryResult<PaginatedResponse<InstituteCourseModel>> {
-  return useQuery(getInstituteCourseList({ page, limit }, options));
+  return useQuery(getCourseListByLearnersId({ page, limit }, options));
 }
