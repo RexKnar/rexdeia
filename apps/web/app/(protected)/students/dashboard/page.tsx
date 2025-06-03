@@ -14,46 +14,44 @@ export default async function Page() {
   });
 
   return (
-    <section className="flex flex-col gap-4">
+    <section className="flex flex-col gap-4 p-4 sm:p-6 md:p-8">
       <StudentDashboardBanner />
-      <section className="flex flex-col gap-3 rounded-md bg-white p-10 shadow-sm">
+      <section className="flex flex-col gap-3 rounded-md bg-white p-6 sm:p-8 shadow-sm">
         <section>
-          <p className="text-xl font-semibold text-gray-800">
+          <p className="text-lg sm:text-xl font-semibold text-gray-800">
             Students Overview
           </p>
-          <p className="text-gray-700">
-            This section provides a comprehensive overview of student
-            statistics.
+          <p className="text-sm sm:text-base text-gray-700">
+            This section provides a comprehensive overview of student statistics.
           </p>
           <StudentsWidgetContainer />
         </section>
       </section>
-
-      <section className="flex flex-col gap-3 rounded-md bg-white p-10 shadow-sm">
+      <section className="flex flex-col gap-3 rounded-md bg-white p-6 sm:p-8 shadow-sm">
         <section>
-          <p className="text-xl font-semibold text-gray-800">
+          <p className="text-lg sm:text-xl font-semibold text-gray-800">
             Recent enrolled students
           </p>
-          <p className="text-gray-700">
+          <p className="text-sm sm:text-base text-gray-700">
             Here you will find information on students who have recently joined,
             including their backgrounds, academic interests.
           </p>
         </section>
         {studentsList.length === 0 && (
-          <div className="mt-4 flex flex-col items-center justify-center text-gray-700">
+          <div className="mt-4 flex flex-col items-center justify-center text-center text-gray-700">
             <Image alt="icon" width={186} height={186} src={noStudentData} />
-            <div className="mt-4">
-              We couldn&lsquo;t find any students who were enrolled recently.
+            <div className="mt-4 text-sm sm:text-base">
+              We couldn’t find any students who were enrolled recently.
             </div>
           </div>
         )}
         {studentsList.map((student) => (
           <Suspense key={student.id}>
-            <RecentEnrolledStudents {...student} />{' '}
+            <RecentEnrolledStudents {...student} />
           </Suspense>
         ))}
-        <div className="flex justify-end text-primary">
-          <Link href={`/students/list`}>Browse All</Link>
+        <div className="flex justify-end text-primary text-sm sm:text-base">
+          <Link href="/students/list">Browse All</Link>
         </div>
       </section>
     </section>

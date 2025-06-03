@@ -50,7 +50,7 @@ export function PageHeader() {
 
   return (
     <header className="sticky top-0 z-50 flex h-[64px] w-full border border-b-gray-200 border-l-transparent bg-white print:hidden">
-      <section className="mx-auto flex w-full items-center justify-between">
+      <section className="flex items-center justify-between w-full mx-auto">
         <Suspense fallback={<div>Loading...</div>}>
           <SidebarHeader />
         </Suspense>
@@ -62,7 +62,7 @@ export function PageHeader() {
                 <input
                   type="search"
                   placeholder="Search students..."
-                  className="h-9 w-64 rounded-md border border-gray-300 px-3 pr-8 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-64 px-3 pr-8 border border-gray-300 rounded-md h-9 focus:outline-none focus:ring-2 focus:ring-blue-500"
                   value={searchTerm}
                   onChange={handleSearchChange}
                   onFocus={() => setIsDropdownOpen(true)}
@@ -74,10 +74,10 @@ export function PageHeader() {
               </div>
 
               {isDropdownOpen && searchTerm.length >= 2 && (
-                <div className="absolute mt-1 w-full rounded-md border border-gray-200 bg-white shadow-lg">
+                <div className="absolute w-full mt-1 bg-white border border-gray-200 rounded-md shadow-lg">
                   {isLoading ? (
                     <div className="flex justify-center p-4">
-                      <div className="h-5 w-5 animate-spin rounded-full border-2 border-gray-300 border-t-blue-600" />
+                      <div className="w-5 h-5 border-2 border-gray-300 rounded-full animate-spin border-t-blue-600" />
                     </div>
                   ) : error ? (
                     <Alert variant="destructive" className="m-2">
@@ -89,7 +89,7 @@ export function PageHeader() {
                     </div>
                   ) : studentList?.data ? (
                     <div className="max-h-[400px] overflow-y-auto">
-                      <div className="border-b p-2 text-sm text-gray-600">
+                      <div className="p-2 text-sm text-gray-600 border-b">
                         Found {studentList.total} results
                       </div>
                       {studentList.data.map((student) => (
@@ -102,7 +102,7 @@ export function PageHeader() {
                             }}
                           >
                             <div className="flex items-center gap-3">
-                              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gray-200">
+                              <div className="flex items-center justify-center w-8 h-8 bg-gray-200 rounded-full">
                                 {student.firstName[0]}
                               </div>
                               <div>

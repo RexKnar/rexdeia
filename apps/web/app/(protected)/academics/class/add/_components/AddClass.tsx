@@ -82,7 +82,6 @@ export default function AddClass() {
   async function addClass(payload) {
     try {
       const response = await mutateCreateClassAsync(payload);
-
       if (response) {
         router.push(`/academics/class/`);
       }
@@ -92,14 +91,12 @@ export default function AddClass() {
   }
 
   return (
-    <section className="relative mt-[20px] w-full">
-      <div className="sm:grid sm:grid-cols-1 sm:gap-4 md:grid md:grid-cols-1 md:gap-4 lg:grid  lg:grid-cols-[1fr_100px]">
+    <section className="relative mt-5 w-full px-4">
+      <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+        <Text variant="lg-semibold" className="text-2xl">
+          New Class
+        </Text>
         <div className="flex items-center">
-          <Text variant="lg-semibold" className="ml-2 text-2xl">
-            New Class
-          </Text>
-        </div>
-        <div className="items-center">
           <Switch
             id="isActive"
             {...register('isActive')}
@@ -115,48 +112,90 @@ export default function AddClass() {
         </div>
       </div>
 
-      <div>
-        <form onSubmit={handleSubmit(addClass)}>
-          <div className="mt-4 grid grid-cols-1 flex-wrap justify-between gap-5 md:grid md:grid-cols-1 lg:grid lg:grid-cols-2">
-            <div className="col-6">
-              <label
-                htmlFor="name"
-                className="text-sm font-semibold text-gray-700"
-              >
-                Class Name
-              </label>
-              <Input
-                {...register('name', {
-                  required: 'Class Name is Required',
-                })}
-                className="border-primary-200 p-1"
-                id="name"
-                errorMessage={fieldErrors?.name?.message.toString()}
-              />
-            </div>
-            <div>
-              <label
-                htmlFor="medium"
-                className="text-sm font-semibold text-gray-700"
-              >
-                Class Level
-              </label>
-              <Controller
-                control={control}
-                name={`classLevelId`}
-                render={({ field }) => {
-                  return (
+      <form onSubmit={handleSubmit(addClass)}>
+        <div className="grid grid-cols-1 gap-5 mt-6 lg:grid-cols-2">
+          <div>
+            <label htmlFor="name" className="text-sm font-semibold text-gray-700">
+              Class Name
+            </label>
+            <Input
+              {...register('name', {
+                required: 'Class Name is Required',
+              })}
+              className="p-1 border-primary-200"
+              id="name"
+              errorMessage={fieldErrors?.name?.message?.toString()}
+            />
+          </div>
+          <div>
+            <label htmlFor="classLevel" className="text-sm font-semibold text-gray-700">
+              Class Level
+            </label>
+            <Controller
+              control={control}
+              name="classLevelId"
+              render={({ field }) => (
+                <Select
+                  onValueChange={field.onChange}
+                  value={field.value}
+                  disabled={isClassLevelListLoading}
+                >
+                  <SelectTrigger className="w-full">
+                    <SelectValue placeholder="Select Class Level" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectGroup>
+                      {ClassLevelListResponse?.map((item) => (
+                        <SelectItem key={item.id} value={item.id}>
+                          {item.name}
+                        </SelectItem>
+                      ))}
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
+              )}
+            />
+          </div>
+        </div>
+
+        <div className="mt-10">
+          {fields.map((row, index) => (
+            <div
+              key={row.id}
+              className="grid grid-cols-1 gap-5 mb-6 md:grid-cols-2 xl:grid-cols-5"
+            >
+              <div>
+                <label className="text-sm font-semibold text-gray-700">
+                  Section Name
+                </label>
+                <Input
+                  {...register(`section.${index}.name`, {
+                    required: 'Section Name is Required',
+                  })}
+                  className="p-1 border-primary-200"
+                  errorMessage={fieldErrors?.section?.message?.toString()}
+                />
+              </div>
+
+              <div>
+                <label className="text-sm font-semibold text-gray-700">
+                  Medium
+                </label>
+                <Controller
+                  control={control}
+                  name={`section.${index}.mediumId`}
+                  render={({ field }) => (
                     <Select
                       onValueChange={field.onChange}
-                      {...field}
-                      disabled={isClassLevelListLoading}
+                      value={field.value}
+                      disabled={isMediumListLoading}
                     >
                       <SelectTrigger className="w-full">
-                        <SelectValue />
+                        <SelectValue placeholder="Select Medium" />
                       </SelectTrigger>
                       <SelectContent>
                         <SelectGroup>
-                          {ClassLevelListResponse?.map((item) => (
+                          {mediumListResponse?.data?.map((item) => (
                             <SelectItem key={item.id} value={item.id}>
                               {item.name}
                             </SelectItem>
@@ -164,191 +203,109 @@ export default function AddClass() {
                         </SelectGroup>
                       </SelectContent>
                     </Select>
-                  );
-                }}
-              ></Controller>
-            </div>
-          </div>
-          <div>
-            <div className="mt-8">
-              {fields.map((row, index) => (
-                <div
-                  key={row.id}
-                  className="grid grid-cols-1 flex-wrap justify-between gap-4 md:grid md:grid-cols-1 lg:grid lg:grid-cols-4"
-                >
-                  <div className="">
-                    <label
-                      htmlFor="sectionName"
-                      className="text-sm font-semibold text-gray-700"
-                    >
-                      Section Name
-                    </label>
-                    <Input
-                      {...register(`section.${index}.name`, {
-                        required: 'Section Name is Required',
-                      })}
-                      key={index}
-                      className="border-primary-200 p-1"
-                      id="sectionName"
-                      errorMessage={fieldErrors?.section?.message.toString()}
-                    />
-                  </div>
-                  <div>
-                    <label
-                      htmlFor="medium"
-                      className="text-sm font-semibold text-gray-700"
-                    >
-                      Medium
-                    </label>
-                    <Controller
-                      control={control}
-                      name={`section.${index}.mediumId`}
-                      render={({ field }) => {
-                        return (
-                          <Select
-                            onValueChange={field.onChange}
-                            {...field}
-                            disabled={isMediumListLoading}
-                          >
-                            <SelectTrigger className="w-full">
-                              <SelectValue />
-                            </SelectTrigger>
-                            <SelectContent>
-                              <SelectGroup>
-                                {mediumListResponse?.data?.map((item) => (
-                                  <SelectItem key={item.id} value={item.id}>
-                                    {item.name}
-                                  </SelectItem>
-                                ))}
-                              </SelectGroup>
-                            </SelectContent>
-                          </Select>
-                        );
-                      }}
-                    ></Controller>
-                  </div>
-                  <div>
-                    <label
-                      htmlFor={`group-${index}`}
-                      className="text-sm font-semibold text-gray-700"
-                    >
-                      Group
-                    </label>
-                    <div className="flex flex-wrap">
-                      {groupListResponse?.data?.map((item) => (
-                        <div
-                          key={item.id}
-                          className="flex items-center space-x-2"
-                        >
-                          <Checkbox
-                            id={`group-${index}`}
-                            className="ml-2 items-center space-x-2 rounded border border-primary-500"
-                            checked={watch(
-                              `section.${index}.groupIds`
-                            )?.includes(item.id)}
-                            onCheckedChange={(checked) => {
-                              const currentGroupIds =
-                                watch(`section.${index}.groupIds`) || [];
-                              if (checked) {
-                                setValue(`section.${index}.groupIds`, [
-                                  ...currentGroupIds,
-                                  item.id,
-                                ]);
-                              } else {
-                                setValue(
-                                  `section.${index}.groupIds`,
-                                  currentGroupIds.filter(
-                                    (value) => value !== item.id
-                                  )
-                                );
-                              }
-                            }}
-                          />
-                          <span className="mr-2">{item.name}</span>
-                        </div>
-                      ))}
+                  )}
+                />
+              </div>
+
+              <div>
+                <label className="text-sm font-semibold text-gray-700">
+                  Group
+                </label>
+                <div className="flex flex-wrap gap-2">
+                  {groupListResponse?.data?.map((item) => (
+                    <div key={item.id} className="flex items-center space-x-2">
+                      <Checkbox
+                        id={`group-${index}-${item.id}`}
+                        checked={watch(`section.${index}.groupIds`)?.includes(item.id)}
+                        onCheckedChange={(checked) => {
+                          const currentGroupIds = watch(`section.${index}.groupIds`) || [];
+                          setValue(
+                            `section.${index}.groupIds`,
+                            checked
+                              ? [...currentGroupIds, item.id]
+                              : currentGroupIds.filter((id) => id !== item.id)
+                          );
+                        }}
+                      />
+                      <span>{item.name}</span>
                     </div>
-                  </div>
-                  <div>
-                    <label
-                      htmlFor="medium"
-                      className="text-sm font-semibold text-gray-700"
-                    >
-                      Grade System(for marks)
-                    </label>
-                    <Controller
-                      control={control}
-                      name={`gradeId`}
-                      render={({ field }) => {
-                        return (
-                          <Select
-                            onValueChange={field.onChange}
-                            {...field}
-                            disabled={isGradeListLoading}
-                          >
-                            <SelectTrigger className="w-full">
-                              <SelectValue />
-                            </SelectTrigger>
-                            <SelectContent>
-                              <SelectGroup>
-                                {gradeListResponse?.data?.map((item) => (
-                                  <SelectItem key={item.id} value={item.id}>
-                                    {item.name}
-                                  </SelectItem>
-                                ))}
-                              </SelectGroup>
-                            </SelectContent>
-                          </Select>
-                        );
-                      }}
-                    ></Controller>
-                  </div>
-                  <div className="flex items-center justify-center">
-                    <Button
-                      className="mt-5 h-9 w-9 border-transparent bg-red-600 p-2 "
-                      variant="outline"
-                      type="button"
-                      onClick={() => {
-                        remove(index);
-                      }}
-                    >
-                      <Trash size={32} className="text-center text-white" />
-                    </Button>
-                  </div>
+                  ))}
                 </div>
-              ))}
-              <Button
-                type="button"
-                className=" ml-4 mt-[1.5rem]  w-full border-dotted  p-2 text-primary "
-                variant="outline"
-                onClick={() => {
-                  append({ section: 'section' });
-                }}
-              >
-                <Plus size={32} className="text-center text-primary" />
-              </Button>
+              </div>
+
+              <div>
+                <label className="text-sm font-semibold text-gray-700">
+                  Grade System (for marks)
+                </label>
+                <Controller
+                  control={control}
+                  name={`gradeId`}
+                  render={({ field }) => (
+                    <Select
+                      onValueChange={field.onChange}
+                      value={field.value}
+                      disabled={isGradeListLoading}
+                    >
+                      <SelectTrigger className="w-full">
+                        <SelectValue placeholder="Select Grade System" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectGroup>
+                          {gradeListResponse?.data?.map((item) => (
+                            <SelectItem key={item.id} value={item.id}>
+                              {item.name}
+                            </SelectItem>
+                          ))}
+                        </SelectGroup>
+                      </SelectContent>
+                    </Select>
+                  )}
+                />
+              </div>
+
+              <div className="flex items-center lg:justify-center">
+                <Button
+                  className="mt-5 bg-red-600 text-white hover:bg-red-700"
+                  variant="outline"
+                  type="button"
+                  onClick={() => remove(index)}
+                >
+                  <Trash size={20} />
+                </Button>
+              </div>
             </div>
-          </div>
-          <div className="mt-10">
-            <Button
-              size="lg"
-              variant="default"
-              disabled={isPendingCreateClass}
-              aria-disabled={isPendingCreateClass}
-              className="mx-auto flex justify-center px-12 py-4"
-            >
-              {isPendingCreateClass ? (
-                <div className="flex items-center justify-center">
-                  <Loader2 className="mr-2 h-6 w-6 animate-spin text-white" />
-                  Saving
-                </div>
-              ) : (
-                'Save'
-              )}
-            </Button>
-          </div>
-        </form>
-      </div>
+          ))}
+
+          <Button
+            type="button"
+            onClick={() => append({})}
+            variant="outline"
+            className="w-full mt-6 border-dotted text-primary"
+          >
+            <Plus size={20} className="mr-2" />
+            Add Section
+          </Button>
+        </div>
+
+        <div className="mt-10 flex justify-center">
+          <Button
+            size="lg"
+            variant="default"
+            disabled={isPendingCreateClass}
+            aria-disabled={isPendingCreateClass}
+            className="px-12 py-4"
+          >
+            {isPendingCreateClass ? (
+              <div className="flex items-center">
+                <Loader2 className="w-6 h-6 mr-2 animate-spin" />
+                Saving
+              </div>
+            ) : (
+              'Save'
+            )}
+          </Button>
+        </div>
+      </form>
     </section>
   );
 }
