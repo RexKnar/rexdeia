@@ -113,22 +113,28 @@ export default function AddClass() {
       </div>
 
       <form onSubmit={handleSubmit(addClass)}>
-        <div className="grid grid-cols-1 gap-5 mt-6 lg:grid-cols-2">
+        <div className="mt-6 grid grid-cols-1 gap-5 lg:grid-cols-2">
           <div>
-            <label htmlFor="name" className="text-sm font-semibold text-gray-700">
+            <label
+              htmlFor="name"
+              className="text-sm font-semibold text-gray-700"
+            >
               Class Name
             </label>
             <Input
               {...register('name', {
                 required: 'Class Name is Required',
               })}
-              className="p-1 border-primary-200"
+              className="border-primary-200 p-1"
               id="name"
               errorMessage={fieldErrors?.name?.message?.toString()}
             />
           </div>
           <div>
-            <label htmlFor="classLevel" className="text-sm font-semibold text-gray-700">
+            <label
+              htmlFor="classLevel"
+              className="text-sm font-semibold text-gray-700"
+            >
               Class Level
             </label>
             <Controller
@@ -162,7 +168,7 @@ export default function AddClass() {
           {fields.map((row, index) => (
             <div
               key={row.id}
-              className="grid grid-cols-1 gap-5 mb-6 md:grid-cols-2 xl:grid-cols-5"
+              className="mb-6 grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-5"
             >
               <div>
                 <label className="text-sm font-semibold text-gray-700">
@@ -172,7 +178,7 @@ export default function AddClass() {
                   {...register(`section.${index}.name`, {
                     required: 'Section Name is Required',
                   })}
-                  className="p-1 border-primary-200"
+                  className="border-primary-200 p-1"
                   errorMessage={fieldErrors?.section?.message?.toString()}
                 />
               </div>
@@ -216,9 +222,12 @@ export default function AddClass() {
                     <div key={item.id} className="flex items-center space-x-2">
                       <Checkbox
                         id={`group-${index}-${item.id}`}
-                        checked={watch(`section.${index}.groupIds`)?.includes(item.id)}
+                        checked={watch(`section.${index}.groupIds`)?.includes(
+                          item.id
+                        )}
                         onCheckedChange={(checked) => {
-                          const currentGroupIds = watch(`section.${index}.groupIds`) || [];
+                          const currentGroupIds =
+                            watch(`section.${index}.groupIds`) || [];
                           setValue(
                             `section.${index}.groupIds`,
                             checked
@@ -280,7 +289,7 @@ export default function AddClass() {
             type="button"
             onClick={() => append({})}
             variant="outline"
-            className="w-full mt-6 border-dotted text-primary"
+            className="mt-6 w-full border-dotted text-primary"
           >
             <Plus size={20} className="mr-2" />
             Add Section
@@ -297,7 +306,7 @@ export default function AddClass() {
           >
             {isPendingCreateClass ? (
               <div className="flex items-center">
-                <Loader2 className="w-6 h-6 mr-2 animate-spin" />
+                <Loader2 className="mr-2 h-6 w-6 animate-spin" />
                 Saving
               </div>
             ) : (
