@@ -173,8 +173,8 @@ export function AddStudentForm() {
       className="relative mt-[20px] w-full"
       onSubmit={handleSubmit(handleOnFormSubmit)}
     >
-      <section className="flex gap-4">
-        <ul className="h-fit w-[215px] shrink-0 rounded-lg bg-white py-3">
+      <section className="gap-4 md:flex lg:flex">
+        <ul className="h-fit shrink-0 rounded-lg bg-white py-3 md:w-[215px]">
           <li>
             {formConfig.formSections.map((section, index: number) => (
               <Button
