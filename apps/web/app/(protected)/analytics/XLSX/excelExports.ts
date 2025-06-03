@@ -214,8 +214,16 @@ export function downloadMarkListXLSX(
     ],
     ...xlsxTableHeader,
   ]);
+  const fixedNullValuesTable = pdfTableValues.map((row: any[]) =>
+    row.map((cell) => {
+      if (typeof cell === 'string' && cell.includes('(null)')) {
+        return cell.replace('(null)', '(-)');
+      }
+      return cell;
+    })
+  );
 
-  pdfTableValues.forEach((row) => {
+  fixedNullValuesTable.forEach((row) => {
     XLSX_utils.sheet_add_aoa(ws, [row], { origin: -1 });
   });
 
