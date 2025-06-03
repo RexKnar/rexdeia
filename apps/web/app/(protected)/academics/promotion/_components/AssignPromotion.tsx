@@ -83,21 +83,15 @@ export function AssignPromotion() {
         !!groupIdToGetStudent,
     }
   );
-
   useEffect(() => {
-    const selectedStudentsToAdd = getStudentListResponse?.filter((student) => {
-      const studentIndex = selectedStudents.findIndex(
-        (obj) => obj.id == student.id
-      );
-
-      if (studentIndex < 0) {
-        return true;
-      } else {
-        return false;
+    const availableStudents = getStudentListResponse?.filter(
+      ({ student }: any) => {
+        return !selectedStudents.some(
+          (selected) => selected.student.id === student.id
+        );
       }
-    });
-
-    setStudentListMaster(selectedStudentsToAdd);
+    );
+    setStudentListMaster(availableStudents || []);
   }, [getStudentListResponse, selectedStudents]);
 
   const { data: batchesList } = useGetBatchesListQuery({
@@ -128,7 +122,6 @@ export function AssignPromotion() {
       return updatedSelectedStudentIds;
     });
   };
-
   const handleSelectedStudentCheckboxChange = (studentId) => {
     setDeselectedStudentIds((prevSelectedStudentIds) => {
       const updatedSelectedStudentIds = prevSelectedStudentIds.includes(
@@ -142,73 +135,70 @@ export function AssignPromotion() {
   };
 
   const addSelectedStudent = (student) => {
-    setSelectedStudents((prevSelectedStudents) => [
-      ...prevSelectedStudents,
-      student,
-    ]);
+    if (!selectedStudents.some((s) => s.student.id === student.student.id)) {
+      setSelectedStudents((prevSelectedStudents) => [
+        ...prevSelectedStudents,
+        student,
+      ]);
+    }
   };
 
   const handleBulkAssign = () => {
-    const selectedStudentsToAdd = studentListMaster?.filter((student) => {
-      if (selectedStudentIds.includes(student.id)) return student;
+    const studentsToMove = studentListMaster?.filter((student) => {
+      return selectedStudentIds.includes(student.student.id);
     });
 
-    setSelectedStudents([...selectedStudents, ...selectedStudentsToAdd]);
+    setSelectedStudents((prevSelectedStudents) => [
+      ...prevSelectedStudents,
+      ...studentsToMove,
+    ]);
 
-    selectedStudentIds.forEach((id) => {
-      const indexToRemove = studentListMaster.findIndex(
-        (student) => student.id === id
-      );
-      if (indexToRemove !== -1) {
-        studentListMaster.splice(indexToRemove, 1);
-      }
-    });
+    setStudentListMaster((prevStudentListMaster) =>
+      prevStudentListMaster.filter(
+        (student) => !selectedStudentIds.includes(student.student.id)
+      )
+    );
+
     setSelectedStudentIds([]);
+    setSelectAll(false);
   };
 
-  useEffect(() => {
-    const selectedStudentsToAdd = getStudentListResponse?.filter((student) => {
-      const studentIndex = selectedStudents.findIndex(
-        (obj) => obj.id == student.id
-      );
-      if (studentIndex < 0) {
-        return student;
-      } else {
-        return null;
-      }
-    });
-
-    setStudentListMaster(selectedStudentsToAdd);
-  }, [selectedStudents]);
-  const handleDeselectAll = () => {
-    setDeselectedStudentIds([]);
+  const handleDeselectAll = (checked: boolean) => {
+    if (checked) {
+      setDeselectedStudentIds(selectedStudents.map((s) => s.student.id));
+    } else {
+      setDeselectedStudentIds([]);
+    }
   };
+
   const handleRemoveSelected = () => {
     const updatedSelectedStudents = selectedStudents.filter((student) => {
-      const removeIndex = deselectedStudentIds.indexOf(student.id);
-      if (removeIndex < 0) return student;
+      return !deselectedStudentIds.includes(student.student.id);
     });
     setSelectedStudents(updatedSelectedStudents);
+    setDeselectedStudentIds([]);
   };
+
   const handleRemoveStudent = (studentId) => {
-    const removedStudent = selectedStudents.find(
-      (student) => student.id === studentId
+    const studentToRemove = selectedStudents.find(
+      (student) => student.student.id === studentId
     );
-    if (removedStudent) {
+    if (studentToRemove) {
       const updatedSelectedStudents = selectedStudents.filter(
-        (student) => student.id !== studentId
+        (student) => student.student.id !== studentId
       );
       setSelectedStudents(updatedSelectedStudents);
+      setDeselectedStudentIds((prev) => prev.filter((id) => id !== studentId));
     }
   };
 
   const handleSelectAll = () => {
-    setSelectAll(!selectAll);
+    const newSelectAllState = !selectAll;
+    setSelectAll(newSelectAllState);
 
-    const allStudentIds = studentListMaster?.map((student) => student.id) || [];
-
-    setSelectedStudentIds(selectAll ? [] : allStudentIds);
-    !selectAll;
+    const allStudentIds =
+      studentListMaster?.map((student) => student.student.id) || [];
+    setSelectedStudentIds(newSelectAllState ? allStudentIds : []);
   };
 
   useEffect(() => {
@@ -228,6 +218,9 @@ export function AssignPromotion() {
 
     await mutateCreateStudentsAsync(assignStudentPayload);
     setSelectedStudents([]);
+    setSelectedStudentIds([]);
+    setDeselectedStudentIds([]);
+    setSelectAll(false);
   };
 
   useEffect(() => {
@@ -277,7 +270,7 @@ export function AssignPromotion() {
                   <Select
                     autoComplete="off"
                     {...register('sectionId', {
-                      required: ' Section is Requeired',
+                      required: 'Section is Required',
                     })}
                     value={watch('sectionId')}
                     onValueChange={(value) => {
@@ -355,13 +348,14 @@ export function AssignPromotion() {
                 <Button variant="outline" className="h-8 px-2" type="button">
                   <Checkbox
                     className="mr-3 h-4 w-4 border-2 border-dashed"
+                    checked={selectAll}
                     onCheckedChange={handleSelectAll}
                   />
                   Select All
                 </Button>
                 {studentListMaster &&
                   studentListMaster.some((x) =>
-                    selectedStudentIds.includes(x.id)
+                    selectedStudentIds.includes(x.student.id)
                   ) && (
                     <Button
                       className="ml-3 h-8 px-2"
@@ -387,6 +381,9 @@ export function AssignPromotion() {
                                 student.student.id
                               );
                             }}
+                            checked={selectedStudentIds.includes(
+                              student.student.id
+                            )}
                           />
                           <Avatar className="ml-3 mt-2 h-8 w-8 cursor-pointer ">
                             <AvatarImage src={student.student.profileImage} />
@@ -437,7 +434,7 @@ export function AssignPromotion() {
                   <Select
                     autoComplete="off"
                     {...register('classId', { required: true })}
-                    value={classId}
+                    value={watch('classId')}
                     onValueChange={(value) => {
                       if (value) {
                         setValue('classId', value);
@@ -578,12 +575,12 @@ export function AssignPromotion() {
                         ))}
                       </SelectGroup>
                     </SelectContent>
+                    {fieldErrors.academicYear && (
+                      <p className="ml-4 text-red-500 ">
+                        {fieldErrors.academicYear.message.toString()}
+                      </p>
+                    )}
                   </Select>
-                  {fieldErrors.academicYear && (
-                    <p className="ml-4 text-red-500 ">
-                      {fieldErrors.academicYear.message.toString()}
-                    </p>
-                  )}
                 </div>
               </section>
               <section className="mb-2 flex justify-between rounded-md bg-white p-2">
@@ -633,15 +630,21 @@ export function AssignPromotion() {
               <div className="flex">
                 <Button
                   className="h-8 border border-red-500 bg-zinc-50 px-2 text-red-500 hover:bg-zinc-50"
-                  onClick={handleDeselectAll}
                   type="button"
                 >
-                  <Checkbox className="mr-3 h-4 w-4  border-2 border-dashed border-red-500 data-[state=checked]:bg-red-500" />
+                  <Checkbox
+                    checked={
+                      deselectedStudentIds.length === selectedStudents.length &&
+                      selectedStudents.length > 0
+                    }
+                    onCheckedChange={handleDeselectAll}
+                    className="mr-3 h-4 w-4  border-2 border-dashed border-red-500 data-[state=checked]:bg-red-500"
+                  />
                   Deselect All
                 </Button>
                 {selectedStudents &&
                   selectedStudents.some((x) =>
-                    deselectedStudentIds.includes(x.id)
+                    deselectedStudentIds.includes(x.student.id)
                   ) && (
                     <Button
                       className="ml-3 h-8 border bg-red-500 px-2 text-white hover:bg-red-500"
@@ -663,9 +666,13 @@ export function AssignPromotion() {
                           <Checkbox
                             className="mt-2"
                             onCheckedChange={() => {
-                              handleSelectedStudentCheckboxChange(student.id);
+                              handleSelectedStudentCheckboxChange(
+                                student.student.id
+                              );
                             }}
-                            checked={deselectedStudentIds.includes(student.id)}
+                            checked={deselectedStudentIds.includes(
+                              student.student.id
+                            )}
                           />
                           <Avatar className="ml-3 mt-2 h-8 w-8 cursor-pointer ">
                             <AvatarImage src={student.student.profileImage} />
