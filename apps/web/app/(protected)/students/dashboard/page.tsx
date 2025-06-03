@@ -16,23 +16,24 @@ export default async function Page() {
   return (
     <section className="flex flex-col gap-4 p-4 sm:p-6 md:p-8">
       <StudentDashboardBanner />
-      <section className="flex flex-col gap-3 rounded-md bg-white p-6 sm:p-8 shadow-sm">
+      <section className="flex flex-col gap-3 rounded-md bg-white p-6 shadow-sm sm:p-8">
         <section>
-          <p className="text-lg sm:text-xl font-semibold text-gray-800">
+          <p className="text-lg font-semibold text-gray-800 sm:text-xl">
             Students Overview
           </p>
-          <p className="text-sm sm:text-base text-gray-700">
-            This section provides a comprehensive overview of student statistics.
+          <p className="text-sm text-gray-700 sm:text-base">
+            This section provides a comprehensive overview of student
+            statistics.
           </p>
           <StudentsWidgetContainer />
         </section>
       </section>
-      <section className="flex flex-col gap-3 rounded-md bg-white p-6 sm:p-8 shadow-sm">
+      <section className="flex flex-col gap-3 rounded-md bg-white p-6 shadow-sm sm:p-8">
         <section>
-          <p className="text-lg sm:text-xl font-semibold text-gray-800">
+          <p className="text-lg font-semibold text-gray-800 sm:text-xl">
             Recent enrolled students
           </p>
-          <p className="text-sm sm:text-base text-gray-700">
+          <p className="text-sm text-gray-700 sm:text-base">
             Here you will find information on students who have recently joined,
             including their backgrounds, academic interests.
           </p>
@@ -50,7 +51,7 @@ export default async function Page() {
             <RecentEnrolledStudents {...student} />
           </Suspense>
         ))}
-        <div className="flex justify-end text-primary text-sm sm:text-base">
+        <div className="flex justify-end text-sm text-primary sm:text-base">
           <Link href="/students/list">Browse All</Link>
         </div>
       </section>
