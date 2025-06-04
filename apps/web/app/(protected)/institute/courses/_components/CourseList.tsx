@@ -17,7 +17,7 @@ export default function CourseList() {
       filter: { isActive: false },
     });
   return (
-    <div className="flex flex-wrap gap-3 ">
+    <div className="flex flex-wrap justify-center gap-3 md:justify-start ">
       {courseListResponse
         ? courseListResponse?.data?.map((course) => (
             <CourseCard

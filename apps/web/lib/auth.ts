@@ -73,6 +73,7 @@ export const authOptions: NextAuthOptions = {
         token.organizationId = session.organizationId;
         token.organizationName = session.organizationName;
         token.institute = session.institute;
+        token.currentBatch = session.currentBatch;
       }
 
       const dbUser = await db.user.findFirst({

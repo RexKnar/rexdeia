@@ -1,9 +1,6 @@
 'use client';
 
-import { motion } from 'framer-motion';
-import { ChevronDown, Menu, Plus, X } from 'lucide-react';
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import { useState } from 'react';
+import { ChevronDown, Plus } from 'lucide-react';
 import {
   Avatar,
   AvatarImage,
@@ -13,19 +10,13 @@ import {
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
+  SidebarTrigger,
 } from 'ui';
 
 import { useGetUserDetailsQuery } from '../../queries/useGetUserDetailsQuery';
 
 export function SidebarHeader() {
   const { data, isLoading } = useGetUserDetailsQuery();
-  const pathname = usePathname();
-  const router = useRouter();
-
-  const searchParams = useSearchParams();
-  const params = new URLSearchParams(searchParams);
-  const isMenuOpen = params.get('isMenu') === 'false' ? false : true;
-  const [isOpen, setIsOpen] = useState(() => isMenuOpen ?? false);
 
   return (
     <div className=" flex h-[64px]  items-center justify-between border border-b-gray-200 border-r-transparent bg-white px-4 text-lg font-semibold">
@@ -57,8 +48,8 @@ export function SidebarHeader() {
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
-      <div className="p-2 ">
-        <button
+      <div className="p-2 lg:hidden">
+        {/* <button
           onClick={() => {
             const isMenuOpen = !isOpen;
             setIsOpen(isMenuOpen);
@@ -76,7 +67,8 @@ export function SidebarHeader() {
           >
             {isOpen ? <X /> : <Menu />}
           </motion.span>
-        </button>
+        </button> */}
+        <SidebarTrigger />
       </div>
     </div>
   );

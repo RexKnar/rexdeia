@@ -1,18 +1,17 @@
 'use client';
 
-import React from 'react';
+import * as React from 'react';
 import { Slot } from '@radix-ui/react-slot';
-import { Button } from './Button';
-import { cn } from 'utils';
-import { Input } from './Input';
-import { Separator } from './Separator';
+import { VariantProps, cva } from 'class-variance-authority';
+import { Menu, PanelLeft, X } from 'lucide-react';
+import { useIsMobile } from '../../hooks/useMobile';
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
 } from './Tooltip';
-import { Skeleton } from './Skeleton';
+import { cn } from 'utils';
 import {
   Sheet,
   SheetContent,
@@ -20,10 +19,10 @@ import {
   SheetHeader,
   SheetTitle,
 } from './Sheet';
-
-import { useIsMobile } from '../../hooks/useMobile';
-import { PanelLeft } from 'lucide-react';
-import { cva, VariantProps } from 'class-variance-authority';
+import { Button } from './Button';
+import { Input } from './Input';
+import { Separator } from './Separator';
+import { Skeleton } from './Skeleton';
 
 const SIDEBAR_COOKIE_NAME = 'sidebar_state';
 const SIDEBAR_COOKIE_MAX_AGE = 60 * 60 * 24 * 7;
@@ -281,13 +280,14 @@ const SidebarTrigger = React.forwardRef<
   React.ElementRef<typeof Button>,
   React.ComponentProps<typeof Button>
 >(({ className, onClick, ...props }, ref) => {
-  const { toggleSidebar } = useSidebar();
+  const { toggleSidebar, open, isMobile, openMobile } = useSidebar();
 
   return (
     <Button
       ref={ref}
       data-sidebar="trigger"
       variant="ghost"
+      size="sm"
       className={cn('h-7 w-7', className)}
       onClick={(event) => {
         onClick?.(event);
@@ -295,7 +295,12 @@ const SidebarTrigger = React.forwardRef<
       }}
       {...props}
     >
-      <PanelLeft />
+      {isMobile ? (
+        <span>{openMobile ? <X /> : <Menu />}</span>
+      ) : (
+        <span>{open ? <X /> : <Menu />}</span>
+      )}
+
       <span className="sr-only">Toggle Sidebar</span>
     </Button>
   );

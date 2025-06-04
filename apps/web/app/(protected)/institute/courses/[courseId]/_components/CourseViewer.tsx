@@ -6,14 +6,17 @@ import { useGetInstituteCourseDetailByIdQuery } from 'lib/queries/institute/cour
 import Image from 'next/image';
 import { useParams, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
+import { Spinner } from 'ui';
 
 import { LinkButton } from '@/components/LinkButton';
+import { useQueryParams } from '@/hooks/useQueryParams';
 
 import ChapterItemContentArea from '../builder/_components/ChapterItemContentArea';
 import { ModuleList } from './ModuleList';
 
 export default function CourseViewer() {
   const [modules, setModules] = useState<InstituteCourseModuleModel[]>([]);
+  const { setParams } = useQueryParams();
 
   const searchParams = useSearchParams();
   const routeParams = useParams<{ courseId: string; chapterItemId: string }>();
@@ -32,6 +35,12 @@ export default function CourseViewer() {
   useEffect(() => {
     if (courseStructure) {
       setModules(courseStructure);
+      const tempModules = courseStructure[0];
+      const tempChapters = tempModules.chapters[0];
+      const tempChapterItems = tempChapters.chapterItems[0];
+      setParams({
+        chapterItemId: tempChapterItems.id || '',
+      });
     }
   }, [courseStructure]);
 
@@ -116,8 +125,15 @@ export default function CourseViewer() {
         )}
       </div>
 
-      <div className="w-[70%]">
-        {chapterItemId && <ChapterItemContentArea editable={false} />}
+      <div className="w-[70%] bg-white p-4">
+        {chapterItemId ? (
+          <ChapterItemContentArea editable={false} />
+        ) : (
+          <div className="flex h-full w-full flex-col items-center justify-center">
+            <span className="text-normal font-sm">Loading...</span>
+            <Spinner />
+          </div>
+        )}
       </div>
     </section>
   );
