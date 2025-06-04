@@ -29,7 +29,8 @@ export default function Roadmap() {
       let y = 0;
       courseStructure
         ?.map((module: any) => {
-          y = y + module?.chapters.length * 120;
+          y = y + (30 * module?.chapters.length) / 2;
+          y = y + 50;
           nodes.push({
             id: module.id,
             type: 'module',

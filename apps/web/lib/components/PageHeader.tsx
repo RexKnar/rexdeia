@@ -3,11 +3,11 @@
 import { useGetStudentSearchListQuery } from 'lib/queries/students/useGetStudentSearchListQuery';
 import { Search } from 'lucide-react';
 import Link from 'next/link';
-import { Suspense, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Alert, Text } from 'ui';
+import { SidebarTrigger } from 'ui/components/ui/Sidebar';
 
 import { NotificationPopover } from './notification/NotificationPopover';
-import { SidebarHeader } from './sidebar/SidebarHeader';
 import { UserMenu } from './UserMenu';
 
 export function PageHeader() {
@@ -51,9 +51,7 @@ export function PageHeader() {
   return (
     <header className="sticky top-0 z-50 flex h-[64px] w-full border border-b-gray-200 border-l-transparent bg-white print:hidden">
       <section className="mx-auto flex w-full items-center justify-between">
-        <Suspense fallback={<div>Loading...</div>}>
-          <SidebarHeader />
-        </Suspense>
+        <SidebarTrigger />
 
         <div className="flex items-center gap-6">
           <div className="flex items-center gap-4" ref={searchRef}>

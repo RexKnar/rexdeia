@@ -13,7 +13,7 @@ export function SidebarFooter() {
         className="pointer-events-none w-24"
       />
       <Text variant="sm-regular" className="mt-2 text-gray-700">
-        rexdeia v1.2, 2023
+        rexdeia v1.2, 2025
       </Text>
     </footer>
   );

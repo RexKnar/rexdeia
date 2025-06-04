@@ -36,7 +36,11 @@ export function useGetBatchesListQuery(
     page,
     limit,
     filter,
-  }: { page: number; limit: number; filter: { isActive?: boolean } },
+  }: {
+    page: number;
+    limit: number;
+    filter: { isActive?: boolean; currentAcademicYear?: boolean };
+  },
   options?: UseQueryOptions<PaginatedResponse<BatchModel>>
 ) {
   const response = useQuery(getBatchesList({ page, limit, filter }, options));
