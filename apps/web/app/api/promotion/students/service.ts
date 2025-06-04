@@ -50,3 +50,23 @@ export async function promoteStudentToNewClass(
     )
   );
 }
+
+export async function archiveStudents(
+  studentIds: string[],
+  remark = 'Passed Out'
+) {
+  return await db.$transaction(
+    studentIds.map((studentId) =>
+      db.studentMapping.updateMany({
+        where: {
+          studentId,
+          isCurrent: true,
+        },
+        data: {
+          isCurrent: false,
+          remark,
+        },
+      })
+    )
+  );
+}
