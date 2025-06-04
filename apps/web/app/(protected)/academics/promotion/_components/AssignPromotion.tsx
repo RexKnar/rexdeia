@@ -18,12 +18,15 @@ import {
   AvatarImage,
   Button,
   Checkbox,
+  RadioGroup,
+  RadioGroupItem,
   Select,
   SelectContent,
   SelectGroup,
   SelectItem,
   SelectTrigger,
   SelectValue,
+  Textarea,
 } from 'ui';
 import { Table, TableBody, TableCell, TableRow } from 'ui/components/ui/Table';
 
@@ -227,6 +230,8 @@ export function AssignPromotion() {
     setValue('classId', classId);
   }, [classId, setValue]);
 
+  const [selected, setSelected] = useState('promote');
+
   return (
     <form onSubmit={handleSubmit(assignStudent)}>
       <section className="flex flex-col">
@@ -340,6 +345,22 @@ export function AssignPromotion() {
                     </SelectContent>
                   </Select>
                 </div>
+                <div className="basis-1/2">
+                  <Select>
+                    <SelectTrigger className="ml-4">
+                      <SelectValue
+                        placeholder="Select Action"
+                        className="basis-1/2"
+                      />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectGroup>
+                        <SelectItem value="On Hold">On Hold</SelectItem>
+                        <SelectItem value="Archive">Archive</SelectItem>
+                      </SelectGroup>
+                    </SelectContent>
+                  </Select>
+                </div>
               </section>
             </section>
             <section className="flex justify-between p-2">
@@ -428,234 +449,279 @@ export function AssignPromotion() {
           </section>
 
           <section className="ml-2 mt-2 w-1/2 rounded-l-lg bg-zinc-50 p-4">
-            <section className="p-2">
-              <section className="mb-2 flex justify-between rounded-md bg-white p-2">
-                <div className=" basis-1/2">
-                  <Select
-                    autoComplete="off"
-                    {...register('classId', { required: true })}
-                    value={watch('classId')}
-                    onValueChange={(value) => {
-                      if (value) {
-                        setValue('classId', value);
-                      }
-                    }}
-                  >
-                    <SelectTrigger className=" basis-1/2">
-                      <SelectValue
-                        className="text-gray-400"
-                        placeholder="Class"
-                      ></SelectValue>
-                      <ChevronDown className="text-gray-400" />
-                    </SelectTrigger>
-                    <SelectContent className="border border-primary-200">
-                      {' '}
-                      <SelectGroup>
-                        {getAllClassListResponse?.data?.map((classDetails) => (
-                          <SelectItem
-                            key={classDetails.id}
-                            value={classDetails.id}
-                          >
-                            {classDetails.name}
-                          </SelectItem>
-                        ))}
-                      </SelectGroup>
-                    </SelectContent>
-                  </Select>
-                </div>
-                <div className=" basis-1/2">
-                  <Select
-                    autoComplete="off"
-                    {...register('sectionId', {
-                      required: ' Section is Requeired',
-                    })}
-                    value={watch('sectionId')}
-                    onValueChange={(value) => {
-                      if (value) {
-                        setValue('sectionId', value);
-                      } else {
-                        setError('sectionId', {
-                          type: 'manual',
-                          message: 'Section is required',
-                        });
-                      }
-                    }}
-                  >
-                    <SelectTrigger className="ml-4 basis-1/2">
-                      <SelectValue
-                        className="text-gray-400"
-                        placeholder="Section"
-                      />{' '}
-                      <ChevronDown className="text-gray-400" />
-                    </SelectTrigger>
-                    <SelectContent className="border border-primary-200">
-                      {' '}
-                      <SelectGroup>
-                        {sectionListResponse?.data?.map((item) => (
-                          <SelectItem key={item.id} value={item.id}>
-                            {item.name}
-                          </SelectItem>
-                        ))}
-                      </SelectGroup>
-                    </SelectContent>
-
-                    {fieldErrors.sectionId && (
-                      <p className="ml-4 text-red-500">
-                        {fieldErrors.sectionId.message.toString()}
-                      </p>
-                    )}
-                  </Select>
-                </div>
-              </section>
-              <section className="mb-2 flex justify-between rounded-md bg-white p-2">
-                <div className=" basis-1/2">
-                  <Select
-                    autoComplete="off"
-                    {...register('groupId', {
-                      required: 'Group is  Requeired',
-                    })}
-                    value={watch('groupId')}
-                    onValueChange={(value) => {
-                      if (value) {
-                        setValue('groupId', value);
-                      }
-                    }}
-                  >
-                    <SelectTrigger className=" basis-1/2">
-                      <SelectValue
-                        className="text-gray-400"
-                        placeholder="Group"
-                      />{' '}
-                      <ChevronDown className="text-gray-400" />
-                    </SelectTrigger>
-                    <SelectContent className="border border-primary-200">
-                      {' '}
-                      <SelectGroup>
-                        {groupListResponse?.data?.map((item) => (
-                          <SelectItem key={item.id} value={item.id}>
-                            {item.name}
-                          </SelectItem>
-                        ))}
-                      </SelectGroup>
-                    </SelectContent>
-                    {fieldErrors.groupId && (
-                      <p className="text-red-500">
-                        {fieldErrors.groupId.message.toString()}
-                      </p>
-                    )}
-                  </Select>
-                </div>
-                <div className=" basis-1/2">
-                  <Select
-                    autoComplete="off"
-                    {...register('academicYear', {
-                      required: 'Academic year is Requeired',
-                    })}
-                    value={watch('academicYear')}
-                    onValueChange={(value) => {
-                      if (value) {
-                        setValue('academicYear', value);
-                      }
-                    }}
-                  >
-                    <SelectTrigger className="ml-4 basis-1/2">
-                      <SelectValue
-                        className="text-gray-400"
-                        placeholder="Academic year"
-                      />{' '}
-                      <ChevronDown className="text-gray-400" />
-                    </SelectTrigger>
-                    <SelectContent className="border border-primary-200">
-                      {' '}
-                      <SelectGroup>
-                        {batchesList?.data?.map((item) => (
-                          <SelectItem key={item.id} value={item.id}>
-                            {item.name}
-                          </SelectItem>
-                        ))}
-                      </SelectGroup>
-                    </SelectContent>
-                    {fieldErrors.academicYear && (
-                      <p className="ml-4 text-red-500 ">
-                        {fieldErrors.academicYear.message.toString()}
-                      </p>
-                    )}
-                  </Select>
-                </div>
-              </section>
-              <section className="mb-2 flex justify-between rounded-md bg-white p-2">
-                <div className=" basis-1/2">
-                  <Select
-                    autoComplete="off"
-                    {...register('mediumId', {
-                      required: 'Medium is  Requeired',
-                    })}
-                    value={watch('mediumId')}
-                    onValueChange={(value) => {
-                      if (value) {
-                        setValue('mediumId', value);
-                      }
-                    }}
-                  >
-                    <SelectTrigger className=" basis-1/2">
-                      <SelectValue
-                        className="text-gray-400"
-                        placeholder="Medium"
-                      />{' '}
-                      <ChevronDown className="text-gray-400" />
-                    </SelectTrigger>
-                    <SelectContent className="border border-primary-200">
-                      {' '}
-                      <SelectGroup>
-                        {mediumListResponse?.data?.map((item) => (
-                          <SelectItem key={item.id} value={item.id}>
-                            {item.name}
-                          </SelectItem>
-                        ))}
-                      </SelectGroup>
-                    </SelectContent>
-                    {fieldErrors.mediumId && (
-                      <p className="text-red-500">
-                        {fieldErrors.mediumId.message.toString()}
-                      </p>
-                    )}
-                  </Select>
-                </div>
-              </section>
-            </section>
-            <section className="flex justify-between p-2">
-              <div className="mt-2 text-sm text-gray-800">
-                Selected Students
+            <RadioGroup
+              value={selected}
+              onValueChange={setSelected}
+              defaultValue="promote"
+              className="mb-5 flex justify-between gap-4"
+            >
+              <div className="flex items-center space-x-2">
+                <RadioGroupItem value="promote" id="promote" />
+                <label htmlFor="promote" className="text-black">
+                  Promote
+                </label>
               </div>
-              <div className="flex">
-                <Button
-                  className="h-8 border border-red-500 bg-zinc-50 px-2 text-red-500 hover:bg-zinc-50"
-                  type="button"
-                >
-                  <Checkbox
-                    checked={
-                      deselectedStudentIds.length === selectedStudents.length &&
-                      selectedStudents.length > 0
-                    }
-                    onCheckedChange={handleDeselectAll}
-                    className="mr-3 h-4 w-4  border-2 border-dashed border-red-500 data-[state=checked]:bg-red-500"
-                  />
-                  Deselect All
-                </Button>
-                {selectedStudents &&
-                  selectedStudents.some((x) =>
-                    deselectedStudentIds.includes(x.student.id)
-                  ) && (
+              <div className="flex items-center space-x-2">
+                <RadioGroupItem value="on-hold" id="on-hold" />
+                <label htmlFor="on-hold" className="text-black">
+                  On Hold
+                </label>
+              </div>
+              <div className="flex items-center space-x-2">
+                <RadioGroupItem value="archive" id="archive" />
+                <label htmlFor="archive" className="text-black">
+                  Archive
+                </label>
+              </div>
+            </RadioGroup>
+            {selected === 'promote' && (
+              <>
+                <section className="p-2">
+                  <section className="mb-2 flex justify-between rounded-md bg-white p-2">
+                    <div className=" basis-1/2">
+                      <Select
+                        autoComplete="off"
+                        {...register('classId', { required: true })}
+                        value={watch('classId')}
+                        onValueChange={(value) => {
+                          if (value) {
+                            setValue('classId', value);
+                          }
+                        }}
+                      >
+                        <SelectTrigger className=" basis-1/2">
+                          <SelectValue
+                            className="text-gray-400"
+                            placeholder="Class"
+                          ></SelectValue>
+                          <ChevronDown className="text-gray-400" />
+                        </SelectTrigger>
+                        <SelectContent className="border border-primary-200">
+                          {' '}
+                          <SelectGroup>
+                            {getAllClassListResponse?.data?.map(
+                              (classDetails) => (
+                                <SelectItem
+                                  key={classDetails.id}
+                                  value={classDetails.id}
+                                >
+                                  {classDetails.name}
+                                </SelectItem>
+                              )
+                            )}
+                          </SelectGroup>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <div className=" basis-1/2">
+                      <Select
+                        autoComplete="off"
+                        {...register('sectionId', {
+                          required: ' Section is Requeired',
+                        })}
+                        value={watch('sectionId')}
+                        onValueChange={(value) => {
+                          if (value) {
+                            setValue('sectionId', value);
+                          } else {
+                            setError('sectionId', {
+                              type: 'manual',
+                              message: 'Section is required',
+                            });
+                          }
+                        }}
+                      >
+                        <SelectTrigger className="ml-4 basis-1/2">
+                          <SelectValue
+                            className="text-gray-400"
+                            placeholder="Section"
+                          />{' '}
+                          <ChevronDown className="text-gray-400" />
+                        </SelectTrigger>
+                        <SelectContent className="border border-primary-200">
+                          {' '}
+                          <SelectGroup>
+                            {sectionListResponse?.data?.map((item) => (
+                              <SelectItem key={item.id} value={item.id}>
+                                {item.name}
+                              </SelectItem>
+                            ))}
+                          </SelectGroup>
+                        </SelectContent>
+
+                        {fieldErrors.sectionId && (
+                          <p className="ml-4 text-red-500">
+                            {fieldErrors.sectionId.message.toString()}
+                          </p>
+                        )}
+                      </Select>
+                    </div>
+                  </section>
+                  <section className="mb-2 flex justify-between rounded-md bg-white p-2">
+                    <div className=" basis-1/2">
+                      <Select
+                        autoComplete="off"
+                        {...register('groupId', {
+                          required: 'Group is  Requeired',
+                        })}
+                        value={watch('groupId')}
+                        onValueChange={(value) => {
+                          if (value) {
+                            setValue('groupId', value);
+                          }
+                        }}
+                      >
+                        <SelectTrigger className=" basis-1/2">
+                          <SelectValue
+                            className="text-gray-400"
+                            placeholder="Group"
+                          />{' '}
+                          <ChevronDown className="text-gray-400" />
+                        </SelectTrigger>
+                        <SelectContent className="border border-primary-200">
+                          {' '}
+                          <SelectGroup>
+                            {groupListResponse?.data?.map((item) => (
+                              <SelectItem key={item.id} value={item.id}>
+                                {item.name}
+                              </SelectItem>
+                            ))}
+                          </SelectGroup>
+                        </SelectContent>
+                        {fieldErrors.groupId && (
+                          <p className="text-red-500">
+                            {fieldErrors.groupId.message.toString()}
+                          </p>
+                        )}
+                      </Select>
+                    </div>
+                    <div className=" basis-1/2">
+                      <Select
+                        autoComplete="off"
+                        {...register('academicYear', {
+                          required: 'Academic year is Requeired',
+                        })}
+                        value={watch('academicYear')}
+                        onValueChange={(value) => {
+                          if (value) {
+                            setValue('academicYear', value);
+                          }
+                        }}
+                      >
+                        <SelectTrigger className="ml-4 basis-1/2">
+                          <SelectValue
+                            className="text-gray-400"
+                            placeholder="Academic year"
+                          />{' '}
+                          <ChevronDown className="text-gray-400" />
+                        </SelectTrigger>
+                        <SelectContent className="border border-primary-200">
+                          {' '}
+                          <SelectGroup>
+                            {batchesList?.data?.map((item) => (
+                              <SelectItem key={item.id} value={item.id}>
+                                {item.name}
+                              </SelectItem>
+                            ))}
+                          </SelectGroup>
+                        </SelectContent>
+                        {fieldErrors.academicYear && (
+                          <p className="ml-4 text-red-500 ">
+                            {fieldErrors.academicYear.message.toString()}
+                          </p>
+                        )}
+                      </Select>
+                    </div>
+                  </section>
+                  <section className="mb-2 flex justify-between rounded-md bg-white p-2">
+                    <div className=" basis-1/2">
+                      <Select
+                        autoComplete="off"
+                        {...register('mediumId', {
+                          required: 'Medium is  Requeired',
+                        })}
+                        value={watch('mediumId')}
+                        onValueChange={(value) => {
+                          if (value) {
+                            setValue('mediumId', value);
+                          }
+                        }}
+                      >
+                        <SelectTrigger className=" basis-1/2">
+                          <SelectValue
+                            className="text-gray-400"
+                            placeholder="Medium"
+                          />{' '}
+                          <ChevronDown className="text-gray-400" />
+                        </SelectTrigger>
+                        <SelectContent className="border border-primary-200">
+                          {' '}
+                          <SelectGroup>
+                            {mediumListResponse?.data?.map((item) => (
+                              <SelectItem key={item.id} value={item.id}>
+                                {item.name}
+                              </SelectItem>
+                            ))}
+                          </SelectGroup>
+                        </SelectContent>
+                        {fieldErrors.mediumId && (
+                          <p className="text-red-500">
+                            {fieldErrors.mediumId.message.toString()}
+                          </p>
+                        )}
+                      </Select>
+                    </div>
+                  </section>
+                </section>
+                <section className="flex justify-between p-2">
+                  <div className="mt-2 text-sm text-gray-800">
+                    Selected Students
+                  </div>
+                  <div className="flex">
                     <Button
-                      className="ml-3 h-8 border bg-red-500 px-2 text-white hover:bg-red-500"
-                      onClick={handleRemoveSelected}
+                      className="h-8 border border-red-500 bg-zinc-50 px-2 text-red-500 hover:bg-zinc-50"
                       type="button"
                     >
-                      Remove Selected
+                      <Checkbox
+                        checked={
+                          deselectedStudentIds.length ===
+                            selectedStudents.length &&
+                          selectedStudents.length > 0
+                        }
+                        onCheckedChange={handleDeselectAll}
+                        className="mr-3 h-4 w-4  border-2 border-dashed border-red-500 data-[state=checked]:bg-red-500"
+                      />
+                      Deselect All
                     </Button>
-                  )}
-              </div>
-            </section>
+                    {selectedStudents &&
+                      selectedStudents.some((x) =>
+                        deselectedStudentIds.includes(x.student.id)
+                      ) && (
+                        <Button
+                          className="ml-3 h-8 border bg-red-500 px-2 text-white hover:bg-red-500"
+                          onClick={handleRemoveSelected}
+                          type="button"
+                        >
+                          Remove Selected
+                        </Button>
+                      )}
+                  </div>
+                </section>
+              </>
+            )}
+            {selected === 'on-hold' && (
+              <Textarea
+                className="w-full rounded-md border border-gray-400 p-3 focus:outline-none focus:ring-2 focus:ring-gray-500"
+                placeholder="Enter the reason..."
+              />
+            )}
+            {selected === 'archive' && (
+              <Textarea
+                className="w-full rounded-md border border-gray-400 p-3 focus:outline-none focus:ring-2 focus:ring-gray-500"
+                placeholder="Enter the reason..."
+              />
+            )}
+
             <section>
               <Table>
                 <TableBody>
