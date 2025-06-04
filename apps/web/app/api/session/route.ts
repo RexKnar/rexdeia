@@ -1,7 +1,6 @@
 import { captureException } from '@sentry/nextjs';
 import { getOrganisationsByUserId } from 'app/api/user/organization/service';
 import { StatusCodes } from 'http-status-codes';
-import { current } from 'immer';
 import { authOptions } from 'lib/auth';
 import { NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';

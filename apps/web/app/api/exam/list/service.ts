@@ -12,7 +12,6 @@ export async function getExamsBySectionId(
   filter: GetExamsByClassSectionFilter
 ) {
   const session = await getServerSession(authOptions);
-  console.log(session);
   const exams = await db.examGroup.findMany({
     where: {
       ...filter,
