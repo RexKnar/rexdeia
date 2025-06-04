@@ -1,6 +1,8 @@
+import { authOptions } from 'lib/auth';
 import { db } from 'lib/db';
 import { ExamModel } from 'lib/domain/exam';
 import uniqBy from 'lodash/uniqBy';
+import { getServerSession } from 'next-auth';
 
 type GetExamsByClassSectionFilter = {
   classId: string;
@@ -9,9 +11,15 @@ type GetExamsByClassSectionFilter = {
 export async function getExamsBySectionId(
   filter: GetExamsByClassSectionFilter
 ) {
+  const session = await getServerSession(authOptions);
   const exams = await db.examGroup.findMany({
     where: {
       ...filter,
+      exam: {
+        batch: {
+          id: session.currentBatch,
+        },
+      },
     },
     select: {
       exam: {

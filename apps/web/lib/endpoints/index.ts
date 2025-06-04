@@ -216,6 +216,7 @@ export const UPDATE_PERIOD_MODE_BY_ID = `UPDATE_PERIOD_MODE_BY_ID`;
 export const DELETE_PERIOD_MODE_BY_ID = `DELETE_PERIOD_MODE_BY_ID`;
 export const ARCHIVE_STUDENT_BY_ID = `ARCHIVE_STUDENT_BY_ID`;
 export const UPDATE_ROLLNUMBERS = `UPDATE_ROLLNUMBERS`;
+export const SESSION_UPDATE = `SESSION_UPDATE`;
 
 export default <EndpointDetails>{
   ...ExamAnalyticsEndpoints,
@@ -1064,5 +1065,9 @@ export default <EndpointDetails>{
   [UPDATE_ROLLNUMBERS]: {
     requestType: 'PUT',
     endpoint: '/api/class/[id]/sections/[sectionId]/roll-number',
+  },
+  [SESSION_UPDATE]: {
+    requestType: 'PUT',
+    endpoint: '/api/session',
   },
 };

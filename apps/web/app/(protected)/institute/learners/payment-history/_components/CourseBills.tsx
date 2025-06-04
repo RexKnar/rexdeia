@@ -73,7 +73,11 @@ const columns: ColumnDef<any>[] = [
       );
     },
     cell: ({ row }) => {
-      return <span>{new Date(row.original.createdAt).toString()}</span>;
+      return (
+        <span>
+          {new Date(row.original.createdAt).toLocaleDateString('en-GB')}
+        </span>
+      );
     },
   },
   {

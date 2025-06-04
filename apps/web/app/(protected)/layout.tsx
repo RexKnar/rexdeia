@@ -1,9 +1,10 @@
 import NextTopLoader from 'nextjs-toploader';
 import { ReactNode, Suspense } from 'react';
 import { primaryColor, Toaster } from 'ui';
+import { SidebarProvider } from 'ui/components/ui/Sidebar';
 
+import { AppSidebar } from '@/components/appSidebar/AppSidebar';
 import { PageHeader } from '@/components/PageHeader';
-import { Sidebar } from '@/components/sidebar/Sidebar';
 import { ZohoSalesIQ } from '@/components/ZohoSalesIQ';
 
 export const metadata = {
@@ -13,23 +14,28 @@ export const metadata = {
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <main className="h-screen bg-gray-50">
-      <NextTopLoader color={primaryColor} showSpinner={false} />
-      <Suspense>
-        <PageHeader />
-      </Suspense>
-      <section className="lg:flex ">
+    <SidebarProvider>
+      <AppSidebar />
+      <main className="h-screen w-full bg-gray-50">
+        <NextTopLoader color={primaryColor} showSpinner={false} />
+
         <Suspense>
-          <Sidebar />
-        </Suspense>
-        <section className="h-full bg-gray-50 lg:ml-72 lg:flex-1 print:ml-0">
-          <section className="mx-auto bg-gray-50 py-6 md:container">
-            {children}
+          <PageHeader />
+
+          <section className="lg:flex ">
+            <section className="h-full bg-gray-50 lg:flex-1 print:ml-0">
+              <section className="h-full bg-gray-50">
+                <section className="mx-auto bg-gray-50 py-6 md:container">
+                  {children}
+                </section>
+              </section>
+            </section>
           </section>
-        </section>
-      </section>
-      <Toaster />
-      <ZohoSalesIQ />
-    </main>
+        </Suspense>
+
+        <Toaster />
+        <ZohoSalesIQ />
+      </main>
+    </SidebarProvider>
   );
 }

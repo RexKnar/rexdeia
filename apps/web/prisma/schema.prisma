@@ -145,11 +145,13 @@ model Mark {
 }
 
 model Session {
-  id           String   @id @default(uuid()) @map("_id") @db.Uuid
-  sessionToken String   @unique
-  userId       String   @db.Uuid
-  expires      DateTime
-  user         User     @relation(fields: [userId], references: [id])
+  id             String   @id @default(uuid()) @map("_id") @db.Uuid
+  sessionToken   String   @unique
+  userId         String   @db.Uuid
+  expires        DateTime
+  user           User     @relation(fields: [userId], references: [id])
+  currentBatchId String?  @db.Uuid
+  currentBatch   Batch?   @relation(fields: [currentBatchId], references: [id])
 }
 
 model User {
@@ -702,6 +704,7 @@ model StudentMapping {
   mediumId   String?  @db.Uuid
   batchId    String?  @db.Uuid
   isCurrent  Boolean  @default(true)
+  onHold     Boolean  @default(false)
   rollNumber Int?     @default(0)
   remark     String?  @default("")
   batch      Batch?   @relation(fields: [batchId], references: [id])
@@ -839,6 +842,7 @@ model Batch {
   StudentElectiveSubject  StudentElectiveSubject[]
   StudentMapping          StudentMapping[]
   RangeScales             RangeScales[]
+  Session                 Session[]
 }
 
 model Class {

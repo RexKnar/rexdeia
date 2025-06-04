@@ -30,6 +30,7 @@ import React, { useEffect, useState } from 'react';
 import { Button, useToast } from 'ui';
 
 import { LinkButton } from '@/components/LinkButton';
+import { useQueryParams } from '@/hooks/useQueryParams';
 
 import { AddChapterItemFlyout } from '../_modals/AddChapterItemFlyout';
 import { AddCourseChapterFlyout } from '../_modals/AddCourseChapterFlyout';
@@ -44,6 +45,7 @@ export default function CourseBuilder() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const routeParams = useParams<{ courseId: string; chapterItemId: string }>();
+  const { setParams } = useQueryParams();
 
   const courseId = searchParams.get('courseId') || routeParams.courseId;
   const chapterItemId = searchParams.get('chapterItemId');
@@ -62,6 +64,12 @@ export default function CourseBuilder() {
   useEffect(() => {
     if (courseStructure) {
       setModules(courseStructure);
+      const tempModules = courseStructure[0];
+      const tempChapters = tempModules.chapters[0];
+      const tempChapterItems = tempChapters.chapterItems[0];
+      setParams({
+        chapterItemId: tempChapterItems?.id || '',
+      });
     }
   }, [courseStructure]);
 
