@@ -5,7 +5,6 @@ import { getServerSession } from 'next-auth';
 
 export async function getAllStudentByClassIdForPromotion(
   classId: string,
-  batchId: string,
   sectionId?: string,
   groupId?: string
 ) {
