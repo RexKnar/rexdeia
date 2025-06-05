@@ -50,3 +50,24 @@ export async function promoteStudentToNewClass(
     )
   );
 }
+
+export async function updateStudentStatus(
+  studentIds: string[],
+  data: {
+    isCurrent: boolean;
+    onHold?: boolean;
+    remark?: string;
+  }
+) {
+  return await db.$transaction(
+    studentIds.map((studentId) =>
+      db.studentMapping.updateMany({
+        where: {
+          studentId,
+          isCurrent: true,
+        },
+        data,
+      })
+    )
+  );
+}
