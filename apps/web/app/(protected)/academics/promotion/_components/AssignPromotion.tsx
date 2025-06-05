@@ -406,6 +406,26 @@ export function AssignPromotion() {
                   </Select>
                 </div>
               </section>
+              <section className="mb-2 flex flex-wrap items-center justify-evenly gap-4 rounded-lg border border-gray-200 bg-white p-2 shadow-sm">
+                <p className="text-base font-medium text-gray-700">
+                  Total Students:{' '}
+                  <span className="font-semibold text-blue-600">
+                    {studentListMaster.length + selectedStudents.length}
+                  </span>
+                </p>
+                <p className="text-base font-medium text-gray-700">
+                  Selected:{' '}
+                  <span className="font-semibold text-green-600">
+                    {selectedStudents.length}
+                  </span>
+                </p>
+                <p className="text-base font-medium text-gray-700">
+                  Pending:{' '}
+                  <span className="font-semibold text-orange-500">
+                    {studentListMaster.length - selectedStudentIds.length}
+                  </span>
+                </p>
+              </section>
             </section>
             <section className="flex justify-between p-2">
               <div className="mt-2 text-sm text-gray-800">All Students</div>
@@ -497,7 +517,7 @@ export function AssignPromotion() {
               value={selected}
               onValueChange={setSelected}
               defaultValue="promote"
-              className="mb-5 flex justify-between gap-4"
+              className="mb-5 flex justify-evenly gap-4"
             >
               <div className="flex items-center space-x-2">
                 <RadioGroupItem value="promote" id="promote" />
