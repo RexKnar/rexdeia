@@ -46,28 +46,6 @@ export function GradeFlyout() {
     },
   });
 
-  const handleValueChange = (index, newValue) => {
-    const isOverlapping = sliderValues.some((existingRange, existingIndex) => {
-      if (existingIndex === index) return false;
-      return (
-        (newValue[0] >= existingRange[0] && newValue[0] <= existingRange[1]) ||
-        (newValue[1] >= existingRange[0] && newValue[1] <= existingRange[1])
-      );
-    });
-
-    setErrorMessages((prevErrorMessages) => {
-      const newErrorMessages = [...prevErrorMessages];
-      newErrorMessages[index] = isOverlapping;
-      return newErrorMessages;
-    });
-
-    setSliderValues((prevValues) => {
-      const newValues = [...prevValues];
-      newValues[index] = newValue;
-      return newValues;
-    });
-  };
-
   const { fields, append, remove } = useFieldArray({
     control,
     name: 'grade' as never,
