@@ -51,9 +51,13 @@ export async function promoteStudentToNewClass(
   );
 }
 
-export async function archiveStudents(
+export async function updateStudentStatus(
   studentIds: string[],
-  remark = 'Passed Out'
+  data: {
+    isCurrent: boolean;
+    onHold?: boolean;
+    remark?: string;
+  }
 ) {
   return await db.$transaction(
     studentIds.map((studentId) =>
@@ -62,10 +66,7 @@ export async function archiveStudents(
           studentId,
           isCurrent: true,
         },
-        data: {
-          isCurrent: false,
-          remark,
-        },
+        data,
       })
     )
   );

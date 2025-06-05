@@ -2,25 +2,27 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import { makeAPICall } from '../../api';
 import {
-  ARCHIVE_STUDENTS_FOR_PROMOTE,
   GET_STUDENT_LIST_BY_CLASS_ID,
   GET_STUDENT_LIST_BY_SECTION_ID,
+  UPDATE_STUDENT_STATUS,
 } from '../../endpoints';
 
-type ArchiveStudentsPayload = {
+type UpdateStudentStatusPayload = {
   studentIds: string[];
-  remark?: string;
+  data: {
+    isCurrent: boolean;
+    onHold?: boolean;
+    remark?: string;
+  };
 };
 
-export function useArchiveStudentsMutation() {
+export function useUpdateStudentStatusMutation() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async (payload: ArchiveStudentsPayload) => {
-      const response = await makeAPICall<any>(
-        ARCHIVE_STUDENTS_FOR_PROMOTE,
-        payload
-      );
+    mutationFn: async (payload: UpdateStudentStatusPayload) => {
+      const response = await makeAPICall<any>(UPDATE_STUDENT_STATUS, payload);
+
       await queryClient.invalidateQueries({
         queryKey: [GET_STUDENT_LIST_BY_CLASS_ID],
       });
