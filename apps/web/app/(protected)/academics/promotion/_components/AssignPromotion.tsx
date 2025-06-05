@@ -5,7 +5,7 @@ import { useGetBatchesListQuery } from 'lib/queries/batches/useGetBatchesListQue
 import { useGetClassListQuery } from 'lib/queries/class/useGetClassListQuery';
 import { useGetGroupListQuery } from 'lib/queries/group/useGetGroupListQuery';
 import { useGetMediumListQuery } from 'lib/queries/medium/useGetMediumListQuery';
-import { useArchiveStudentsMutation } from 'lib/queries/promotion/useArchiveStudentsMutationQuery';
+import { useUpdateStudentStatusMutation } from 'lib/queries/promotion/useUpdateStudentStatusMutationQuery';
 import { useGetAllSectionByClassIdQuery } from 'lib/queries/section/useGetAllSectionsByClassIdQuery';
 import { useGetStudentListForPromoteQuery } from 'lib/queries/students/useGetStudentListForPromoteQuery';
 import { usePromoteStudentsMutationQuery } from 'lib/queries/students/usePromoteStudentMutationQuery';
@@ -116,7 +116,10 @@ export function AssignPromotion() {
     limit,
     filter,
   });
-  const { mutateAsync: archiveStudents } = useArchiveStudentsMutation();
+  const {
+    mutateAsync: updateStudentStatus,
+    isPending: isPendingOnHoldStudents,
+  } = useUpdateStudentStatusMutation();
 
   const handleActualStudentCheckboxChange = (studentId) => {
     setSelectedStudentIds((prevSelectedStudentIds) => {
@@ -239,9 +242,31 @@ export function AssignPromotion() {
 
     if (studentIds.length === 0) return;
 
-    await archiveStudents({
+    await updateStudentStatus({
       studentIds,
-      remark: remark,
+      data: {
+        isCurrent: false,
+        onHold: false,
+        remark,
+      },
+    });
+    setSelectedStudents([]);
+    setSelectedStudentIds([]);
+    setDeselectedStudentIds([]);
+    setSelectAll(false);
+    setRemark('');
+  };
+  const handleOnHoldStudents = async () => {
+    const studentIds = selectedStudents.map((x) => x.student.id);
+    if (studentIds.length === 0) return;
+
+    await updateStudentStatus({
+      studentIds,
+      data: {
+        isCurrent: false,
+        onHold: false,
+        remark,
+      },
     });
 
     setSelectedStudents([]);
@@ -728,13 +753,7 @@ export function AssignPromotion() {
                 </section>
               </>
             )}
-            {selected === 'on-hold' && (
-              <Textarea
-                className="w-full rounded-md border border-gray-400 p-3 focus:outline-none focus:ring-2 focus:ring-gray-500"
-                placeholder="Enter the reason..."
-              />
-            )}
-            {selected === 'archive' && (
+            {(selected === 'on-hold' || selected === 'archive') && (
               <>
                 <Textarea
                   className="w-full rounded-md border border-gray-400 p-3 focus:outline-none focus:ring-2 focus:ring-gray-500"
@@ -777,20 +796,6 @@ export function AssignPromotion() {
                 </section>
               </>
             )}
-
-            {selected === 'archive' && (
-              <Button
-                size="lg"
-                variant="default"
-                disabled={isPendingAssignStudents}
-                aria-disabled={isPendingAssignStudents}
-                className="mx-auto flex justify-center px-12 py-4"
-                onClick={handleArchiveStudents}
-              >
-                Archive
-              </Button>
-            )}
-
             <section>
               <Table>
                 <TableBody>
@@ -840,6 +845,31 @@ export function AssignPromotion() {
                 </TableBody>
               </Table>
             </section>
+            {selected === 'archive' && (
+              <Button
+                size="lg"
+                variant="default"
+                disabled={isPendingAssignStudents}
+                aria-disabled={isPendingAssignStudents}
+                className="mx-auto flex justify-center px-12 py-4"
+                onClick={handleArchiveStudents}
+              >
+                {isPendingAssignStudents ? 'Archiving...' : 'Archive'}
+              </Button>
+            )}
+
+            {selected === 'on-hold' && (
+              <Button
+                size="lg"
+                variant="default"
+                disabled={isPendingOnHoldStudents}
+                aria-disabled={isPendingOnHoldStudents}
+                className="mx-auto flex justify-center px-12 py-4"
+                onClick={handleOnHoldStudents}
+              >
+                {isPendingOnHoldStudents ? 'Putting On Hold...' : 'On Hold'}
+              </Button>
+            )}
             <div className="mt-8 flex items-center justify-center">
               <Button
                 size="lg"
