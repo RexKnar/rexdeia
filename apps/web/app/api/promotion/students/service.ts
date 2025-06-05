@@ -1,14 +1,19 @@
+import { authOptions } from 'lib/auth';
 import { db } from 'lib/db';
 import { PromoteStudentsToNewClassModel } from 'lib/domain/student';
+import { getServerSession } from 'next-auth';
 
 export async function getAllStudentByClassIdForPromotion(
   classId: string,
+  batchId: string,
   sectionId?: string,
   groupId?: string
 ) {
+  const session = await getServerSession(authOptions);
   return db.studentMapping.findMany({
     where: {
       classId,
+      batchId: session.currentBatch,
       isCurrent: true,
       ...(sectionId && { sectionId }),
       ...(groupId && { groupId }),
