@@ -796,64 +796,6 @@ export function AssignPromotion() {
                 </section>
               </>
             )}
-
-            {/* {selected === 'archive' && (
-              <>
-                <Textarea
-                  className="w-full p-3 border border-gray-400 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-500"
-                  placeholder="Enter the reason..."
-                  onChange={(e) => setRemark(e.target.value)}
-                />
-                <section className="flex justify-between p-2">
-                  <div className="mt-2 text-sm text-gray-800">
-                    Selected Students
-                  </div>
-                  <div className="flex">
-                    <Button
-                      className="h-8 px-2 text-red-500 border border-red-500 bg-zinc-50 hover:bg-zinc-50"
-                      type="button"
-                    >
-                      <Checkbox
-                        checked={
-                          deselectedStudentIds.length ===
-                            selectedStudents.length &&
-                          selectedStudents.length > 0
-                        }
-                        onCheckedChange={handleDeselectAll}
-                        className="mr-3 h-4 w-4  border-2 border-dashed border-red-500 data-[state=checked]:bg-red-500"
-                      />
-                      Deselect All
-                    </Button>
-                    {selectedStudents &&
-                      selectedStudents.some((x) =>
-                        deselectedStudentIds.includes(x.student.id)
-                      ) && (
-                        <Button
-                          className="h-8 px-2 ml-3 text-white bg-red-500 border hover:bg-red-500"
-                          onClick={handleRemoveSelected}
-                          type="button"
-                        >
-                          Remove Selected
-                        </Button>
-                      )}
-                  </div>
-                </section>
-              </>
-            )} */}
-
-            {/* {selected === 'archive' && (
-              <Button
-                size="lg"
-                variant="default"
-                disabled={isPendingAssignStudents}
-                aria-disabled={isPendingAssignStudents}
-                className="flex justify-center px-12 py-4 mx-auto"
-                onClick={handleArchiveStudents}
-              >
-                Archive
-              </Button>
-            )} */}
-
             <section>
               <Table>
                 <TableBody>
