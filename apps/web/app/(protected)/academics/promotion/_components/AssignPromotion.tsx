@@ -5,6 +5,7 @@ import { useGetBatchesListQuery } from 'lib/queries/batches/useGetBatchesListQue
 import { useGetClassListQuery } from 'lib/queries/class/useGetClassListQuery';
 import { useGetGroupListQuery } from 'lib/queries/group/useGetGroupListQuery';
 import { useGetMediumListQuery } from 'lib/queries/medium/useGetMediumListQuery';
+import { useArchiveStudentsMutation } from 'lib/queries/promotion/useArchiveStudentsMutationQuery';
 import { useGetAllSectionByClassIdQuery } from 'lib/queries/section/useGetAllSectionsByClassIdQuery';
 import { useGetStudentListForPromoteQuery } from 'lib/queries/students/useGetStudentListForPromoteQuery';
 import { usePromoteStudentsMutationQuery } from 'lib/queries/students/usePromoteStudentMutationQuery';
@@ -32,7 +33,9 @@ import { Table, TableBody, TableCell, TableRow } from 'ui/components/ui/Table';
 
 export function AssignPromotion() {
   const searchParams = useSearchParams();
+  const [selected, setSelected] = useState('promote');
   const { classId } = useParams<{ classId: string }>();
+  const [remark, setRemark] = useState('');
 
   const {
     watch,
@@ -113,6 +116,7 @@ export function AssignPromotion() {
     limit,
     filter,
   });
+  const { mutateAsync: archiveStudents } = useArchiveStudentsMutation();
 
   const handleActualStudentCheckboxChange = (studentId) => {
     setSelectedStudentIds((prevSelectedStudentIds) => {
@@ -230,7 +234,22 @@ export function AssignPromotion() {
     setValue('classId', classId);
   }, [classId, setValue]);
 
-  const [selected, setSelected] = useState('promote');
+  const handleArchiveStudents = async () => {
+    const studentIds = selectedStudents.map((x) => x.student.id);
+
+    if (studentIds.length === 0) return;
+
+    await archiveStudents({
+      studentIds,
+      remark: remark,
+    });
+
+    setSelectedStudents([]);
+    setSelectedStudentIds([]);
+    setDeselectedStudentIds([]);
+    setSelectAll(false);
+    setRemark('');
+  };
 
   return (
     <form onSubmit={handleSubmit(assignStudent)}>
@@ -716,10 +735,60 @@ export function AssignPromotion() {
               />
             )}
             {selected === 'archive' && (
-              <Textarea
-                className="w-full rounded-md border border-gray-400 p-3 focus:outline-none focus:ring-2 focus:ring-gray-500"
-                placeholder="Enter the reason..."
-              />
+              <>
+                <Textarea
+                  className="w-full rounded-md border border-gray-400 p-3 focus:outline-none focus:ring-2 focus:ring-gray-500"
+                  placeholder="Enter the reason..."
+                  onChange={(e) => setRemark(e.target.value)}
+                />
+                <section className="flex justify-between p-2">
+                  <div className="mt-2 text-sm text-gray-800">
+                    Selected Students
+                  </div>
+                  <div className="flex">
+                    <Button
+                      className="h-8 border border-red-500 bg-zinc-50 px-2 text-red-500 hover:bg-zinc-50"
+                      type="button"
+                    >
+                      <Checkbox
+                        checked={
+                          deselectedStudentIds.length ===
+                            selectedStudents.length &&
+                          selectedStudents.length > 0
+                        }
+                        onCheckedChange={handleDeselectAll}
+                        className="mr-3 h-4 w-4  border-2 border-dashed border-red-500 data-[state=checked]:bg-red-500"
+                      />
+                      Deselect All
+                    </Button>
+                    {selectedStudents &&
+                      selectedStudents.some((x) =>
+                        deselectedStudentIds.includes(x.student.id)
+                      ) && (
+                        <Button
+                          className="ml-3 h-8 border bg-red-500 px-2 text-white hover:bg-red-500"
+                          onClick={handleRemoveSelected}
+                          type="button"
+                        >
+                          Remove Selected
+                        </Button>
+                      )}
+                  </div>
+                </section>
+              </>
+            )}
+
+            {selected === 'archive' && (
+              <Button
+                size="lg"
+                variant="default"
+                disabled={isPendingAssignStudents}
+                aria-disabled={isPendingAssignStudents}
+                className="mx-auto flex justify-center px-12 py-4"
+                onClick={handleArchiveStudents}
+              >
+                Archive
+              </Button>
             )}
 
             <section>

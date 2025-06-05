@@ -141,6 +141,7 @@ export const GET_STAFF_SUBJECT_LIST_BY_CLASS_ID = `GET_STAFF_SUBJECT_LIST_BY_CLA
 export const GET_STUDENTS_LIST_FOR_ASSIGN = `GET_STUDENTS_LIST_FOR_ASSIGN`;
 export const GET_STUDENT_LIST_FOR_PROMOTE = `GET_STUDENTS_LIST_FOR_PROMOTE`;
 export const ASSIGN_STUDENTS_FOR_PROMOTE = `ASSIGN_STUDENTS_FOR_PROMOTE`;
+export const ARCHIVE_STUDENTS_FOR_PROMOTE = `ARCHIVE_STUDENTS_FOR_PROMOTE`;
 export const GET_EXAM_DETAIL_BY_EXAM_ID = `GET_EXAM_DETAIL_BY_EXAM_ID`;
 export const GET_SUBJECT_EXAM_CONFIG_DETAIL = `GET_SUBJECT_EXAM_CONFIG_DETAIL`;
 export const EDIT_EXAM_SUBJECT_CONFIG_BY_ID = `EDIT_EXAM_SUBJECT_CONFIG_BY_ID`;
@@ -619,7 +620,10 @@ export default <EndpointDetails>{
     requestType: `POST`,
     endpoint: `/api/promotion/students`,
   },
-
+  [ARCHIVE_STUDENTS_FOR_PROMOTE]: {
+    requestType: `PUT`,
+    endpoint: `/api/promotion/students/archive`,
+  },
   [GET_SUBJECT_LIST_BY_FILTER]: {
     requestType: `PUT`,
     endpoint: `/api/exam/subject`,
