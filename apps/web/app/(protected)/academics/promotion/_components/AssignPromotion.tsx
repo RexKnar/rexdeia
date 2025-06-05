@@ -845,7 +845,7 @@ export function AssignPromotion() {
                 </TableBody>
               </Table>
             </section>
-            {selected === 'archive' && (
+            {selected === 'archive' && selectedStudents.length > 0 && (
               <Button
                 size="lg"
                 variant="default"
@@ -858,7 +858,7 @@ export function AssignPromotion() {
               </Button>
             )}
 
-            {selected === 'on-hold' && (
+            {selected === 'on-hold' && selectedStudents.length > 0 && (
               <Button
                 size="lg"
                 variant="default"
@@ -870,24 +870,26 @@ export function AssignPromotion() {
                 {isPendingOnHoldStudents ? 'Putting On Hold...' : 'On Hold'}
               </Button>
             )}
-            <div className="mt-8 flex items-center justify-center">
-              <Button
-                size="lg"
-                variant="default"
-                disabled={isPendingAssignStudents}
-                aria-disabled={isPendingAssignStudents}
-                className="mx-auto flex justify-center px-12 py-4"
-              >
-                {isPendingAssignStudents ? (
-                  <div className="flex items-center justify-center">
-                    <Loader2 className="mr-2 h-6 w-6 animate-spin text-white" />
-                    Saving
-                  </div>
-                ) : (
-                  'Save'
-                )}
-              </Button>
-            </div>
+            {selected === 'promote' && selectedStudents.length > 0 && (
+              <div className="mt-8 flex items-center justify-center">
+                <Button
+                  size="lg"
+                  variant="default"
+                  disabled={isPendingAssignStudents}
+                  aria-disabled={isPendingAssignStudents}
+                  className="mx-auto flex justify-center px-12 py-4"
+                >
+                  {isPendingAssignStudents ? (
+                    <div className="flex items-center justify-center">
+                      <Loader2 className="mr-2 h-6 w-6 animate-spin text-white" />
+                      Saving
+                    </div>
+                  ) : (
+                    'Save'
+                  )}
+                </Button>
+              </div>
+            )}
           </section>
         </section>
       </section>
