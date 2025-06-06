@@ -6,17 +6,29 @@ import { getServerSession } from 'next-auth';
 export async function getAllStudentByClassIdForPromotion(
   classId: string,
   sectionId?: string,
-  groupId?: string
+  groupId?: string,
+  status?: string
 ) {
   const session = await getServerSession(authOptions);
+
+  let where: any = {
+    classId,
+    batchId: session.currentBatch,
+  };
+
+  if (sectionId) where.sectionId = sectionId;
+  if (groupId) where.groupId = groupId;
+
+  if (status === 'archive') {
+    where.isCurrent = false;
+    where.onHold = false;
+  } else if (status === 'on-hold') {
+    where.isCurrent = false;
+    where.onHold = true;
+  }
+
   return db.studentMapping.findMany({
-    where: {
-      classId,
-      batchId: session.currentBatch,
-      isCurrent: true,
-      ...(sectionId && { sectionId }),
-      ...(groupId && { groupId }),
-    },
+    where,
     select: {
       student: {
         select: {
@@ -28,6 +40,8 @@ export async function getAllStudentByClassIdForPromotion(
         },
       },
       rollNumber: true,
+      isCurrent: true,
+      onHold: true,
     },
     orderBy: {
       rollNumber: 'asc',
@@ -38,11 +52,20 @@ export async function getAllStudentByClassIdForPromotion(
 export async function promoteStudentToNewClass(
   payload: PromoteStudentsToNewClassModel
 ) {
-  return await db.$transaction(
-    payload.studentIds.map((studentId) =>
+  return await db.$transaction([
+    db.studentMapping.updateMany({
+      where: {
+        studentId: { in: payload.studentIds },
+        isCurrent: true,
+      },
+      data: {
+        isCurrent: false,
+      },
+    }),
+    ...payload.studentIds.map((studentId) =>
       db.studentMapping.create({
         data: {
-          studentId: studentId,
+          studentId,
           classId: payload.classId,
           sectionId: payload.sectionId,
           groupId: payload.groupId,
@@ -51,8 +74,8 @@ export async function promoteStudentToNewClass(
           isCurrent: true,
         },
       })
-    )
-  );
+    ),
+  ]);
 }
 
 export async function updateStudentStatus(
