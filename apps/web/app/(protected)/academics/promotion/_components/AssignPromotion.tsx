@@ -55,6 +55,7 @@ export function AssignPromotion() {
   } = usePromoteStudentsMutationQuery();
 
   const [groupIdToGetStudent, setGroupIdToGetStudent] = useState('');
+  const [statusToGetStudent, setStatusToGetStudent] = useState('');
   const [classIdToGetStudent, setClassIdToGetStudent] = useState('');
   const [sectionIdToGetStudent, setSectionIdToGetStudent] = useState('');
   const [selectedStudentIds, setSelectedStudentIds] = useState([]);
@@ -82,11 +83,13 @@ export function AssignPromotion() {
     classIdToGetStudent,
     sectionIdToGetStudent,
     groupIdToGetStudent,
+    statusToGetStudent,
     {
       enabled:
         !!classIdToGetStudent ||
         !!sectionIdToGetStudent ||
-        !!groupIdToGetStudent,
+        !!groupIdToGetStudent ||
+        !!statusToGetStudent,
     }
   );
   useEffect(() => {
@@ -390,19 +393,38 @@ export function AssignPromotion() {
                   </Select>
                 </div>
                 <div className="basis-1/2">
-                  <Select>
-                    <SelectTrigger className="ml-4">
+                  <Select
+                    value={watch('action')}
+                    onValueChange={(value) => {
+                      if (value) {
+                        setValue('action', value);
+                        setStatusToGetStudent(value);
+                      } else {
+                        setError('action', {
+                          type: 'manual',
+                          message: 'Action is required',
+                        });
+                      }
+                    }}
+                  >
+                    <SelectTrigger className="ml-4 w-full border-gray-300">
                       <SelectValue
                         placeholder="Select Action"
-                        className="basis-1/2"
+                        className="text-gray-500"
                       />
+                      <ChevronDown className="ml-auto text-gray-400" />
                     </SelectTrigger>
-                    <SelectContent>
+                    <SelectContent className="border border-gray-200 shadow-md">
                       <SelectGroup>
-                        <SelectItem value="On Hold">On Hold</SelectItem>
-                        <SelectItem value="Archive">Archive</SelectItem>
+                        <SelectItem value="on-hold">On Hold</SelectItem>
+                        <SelectItem value="archive">Archive</SelectItem>
                       </SelectGroup>
                     </SelectContent>
+                    {fieldErrors?.action && (
+                      <p className="ml-4 mt-1 text-sm text-red-500">
+                        {fieldErrors.action.message.toString()}
+                      </p>
+                    )}
                   </Select>
                 </div>
               </section>

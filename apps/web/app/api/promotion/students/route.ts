@@ -15,7 +15,7 @@ import {
  * /api/promotion/students:
  *   put:
  *     summary: Get assigned students by class, section, and group for promotion
- *     description: Retrieves students who are currently active in a specific class, section, and group for the purpose of promotion.
+ *     description: Retrieves students filtered by class, section, group, and status (current, on-hold, archived) for the purpose of promotion or review.
  *     requestBody:
  *       required: true
  *       content:
@@ -29,6 +29,10 @@ import {
  *                 type: string
  *               groupId:
  *                 type: string
+ *               status:
+ *                 type: string
+ *                 enum: [on-hold, archive]
+ *                 default: on-hold
  *     responses:
  *       200:
  *         description: List of filtered students
@@ -48,7 +52,7 @@ export async function PUT(req: Request) {
   }
 
   try {
-    const { classId, sectionId, groupId } = await req.json();
+    const { classId, sectionId, groupId, status } = await req.json();
 
     if (!classId) {
       return new NextResponse(
@@ -60,8 +64,10 @@ export async function PUT(req: Request) {
     const students = await getAllStudentByClassIdForPromotion(
       classId,
       sectionId,
-      groupId
+      groupId,
+      status
     );
+
     return new NextResponse(JSON.stringify(students), {
       status: StatusCodes.OK,
     });
