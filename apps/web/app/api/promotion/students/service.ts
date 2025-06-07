@@ -14,6 +14,7 @@ export async function getAllStudentByClassIdForPromotion(
   let where: any = {
     classId,
     batchId: session.currentBatch,
+    isCurrent: true,
   };
 
   if (sectionId) where.sectionId = sectionId;
@@ -41,6 +42,7 @@ export async function getAllStudentByClassIdForPromotion(
       },
       rollNumber: true,
       isCurrent: true,
+      batchId: true,
       onHold: true,
     },
     orderBy: {
@@ -53,15 +55,15 @@ export async function promoteStudentToNewClass(
   payload: PromoteStudentsToNewClassModel
 ) {
   return await db.$transaction([
-    db.studentMapping.updateMany({
-      where: {
-        studentId: { in: payload.studentIds },
-        isCurrent: true,
-      },
-      data: {
-        isCurrent: false,
-      },
-    }),
+    // db.studentMapping.updateMany({
+    //   where: {
+    //     studentId: { in: payload.studentIds },
+    //     isCurrent: true,
+    //   },
+    //   data: {
+    //     isCurrent: false,
+    //   },
+    // }),
     ...payload.studentIds.map((studentId) =>
       db.studentMapping.create({
         data: {

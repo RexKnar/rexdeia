@@ -12,6 +12,7 @@ export async function getExamsList(page: number, limit: number) {
       skip: (page - 1) * limit,
       where: {
         branchId: session.branchId,
+        batchId: session.currentBatch,
       },
       include: {
         examType: {
