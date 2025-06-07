@@ -68,14 +68,6 @@ export const authOptions: NextAuthOptions = {
     },
 
     async jwt({ token, user, trigger, session }) {
-      if (trigger === 'update' && session.organizationId && session.branchId) {
-        token.branchId = session.branchId;
-        token.organizationId = session.organizationId;
-        token.organizationName = session.organizationName;
-        token.institute = session.institute;
-        token.currentBatch = session.currentBatch;
-      }
-
       const dbUser = await db.user.findFirst({
         where: {
           email: token.email,
@@ -102,12 +94,6 @@ export const authOptions: NextAuthOptions = {
         });
       }
 
-      const academicDetails = await db.batch.findFirst({
-        where: {
-          currentAcademicYear: true,
-          branchId: token.branchId,
-        },
-      });
       let staffId = null;
       if (token.role === 'TeachingStaff') {
         const dbStaff = await db.staff.findFirst({
@@ -116,6 +102,25 @@ export const authOptions: NextAuthOptions = {
           },
         });
         staffId = dbStaff.id || null;
+      }
+
+      if (trigger === 'update' && session.organizationId && session.branchId) {
+        token.branchId = session.branchId;
+        token.organizationId = session.organizationId;
+        token.organizationName = session.organizationName;
+        token.institute = session.institute;
+        token.currentBatch = session.currentBatch;
+        if (session.currentBatch) {
+          token.currentBatch = session.currentBatch;
+        } else {
+          const academicDetails = await db.batch.findFirst({
+            where: {
+              currentAcademicYear: true,
+              branchId: token.branchId,
+            },
+          });
+          token.currentBatch = academicDetails.id;
+        }
       }
       return {
         ...token,
@@ -126,7 +131,6 @@ export const authOptions: NextAuthOptions = {
         username: dbUser.username,
         role: dbUser.role,
         createdBranches: dbUser.createdBranches,
-        currentBatch: academicDetails?.id,
         staffId: staffId || null,
       };
     },
