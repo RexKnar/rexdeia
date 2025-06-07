@@ -308,9 +308,11 @@ export async function getAllStaffsBySectionsIdWithSubjects(ids: string[]) {
 }
 
 export async function getStaffsBySection(filter: GetStaffsFilter) {
+  const session = await getServerSession(authOptions);
   const staffs = await db.academicSubjectForStaff.findMany({
     where: {
       ...filter,
+      academicYearId: session.currentBatch,
     },
     select: {
       staff: {
