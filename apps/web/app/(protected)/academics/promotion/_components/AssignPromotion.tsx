@@ -68,9 +68,18 @@ export function AssignPromotion() {
     if (classId) setClassIdToGetStudent(classId);
   }, [classId]);
 
+  useEffect(() => {
+    setValue('classId', classId);
+  }, [classId, setValue]);
+
   const { data: sectionListResponse } = useGetAllSectionByClassIdQuery(
     { classId: classIdToGetStudent, filter },
     { enabled: !!classIdToGetStudent }
+  );
+
+  const { data: promotionSectionList } = useGetAllSectionByClassIdQuery(
+    { classId: watch('classId'), filter: { isActive: true } },
+    { enabled: !!watch('classId') }
   );
 
   const { data: groupListResponse } = useGetGroupListQuery({
@@ -236,10 +245,6 @@ export function AssignPromotion() {
     setSelectAll(false);
   };
 
-  useEffect(() => {
-    setValue('classId', classId);
-  }, [classId, setValue]);
-
   const handleArchiveStudents = async () => {
     const studentIds = selectedStudents.map((x) => x.student.id);
 
@@ -308,7 +313,7 @@ export function AssignPromotion() {
                       <SelectGroup>
                         {getAllClassListResponse?.data?.map((classDetails) => (
                           <SelectItem
-                            key={classDetails.id}
+                            key={`classList_section_${classDetails.id}`}
                             value={classDetails.id}
                           >
                             {classDetails.name}
@@ -324,16 +329,9 @@ export function AssignPromotion() {
                     {...register('sectionId', {
                       required: 'Section is Required',
                     })}
-                    value={watch('sectionId')}
                     onValueChange={(value) => {
                       if (value) {
-                        setValue('sectionId', value);
                         setSectionIdToGetStudent(value);
-                      } else {
-                        setError('sectionId', {
-                          type: 'manual',
-                          message: 'Section is required',
-                        });
                       }
                     }}
                   >
@@ -348,18 +346,15 @@ export function AssignPromotion() {
                       {' '}
                       <SelectGroup>
                         {sectionListResponse?.data?.map((item) => (
-                          <SelectItem key={item.id} value={item.id}>
+                          <SelectItem
+                            key={`sectionList_left_${item.id}`}
+                            value={item.id}
+                          >
                             {item.name}
                           </SelectItem>
                         ))}
                       </SelectGroup>
                     </SelectContent>
-
-                    {fieldErrors.sectionId && (
-                      <p className="ml-4 text-red-500">
-                        {fieldErrors.sectionId.message.toString()}
-                      </p>
-                    )}
                   </Select>
                 </div>
               </section>
@@ -452,14 +447,14 @@ export function AssignPromotion() {
             <section className="flex justify-between p-2">
               <div className="mt-2 text-sm text-gray-800">All Students</div>
               <div className="flex">
-                <Button variant="outline" className="h-8 px-2" type="button">
+                <div className="border-input hover:bg-accent hover:text-accent-foreground focus-visible:ring-ring ring-offset-background inline-flex h-8 items-center justify-center rounded-md border border-primary px-2 text-sm font-medium text-primary transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50">
                   <Checkbox
                     className="mr-3 h-4 w-4 border-2 border-dashed"
                     checked={selectAll}
                     onCheckedChange={handleSelectAll}
                   />
                   Select All
-                </Button>
+                </div>
                 {studentListMaster &&
                   studentListMaster.some((x) =>
                     selectedStudentIds.includes(x.student.id)
@@ -477,8 +472,11 @@ export function AssignPromotion() {
             <section>
               <Table>
                 <TableBody>
-                  {studentListMaster?.map((student) => (
-                    <TableRow key={student.student.id} className="py-0">
+                  {studentListMaster?.map((student, index) => (
+                    <TableRow
+                      key={`studentRow_${student.student.id}_${index}`}
+                      className="py-0"
+                    >
                       <TableCell className="py-0">
                         <div className="mb-2 flex items-center">
                           <Checkbox
@@ -567,11 +565,18 @@ export function AssignPromotion() {
                     <div className=" basis-1/2">
                       <Select
                         autoComplete="off"
-                        {...register('classId', { required: true })}
+                        {...register('classId', {
+                          required: 'Class is Required',
+                        })}
                         value={watch('classId')}
                         onValueChange={(value) => {
                           if (value) {
                             setValue('classId', value);
+                          } else {
+                            setError('classId', {
+                              type: 'manual',
+                              message: 'Class is required',
+                            });
                           }
                         }}
                       >
@@ -588,7 +593,7 @@ export function AssignPromotion() {
                             {getAllClassListResponse?.data?.map(
                               (classDetails) => (
                                 <SelectItem
-                                  key={classDetails.id}
+                                  key={`classList_${classDetails.id}`}
                                   value={classDetails.id}
                                 >
                                   {classDetails.name}
@@ -597,13 +602,18 @@ export function AssignPromotion() {
                             )}
                           </SelectGroup>
                         </SelectContent>
+                        {fieldErrors.classId && (
+                          <p className="ml-4 text-red-500">
+                            {fieldErrors.classId.message.toString()}
+                          </p>
+                        )}
                       </Select>
                     </div>
                     <div className=" basis-1/2">
                       <Select
                         autoComplete="off"
                         {...register('sectionId', {
-                          required: ' Section is Requeired',
+                          required: ' Section is Required',
                         })}
                         value={watch('sectionId')}
                         onValueChange={(value) => {
@@ -627,20 +637,22 @@ export function AssignPromotion() {
                         <SelectContent className="border border-primary-200">
                           {' '}
                           <SelectGroup>
-                            {sectionListResponse?.data?.map((item) => (
-                              <SelectItem key={item.id} value={item.id}>
+                            {promotionSectionList?.data?.map((item) => (
+                              <SelectItem
+                                key={`sectionList_${item.id}`}
+                                value={item.id}
+                              >
                                 {item.name}
                               </SelectItem>
                             ))}
                           </SelectGroup>
                         </SelectContent>
-
-                        {fieldErrors.sectionId && (
-                          <p className="ml-4 text-red-500">
-                            {fieldErrors.sectionId.message.toString()}
-                          </p>
-                        )}
                       </Select>
+                      {fieldErrors.sectionId && (
+                        <p className="ml-4 text-red-500">
+                          {fieldErrors.sectionId.message.toString()}
+                        </p>
+                      )}
                     </div>
                   </section>
                   <section className="mb-2 flex justify-between rounded-md bg-white p-2">
@@ -648,7 +660,7 @@ export function AssignPromotion() {
                       <Select
                         autoComplete="off"
                         {...register('groupId', {
-                          required: 'Group is  Requeired',
+                          required: 'Group is  Required',
                         })}
                         value={watch('groupId')}
                         onValueChange={(value) => {
@@ -668,7 +680,10 @@ export function AssignPromotion() {
                           {' '}
                           <SelectGroup>
                             {groupListResponse?.data?.map((item) => (
-                              <SelectItem key={item.id} value={item.id}>
+                              <SelectItem
+                                key={`groupList_${item.id}`}
+                                value={item.id}
+                              >
                                 {item.name}
                               </SelectItem>
                             ))}
@@ -685,7 +700,7 @@ export function AssignPromotion() {
                       <Select
                         autoComplete="off"
                         {...register('academicYear', {
-                          required: 'Academic year is Requeired',
+                          required: 'Academic year is Required',
                         })}
                         value={watch('academicYear')}
                         onValueChange={(value) => {
@@ -705,7 +720,10 @@ export function AssignPromotion() {
                           {' '}
                           <SelectGroup>
                             {batchesList?.data?.map((item) => (
-                              <SelectItem key={item.id} value={item.id}>
+                              <SelectItem
+                                key={`batchList_${item.id}`}
+                                value={item.id}
+                              >
                                 {item.name}
                               </SelectItem>
                             ))}
@@ -724,7 +742,7 @@ export function AssignPromotion() {
                       <Select
                         autoComplete="off"
                         {...register('mediumId', {
-                          required: 'Medium is  Requeired',
+                          required: 'Medium is  Required',
                         })}
                         value={watch('mediumId')}
                         onValueChange={(value) => {
@@ -744,7 +762,10 @@ export function AssignPromotion() {
                           {' '}
                           <SelectGroup>
                             {mediumListResponse?.data?.map((item) => (
-                              <SelectItem key={item.id} value={item.id}>
+                              <SelectItem
+                                key={`mediumList_${item.id}`}
+                                value={item.id}
+                              >
                                 {item.name}
                               </SelectItem>
                             ))}
@@ -764,10 +785,7 @@ export function AssignPromotion() {
                     Selected Students
                   </div>
                   <div className="flex">
-                    <Button
-                      className="h-8 border border-red-500 bg-zinc-50 px-2 text-red-500 hover:bg-zinc-50"
-                      type="button"
-                    >
+                    <div className=" border-input hover:bg-accent  hover:text-accent-foreground focus-visible:ring-ring ring-offset-background inline-flex h-8 items-center justify-center rounded-md border border-red-500 bg-zinc-50 px-2 text-sm font-medium text-red-500 transition-colors hover:bg-zinc-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50">
                       <Checkbox
                         checked={
                           deselectedStudentIds.length ===
@@ -778,7 +796,7 @@ export function AssignPromotion() {
                         className="mr-3 h-4 w-4  border-2 border-dashed border-red-500 data-[state=checked]:bg-red-500"
                       />
                       Deselect All
-                    </Button>
+                    </div>
                     {selectedStudents &&
                       selectedStudents.some((x) =>
                         deselectedStudentIds.includes(x.student.id)
@@ -807,10 +825,7 @@ export function AssignPromotion() {
                     Selected Students
                   </div>
                   <div className="flex">
-                    <Button
-                      className="h-8 border border-red-500 bg-zinc-50 px-2 text-red-500 hover:bg-zinc-50"
-                      type="button"
-                    >
+                    <div className=" border-input hover:bg-accent  hover:text-accent-foreground focus-visible:ring-ring ring-offset-background inline-flex h-8 items-center justify-center rounded-md border border-red-500 bg-zinc-50 px-2 text-sm font-medium text-red-500 transition-colors hover:bg-zinc-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50">
                       <Checkbox
                         checked={
                           deselectedStudentIds.length ===
@@ -821,7 +836,7 @@ export function AssignPromotion() {
                         className="mr-3 h-4 w-4  border-2 border-dashed border-red-500 data-[state=checked]:bg-red-500"
                       />
                       Deselect All
-                    </Button>
+                    </div>
                     {selectedStudents &&
                       selectedStudents.some((x) =>
                         deselectedStudentIds.includes(x.student.id)
@@ -841,8 +856,8 @@ export function AssignPromotion() {
             <section>
               <Table>
                 <TableBody>
-                  {selectedStudents.map((student) => (
-                    <TableRow key={student.student.id}>
+                  {selectedStudents.map((student, index) => (
+                    <TableRow key={`${student.student.id}-${index}`}>
                       <TableCell className="py-0">
                         <div className="mb-2 flex items-center">
                           <Checkbox

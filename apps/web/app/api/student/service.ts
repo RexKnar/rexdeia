@@ -306,6 +306,7 @@ export async function getAllStudentsBySectionIdWithGroup(sectionId: string) {
     where: {
       sectionId: sectionId,
       isCurrent: true,
+      batchId: session.currentBatch,
       student: {
         branchId: session.branchId,
         organizationId: session.organizationId,

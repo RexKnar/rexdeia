@@ -242,6 +242,7 @@ export async function getAllStaffsBySectionIds(ids: string[]) {
 }
 
 export async function getAllStaffsBySectionsIdWithSubjects(ids: string[]) {
+  const session = await getServerSession(authOptions);
   const staffs = await db.staff.findMany({
     where: {
       academicSubjectForStaff: {
@@ -249,6 +250,7 @@ export async function getAllStaffsBySectionsIdWithSubjects(ids: string[]) {
           sectionId: {
             in: ids,
           },
+          academicYearId: session.currentBatch,
           deletedAt: null,
         },
       },
