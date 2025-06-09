@@ -2,7 +2,7 @@
 
 import { Plus, PlusCircle, Trash } from 'lucide-react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import React, { useState } from 'react';
+import React from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
 import {
   Button,
@@ -20,98 +20,34 @@ import {
   Text,
 } from 'ui';
 
-import { useCreateGradeMutationQuery } from '../../../../../lib/queries/grade/useCreateGradeMutationQuery';
-
-export function GradeFlyout() {
+export function RoleManagementFlyout() {
   const pathname = usePathname();
   const router = useRouter();
   const searchParams = useSearchParams();
   const isOpen = searchParams.get('isGradeFlyoutOpen') === 'true';
-  const [sliderValues, setSliderValues] = useState([[0, 100]]);
-  const [errorMessages, setErrorMessages] = useState([false]);
 
-  const {
-    control,
-    handleSubmit,
-    watch,
-    setValue,
-    reset,
-    register,
-    formState: { errors: fieldErrors },
-  } = useForm({
+  const { register, control, handleSubmit, reset } = useForm({
     defaultValues: {
-      name: '',
-      grade: [{ name: '', slider: [] }],
-      isActive: false,
+      roleName: '',
+      roles: [],
     },
   });
 
-  const handleValueChange = (index, newValue) => {
-    const isOverlapping = sliderValues.some((existingRange, existingIndex) => {
-      if (existingIndex === index) return false;
-      return (
-        (newValue[0] >= existingRange[0] && newValue[0] <= existingRange[1]) ||
-        (newValue[1] >= existingRange[0] && newValue[1] <= existingRange[1])
-      );
-    });
-
-    setErrorMessages((prevErrorMessages) => {
-      const newErrorMessages = [...prevErrorMessages];
-      newErrorMessages[index] = isOverlapping;
-      return newErrorMessages;
-    });
-
-    setSliderValues((prevValues) => {
-      const newValues = [...prevValues];
-      newValues[index] = newValue;
-      return newValues;
-    });
-  };
-
   const { fields, append, remove } = useFieldArray({
     control,
-    name: 'grade' as never,
+    name: 'roles',
   });
 
-  const {
-    isPending: isPendingCreateGrade,
-    mutateAsync: mutateCreateGradeAsync,
-  } = useCreateGradeMutationQuery();
-
-  const closeFlyout = async () => {
+  const closeFlyout = () => {
     const params = new URLSearchParams(searchParams);
     params.set('isGradeFlyoutOpen', 'false');
     router.replace(pathname + '?' + params.toString());
-    setSliderValues([[0, 100]]);
-    setErrorMessages([false]);
+    reset();
   };
 
-  const SaveGrade = async () => {
-    const hasDefaultValues = sliderValues.some(
-      (value) => value[0] === 0 && value[1] === 100
-    );
-    if (hasDefaultValues || errorMessages.some(Boolean)) {
-      return;
-    }
-    try {
-      const requestPayload = {
-        name: watch('name'),
-        isActive: watch('isActive'),
-        gradeScales: fields.map((field, index) => ({
-          startValue: sliderValues[index][0].toString(),
-          endValue: sliderValues[index][1].toString(),
-          gradeName: watch(`grade.${index}.name`),
-          remark: '',
-        })),
-      };
-      await mutateCreateGradeAsync(requestPayload);
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setValue('isActive', false);
-      await closeFlyout();
-      reset();
-    }
+  const SaveGrade = (data: any) => {
+    console.log('Form Data:', data);
+    closeFlyout();
   };
 
   return (
@@ -120,139 +56,87 @@ export function GradeFlyout() {
         <SheetContent
           side="right"
           widthSize="sm"
-          className="bg-white p-10"
-          onCloseClick={() => closeFlyout()}
+          className="p-10 bg-white"
+          onCloseClick={closeFlyout}
         >
           <div className="max-h-[90vh] overflow-y-auto">
             <form onSubmit={handleSubmit(SaveGrade)}>
               <SheetHeader>
                 <SheetTitle className="mb-5">
-                  <div className="sm:grid sm:grid-cols-1 sm:gap-4 md:grid md:grid-cols-1 md:gap-4 lg:grid lg:grid-cols-[1fr_100px]">
-                    <div className="flex items-center">
-                      <PlusCircle size={20} strokeWidth={1.5} />
-                      <Text variant="lg-semibold" className="ml-2">
-                        New Role Management
-                      </Text>
-                    </div>
+                  <div className="flex items-center gap-2">
+                    <PlusCircle size={20} strokeWidth={1.5} />
+                    <Text variant="lg-semibold">New Role Management</Text>
                   </div>
                 </SheetTitle>
-                <hr className="border-t border-gray-300"></hr>
+                <hr className="border-t border-gray-300" />
               </SheetHeader>
-              <div className="mt-5 flex gap-2">
-                <div className="w-full">
-                  <label
-                    htmlFor="name"
-                    className="text-sm font-semibold text-gray-700"
-                  >
-                    Role Name
-                  </label>
-                  <Input
-                    {...register('name', {
-                      required: 'Grade Name is Required',
-                    })}
-                    autoFocus
-                    className="mt-2"
-                    id="name"
-                    errorMessage={fieldErrors?.name?.message.toString()}
-                  />
-                </div>
-                <div className="mt-8">
-                  {fields.length === 0 && (
-                    <Button
-                      className="border-transparent px-2"
-                      variant="default"
-                      size="sm"
-                      onClick={() => {
-                        append({ grade: 'grade' });
-                        setSliderValues([...sliderValues, [0, 100]]);
-                        setErrorMessages([...errorMessages, false]);
-                      }}
-                    >
-                      <Plus size={20} className="text-center text-white" />
-                    </Button>
-                  )}
-                </div>
-              </div>
-              {fields.map((row, index) => (
-                <section key={row.id}>
-                  <div className="ml-9 mt-5">
-                    <div className="mt-4 flex gap-2 ">
-                      <div className="">
-                        <Select>
-                          <SelectTrigger className="w-[280px]">
-                            <SelectValue placeholder="Select Role" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="Option">Option 1</SelectItem>
-                            <SelectItem value="Option">Option</SelectItem>
-                            <SelectItem value="Option">Option</SelectItem>
-                          </SelectContent>
-                        </Select>
-                      </div>
 
-                      <div className="">
-                        {fields.length > 0 && (
-                          <Button
-                            className="border-transparent bg-red-600 px-2"
-                            variant="outline"
-                            size="sm"
-                            onClick={() => {
-                              remove(index);
-                              setErrorMessages(
-                                errorMessages.filter((_, i) => i !== index)
-                              );
-                            }}
-                          >
-                            <Trash
-                              size={20}
-                              className="text-center text-white"
-                            />
-                          </Button>
-                        )}
-                      </div>
-                      <div className="">
-                        <Button
-                          className={`border-transparent px-2 ${
-                            index === fields.length - 1 ? '' : 'invisible'
-                          }`}
-                          variant="default"
-                          size="sm"
-                          onClick={() => {
-                            append({ grade: 'grade' });
-                            setSliderValues([...sliderValues, [0, 100]]);
-                            setErrorMessages([...errorMessages, false]);
-                          }}
-                        >
-                          <Plus size={20} className="text-center text-white" />
-                        </Button>
-                      </div>
-                    </div>
+              <div className="mt-5">
+                <label
+                  className="text-sm font-semibold text-gray-700"
+                  htmlFor="roleName"
+                >
+                  Role Name
+                </label>
+                <Input
+                  {...register('roleName')}
+                  className="mt-2"
+                  id="roleName"
+                />
+              </div>
+
+              <div className="mt-5">
+                <Button
+                  type="button"
+                  variant="default"
+                  onClick={() => append({ role: '', permissions: [] })}
+                >
+                  <Plus size={18} className="mr-2" />
+                  Add Role
+                </Button>
+              </div>
+
+              {fields.map((field, index) => (
+                <section key={field.id} className="pt-4 mt-6 border-t">
+                  <div className="flex items-center gap-2">
+                    <Select
+                      onValueChange={(value) =>
+                        control.setValue(`roles.${index}.role`, value)
+                      }
+                    >
+                      <SelectTrigger className="w-[280px]">
+                        <SelectValue placeholder="Select Role" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="Admin">Admin</SelectItem>
+                        <SelectItem value="Teacher">Teacher</SelectItem>
+                        <SelectItem value="Student">Student</SelectItem>
+                      </SelectContent>
+                    </Select>
+
+                    <Button
+                      type="button"
+                      size="sm"
+                      variant="outline"
+                      className="bg-red-600"
+                      onClick={() => remove(index)}
+                    >
+                      <Trash size={18} className="text-white" />
+                    </Button>
                   </div>
-                  <div className="mt-4 flex justify-between">
-                    <div>
-                      <Checkbox />
-                      <label className="ml-2 text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
-                        Read
-                      </label>
-                    </div>
-                    <div>
-                      <Checkbox />
-                      <label className="ml-2 text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
-                        Read
-                      </label>
-                    </div>
-                    <div>
-                      <Checkbox />
-                      <label className="ml-2 text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
-                        Read
-                      </label>
-                    </div>
-                    <div>
-                      <Checkbox />
-                      <label className="ml-2 text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
-                        Read
-                      </label>
-                    </div>
+
+                  <div className="flex justify-between mt-4">
+                    {['Read', 'Create', 'Update', 'Delete'].map((perm) => (
+                      <div key={perm}>
+                        <Checkbox
+                          {...register(`roles.${index}.permissions`)}
+                          value={perm}
+                        />
+                        <label className="ml-2 text-sm font-medium">
+                          {perm}
+                        </label>
+                      </div>
+                    ))}
                   </div>
                 </section>
               ))}
@@ -261,8 +145,8 @@ export function GradeFlyout() {
                 <Button
                   size="lg"
                   variant="default"
-                  className="mx-auto flex justify-center px-12 py-4"
-                  disabled={isPendingCreateGrade || errorMessages.some(Boolean)}
+                  className="flex justify-center px-12 py-4 mx-auto"
+                  type="submit"
                 >
                   Save
                 </Button>

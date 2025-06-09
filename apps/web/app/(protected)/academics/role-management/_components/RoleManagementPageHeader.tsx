@@ -9,7 +9,9 @@ import { PageTitle } from '@/components/PageTitle';
 import { AddScalesFlyout } from '../_modals/AddScalesFlyout';
 
 const RoleManagementFlyout = dynamic(() =>
-  import('../_modals/SaveRolemanagementFlyout').then((mod) => mod.GradeFlyout)
+  import('../_modals/SaveRolemanagementFlyout').then(
+    (mod) => mod.RoleManagementFlyout
+  )
 );
 
 export function RoleManagementPageHeader() {

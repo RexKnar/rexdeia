@@ -9,18 +9,18 @@ import {
   getSortedRowModel,
   useReactTable,
 } from '@tanstack/react-table';
-import { useDeleteGradeScaleMutationQuery } from 'lib/queries/grade/useDeleteGradeScaleMutationQuery';
-import { Loader2, Pencil, PlusCircleIcon, Trash2 } from 'lucide-react';
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import React, { useCallback, useEffect, useState } from 'react';
-import { When } from 'react-if';
+// import { useDeleteGradeScaleMutationQuery } from 'lib/queries/grade/useDeleteGradeScaleMutationQuery';
+import { Pencil, PlusCircleIcon, Trash2 } from 'lucide-react';
+// import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+// import React, { useCallback, useEffect, useState } from 'react';
+// import { When } from 'react-if';
 import {
   Button,
-  Pagination,
+  // Pagination,
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-  useToast,
+  // useToast,
 } from 'ui';
 import {
   Table,
@@ -31,158 +31,128 @@ import {
   TableRow,
 } from 'ui/components/ui/Table';
 
-import { DeleteConfirmationModal } from '@/components/modals/DeleteConfirmationModal';
+// import { DeleteConfirmationModal } from '@/components/modals/DeleteConfirmationModal';
+// import { GradeModel, gradeScales } from '../../../../../lib/domain/grade';
+// import { useGetGradeList } from '../../../../../lib/queries/grade/useGetGradeListMutationQuery';
 
-import { GradeModel, gradeScales } from '../../../../../lib/domain/grade';
-import { useGetGradeList } from '../../../../../lib/queries/grade/useGetGradeListMutationQuery';
-
+type Role = {
+  id: string;
+  name: string;
+  permissions: string[];
+};
 export function RoleManagementListTable() {
-  const { toast } = useToast();
+  // const { toast } = useToast();
 
-  const [
-    showScaleDeleteConfirmationModal,
-    setShowScaleDeleteConfirmationModal,
-  ] = useState(false);
-  const [selectedGradeScale, setSelectedGradeScale] = useState(null);
-  const pathname = usePathname();
-  const router = useRouter();
-  const searchParams = useSearchParams();
-  const columns: ColumnDef<GradeModel>[] = [
+  // const pathname = usePathname();
+  // const router = useRouter();
+  // const searchParams = useSearchParams();
+  const rolesData: Role[] = [
     {
-      accessorKey: 'name',
-      header: () => {
-        return (
-          <Button variant="ghost" className="px-0">
-            Role
-          </Button>
-        );
-      },
-      cell: ({ row }) => {
-        return <div className="flex ">{row.original.name}</div>;
-      },
+      id: '1',
+      name: 'Admin',
+      permissions: ['Read', 'Create', 'Update', 'Delete'], // All access
     },
     {
-      accessorKey: 'gradeScales',
-      header: () => {
-        return (
-          <Button variant="ghost" className="px-0">
-            Module Access
-          </Button>
-        );
-      },
-      cell: ({ row }) => {
-        return (
-          <div className="grid grid-cols-5 gap-2">
-            {row.original.gradeScales.map((gradeScale: gradeScales, index) => (
-              <div key={index}>
-                <p className="mt-1 flex justify-between rounded-full bg-blue-100 px-1 py-1 text-center text-sm font-medium text-indigo-700">
-                  <Button
-                    className="flex h-auto w-full cursor-pointer justify-between gap-4"
-                    variant="ghost"
-                  >
-                    <span>
-                      {gradeScale.gradeName}
-                      {' (' +
-                        gradeScale.startValue +
-                        ' to ' +
-                        gradeScale.endValue +
-                        ')'}
-                    </span>
-                    {isDeleteGradeScalePending &&
-                    gradeScale?.id === selectedGradeScale?.id ? (
-                      <Loader2 className="mr-2 h-4 w-4 animate-spin text-red-600" />
-                    ) : (
-                      <Trash2
-                        onClick={() => {
-                          setSelectedGradeScale(gradeScale);
-                          setShowScaleDeleteConfirmationModal(true);
-                        }}
-                        size={12}
-                        className="text-center text-red-600 "
-                      />
-                    )}
-                  </Button>
-                </p>
-              </div>
-            ))}
-            <div>
-              <p className="mt-1 flex cursor-pointer justify-between rounded-full border-2 border-zinc-300 bg-gray-100 px-1 py-1 text-center text-sm font-medium text-indigo-700">
-                <Button
-                  className="flex h-auto justify-between gap-4"
-                  variant="ghost"
-                  onClick={async () => {
-                    const params = new URLSearchParams(searchParams);
-                    params.set('isGradeScaleFlyoutOpen', 'true');
-                    params.set('gradeId', row.original.id);
+      id: '2',
+      name: 'Teacher',
+      permissions: ['Read', 'Create', 'Update'], // No delete
+    },
+    {
+      id: '3',
+      name: 'Student',
+      permissions: ['Read'], // Read-only
+    },
+  ];
+  const columns: ColumnDef<Role>[] = [
+    {
+      accessorKey: 'name',
+      header: () => (
+        <Button variant="ghost" className="px-0">
+          Role
+        </Button>
+      ),
+      cell: ({ row }) => <div className="flex">{row.original.name}</div>,
+    },
+    {
+      accessorKey: 'permissions',
+      header: () => (
+        <Button variant="ghost" className="px-0">
+          Module Access
+        </Button>
+      ),
+      cell: ({ row }) => (
+        <div className="flex flex-wrap gap-2">
+          {row.original.permissions.map((perm, index) => (
+            <span
+              key={index}
+              className="px-2 py-1 text-sm font-medium text-indigo-700 bg-blue-100 rounded-full"
+            >
+              {perm}
+            </span>
+          ))}
 
-                    router.replace(pathname + '?' + params.toString());
-                  }}
-                >
-                  <span className="text-gray-600"> Add More</span>
-                  <PlusCircleIcon
-                    size={16}
-                    className="text-center text-gray-600"
-                  />
-                </Button>
-              </p>
-            </div>
-          </div>
-        );
-      },
+          <Button
+            variant="ghost"
+            className="flex items-center gap-1 text-sm text-gray-600"
+          >
+            <PlusCircleIcon size={16} /> Add More
+          </Button>
+        </div>
+      ),
     },
   ];
 
-  const page = parseInt(searchParams.get('page')) || 1;
-  const limit = parseInt(searchParams.get('limit')) || 10;
+  // const page = parseInt(searchParams.get('page')) || 1;
+  // const limit = parseInt(searchParams.get('limit')) || 10;
 
-  const { data: getGradeListResponse, isLoading: isGradeListLoading } =
-    useGetGradeList({ page, limit });
+  // const { data: getGradeListResponse, isLoading: isGradeListLoading } =
+  //   useGetGradeList({ page, limit });
 
   const table = useReactTable({
     columns,
-    data: getGradeListResponse?.data || [],
+    data: rolesData,
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
   });
 
-  const handleOnPageChange = useCallback(
-    (page: number) => {
-      const params = new URLSearchParams(searchParams);
-      params.set('page', page.toString());
+  // const handleOnPageChange = useCallback(
+  //   (page: number) => {
+  //     const params = new URLSearchParams(searchParams);
+  //     params.set('page', page.toString());
 
-      router.push(pathname + '?' + params.toString());
-    },
-    [searchParams, pathname, router]
-  );
+  //     router.push(pathname + '?' + params.toString());
+  //   },
+  //   [searchParams, pathname, router]
+  // );
 
-  const {
-    isError: isDeleteGradeScaleError,
-    isSuccess: isDeleteGradeScaleSuccess,
-    isPending: isDeleteGradeScalePending,
-    mutateAsync: deleteGradeScaleAsync,
-  } = useDeleteGradeScaleMutationQuery(page, limit);
-  useEffect(() => {
-    if (isDeleteGradeScaleError) {
-      toast({
-        title: 'Error',
-        variant: 'default',
-        description: 'Error while deleting scale',
-      });
-    }
-  }, [isDeleteGradeScaleError, toast]);
+  // const {
+  //   isError: isDeleteGradeScaleError,
+  //   isSuccess: isDeleteGradeScaleSuccess,
+  //   isPending: isDeleteGradeScalePending,
+  //   mutateAsync: deleteGradeScaleAsync,
+  // } = useDeleteGradeScaleMutationQuery(page, limit);
+  // useEffect(() => {
+  //   if (isDeleteGradeScaleError) {
+  //     toast({
+  //       title: 'Error',
+  //       variant: 'default',
+  //       description: 'Error while deleting scale',
+  //     });
+  //   }
+  // }, [isDeleteGradeScaleError, toast]);
 
-  useEffect(() => {
-    if (isDeleteGradeScaleSuccess) {
-      toast({
-        title: 'Success',
-        variant: 'default',
-        description: 'Scale deleted successfully',
-      });
-      setSelectedGradeScale(null);
-    }
-  }, [isDeleteGradeScaleSuccess, toast]);
+  // useEffect(() => {
+  //   if (isDeleteGradeScaleSuccess) {
+  //     toast({
+  //       title: 'Success',
+  //       variant: 'default',
+  //       description: 'Scale deleted successfully',
+  //     });
+  //     setSelectedGradeScale(null);
+  //   }
+  // }, [isDeleteGradeScaleSuccess, toast]);
   return (
     <section>
       <div className="rounded-md ">
@@ -199,9 +169,9 @@ export function RoleManagementListTable() {
                       {header.isPlaceholder
                         ? null
                         : flexRender(
-                            header.column.columnDef.header,
-                            header.getContext()
-                          )}
+                          header.column.columnDef.header,
+                          header.getContext()
+                        )}
                     </TableHead>
                   );
                 })}
@@ -232,7 +202,7 @@ export function RoleManagementListTable() {
                     <Tooltip>
                       <TooltipTrigger asChild>
                         <Button
-                          className="mr-3 h-auto px-3 py-2"
+                          className="h-auto px-3 py-2 mr-3"
                           variant="mild"
                         >
                           <Pencil
@@ -268,14 +238,14 @@ export function RoleManagementListTable() {
             ) : (
               <TableRow>
                 <TableCell colSpan={5} className="h-24 text-center">
-                  {isGradeListLoading ? 'Loading...' : 'No Grade Found'}
+                  {/* {isGradeListLoading ? 'Loading...' : 'No Grade Found'} */}
                 </TableCell>
               </TableRow>
             )}
           </TableBody>
         </Table>
       </div>
-      <When
+      {/* <When
         condition={getGradeListResponse?.data?.length && !isGradeListLoading}
       >
         <Pagination
@@ -291,20 +261,7 @@ export function RoleManagementListTable() {
             router.replace(pathname + '?' + params.toString());
           }}
         />
-        <DeleteConfirmationModal
-          open={showScaleDeleteConfirmationModal}
-          description={`Are you sure you want to delete "${selectedGradeScale?.scaleName}"`}
-          onDeleteClick={async () => {
-            if (selectedGradeScale) {
-              setShowScaleDeleteConfirmationModal(false);
-              await deleteGradeScaleAsync(selectedGradeScale.id);
-            }
-          }}
-          onCancelClick={() => {
-            setShowScaleDeleteConfirmationModal(false);
-          }}
-        />
-      </When>
+      </When> */}
     </section>
   );
 }
