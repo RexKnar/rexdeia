@@ -162,7 +162,7 @@ export function AssignStaffClassDetailPageFlyout() {
         <SheetContent
           side="right"
           widthSize="sm"
-          className="p-10 bg-white"
+          className=" w-72 md:w-[28rem] lg:w-[32rem] px-4 py-6 bg-white"
           onCloseClick={() => closeFlyout()}
         >
           <div className="max-h-[80vh] overflow-y-auto">

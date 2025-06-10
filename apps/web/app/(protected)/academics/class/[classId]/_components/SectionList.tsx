@@ -34,17 +34,17 @@ export function SectionList() {
   }
 
   return (
-    <section className="grid justify-between w-full grid-cols-4 gap-4 px-0">
+    <section className="grid w-full grid-cols-1 gap-4 px-0 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
       {sectionListResponse?.data?.map((sectionItem) => (
-        <div key={sectionItem.id}>
-          <SectionCard
-            id={sectionItem.id}
-            name={sectionItem.name}
-            classId={classId}
-            staffIncharges={sectionItem.staffIncharges}
-          />
-        </div>
+        <SectionCard
+          key={sectionItem.id}
+          id={sectionItem.id}
+          name={sectionItem.name}
+          classId={classId}
+          staffIncharges={sectionItem.staffIncharges}
+        />
       ))}
     </section>
+
   );
 }
