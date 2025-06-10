@@ -113,7 +113,7 @@ export function ClassDetail() {
               <PageTitle title="Class Details" className="mb-3" />
               <div className="flex justify-between p-6 mx-auto my-5 bg-white rounded-md ">
                 <div className="flex">
-                  <div className="inline-flex px-5 my-auto">
+                  <div className="inline-flex my-auto ">
                     <Text variant="base-bold" className="pr-5">
                       {getClassByIdResponse?.name}
                     </Text>

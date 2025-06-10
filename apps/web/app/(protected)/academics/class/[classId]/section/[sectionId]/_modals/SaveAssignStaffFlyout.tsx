@@ -52,7 +52,7 @@ export function SaveAssignStaffFlyout() {
         <SheetContent
           side="right"
           widthSize="sm"
-          className="bg-white p-10"
+          className=" w-72 md:w-[28rem] lg:w-[32rem] px-4 py-6 bg-white"
           onCloseClick={() => closeFlyout()}
         >
           <SheetHeader>
@@ -73,7 +73,7 @@ export function SaveAssignStaffFlyout() {
             <div>
               <label
                 htmlFor="sectionName"
-                className=" text-sm font-semibold text-gray-700"
+                className="text-sm font-semibold text-gray-700 "
               >
                 Search staff
               </label>
@@ -81,11 +81,11 @@ export function SaveAssignStaffFlyout() {
                 <Input
                   type="text"
                   placeholder="staff name"
-                  className="mb-4 mt-2 w-full rounded-lg border border-gray-300 p-2"
+                  className="w-full p-2 mt-2 mb-4 border border-gray-300 rounded-lg"
                   value={searchQuery}
                   onChange={handleSearchChange}
                 />
-                <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pb-6 pr-3">
+                <div className="absolute inset-y-0 right-0 flex items-center pb-6 pr-3 pointer-events-none">
                   <Search className="text-primary-200" size={20} />
                 </div>
               </div>
@@ -94,9 +94,9 @@ export function SaveAssignStaffFlyout() {
               {filteredStaff.map((staff) => (
                 <div
                   key={staff.id}
-                  className="mb-2 flex items-center  border bg-gray-100"
+                  className="flex items-center mb-2 bg-gray-100 border"
                 >
-                  <Avatar className="ml-3 h-12 w-12 cursor-pointer ">
+                  <Avatar className="w-12 h-12 ml-3 cursor-pointer ">
                     <AvatarImage src="https://png.pngtree.com/thumb_back/fh260/background/20230612/pngtree-man-wearing-glasses-is-wearing-colorful-background-image_2905240.jpg" />
                   </Avatar>
                   <div className="ml-4">
@@ -105,7 +105,7 @@ export function SaveAssignStaffFlyout() {
                   <div className="ml-auto">
                     <Button
                       variant={staff.isAssigned ? 'default' : 'outline'}
-                      className="mb-4 mr-4 mt-4 rounded-lg "
+                      className="mt-4 mb-4 mr-4 rounded-lg "
                       onClick={() => {
                         setStaffList((prevStaffList) =>
                           prevStaffList.map((prevStaff) =>
@@ -127,7 +127,7 @@ export function SaveAssignStaffFlyout() {
             <Button
               size="lg"
               variant="default"
-              className="mx-auto flex justify-center px-12 py-4"
+              className="flex justify-center px-12 py-4 mx-auto"
               onClick={() => closeFlyout}
             >
               Save & Close
