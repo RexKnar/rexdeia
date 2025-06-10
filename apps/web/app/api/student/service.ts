@@ -306,6 +306,7 @@ export async function getAllStudentsBySectionIdWithGroup(sectionId: string) {
     where: {
       sectionId: sectionId,
       isCurrent: true,
+      batchId: session.currentBatch,
       student: {
         branchId: session.branchId,
         organizationId: session.organizationId,
@@ -357,12 +358,14 @@ export async function getAllStudentsBySectionIdWithGroup(sectionId: string) {
 }
 
 export async function getAllStudentsBySectionIds(ids: string[]) {
+  const session = await getServerSession(authOptions);
   const studentsList = await db.studentMapping.findMany({
     where: {
       sectionId: {
         in: ids,
       },
       isCurrent: true,
+      batchId: session.currentBatch,
     },
     select: {
       student: true,
