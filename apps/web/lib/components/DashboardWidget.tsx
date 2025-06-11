@@ -33,20 +33,21 @@ export function DashboardWidget({
   return (
     <section
       className={cn(
-        'flex w-96 cursor-pointer flex-col gap-4 rounded-md border-[1.5px] bg-white p-4 shadow-sm hover:border-gray-700'
+        'flex w-full max-w-xs flex-col gap-4 rounded-md border-[1.5px] bg-white p-4 shadow-sm transition-all duration-150 hover:border-gray-700 sm:max-w-sm md:max-w-md lg:w-96'
       )}
     >
-      <div className="text-sm font-normal text-gray-700">
+      <div className="text-sm font-medium tracking-wide text-gray-700">
         {label.toUpperCase()}
       </div>
-      <div className="flex items-center justify-between gap-6">
-        <motion.div className="text-4xl font-semibold">
+
+      <div className="flex items-center justify-between gap-4 sm:gap-6">
+        <motion.div className="text-3xl font-semibold text-gray-900 sm:text-4xl">
           {roundedValue}
         </motion.div>
         <Icon
-          size={32}
-          strokeWidth={1}
-          className={cn('rounded-full', className)}
+          size={28}
+          strokeWidth={1.2}
+          className={cn('rounded-full text-gray-600', className)}
         />
       </div>
     </section>

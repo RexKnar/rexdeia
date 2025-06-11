@@ -12,15 +12,16 @@ export function StudentDashboardBanner() {
     );
 
   return (
-    <section className="flex items-center justify-between rounded-md border bg-primary-300 px-12 py-8">
-      <section>
-        <div className="flex gap-1">
-          <p className="text-2xl font-semibold">Explore</p>
-          <p className="rounded-md bg-primary-900 px-2 text-xl text-gray-100">
+    <section className="flex flex-col-reverse items-center justify-between gap-4 px-4 py-6 border rounded-md bg-primary-300 md:flex-row md:px-12 md:py-8">
+      <section className="text-center md:text-left">
+        <div className="flex flex-wrap items-center justify-center gap-2 md:justify-start">
+          <p className="text-xl font-semibold md:text-2xl">Explore</p>
+          <p className="px-2 py-1 text-base text-gray-100 rounded-md bg-primary-900 md:text-xl">
             Student&apos;s Dashboard
           </p>
         </div>
-        <p className="text-gray-90000">
+
+        <p className="mt-2 text-sm leading-relaxed text-gray-800 md:text-base">
           {text.map((el, i) => (
             <motion.span
               initial={{ opacity: 0 }}
@@ -36,7 +37,14 @@ export function StudentDashboardBanner() {
           ))}
         </p>
       </section>
-      <Image alt="icon" width={186} height={186} src={studentDashboardImage} />
+
+      <Image
+        alt="Student Dashboard"
+        src={studentDashboardImage}
+        width={140}
+        height={140}
+        className="h-28 w-28 object-contain md:h-[186px] md:w-[186px]"
+      />
     </section>
   );
 }
