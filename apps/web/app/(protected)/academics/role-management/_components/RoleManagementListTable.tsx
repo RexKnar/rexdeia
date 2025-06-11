@@ -9,19 +9,8 @@ import {
   getSortedRowModel,
   useReactTable,
 } from '@tanstack/react-table';
-// import { useDeleteGradeScaleMutationQuery } from 'lib/queries/grade/useDeleteGradeScaleMutationQuery';
 import { Pencil, PlusCircleIcon, Trash2 } from 'lucide-react';
-// import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-// import React, { useCallback, useEffect, useState } from 'react';
-// import { When } from 'react-if';
-import {
-  Button,
-  // Pagination,
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-  // useToast,
-} from 'ui';
+import { Button, Tooltip, TooltipContent, TooltipTrigger } from 'ui';
 import {
   Table,
   TableBody,
@@ -31,36 +20,27 @@ import {
   TableRow,
 } from 'ui/components/ui/Table';
 
-// import { DeleteConfirmationModal } from '@/components/modals/DeleteConfirmationModal';
-// import { GradeModel, gradeScales } from '../../../../../lib/domain/grade';
-// import { useGetGradeList } from '../../../../../lib/queries/grade/useGetGradeListMutationQuery';
-
 type Role = {
   id: string;
   name: string;
   permissions: string[];
 };
 export function RoleManagementListTable() {
-  // const { toast } = useToast();
-
-  // const pathname = usePathname();
-  // const router = useRouter();
-  // const searchParams = useSearchParams();
   const rolesData: Role[] = [
     {
       id: '1',
       name: 'Admin',
-      permissions: ['Read', 'Create', 'Update', 'Delete'], // All access
+      permissions: ['Read', 'Create', 'Update', 'Delete'],
     },
     {
       id: '2',
       name: 'Teacher',
-      permissions: ['Read', 'Create', 'Update'], // No delete
+      permissions: ['Read', 'Create', 'Update'],
     },
     {
       id: '3',
       name: 'Student',
-      permissions: ['Read'], // Read-only
+      permissions: ['Read'],
     },
   ];
   const columns: ColumnDef<Role>[] = [
@@ -102,12 +82,6 @@ export function RoleManagementListTable() {
     },
   ];
 
-  // const page = parseInt(searchParams.get('page')) || 1;
-  // const limit = parseInt(searchParams.get('limit')) || 10;
-
-  // const { data: getGradeListResponse, isLoading: isGradeListLoading } =
-  //   useGetGradeList({ page, limit });
-
   const table = useReactTable({
     columns,
     data: rolesData,
@@ -117,42 +91,6 @@ export function RoleManagementListTable() {
     getPaginationRowModel: getPaginationRowModel(),
   });
 
-  // const handleOnPageChange = useCallback(
-  //   (page: number) => {
-  //     const params = new URLSearchParams(searchParams);
-  //     params.set('page', page.toString());
-
-  //     router.push(pathname + '?' + params.toString());
-  //   },
-  //   [searchParams, pathname, router]
-  // );
-
-  // const {
-  //   isError: isDeleteGradeScaleError,
-  //   isSuccess: isDeleteGradeScaleSuccess,
-  //   isPending: isDeleteGradeScalePending,
-  //   mutateAsync: deleteGradeScaleAsync,
-  // } = useDeleteGradeScaleMutationQuery(page, limit);
-  // useEffect(() => {
-  //   if (isDeleteGradeScaleError) {
-  //     toast({
-  //       title: 'Error',
-  //       variant: 'default',
-  //       description: 'Error while deleting scale',
-  //     });
-  //   }
-  // }, [isDeleteGradeScaleError, toast]);
-
-  // useEffect(() => {
-  //   if (isDeleteGradeScaleSuccess) {
-  //     toast({
-  //       title: 'Success',
-  //       variant: 'default',
-  //       description: 'Scale deleted successfully',
-  //     });
-  //     setSelectedGradeScale(null);
-  //   }
-  // }, [isDeleteGradeScaleSuccess, toast]);
   return (
     <section>
       <div className="rounded-md ">
@@ -169,9 +107,9 @@ export function RoleManagementListTable() {
                       {header.isPlaceholder
                         ? null
                         : flexRender(
-                          header.column.columnDef.header,
-                          header.getContext()
-                        )}
+                            header.column.columnDef.header,
+                            header.getContext()
+                          )}
                     </TableHead>
                   );
                 })}
@@ -237,31 +175,12 @@ export function RoleManagementListTable() {
               ))
             ) : (
               <TableRow>
-                <TableCell colSpan={5} className="h-24 text-center">
-                  {/* {isGradeListLoading ? 'Loading...' : 'No Grade Found'} */}
-                </TableCell>
+                <TableCell colSpan={5} className="h-24 text-center"></TableCell>
               </TableRow>
             )}
           </TableBody>
         </Table>
       </div>
-      {/* <When
-        condition={getGradeListResponse?.data?.length && !isGradeListLoading}
-      >
-        <Pagination
-          limit={limit.toString()}
-          onPageChange={handleOnPageChange}
-          pageSize={getGradeListResponse?.limit || 0}
-          totalRecords={getGradeListResponse?.total || 0}
-          disabled={isGradeListLoading}
-          onLimitChange={(value) => {
-            const params = new URLSearchParams(searchParams);
-            params.set('limit', value.toString());
-
-            router.replace(pathname + '?' + params.toString());
-          }}
-        />
-      </When> */}
     </section>
   );
 }
