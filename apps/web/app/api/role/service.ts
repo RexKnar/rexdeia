@@ -21,17 +21,18 @@ export async function addRole(rolePayload: any) {
     },
   });
 
-  rolePayload.moduleAccess.forEach((access) => {
-    const createModuleAccess: any = {
-      roleId: createdRole.id,
-      module: access.module,
-      create: access.create,
-      read: access.read,
-      update: access.update,
-      delete: access.delete,
-    };
-    addModuleAccess(createModuleAccess);
-  });
+  await Promise.all(
+    rolePayload.moduleAccess.map((access) =>
+      addModuleAccess({
+        roleId: createdRole.id,
+        module: access.module,
+        create: access.create,
+        read: access.read,
+        update: access.update,
+        delete: access.delete,
+      })
+    )
+  );
   return createdRole;
 }
 
@@ -50,17 +51,32 @@ export async function getAllRoleList(page: number, limit: number) {
       where: {
         organizationId: session.organizationId,
       },
-      include: {
-        modelAccess: true,
+      select: {
+        id: true,
+        name: true,
+        modelAccess: {
+          select: {
+            module: true,
+            create: true,
+            read: true,
+            update: true,
+            delete: true,
+          },
+        },
       },
     }),
   ]);
+
+  const mappedRoles = roleList.map((role) => ({
+    ...role,
+    moduleAccess: role.modelAccess,
+  }));
 
   return {
     page,
     total,
     limit,
-    data: roleList,
+    data: mappedRoles,
   };
 }
 
