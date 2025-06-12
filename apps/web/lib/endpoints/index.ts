@@ -218,6 +218,8 @@ export const DELETE_PERIOD_MODE_BY_ID = `DELETE_PERIOD_MODE_BY_ID`;
 export const ARCHIVE_STUDENT_BY_ID = `ARCHIVE_STUDENT_BY_ID`;
 export const UPDATE_ROLLNUMBERS = `UPDATE_ROLLNUMBERS`;
 export const SESSION_UPDATE = `SESSION_UPDATE`;
+export const ADD_ROLE = `ADD_ROLE`;
+export const GET_ROLE_LIST = `GET_ROLE_LIST`;
 
 export default <EndpointDetails>{
   ...ExamAnalyticsEndpoints,
@@ -1073,5 +1075,13 @@ export default <EndpointDetails>{
   [SESSION_UPDATE]: {
     requestType: 'PUT',
     endpoint: '/api/session',
+  },
+  [ADD_ROLE]: {
+    requestType: 'POST',
+    endpoint: '/api/role',
+  },
+  [GET_ROLE_LIST]: {
+    requestType: 'GET',
+    endpoint: '/api/role',
   },
 };

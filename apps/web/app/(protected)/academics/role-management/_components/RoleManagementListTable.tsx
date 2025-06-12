@@ -9,10 +9,10 @@ import {
   getSortedRowModel,
   useReactTable,
 } from '@tanstack/react-table';
-import { useDeleteGradeScaleMutationQuery } from 'lib/queries/grade/useDeleteGradeScaleMutationQuery';
-import { Loader2, Pencil, PlusCircleIcon, Trash2 } from 'lucide-react';
+import { useGetRoleListQuery } from 'lib/queries/role-management/useGetRoleListMutationQuery';
+import { Pencil, PlusCircleIcon, Trash2 } from 'lucide-react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { When } from 'react-if';
 import {
   Button,
@@ -20,7 +20,6 @@ import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-  useToast,
 } from 'ui';
 import {
   Table,
@@ -33,98 +32,117 @@ import {
 
 import { DeleteConfirmationModal } from '@/components/modals/DeleteConfirmationModal';
 
-import { GradeModel, gradeScales } from '../../../../../lib/domain/grade';
-import { useGetGradeList } from '../../../../../lib/queries/grade/useGetGradeListMutationQuery';
+import { RoleModel } from '../../../../../lib/domain/role';
 
 export function RoleManagementListTable() {
-  const { toast } = useToast();
-
-  const [
-    showScaleDeleteConfirmationModal,
-    setShowScaleDeleteConfirmationModal,
-  ] = useState(false);
-  const [selectedGradeScale, setSelectedGradeScale] = useState(null);
+  const [showRoleDeleteConfirmationModal, setShowRoleDeleteConfirmationModal] =
+    useState(false);
+  const [selectedRole, setSelectedRole] = useState<RoleModel | null>(null);
   const pathname = usePathname();
   const router = useRouter();
   const searchParams = useSearchParams();
-  const columns: ColumnDef<GradeModel>[] = [
+
+  const page = parseInt(searchParams.get('page') || '1');
+  const limit = parseInt(searchParams.get('limit') || '10');
+
+  const { data: getRoleListResponse, isLoading: isRoleListLoading } =
+    useGetRoleListQuery(page, limit);
+
+  const columns: ColumnDef<RoleModel>[] = [
     {
       accessorKey: 'name',
-      header: () => {
-        return (
-          <Button variant="ghost" className="px-0">
-            Role
-          </Button>
-        );
-      },
-      cell: ({ row }) => {
-        return <div className="flex ">{row.original.name}</div>;
-      },
+      header: () => (
+        <Button variant="ghost" className="px-0">
+          Role
+        </Button>
+      ),
+      cell: ({ row }) => <div className="flex">{row.original.name}</div>,
     },
     {
-      accessorKey: 'gradeScales',
-      header: () => {
-        return (
-          <Button variant="ghost" className="px-0">
-            Module Access
-          </Button>
-        );
-      },
+      accessorKey: 'moduleAccess',
+      header: () => (
+        <Button variant="ghost" className="px-0">
+          Module Access
+        </Button>
+      ),
       cell: ({ row }) => {
+        const modelAccess = Array.isArray(row.original.moduleAccess)
+          ? row.original.moduleAccess
+          : row.original.moduleAccess
+            ? [row.original.moduleAccess]
+            : [];
+
         return (
           <div className="grid grid-cols-5 gap-2">
-            {row.original.gradeScales.map((gradeScale: gradeScales, index) => (
-              <div key={index}>
-                <p className="mt-1 flex justify-between rounded-full bg-blue-100 px-1 py-1 text-center text-sm font-medium text-indigo-700">
-                  <Button
-                    className="flex h-auto w-full cursor-pointer justify-between gap-4"
-                    variant="ghost"
-                  >
-                    <span>
-                      {gradeScale.gradeName}
-                      {' (' +
-                        gradeScale.startValue +
-                        ' to ' +
-                        gradeScale.endValue +
-                        ')'}
-                    </span>
-                    {isDeleteGradeScalePending &&
-                    gradeScale?.id === selectedGradeScale?.id ? (
-                      <Loader2 className="mr-2 h-4 w-4 animate-spin text-red-600" />
-                    ) : (
-                      <Trash2
-                        onClick={() => {
-                          setSelectedGradeScale(gradeScale);
-                          setShowScaleDeleteConfirmationModal(true);
-                        }}
-                        size={12}
-                        className="text-center text-red-600 "
-                      />
-                    )}
-                  </Button>
-                </p>
-              </div>
-            ))}
-            <div>
-              <p className="mt-1 flex cursor-pointer justify-between rounded-full border-2 border-zinc-300 bg-gray-100 px-1 py-1 text-center text-sm font-medium text-indigo-700">
-                <Button
-                  className="flex h-auto justify-between gap-4"
-                  variant="ghost"
-                  onClick={async () => {
-                    const params = new URLSearchParams(searchParams);
-                    params.set('isGradeScaleFlyoutOpen', 'true');
-                    params.set('gradeId', row.original.id);
-
-                    router.replace(pathname + '?' + params.toString());
-                  }}
+            {modelAccess.length > 0 ? (
+              modelAccess.map((access, idx) => (
+                <div
+                  key={access.module || idx}
+                  className="rounded-md border border-indigo-200 bg-indigo-50 px-4 py-3 shadow-sm"
                 >
-                  <span className="text-gray-600"> Add More</span>
-                  <PlusCircleIcon
-                    size={16}
-                    className="text-center text-gray-600"
-                  />
-                </Button>
-              </p>
+                  <div className="mb-2 text-sm font-semibold capitalize text-indigo-700">
+                    {access.module}
+                  </div>
+                  <div className="flex gap-2">
+                    <span
+                      className={`rounded-md px-2 py-1 text-xs font-medium ${
+                        access.create
+                          ? 'bg-green-100 text-green-700'
+                          : 'bg-gray-100 text-gray-400'
+                      }`}
+                    >
+                      C
+                    </span>
+                    <span
+                      className={`rounded-md px-2 py-1 text-xs font-medium ${
+                        access.read
+                          ? 'bg-blue-100 text-blue-700'
+                          : 'bg-gray-100 text-gray-400'
+                      }`}
+                    >
+                      R
+                    </span>
+                    <span
+                      className={`rounded-md px-2 py-1 text-xs font-medium ${
+                        access.update
+                          ? 'bg-yellow-100 text-yellow-700'
+                          : 'bg-gray-100 text-gray-400'
+                      }`}
+                    >
+                      U
+                    </span>
+                    <span
+                      className={`rounded-md px-2 py-1 text-xs font-medium ${
+                        access.delete
+                          ? 'bg-red-100 text-red-700'
+                          : 'bg-gray-100 text-gray-400'
+                      }`}
+                    >
+                      D
+                    </span>
+                  </div>
+                </div>
+              ))
+            ) : (
+              <span className="text-sm italic text-gray-400">
+                No access assigned
+              </span>
+            )}
+
+            <div className="mt-2">
+              <Button
+                variant="outline"
+                className="flex items-center gap-2 border-gray-700 text-sm text-gray-700"
+                onClick={() => {
+                  const params = new URLSearchParams(searchParams);
+                  params.set('isPermissionFlyoutOpen', 'true');
+                  params.set('roleId', row.original.id);
+                  router.replace(pathname + '?' + params.toString());
+                }}
+              >
+                <PlusCircleIcon size={16} className="text-gray-600" />
+                Add More
+              </Button>
             </div>
           </div>
         );
@@ -132,15 +150,9 @@ export function RoleManagementListTable() {
     },
   ];
 
-  const page = parseInt(searchParams.get('page')) || 1;
-  const limit = parseInt(searchParams.get('limit')) || 10;
-
-  const { data: getGradeListResponse, isLoading: isGradeListLoading } =
-    useGetGradeList({ page, limit });
-
   const table = useReactTable({
     columns,
-    data: getGradeListResponse?.data || [],
+    data: getRoleListResponse?.data || [],
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
@@ -151,41 +163,29 @@ export function RoleManagementListTable() {
     (page: number) => {
       const params = new URLSearchParams(searchParams);
       params.set('page', page.toString());
-
       router.push(pathname + '?' + params.toString());
     },
     [searchParams, pathname, router]
   );
 
-  const {
-    isError: isDeleteGradeScaleError,
-    isSuccess: isDeleteGradeScaleSuccess,
-    isPending: isDeleteGradeScalePending,
-    mutateAsync: deleteGradeScaleAsync,
-  } = useDeleteGradeScaleMutationQuery(page, limit);
-  useEffect(() => {
-    if (isDeleteGradeScaleError) {
-      toast({
-        title: 'Error',
-        variant: 'default',
-        description: 'Error while deleting scale',
-      });
-    }
-  }, [isDeleteGradeScaleError, toast]);
+  const handleEditRole = useCallback(
+    (role: RoleModel) => {
+      const params = new URLSearchParams(searchParams);
+      params.set('isEditRoleOpen', 'true');
+      params.set('roleId', role.id);
+      router.replace(pathname + '?' + params.toString());
+    },
+    [searchParams, pathname, router]
+  );
 
-  useEffect(() => {
-    if (isDeleteGradeScaleSuccess) {
-      toast({
-        title: 'Success',
-        variant: 'default',
-        description: 'Scale deleted successfully',
-      });
-      setSelectedGradeScale(null);
-    }
-  }, [isDeleteGradeScaleSuccess, toast]);
+  const handleDeleteRole = useCallback((role: RoleModel) => {
+    setSelectedRole(role);
+    setShowRoleDeleteConfirmationModal(true);
+  }, []);
+
   return (
     <section>
-      <div className="rounded-md ">
+      <div className="rounded-md">
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
@@ -193,18 +193,16 @@ export function RoleManagementListTable() {
                 key={headerGroup.id}
                 className="cursor-pointer hover:bg-white"
               >
-                {headerGroup.headers.map((header) => {
-                  return (
-                    <TableHead key={header.id}>
-                      {header.isPlaceholder
-                        ? null
-                        : flexRender(
-                            header.column.columnDef.header,
-                            header.getContext()
-                          )}
-                    </TableHead>
-                  );
-                })}
+                {headerGroup.headers.map((header) => (
+                  <TableHead key={header.id}>
+                    {header.isPlaceholder
+                      ? null
+                      : flexRender(
+                          header.column.columnDef.header,
+                          header.getContext()
+                        )}
+                  </TableHead>
+                ))}
                 <TableHead>
                   <Button variant="ghost" className="px-0">
                     Actions
@@ -214,7 +212,7 @@ export function RoleManagementListTable() {
             ))}
           </TableHeader>
           <TableBody>
-            {table.getRowModel().rows?.length ? (
+            {table.getRowModel().rows.length ? (
               table.getRowModel().rows.map((row) => (
                 <TableRow
                   key={row.id}
@@ -234,6 +232,7 @@ export function RoleManagementListTable() {
                         <Button
                           className="mr-3 h-auto px-3 py-2"
                           variant="mild"
+                          onClick={() => handleEditRole(row.original)}
                         >
                           <Pencil
                             size={12}
@@ -242,24 +241,24 @@ export function RoleManagementListTable() {
                         </Button>
                       </TooltipTrigger>
                       <TooltipContent>
-                        <p>
-                          <span>Edit</span>
-                        </p>
+                        <p>Edit</p>
                       </TooltipContent>
                     </Tooltip>
                     <Tooltip>
                       <TooltipTrigger asChild>
-                        <Button className="h-auto px-3 py-2" variant="mild">
+                        <Button
+                          className="h-auto px-3 py-2"
+                          variant="mild"
+                          onClick={() => handleDeleteRole(row.original)}
+                        >
                           <Trash2
                             size={12}
-                            className="text-center text-red-600 "
+                            className="text-center text-red-600"
                           />
                         </Button>
                       </TooltipTrigger>
                       <TooltipContent>
-                        <p>
-                          <span>Delete</span>
-                        </p>
+                        <p>Delete</p>
                       </TooltipContent>
                     </Tooltip>
                   </TableCell>
@@ -267,44 +266,45 @@ export function RoleManagementListTable() {
               ))
             ) : (
               <TableRow>
-                <TableCell colSpan={5} className="h-24 text-center">
-                  {isGradeListLoading ? 'Loading...' : 'No Grade Found'}
+                <TableCell colSpan={3} className="h-24 text-center">
+                  {isRoleListLoading ? 'Loading...' : 'No Role Found'}
                 </TableCell>
               </TableRow>
             )}
           </TableBody>
         </Table>
       </div>
-      <When
-        condition={getGradeListResponse?.data?.length && !isGradeListLoading}
-      >
+
+      <When condition={getRoleListResponse?.data?.length && !isRoleListLoading}>
         <Pagination
           limit={limit.toString()}
+          pageSize={limit}
+          totalRecords={getRoleListResponse?.total || 0}
           onPageChange={handleOnPageChange}
-          pageSize={getGradeListResponse?.limit || 0}
-          totalRecords={getGradeListResponse?.total || 0}
-          disabled={isGradeListLoading}
+          disabled={isRoleListLoading}
           onLimitChange={(value) => {
             const params = new URLSearchParams(searchParams);
             params.set('limit', value.toString());
-
+            params.set('page', '1');
             router.replace(pathname + '?' + params.toString());
           }}
         />
-        <DeleteConfirmationModal
-          open={showScaleDeleteConfirmationModal}
-          description={`Are you sure you want to delete "${selectedGradeScale?.scaleName}"`}
-          onDeleteClick={async () => {
-            if (selectedGradeScale) {
-              setShowScaleDeleteConfirmationModal(false);
-              await deleteGradeScaleAsync(selectedGradeScale.id);
-            }
-          }}
-          onCancelClick={() => {
-            setShowScaleDeleteConfirmationModal(false);
-          }}
-        />
       </When>
+
+      <DeleteConfirmationModal
+        open={showRoleDeleteConfirmationModal}
+        description={`Are you sure you want to delete "${selectedRole?.name}"?`}
+        onDeleteClick={async () => {
+          if (selectedRole) {
+            setShowRoleDeleteConfirmationModal(false);
+            setSelectedRole(null);
+          }
+        }}
+        onCancelClick={() => {
+          setShowRoleDeleteConfirmationModal(false);
+          setSelectedRole(null);
+        }}
+      />
     </section>
   );
 }
