@@ -8,30 +8,41 @@ import { addRole, getAllRoleList } from './service';
 
 /**
  * @swagger
- *   /api/role:
- *     post:
- *       summary: Add a new Role
- *       description: Creates a new Role with the Role Scales.
- *       requestBody:
- *         required: true
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *       responses:
- *         '200':
- *           description: Successfully Created the Role.
- *           content:
- *             application/json:
- *               schema:
+ * /api/role:
+ *   post:
+ *     summary: Add a new role
+ *     description: Creates a new role with module access permissions.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *               moduleAccess:
  *                 type: array
  *                 items:
- *                   # Define the schema for a Role
- *         '401':
- *           description: Unauthorized access.
- *         '400':
- *           description: Bad request due to an error in processing the request.
+ *                   type: object
+ *                   properties:
+ *                     module:
+ *                       type: string
+ *                     create:
+ *                       type: boolean
+ *                     read:
+ *                       type: boolean
+ *                     update:
+ *                       type: boolean
+ *                     delete:
+ *                       type: boolean
+ *     responses:
+ *       201:
+ *         description: Role created successfully
+ *       400:
+ *         description: Bad request
+ *       401:
+ *         description: Unauthorized
  */
 export async function POST(request: NextRequest) {
   const session = await getServerSession(authOptions);
@@ -57,6 +68,33 @@ export async function POST(request: NextRequest) {
   }
 }
 
+/**
+ * @swagger
+ * /api/role:
+ *   get:
+ *     summary: Get All Roles
+ *     description: Fetch a paginated list of roles for the authenticated branch
+ *     parameters:
+ *       - in: query
+ *         name: page
+ *         schema:
+ *           type: integer
+ *         description: Page number (default: 1)
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: integer
+ *         description: Number of roles per page (default: 10)
+ *     responses:
+ *       200:
+ *         description: Roles fetched successfully.
+ *       400:
+ *         description: Bad request due to validation error.
+ *       401:
+ *         description: Unauthorized access.
+ *       500:
+ *         description: Internal server error.
+ */
 export async function GET(request: NextRequest) {
   const session = await getServerSession(authOptions);
   if (!session) {

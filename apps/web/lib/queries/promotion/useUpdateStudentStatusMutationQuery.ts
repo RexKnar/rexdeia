@@ -11,7 +11,6 @@ type UpdateStudentStatusPayload = {
   studentIds: string[];
   data: {
     isCurrent: boolean;
-    onHold?: boolean;
     remark?: string;
   };
 };

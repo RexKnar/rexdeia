@@ -91,7 +91,7 @@ export function ClassDetail() {
   if (isLoadingGetClassById) {
     return (
       <div className="flex items-center justify-center">
-        <Loader2 className="w-6 h-6 mr-2 text-black animate-spin" />
+        <Loader2 className="mr-2 h-6 w-6 animate-spin text-black" />
         <p className="text-black ">Fetching Class Details...</p>
       </div>
     );
@@ -105,15 +105,15 @@ export function ClassDetail() {
   };
 
   return (
-    <section className="w-full p-3 bg-gray-50">
+    <section className="w-full bg-gray-50 p-3">
       {!isLoadingGetClassById ? (
         <div>
           {getClassByIdResponse?.id ? (
             <>
               <PageTitle title="Class Details" className="mb-3" />
-              <div className="flex justify-between p-6 mx-auto my-5 bg-white rounded-md ">
+              <div className="mx-auto my-5 flex justify-between rounded-md bg-white p-6 ">
                 <div className="flex">
-                  <div className="inline-flex my-auto ">
+                  <div className="my-auto inline-flex ">
                     <Text variant="base-bold" className="pr-5">
                       {getClassByIdResponse?.name}
                     </Text>
@@ -135,7 +135,7 @@ export function ClassDetail() {
                     </Text>
                   </div>
                 </div>
-                <div className="flex gap-4 px-5 my-auto">
+                <div className="my-auto flex gap-4 px-5">
                   <div className="relative my-auto">
                     <Button
                       variant="outline"
@@ -158,8 +158,8 @@ export function ClassDetail() {
                   </div>
                 </div>
               </div>
-              <Tabs defaultValue="Students" className="relative px-0 py-2 mt-4">
-                <TabsList className="justify-start w-full overflow-auto border-b-2 border-gray-400">
+              <Tabs defaultValue="Students" className="relative mt-4 px-0 py-2">
+                <TabsList className="w-full justify-start overflow-auto border-b-2 border-gray-400">
                   <TabsTrigger
                     value="Subjects"
                     className="mr-2 text-base focus:border-b-4 focus:border-primary"
@@ -192,7 +192,7 @@ export function ClassDetail() {
                   </TabsTrigger>
                 </TabsList>
                 <TabsContent className="w-full" value="Subjects">
-                  <div className="flex items-center justify-between mb-4">
+                  <div className="mb-4 flex items-center justify-between">
                     <SubjectList />
                     <Button
                       variant="default"
@@ -201,7 +201,7 @@ export function ClassDetail() {
                         params.set('isAddSubjectFlyoutOpen', 'true');
                         router.replace(pathname + '?' + params.toString());
                       }}
-                      className="absolute top-0 right-0"
+                      className="absolute right-0 top-0"
                     >
                       Add Subject
                     </Button>
@@ -216,7 +216,7 @@ export function ClassDetail() {
                         `/academics/class/${[classId]}/assign/student`
                       )
                     }
-                    className="absolute top-0 right-0"
+                    className="absolute right-0 top-0"
                   >
                     Assign Students
                   </Button>
@@ -235,7 +235,7 @@ export function ClassDetail() {
                         );
                         router.replace(pathname + '?' + params.toString());
                       }}
-                      className="absolute top-0 right-0"
+                      className="absolute right-0 top-0"
                     >
                       Assign Staff
                     </Button>
@@ -250,7 +250,7 @@ export function ClassDetail() {
                         params.set('isSectionFlyoutOpen', 'true');
                         router.replace(pathname + '?' + params.toString());
                       }}
-                      className="absolute top-0 right-0"
+                      className="absolute right-0 top-0"
                     >
                       Add Section
                     </Button>
@@ -278,7 +278,7 @@ export function ClassDetail() {
         </div>
       ) : (
         <div className="flex items-center justify-center">
-          <Loader2 className="w-6 h-6 mr-2 text-black animate-spin" />
+          <Loader2 className="mr-2 h-6 w-6 animate-spin text-black" />
           <p className="text-black ">Fetching Class Details...</p>
         </div>
       )}

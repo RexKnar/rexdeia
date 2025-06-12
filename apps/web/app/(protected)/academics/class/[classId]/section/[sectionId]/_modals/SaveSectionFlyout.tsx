@@ -207,7 +207,7 @@ export function SaveSectionFlyout() {
                 >
                   Medium
                 </label>
-                <div className="w-full mt-2">
+                <div className="mt-2 w-full">
                   <Select
                     disabled={isMediumListLoading}
                     value={mediumId}
@@ -238,7 +238,7 @@ export function SaveSectionFlyout() {
                 >
                   Group
                 </label>
-                <div className="flex flex-wrap mt-2">
+                <div className="mt-2 flex flex-wrap">
                   {groupListResponse?.data?.map((item) => (
                     <label className="me-5" key={item.id}>
                       <Controller
@@ -249,7 +249,7 @@ export function SaveSectionFlyout() {
                           return (
                             <label className="me-5">
                               <Checkbox
-                                className="items-center space-x-2 border rounded me-2 border-primary-500"
+                                className="me-2 items-center space-x-2 rounded border border-primary-500"
                                 checked={field.value?.includes(item.id)}
                                 onCheckedChange={(checked) => {
                                   return checked
@@ -281,11 +281,11 @@ export function SaveSectionFlyout() {
                   aria-disabled={
                     isPendingCreateSection || isPendingUpdateSection
                   }
-                  className="flex justify-center px-12 py-4 mx-auto"
+                  className="mx-auto flex justify-center px-12 py-4"
                 >
                   {isPendingCreateSection || isPendingUpdateSection ? (
                     <div className="flex items-center justify-center">
-                      <Loader2 className="w-6 h-6 mr-2 text-white animate-spin" />
+                      <Loader2 className="mr-2 h-6 w-6 animate-spin text-white" />
                       {isEditing ? 'Updating' : 'Saving'}
                     </div>
                   ) : isEditing ? (

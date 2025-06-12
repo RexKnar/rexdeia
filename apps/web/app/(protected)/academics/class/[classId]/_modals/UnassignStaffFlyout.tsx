@@ -93,7 +93,7 @@ export function UnassignStaffFlyout() {
         <SheetContent
           side="right"
           widthSize="sm"
-          className=" w-72 md:w-[28rem] lg:w-[32rem] px-4 py-6 bg-white"
+          className=" w-72 bg-white px-4 py-6 md:w-[28rem] lg:w-[32rem]"
           onCloseClick={() => closeFlyout()}
         >
           <SheetHeader>
@@ -120,7 +120,7 @@ export function UnassignStaffFlyout() {
                     >
                       {getStaffSubjectListResponse[index]?.sectionName}
                     </label>
-                    <div className="flex flex-wrap items-center mt-2 me-6">
+                    <div className="me-6 mt-2 flex flex-wrap items-center">
                       {getStaffSubjectListResponse[index]?.subjects.map(
                         (subject) => {
                           return (
@@ -131,7 +131,7 @@ export function UnassignStaffFlyout() {
                               render={({ field }) => (
                                 <>
                                   <Checkbox
-                                    className="items-center space-x-2 border rounded me-2 border-primary-500"
+                                    className="me-2 items-center space-x-2 rounded border border-primary-500"
                                     checked={field.value.includes(subject.id)}
                                     onCheckedChange={(checked) => {
                                       if (checked) {
@@ -168,12 +168,12 @@ export function UnassignStaffFlyout() {
               type="submit"
               size="lg"
               variant="default"
-              className="flex justify-center px-12 py-4 mx-auto mt-8"
+              className="mx-auto mt-8 flex justify-center px-12 py-4"
             >
               {' '}
               {isUnAssignStaffPending ? (
                 <div className="flex items-center justify-center">
-                  <Loader2 className="w-6 h-6 mr-2 text-white animate-spin" />
+                  <Loader2 className="mr-2 h-6 w-6 animate-spin text-white" />
                   removing
                 </div>
               ) : (
