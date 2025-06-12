@@ -2,7 +2,7 @@
 
 import { useGetBatchesListQuery } from 'lib/queries/batches/useGetBatchesListQuery';
 import { ChevronDown, Plus } from 'lucide-react';
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 import { useEffect, useState } from 'react';
 import {
@@ -17,6 +17,7 @@ import {
 
 export function ChooseBatch() {
   const router = useRouter();
+  const pathname = usePathname();
   const [batchList, setBatchList] = useState([]);
   // const router = useRouter();
   const { data: sessionData } = useSession();
@@ -32,7 +33,7 @@ export function ChooseBatch() {
 
   const handleSessionUpdate = async (batchId: string) => {
     try {
-      router.push(`/workspace?currentBatch=${batchId}`);
+      router.push(`/workspace?currentBatch=${batchId}&callBackUrl=${pathname}`);
     } catch (error) {
       console.error('Failed to update session:', error);
     }

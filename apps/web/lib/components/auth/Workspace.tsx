@@ -25,6 +25,7 @@ export function Workspace({
   const searchParams = useSearchParams();
 
   const currentBatch = searchParams.get('currentBatch');
+  const callBackUrl = searchParams.get('callBackUrl');
   const { update, status } = useSession();
   const handleSessionUpdate = async (payload) => {
     try {
@@ -74,7 +75,11 @@ export function Workspace({
         organizationName,
         currentBatch: currentBatch ?? '',
       });
-      router.push('/');
+      if (callBackUrl) {
+        router.push(callBackUrl);
+      } else {
+        router.push('/');
+      }
     }
 
     // This is intentional as we wanted to update the session only once
