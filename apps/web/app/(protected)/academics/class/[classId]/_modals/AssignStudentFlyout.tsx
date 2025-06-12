@@ -47,7 +47,7 @@ export function AssignStudentFlyout() {
         <SheetContent
           side="right"
           widthSize="sm"
-          className=" w-72 md:w-[28rem] lg:w-[32rem] px-4 py-6 bg-white"
+          className=" w-72 bg-white px-4 py-6 md:w-[28rem] lg:w-[32rem]"
           onCloseClick={() => closeFlyout()}
         >
           <SheetHeader>
@@ -72,7 +72,7 @@ export function AssignStudentFlyout() {
                 Student
               </label>
               <Select>
-                <SelectTrigger className="w-full mt-2">
+                <SelectTrigger className="mt-2 w-full">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
@@ -93,7 +93,7 @@ export function AssignStudentFlyout() {
                   Section
                 </label>
                 <Select>
-                  <SelectTrigger className="w-full mt-2">
+                  <SelectTrigger className="mt-2 w-full">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
@@ -116,7 +116,7 @@ export function AssignStudentFlyout() {
                 Group
               </label>
               <Select>
-                <SelectTrigger className="w-full mt-2">
+                <SelectTrigger className="mt-2 w-full">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
@@ -135,7 +135,7 @@ export function AssignStudentFlyout() {
                 Medium
               </label>
               <Select>
-                <SelectTrigger className="w-full mt-2">
+                <SelectTrigger className="mt-2 w-full">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
@@ -158,7 +158,7 @@ export function AssignStudentFlyout() {
                       Elective
                     </label>
                   </div>
-                  <div className="flex items-center ml-5 space-x-2">
+                  <div className="ml-5 flex items-center space-x-2">
                     <RadioGroupItem value="non-elective" />
                     <label
                       htmlFor="name"
@@ -174,7 +174,7 @@ export function AssignStudentFlyout() {
               <Button
                 size="default"
                 variant="default"
-                className="flex justify-center px-12 py-4 mx-auto"
+                className="mx-auto flex justify-center px-12 py-4"
               >
                 Save & Close
               </Button>
