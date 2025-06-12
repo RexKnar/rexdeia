@@ -55,7 +55,7 @@ export function ArchiveStudentFlyout() {
       <SheetContent
         side="right"
         widthSize="sm"
-        className="bg-white p-10"
+        className=" w-72 md:w-[28rem] lg:w-[32rem] px-4 py-6 bg-white"
         onCloseClick={() => closeFlyout()}
       >
         <SheetHeader>
@@ -88,13 +88,13 @@ export function ArchiveStudentFlyout() {
                 </p>
               )}
             </div>
-            <div className="mt-10 flex justify-center ">
+            <div className="flex justify-center mt-10 ">
               <Button
                 size="default"
                 variant="default"
                 type="submit"
                 disabled={isPendingArchiveStudent}
-                className="ml-3 flex justify-center px-4 py-4"
+                className="flex justify-center px-4 py-4 ml-3"
               >
                 Change
               </Button>

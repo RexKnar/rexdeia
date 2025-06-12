@@ -16,7 +16,7 @@ export function StaffList() {
   if (isStaffListLoading) {
     return (
       <div className="flex items-center justify-center">
-        <Loader2 className="mr-2 h-6 w-6 animate-spin text-black" />
+        <Loader2 className="w-6 h-6 mr-2 text-black animate-spin" />
         <p className="text-black">Fetching Staff List...</p>
       </div>
     );
@@ -31,19 +31,16 @@ export function StaffList() {
   }
 
   return (
-    <section className="grid w-full grid-cols-4 justify-between gap-4 px-0">
+    <section className="grid w-full grid-cols-1 gap-4 px-0 sm:grid-cols-1 md:grid-cols-3 lg:grid-cols-4">
       {staffListResponse.map((staffItem) => (
-        <div key={staffItem.id}>
-          <StaffCard
-            id={staffItem.id}
-            name={`
-              ${staffItem.firstName || ''}  ${staffItem.middleName || ''}  ${staffItem.lastName || ''}
-            `}
-            subjects={staffItem.subjects || []}
-            sectionsHandled={staffItem.sections || []}
-            sectionIncharge={staffItem.sectionIncharge || []}
-          />
-        </div>
+        <StaffCard
+          key={staffItem.id}
+          id={staffItem.id}
+          name={`${staffItem.firstName || ''} ${staffItem.middleName || ''} ${staffItem.lastName || ''}`.trim()}
+          subjects={staffItem.subjects || []}
+          sectionsHandled={staffItem.sections || []}
+          sectionIncharge={staffItem.sectionIncharge || []}
+        />
       ))}
     </section>
   );
