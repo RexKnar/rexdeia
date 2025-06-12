@@ -47,7 +47,7 @@ export function AssignStudentFlyout() {
         <SheetContent
           side="right"
           widthSize="sm"
-          className="bg-white p-10"
+          className=" w-72 bg-white px-4 py-6 md:w-[28rem] lg:w-[32rem]"
           onCloseClick={() => closeFlyout()}
         >
           <SheetHeader>

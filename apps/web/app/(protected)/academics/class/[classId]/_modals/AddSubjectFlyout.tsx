@@ -182,8 +182,7 @@ export function AddSubjectFlyout() {
       <Sheet open={isOpen}>
         <SheetContent
           side="right"
-          widthSize="sm"
-          className="bg-white p-10"
+          className="bg-white px-4 py-6 sm:w-96"
           onCloseClick={() => closeFlyout()}
         >
           <form onSubmit={handleSubmit(saveSubject)}>

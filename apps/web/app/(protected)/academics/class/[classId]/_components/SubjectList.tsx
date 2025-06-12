@@ -32,7 +32,7 @@ export function SubjectList() {
   }
 
   return (
-    <section className="grid justify-between w-full grid-cols-4 gap-4 px-0">
+    <section className="justify-between w-full gap-4 px-0 md:grid md:grid-cols-4 sm:grid sm:grid-cols-1">
       {subjectListResponse.map((subject) => (
         <div key={subject.id}>
           <SubjectCard
@@ -43,7 +43,7 @@ export function SubjectList() {
                 const { firstName, middleName, lastName } = staff.staff;
                 const fullName = [firstName, middleName, lastName]
                   .filter(Boolean)
-                  .join(' '); 
+                  .join(' ');
                 const sectionName = staff.section?.name;
                 return `${fullName} (${sectionName})`;
               })
