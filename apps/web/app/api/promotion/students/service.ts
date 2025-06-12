@@ -22,10 +22,6 @@ export async function getAllStudentByClassIdForPromotion(
 
   if (status === 'archive') {
     where.isCurrent = false;
-    where.onHold = false;
-  } else if (status === 'on-hold') {
-    where.isCurrent = false;
-    where.onHold = true;
   }
 
   return db.studentMapping.findMany({
@@ -43,7 +39,6 @@ export async function getAllStudentByClassIdForPromotion(
       rollNumber: true,
       isCurrent: true,
       batchId: true,
-      onHold: true,
     },
     orderBy: {
       rollNumber: 'asc',
@@ -55,15 +50,6 @@ export async function promoteStudentToNewClass(
   payload: PromoteStudentsToNewClassModel
 ) {
   return await db.$transaction([
-    // db.studentMapping.updateMany({
-    //   where: {
-    //     studentId: { in: payload.studentIds },
-    //     isCurrent: true,
-    //   },
-    //   data: {
-    //     isCurrent: false,
-    //   },
-    // }),
     ...payload.studentIds.map((studentId) =>
       db.studentMapping.create({
         data: {
@@ -84,7 +70,6 @@ export async function updateStudentStatus(
   studentIds: string[],
   data: {
     isCurrent: boolean;
-    onHold?: boolean;
     remark?: string;
   }
 ) {

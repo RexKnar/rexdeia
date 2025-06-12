@@ -9,7 +9,7 @@ import { PageTitle } from '@/components/PageTitle';
 import { AddScalesFlyout } from '../_modals/AddScalesFlyout';
 
 const RoleManagementFlyout = dynamic(() =>
-  import('../_modals/SaveRolemanagementFlyout').then((mod) => mod.GradeFlyout)
+  import('../_modals/SaveRolemanagementFlyout').then((mod) => mod.RoleFlyout)
 );
 
 export function RoleManagementPageHeader() {
@@ -25,12 +25,12 @@ export function RoleManagementPageHeader() {
           variant="default"
           onClick={async () => {
             const params = new URLSearchParams(searchParams);
-            params.set('isGradeFlyoutOpen', 'true');
+            params.set('isRoleFlyoutOpen', 'true');
 
             router.replace(pathname + '?' + params.toString());
           }}
         >
-          Add Role Management
+          Add New Role
         </Button>
       </section>
       <RoleManagementFlyout />

@@ -111,9 +111,9 @@ export function ClassDetail() {
           {getClassByIdResponse?.id ? (
             <>
               <PageTitle title="Class Details" className="mb-3" />
-              <div className="space-between mx-auto my-5 flex justify-between rounded-md bg-white p-6">
+              <div className="mx-auto my-5 flex justify-between rounded-md bg-white p-6 ">
                 <div className="flex">
-                  <div className="my-auto inline-flex px-5">
+                  <div className="my-auto inline-flex ">
                     <Text variant="base-bold" className="pr-5">
                       {getClassByIdResponse?.name}
                     </Text>
@@ -151,7 +151,9 @@ export function ClassDetail() {
                         strokeWidth={2}
                         className="text-primary"
                       />
-                      <span className="pl-2 text-primary">Edit</span>
+                      <span className="hidden pl-2 text-primary sm:inline">
+                        Edit
+                      </span>
                     </Button>
                   </div>
                 </div>

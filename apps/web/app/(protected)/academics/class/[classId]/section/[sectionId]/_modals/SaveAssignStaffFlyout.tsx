@@ -52,7 +52,7 @@ export function SaveAssignStaffFlyout() {
         <SheetContent
           side="right"
           widthSize="sm"
-          className="bg-white p-10"
+          className=" w-72 bg-white px-4 py-6 md:w-[28rem] lg:w-[32rem]"
           onCloseClick={() => closeFlyout()}
         >
           <SheetHeader>
@@ -73,7 +73,7 @@ export function SaveAssignStaffFlyout() {
             <div>
               <label
                 htmlFor="sectionName"
-                className=" text-sm font-semibold text-gray-700"
+                className="text-sm font-semibold text-gray-700 "
               >
                 Search staff
               </label>
@@ -94,7 +94,7 @@ export function SaveAssignStaffFlyout() {
               {filteredStaff.map((staff) => (
                 <div
                   key={staff.id}
-                  className="mb-2 flex items-center  border bg-gray-100"
+                  className="mb-2 flex items-center border bg-gray-100"
                 >
                   <Avatar className="ml-3 h-12 w-12 cursor-pointer ">
                     <AvatarImage src="https://png.pngtree.com/thumb_back/fh260/background/20230612/pngtree-man-wearing-glasses-is-wearing-colorful-background-image_2905240.jpg" />
