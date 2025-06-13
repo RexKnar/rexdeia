@@ -16,14 +16,14 @@ import {
   Text,
 } from 'ui';
 
-export function AddScalesFlyout() {
+export function AssignUsersRoleFlyout() {
   const pathname = usePathname();
   const router = useRouter();
   const searchParams = useSearchParams();
-  const isOpen = searchParams.get('isGradeScaleFlyoutOpen') === 'true';
+  const isOpen = searchParams.get('isAssignUsersOpen') === 'true';
   const [sliderValues, setSliderValues] = useState([[0, 100]]);
   const [errorMessages, setErrorMessages] = useState([false]);
-  const gradeId = searchParams.get('gradeId');
+  const gradeId = searchParams.get('roleId');
   const page = parseInt(searchParams.get('page')) || 1;
   const limit = parseInt(searchParams.get('limit')) || 10;
 
@@ -67,7 +67,7 @@ export function AddScalesFlyout() {
 
   const { fields, append, remove } = useFieldArray({
     control,
-    name: 'grade' as never,
+    name: 'role' as never,
   });
 
   const {
@@ -77,7 +77,7 @@ export function AddScalesFlyout() {
 
   const closeFlyout = async () => {
     const params = new URLSearchParams(searchParams);
-    params.set('isGradeScaleFlyoutOpen', 'false');
+    params.set('isAssignUsersOpen', 'false');
     router.replace(pathname + '?' + params.toString());
     setSliderValues([[0, 100]]);
     setErrorMessages([false]);
@@ -127,7 +127,7 @@ export function AddScalesFlyout() {
                     <div className="flex items-center">
                       <PlusCircle size={20} strokeWidth={1.5} />
                       <Text variant="lg-semibold" className="ml-2">
-                        Add More Grade Scales
+                        Add More Users
                       </Text>
                     </div>
                   </div>

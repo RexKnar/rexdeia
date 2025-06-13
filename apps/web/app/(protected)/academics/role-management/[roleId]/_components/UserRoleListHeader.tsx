@@ -6,11 +6,13 @@ import { Button } from 'ui';
 
 import { PageTitle } from '@/components/PageTitle';
 
-const RoleManagementFlyout = dynamic(() =>
-  import('../_modals/SaveRolemanagementFlyout').then((mod) => mod.RoleFlyout)
+const AssignUsersRoleFlyout = dynamic(() =>
+  import('../_models/AssignUsersRoleFlyout').then(
+    (mod) => mod.AssignUsersRoleFlyout
+  )
 );
 
-export function RoleManagementPageHeader() {
+export function UserRoleListHeader() {
   const pathname = usePathname();
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -18,20 +20,20 @@ export function RoleManagementPageHeader() {
   return (
     <>
       <section className="flex justify-between px-2">
-        <PageTitle title="Role Management" />
+        <PageTitle title="User Role List" />
         <Button
           variant="default"
           onClick={async () => {
             const params = new URLSearchParams(searchParams);
-            params.set('isRoleFlyoutOpen', 'true');
+            params.set('isAssignUsersOpen', 'true');
 
             router.replace(pathname + '?' + params.toString());
           }}
         >
-          Add New Role
+          Add New User
         </Button>
       </section>
-      <RoleManagementFlyout />
+      <AssignUsersRoleFlyout />
     </>
   );
 }
