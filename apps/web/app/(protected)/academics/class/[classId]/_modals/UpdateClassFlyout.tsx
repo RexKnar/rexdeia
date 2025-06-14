@@ -117,7 +117,7 @@ export function UpdateClassFlyout() {
         <SheetContent
           side="right"
           widthSize="sm"
-          className=" w-72 md:w-[28rem] lg:w-[32rem] px-4 py-6 bg-white"
+          className=" w-72 bg-white px-4 py-6 md:w-[28rem] lg:w-[32rem]"
           onCloseClick={() => {
             const params = new URLSearchParams(searchParams);
             params.set('isUpdateClassFlyoutOpen', 'false');
@@ -247,11 +247,11 @@ export function UpdateClassFlyout() {
                   variant="default"
                   disabled={isPendingUpdateClass}
                   aria-disabled={isPendingUpdateClass}
-                  className="flex justify-center px-12 py-4 mx-auto"
+                  className="mx-auto flex justify-center px-12 py-4"
                 >
                   {isPendingUpdateClass ? (
                     <div className="flex items-center justify-center">
-                      <Loader2 className="w-6 h-6 mr-2 text-white animate-spin" />
+                      <Loader2 className="mr-2 h-6 w-6 animate-spin text-white" />
                       Updating
                     </div>
                   ) : (

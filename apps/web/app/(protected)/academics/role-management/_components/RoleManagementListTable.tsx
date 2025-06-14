@@ -65,7 +65,7 @@ export function RoleManagementListTable() {
           {row.original.permissions.map((perm, index) => (
             <span
               key={index}
-              className="px-2 py-1 text-sm font-medium text-indigo-700 bg-blue-100 rounded-full"
+              className="rounded-full bg-blue-100 px-2 py-1 text-sm font-medium text-indigo-700"
             >
               {perm}
             </span>
@@ -140,7 +140,7 @@ export function RoleManagementListTable() {
                     <Tooltip>
                       <TooltipTrigger asChild>
                         <Button
-                          className="h-auto px-3 py-2 mr-3"
+                          className="mr-3 h-auto px-3 py-2"
                           variant="mild"
                         >
                           <Pencil
