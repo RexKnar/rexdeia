@@ -215,6 +215,7 @@ model Branch {
 
   CourseBatch          CourseBatch[]
   CoursePurchaseRecord CoursePurchaseRecord[]
+  Role                 Role[]
 }
 
 model Organization {
@@ -236,6 +237,7 @@ model Organization {
   users                UserOrganization[]
   InstituteCourse      InstituteCourse[]
   CoursePurchaseRecord CoursePurchaseRecord[]
+  Role                 Role[]
 }
 
 model UserOrganization {
@@ -246,6 +248,28 @@ model UserOrganization {
   branch         Branch?      @relation(fields: [branchId], references: [id])
   organization   Organization @relation(fields: [organizationId], references: [id])
   user           User         @relation(fields: [userId], references: [id])
+  role           String?      @db.Uuid
+}
+
+model Role {
+  id             String        @id @default(uuid()) @map("_id") @db.Uuid
+  name           String
+  organizationId String        @db.Uuid
+  branchId       String?       @db.Uuid
+  branch         Branch?       @relation(fields: [branchId], references: [id])
+  organization   Organization  @relation(fields: [organizationId], references: [id])
+  modelAccess    ModelAccess[]
+}
+
+model ModelAccess {
+  id     String  @id @default(uuid()) @map("_id") @db.Uuid
+  roleId String  @db.Uuid
+  role   Role    @relation(fields: [roleId], references: [id])
+  module String
+  create Boolean @default(false)
+  read   Boolean @default(false)
+  update Boolean @default(false)
+  delete Boolean @default(false)
 }
 
 model AdmissionForm {

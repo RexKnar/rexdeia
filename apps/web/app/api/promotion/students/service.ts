@@ -1,18 +1,31 @@
+import { authOptions } from 'lib/auth';
 import { db } from 'lib/db';
 import { PromoteStudentsToNewClassModel } from 'lib/domain/student';
+import { getServerSession } from 'next-auth';
 
 export async function getAllStudentByClassIdForPromotion(
   classId: string,
   sectionId?: string,
-  groupId?: string
+  groupId?: string,
+  status?: string
 ) {
+  const session = await getServerSession(authOptions);
+
+  let where: any = {
+    classId,
+    batchId: session.currentBatch,
+    isCurrent: true,
+  };
+
+  if (sectionId) where.sectionId = sectionId;
+  if (groupId) where.groupId = groupId;
+
+  if (status === 'archive') {
+    where.isCurrent = false;
+  }
+
   return db.studentMapping.findMany({
-    where: {
-      classId,
-      isCurrent: true,
-      ...(sectionId && { sectionId }),
-      ...(groupId && { groupId }),
-    },
+    where,
     select: {
       student: {
         select: {
@@ -24,6 +37,8 @@ export async function getAllStudentByClassIdForPromotion(
         },
       },
       rollNumber: true,
+      isCurrent: true,
+      batchId: true,
     },
     orderBy: {
       rollNumber: 'asc',
@@ -34,11 +49,11 @@ export async function getAllStudentByClassIdForPromotion(
 export async function promoteStudentToNewClass(
   payload: PromoteStudentsToNewClassModel
 ) {
-  return await db.$transaction(
-    payload.studentIds.map((studentId) =>
+  return await db.$transaction([
+    ...payload.studentIds.map((studentId) =>
       db.studentMapping.create({
         data: {
-          studentId: studentId,
+          studentId,
           classId: payload.classId,
           sectionId: payload.sectionId,
           groupId: payload.groupId,
@@ -46,6 +61,26 @@ export async function promoteStudentToNewClass(
           mediumId: payload.mediumId,
           isCurrent: true,
         },
+      })
+    ),
+  ]);
+}
+
+export async function updateStudentStatus(
+  studentIds: string[],
+  data: {
+    isCurrent: boolean;
+    remark?: string;
+  }
+) {
+  return await db.$transaction(
+    studentIds.map((studentId) =>
+      db.studentMapping.updateMany({
+        where: {
+          studentId,
+          isCurrent: true,
+        },
+        data,
       })
     )
   );
