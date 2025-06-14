@@ -10,7 +10,7 @@ import {
   useReactTable,
 } from '@tanstack/react-table';
 import { useGetRoleListQuery } from 'lib/queries/role-management/useGetRoleListMutationQuery';
-import { Pencil, PlusCircleIcon, Trash2 } from 'lucide-react';
+import { Pencil, PlusCircleIcon, Trash2, UserPlus } from 'lucide-react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import React, { useCallback, useState } from 'react';
 import { When } from 'react-if';
@@ -30,9 +30,11 @@ import {
   TableRow,
 } from 'ui/components/ui/Table';
 
+import { LinkButton } from '@/components/LinkButton';
 import { DeleteConfirmationModal } from '@/components/modals/DeleteConfirmationModal';
 
 import { RoleModel } from '../../../../../lib/domain/role';
+import { EditRoleManagementFlyout } from '../_modals/EditRoleManagementFlyout';
 
 export function RoleManagementListTable() {
   const [showRoleDeleteConfirmationModal, setShowRoleDeleteConfirmationModal] =
@@ -78,48 +80,87 @@ export function RoleManagementListTable() {
               modelAccess.map((access, idx) => (
                 <div
                   key={access.module || idx}
-                  className="rounded-md border border-indigo-200 bg-indigo-50 px-4 py-3 shadow-sm"
+                  className="rounded-md border border-indigo-200 bg-indigo-50 px-3 py-2 shadow-sm"
                 >
-                  <div className="mb-2 text-sm font-semibold capitalize text-indigo-700">
-                    {access.module}
+                  <div className="flex items-center justify-between">
+                    <div className="mb-2 text-sm font-semibold capitalize text-indigo-700">
+                      {access.module}
+                    </div>
+                    <Button
+                      variant="ghost"
+                      className="mb-2 h-8 w-8 p-1"
+                      onClick={() => handleEditRole(row.original)}
+                    >
+                      <Pencil size={16} className="text-gray-600" />
+                    </Button>
                   </div>
                   <div className="flex gap-2">
-                    <span
-                      className={`rounded-md px-2 py-1 text-xs font-medium ${
-                        access.create
-                          ? 'bg-green-100 text-green-700'
-                          : 'bg-gray-100 text-gray-400'
-                      }`}
-                    >
-                      C
-                    </span>
-                    <span
-                      className={`rounded-md px-2 py-1 text-xs font-medium ${
-                        access.read
-                          ? 'bg-blue-100 text-blue-700'
-                          : 'bg-gray-100 text-gray-400'
-                      }`}
-                    >
-                      R
-                    </span>
-                    <span
-                      className={`rounded-md px-2 py-1 text-xs font-medium ${
-                        access.update
-                          ? 'bg-yellow-100 text-yellow-700'
-                          : 'bg-gray-100 text-gray-400'
-                      }`}
-                    >
-                      U
-                    </span>
-                    <span
-                      className={`rounded-md px-2 py-1 text-xs font-medium ${
-                        access.delete
-                          ? 'bg-red-100 text-red-700'
-                          : 'bg-gray-100 text-gray-400'
-                      }`}
-                    >
-                      D
-                    </span>
+                    <Tooltip>
+                      {' '}
+                      <TooltipTrigger asChild>
+                        <span
+                          className={`rounded-md px-2 py-1 text-xs font-medium ${
+                            access.create
+                              ? 'bg-green-100 text-green-700'
+                              : 'bg-gray-100 text-gray-400'
+                          }`}
+                        >
+                          C
+                        </span>
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p>Create</p>
+                      </TooltipContent>
+                    </Tooltip>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <span
+                          className={`rounded-md px-2 py-1 text-xs font-medium ${
+                            access.read
+                              ? 'bg-blue-100 text-blue-700'
+                              : 'bg-gray-100 text-gray-400'
+                          }`}
+                        >
+                          R
+                        </span>
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p>Read</p>
+                      </TooltipContent>
+                    </Tooltip>
+                    <Tooltip>
+                      {' '}
+                      <TooltipTrigger asChild>
+                        <span
+                          className={`rounded-md px-2 py-1 text-xs font-medium ${
+                            access.update
+                              ? 'bg-yellow-100 text-yellow-700'
+                              : 'bg-gray-100 text-gray-400'
+                          }`}
+                        >
+                          U
+                        </span>
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p>Update</p>
+                      </TooltipContent>
+                    </Tooltip>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <span
+                          className={`rounded-md px-2 py-1 text-xs font-medium ${
+                            access.delete
+                              ? 'bg-red-100 text-red-700'
+                              : 'bg-gray-100 text-gray-400'
+                          }`}
+                        >
+                          D
+                        </span>
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p>Delete</p>
+                      </TooltipContent>
+                    </Tooltip>
                   </div>
                 </div>
               ))
@@ -170,13 +211,22 @@ export function RoleManagementListTable() {
 
   const handleEditRole = useCallback(
     (role: RoleModel) => {
-      const params = new URLSearchParams(searchParams);
-      params.set('isEditRoleOpen', 'true');
+      const params = new URLSearchParams(window.location.search);
+      params.set('isEditRoleFlyoutOpen', 'true');
       params.set('roleId', role.id);
-      router.replace(pathname + '?' + params.toString());
+      router.replace(`${pathname}?${params.toString()}`);
     },
-    [searchParams, pathname, router]
+    [pathname, router]
   );
+  // const handleAssignRole = useCallback(
+  //   (role: RoleModel) => {
+  //     const params = new URLSearchParams(searchParams);
+  //     params.set('isAssignUsersOpen', 'true');
+  //     params.set('roleId', role.id);
+  //     router.replace(pathname + '?' + params.toString());
+  //   },
+  //   [searchParams, pathname, router]
+  // );
 
   const handleDeleteRole = useCallback((role: RoleModel) => {
     setSelectedRole(role);
@@ -226,22 +276,22 @@ export function RoleManagementListTable() {
                       )}
                     </TableCell>
                   ))}
-                  <TableCell className="w-52">
+                  <TableCell className="flex w-52 gap-2">
                     <Tooltip>
                       <TooltipTrigger asChild>
-                        <Button
-                          className="mr-3 h-auto px-3 py-2"
-                          variant="mild"
-                          onClick={() => handleEditRole(row.original)}
+                        <LinkButton
+                          variant="outline"
+                          url={`/academics/role-management/${row.original.id}`}
+                          className="h-auto border-gray-700 px-3 py-2"
                         >
-                          <Pencil
+                          <UserPlus
                             size={12}
-                            className="text-center text-black"
+                            className="text-center text-gray-900 "
                           />
-                        </Button>
+                        </LinkButton>
                       </TooltipTrigger>
                       <TooltipContent>
-                        <p>Edit</p>
+                        <p>Assign</p>
                       </TooltipContent>
                     </Tooltip>
                     <Tooltip>
@@ -279,6 +329,7 @@ export function RoleManagementListTable() {
         <Pagination
           limit={limit.toString()}
           pageSize={limit}
+          pageNumber={page}
           totalRecords={getRoleListResponse?.total || 0}
           onPageChange={handleOnPageChange}
           disabled={isRoleListLoading}
@@ -305,6 +356,7 @@ export function RoleManagementListTable() {
           setSelectedRole(null);
         }}
       />
+      <EditRoleManagementFlyout />
     </section>
   );
 }

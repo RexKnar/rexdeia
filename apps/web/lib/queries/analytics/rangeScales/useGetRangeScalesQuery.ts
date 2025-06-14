@@ -3,28 +3,42 @@ import { makeAPICall } from 'lib/api';
 import { GetRangeScales } from 'lib/domain/analytics/rangeAnalytics';
 import { GET_RANGE_SCALES } from 'lib/endpoints/examAnalyticsEndpoints';
 
-function getRangeScales(
-  { rangeType, classId }: { rangeType: string; classId?: string },
-  options?: Partial<UseQueryOptions<GetRangeScales[]>>
-) {
-  const filter = classId ? { rangeType, classId } : { rangeType };
-  return {
-    ...options,
-    queryKey: [GET_RANGE_SCALES, rangeType],
-    queryFn: async () => {
-      return await makeAPICall<GetRangeScales[]>(
-        GET_RANGE_SCALES,
-        {},
-        filter,
-        {}
-      );
-    },
-  };
+interface RangeScaleFilter {
+  rangeType: string;
+  classId?: string;
+  academicYearId?: string;
 }
 
+const getRangeScales = async (filter: RangeScaleFilter) => {
+  const queryParams: Record<string, string> = {
+    rangeType: filter.rangeType,
+  };
+
+  if (filter.classId) queryParams.classId = filter.classId;
+  if (filter.academicYearId) queryParams.academicYearId = filter.academicYearId;
+
+  return await makeAPICall<GetRangeScales[]>(
+    GET_RANGE_SCALES,
+    {},
+    queryParams,
+    {}
+  );
+};
+
 export function useGetRangeScalesQuery(
-  filter: { rangeType: string; classId?: string },
+  filter: RangeScaleFilter,
   options?: Partial<UseQueryOptions<GetRangeScales[]>>
 ) {
-  return useQuery(getRangeScales(filter, options));
+  return useQuery<GetRangeScales[]>({
+    queryKey: [
+      GET_RANGE_SCALES,
+      filter.rangeType,
+      filter.classId,
+      filter.academicYearId,
+    ],
+    queryFn: () => getRangeScales(filter),
+    enabled:
+      !!filter.rangeType && (!!filter.classId || !!filter.academicYearId),
+    ...options,
+  });
 }
