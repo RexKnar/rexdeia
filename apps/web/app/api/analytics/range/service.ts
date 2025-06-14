@@ -22,19 +22,18 @@ export async function addRangeFilter(createRangePayload: {
   });
 }
 
-export async function getRangeScales(rangeType: string, classId?: string) {
+export async function getRangeScales(
+  rangeType: string,
+  classId?: string,
+  academicYearId?: string
+) {
   const session = await getServerSession(authOptions);
   const classDetail = await getClassById(classId);
-  let where = {};
-  if (rangeType == 'All') {
-    where = {
-      batchId: session.currentBatch,
-    };
-  } else {
-    where = {
-      batchId: session.currentBatch,
-      rangeOf: rangeType as RangeType,
-    };
+  const where: any = {
+    batchId: academicYearId ?? session.currentBatch,
+  };
+  if (rangeType !== 'All') {
+    where.rangeOf = rangeType as RangeType;
   }
   if (classDetail?.classLevelId) {
     where['classLevel'] = { id: classDetail.classLevelId };
