@@ -51,7 +51,7 @@ export default function Page() {
   if (isGetSectionResponseLoading) {
     return (
       <div className="flex items-center justify-center">
-        <Loader2 className="w-6 h-6 mr-2 text-black animate-spin" />
+        <Loader2 className="mr-2 h-6 w-6 animate-spin text-black" />
         <p className="text-black ">Fetching Section Details...</p>
       </div>
     );
@@ -66,11 +66,11 @@ export default function Page() {
   }
 
   return (
-    <section className="w-full p-3 bg-gray-50">
+    <section className="w-full bg-gray-50 p-3">
       <PageTitle title="Section Details" className="mb-3" />
-      <div className="flex justify-between p-6 mx-auto my-5 bg-white rounded-md space-between">
+      <div className="space-between mx-auto my-5 flex justify-between rounded-md bg-white p-6">
         <div className="flex">
-          <div className="inline-flex px-5 my-auto">
+          <div className="my-auto inline-flex px-5">
             <Text variant="base-bold" className="pr-5">
               {getSectionResponse.name}
             </Text>
@@ -79,7 +79,7 @@ export default function Page() {
             </span>
           </div>
         </div>
-        <div className="flex gap-4 px-5 my-auto">
+        <div className="my-auto flex gap-4 px-5">
           <div className="relative my-auto">
             <Button
               className="text-primary"
@@ -104,7 +104,7 @@ export default function Page() {
             <TabsTrigger
               key={tab}
               value={tab}
-              className="mr-2 text-base whitespace-nowrap focus:border-b-4 focus:border-primary"
+              className="mr-2 whitespace-nowrap text-base focus:border-b-4 focus:border-primary"
             >
               {tab}
             </TabsTrigger>
@@ -112,7 +112,7 @@ export default function Page() {
         </TabsList>
 
         <TabsContent className="relative w-full" value="Subjects">
-          <div className="flex flex-col gap-2 mb-4 sm:flex-row sm:items-center sm:justify-between">
+          <div className="mb-4 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
             <SubjectList />
             <Button
               variant="default"
@@ -130,7 +130,7 @@ export default function Page() {
 
         <TabsContent value="Students">
           <section className="relative pt-5">
-            <div className="absolute top-0 right-0 flex flex-col gap-3 sm:flex-row">
+            <div className="absolute right-0 top-0 flex flex-col gap-3 sm:flex-row">
               <LinkButton
                 variant="outline"
                 url={`/academics/class/assign-roll-number?classId=${classId}&sectionId=${sectionId}`}
@@ -162,7 +162,7 @@ export default function Page() {
                 params.set('isSaveAssignStaffFlyoutOpen', 'true');
                 router.replace(pathname + '?' + params.toString());
               }}
-              className="absolute top-0 right-0"
+              className="absolute right-0 top-0"
             >
               Assign Staff
             </Button>

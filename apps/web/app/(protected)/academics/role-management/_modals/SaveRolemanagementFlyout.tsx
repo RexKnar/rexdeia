@@ -45,8 +45,7 @@ export function RoleManagementFlyout() {
     reset();
   };
 
-  const SaveGrade = (data: any) => {
-    console.log('Form Data:', data);
+  const SaveGrade = () => {
     closeFlyout();
   };
 
@@ -56,7 +55,7 @@ export function RoleManagementFlyout() {
         <SheetContent
           side="right"
           widthSize="sm"
-          className="p-10 bg-white"
+          className="bg-white p-10"
           onCloseClick={closeFlyout}
         >
           <div className="max-h-[90vh] overflow-y-auto">
@@ -97,13 +96,9 @@ export function RoleManagementFlyout() {
               </div>
 
               {fields.map((field, index) => (
-                <section key={field.id} className="pt-4 mt-6 border-t">
+                <section key={field.id} className="mt-6 border-t pt-4">
                   <div className="flex items-center gap-2">
-                    <Select
-                      onValueChange={(value) =>
-                        control.setValue(`roles.${index}.role`, value)
-                      }
-                    >
+                    <Select>
                       <SelectTrigger className="w-[280px]">
                         <SelectValue placeholder="Select Role" />
                       </SelectTrigger>
@@ -125,7 +120,7 @@ export function RoleManagementFlyout() {
                     </Button>
                   </div>
 
-                  <div className="flex justify-between mt-4">
+                  <div className="mt-4 flex justify-between">
                     {['Read', 'Create', 'Update', 'Delete'].map((perm) => (
                       <div key={perm}>
                         <Checkbox
@@ -145,7 +140,7 @@ export function RoleManagementFlyout() {
                 <Button
                   size="lg"
                   variant="default"
-                  className="flex justify-center px-12 py-4 mx-auto"
+                  className="mx-auto flex justify-center px-12 py-4"
                   type="submit"
                 >
                   Save

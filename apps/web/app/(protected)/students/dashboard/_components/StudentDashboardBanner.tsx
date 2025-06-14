@@ -12,11 +12,11 @@ export function StudentDashboardBanner() {
     );
 
   return (
-    <section className="flex flex-col-reverse items-center justify-between gap-4 px-4 py-6 border rounded-md bg-primary-300 md:flex-row md:px-12 md:py-8">
+    <section className="flex flex-col-reverse items-center justify-between gap-4 rounded-md border bg-primary-300 px-4 py-6 md:flex-row md:px-12 md:py-8">
       <section className="text-center md:text-left">
         <div className="flex flex-wrap items-center justify-center gap-2 md:justify-start">
           <p className="text-xl font-semibold md:text-2xl">Explore</p>
-          <p className="px-2 py-1 text-base text-gray-100 rounded-md bg-primary-900 md:text-xl">
+          <p className="rounded-md bg-primary-900 px-2 py-1 text-base text-gray-100 md:text-xl">
             Student&apos;s Dashboard
           </p>
         </div>

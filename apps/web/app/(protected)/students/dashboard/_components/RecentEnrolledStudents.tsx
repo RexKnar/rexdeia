@@ -31,7 +31,7 @@ export function RecentEnrolledStudents({
   return (
     <section
       key={id}
-      className="w-full p-4 mt-4 transition-all duration-150 border-l-2 border-transparent rounded-md cursor-pointer hover:border-primary hover:bg-gray-50"
+      className="mt-4 w-full cursor-pointer rounded-md border-l-2 border-transparent p-4 transition-all duration-150 hover:border-primary hover:bg-gray-50"
     >
       <div className="flex flex-col items-start gap-4 md:grid md:grid-cols-[auto_1fr_1fr_1fr_auto]">
         <div className="flex justify-center md:justify-start">
@@ -72,7 +72,7 @@ export function RecentEnrolledStudents({
         </div>
 
         <div className="flex items-center justify-start md:justify-center">
-          <span className="px-2 py-1 text-sm text-white bg-green-600 rounded">
+          <span className="rounded bg-green-600 px-2 py-1 text-sm text-white">
             {status}
           </span>
         </div>
