@@ -18,11 +18,11 @@ import {
 
 import { useCreateGradeMutationQuery } from '../../../../../lib/queries/grade/useCreateGradeMutationQuery';
 
-export function EditGradeFlyout() {
+export function EditRoleManagementFlyout() {
   const pathname = usePathname();
   const router = useRouter();
   const searchParams = useSearchParams();
-  const isOpen = searchParams.get('isGradeFlyoutOpen') === 'true';
+  const isOpen = searchParams.get('isEditRoleFlyoutOpen') === 'true';
   const [sliderValues, setSliderValues] = useState([[0, 100]]);
   const [errorMessages, setErrorMessages] = useState([false]);
 
@@ -76,7 +76,7 @@ export function EditGradeFlyout() {
 
   const closeFlyout = async () => {
     const params = new URLSearchParams(searchParams);
-    params.set('isGradeFlyoutOpen', 'false');
+    params.set('isEditRoleFlyoutOpen', 'false');
     router.replace(pathname + '?' + params.toString());
     setSliderValues([[0, 100]]);
     setErrorMessages([false]);
