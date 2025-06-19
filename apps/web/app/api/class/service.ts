@@ -334,22 +334,23 @@ export async function unMapStaffsFromClass(
   const response = await Promise.all(
     sectionData.map(async (section) => {
       if (section.subjects.length > 0) {
-        section.subjects.map(async (subject) => {
+        return section.subjects.map(async (subject) => {
           const where = {
-            academicYearId_staffId_sectionId_subjectId_deletedAt: {
-              academicYearId: academicYearId,
-              staffId: staffId,
-              sectionId: section.sectionId,
-              subjectId: subject,
-              deletedAt: null,
-            },
+            // academicYearId_staffId_sectionId_subjectId_deletedAt: {
+            academicYearId: academicYearId,
+            staffId: staffId,
+            sectionId: section.sectionId,
+            subjectId: subject,
+            deletedAt: null,
+            // },
           };
-          return await db.academicSubjectForStaff.update({
+          const innerResponse = await db.academicSubjectForStaff.updateMany({
             where,
             data: {
               deletedAt: new Date(),
             },
           });
+          return innerResponse;
         });
       }
     })
