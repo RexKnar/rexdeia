@@ -37,6 +37,7 @@ export async function getStudentMarksByFilter(
       where: {
         ...mainClause,
         isCurrent: true,
+        onHold: false,
         batchId: session.currentBatch,
       },
       select: {
