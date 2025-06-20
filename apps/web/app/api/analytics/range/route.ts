@@ -95,21 +95,22 @@ export async function GET(request: NextRequest) {
 
   try {
     const rangeType = request.nextUrl.searchParams.get('rangeType') || 'All';
-    const classId = request.nextUrl.searchParams.get('classId');
+    const classId = request.nextUrl.searchParams.get('classId') ?? undefined;
     const academicYearId =
-      request.nextUrl.searchParams.get('academicYearId') ??
-      session.currentBatch;
+      request.nextUrl.searchParams.get('academicYearId') ?? undefined;
+
     const rangeScales = await getRangeScales(
       rangeType,
       classId,
       academicYearId
     );
+
     return new NextResponse(JSON.stringify(rangeScales), {
       status: StatusCodes.OK,
     });
   } catch (e) {
     captureException(e);
-    return new NextResponse(e, {
+    return new NextResponse(JSON.stringify({ error: e.message }), {
       status: StatusCodes.BAD_REQUEST,
     });
   }
