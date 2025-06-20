@@ -11,6 +11,7 @@ import {
 import { RangeScaleModel } from 'lib/domain/analytics/rangeAnalytics';
 import { useDeleteRangeMutationQuery } from 'lib/queries/analytics/rangeScales/useDeleteRangeMutationQuery';
 import { useGetRangeScalesQuery } from 'lib/queries/analytics/rangeScales/useGetRangeScalesQuery';
+import { useGetBatchesListQuery } from 'lib/queries/batches/useGetBatchesListQuery';
 import { Trash2 } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { When } from 'react-if';
@@ -43,6 +44,7 @@ export function RangeScaleList() {
 
   const [showDeleteConfirmationModal, setShowDeleteConfirmationModal] =
     useState(false);
+  const [selectedAcademicYearId, setSelectedAcademicYearId] = useState('');
   const [selectedRange, setSelectedRange] = useState<RangeScaleModel | null>(
     null
   );
@@ -118,11 +120,36 @@ export function RangeScaleList() {
       },
     },
   ];
+  const { data: allBatchesList } = useGetBatchesListQuery({
+    page: 1,
+    limit: 100,
+    filter: { isActive: true },
+  });
+
+  useEffect(() => {
+    if (
+      allBatchesList?.data?.length &&
+      (!selectedAcademicYearId ||
+        !allBatchesList.data.find(
+          (current) => current.id === selectedAcademicYearId
+        ))
+    ) {
+      setSelectedAcademicYearId(allBatchesList.data[0].id);
+    }
+  }, [allBatchesList]);
 
   const {
     data: getRangeScaleListResponse,
     isLoading: isRangeScaleListLoading,
-  } = useGetRangeScalesQuery({ rangeType: filterType });
+  } = useGetRangeScalesQuery(
+    {
+      rangeType: filterType,
+      academicYearId: selectedAcademicYearId,
+    },
+    {
+      enabled: !!selectedAcademicYearId,
+    }
+  );
 
   const table = useReactTable({
     columns,
@@ -178,7 +205,7 @@ export function RangeScaleList() {
                 }
               }}
             >
-              <SelectTrigger className="mt-2 w-full">
+              <SelectTrigger className="w-full">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>

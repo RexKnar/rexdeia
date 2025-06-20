@@ -39,7 +39,7 @@ export const menuItems: SidebarMenuItem[] = [
         id: 'class-dashboard',
         label: 'Dashboard',
         icon: FileText,
-        path: '/class/dashboard',
+        path: '/academics/class/dashboard',
       },
       {
         id: 'class-list',
@@ -231,7 +231,7 @@ export const menuItem = {
           id: 'class-dashboard',
           label: 'Dashboard',
           icon: FileText,
-          path: '/class/dashboard',
+          path: '/academics/class/dashboard',
         },
         {
           id: 'class-list',
@@ -501,7 +501,7 @@ export const menuItem = {
           id: 'class-dashboard',
           label: 'Dashboard',
           icon: FileText,
-          path: '/class/dashboard',
+          path: '/academics/class/dashboard',
         },
         {
           id: 'class-list',
@@ -853,7 +853,7 @@ export const instituteMenu = {
           id: 'class-dashboard',
           label: 'Dashboard',
           icon: FileText,
-          path: '/class/dashboard',
+          path: '/academics/class/dashboard',
         },
         {
           id: 'class-list',
