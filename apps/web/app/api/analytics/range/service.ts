@@ -35,11 +35,9 @@ export async function getRangeScales(
   if (rangeType !== 'All') {
     where.rangeOf = rangeType as RangeType;
   }
-  if (classDetail?.classLevelId) {
-    where['classLevel'] = { id: classDetail.classLevelId };
-  } else {
-    where['classLevel'] = null;
-  }
+  where.classLevel = classDetail?.classLevelId
+    ? { id: classDetail.classLevelId }
+    : null;
 
   const rangeScales = await db.rangeScales.findMany({
     where: where,

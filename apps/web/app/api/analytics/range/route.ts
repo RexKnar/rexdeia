@@ -97,7 +97,8 @@ export async function GET(request: NextRequest) {
     const rangeType = request.nextUrl.searchParams.get('rangeType') || 'All';
     const classId = request.nextUrl.searchParams.get('classId');
     const academicYearId =
-      request.nextUrl.searchParams.get('academicYearId') ?? undefined;
+      request.nextUrl.searchParams.get('academicYearId') ??
+      session.currentBatch;
     const rangeScales = await getRangeScales(
       rangeType,
       classId,
