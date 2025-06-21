@@ -178,7 +178,7 @@ export function RangeScaleList() {
                 }
               }}
             >
-              <SelectTrigger className="mt-2 w-full">
+              <SelectTrigger className="w-full">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
