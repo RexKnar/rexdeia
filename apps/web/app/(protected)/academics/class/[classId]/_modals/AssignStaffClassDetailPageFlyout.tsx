@@ -135,7 +135,7 @@ export function AssignStaffClassDetailPageFlyout() {
       toast({
         title: 'Success',
         variant: 'default',
-        description: 'staff assigned successfully',
+        description: 'Staff assigned successfully',
       });
       setSubjectId(null);
     }
@@ -162,7 +162,7 @@ export function AssignStaffClassDetailPageFlyout() {
         <SheetContent
           side="right"
           widthSize="sm"
-          className=" w-72 md:w-[28rem] lg:w-[32rem] px-4 py-6 bg-white"
+          className=" w-72 bg-white px-4 py-6 md:w-[28rem] lg:w-[32rem]"
           onCloseClick={() => closeFlyout()}
         >
           <div className="max-h-[80vh] overflow-y-auto">
@@ -181,7 +181,7 @@ export function AssignStaffClassDetailPageFlyout() {
               <div className="mt-8">
                 {fields.map((row, index) => (
                   <section key={row.id}>
-                    <div className="flex gap-4 mt-5">
+                    <div className="mt-5 flex gap-4">
                       <div className="w-full">
                         <label
                           htmlFor="searchStaff"
@@ -205,7 +205,7 @@ export function AssignStaffClassDetailPageFlyout() {
                               }
                             }}
                           >
-                            <SelectTrigger className="w-full mt-2" key={index}>
+                            <SelectTrigger className="mt-2 w-full" key={index}>
                               <SelectValue />
                             </SelectTrigger>
                             <SelectContent>
@@ -218,7 +218,7 @@ export function AssignStaffClassDetailPageFlyout() {
                               </SelectGroup>
                             </SelectContent>
                           </Select>
-                          <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                          <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
                             <Search className="text-primary-200" size={20} />
                           </div>
                         </div>
@@ -251,7 +251,7 @@ export function AssignStaffClassDetailPageFlyout() {
                               }
                             }}
                           >
-                            <SelectTrigger className="w-full mt-2">
+                            <SelectTrigger className="mt-2 w-full">
                               <SelectValue />
                             </SelectTrigger>
                             <SelectContent>
@@ -264,7 +264,7 @@ export function AssignStaffClassDetailPageFlyout() {
                               </SelectGroup>
                             </SelectContent>
                           </Select>
-                          <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                          <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
                             <Search className="text-primary-200" size={20} />
                           </div>
                         </div>
@@ -278,7 +278,7 @@ export function AssignStaffClassDetailPageFlyout() {
                       {fields.length > 1 ? (
                         <div className="mt-8">
                           <Button
-                            className="px-2 bg-red-600 border-transparent"
+                            className="border-transparent bg-red-600 px-2"
                             variant="outline"
                             size="sm"
                             onClick={() => {
@@ -300,7 +300,7 @@ export function AssignStaffClassDetailPageFlyout() {
                       >
                         Sections
                       </label>
-                      <div className="flex flex-wrap mt-2" id="sectionId">
+                      <div className="mt-2 flex flex-wrap" id="sectionId">
                         {sectionResponseByGroup?.length ? (
                           sectionResponseByGroup?.map((item) => (
                             <label className="me-5" key={item.id}>
@@ -312,7 +312,7 @@ export function AssignStaffClassDetailPageFlyout() {
                                   return (
                                     <label className="me-5">
                                       <Checkbox
-                                        className="items-center space-x-2 border rounded me-2 border-primary-500"
+                                        className="me-2 items-center space-x-2 rounded border border-primary-500"
                                         onCheckedChange={(checked) => {
                                           return checked
                                             ? field.onChange([
@@ -335,7 +335,7 @@ export function AssignStaffClassDetailPageFlyout() {
                           ))
                         ) : (
                           <div className="flex items-center justify-center">
-                            <Loader2 className="w-6 h-6 mr-2 text-black animate-spin" />
+                            <Loader2 className="mr-2 h-6 w-6 animate-spin text-black" />
                             <p className="text-black ">
                               Please Select Subject...
                             </p>
@@ -357,7 +357,7 @@ export function AssignStaffClassDetailPageFlyout() {
                       >
                         Class InCharge
                       </label>
-                      <div className="flex flex-wrap mt-2" id="sectionId">
+                      <div className="mt-2 flex flex-wrap" id="sectionId">
                         {sectionListResponse?.data?.map((item) => (
                           <label className="me-5" key={item.id}>
                             <Controller
@@ -368,7 +368,7 @@ export function AssignStaffClassDetailPageFlyout() {
                                 return (
                                   <label className="me-5">
                                     <Checkbox
-                                      className="items-center space-x-2 border rounded me-2 border-primary-500"
+                                      className="me-2 items-center space-x-2 rounded border border-primary-500"
                                       onCheckedChange={(checked) => {
                                         return checked
                                           ? field.onChange([
@@ -423,7 +423,7 @@ export function AssignStaffClassDetailPageFlyout() {
                             }
                           }}
                         >
-                          <SelectTrigger className="w-full mt-2">
+                          <SelectTrigger className="mt-2 w-full">
                             <SelectValue />
                           </SelectTrigger>
                           <SelectContent>
@@ -436,7 +436,7 @@ export function AssignStaffClassDetailPageFlyout() {
                             </SelectGroup>
                           </SelectContent>
                         </Select>
-                        <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                        <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
                           <Search className="text-primary-200" size={20} />
                         </div>
                       </div>
@@ -454,7 +454,7 @@ export function AssignStaffClassDetailPageFlyout() {
                 <Button
                   size="sm"
                   variant="outline"
-                  className="flex justify-center px-4 py-2 mx-auto"
+                  className="mx-auto flex justify-center px-4 py-2"
                   onClick={() => {
                     append({ section: 'section' });
                   }}
@@ -469,7 +469,7 @@ export function AssignStaffClassDetailPageFlyout() {
                   type="submit"
                   size="lg"
                   variant="default"
-                  className="flex justify-center px-12 py-4 mx-auto"
+                  className="mx-auto flex justify-center px-12 py-4"
                 >
                   Save & Close
                 </Button>

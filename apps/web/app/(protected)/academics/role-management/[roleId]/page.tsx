@@ -1,13 +1,7 @@
-import React from 'react';
-
-import UserRoleList from './_components/UserRoleList';
-import { UserRoleListHeader } from './_components/UserRoleListHeader';
-
 const UserRole = () => {
   return (
     <div>
-      <UserRoleListHeader />
-      <UserRoleList />
+      <h1>This is a role members page</h1>
     </div>
   );
 };

@@ -1,6 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { UnassignStaffModel } from 'lib/domain/staff';
 import {
+  GET_STAFF_LIST_BY_CLASS_ID,
   GET_STAFF_SUBJECT_LIST_BY_CLASS_ID,
   UNASSIGN_STAFF_SECTION_BY_ID,
 } from 'lib/endpoints';
@@ -21,6 +22,9 @@ export function useUnassignStaffFromSubjectMutationQurey(
         { academicYearId: academicYearId },
         { id: classId, staffId: staffId }
       );
+      await queryClient.invalidateQueries({
+        queryKey: [GET_STAFF_LIST_BY_CLASS_ID, classId],
+      });
       await queryClient.refetchQueries({
         queryKey: [GET_STAFF_SUBJECT_LIST_BY_CLASS_ID, classId],
       });
