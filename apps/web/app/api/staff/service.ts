@@ -261,6 +261,7 @@ export async function getAllStaffsBySectionsIdWithSubjects(ids: string[]) {
           sectionId: {
             in: ids,
           },
+          academicYearId: session.currentBatch,
           deletedAt: null,
         },
         select: {

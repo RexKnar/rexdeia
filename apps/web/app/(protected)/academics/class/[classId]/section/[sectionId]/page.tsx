@@ -97,35 +97,22 @@ export default function Page() {
           </div>
         </div>
       </div>
-      <Tabs defaultValue="Students" className="relative mt-4 px-0 py-2">
-        <TabsList className="w-full justify-start border-b-2 border-gray-400">
-          <TabsTrigger
-            value="Subjects"
-            className="mr-2 text-base focus:border-b-4 focus:border-primary"
-          >
-            Subjects
-          </TabsTrigger>
-          <TabsTrigger
-            value="Students"
-            className="mr-2 text-base focus:border-b-4 focus:border-primary"
-          >
-            Students
-          </TabsTrigger>
-          <TabsTrigger
-            value="Staffs"
-            className="mr-2 text-base focus:border-b-4 focus:border-primary"
-          >
-            Staffs
-          </TabsTrigger>
-          <TabsTrigger
-            value="Assessments"
-            className="mr-2 text-base focus:border-b-4 focus:border-primary"
-          >
-            Assessments
-          </TabsTrigger>
+
+      <Tabs defaultValue="Students" className="relative mt-4">
+        <TabsList className="w-full overflow-x-auto border-b-2 border-gray-400">
+          {['Subjects', 'Students', 'Staffs', 'Assessments'].map((tab) => (
+            <TabsTrigger
+              key={tab}
+              value={tab}
+              className="mr-2 whitespace-nowrap text-base focus:border-b-4 focus:border-primary"
+            >
+              {tab}
+            </TabsTrigger>
+          ))}
         </TabsList>
-        <TabsContent className="w-full" value="Subjects">
-          <div className="mb-4 flex items-center justify-between">
+
+        <TabsContent className="relative w-full" value="Subjects">
+          <div className="mb-4 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
             <SubjectList />
             <Button
               variant="default"
@@ -134,20 +121,21 @@ export default function Page() {
                 params.set('isAddSubjectFlyoutOpen', 'true');
                 router.replace(pathname + '?' + params.toString());
               }}
-              className="absolute right-0 top-0"
+              className="w-full sm:w-auto"
             >
               Add Subject
             </Button>
           </div>
         </TabsContent>
+
         <TabsContent value="Students">
-          <section className="pt-5">
-            <section className="absolute right-0 top-0 flex gap-3 ">
+          <section className="relative pt-5">
+            <div className="absolute right-0 top-0 flex flex-col gap-3 sm:flex-row">
               <LinkButton
                 variant="outline"
                 url={`/academics/class/assign-roll-number?classId=${classId}&sectionId=${sectionId}`}
               >
-                Assign Role Number
+                Assign Roll Number
               </LinkButton>
               <Button
                 variant="default"
@@ -156,33 +144,33 @@ export default function Page() {
                   params.set('isAssignStudentFlyoutOpen', 'true');
                   router.replace(pathname + '?' + params.toString());
                 }}
-                className=""
               >
                 Assign Students
               </Button>
-            </section>
+            </div>
             <StudentList />
           </section>
         </TabsContent>
+
         <TabsContent value="Staffs">
-          <section className="pt-5">
+          <section className="relative pt-5">
             <StaffList />
             <Button
               variant="default"
               onClick={async () => {
                 const params = new URLSearchParams(searchParams);
                 params.set('isSaveAssignStaffFlyoutOpen', 'true');
-
                 router.replace(pathname + '?' + params.toString());
               }}
               className="absolute right-0 top-0"
             >
-              Assign staff
+              Assign Staff
             </Button>
           </section>
         </TabsContent>
+
         <TabsContent value="Assessments">
-          <h1>Page 4</h1>
+          <h1 className="mt-5">Assessments Content</h1>
         </TabsContent>
       </Tabs>
       <AddSubjectFlyout />

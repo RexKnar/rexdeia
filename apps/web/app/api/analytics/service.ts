@@ -1,4 +1,6 @@
+import { authOptions } from 'lib/auth';
 import { db } from 'lib/db';
+import { getServerSession } from 'next-auth';
 
 import { getGradeByClassId } from '../grade/service';
 
@@ -20,6 +22,7 @@ export async function getStudentMarksByFilter(
 ) {
   const { classId, examId, sectionId } = filter;
   const { gradeScales } = await getGradeByClassId(classId);
+  const session = await getServerSession(authOptions);
 
   const mainClause = {};
   if (sectionId) {
@@ -34,6 +37,8 @@ export async function getStudentMarksByFilter(
       where: {
         ...mainClause,
         isCurrent: true,
+        onHold: false,
+        batchId: session.currentBatch,
       },
       select: {
         student: {
