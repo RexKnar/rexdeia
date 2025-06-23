@@ -33,12 +33,11 @@ export function useGetRangeScalesQuery(
     queryKey: [
       GET_RANGE_SCALES,
       filter.rangeType,
-      filter.classId,
-      filter.academicYearId,
+      filter.classId ?? null,
+      filter.academicYearId ?? null,
     ],
     queryFn: () => getRangeScales(filter),
-    enabled:
-      !!filter.rangeType && (!!filter.classId || !!filter.academicYearId),
+    enabled: !!filter.rangeType,
     ...options,
   });
 }
