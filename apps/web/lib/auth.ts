@@ -119,9 +119,10 @@ export const authOptions: NextAuthOptions = {
               branchId: token.branchId,
             },
           });
-          token.currentBatch = academicDetails.id;
+          token.currentBatch = academicDetails?.id ?? '';
         }
       }
+
       return {
         ...token,
         id: dbUser.id,
