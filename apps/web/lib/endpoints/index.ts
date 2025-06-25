@@ -153,6 +153,7 @@ export const EXAM_MARK_ENTRY = `EXAM_MARK_ENTRY`;
 export const UPDATE_STAFF_BY_ID = `UPDATE_STAFF_BY_ID`;
 export const GET_SUBJECT_LIST_BY_STAFF_ID = `GET_SUBJECT_LIST_BY_STAFF_ID`;
 export const UNASSIGN_STAFF_SECTION_BY_ID = `UNASSIGN_STAFF_SECTION_BY_ID`;
+export const UNASSIGN_CLASS_INCHARGE_BY_ID = `UNASSIGN_CLASS_INCHARGE_BY_ID`;
 export const ADD_COMMUNITY = `ADD_COMMUNITY`;
 export const ADD_LANGUAGE = `ADD_LANGUAGE`;
 export const ADD_STAFF_CATEGORY = `ADD_STAFF_CATEGORY`;
@@ -819,6 +820,10 @@ export default <EndpointDetails>{
   [UNASSIGN_STAFF_SECTION_BY_ID]: {
     requestType: `DELETE`,
     endpoint: `/api/class/[id]/staffs/[staffId]/subjects`,
+  },
+  [UNASSIGN_CLASS_INCHARGE_BY_ID]: {
+    requestType: `DELETE`,
+    endpoint: `/api/class/[id]/incharge/[staffId]`,
   },
   [ADD_COMMUNITY]: {
     requestType: 'POST',
