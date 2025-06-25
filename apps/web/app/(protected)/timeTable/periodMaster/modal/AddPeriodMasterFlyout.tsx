@@ -204,37 +204,22 @@ export function AddPeriodMasterFlyout() {
               </div>
               <div className="w-full">
                 <label className="mt-1 block text-sm text-gray-700">Day</label>
-                <Select
-                  autoComplete="off"
-                  value={watch('daysId')}
-                  {...register('daysId', {
-                    required: 'Select a day',
-                  })}
-                  onValueChange={(value) => {
-                    if (value) {
-                      setValue('daysId', value);
-                    }
-                  }}
-                >
+                <Select>
                   <SelectTrigger className="w-full">
-                    <SelectValue />
+                    <SelectValue placeholder="Select a day" />
                   </SelectTrigger>
                   <SelectContent>
                     <SelectGroup>
-                      {daysListResponse &&
-                        daysListResponse?.data?.map((item) => (
-                          <SelectItem key={item.id} value={item.id}>
-                            {item.name}
-                          </SelectItem>
-                        ))}
+                      <SelectItem value="monday">Monday</SelectItem>
+                      <SelectItem value="tuesday">Tuesday</SelectItem>
+                      <SelectItem value="wednesday">Wednesday</SelectItem>
+                      <SelectItem value="thursday">Thursday</SelectItem>
+                      <SelectItem value="friday">Friday</SelectItem>
+                      <SelectItem value="saturday">Saturday</SelectItem>
+                      <SelectItem value="sunday">Sunday</SelectItem>
                     </SelectGroup>
                   </SelectContent>
                 </Select>
-                {errors['daysId'] && (
-                  <p className="mb-2 h-2 p-1 text-sm text-red-600">
-                    {errors['daysId'].message as string}
-                  </p>
-                )}
               </div>
               <div className="mt-10">
                 <Button
