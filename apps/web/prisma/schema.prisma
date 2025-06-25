@@ -867,6 +867,7 @@ model Batch {
   StudentMapping          StudentMapping[]
   RangeScales             RangeScales[]
   Session                 Session[]
+  Section                 Section[]
 }
 
 model Class {
@@ -930,22 +931,24 @@ model Section {
   isActive                Boolean
   mediumId                String                    @db.Uuid
   classId                 String                    @db.Uuid
+  academicYearId          String?                   @db.Uuid
   createdAt               DateTime?                 @default(now())
   updatedAt               DateTime?                 @default(now())
-  subjectId               String?                   @db.Uuid
-  staffId                 String?                   @db.Uuid
   isDeleted               Boolean                   @default(false)
   academicSubjectForStaff AcademicSubjectForStaff[]
   ExamGroup               ExamGroup[]
   periods                 Periods[]
   class                   Class                     @relation(fields: [classId], references: [id])
   medium                  Medium                    @relation(fields: [mediumId], references: [id])
-  staff                   Staff?                    @relation(fields: [staffId], references: [id])
-  Subject                 Subject?                  @relation(fields: [subjectId], references: [id])
+  academicYear            Batch?                    @relation(fields: [academicYearId], references: [id])
   sectionToGroups         SectionToGroups[]
   staffSections           StaffSection[]
   students                Student[]
   studentMapping          StudentMapping[]
+  Staff                   Staff?                    @relation(fields: [staffId], references: [id])
+  staffId                 String?                   @db.Uuid
+  Subject                 Subject?                  @relation(fields: [subjectId], references: [id])
+  subjectId               String?                   @db.Uuid
 }
 
 model SectionToGroups {

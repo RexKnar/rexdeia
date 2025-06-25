@@ -7,6 +7,7 @@ export async function addStudentCSV(studentDetails: any) {
   try {
     const promises = [];
     const session = await getServerSession(authOptions);
+
     for (const studentDetail of studentDetails) {
       if (studentDetail.Name && studentDetail.AadhaarNumber) {
         const classDetail = await db.class.findFirst({
@@ -109,10 +110,9 @@ export async function addStudentCSV(studentDetails: any) {
 
         const student = await db.student.findFirst({
           where: {
-            aadharCardNumber: studentDetail.AadhaarNumber,
+            emailId: studentDetail.EMISId,
           },
         });
-
         if (!student && studentDetail.AadhaarNumber) {
           const createdStudent = await db.student.create({
             data: {
@@ -188,7 +188,6 @@ export async function addStudentCSV(studentDetails: any) {
               status: 'DirectStudentEntry',
             },
           });
-
           promises.push(createdStudent);
         }
       }
