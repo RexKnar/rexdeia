@@ -84,6 +84,7 @@ export function SectionCard({
                   <Button
                     size="sm"
                     className="flex-1"
+                    variant="link"
                     onClick={(e) => {
                       e.stopPropagation();
                       const params = new URLSearchParams(
