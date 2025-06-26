@@ -21,6 +21,8 @@ import {
   Text,
 } from 'ui';
 
+import { SearchableSelect } from '@/components/SearchableSelect';
+
 import { useCreateClassMutationQuery } from '../../../../../../lib/queries/class/useCreateClassMutationQuery';
 import { useGetMediumListQuery } from '../../../../../../lib/queries/medium/useGetMediumListQuery';
 
@@ -91,7 +93,7 @@ export default function AddClass() {
   }
 
   return (
-    <section className="relative mt-5 w-full px-4">
+    <section className="relative w-full px-4 mt-5">
       <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
         <Text variant="lg-semibold" className="text-2xl">
           New Class
@@ -113,7 +115,7 @@ export default function AddClass() {
       </div>
 
       <form onSubmit={handleSubmit(addClass)}>
-        <div className="mt-6 grid grid-cols-1 gap-5 lg:grid-cols-2">
+        <div className="grid grid-cols-1 gap-5 mt-6 lg:grid-cols-2">
           <div>
             <label
               htmlFor="name"
@@ -125,7 +127,7 @@ export default function AddClass() {
               {...register('name', {
                 required: 'Class Name is Required',
               })}
-              className="border-primary-200 p-1"
+              className="p-1 border-primary-200"
               id="name"
               errorMessage={fieldErrors?.name?.message?.toString()}
             />
@@ -168,7 +170,7 @@ export default function AddClass() {
           {fields.map((row, index) => (
             <div
               key={row.id}
-              className="mb-6 grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-5"
+              className="grid grid-cols-1 gap-5 mb-6 md:grid-cols-2 xl:grid-cols-5"
             >
               <div>
                 <label className="text-sm font-semibold text-gray-700">
@@ -178,41 +180,24 @@ export default function AddClass() {
                   {...register(`section.${index}.name`, {
                     required: 'Section Name is Required',
                   })}
-                  className="border-primary-200 p-1"
+                  className="p-1 border-primary-200"
                   errorMessage={fieldErrors?.section?.message?.toString()}
                 />
               </div>
-
-              <div>
-                <label className="text-sm font-semibold text-gray-700">
-                  Medium
-                </label>
-                <Controller
-                  control={control}
-                  name={`section.${index}.mediumId`}
-                  render={({ field }) => (
-                    <Select
-                      onValueChange={field.onChange}
-                      value={field.value}
-                      disabled={isMediumListLoading}
-                    >
-                      <SelectTrigger className="w-full">
-                        <SelectValue placeholder="Select Medium" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectGroup>
-                          {mediumListResponse?.data?.map((item) => (
-                            <SelectItem key={item.id} value={item.id}>
-                              {item.name}
-                            </SelectItem>
-                          ))}
-                        </SelectGroup>
-                      </SelectContent>
-                    </Select>
-                  )}
-                />
-              </div>
-
+              <Controller
+                control={control}
+                name={`section.${index}.mediumId`}
+                render={({ field }) => (
+                  <SearchableSelect
+                    label="Medium"
+                    value={field.value}
+                    onChange={field.onChange}
+                    options={mediumListResponse?.data || []}
+                    placeholder="Select Medium"
+                    disabled={isMediumListLoading}
+                  />
+                )}
+              />
               <div>
                 <label className="text-sm font-semibold text-gray-700">
                   Group
@@ -274,7 +259,7 @@ export default function AddClass() {
 
               <div className="flex items-center lg:justify-center">
                 <Button
-                  className="mt-5 bg-red-600 text-white hover:bg-red-700"
+                  className="mt-5 text-white bg-red-600 hover:bg-red-700"
                   variant="outline"
                   type="button"
                   onClick={() => remove(index)}
@@ -289,14 +274,14 @@ export default function AddClass() {
             type="button"
             onClick={() => append({})}
             variant="outline"
-            className="mt-6 w-full border-dotted text-primary"
+            className="w-full mt-6 border-dotted text-primary"
           >
             <Plus size={20} className="mr-2" />
             Add Section
           </Button>
         </div>
 
-        <div className="mt-10 flex justify-center">
+        <div className="flex justify-center mt-10">
           <Button
             size="lg"
             variant="default"
@@ -306,7 +291,7 @@ export default function AddClass() {
           >
             {isPendingCreateClass ? (
               <div className="flex items-center">
-                <Loader2 className="mr-2 h-6 w-6 animate-spin" />
+                <Loader2 className="w-6 h-6 mr-2 animate-spin" />
                 Saving
               </div>
             ) : (
