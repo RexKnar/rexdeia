@@ -1,6 +1,6 @@
 generator client {
   provider        = "prisma-client-js"
-  previewFeatures = ["fullTextSearch"]
+  previewFeatures = ["fullTextSearchPostgres"]
 }
 
 datasource db {
@@ -35,12 +35,12 @@ model Exam {
   isDeleted               Boolean     @default(false)
   branchId                String      @db.Uuid
   isActive                Boolean
-  markEntryOpenDate       DateTime?
-  markEntryEndDate        DateTime?
-  markEntryCorrectionDate DateTime?
-  blockMarkEntry          Boolean     @default(false)
   termId                  String      @db.Uuid
   batchId                 String      @db.Uuid
+  blockMarkEntry          Boolean     @default(false)
+  markEntryCorrectionDate DateTime?
+  markEntryEndDate        DateTime?
+  markEntryOpenDate       DateTime?
   batch                   Batch       @relation(fields: [batchId], references: [id])
   branch                  Branch      @relation(fields: [branchId], references: [id])
   examType                ExamType    @relation(fields: [examTypeId], references: [id])
@@ -110,9 +110,9 @@ model ExamSubjectPartition {
   examSubjectId            String           @db.Uuid
   assessmentFormatId       String           @db.Uuid
   convertTo                Decimal          @db.Decimal
-  excludeSubjectValidation Boolean          @default(false)
   dateToConduct            DateTime
   examGroupId              String           @db.Uuid
+  excludeSubjectValidation Boolean          @default(false)
   order                    Int?             @default(1)
   assessmentFormat         AssessmentFormat @relation(fields: [assessmentFormatId], references: [id])
   examGroup                ExamGroup        @relation(fields: [examGroupId], references: [id])
@@ -149,9 +149,9 @@ model Session {
   sessionToken   String   @unique
   userId         String   @db.Uuid
   expires        DateTime
-  user           User     @relation(fields: [userId], references: [id])
   currentBatchId String?  @db.Uuid
   currentBatch   Batch?   @relation(fields: [currentBatchId], references: [id])
+  user           User     @relation(fields: [userId], references: [id])
 }
 
 model User {
@@ -167,14 +167,14 @@ model User {
   accounts              Account[]
   createdAdmissionForms AdmissionForm[]
   createdBranches       Branch[]
+  CoursePurchaseRecord  CoursePurchaseRecord[]
   Mark                  Mark[]
   createdOrganizations  Organization[]
+  PaymentHistory        PaymentHistory[]
   sessions              Session[]
   staff                 Staff?
   student               Student?
   userOrganizations     UserOrganization[]
-  CoursePurchaseRecord  CoursePurchaseRecord[]
-  PaymentHistory        PaymentHistory[]
 }
 
 model Branch {
@@ -191,15 +191,23 @@ model Branch {
   createdBy                  User                         @relation(fields: [createdById], references: [id])
   organization               Organization                 @relation(fields: [organizationId], references: [id])
   class                      Class[]
+  CourseBatch                CourseBatch[]
+  CourseCategory             CourseCategory[]
+  CoursePurchaseRecord       CoursePurchaseRecord[]
   department                 Department[]
   Exam                       Exam[]
   examType                   ExamType[]
   forms                      Form[]
   grade                      Grade[]
   group                      Group[]
+  InstituteCourse            InstituteCourse[]
+  InstituteCourseChapter     InstituteCourseChapter[]
+  InstituteCourseChapterItem InstituteCourseChapterItem[]
+  InstituteCourseModule      InstituteCourseModule[]
   medium                     Medium[]
   natureOfPosting            NatureOfPosting[]
   regulation                 Regulation[]
+  Role                       Role[]
   staff                      Staff[]
   Student                    Student[]
   Subject                    Subject[]
@@ -207,15 +215,6 @@ model Branch {
   term                       Term[]
   users                      UserOrganization[]
   subjectType                subjectType[]
-  InstituteCourse            InstituteCourse[]
-  CourseCategory             CourseCategory[]
-  InstituteCourseModule      InstituteCourseModule[]
-  InstituteCourseChapter     InstituteCourseChapter[]
-  InstituteCourseChapterItem InstituteCourseChapterItem[]
-
-  CourseBatch          CourseBatch[]
-  CoursePurchaseRecord CoursePurchaseRecord[]
-  Role                 Role[]
 }
 
 model Organization {
@@ -229,15 +228,15 @@ model Organization {
   updatedAt            DateTime?              @default(now())
   createdById          String                 @db.Uuid
   branches             Branch[]
+  CoursePurchaseRecord CoursePurchaseRecord[]
   forms                Form[]
+  InstituteCourse      InstituteCourse[]
   createdBy            User                   @relation(fields: [createdById], references: [id])
   periods              Periods[]
+  Role                 Role[]
   staff                Staff[]
   Student              Student[]
   users                UserOrganization[]
-  InstituteCourse      InstituteCourse[]
-  CoursePurchaseRecord CoursePurchaseRecord[]
-  Role                 Role[]
 }
 
 model UserOrganization {
@@ -245,10 +244,10 @@ model UserOrganization {
   userId         String       @db.Uuid
   organizationId String       @db.Uuid
   branchId       String?      @db.Uuid
+  role           String?      @db.Uuid
   branch         Branch?      @relation(fields: [branchId], references: [id])
   organization   Organization @relation(fields: [organizationId], references: [id])
   user           User         @relation(fields: [userId], references: [id])
-  role           String?      @db.Uuid
 }
 
 model Role {
@@ -256,20 +255,20 @@ model Role {
   name           String
   organizationId String        @db.Uuid
   branchId       String?       @db.Uuid
+  modelAccess    ModelAccess[]
   branch         Branch?       @relation(fields: [branchId], references: [id])
   organization   Organization  @relation(fields: [organizationId], references: [id])
-  modelAccess    ModelAccess[]
 }
 
 model ModelAccess {
   id     String  @id @default(uuid()) @map("_id") @db.Uuid
   roleId String  @db.Uuid
-  role   Role    @relation(fields: [roleId], references: [id])
   module String
   create Boolean @default(false)
   read   Boolean @default(false)
   update Boolean @default(false)
   delete Boolean @default(false)
+  role   Role    @relation(fields: [roleId], references: [id])
 }
 
 model AdmissionForm {
@@ -364,29 +363,29 @@ model InstituteCourse {
   description              String?
   tagLine                  String?
   languageId               String                     @db.Uuid
-  language                 Language                   @relation(fields: [languageId], references: [id])
   price                    String
   discountPrice            String
   order                    Int                        @default(1)
-  coverImage               String?
-  courseType               String                     @default("Recorded")
-  CourseCategory           CourseCategory[]           @relation("CourseCategories")
-  status                   String                     @default("Draft") //Draft, Published, Archived
   isActive                 Boolean                    @default(false)
   isDeleted                Boolean                    @default(false)
   deletedAt                DateTime?
   branchId                 String?                    @db.Uuid
-  branch                   Branch?                    @relation(fields: [branchId], references: [id])
   createdAt                DateTime                   @default(now())
   updatedAt                DateTime                   @default(now())
   organizationId           String?                    @db.Uuid
-  organization             Organization?              @relation(fields: [organizationId], references: [id])
-  InstituteCourseHighlight InstituteCourseHighlight[]
-  InstituteCourseOutcome   InstituteCourseOutcome[]
-  InstituteCourseFAQ       InstituteCourseFAQ[]
-  InstituteCourseModule    InstituteCourseModule[]
+  coverImage               String?
+  courseType               String                     @default("Recorded")
+  status                   String                     @default("Draft")
   CourseBatch              CourseBatch[]
   CoursePurchaseRecord     CoursePurchaseRecord[]
+  branch                   Branch?                    @relation(fields: [branchId], references: [id])
+  language                 Language                   @relation(fields: [languageId], references: [id])
+  organization             Organization?              @relation(fields: [organizationId], references: [id])
+  InstituteCourseFAQ       InstituteCourseFAQ[]
+  InstituteCourseHighlight InstituteCourseHighlight[]
+  InstituteCourseModule    InstituteCourseModule[]
+  InstituteCourseOutcome   InstituteCourseOutcome[]
+  CourseCategory           CourseCategory[]           @relation("CourseCategories")
 }
 
 model InstituteCourseHighlight {
@@ -417,33 +416,33 @@ model InstituteCourseFAQ {
 model CourseBatch {
   id                   String                 @id @default(uuid()) @map("_id") @db.Uuid
   courseId             String                 @db.Uuid
-  course               InstituteCourse        @relation(fields: [courseId], references: [id])
   startDate            DateTime
   type                 String
   totalSeats           Int                    @default(0)
   totalHours           Int
   hoursPerDay          Int
   sessionDays          Json
-  status               String                 @default("Draft") //Draft, Published, Archived
+  status               String                 @default("Draft")
   createdAt            DateTime               @default(now())
   updatedAt            DateTime               @updatedAt
   deletedAt            DateTime?
   branchId             String                 @db.Uuid
   branch               Branch                 @relation(fields: [branchId], references: [id])
-  RecordedContent      RecordedBatchContent[]
+  course               InstituteCourse        @relation(fields: [courseId], references: [id])
   CoursePurchaseRecord CoursePurchaseRecord[]
+  RecordedContent      RecordedBatchContent[]
 }
 
 model RecordedBatchContent {
   id           String                     @id @default(uuid()) @map("_id") @db.Uuid
   courseItemId String                     @db.Uuid
-  courseItem   InstituteCourseChapterItem @relation(fields: [courseItemId], references: [id])
   videoUrl     String
   batchId      String                     @db.Uuid
-  batch        CourseBatch                @relation(fields: [batchId], references: [id])
   createdAt    DateTime                   @default(now())
   updatedAt    DateTime                   @updatedAt
   deletedAt    DateTime?
+  batch        CourseBatch                @relation(fields: [batchId], references: [id])
+  courseItem   InstituteCourseChapterItem @relation(fields: [courseItemId], references: [id])
 }
 
 model CourseCategory {
@@ -451,16 +450,16 @@ model CourseCategory {
   name                  String
   icon                  String?
   courseCategoryId      String?           @db.Uuid
+  isActive              Boolean           @default(false)
+  branchId              String?           @db.Uuid
+  createdAt             DateTime?         @default(now())
+  createdById           String?           @db.Uuid
+  deletedAt             DateTime?
+  updatedAt             DateTime?         @default(now())
+  branch                Branch?           @relation(fields: [branchId], references: [id])
   parentCourseCategory  CourseCategory?   @relation("CourseCategoryChild", fields: [courseCategoryId], references: [id])
   childCourseCategories CourseCategory[]  @relation("CourseCategoryChild")
-  isActive              Boolean           @default(false)
   InstituteCourse       InstituteCourse[] @relation("CourseCategories")
-  createdAt             DateTime?         @default(now())
-  updatedAt             DateTime?         @default(now())
-  deletedAt             DateTime?
-  createdById           String?           @db.Uuid
-  branchId              String?           @db.Uuid
-  branch                Branch?           @relation(fields: [branchId], references: [id])
 }
 
 model InstituteCourseModule {
@@ -470,13 +469,13 @@ model InstituteCourseModule {
   description       String?
   isActive          Boolean                  @default(false)
   instituteCourseId String                   @db.Uuid
-  instituteCourse   InstituteCourse          @relation(fields: [instituteCourseId], references: [id])
   createdAt         DateTime?                @default(now())
   updatedAt         DateTime?                @default(now())
   deletedAt         DateTime?
   createdById       String                   @db.Uuid
   branchId          String?                  @db.Uuid
   branch            Branch?                  @relation(fields: [branchId], references: [id])
+  instituteCourse   InstituteCourse          @relation(fields: [instituteCourseId], references: [id])
   chapters          InstituteCourseChapter[] @relation("InstituteCourseChapterModule")
 }
 
@@ -492,8 +491,8 @@ model InstituteCourseChapter {
   createdById  String                       @db.Uuid
   branchId     String?                      @db.Uuid
   branch       Branch?                      @relation(fields: [branchId], references: [id])
-  modules      InstituteCourseModule[]      @relation("InstituteCourseChapterModule")
   chapterItems InstituteCourseChapterItem[]
+  modules      InstituteCourseModule[]      @relation("InstituteCourseChapterModule")
 }
 
 model InstituteCourseChapterItem {
@@ -501,23 +500,23 @@ model InstituteCourseChapterItem {
   name                   String
   icon                   String?
   description            String?
-  itemType               String                   @default("text")
-  textContent            Json?
-  pdfUrl                 String?
-  videoUrl               String?
-  youtubeUrl             String?
-  vimeoUrl               String?
-  imageUrl               String?
-  chapterId              String                   @db.Uuid
-  chapter                InstituteCourseChapter   @relation(fields: [chapterId], references: [id])
   languageId             String?                  @db.Uuid
-  language               Language?                @relation(fields: [languageId], references: [id])
   createdAt              DateTime?                @default(now())
   updatedAt              DateTime?                @default(now())
   deletedAt              DateTime?
   createdById            String                   @db.Uuid
   branchId               String?                  @db.Uuid
+  chapterId              String                   @db.Uuid
+  imageUrl               String?
+  itemType               String                   @default("text")
+  pdfUrl                 String?
+  videoUrl               String?
+  vimeoUrl               String?
+  youtubeUrl             String?
+  textContent            Json?
   branch                 Branch?                  @relation(fields: [branchId], references: [id])
+  chapter                InstituteCourseChapter   @relation(fields: [chapterId], references: [id])
+  language               Language?                @relation(fields: [languageId], references: [id])
   QuizChapterItemMapping QuizChapterItemMapping[]
   RecordedBatchContent   RecordedBatchContent[]
 }
@@ -570,24 +569,24 @@ model QuizOptions {
 model CoursePurchaseRecord {
   id              String           @id @default(uuid()) @map("_id") @db.Uuid
   courseId        String           @db.Uuid
-  course          InstituteCourse  @relation(fields: [courseId], references: [id])
   userId          String           @db.Uuid
-  user            User             @relation(fields: [userId], references: [id])
   studentId       String?          @db.Uuid
-  student         Student?         @relation(fields: [studentId], references: [id])
-  paymentType     String           @default("FullPayment") //Term, FullPayment, Free, CardEMI
+  paymentType     String           @default("FullPayment")
   actualAmount    Float?           @default(0)
   discountAmount  Float?           @default(0)
-  courseBatchId   String?          @db.Uuid
-  courseBatch     CourseBatch?     @relation(fields: [courseBatchId], references: [id])
   isPaid          Boolean          @default(false)
   paidFullPayment Boolean          @default(false)
   createdAt       DateTime?        @default(now())
   updatedAt       DateTime?        @default(now())
+  organizationId  String           @db.Uuid
+  courseBatchId   String?          @db.Uuid
   branchId        String           @db.Uuid
   branch          Branch           @relation(fields: [branchId], references: [id])
-  organizationId  String           @db.Uuid
+  courseBatch     CourseBatch?     @relation(fields: [courseBatchId], references: [id])
+  course          InstituteCourse  @relation(fields: [courseId], references: [id])
   organization    Organization     @relation(fields: [organizationId], references: [id])
+  student         Student?         @relation(fields: [studentId], references: [id])
+  user            User             @relation(fields: [userId], references: [id])
   PaymentHistory  PaymentHistory[]
 }
 
@@ -595,16 +594,16 @@ model PaymentHistory {
   id               String               @id @default(uuid()) @map("_id") @db.Uuid
   referenceId      String
   coursePurchaseId String               @db.Uuid
-  coursePurchase   CoursePurchaseRecord @relation(fields: [coursePurchaseId], references: [id])
   paymentId        String?              @db.Uuid
-  payment          Payment?             @relation(fields: [paymentId], references: [id])
-  paymentMethod    String               @default("Online") //Online, Cash, CardEMI
+  paymentMethod    String               @default("Online")
   amount           Float?               @default(0)
   paymentDate      DateTime             @default(now())
   createdById      String               @db.Uuid
-  createdBy        User                 @relation(fields: [createdById], references: [id])
   createdAt        DateTime             @default(now())
   updatedAt        DateTime             @default(now())
+  coursePurchase   CoursePurchaseRecord @relation(fields: [coursePurchaseId], references: [id])
+  createdBy        User                 @relation(fields: [createdById], references: [id])
+  payment          Payment?             @relation(fields: [paymentId], references: [id])
 }
 
 model Form {
@@ -683,7 +682,6 @@ model Student {
   motherPhoneNumber      String?
   nationality            String?
   religion               String?
-  profileImage           String?
   status                 StudentStatus
   createdAt              DateTime                 @default(now())
   updatedAt              DateTime                 @default(now())
@@ -702,7 +700,9 @@ model Student {
   motherTongueId         String?                  @db.Uuid
   admissionNumber        String?
   emisNumber             String                   @unique
+  profileImage           String?
   AdmissionForm          AdmissionForm[]
+  CoursePurchaseRecord   CoursePurchaseRecord[]
   Mark                   Mark[]
   batch                  Batch?                   @relation(fields: [batchId], references: [id])
   branch                 Branch                   @relation(fields: [branchId], references: [id])
@@ -714,7 +714,6 @@ model Student {
   user                   User                     @relation(fields: [userId], references: [id])
   StudentElectiveSubject StudentElectiveSubject[]
   studentMapping         StudentMapping[]
-  CoursePurchaseRecord   CoursePurchaseRecord[]
 
   @@index([firstName, lastName, emisNumber, phoneNumber, emailId, aadharCardNumber])
 }
@@ -728,9 +727,9 @@ model StudentMapping {
   mediumId   String?  @db.Uuid
   batchId    String?  @db.Uuid
   isCurrent  Boolean  @default(true)
-  onHold     Boolean  @default(false)
-  rollNumber Int?     @default(0)
   remark     String?  @default("")
+  rollNumber Int?     @default(0)
+  onHold     Boolean  @default(false)
   batch      Batch?   @relation(fields: [batchId], references: [id])
   class      Class    @relation(fields: [classId], references: [id])
   group      Group    @relation(fields: [groupId], references: [id])
@@ -862,11 +861,11 @@ model Batch {
   class                   Class[]
   exams                   Exam[]
   periods                 Periods[]
+  RangeScales             RangeScales[]
+  Session                 Session[]
   students                Student[]
   StudentElectiveSubject  StudentElectiveSubject[]
   StudentMapping          StudentMapping[]
-  RangeScales             RangeScales[]
-  Session                 Session[]
   Section                 Section[]
 }
 
@@ -965,12 +964,12 @@ model SectionToGroups {
 model SubjectMaster {
   id                     String                   @id @default(uuid()) @map("_id") @db.Uuid
   name                   String
-  order                  Int?                     @default(1)
   isActive               Boolean
   branchId               String?                  @db.Uuid
   isDeleted              Boolean                  @default(false)
   createdAt              DateTime?                @default(now())
   updatedAt              DateTime?                @default(now())
+  order                  Int?                     @default(1)
   Mark                   Mark[]
   otherStaff             Staff[]                  @relation("OtherSubject")
   primaryStaff           Staff[]                  @relation("PrimarySubject")
@@ -1129,9 +1128,9 @@ model Grade {
   createdAt   DateTime?     @default(now())
   updatedAt   DateTime?     @default(now())
   isDeleted   Boolean       @default(false)
+  Class       Class[]
   branch      Branch        @relation(fields: [branchId], references: [id])
   gradeScales GradeScales[]
-  Class       Class[]
 }
 
 model GradeScales {
@@ -1153,11 +1152,11 @@ model RangeScales {
   endValue     String
   order        Int         @default(1)
   batchId      String      @db.Uuid
-  batch        Batch       @relation(fields: [batchId], references: [id])
   rangeOf      RangeType   @default(SubjectMarks)
-  classLevelId String?     @db.Uuid
-  classLevel   ClassLevel? @relation(fields: [classLevelId], references: [id])
   createdAt    DateTime?   @default(now())
+  classLevelId String?     @db.Uuid
+  batch        Batch       @relation(fields: [batchId], references: [id])
+  classLevel   ClassLevel? @relation(fields: [classLevelId], references: [id])
 }
 
 model Community {
@@ -1178,10 +1177,10 @@ model Language {
   createdAt                  DateTime?                    @default(now())
   updatedAt                  DateTime?                    @default(now())
   isDeleted                  Boolean                      @default(false)
-  staff                      Staff[]
-  student                    Student[]
   InstituteCourse            InstituteCourse[]
   InstituteCourseChapterItem InstituteCourseChapterItem[]
+  staff                      Staff[]
+  student                    Student[]
 }
 
 model StaffCategory {

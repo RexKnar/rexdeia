@@ -1,10 +1,10 @@
-/* eslint-disable prettier/prettier */
 'use client';
 
 import { Loader2 } from 'lucide-react';
 import { useParams } from 'next/navigation';
 
 import { useGetAllSectionByClassIdQuery } from '../../../../../../lib/queries/section/useGetAllSectionsByClassIdQuery';
+import { UnassignInchargeFlyout } from '../_modals/UnassignInchargeFlyout';
 import { SectionCard } from '../section/[sectionId]/_components/SectionCard';
 
 export function SectionList() {
@@ -20,7 +20,7 @@ export function SectionList() {
   if (isSectionListLoading) {
     return (
       <div className="flex items-center justify-center">
-        <Loader2 className="w-6 h-6 mr-2 text-black animate-spin" />
+        <Loader2 className="mr-2 h-6 w-6 animate-spin text-black" />
         <p className="text-black">Fetching Section List...</p>
       </div>
     );
@@ -44,7 +44,7 @@ export function SectionList() {
           staffIncharges={sectionItem.staffIncharges}
         />
       ))}
+      <UnassignInchargeFlyout />
     </section>
-
   );
 }
