@@ -1,4 +1,3 @@
-/* eslint-disable prettier/prettier */
 import { SectionModel } from 'lib/domain/section';
 import { SubjectModel } from 'lib/domain/subject';
 import { MoreHorizontal } from 'lucide-react';
@@ -75,22 +74,6 @@ export function StaffCard(props: StaffCardProps) {
                   }}
                 >
                   Un-Assign
-                </Button>
-              </DropdownMenuItem>
-              <DropdownMenuItem className="flex cursor-pointer flex-col items-center">
-                <Button
-                  variant="link"
-                  size="sm"
-                  className="flex-1"
-                  onClick={() => {
-                    const params = new URLSearchParams(searchParams.toString());
-                    params.set('isUnassignInchargeFlyoutOpen', 'true');
-                    params.set('staffId', id);
-
-                    router.replace(`${pathname}?${params.toString()}`);
-                  }}
-                >
-                  Un-Assign Incharge
                 </Button>
               </DropdownMenuItem>
             </DropdownMenuContent>

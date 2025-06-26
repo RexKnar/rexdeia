@@ -1,9 +1,8 @@
-/* eslint-disable prettier/prettier */
 import { staffInchargesModel } from 'lib/domain/section';
 import { useGetSectionByIdQuery } from 'lib/queries/section/useGetSectionByIdQuery';
 import { useGetStudentListBySectionIdQuery } from 'lib/queries/students/useGetStudentListBySectionIdQuery';
 import { Loader2, MoreHorizontal } from 'lucide-react';
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import React from 'react';
 import {
   Badge,
@@ -22,7 +21,7 @@ type SectionCardProps = {
   id: string;
   name: string;
   classId: string;
-  staffIncharges:staffInchargesModel[];
+  staffIncharges: staffInchargesModel[];
 };
 
 export function SectionCard({
@@ -32,6 +31,8 @@ export function SectionCard({
   staffIncharges,
 }: SectionCardProps) {
   const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
   const handleCardClick = (event: React.MouseEvent<HTMLDivElement>) => {
     router.push(`/academics/class/${classId}/section/${id}`);
     event.stopPropagation();
@@ -46,11 +47,11 @@ export function SectionCard({
 
   return (
     <div
-      className="flex-col h-full p-3 bg-white"
+      className="h-full flex-col bg-white p-3"
       onClick={(event) => handleCardClick(event)}
     >
       <div className="flex">
-        <div className="w-2/4 px-2 my-auto">
+        <div className="my-auto w-2/4 px-2">
           <LinkButton
             className={'base-bold'}
             url={`/academics/class/${classId}/section/${id}`}
@@ -59,8 +60,8 @@ export function SectionCard({
           </LinkButton>
         </div>
 
-        <div className="w-2/4 my-auto ">
-          <div className="justify-end p-1 my-auto float-end">
+        <div className="my-auto w-2/4 ">
+          <div className="float-end my-auto justify-end p-1">
             <DropdownMenu>
               <DropdownMenuTrigger>
                 <Button variant="mild" className="h-8 px-1">
@@ -73,33 +74,42 @@ export function SectionCard({
                 sideOffset={15}
               >
                 <DropdownMenuItem
-                  className="flex items-center cursor-pointer"
+                  className="flex cursor-pointer items-center"
                   onClick={() => {}}
                 >
                   <span className="flex-1">Reassign</span>
                 </DropdownMenuItem>
-                <DropdownMenuSeparator className="text-gray-500 bg-gray-100" />
-                <DropdownMenuItem
-                  className="flex items-center cursor-pointer"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                  }}
-                >
-                  <span className="flex-1">Remove</span>
+                <DropdownMenuSeparator className="bg-gray-100 text-gray-500" />
+                <DropdownMenuItem className="flex cursor-pointer flex-col items-center">
+                  <Button
+                    size="sm"
+                    className="flex-1"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      const params = new URLSearchParams(
+                        searchParams.toString()
+                      );
+                      params.set('isUnassignInchargeFlyoutOpen', 'true');
+                      params.set('sectionId', id);
+                      router.replace(`${pathname}?${params.toString()}`);
+                    }}
+                  >
+                    Un-Assign Incharge
+                  </Button>
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
           </div>
         </div>
       </div>
-      <hr className="border-gray-400 border-1" />
-      <div className="flex flex-wrap mt-2">
+      <hr className="border-1 border-gray-400" />
+      <div className="mt-2 flex flex-wrap">
         <Badge className={cn('mb-2 bg-yellow-100')}>
           Students: &nbsp;{studentList ? studentList.length : '-'}
         </Badge>
 
         {isSectionDetailsLoading ? (
-          <Loader2 className="justify-center w-6 h-6 mr-2 text-indigo-700 animate-spin" />
+          <Loader2 className="mr-2 h-6 w-6 animate-spin justify-center text-indigo-700" />
         ) : SectionDetails ? (
           SectionDetails.group.map((group) => (
             <Badge key={group.id} className={cn('mb-2')}>

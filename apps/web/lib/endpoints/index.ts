@@ -823,7 +823,7 @@ export default <EndpointDetails>{
   },
   [UNASSIGN_CLASS_INCHARGE_BY_ID]: {
     requestType: `DELETE`,
-    endpoint: `/api/class/[id]/incharge/[staffId]`,
+    endpoint: `/api/class/[id]/incharge/[staffId]/section/[sectionId]`,
   },
   [ADD_COMMUNITY]: {
     requestType: 'POST',
