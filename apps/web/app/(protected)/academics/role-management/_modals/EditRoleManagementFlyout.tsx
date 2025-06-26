@@ -2,43 +2,31 @@
 
 import { Plus, PlusCircle, Trash } from 'lucide-react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import React, { useState } from 'react';
-import { useCreateRoleMutationQuery } from 'lib/queries/role-management/useCreateRoleMutationQuery';
 import { Controller, useFieldArray, useForm } from 'react-hook-form';
 import {
   Button,
-  Input,
   Checkbox,
-  Sheet,
+  Input,
   Select,
-  SelectTrigger,
   SelectContent,
   SelectItem,
+  SelectTrigger,
   SelectValue,
+  Sheet,
   SheetContent,
   SheetHeader,
   SheetTitle,
-  Slider,
-  Switch,
   Text,
 } from 'ui';
-
-import { useCreateGradeMutationQuery } from '../../../../../lib/queries/grade/useCreateGradeMutationQuery';
 
 export function EditRoleManagementFlyout() {
   const pathname = usePathname();
   const router = useRouter();
   const searchParams = useSearchParams();
   const isOpen = searchParams.get('isEditRoleFlyoutOpen') === 'true';
-  const [sliderValues, setSliderValues] = useState([[0, 100]]);
-  const [errorMessages, setErrorMessages] = useState([false]);
 
   const {
     control,
-    handleSubmit,
-    watch,
-    setValue,
-    reset,
     register,
     formState: { errors: fieldErrors },
   } = useForm({
@@ -46,51 +34,19 @@ export function EditRoleManagementFlyout() {
       name: '',
       isActive: false,
       moduleAccess: [],
-    }
+    },
   });
-
-  const handleValueChange = (index, newValue) => {
-    const isOverlapping = sliderValues.some((existingRange, existingIndex) => {
-      if (existingIndex === index) return false;
-      return (
-        (newValue[0] >= existingRange[0] && newValue[0] <= existingRange[1]) ||
-        (newValue[1] >= existingRange[0] && newValue[1] <= existingRange[1])
-      );
-    });
-
-    setErrorMessages((prevErrorMessages) => {
-      const newErrorMessages = [...prevErrorMessages];
-      newErrorMessages[index] = isOverlapping;
-      return newErrorMessages;
-    });
-
-    setSliderValues((prevValues) => {
-      const newValues = [...prevValues];
-      newValues[index] = newValue;
-      return newValues;
-    });
-  };
 
   const { fields, append, remove } = useFieldArray({
     control,
     name: 'moduleAccess',
   });
 
-  const {
-    isPending: isPendingCreateGrade,
-    mutateAsync: mutateCreateGradeAsync,
-  } = useCreateGradeMutationQuery();
-
-  const { mutateAsync: createRole, isPending } = useCreateRoleMutationQuery();
-
   const closeFlyout = async () => {
     const params = new URLSearchParams(searchParams);
     params.set('isEditRoleFlyoutOpen', 'false');
     router.replace(pathname + '?' + params.toString());
-    setSliderValues([[0, 100]]);
-    setErrorMessages([false]);
   };
-
 
   return (
     <section>
@@ -110,7 +66,7 @@ export function EditRoleManagementFlyout() {
                     New Role Management
                   </Text>
                 </SheetTitle>
-                <hr className="border-t border-gray-300" />
+                <hr className="border-t border-gray-300 " />
               </SheetHeader>
               <div className="mt-5">
                 <label className="text-sm font-semibold text-gray-700">
@@ -130,7 +86,10 @@ export function EditRoleManagementFlyout() {
                       name={`moduleAccess.${index}.module`}
                       control={control}
                       render={({ field }) => (
-                        <Select onValueChange={field.onChange} value={field.value}>
+                        <Select
+                          onValueChange={field.onChange}
+                          value={field.value}
+                        >
                           <SelectTrigger className="w-[280px]">
                             <SelectValue placeholder="Select Module" />
                           </SelectTrigger>
@@ -198,13 +157,8 @@ export function EditRoleManagementFlyout() {
               </Button>
 
               <div className="mt-10 text-center">
-                <Button
-                  type="submit"
-                  size="lg"
-                  className="px-12 py-4"
-                  disabled={isPending}
-                >
-                  {isPending ? 'Saving...' : 'Save'}
+                <Button type="submit" size="lg" className="px-12 py-4">
+                  Save
                 </Button>
               </div>
             </form>
