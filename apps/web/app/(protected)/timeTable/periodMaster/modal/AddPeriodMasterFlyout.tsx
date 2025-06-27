@@ -57,7 +57,7 @@ export function AddPeriodMasterFlyout() {
     page,
     limit,
   });
-  const { data: daysListResponse } = useGetDaysListQuery({
+  useGetDaysListQuery({
     page,
     limit,
   });
@@ -204,20 +204,23 @@ export function AddPeriodMasterFlyout() {
               </div>
               <div className="w-full">
                 <label className="mt-1 block text-sm text-gray-700">Day</label>
-                <Select>
+                <Select
+                  autoComplete="off"
+                  value={watch('daysId')}
+                  {...register('daysId', {
+                    required: 'Select a day',
+                  })}
+                  onValueChange={(value) => {
+                    if (value) {
+                      setValue('daysId', value);
+                    }
+                  }}
+                >
                   <SelectTrigger className="w-full">
                     <SelectValue placeholder="Select a day" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectGroup>
-                      <SelectItem value="monday">Monday</SelectItem>
-                      <SelectItem value="tuesday">Tuesday</SelectItem>
-                      <SelectItem value="wednesday">Wednesday</SelectItem>
-                      <SelectItem value="thursday">Thursday</SelectItem>
-                      <SelectItem value="friday">Friday</SelectItem>
-                      <SelectItem value="saturday">Saturday</SelectItem>
-                      <SelectItem value="sunday">Sunday</SelectItem>
-                    </SelectGroup>
+                    <SelectGroup></SelectGroup>
                   </SelectContent>
                 </Select>
               </div>

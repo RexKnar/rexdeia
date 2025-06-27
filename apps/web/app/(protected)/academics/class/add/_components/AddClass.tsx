@@ -93,7 +93,7 @@ export default function AddClass() {
   }
 
   return (
-    <section className="relative w-full px-4 mt-5">
+    <section className="relative mt-5 w-full px-4">
       <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
         <Text variant="lg-semibold" className="text-2xl">
           New Class
@@ -115,7 +115,7 @@ export default function AddClass() {
       </div>
 
       <form onSubmit={handleSubmit(addClass)}>
-        <div className="grid grid-cols-1 gap-5 mt-6 lg:grid-cols-2">
+        <div className="mt-6 grid grid-cols-1 gap-5 lg:grid-cols-2">
           <div>
             <label
               htmlFor="name"
@@ -127,7 +127,7 @@ export default function AddClass() {
               {...register('name', {
                 required: 'Class Name is Required',
               })}
-              className="p-1 border-primary-200"
+              className="border-primary-200 p-1"
               id="name"
               errorMessage={fieldErrors?.name?.message?.toString()}
             />
@@ -170,7 +170,7 @@ export default function AddClass() {
           {fields.map((row, index) => (
             <div
               key={row.id}
-              className="grid grid-cols-1 gap-5 mb-6 md:grid-cols-2 xl:grid-cols-5"
+              className="mb-6 grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-5"
             >
               <div>
                 <label className="text-sm font-semibold text-gray-700">
@@ -180,24 +180,26 @@ export default function AddClass() {
                   {...register(`section.${index}.name`, {
                     required: 'Section Name is Required',
                   })}
-                  className="p-1 border-primary-200"
+                  className="border-primary-200 p-1"
                   errorMessage={fieldErrors?.section?.message?.toString()}
                 />
               </div>
-              <Controller
-                control={control}
-                name={`section.${index}.mediumId`}
-                render={({ field }) => (
-                  <SearchableSelect
-                    label="Medium"
-                    value={field.value}
-                    onChange={field.onChange}
-                    options={mediumListResponse?.data || []}
-                    placeholder="Select Medium"
-                    disabled={isMediumListLoading}
-                  />
-                )}
-              />
+              <div>
+                <Controller
+                  control={control}
+                  name={`section.${index}.mediumId`}
+                  render={({ field }) => (
+                    <SearchableSelect
+                      label="Medium"
+                      value={field.value}
+                      onChange={field.onChange}
+                      options={mediumListResponse?.data || []}
+                      placeholder="Select Medium"
+                      disabled={isMediumListLoading}
+                    />
+                  )}
+                />
+              </div>
               <div>
                 <label className="text-sm font-semibold text-gray-700">
                   Group
@@ -259,7 +261,7 @@ export default function AddClass() {
 
               <div className="flex items-center lg:justify-center">
                 <Button
-                  className="mt-5 text-white bg-red-600 hover:bg-red-700"
+                  className="mt-5 bg-red-600 text-white hover:bg-red-700"
                   variant="outline"
                   type="button"
                   onClick={() => remove(index)}
@@ -274,14 +276,14 @@ export default function AddClass() {
             type="button"
             onClick={() => append({})}
             variant="outline"
-            className="w-full mt-6 border-dotted text-primary"
+            className="mt-6 w-full border-dotted text-primary"
           >
             <Plus size={20} className="mr-2" />
             Add Section
           </Button>
         </div>
 
-        <div className="flex justify-center mt-10">
+        <div className="mt-10 flex justify-center">
           <Button
             size="lg"
             variant="default"
@@ -291,7 +293,7 @@ export default function AddClass() {
           >
             {isPendingCreateClass ? (
               <div className="flex items-center">
-                <Loader2 className="w-6 h-6 mr-2 animate-spin" />
+                <Loader2 className="mr-2 h-6 w-6 animate-spin" />
                 Saving
               </div>
             ) : (

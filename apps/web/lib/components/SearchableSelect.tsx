@@ -37,7 +37,9 @@ export const SearchableSelect: React.FC<SearchableSelectProps> = ({
 
   return (
     <div>
-      <label className="overflow-hidden text-sm font-semibold text-gray-700">{label}</label>
+      <label className="overflow-hidden text-sm font-semibold text-gray-700">
+        {label}
+      </label>
       <Select value={value} onValueChange={onChange} disabled={disabled}>
         <SelectTrigger className="w-full">
           <SelectValue placeholder={placeholder} />
