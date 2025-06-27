@@ -21,6 +21,8 @@ import {
   Text,
 } from 'ui';
 
+import { SearchableSelect } from '@/components/SearchableSelect';
+
 import dataSegmentationGif from '../../../../../public/assets/images/data-segmentation.gif';
 import noClassListImage from '../../../../../public/assets/images/options.svg';
 import { DataLoadingPlaceholder } from '../../_components/DataLoadingPlaceholder';
@@ -114,29 +116,18 @@ export function AnalyticStudentList() {
       <section className="space-y-2 rounded-md bg-white p-6">
         <div className="flex gap-4">
           <div className="w-4/12">
-            <label className="mt-1 block text-sm text-gray-700">Class</label>
-            <Select
-              autoComplete="off"
-              value={classId}
-              onValueChange={(value) => {
+            <SearchableSelect
+              label="Class"
+              value={params.get('classId') || ''}
+              onChange={(value) => {
                 params.set('classId', value);
                 params.delete('sectionId');
                 router.replace(pathname + '?' + params.toString());
               }}
-            >
-              <SelectTrigger className="w-full">
-                {isClassLoading ? <Text>Loading...</Text> : <SelectValue />}
-              </SelectTrigger>
-              <SelectContent>
-                <SelectGroup>
-                  {classList?.data?.map((item) => (
-                    <SelectItem key={item.id} value={item.id}>
-                      {item.name}
-                    </SelectItem>
-                  ))}
-                </SelectGroup>
-              </SelectContent>
-            </Select>
+              options={classList?.data || []}
+              placeholder={isClassLoading ? 'Loading...' : 'Select Class'}
+              disabled={isClassLoading}
+            />
           </div>
           <div className="w-4/12">
             <label className="mt-1 block text-sm text-gray-700">Section</label>
