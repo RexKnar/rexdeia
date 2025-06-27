@@ -21,6 +21,8 @@ import {
   Text,
 } from 'ui';
 
+import { SearchableSelect } from '@/components/SearchableSelect';
+
 import { useCreateClassMutationQuery } from '../../../../../../lib/queries/class/useCreateClassMutationQuery';
 import { useGetMediumListQuery } from '../../../../../../lib/queries/medium/useGetMediumListQuery';
 
@@ -182,37 +184,22 @@ export default function AddClass() {
                   errorMessage={fieldErrors?.section?.message?.toString()}
                 />
               </div>
-
               <div>
-                <label className="text-sm font-semibold text-gray-700">
-                  Medium
-                </label>
                 <Controller
                   control={control}
                   name={`section.${index}.mediumId`}
                   render={({ field }) => (
-                    <Select
-                      onValueChange={field.onChange}
+                    <SearchableSelect
+                      label="Medium"
                       value={field.value}
+                      onChange={field.onChange}
+                      options={mediumListResponse?.data || []}
+                      placeholder="Select Medium"
                       disabled={isMediumListLoading}
-                    >
-                      <SelectTrigger className="w-full">
-                        <SelectValue placeholder="Select Medium" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectGroup>
-                          {mediumListResponse?.data?.map((item) => (
-                            <SelectItem key={item.id} value={item.id}>
-                              {item.name}
-                            </SelectItem>
-                          ))}
-                        </SelectGroup>
-                      </SelectContent>
-                    </Select>
+                    />
                   )}
                 />
               </div>
-
               <div>
                 <label className="text-sm font-semibold text-gray-700">
                   Group

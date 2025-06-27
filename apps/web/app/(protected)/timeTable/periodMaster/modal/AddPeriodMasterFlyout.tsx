@@ -57,7 +57,7 @@ export function AddPeriodMasterFlyout() {
     page,
     limit,
   });
-  const { data: daysListResponse } = useGetDaysListQuery({
+  useGetDaysListQuery({
     page,
     limit,
   });
@@ -217,24 +217,12 @@ export function AddPeriodMasterFlyout() {
                   }}
                 >
                   <SelectTrigger className="w-full">
-                    <SelectValue />
+                    <SelectValue placeholder="Select a day" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectGroup>
-                      {daysListResponse &&
-                        daysListResponse?.data?.map((item) => (
-                          <SelectItem key={item.id} value={item.id}>
-                            {item.name}
-                          </SelectItem>
-                        ))}
-                    </SelectGroup>
+                    <SelectGroup></SelectGroup>
                   </SelectContent>
                 </Select>
-                {errors['daysId'] && (
-                  <p className="mb-2 h-2 p-1 text-sm text-red-600">
-                    {errors['daysId'].message as string}
-                  </p>
-                )}
               </div>
               <div className="mt-10">
                 <Button
