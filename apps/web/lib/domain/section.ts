@@ -17,13 +17,14 @@ export type SectionModel = {
   subjects: SubjectModel[];
   staffs: string[];
   students: string[];
+  academicYearId: string;
 };
 
 export type GetMediumModel = Pick<MediumModel, 'name' | 'isActive' | 'id'>;
 
 export type CreateSectionModel = Pick<
   SectionModel,
-  'name' | 'isActive' | 'mediumId' | 'classId' | 'groupIds'
+  'name' | 'isActive' | 'mediumId' | 'classId' | 'groupIds' | 'academicYearId'
 >;
 
 export type UpdateSectionModel = Pick<
