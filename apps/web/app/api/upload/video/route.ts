@@ -8,6 +8,7 @@ import path from 'path';
 
 import { deleteFileFromGCS, uploadFileToGCS } from './service';
 
+export const runtime = 'nodejs';
 const storage = new Storage({
   projectId: process.env.NEXT_GCLOUD_PROJECT_ID,
   keyFilename: path.resolve('./keyfile.json'),
