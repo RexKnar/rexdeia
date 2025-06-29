@@ -4,7 +4,6 @@ import { authOptions } from 'lib/auth';
 import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth/next';
 
-import { addSection } from '../service';
 import { copySections } from './service';
 
 /**
@@ -44,7 +43,6 @@ export async function POST(request: NextRequest) {
 
   try {
     const batch = await copySections(payload);
-    console.log(batch);
     return new NextResponse(JSON.stringify(batch), {
       status: StatusCodes.CREATED,
     });
