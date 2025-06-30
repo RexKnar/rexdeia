@@ -101,7 +101,7 @@ export function AnalyticStudentList() {
 
   return (
     <>
-      <section className="space-y-2 rounded-md bg-white p-6">
+      <section className="p-6 space-y-2 bg-white rounded-md">
         <div className="flex gap-4">
           <div className="w-4/12">
             <SearchableSelect
@@ -118,50 +118,52 @@ export function AnalyticStudentList() {
             />
           </div>
           <div className="w-4/12">
-            <SearchableSelect
-              label="Section"
-              value={sectionId ?? 'all'}
-              onChange={(value) => {
-                if (value === 'all') {
-                  params.delete('sectionId');
-                } else {
-                  params.set('sectionId', value);
-                }
-                router.replace(pathname + '?' + params.toString());
-              }}
-              options={[
-                { id: 'all', name: 'All' },
-                ...(sectionList?.data || []),
-              ]}
-              placeholder={isSectionLoading ? 'Loading...' : 'Select Section'}
-              disabled={isSectionLoading}
-            />
+            <div className="w-4/12">
+              <SearchableSelect
+                label="Section"
+                value={sectionId ?? 'all'}
+                onChange={(value) => {
+                  value === 'all'
+                    ? params.delete('sectionId')
+                    : params.set('sectionId', value);
+
+                  router.replace(pathname + '?' + params.toString());
+                }}
+                options={[
+                  { id: 'all', name: 'All' },
+                  ...(sectionList?.data || []),
+                ]}
+                placeholder={isSectionLoading ? 'Loading...' : 'Select Section'}
+                disabled={isSectionLoading}
+              />
+            </div>
           </div>
           <div className="w-4/12">
-            <SearchableSelect
-              label="Exam"
-              value={examId ?? 'all'}
-              onChange={(value) => {
-                if (value === 'all') {
-                  params.delete('examId');
-                } else {
-                  params.set('examId', value);
-                }
-                router.replace(pathname + '?' + params.toString());
-              }}
-              options={[
-                { id: 'all', name: 'Choose a Exam' },
-                ...(examList || []),
-              ]}
-              placeholder={isExamLoading ? 'Loading...' : 'Select Exam'}
-              disabled={isExamLoading}
-            />
+            <div className="w-4/12">
+              <SearchableSelect
+                label="Exam"
+                value={examId ?? 'all'}
+                onChange={(value) => {
+                  value === 'all'
+                    ? params.delete('examId')
+                    : params.set('examId', value);
+
+                  router.replace(`${pathname}?${params.toString()}`);
+                }}
+                options={[
+                  { id: 'all', name: 'Choose a Exam' },
+                  ...(examList || []),
+                ]}
+                placeholder={isExamLoading ? 'Loading...' : 'Select Exam'}
+                disabled={isExamLoading}
+              />
+            </div>
           </div>
         </div>
       </section>
       {markDetails ? (
         <Tabs defaultValue="overall" className="border-0 ">
-          <TabsList className="w-full justify-start border-b-2 border-gray-100">
+          <TabsList className="justify-start w-full border-b-2 border-gray-100">
             <TabsTrigger
               value="overall"
               className="mr-2 text-base focus:border-b-4 focus:border-primary print:hidden"
@@ -260,7 +262,7 @@ export function AnalyticStudentList() {
           </TabsContent>
         </Tabs>
       ) : (
-        <section className="mt-4 space-y-4 overflow-x-auto rounded-md bg-white p-6 print:m-0 print:p-0 ">
+        <section className="p-6 mt-4 space-y-4 overflow-x-auto bg-white rounded-md print:m-0 print:p-0 ">
           {isStudentDetailsLoading ? (
             <DataLoadingPlaceholder
               image={dataSegmentationGif}
