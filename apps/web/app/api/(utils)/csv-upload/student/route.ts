@@ -82,7 +82,6 @@ export async function POST(request: NextRequest) {
       }
     });
   });
-
   try {
     const data = await csvResponse;
     const dbResponse = await addStudentCSV(data);
