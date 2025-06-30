@@ -19,7 +19,7 @@ export function StaffClassWidget({ classDetails }) {
         <div className="widget-title flex items-center justify-between text-lg font-semibold">
           <LinkButton
             className={cn('ps-0 text-lg font-semibold')}
-            url={`class/${classDetails.id}`}
+            url={`./class/${classDetails.id}`}
           >
             {classDetails.name}
           </LinkButton>
