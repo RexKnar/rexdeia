@@ -67,10 +67,10 @@ export function ExamAnalytics() {
     useExamAnalyticsQuery(
       sectionId
         ? {
-            classId,
-            sectionId,
-            examId,
-          }
+          classId,
+          sectionId,
+          examId,
+        }
         : { classId, examId },
       {
         enabled: !!classId && !!examId,
