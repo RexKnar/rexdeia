@@ -469,6 +469,12 @@ export const menuItem = {
         },
       ],
     },
+    {
+      id: 'class-list',
+      label: 'Class List',
+      icon: FileText,
+      path: '/academics/class',
+    },
   ],
   OfficeAdmin: [
     {

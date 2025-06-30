@@ -1,17 +1,12 @@
 'use client';
 
 import { useGetStudentListByClassIdQuery } from 'lib/queries/students/useGetStudentListByClassIdQuery';
-import { Plus } from 'lucide-react';
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import { Badge, Button } from 'ui';
+import { Badge } from 'ui';
 import { cn } from 'utils';
 
 import { LinkButton } from '@/components/LinkButton';
 
-export function ClassWidget({ classDetails }) {
-  const pathname = usePathname();
-  const router = useRouter();
-  const searchParams = useSearchParams();
+export function StaffClassWidget({ classDetails }) {
   const { data: studentListResponse } = useGetStudentListByClassIdQuery(
     classDetails.id,
     {
@@ -33,45 +28,21 @@ export function ClassWidget({ classDetails }) {
               Students:&nbsp;
               {studentListResponse ? studentListResponse.length : '-'}
             </Badge>
-            <Button
-              variant="outline"
-              className={cn(
-                'w-18 ml-2 h-5 rounded-lg border-none  px-2 py-1 text-center text-sm font-medium text-teal-800',
-                classDetails?.isActive ? 'bg-teal-100' : 'bg-red-300'
-              )}
-            >
-              {classDetails?.isActive ? 'Active' : 'Inactive'}
-            </Button>
           </div>
         </div>
         <div className="mb-2 mt-4 flex flex-wrap content-center items-center gap-2 self-stretch">
-          {classDetails.Section.map((section, index) => (
+          {classDetails.sections.map((section, index) => (
             <LinkButton
               key={index}
               className={cn(
                 'h-7 w-7 text-center',
-                section?.isActive
-                  ? 'bg-primary text-white hover:bg-primary'
-                  : 'bg-gray-400 text-black hover:bg-gray-400'
+                'bg-primary text-white hover:bg-primary'
               )}
               url={`/academics/class/${classDetails.id}/section/${section.id}`}
             >
               {section.name}
             </LinkButton>
           ))}
-          <Button
-            variant="outline"
-            className="h-7 w-7 rounded p-1"
-            onClick={() => {
-              const params = new URLSearchParams(searchParams);
-              params.set('isSectionFlyoutOpen', 'true');
-              params.set('classId', classDetails.id);
-
-              router.replace(pathname + '?' + params.toString());
-            }}
-          >
-            <Plus height={24} width={24} />
-          </Button>
         </div>
       </div>
     </div>
