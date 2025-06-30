@@ -7,19 +7,7 @@ import { useGetExamsBySectionIdQuery } from 'lib/queries/exams/useGetExamBySecti
 import { useGetAllSectionByClassIdQuery } from 'lib/queries/section/useGetAllSectionsByClassIdQuery';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-  Text,
-} from 'ui';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from 'ui';
 
 import { SearchableSelect } from '@/components/SearchableSelect';
 
@@ -130,60 +118,44 @@ export function AnalyticStudentList() {
             />
           </div>
           <div className="w-4/12">
-            <label className="mt-1 block text-sm text-gray-700">Section</label>
-            <Select
-              autoComplete="off"
+            <SearchableSelect
+              label="Section"
               value={sectionId ?? 'all'}
-              onValueChange={(value) => {
-                value === 'all'
-                  ? params.delete('sectionId')
-                  : params.set('sectionId', value);
-
+              onChange={(value) => {
+                if (value === 'all') {
+                  params.delete('sectionId');
+                } else {
+                  params.set('sectionId', value);
+                }
                 router.replace(pathname + '?' + params.toString());
               }}
-            >
-              <SelectTrigger className="w-full">
-                {isSectionLoading ? <Text>Loading...</Text> : <SelectValue />}
-              </SelectTrigger>
-              <SelectContent>
-                <SelectGroup>
-                  <SelectItem value="all">All</SelectItem>
-                  {sectionList?.data?.map((item) => (
-                    <SelectItem key={item.id} value={item.id}>
-                      {item.name}
-                    </SelectItem>
-                  ))}
-                </SelectGroup>
-              </SelectContent>
-            </Select>
+              options={[
+                { id: 'all', name: 'All' },
+                ...(sectionList?.data || []),
+              ]}
+              placeholder={isSectionLoading ? 'Loading...' : 'Select Section'}
+              disabled={isSectionLoading}
+            />
           </div>
           <div className="w-4/12">
-            <label className="mt-1 block text-sm text-gray-700">Exam</label>
-            <Select
-              autoComplete="off"
+            <SearchableSelect
+              label="Exam"
               value={examId ?? 'all'}
-              onValueChange={(value) => {
-                value === 'all'
-                  ? params.delete('examId')
-                  : params.set('examId', value);
-
+              onChange={(value) => {
+                if (value === 'all') {
+                  params.delete('examId');
+                } else {
+                  params.set('examId', value);
+                }
                 router.replace(pathname + '?' + params.toString());
               }}
-            >
-              <SelectTrigger className="w-full">
-                {isExamLoading ? <Text>Loading...</Text> : <SelectValue />}
-              </SelectTrigger>
-              <SelectContent>
-                <SelectGroup>
-                  <SelectItem value="all">Choose a Exam</SelectItem>
-                  {examList?.map((item) => (
-                    <SelectItem key={item.id} value={item.id}>
-                      {item.name}
-                    </SelectItem>
-                  ))}
-                </SelectGroup>
-              </SelectContent>
-            </Select>
+              options={[
+                { id: 'all', name: 'Choose a Exam' },
+                ...(examList || []),
+              ]}
+              placeholder={isExamLoading ? 'Loading...' : 'Select Exam'}
+              disabled={isExamLoading}
+            />
           </div>
         </div>
       </section>
