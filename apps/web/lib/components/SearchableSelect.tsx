@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import {
   Input,
   Select,
@@ -30,34 +30,79 @@ export const SearchableSelect: React.FC<SearchableSelectProps> = ({
   disabled = false,
 }) => {
   const [search, setSearch] = useState('');
+  const [open, setOpen] = useState(false);
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (open && inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, [open]);
 
   const filteredOptions = options.filter((item) =>
     item.name.toLowerCase().includes(search.toLowerCase())
   );
 
   return (
-    <div>
-      <label className="overflow-hidden text-sm font-semibold text-gray-700">
-        {label}
-      </label>
-      <Select value={value} onValueChange={onChange} disabled={disabled}>
-        <SelectTrigger className="w-full">
+    <div className="space-y-2">
+      {label && (
+        <label className="block text-sm font-semibold text-gray-700">
+          {label}
+        </label>
+      )}
+
+      <Select
+        value={value}
+        onValueChange={(val) => {
+          onChange(val);
+          setSearch('');
+        }}
+        disabled={disabled}
+        open={open}
+        onOpenChange={(isOpen) => {
+          setOpen(isOpen);
+          if (!isOpen) {
+            setSearch('');
+          }
+        }}
+      >
+        <SelectTrigger className="w-full px-3 py-2 text-sm border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
           <SelectValue placeholder={placeholder} />
         </SelectTrigger>
-        <SelectContent>
+
+        <SelectContent
+          className="overflow-y-auto max-h-64"
+          onMouseDown={(e) => e.stopPropagation()}
+          onKeyDown={(e) => e.stopPropagation()}
+        >
+          <div className="sticky top-0 z-10 p-2 bg-white border-b">
+            <Input
+              ref={inputRef}
+              placeholder="Search..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              className="w-full px-3 py-2 text-sm border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              onMouseDown={(e) => e.stopPropagation()}
+              onKeyDown={(e) => e.stopPropagation()}
+            />
+          </div>
+
           <SelectGroup>
-            <div className="p-2">
-              <Input
-                placeholder="Search..."
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-              />
-            </div>
-            {filteredOptions.map((item) => (
-              <SelectItem key={item.id} value={item.id}>
-                {item.name}
-              </SelectItem>
-            ))}
+            {filteredOptions.length > 0 ? (
+              filteredOptions.map((item) => (
+                <SelectItem
+                  key={item.id}
+                  value={item.id}
+                  className="px-3 py-2 text-sm cursor-pointer hover:bg-blue-100"
+                >
+                  {item.name}
+                </SelectItem>
+              ))
+            ) : (
+              <div className="px-3 py-2 text-sm text-gray-500">
+                No results found
+              </div>
+            )}
           </SelectGroup>
         </SelectContent>
       </Select>
