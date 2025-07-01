@@ -5,12 +5,11 @@ import { getServerSession } from 'next-auth';
 import { Suspense } from 'react';
 import { Text } from 'ui';
 
-import { SignUpForm } from '@/components/auth/SignUpForm';
+import { NewSignInForm } from '@/components/auth/NewSignUp';
 import { Footer } from '@/components/Footer';
 
 import { authOptions } from '../../../lib/auth';
 import logo from '../../../public/assets/images/rexdeia-logo.png';
-import { NewSignInForm } from '@/components/auth/NewSignUp';
 
 export const metadata = {
   title: 'Rexdeia | Sign up',
