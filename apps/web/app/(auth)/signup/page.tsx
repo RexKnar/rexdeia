@@ -10,6 +10,7 @@ import { Footer } from '@/components/Footer';
 
 import { authOptions } from '../../../lib/auth';
 import logo from '../../../public/assets/images/rexdeia-logo.png';
+import { NewSignInForm } from '@/components/auth/NewSignUp';
 
 export const metadata = {
   title: 'Rexdeia | Sign up',
@@ -42,7 +43,7 @@ export default async function Page() {
               Join rexdeia and embark on a seamless academic experience.
             </Text>
             <Suspense>
-              <SignUpForm />
+              <NewSignInForm />
             </Suspense>
             <Text
               variant="sm-semibold"
