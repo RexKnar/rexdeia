@@ -97,3 +97,37 @@ export function addModuleAccess(access: any) {
     data: createModuleAccess,
   });
 }
+
+export async function getRoleById(roleId: string) {
+  const session = await getServerSession(authOptions);
+
+  const role = await db.role.findFirst({
+    where: {
+      id: roleId,
+      organizationId: session.organizationId,
+      branchId: session.branchId,
+    },
+    select: {
+      id: true,
+      name: true,
+      modelAccess: {
+        select: {
+          module: true,
+          create: true,
+          read: true,
+          update: true,
+          delete: true,
+        },
+      },
+    },
+  });
+
+  if (!role) {
+    throw new Error('Role not found');
+  }
+
+  return {
+    ...role,
+    moduleAccess: role.modelAccess,
+  };
+}
