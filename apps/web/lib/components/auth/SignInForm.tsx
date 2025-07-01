@@ -53,7 +53,6 @@ export function SignInForm() {
         Email
       </label>
       <div className="relative">
-        
         <Input
           type="email"
           className="mt-2 text-sm"
@@ -71,10 +70,11 @@ export function SignInForm() {
         </div>
       </div>
       <p
-        className={`h-2 p-1 text-sm text-red-600 ${fieldErrors.email
+        className={`h-2 p-1 text-sm text-red-600 ${
+          fieldErrors.email
             ? 'opacity-100 transition-opacity duration-300'
             : 'opacity-0 transition-opacity duration-300'
-          }`}
+        }`}
       >
         {fieldErrors.email?.message || errors[error]}
       </p>
@@ -101,10 +101,11 @@ export function SignInForm() {
         </div>
       </div>
       <p
-        className={`h-2 p-1 text-sm text-red-600 ${fieldErrors.password
+        className={`h-2 p-1 text-sm text-red-600 ${
+          fieldErrors.password
             ? 'opacity-100 transition-opacity duration-300'
             : 'opacity-0 transition-opacity duration-300'
-          }`}
+        }`}
       >
         {fieldErrors.password?.message as string}
       </p>

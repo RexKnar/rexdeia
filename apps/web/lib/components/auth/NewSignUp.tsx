@@ -36,7 +36,6 @@ export function NewSignInForm() {
   }
 
   return (
-
     <form
       className="mt-4"
       autoComplete="off"
@@ -54,7 +53,6 @@ export function NewSignInForm() {
         Email
       </label>
       <div className="relative">
-
         <Input
           type="email"
           className="mt-1 text-sm"
@@ -72,10 +70,11 @@ export function NewSignInForm() {
         </div>
       </div>
       <p
-        className={`h-2 p-1 text-sm text-red-600 ${fieldErrors.email
-          ? 'opacity-100 transition-opacity duration-300'
-          : 'opacity-0 transition-opacity duration-300'
-          }`}
+        className={`h-2 p-1 text-sm text-red-600 ${
+          fieldErrors.email
+            ? 'opacity-100 transition-opacity duration-300'
+            : 'opacity-0 transition-opacity duration-300'
+        }`}
       >
         {fieldErrors.email?.message || errors[error]}
       </p>
@@ -102,10 +101,11 @@ export function NewSignInForm() {
         </div>
       </div>
       <p
-        className={`h-2 p-1 text-sm text-red-600 ${fieldErrors.password
-          ? 'opacity-100 transition-opacity duration-300'
-          : 'opacity-0 transition-opacity duration-300'
-          }`}
+        className={`h-2 p-1 text-sm text-red-600 ${
+          fieldErrors.password
+            ? 'opacity-100 transition-opacity duration-300'
+            : 'opacity-0 transition-opacity duration-300'
+        }`}
       >
         {fieldErrors.password?.message as string}
       </p>

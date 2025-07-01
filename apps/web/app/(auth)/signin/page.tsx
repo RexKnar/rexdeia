@@ -11,7 +11,6 @@ import { Footer } from '@/components/Footer';
 import { authOptions } from '../../../lib/auth';
 import logo from '../../../public/assets/images/rexdeia-logo.png';
 
-
 export const metadata = {
   title: 'Rexdeia | Sign in',
   description:
@@ -27,7 +26,7 @@ export default async function Page() {
   return (
     <section className="flex h-screen flex-col  overflow-x-hidden sm:flex-row">
       <section
-        className=" w-2/5 mt-10 ml-52 rounded-2xl h-5/6  py-36 px-12"
+        className=" ml-52 mt-10 h-5/6 w-2/5 rounded-2xl  px-12 py-36"
         style={{
           backgroundImage: 'url(/assets/images/signin-banner.png)',
         }}
@@ -61,12 +60,6 @@ export default async function Page() {
                 Create an account
               </Link>
             </Text>
-            {/* <Link
-              href="/signup"
-              className="mt-3 flex w-full justify-center rounded-md border-2 border-gray-300 bg-transparent p-2 text-sm font-semibold text-primary hover:bg-primary hover:text-white"
-            >
-              Signup
-            </Link> */}
           </div>
           <div className="pt-16">
             <Footer />
