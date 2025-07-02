@@ -56,6 +56,7 @@ export const ADD_SUBJECT = `ADD_SUBJECT`;
 export const ADD_GROUP = `ADD_GROUP`;
 export const ADD_SECTION = `ADD_SECTION`;
 export const GET_SECTION_BY_ID = `GET_SECTION_BY_ID`;
+export const COPY_SECTION = `COPY_SECTION`;
 
 export const DELETE_SUBJECT_BY_ID = `DELETE_SUBJECT_BY_ID`;
 export const UPDATE_SUBJECT_BY_ID = `UPDATE_SUBJECT_BY_ID`;
@@ -458,6 +459,10 @@ export default <EndpointDetails>{
   [GET_SECTION_BY_ID]: {
     requestType: `GET`,
     endpoint: `/api/section/[id]`,
+  },
+  [COPY_SECTION]: {
+    requestType: `POST`,
+    endpoint: `/api/section/copy`,
   },
   [GET_SECTION_BY_CLASS_GROUP]: {
     requestType: `PUT`,
