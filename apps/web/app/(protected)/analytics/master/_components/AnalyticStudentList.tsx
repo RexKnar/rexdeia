@@ -118,44 +118,46 @@ export function AnalyticStudentList() {
             />
           </div>
           <div className="w-4/12">
-            <SearchableSelect
-              label="Section"
-              value={sectionId ?? 'all'}
-              onChange={(value) => {
-                if (value === 'all') {
-                  params.delete('sectionId');
-                } else {
-                  params.set('sectionId', value);
-                }
-                router.replace(pathname + '?' + params.toString());
-              }}
-              options={[
-                { id: 'all', name: 'All' },
-                ...(sectionList?.data || []),
-              ]}
-              placeholder={isSectionLoading ? 'Loading...' : 'Select Section'}
-              disabled={isSectionLoading}
-            />
+            <div className="w-4/12">
+              <SearchableSelect
+                label="Section"
+                value={sectionId ?? 'all'}
+                onChange={(value) => {
+                  value === 'all'
+                    ? params.delete('sectionId')
+                    : params.set('sectionId', value);
+
+                  router.replace(pathname + '?' + params.toString());
+                }}
+                options={[
+                  { id: 'all', name: 'All' },
+                  ...(sectionList?.data || []),
+                ]}
+                placeholder={isSectionLoading ? 'Loading...' : 'Select Section'}
+                disabled={isSectionLoading}
+              />
+            </div>
           </div>
           <div className="w-4/12">
-            <SearchableSelect
-              label="Exam"
-              value={examId ?? 'all'}
-              onChange={(value) => {
-                if (value === 'all') {
-                  params.delete('examId');
-                } else {
-                  params.set('examId', value);
-                }
-                router.replace(pathname + '?' + params.toString());
-              }}
-              options={[
-                { id: 'all', name: 'Choose a Exam' },
-                ...(examList || []),
-              ]}
-              placeholder={isExamLoading ? 'Loading...' : 'Select Exam'}
-              disabled={isExamLoading}
-            />
+            <div className="w-4/12">
+              <SearchableSelect
+                label="Exam"
+                value={examId ?? 'all'}
+                onChange={(value) => {
+                  value === 'all'
+                    ? params.delete('examId')
+                    : params.set('examId', value);
+
+                  router.replace(`${pathname}?${params.toString()}`);
+                }}
+                options={[
+                  { id: 'all', name: 'Choose a Exam' },
+                  ...(examList || []),
+                ]}
+                placeholder={isExamLoading ? 'Loading...' : 'Select Exam'}
+                disabled={isExamLoading}
+              />
+            </div>
           </div>
         </div>
       </section>
