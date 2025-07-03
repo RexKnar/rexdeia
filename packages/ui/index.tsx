@@ -50,3 +50,5 @@ export * from './components/ui/Sidebar';
 export * from './components/ui/Skeleton';
 export * from './components/ui/Collapsible';
 export * from './components/ui/Textarea';
+
+export * from './components/ui/Carousel';

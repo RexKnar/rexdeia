@@ -32,6 +32,7 @@
     "clsx": "^2.0.0",
     "cmdk": "^1.0.0",
     "date-fns": "^3.0.0",
+    "embla-carousel-react": "^8.6.0",
     "lucide-react": "^0.400.0",
     "postcss": "^8.4.29",
     "react-datepicker": "^6.0.0",
