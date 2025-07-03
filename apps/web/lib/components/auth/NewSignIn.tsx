@@ -12,7 +12,7 @@ const errors = {
     'The username or password you entered is incorrect. Please try again.',
 };
 
-export function SignInForm() {
+export function NewSignInForm() {
   const [showPassword, setShowPassword] = useState(false);
   const {
     register,
@@ -55,7 +55,7 @@ export function SignInForm() {
       <div className="relative">
         <Input
           type="email"
-          className="mt-2 text-sm"
+          className="mt-1 text-sm"
           placeholder="Enter your Email"
           {...register('email', {
             required: 'Your email address is needed to sign in',
@@ -78,13 +78,13 @@ export function SignInForm() {
       >
         {fieldErrors.email?.message || errors[error]}
       </p>
-      <label className="mt-4 block text-sm font-semibold text-gray-700">
+      <label className="mt-2 block text-sm font-semibold text-gray-700">
         Password
       </label>
       <div className="relative">
         <Input
           type={showPassword ? 'text' : 'password'}
-          className="mt-2 text-sm"
+          className="mt-1 text-sm"
           placeholder="Enter your password"
           {...register('password', {
             required: 'Your password is needed to sign in.',
@@ -109,12 +109,12 @@ export function SignInForm() {
       >
         {fieldErrors.password?.message as string}
       </p>
-      <label className="mt-2 block text-end text-sm font-semibold text-gray-800">
+      <label className="mt-2 block text-end text-sm font-semibold  text-primary">
         <Link href="/account-recovery">Forgot Password?</Link>
       </label>
       <Button
         type="submit"
-        className="mt-6 w-full text-white"
+        className="mt-6 w-full  text-white"
         disabled={isSubmitting}
       >
         {isLoading || isSubmitting ? (
