@@ -30,6 +30,8 @@ import {
   useToast,
 } from 'ui';
 
+import { SearchableSelect } from '@/components/SearchableSelect';
+
 import { AssignStaffToClassRequestModel } from '../../../../../../lib/domain/class';
 import { useGetAllSectionByClassIdQuery } from '../../../../../../lib/queries/section/useGetAllSectionsByClassIdQuery';
 import { useCreateStaffMutationByClassIdQuery } from '../../../../../../lib/queries/staff/useCreateStaffMutationByClassIdQuery';
@@ -41,7 +43,6 @@ export function AssignStaffClassDetailPageFlyout() {
   const searchParams = useSearchParams();
   const { toast } = useToast();
   const {
-    watch,
     register,
     handleSubmit,
     setValue,
@@ -181,104 +182,77 @@ export function AssignStaffClassDetailPageFlyout() {
               <div className="mt-8">
                 {fields.map((row, index) => (
                   <section key={row.id}>
-                    <div className="mt-5 flex gap-4">
-                      <div className="w-full">
-                        <label
-                          htmlFor="searchStaff"
-                          className="text-sm font-semibold text-gray-700"
-                        >
-                          Search staff
-                        </label>
-                        <div className="relative w-full">
-                          <Select
-                            autoComplete="off"
-                            value={watch(`sections.${index}.staffId`)}
-                            {...register(`sections.${index}.staffId` as any, {
-                              required: true,
-                            })}
-                            onValueChange={(value) => {
-                              if (value) {
-                                setValue(
-                                  `sections.${index}.staffId` as any,
-                                  value
-                                );
-                              }
-                            }}
-                          >
-                            <SelectTrigger className="mt-2 w-full" key={index}>
-                              <SelectValue />
-                            </SelectTrigger>
-                            <SelectContent>
-                              <SelectGroup>
-                                {getStaffListResponse?.data?.map((item) => (
-                                  <SelectItem key={item.id} value={item.id}>
-                                    {item.firstName}
-                                  </SelectItem>
-                                ))}
-                              </SelectGroup>
-                            </SelectContent>
-                          </Select>
-                          <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
-                            <Search className="text-primary-200" size={20} />
-                          </div>
-                        </div>
+                    <div className="flex gap-4 mt-5">
 
-                        <p>
-                          {errors[
-                            `sections.${index}.staffId`
-                          ]?.message.toString()}
-                        </p>
+
+                      <div className="w-full space-y-2 bg-white">
+                        <Controller
+                          name={`sections.${index}.staffId`}
+                          control={control}
+                          rules={{ required: 'Staff selection is required' }}
+                          render={({ field }) => (
+                            <SearchableSelect
+                              label="Staff Name"
+                              value={field.value}
+                              onChange={field.onChange}
+                              options={
+                                getStaffListResponse?.data?.map((item) => ({
+                                  id: item.id,
+                                  name: item.firstName,
+                                })) || []
+                              }
+                              placeholder="Select Staff"
+                              disabled={false}
+                            />
+                          )}
+                        />
+
+                        {errors?.sections?.[index]?.staffId && (
+                          <p className="text-sm text-red-600">
+                            {errors.sections[index].staffId.message}
+                          </p>
+                        )}
                       </div>
-                      <div className="w-full">
-                        <label
-                          htmlFor="subjectName"
-                          className="text-sm font-semibold text-gray-700"
-                        >
-                          Subject Name
-                        </label>
-                        <div className="relative w-full">
-                          <Select
-                            autoComplete="off"
-                            value={watch(`sections.${index}.subjectId`)}
-                            {...register(`sections.${index}.subjectId` as any)}
-                            onValueChange={(value) => {
-                              if (value) {
+
+
+                      <div className="w-full space-y-2">
+
+
+                        <Controller
+                          name={`sections.${index}.subjectId`}
+                          control={control}
+                          rules={{ required: 'Subject is required' }}
+                          render={({ field }) => (
+                            <SearchableSelect
+                              label="    Subject Name"
+                              value={field.value}
+                              onChange={(value) => {
                                 setSubjectId(value);
-                                setValue(
-                                  `sections.${index}.subjectId` as any,
-                                  value
-                                );
+                                field.onChange(value);
+                              }}
+                              options={
+                                subjectListResponse?.map((item) => ({
+                                  id: item.id,
+                                  name: item.name,
+                                })) || []
                               }
-                            }}
-                          >
-                            <SelectTrigger className="mt-2 w-full">
-                              <SelectValue />
-                            </SelectTrigger>
-                            <SelectContent>
-                              <SelectGroup>
-                                {subjectListResponse?.map((item) => (
-                                  <SelectItem key={item.id} value={item.id}>
-                                    {item.name}
-                                  </SelectItem>
-                                ))}
-                              </SelectGroup>
-                            </SelectContent>
-                          </Select>
-                          <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
-                            <Search className="text-primary-200" size={20} />
-                          </div>
-                        </div>
+                              placeholder="Select Subject"
+                              disabled={false}
+                            />
+                          )}
+                        />
 
-                        <p>
-                          {errors[
-                            `sections.${index}.subjectId`
-                          ]?.message.toString()}
-                        </p>
+                        {errors?.sections?.[index]?.subjectId && (
+                          <p className="text-sm text-red-600">
+                            {errors.sections[index].subjectId.message}
+                          </p>
+                        )}
                       </div>
+
                       {fields.length > 1 ? (
                         <div className="mt-8">
                           <Button
-                            className="border-transparent bg-red-600 px-2"
+                            className="px-2 bg-red-600 border-transparent"
                             variant="outline"
                             size="sm"
                             onClick={() => {
@@ -300,7 +274,7 @@ export function AssignStaffClassDetailPageFlyout() {
                       >
                         Sections
                       </label>
-                      <div className="mt-2 flex flex-wrap" id="sectionId">
+                      <div className="flex flex-wrap mt-2" id="sectionId">
                         {sectionResponseByGroup?.length ? (
                           sectionResponseByGroup?.map((item) => (
                             <label className="me-5" key={item.id}>
@@ -312,18 +286,18 @@ export function AssignStaffClassDetailPageFlyout() {
                                   return (
                                     <label className="me-5">
                                       <Checkbox
-                                        className="me-2 items-center space-x-2 rounded border border-primary-500"
+                                        className="items-center space-x-2 border rounded me-2 border-primary-500"
                                         onCheckedChange={(checked) => {
                                           return checked
                                             ? field.onChange([
-                                                ...(field.value || []),
-                                                item.id,
-                                              ])
+                                              ...(field.value || []),
+                                              item.id,
+                                            ])
                                             : field.onChange(
-                                                field.value?.filter(
-                                                  (value) => value !== item.id
-                                                )
-                                              );
+                                              field.value?.filter(
+                                                (value) => value !== item.id
+                                              )
+                                            );
                                         }}
                                       />
                                       <span>{item.name}</span>
@@ -335,7 +309,7 @@ export function AssignStaffClassDetailPageFlyout() {
                           ))
                         ) : (
                           <div className="flex items-center justify-center">
-                            <Loader2 className="mr-2 h-6 w-6 animate-spin text-black" />
+                            <Loader2 className="w-6 h-6 mr-2 text-black animate-spin" />
                             <p className="text-black ">
                               Please Select Subject...
                             </p>
@@ -357,7 +331,7 @@ export function AssignStaffClassDetailPageFlyout() {
                       >
                         Class InCharge
                       </label>
-                      <div className="mt-2 flex flex-wrap" id="sectionId">
+                      <div className="flex flex-wrap mt-2" id="sectionId">
                         {sectionListResponse?.data?.map((item) => (
                           <label className="me-5" key={item.id}>
                             <Controller
@@ -368,18 +342,18 @@ export function AssignStaffClassDetailPageFlyout() {
                                 return (
                                   <label className="me-5">
                                     <Checkbox
-                                      className="me-2 items-center space-x-2 rounded border border-primary-500"
+                                      className="items-center space-x-2 border rounded me-2 border-primary-500"
                                       onCheckedChange={(checked) => {
                                         return checked
                                           ? field.onChange([
-                                              ...(field.value || []),
-                                              item.id,
-                                            ])
+                                            ...(field.value || []),
+                                            item.id,
+                                          ])
                                           : field.onChange(
-                                              field.value?.filter(
-                                                (value) => value !== item.id
-                                              )
-                                            );
+                                            field.value?.filter(
+                                              (value) => value !== item.id
+                                            )
+                                          );
                                       }}
                                     />
                                     <span>{item.name}</span>
@@ -423,7 +397,7 @@ export function AssignStaffClassDetailPageFlyout() {
                             }
                           }}
                         >
-                          <SelectTrigger className="mt-2 w-full">
+                          <SelectTrigger className="w-full mt-2">
                             <SelectValue />
                           </SelectTrigger>
                           <SelectContent>
@@ -436,7 +410,7 @@ export function AssignStaffClassDetailPageFlyout() {
                             </SelectGroup>
                           </SelectContent>
                         </Select>
-                        <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
+                        <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
                           <Search className="text-primary-200" size={20} />
                         </div>
                       </div>
@@ -454,7 +428,7 @@ export function AssignStaffClassDetailPageFlyout() {
                 <Button
                   size="sm"
                   variant="outline"
-                  className="mx-auto flex justify-center px-4 py-2"
+                  className="flex justify-center px-4 py-2 mx-auto"
                   onClick={() => {
                     append({ section: 'section' });
                   }}
@@ -469,7 +443,7 @@ export function AssignStaffClassDetailPageFlyout() {
                   type="submit"
                   size="lg"
                   variant="default"
-                  className="mx-auto flex justify-center px-12 py-4"
+                  className="flex justify-center px-12 py-4 mx-auto"
                 >
                   Save & Close
                 </Button>
