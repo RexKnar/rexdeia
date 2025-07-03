@@ -456,6 +456,26 @@ export const menuItem = {
       ],
     },
     {
+      id: 'students',
+      label: 'Students',
+      icon: SquareUserRound,
+      path: '',
+      children: [
+        {
+          icon: null,
+          id: 'enroll-new-student',
+          label: 'Enroll New Student',
+          path: '/students/enroll-new-student',
+        },
+        {
+          icon: null,
+          id: 'student-list',
+          label: 'Students List',
+          path: '/students/list',
+        },
+      ],
+    },
+    {
       id: 'exam-page',
       label: 'Exams',
       icon: FileText,

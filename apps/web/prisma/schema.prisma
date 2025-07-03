@@ -244,23 +244,25 @@ model UserOrganization {
   userId         String       @db.Uuid
   organizationId String       @db.Uuid
   branchId       String?      @db.Uuid
-  role           String?      @db.Uuid
+  roleId         String?      @db.Uuid
+  role           Role?        @relation(fields: [roleId], references: [id])
   branch         Branch?      @relation(fields: [branchId], references: [id])
   organization   Organization @relation(fields: [organizationId], references: [id])
   user           User         @relation(fields: [userId], references: [id])
 }
 
 model Role {
-  id             String        @id @default(uuid()) @map("_id") @db.Uuid
-  name           String
-  organizationId String        @db.Uuid
-  branchId       String?       @db.Uuid
-  modelAccess    ModelAccess[]
-  branch         Branch?       @relation(fields: [branchId], references: [id])
-  organization   Organization  @relation(fields: [organizationId], references: [id])
+  id               String             @id @default(uuid()) @map("_id") @db.Uuid
+  name             String
+  organizationId   String             @db.Uuid
+  branchId         String?            @db.Uuid
+  moduleAccess     ModuleAccess[]
+  branch           Branch?            @relation(fields: [branchId], references: [id])
+  organization     Organization       @relation(fields: [organizationId], references: [id])
+  UserOrganization UserOrganization[]
 }
 
-model ModelAccess {
+model ModuleAccess {
   id     String  @id @default(uuid()) @map("_id") @db.Uuid
   roleId String  @db.Uuid
   module String
