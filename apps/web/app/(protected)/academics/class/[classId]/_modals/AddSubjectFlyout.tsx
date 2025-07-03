@@ -182,7 +182,7 @@ export function AddSubjectFlyout() {
       <Sheet open={isOpen}>
         <SheetContent
           side="right"
-          className="px-4 py-6 bg-white sm:w-96"
+          className="bg-white px-4 py-6 sm:w-96"
           onCloseClick={() => closeFlyout()}
         >
           <form onSubmit={handleSubmit(saveSubject)}>
@@ -273,7 +273,7 @@ export function AddSubjectFlyout() {
                     }
                   }}
                 >
-                  <SelectTrigger className="w-full mt-2">
+                  <SelectTrigger className="mt-2 w-full">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
@@ -311,7 +311,7 @@ export function AddSubjectFlyout() {
                     }
                   }}
                 >
-                  <SelectTrigger className="w-full mt-2">
+                  <SelectTrigger className="mt-2 w-full">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
@@ -349,7 +349,7 @@ export function AddSubjectFlyout() {
                     }
                   }}
                 >
-                  <SelectTrigger className="w-full mt-2">
+                  <SelectTrigger className="mt-2 w-full">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
@@ -375,7 +375,7 @@ export function AddSubjectFlyout() {
                 >
                   Assessment Format
                 </label>
-                <div className="flex flex-wrap mt-2">
+                <div className="mt-2 flex flex-wrap">
                   {assessmentFormatList?.data?.map((item) => (
                     <Controller
                       key={item.id}
@@ -387,16 +387,16 @@ export function AddSubjectFlyout() {
                         return (
                           <label className="me-5">
                             <Checkbox
-                              className="items-center space-x-2 border rounded me-2 border-primary-500"
+                              className="me-2 items-center space-x-2 rounded border border-primary-500"
                               checked={isChecked}
                               onCheckedChange={(checked) => {
                                 return checked
                                   ? field.onChange([...field.value, item.id])
                                   : field.onChange(
-                                    field.value?.filter(
-                                      (value) => value !== item.id
-                                    )
-                                  );
+                                      field.value?.filter(
+                                        (value) => value !== item.id
+                                      )
+                                    );
                               }}
                             />
                             <span>{item.name}</span>
@@ -419,7 +419,7 @@ export function AddSubjectFlyout() {
                 >
                   Group
                 </label>
-                <div className="flex flex-wrap mt-2">
+                <div className="mt-2 flex flex-wrap">
                   {groupList?.data?.map((item) => (
                     <Controller
                       key={item.id}
@@ -431,16 +431,16 @@ export function AddSubjectFlyout() {
                         return (
                           <label className="me-5">
                             <Checkbox
-                              className="items-center space-x-2 border rounded me-2 border-primary-500"
+                              className="me-2 items-center space-x-2 rounded border border-primary-500"
                               checked={isChecked}
                               onCheckedChange={(checked) => {
                                 return checked
                                   ? field.onChange([...field.value, item.id])
                                   : field.onChange(
-                                    field.value?.filter(
-                                      (value) => value !== item.id
-                                    )
-                                  );
+                                      field.value?.filter(
+                                        (value) => value !== item.id
+                                      )
+                                    );
                               }}
                             />
                             <span>{item.name}</span>
@@ -476,7 +476,7 @@ export function AddSubjectFlyout() {
                             Elective
                           </label>
                         </div>
-                        <div className="flex items-center ml-5 space-x-2">
+                        <div className="ml-5 flex items-center space-x-2">
                           <RadioGroupItem value="2" />
                           <label
                             htmlFor="Non-Elective"
@@ -497,13 +497,13 @@ export function AddSubjectFlyout() {
                 )}
               </div>
             </div>
-            <div className="flex justify-center mt-10 ">
+            <div className="mt-10 flex justify-center ">
               <Button
                 size="default"
                 variant="default"
                 type="submit"
                 disabled={isPendingCreateSubject || isPendingUpdateSubject}
-                className="flex justify-center px-4 py-4 ml-3"
+                className="ml-3 flex justify-center px-4 py-4"
               >
                 {subjectId ? 'Update' : 'Save'}
               </Button>
