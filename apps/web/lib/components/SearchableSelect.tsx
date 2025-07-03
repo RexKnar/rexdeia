@@ -66,22 +66,22 @@ export const SearchableSelect: React.FC<SearchableSelectProps> = ({
           }
         }}
       >
-        <SelectTrigger className="w-full px-3 py-2 text-sm border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+        <SelectTrigger className="w-full rounded-md border px-3 py-2 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
           <SelectValue placeholder={placeholder} />
         </SelectTrigger>
 
         <SelectContent
-          className="overflow-y-auto max-h-64"
+          className="max-h-64 overflow-y-auto"
           onMouseDown={(e) => e.stopPropagation()}
           onKeyDown={(e) => e.stopPropagation()}
         >
-          <div className="sticky top-0 z-10 p-2 bg-white border-b">
+          <div className="sticky top-0 z-10 border-b bg-white p-2">
             <Input
               ref={inputRef}
               placeholder="Search..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="w-full px-3 py-2 text-sm border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full rounded-md border px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
               onMouseDown={(e) => e.stopPropagation()}
               onKeyDown={(e) => e.stopPropagation()}
             />
@@ -93,7 +93,7 @@ export const SearchableSelect: React.FC<SearchableSelectProps> = ({
                 <SelectItem
                   key={item.id}
                   value={item.id}
-                  className="px-3 py-2 text-sm cursor-pointer hover:bg-blue-100"
+                  className="cursor-pointer px-3 py-2 text-sm hover:bg-blue-100"
                 >
                   {item.name}
                 </SelectItem>
