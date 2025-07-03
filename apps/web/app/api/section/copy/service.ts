@@ -2,13 +2,20 @@ import { authOptions } from 'lib/auth';
 import { db } from 'lib/db';
 import { getServerSession } from 'next-auth';
 
-export async function copySections(payload: any) {
+export async function copySections(payload: {
+  classId: string;
+  academicYearId: string;
+}) {
   const { classId, academicYearId: sourceAcademicYearId } = payload;
   const session = await getServerSession(authOptions);
 
+  if (!session?.currentBatch) {
+    throw new Error('Missing current academicYearId in session');
+  }
+
   const oldSections = await db.section.findMany({
     where: {
-      classId: classId,
+      classId,
       academicYearId: sourceAcademicYearId,
     },
     include: {
@@ -16,36 +23,32 @@ export async function copySections(payload: any) {
     },
   });
 
-  try {
-    return await db.$transaction(async (prisma) => {
-      for (const sectionDetails of oldSections) {
-        const createdSection = await prisma.section.create({
-          data: {
-            name: sectionDetails.name,
-            isActive: sectionDetails.isActive,
-            classId: sectionDetails.classId,
-            mediumId: sectionDetails.mediumId,
-            academicYearId: session.currentBatch,
-          },
-        });
-
-        await Promise.all(
-          sectionDetails.sectionToGroups.map(async (group) => {
-            return prisma.section.update({
-              where: {
-                id: createdSection.id,
-              },
-              data: {
-                sectionToGroups: {
-                  create: [{ groupId: group.groupId }],
-                },
-              },
-            });
-          })
-        );
-      }
-    });
-  } catch (e) {
-    return e;
+  if (oldSections.length === 0) {
+    return [];
   }
+
+  return await db.$transaction(async (prisma) => {
+    const copied = [];
+
+    for (const oldSection of oldSections) {
+      const createdSection = await prisma.section.create({
+        data: {
+          name: oldSection.name,
+          isActive: oldSection.isActive,
+          classId: oldSection.classId,
+          mediumId: oldSection.mediumId,
+          academicYearId: session.currentBatch,
+          sectionToGroups: {
+            create: oldSection.sectionToGroups.map((group) => ({
+              groupId: group.groupId,
+            })),
+          },
+        },
+      });
+
+      copied.push(createdSection);
+    }
+
+    return copied;
+  });
 }

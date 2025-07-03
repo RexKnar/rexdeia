@@ -39,17 +39,21 @@ export async function POST(request: NextRequest) {
       status: StatusCodes.UNAUTHORIZED,
     });
   }
-  const payload = await request.json();
 
   try {
-    const batch = await copySections(payload);
-    return new NextResponse(JSON.stringify(batch), {
+    const payload = await request.json();
+    const copiedSections = await copySections(payload);
+
+    return new NextResponse(JSON.stringify(copiedSections), {
       status: StatusCodes.CREATED,
     });
-  } catch (e) {
+  } catch (e: any) {
     captureException(e);
-    return new NextResponse(e, {
-      status: StatusCodes.BAD_REQUEST,
-    });
+    return new NextResponse(
+      JSON.stringify({ error: e.message || 'Something went wrong' }),
+      {
+        status: StatusCodes.BAD_REQUEST,
+      }
+    );
   }
 }
