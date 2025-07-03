@@ -109,6 +109,7 @@ export async function addStaff(staff: AddStaffModel) {
   return db.staff.create({
     data: {
       ...staffDetails,
+      userId: staffDetails?.userId as never,
       createdAt: new Date(),
       updatedAt: new Date(),
       user: {
