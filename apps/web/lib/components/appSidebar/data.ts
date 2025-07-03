@@ -39,7 +39,7 @@ export const menuItems: SidebarMenuItem[] = [
         id: 'class-dashboard',
         label: 'Dashboard',
         icon: FileText,
-        path: '/class/dashboard',
+        path: '/academics/class/dashboard',
       },
       {
         id: 'class-list',
@@ -231,7 +231,7 @@ export const menuItem = {
           id: 'class-dashboard',
           label: 'Dashboard',
           icon: FileText,
-          path: '/class/dashboard',
+          path: '/academics/class/dashboard',
         },
         {
           id: 'class-list',
@@ -456,6 +456,26 @@ export const menuItem = {
       ],
     },
     {
+      id: 'students',
+      label: 'Students',
+      icon: SquareUserRound,
+      path: '',
+      children: [
+        {
+          icon: null,
+          id: 'enroll-new-student',
+          label: 'Enroll New Student',
+          path: '/students/enroll-new-student',
+        },
+        {
+          icon: null,
+          id: 'student-list',
+          label: 'Students List',
+          path: '/students/list',
+        },
+      ],
+    },
+    {
       id: 'exam-page',
       label: 'Exams',
       icon: FileText,
@@ -507,7 +527,7 @@ export const menuItem = {
           id: 'class-dashboard',
           label: 'Dashboard',
           icon: FileText,
-          path: '/class/dashboard',
+          path: '/academics/class/dashboard',
         },
         {
           id: 'class-list',
@@ -859,7 +879,7 @@ export const instituteMenu = {
           id: 'class-dashboard',
           label: 'Dashboard',
           icon: FileText,
-          path: '/class/dashboard',
+          path: '/academics/class/dashboard',
         },
         {
           id: 'class-list',

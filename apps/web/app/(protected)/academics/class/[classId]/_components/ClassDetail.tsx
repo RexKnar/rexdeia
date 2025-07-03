@@ -58,6 +58,11 @@ const UnassignStaffFlyout = dynamic(() =>
   )
 );
 
+const UnassignInchargeFlyout = dynamic(() =>
+  import('../_modals/UnassignInchargeFlyout').then(
+    (mod) => mod.UnassignInchargeFlyout
+  )
+);
 export function ClassDetail() {
   const pathname = usePathname();
   const router = useRouter();
@@ -288,6 +293,7 @@ export function ClassDetail() {
       <SaveSectionFlyout />
       <AddSubjectFlyout />
       <UnassignStaffFlyout />
+      <UnassignInchargeFlyout />
       <AssignSubjectToStudentFlyout />
     </section>
   );

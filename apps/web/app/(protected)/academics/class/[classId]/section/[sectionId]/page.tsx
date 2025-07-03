@@ -15,6 +15,7 @@ import { PageTitle } from '@/components/PageTitle';
 
 import { useGetSectionByIdQuery } from '../../../../../../../lib/queries/section/useGetSectionByIdQuery';
 import { AddSubjectFlyout } from '../../_modals/AddSubjectFlyout';
+import { UnassignInchargeFlyout } from '../../_modals/UnassignInchargeFlyout';
 import { UnassignStaffFlyout } from '../../_modals/UnassignStaffFlyout';
 import { StaffList } from './_components/StaffList';
 import { StudentList } from './_components/StudentList';
@@ -68,16 +69,12 @@ export default function Page() {
   return (
     <section className="w-full bg-gray-50 p-3">
       <PageTitle title="Section Details" className="mb-3" />
-      <div className="space-between mx-auto my-5 flex justify-between rounded-md bg-white p-6">
-        <div className="flex">
-          <div className="my-auto inline-flex px-5">
-            <Text variant="base-bold" className="pr-5">
-              {getSectionResponse.name}
-            </Text>
-            <span className="me-2 rounded bg-indigo-100 px-2.5 py-0.5 text-sm font-medium text-indigo-800 dark:bg-indigo-900 dark:text-indigo-300">
-              {getSectionResponse.medium.name}
-            </span>
-          </div>
+      <div className="mx-auto my-5 flex justify-between rounded-md bg-white p-6">
+        <div className="my-auto flex items-center space-x-3 px-5">
+          <Text variant="base-bold">{getSectionResponse.name}</Text>
+          <span className="rounded bg-indigo-100 px-2.5 py-0.5 text-sm font-medium text-indigo-800 dark:bg-indigo-900 dark:text-indigo-300">
+            {getSectionResponse.medium.name}
+          </span>
         </div>
         <div className="my-auto flex gap-4 px-5">
           <div className="relative my-auto">
@@ -86,7 +83,6 @@ export default function Page() {
               onClick={() => {
                 const params = new URLSearchParams(searchParams);
                 params.set('isSectionFlyoutOpen', 'true');
-
                 router.replace(pathname + '?' + params.toString());
               }}
               variant="outline"
@@ -98,7 +94,7 @@ export default function Page() {
         </div>
       </div>
 
-      <Tabs defaultValue="Students" className="relative mt-4">
+      <Tabs defaultValue="Students" className="relative mt-4 px-0 py-2">
         <TabsList className="w-full overflow-x-auto border-b-2 border-gray-400">
           {['Subjects', 'Students', 'Staffs', 'Assessments'].map((tab) => (
             <TabsTrigger
@@ -111,8 +107,8 @@ export default function Page() {
           ))}
         </TabsList>
 
-        <TabsContent className="relative w-full" value="Subjects">
-          <div className="mb-4 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+        <TabsContent className="w-full" value="Subjects">
+          <div className="mb-4 flex items-center justify-between">
             <SubjectList />
             <Button
               variant="default"
@@ -121,7 +117,7 @@ export default function Page() {
                 params.set('isAddSubjectFlyoutOpen', 'true');
                 router.replace(pathname + '?' + params.toString());
               }}
-              className="w-full sm:w-auto"
+              className="absolute right-0 top-0"
             >
               Add Subject
             </Button>
@@ -129,8 +125,8 @@ export default function Page() {
         </TabsContent>
 
         <TabsContent value="Students">
-          <section className="relative pt-5">
-            <div className="absolute right-0 top-0 flex flex-col gap-3 sm:flex-row">
+          <section className="pt-5">
+            <div className="absolute right-0 top-0 flex gap-3">
               <LinkButton
                 variant="outline"
                 url={`/academics/class/assign-roll-number?classId=${classId}&sectionId=${sectionId}`}
@@ -153,7 +149,7 @@ export default function Page() {
         </TabsContent>
 
         <TabsContent value="Staffs">
-          <section className="relative pt-5">
+          <section className="pt-5">
             <StaffList />
             <Button
               variant="default"
@@ -168,16 +164,17 @@ export default function Page() {
             </Button>
           </section>
         </TabsContent>
-
         <TabsContent value="Assessments">
-          <h1 className="mt-5">Assessments Content</h1>
+          <h1>Page 4</h1>
         </TabsContent>
       </Tabs>
+
       <AddSubjectFlyout />
       <SaveSectionFlyout />
       <AssignStudentFlyout />
       <SaveAssignStaffFlyout />
       <UnassignStaffFlyout />
+      <UnassignInchargeFlyout />
     </section>
   );
 }

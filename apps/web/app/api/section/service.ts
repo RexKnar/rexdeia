@@ -293,6 +293,7 @@ export async function getSectionsBySubjectIdClassId(filter: {
   classId: string;
   subjectId: string;
 }) {
+  const session = await getServerSession(authOptions);
   const groups = await db.subjectToGroup.findMany({
     where: {
       subjectId: filter.subjectId,
@@ -312,6 +313,7 @@ export async function getSectionsBySubjectIdClassId(filter: {
       },
       section: {
         classId: filter.classId,
+        academicYearId: session.currentBatch,
       },
     },
     select: {

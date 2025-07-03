@@ -376,6 +376,25 @@ export async function unMapStaffsFromClass(
   return response;
 }
 
+export async function removeClassIncharge(
+  academicYearId: string,
+  staffId: string,
+  sectionId: string
+) {
+  return await db.academicSubjectForStaff.updateMany({
+    where: {
+      academicYearId,
+      staffId,
+      sectionId,
+      isIncharge: true,
+      deletedAt: null,
+    },
+    data: {
+      deletedAt: new Date(),
+    },
+  });
+}
+
 export async function getAllSubjectByClassId(id: string) {
   const session = await getServerSession(authOptions);
   const academicYearId = session.currentBatch;

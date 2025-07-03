@@ -28,21 +28,25 @@ export async function getRangeScales(
   academicYearId?: string
 ) {
   const session = await getServerSession(authOptions);
-  const classDetail = await getClassById(classId);
+  if (!session) throw new Error('Unauthorized');
+
+  const BatchId = academicYearId ?? session.currentBatch;
+  const classDetail = classId ? await getClassById(classId) : null;
+
   const where: any = {
-    batchId: academicYearId ?? session.currentBatch,
+    batchId: BatchId,
   };
+
   if (rangeType !== 'All') {
     where.rangeOf = rangeType as RangeType;
   }
+
   if (classDetail?.classLevelId) {
-    where['classLevel'] = { id: classDetail.classLevelId };
-  } else {
-    where['classLevel'] = null;
+    where.classLevel = { id: classDetail.classLevelId };
   }
 
   const rangeScales = await db.rangeScales.findMany({
-    where: where,
+    where,
     include: {
       classLevel: true,
     },

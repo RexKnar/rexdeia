@@ -54,7 +54,7 @@ export async function getAllRoleList(page: number, limit: number) {
       select: {
         id: true,
         name: true,
-        modelAccess: {
+        moduleAccess: {
           select: {
             module: true,
             create: true,
@@ -69,7 +69,7 @@ export async function getAllRoleList(page: number, limit: number) {
 
   const mappedRoles = roleList.map((role) => ({
     ...role,
-    moduleAccess: role.modelAccess,
+    moduleAccess: role.moduleAccess,
   }));
 
   return {
@@ -93,7 +93,52 @@ export function addModuleAccess(access: any) {
     update: access.update,
     delete: access.delete,
   };
-  return db.modelAccess.create({
+  return db.moduleAccess.create({
     data: createModuleAccess,
   });
+}
+
+export async function getRoleById(roleId: string) {
+  const session = await getServerSession(authOptions);
+
+  const role = await db.role.findFirst({
+    where: {
+      id: roleId,
+      organizationId: session.organizationId,
+      branchId: session.branchId,
+    },
+    select: {
+      id: true,
+      name: true,
+      moduleAccess: {
+        select: {
+          module: true,
+          create: true,
+          read: true,
+          update: true,
+          delete: true,
+        },
+      },
+      UserOrganization: {
+        include: {
+          user: {
+            select: {
+              id: true,
+              email: true,
+              name: true,
+              image: true,
+              phoneNumber: true,
+              role: true,
+            },
+          },
+        },
+      },
+    },
+  });
+
+  if (!role) {
+    throw new Error('Role not found');
+  }
+
+  return role;
 }
