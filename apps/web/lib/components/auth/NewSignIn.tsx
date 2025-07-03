@@ -56,7 +56,7 @@ export function NewSignInForm() {
         <Input
           type="email"
           className="mt-1 text-sm"
-          placeholder="Enter"
+          placeholder="Enter your Email"
           {...register('email', {
             required: 'Your email address is needed to sign in',
             pattern: {

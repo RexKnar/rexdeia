@@ -5,7 +5,8 @@ import { getServerSession } from 'next-auth';
 import { Suspense } from 'react';
 import { Text } from 'ui';
 
-import { NewSignInForm } from '@/components/auth/NewSignUp';
+
+import { SignUpForm } from '@/components/auth/SignUpForm';
 import { Footer } from '@/components/Footer';
 
 import { authOptions } from '../../../lib/auth';
@@ -42,7 +43,7 @@ export default async function Page() {
               Join rexdeia and embark on a seamless academic experience.
             </Text>
             <Suspense>
-              <NewSignInForm />
+              <SignUpForm />
             </Suspense>
             <Text
               variant="sm-semibold"

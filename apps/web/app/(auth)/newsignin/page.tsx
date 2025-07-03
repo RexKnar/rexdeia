@@ -12,7 +12,7 @@ import {
   Text,
 } from 'ui';
 
-import { NewSignInForm } from '@/components/auth/NewSignUp';
+import { NewSignInForm } from '@/components/auth/NewSignIn';
 import { Footer } from '@/components/Footer';
 
 import { authOptions } from '../../../lib/auth';
@@ -31,43 +31,46 @@ export default async function Page() {
   }
 
   return (
-    <section className="  h-full  w-full  bg-white px-6 py-10 sm:px-20 md:bg-gray-600   ">
-      <div className="mx-auto my-auto flex flex-row">
-        <div className="w-full rounded-2xl border border-gray-500 bg-white  px-6 sm:w-5/6  sm:px-12 md:w-full md:rounded-tl-2xl  md:px-16   lg:w-1/2 lg:rounded-bl-2xl lg:rounded-br-none lg:rounded-tr-none  lg:px-20 xl:px-28   ">
+    <section className="flex w-full items-center justify-center bg-white lg:h-screen xl:bg-slate-50">
+      <div className=" flex w-8/12  justify-between rounded-2xl    xl:border  xl:shadow-xl ">
+        <div className="  md:w-full xl:w-1/2  xl:px-24 xl:py-2 ">
           <div>
             <Image
               src={logo}
-              className="pt-12 "
+              className="pt-10"
               alt={'logo'}
               width={100}
             ></Image>
-            <div className="mt-[2rem]">
-              <Text variant="xl-bold">Welcome</Text>
+            <div className="mt-[3rem]">
+              <Text variant="xl-semibold" className="">
+                Welcome
+              </Text>
               <Text variant="sm-regular" className="text-gray-800">
-                Sign in to you Account to get started
+                Sign in to your account to get started.
               </Text>
-              <Suspense>
-                <NewSignInForm />
-              </Suspense>
-              <Text
-                variant="sm-semibold"
-                className="mt-8 text-center  text-gray-800"
-              >
-                Don&apos;t have an account?
-              </Text>
-              <Link
-                href="/signup"
-                className="mt-2 flex w-full justify-center rounded-md border-2 border-gray-300 bg-transparent p-2 text-sm font-semibold text-primary hover:bg-primary hover:text-white"
-              >
-                Signup
-              </Link>
             </div>
-            <div className="pt-16">
-              <Footer />
-            </div>
+            <Suspense>
+              <NewSignInForm />
+            </Suspense>
+            <Text
+              variant="sm-semibold"
+              className="mt-12 text-center text-gray-800"
+            >
+              Don&apos;t have an account?
+            </Text>
+            <Link
+              href="/signup"
+              className="mt-3 flex w-full justify-center rounded-md border-2 border-gray-300 bg-transparent p-2 text-sm font-semibold text-primary hover:bg-primary hover:text-white"
+            >
+              Signup
+            </Link>
+          </div>
+          <div className="">
+            <Footer />
           </div>
         </div>
-        <div className=" hidden w-3/6 rounded-br-2xl rounded-tr-2xl bg-primary xl:block  ">
+
+        <div className=" hidden w-1/2 rounded-br-2xl rounded-tr-2xl bg-primary xl:block  ">
           <Carousel>
             <CarouselContent>
               <CarouselItem>
