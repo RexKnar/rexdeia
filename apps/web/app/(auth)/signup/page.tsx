@@ -5,7 +5,6 @@ import { getServerSession } from 'next-auth';
 import { Suspense } from 'react';
 import { Text } from 'ui';
 
-
 import { SignUpForm } from '@/components/auth/SignUpForm';
 import { Footer } from '@/components/Footer';
 
