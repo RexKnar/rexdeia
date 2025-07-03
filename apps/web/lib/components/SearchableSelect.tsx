@@ -32,16 +32,39 @@ export const SearchableSelect: React.FC<SearchableSelectProps> = ({
   const [search, setSearch] = useState('');
   const [open, setOpen] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
+  const [shouldFocus, setShouldFocus] = useState(false);
 
   useEffect(() => {
-    if (open && inputRef.current) {
-      inputRef.current.focus();
+    if (open && shouldFocus) {
+      const timer = setTimeout(() => {
+        if (inputRef.current) {
+          inputRef.current.focus();
+          setShouldFocus(false);
+        }
+      }, 50);
+      return () => clearTimeout(timer);
     }
-  }, [open]);
+  }, [open, shouldFocus]);
 
   const filteredOptions = options.filter((item) =>
     item.name.toLowerCase().includes(search.toLowerCase())
   );
+
+  const handleValueChange = (val: string) => {
+    onChange(val);
+    setOpen(false);
+  };
+
+  const handleOpenChange = (isOpen: boolean) => {
+    if (isOpen) {
+      setOpen(true);
+      setShouldFocus(true);
+    } else {
+      setOpen(false);
+      setSearch('');
+      setShouldFocus(false);
+    }
+  };
 
   return (
     <div className="space-y-2">
@@ -53,18 +76,10 @@ export const SearchableSelect: React.FC<SearchableSelectProps> = ({
 
       <Select
         value={value}
-        onValueChange={(val) => {
-          onChange(val);
-          setSearch('');
-        }}
+        onValueChange={handleValueChange}
         disabled={disabled}
         open={open}
-        onOpenChange={(isOpen) => {
-          setOpen(isOpen);
-          if (!isOpen) {
-            setSearch('');
-          }
-        }}
+        onOpenChange={handleOpenChange}
       >
         <SelectTrigger className="w-full rounded-md border px-3 py-2 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
           <SelectValue placeholder={placeholder} />
@@ -72,8 +87,13 @@ export const SearchableSelect: React.FC<SearchableSelectProps> = ({
 
         <SelectContent
           className="max-h-64 overflow-y-auto"
-          onMouseDown={(e) => e.stopPropagation()}
-          onKeyDown={(e) => e.stopPropagation()}
+          onCloseAutoFocus={(e) => e.preventDefault()}
+          onEscapeKeyDown={() => {
+            setOpen(false);
+          }}
+          onPointerDownOutside={() => {
+            setOpen(false);
+          }}
         >
           <div className="sticky top-0 z-10 border-b bg-white p-2">
             <Input
@@ -83,7 +103,24 @@ export const SearchableSelect: React.FC<SearchableSelectProps> = ({
               onChange={(e) => setSearch(e.target.value)}
               className="w-full rounded-md border px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
               onMouseDown={(e) => e.stopPropagation()}
-              onKeyDown={(e) => e.stopPropagation()}
+              onKeyDown={(e) => {
+                e.stopPropagation();
+                if (e.key === 'Enter' && filteredOptions.length > 0) {
+                  handleValueChange(filteredOptions[0].id);
+                }
+                if (e.key === 'Escape') {
+                  setOpen(false);
+                }
+              }}
+              onBlur={() => {
+                if (open) {
+                  setTimeout(() => {
+                    if (inputRef.current && open) {
+                      inputRef.current.focus();
+                    }
+                  }, 0);
+                }
+              }}
             />
           </div>
 
@@ -93,7 +130,10 @@ export const SearchableSelect: React.FC<SearchableSelectProps> = ({
                 <SelectItem
                   key={item.id}
                   value={item.id}
-                  className="cursor-pointer px-3 py-2 text-sm hover:bg-blue-100"
+                  className="cursor-pointer px-3 py-2 text-sm hover:bg-blue-100 focus:outline-none"
+                  onMouseDown={(e) => {
+                    e.preventDefault();
+                  }}
                 >
                   {item.name}
                 </SelectItem>
