@@ -1,5 +1,4 @@
 'use client';
-
 import {
   ColumnDef,
   flexRender,
@@ -8,17 +7,16 @@ import {
   getSortedRowModel,
   useReactTable,
 } from '@tanstack/react-table';
+import { useGetRoleDetailsByIdQuery } from 'lib/queries/role-management/useGetRoleDetailsByIdQuery';
 import { Pencil, Trash2 } from 'lucide-react';
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import React, { useCallback, useState } from 'react';
 import {
-  Button,
-  Pagination,
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-  useToast,
-} from 'ui';
+  useParams,
+  usePathname,
+  useRouter,
+  useSearchParams,
+} from 'next/navigation';
+import React, { useEffect, useState } from 'react';
+import { Button, Tooltip, TooltipContent, TooltipTrigger, useToast } from 'ui';
 import {
   Table,
   TableBody,
@@ -28,27 +26,9 @@ import {
   TableRow,
 } from 'ui/components/ui/Table';
 
-type RoleModel = {
-  id: string;
-  name: string;
-  assignedDate: string;
-  isActive: boolean;
-};
+import { PageTitle } from '@/components/PageTitle';
 
-const dummyRoles: RoleModel[] = [
-  {
-    id: '1',
-    name: 'Admin',
-    assignedDate: '2025-06-01T10:00:00Z',
-    isActive: true,
-  },
-  {
-    id: '2',
-    name: 'Teacher',
-    assignedDate: '2025-05-28T14:30:00Z',
-    isActive: false,
-  },
-];
+// Define the type for user data in the role
 
 const UserRoleList = () => {
   const { toast } = useToast();
@@ -56,56 +36,41 @@ const UserRoleList = () => {
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
-  const page = parseInt(searchParams.get('page') || '1');
-  const limit = parseInt(searchParams.get('limit') || '10');
+  const roleId = useParams<{ roleId: string }>().roleId;
 
-  const [data] = useState<RoleModel[]>(dummyRoles);
+  const [userList, setUserList] = useState<any[]>([]);
 
-  const handleEditRole = (role: RoleModel) => {
+  const { data: roleDetailsResponse } = useGetRoleDetailsByIdQuery(roleId);
+  useEffect(() => {
+    if (roleDetailsResponse) {
+      setUserList(roleDetailsResponse?.UserOrganization);
+    }
+  }, [roleDetailsResponse]);
+
+  const handleEditRole = (role: any) => {
     const params = new URLSearchParams(searchParams);
     params.set('isEditRoleFlyoutOpen', 'true');
     params.set('roleId', role.id);
     router.push(`${pathname}?${params.toString()}`);
   };
 
-  const handleDeleteRole = (role: RoleModel) => {
+  const handleDeleteRole = (role: any) => {
     toast({
       title: 'Delete Clicked',
-      description: `You clicked delete on ${role.name}`,
+      description: `You clicked delete on ${role.user.name}`,
     });
   };
 
-  const handlePageChange = useCallback(
-    (page: number) => {
-      const params = new URLSearchParams(searchParams);
-      params.set('page', page.toString());
-      router.push(`${pathname}?${params.toString()}`);
-    },
-    [pathname, router, searchParams]
-  );
-  const columns: ColumnDef<RoleModel>[] = [
+  const columns: ColumnDef<any>[] = [
     {
-      accessorKey: 'name',
+      accessorKey: 'user.name', // 'user.name' will point to the name of the user in the user object
       header: 'Name',
-      cell: ({ row }) => row.original.name,
+      cell: ({ row }) => row.original.user.name,
     },
     {
-      accessorKey: 'assignedDate',
-      header: 'Assigned On',
-      cell: ({ row }) => new Date(row.original.assignedDate),
-    },
-    {
-      accessorKey: 'isActive',
-      header: 'Status',
-      cell: ({ row }) => (
-        <span
-          className={`rounded px-2 py-1 text-sm font-medium text-white ${
-            row.original.isActive ? 'bg-green-500' : 'bg-red-500'
-          }`}
-        >
-          {row.original.isActive ? 'Active' : 'Inactive'}
-        </span>
-      ),
+      accessorKey: 'user.role', // 'user.role' will point to the role of the user
+      header: 'User Type',
+      cell: ({ row }) => row.original.user.role,
     },
     {
       id: 'actions',
@@ -144,7 +109,7 @@ const UserRoleList = () => {
   ];
 
   const table = useReactTable({
-    data,
+    data: userList, // Make sure 'data' is passed here
     columns,
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
@@ -153,6 +118,10 @@ const UserRoleList = () => {
 
   return (
     <section className="mt-4 rounded-md border bg-white p-4 shadow-sm">
+      <div className="flex justify-between pb-3">
+        <PageTitle title={roleDetailsResponse?.name ?? 'Role Details'} />
+      </div>
+      <hr className="border-t border-gray-300" />
       <Table>
         <TableHeader>
           {table.getHeaderGroups().map((headerGroup) => (
@@ -188,19 +157,6 @@ const UserRoleList = () => {
           )}
         </TableBody>
       </Table>
-      <Pagination
-        limit={limit.toString()}
-        pageNumber={page}
-        totalRecords={dummyRoles.length}
-        pageSize={limit}
-        onPageChange={handlePageChange}
-        disabled={false}
-        onLimitChange={(value) => {
-          const params = new URLSearchParams(searchParams);
-          params.set('limit', value.toString());
-          router.push(`${pathname}?${params.toString()}`);
-        }}
-      />
     </section>
   );
 };
