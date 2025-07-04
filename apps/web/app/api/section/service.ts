@@ -31,7 +31,6 @@ export async function getSectionById(id: string) {
   const sectionDetails = await db.section.findFirst({
     where: {
       id: id,
-      isActive: true,
       academicYearId: academicYearId,
     },
     include: {
