@@ -11,6 +11,7 @@ import {
 
 type SectionFilter = {
   isActive?: boolean;
+  requestAcademicYearId?: string;
 };
 
 export async function deleteSectionById(id: string) {
@@ -67,13 +68,13 @@ export async function getSectionsWithFilter(
   filter: SectionFilter
 ) {
   const session = await getServerSession(authOptions);
-  const academicYearId = session.currentBatch;
+
+  const { isActive, requestAcademicYearId } = filter;
+  const academicYearId = requestAcademicYearId ?? session.currentBatch;
 
   if (!academicYearId) {
     throw new Error('No active academic year found');
   }
-
-  const { isActive } = filter;
 
   const whereClause = {
     classId: classId,
