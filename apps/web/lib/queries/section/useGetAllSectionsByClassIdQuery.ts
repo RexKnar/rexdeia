@@ -6,7 +6,13 @@ import { SectionModel } from '../../domain/section';
 import { GET_ALL_SECTIONS_BY_CLASS_ID } from '../../endpoints';
 
 function getAllSectionByClassId(
-  { classId, filter }: { classId: string; filter: { isActive?: boolean } },
+  {
+    classId,
+    filter,
+  }: {
+    classId: string;
+    filter: { isActive?: boolean; academicYearId?: string };
+  },
   options?: Partial<UseQueryOptions<PaginatedResponse<SectionModel>>>
 ) {
   return {
@@ -24,7 +30,13 @@ function getAllSectionByClassId(
 }
 
 export function useGetAllSectionByClassIdQuery(
-  { classId, filter }: { classId: string; filter: { isActive?: boolean } },
+  {
+    classId,
+    filter,
+  }: {
+    classId: string;
+    filter: { isActive?: boolean; academicYearId?: string };
+  },
   options?: Partial<UseQueryOptions<PaginatedResponse<SectionModel>>>
 ) {
   return useQuery(getAllSectionByClassId({ classId, filter }, options));

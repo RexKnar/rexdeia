@@ -85,7 +85,10 @@ export function AssignPromotion() {
   );
 
   const { data: promotionSectionList } = useGetAllSectionByClassIdQuery(
-    { classId: watch('classId'), filter: { isActive: true } },
+    {
+      classId: watch('classId'),
+      filter: { isActive: true, academicYearId: watch('academicYear') },
+    },
     { enabled: !!watch('classId') && !!watch('academicYear') }
   );
 
