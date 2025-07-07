@@ -1,7 +1,9 @@
 'use client';
 
+import { useGetRoleDetailsByIdQuery } from 'lib/queries/role-management/useGetRoleDetailsByIdQuery';
 import { Plus, PlusCircle, Trash } from 'lucide-react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { useEffect } from 'react';
 import { Controller, useFieldArray, useForm } from 'react-hook-form';
 import {
   Button,
@@ -28,6 +30,7 @@ export function EditRoleManagementFlyout() {
   const {
     control,
     register,
+    setValue,
     formState: { errors: fieldErrors },
   } = useForm({
     defaultValues: {
@@ -37,16 +40,35 @@ export function EditRoleManagementFlyout() {
     },
   });
 
-  const { fields, append, remove } = useFieldArray({
-    control,
-    name: 'moduleAccess',
-  });
+  const roleId = searchParams.get('roleId');
 
   const closeFlyout = async () => {
     const params = new URLSearchParams(searchParams);
     params.set('isEditRoleFlyoutOpen', 'false');
     router.replace(pathname + '?' + params.toString());
   };
+
+  const { data: getRoleByIdResponse } = useGetRoleDetailsByIdQuery(roleId, {
+    enabled: !!roleId,
+    queryKey: [],
+  });
+
+  useEffect(() => {
+    if (getRoleByIdResponse) {
+      const { name, moduleAccess } = getRoleByIdResponse;
+
+      setValue('name', name);
+      setValue('moduleAccess', moduleAccess);
+    } else {
+      setValue('name', null);
+      setValue('moduleAccess', null);
+    }
+  }, [getRoleByIdResponse, setValue]);
+
+  const { fields, append, remove } = useFieldArray({
+    control,
+    name: 'moduleAccess',
+  });
 
   return (
     <section>
@@ -63,7 +85,7 @@ export function EditRoleManagementFlyout() {
                 <SheetTitle className="mb-5 flex items-center">
                   <PlusCircle size={20} strokeWidth={1.5} />
                   <Text variant="lg-semibold" className="ml-2">
-                    New Role Management
+                    Update Role
                   </Text>
                 </SheetTitle>
                 <hr className="border-t border-gray-300 " />
@@ -74,9 +96,10 @@ export function EditRoleManagementFlyout() {
                 </label>
                 <Input
                   {...register('name', { required: 'Role name is required' })}
-                  className="mt-2"
                   autoFocus
-                  errorMessage={fieldErrors?.name?.message}
+                  className="mt-2"
+                  placeholder="Role Name"
+                  errorMessage={fieldErrors?.name?.message.toString()}
                 />
               </div>
               {fields.map((field, index) => (
