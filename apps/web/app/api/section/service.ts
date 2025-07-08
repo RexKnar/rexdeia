@@ -59,10 +59,10 @@ export async function getAllSectionsByClassId(classId: string) {
 
 export async function getSectionsWithFilter(
   classId: string,
-  filter: SectionFilter
+  filter: SectionFilter & { academicYearId?: string }
 ) {
   const session = await getServerSession(authOptions);
-  const academicYearId = session.currentBatch;
+  const academicYearId = filter.academicYearId ?? session.currentBatch;
 
   if (!academicYearId) {
     throw new Error('No active academic year found');
@@ -71,7 +71,7 @@ export async function getSectionsWithFilter(
   const { isActive } = filter;
 
   const whereClause = {
-    classId: classId,
+    classId,
     isDeleted: false,
   };
 
@@ -93,7 +93,7 @@ export async function getSectionsWithFilter(
         name: true,
         academicSubjectForStaff: {
           where: {
-            academicYearId: academicYearId,
+            academicYearId,
             deletedAt: null,
             isIncharge: true,
           },
