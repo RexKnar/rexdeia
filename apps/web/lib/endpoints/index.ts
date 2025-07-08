@@ -223,6 +223,7 @@ export const SESSION_UPDATE = `SESSION_UPDATE`;
 export const ADD_ROLE = `ADD_ROLE`;
 export const GET_ROLE_LIST = `GET_ROLE_LIST`;
 export const GET_ROLE_BY_ID = `GET_ROLE_BY_ID`;
+export const UPDATE_ROLE_BY_ID = `UPDATE_ROLE_BY_ID`;
 export const ASSIGN_USERS_TO_ROLE = `ASSIGN_USERS_TO_ROLE`;
 
 export default <EndpointDetails>{
@@ -1098,6 +1099,10 @@ export default <EndpointDetails>{
   },
   [GET_ROLE_BY_ID]: {
     requestType: 'GET',
+    endpoint: '/api/role/[roleId]',
+  },
+  [UPDATE_ROLE_BY_ID]: {
+    requestType: 'PUT',
     endpoint: '/api/role/[roleId]',
   },
   [ASSIGN_USERS_TO_ROLE]: {
