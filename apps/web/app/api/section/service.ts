@@ -11,6 +11,7 @@ import {
 
 type SectionFilter = {
   isActive?: boolean;
+  requestAcademicYearId?: string;
 };
 
 export async function deleteSectionById(id: string) {
@@ -64,21 +65,21 @@ export async function getAllSectionsByClassId(classId: string) {
 
 export async function getSectionsWithFilter(
   classId: string,
-  filter: SectionFilter
+  filter: SectionFilter & { academicYearId?: string }
 ) {
   const session = await getServerSession(authOptions);
-  const academicYearId = session.currentBatch;
+
+  const { isActive, academicYearId: requestAcademicYearId } = filter;
+  const academicYearId = requestAcademicYearId ?? session.currentBatch;
 
   if (!academicYearId) {
     throw new Error('No active academic year found');
   }
 
-  const { isActive } = filter;
-
   const whereClause = {
-    classId: classId,
+    classId,
     isDeleted: false,
-    academicYearId: academicYearId,
+    academicYearId,
   };
 
   if (isActive !== undefined) {
@@ -91,15 +92,13 @@ export async function getSectionsWithFilter(
     }),
     db.section.findMany({
       where: whereClause,
-      orderBy: {
-        name: 'asc',
-      },
+      orderBy: { name: 'asc' },
       select: {
         id: true,
         name: true,
         academicSubjectForStaff: {
           where: {
-            academicYearId: academicYearId,
+            academicYearId,
             deletedAt: null,
             isIncharge: true,
           },
