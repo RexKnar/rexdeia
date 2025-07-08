@@ -17,7 +17,7 @@ function getAllSectionByClassId(
 ) {
   return {
     ...options,
-    queryKey: [GET_ALL_SECTIONS_BY_CLASS_ID, classId],
+    queryKey: [GET_ALL_SECTIONS_BY_CLASS_ID, classId, filter],
     queryFn: async () => {
       return await makeAPICall<PaginatedResponse<SectionModel>>(
         GET_ALL_SECTIONS_BY_CLASS_ID,

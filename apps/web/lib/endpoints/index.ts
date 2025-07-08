@@ -222,8 +222,8 @@ export const UPDATE_ROLLNUMBERS = `UPDATE_ROLLNUMBERS`;
 export const SESSION_UPDATE = `SESSION_UPDATE`;
 export const ADD_ROLE = `ADD_ROLE`;
 export const GET_ROLE_LIST = `GET_ROLE_LIST`;
-export const ASSIGN_USERS_TO_ROLE = `ASSIGN_USERS_TO_ROLE`;
 export const GET_ROLE_BY_ID = `GET_ROLE_BY_ID`;
+export const ASSIGN_USERS_TO_ROLE = `ASSIGN_USERS_TO_ROLE`;
 
 export default <EndpointDetails>{
   ...ExamAnalyticsEndpoints,
@@ -1096,12 +1096,12 @@ export default <EndpointDetails>{
     requestType: 'GET',
     endpoint: '/api/role',
   },
-  [ASSIGN_USERS_TO_ROLE]: {
-    requestType: 'POST',
-    endpoint: '/api/role/[roleId]/assign',
-  },
   [GET_ROLE_BY_ID]: {
     requestType: 'GET',
     endpoint: '/api/role/[roleId]',
+  },
+  [ASSIGN_USERS_TO_ROLE]: {
+    requestType: 'POST',
+    endpoint: '/api/role/[roleId]/assign',
   },
 };

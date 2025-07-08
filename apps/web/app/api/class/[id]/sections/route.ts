@@ -95,8 +95,12 @@ export async function GET(request: Request, { params: { id } }) {
  *         '500':
  *           description: Internal server error.
  */
-export async function PUT(request: NextRequest, { params: { id } }) {
+export async function PUT(
+  request: NextRequest,
+  { params: { id } }: { params: { id: string } }
+) {
   const session = await getServerSession(authOptions);
+
   if (!session) {
     return new NextResponse(JSON.stringify({ error: 'UNAUTHORIZED' }), {
       status: StatusCodes.UNAUTHORIZED,
@@ -111,10 +115,16 @@ export async function PUT(request: NextRequest, { params: { id } }) {
     return new NextResponse(JSON.stringify(sectionsWithFilter), {
       status: StatusCodes.OK,
     });
-  } catch (e) {
+  } catch (e: any) {
     captureException(e);
-    return new NextResponse(e, {
-      status: StatusCodes.BAD_REQUEST,
-    });
+    return new NextResponse(
+      JSON.stringify({
+        error: 'Failed to fetch sections',
+        message: e?.message || 'Unknown error',
+      }),
+      {
+        status: StatusCodes.BAD_REQUEST,
+      }
+    );
   }
 }

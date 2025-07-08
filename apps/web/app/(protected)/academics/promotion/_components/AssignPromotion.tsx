@@ -80,16 +80,27 @@ export function AssignPromotion() {
   }, [classId, setValue]);
 
   const { data: sectionListResponse } = useGetAllSectionByClassIdQuery(
-    { classId: classIdToGetStudent, filter },
+    {
+      classId: classIdToGetStudent,
+      filter: {
+        ...filter,
+        academicYearId: academicYearId,
+      },
+    },
     { enabled: !!classIdToGetStudent }
   );
 
   const { data: promotionSectionList } = useGetAllSectionByClassIdQuery(
     {
       classId: watch('classId'),
-      filter: { isActive: true, academicYearId: watch('academicYear') },
+      filter: {
+        isActive: true,
+        academicYearId: watch('academicYear'),
+      },
     },
-    { enabled: !!watch('classId') && !!watch('academicYear') }
+    {
+      enabled: !!watch('classId') && !!watch('academicYear'),
+    }
   );
 
   const { data: groupListResponse } = useGetGroupListQuery({
@@ -553,7 +564,7 @@ export function AssignPromotion() {
             {selected === 'promote' && (
               <>
                 <section className="p-2">
-                  <section className="mb-2 flex justify-between rounded-md bg-white p-2">
+                  <section className="mb-2 flex justify-between gap-5 rounded-md bg-white p-2">
                     <div className=" basis-1/2">
                       <Select
                         autoComplete="off"
