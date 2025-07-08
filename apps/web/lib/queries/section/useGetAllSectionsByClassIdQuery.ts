@@ -11,7 +11,13 @@ type SectionFilter = {
 };
 
 function getAllSectionByClassId(
-  { classId, filter }: { classId: string; filter: SectionFilter },
+  {
+    classId,
+    filter,
+  }: {
+    classId: string;
+    filter: { isActive?: boolean; academicYearId?: string };
+  },
   options?: Partial<UseQueryOptions<PaginatedResponse<SectionModel>>>
 ) {
   return {
@@ -29,7 +35,13 @@ function getAllSectionByClassId(
 }
 
 export function useGetAllSectionByClassIdQuery(
-  { classId, filter }: { classId: string; filter: SectionFilter },
+  {
+    classId,
+    filter,
+  }: {
+    classId: string;
+    filter: { isActive?: boolean; academicYearId?: string };
+  },
   options?: Partial<UseQueryOptions<PaginatedResponse<SectionModel>>>
 ) {
   return useQuery(getAllSectionByClassId({ classId, filter }, options));

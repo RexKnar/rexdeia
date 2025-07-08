@@ -456,6 +456,26 @@ export const menuItem = {
       ],
     },
     {
+      id: 'students',
+      label: 'Students',
+      icon: SquareUserRound,
+      path: '',
+      children: [
+        {
+          icon: null,
+          id: 'enroll-new-student',
+          label: 'Enroll New Student',
+          path: '/students/enroll-new-student',
+        },
+        {
+          icon: null,
+          id: 'student-list',
+          label: 'Students List',
+          path: '/students/list',
+        },
+      ],
+    },
+    {
       id: 'exam-page',
       label: 'Exams',
       icon: FileText,
@@ -468,6 +488,12 @@ export const menuItem = {
           path: '/exams/mark-entry',
         },
       ],
+    },
+    {
+      id: 'class-list',
+      label: 'Class List',
+      icon: FileText,
+      path: '/staffs/00ea7e77-1a3a-484f-b027-da560b2ddb3d/class',
     },
   ],
   OfficeAdmin: [

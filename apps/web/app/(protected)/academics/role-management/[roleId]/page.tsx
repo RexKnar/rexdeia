@@ -1,7 +1,11 @@
+import UserRoleList from './_components/UserRoleList';
+import { UserRoleListHeader } from './_components/UserRoleListHeader';
+
 const UserRole = () => {
   return (
     <div>
-      <h1>This is a role members page</h1>
+      <UserRoleListHeader />
+      <UserRoleList />
     </div>
   );
 };

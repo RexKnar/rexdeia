@@ -19,6 +19,7 @@ export async function addStudentCSV(studentDetails: any) {
           where: {
             name: studentDetail.Section,
             classId: classDetail.id,
+            academicYearId: session.currentBatch,
           },
         });
 
@@ -109,10 +110,9 @@ export async function addStudentCSV(studentDetails: any) {
 
         const student = await db.student.findFirst({
           where: {
-            aadharCardNumber: studentDetail.AadhaarNumber,
+            emisNumber: studentDetail.EMISId,
           },
         });
-
         if (!student && studentDetail.AadhaarNumber) {
           const createdStudent = await db.student.create({
             data: {
@@ -188,7 +188,6 @@ export async function addStudentCSV(studentDetails: any) {
               status: 'DirectStudentEntry',
             },
           });
-
           promises.push(createdStudent);
         }
       }

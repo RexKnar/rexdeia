@@ -109,6 +109,7 @@ export async function addStaff(staff: AddStaffModel) {
   return db.staff.create({
     data: {
       ...staffDetails,
+      userId: staffDetails?.userId as never,
       createdAt: new Date(),
       updatedAt: new Date(),
       user: {
@@ -335,6 +336,7 @@ export async function getStaffsBySection(filter: GetStaffsFilter) {
 }
 
 export async function getSubjectByStaffId(id) {
+  const session = await getServerSession(authOptions);
   const subjectResponse = await db.class.findMany({
     where: {
       Section: {
@@ -342,6 +344,7 @@ export async function getSubjectByStaffId(id) {
           academicSubjectForStaff: {
             some: {
               staffId: id,
+              academicYearId: session.currentBatch,
             },
           },
         },
@@ -358,6 +361,7 @@ export async function getSubjectByStaffId(id) {
             where: {
               staffId: id,
               isIncharge: false,
+              academicYearId: session.currentBatch,
             },
             include: {
               subject: true,

@@ -69,6 +69,7 @@ export function AssignPromotion() {
   const [selectedStudents, setSelectedStudents] = useState([]);
   const [studentListMaster, setStudentListMaster] = useState([]);
   const [selectAll, setSelectAll] = useState(false);
+  // const [requestAcademicYearId, setAcademicYearId] = useState();
 
   useEffect(() => {
     if (classId) setClassIdToGetStudent(classId);
@@ -92,14 +93,9 @@ export function AssignPromotion() {
   const { data: promotionSectionList } = useGetAllSectionByClassIdQuery(
     {
       classId: watch('classId'),
-      filter: {
-        isActive: true,
-        academicYearId: watch('academicYear'),
-      },
+      filter: { isActive: true, academicYearId: watch('academicYear') },
     },
-    {
-      enabled: !!watch('classId') && !!watch('academicYear'),
-    }
+    { enabled: !!watch('classId') && !!watch('academicYear') }
   );
 
   const { data: groupListResponse } = useGetGroupListQuery({
@@ -607,6 +603,46 @@ export function AssignPromotion() {
                     <div className=" basis-1/2">
                       <Select
                         autoComplete="off"
+                        {...register('academicYear', {
+                          required: 'Academic year is Required',
+                        })}
+                        value={watch('academicYear')}
+                        onValueChange={(value) => {
+                          if (value) {
+                            setValue('academicYear', value);
+                          }
+                        }}
+                      >
+                        <SelectTrigger className="ml-4 basis-1/2">
+                          <SelectValue
+                            className="text-gray-400"
+                            placeholder="Academic year"
+                          />{' '}
+                          <ChevronDown className="text-gray-400" />
+                        </SelectTrigger>
+                        <SelectContent className="border border-primary-200">
+                          {' '}
+                          <SelectGroup>
+                            {batchesList?.map((item) => (
+                              <SelectItem
+                                key={`batchList_${item.id}`}
+                                value={item.id}
+                              >
+                                {item.name}
+                              </SelectItem>
+                            ))}
+                          </SelectGroup>
+                        </SelectContent>
+                        {fieldErrors.academicYear && (
+                          <p className="ml-4 text-red-500 ">
+                            {fieldErrors.academicYear.message.toString()}
+                          </p>
+                        )}
+                      </Select>
+                    </div>
+                    <div className=" basis-1/2">
+                      <Select
+                        autoComplete="off"
                         {...register('classId', {
                           required: 'Class is Required',
                         })}
@@ -652,7 +688,7 @@ export function AssignPromotion() {
                       </Select>
                     </div>
                   </section>
-                  <section className="mb-2 flex justify-between gap-5 rounded-md bg-white p-2">
+                  <section className="mb-2 flex justify-between rounded-md bg-white p-2">
                     <div className=" basis-1/2">
                       <Select
                         autoComplete="off"

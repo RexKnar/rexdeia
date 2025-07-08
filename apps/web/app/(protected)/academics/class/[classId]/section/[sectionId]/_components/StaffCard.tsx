@@ -1,4 +1,3 @@
-/* eslint-disable prettier/prettier */
 import { SectionModel } from 'lib/domain/section';
 import { SubjectModel } from 'lib/domain/subject';
 import { MoreHorizontal } from 'lucide-react';
@@ -26,8 +25,8 @@ export function StaffCard(props: StaffCardProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
   return (
-    <div className="flex flex-wrap p-3 bg-white">
-      <div className="w-3/4 px-2 my-auto">
+    <div className="flex flex-wrap bg-white p-3">
+      <div className="my-auto w-3/4 px-2">
         <Text variant="base-bold">{name}</Text>
         {sectionsHandled.map((section, sectionIndex) => (
           <div key={sectionIndex} className="inline-flex items-center">
@@ -48,8 +47,8 @@ export function StaffCard(props: StaffCardProps) {
         )}
         {!subjects.length && <Text variant="base-regular">No Subjects</Text>}
       </div>
-      <div className="w-1/4 my-auto ">
-        <div className="justify-end p-1 my-auto float-end">
+      <div className="my-auto w-1/4 ">
+        <div className="float-end my-auto justify-end p-1">
           <DropdownMenu>
             <DropdownMenuTrigger className="flex items-center gap-2 outline-none">
               <Button variant="mild" size="sm" className="h-8 px-1">
@@ -61,7 +60,7 @@ export function StaffCard(props: StaffCardProps) {
               align="end"
               sideOffset={15}
             >
-              <DropdownMenuItem className="flex flex-col items-center cursor-pointer">
+              <DropdownMenuItem className="flex cursor-pointer flex-col items-center">
                 <Button
                   variant="link"
                   size="sm"
@@ -88,7 +87,7 @@ export function StaffCard(props: StaffCardProps) {
             {sectionIncharge.map((section) => (
               <span
                 key={section.id}
-                className="px-2 text-white bg-green-300 rounded-md"
+                className="rounded-md bg-green-300 px-2 text-white"
               >
                 {section.name}
               </span>

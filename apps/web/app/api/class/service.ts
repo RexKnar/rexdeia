@@ -29,23 +29,33 @@ type SectionDataType = {
 };
 export async function getClassList(page: number, limit: number) {
   const session = await getServerSession(authOptions);
-  const [data, total] = await Promise.all([
+  const [classList, total] = await Promise.all([
     db.class.findMany({
       take: limit,
       skip: (page - 1) * limit,
       where: {
         branchId: session.branchId,
       },
-      include: {
-        Section: true,
-      },
     }),
     db.class.count({
       where: {
         branchId: session.branchId,
+        Section: {
+          some: {
+            academicYearId: session.currentBatch,
+          },
+        },
       },
     }),
   ]);
+
+  const data = classList.map(async (classItem) => {
+    const sections = await getAllSectionsByClassId(classItem.id);
+    return {
+      ...classItem,
+      Section: sections,
+    };
+  });
 
   return {
     page,
@@ -80,17 +90,24 @@ export async function getAllClassesWithFilter(
       take: limit,
       skip: (page - 1) * limit,
       where: whereClause,
-      include: {
-        Section: true,
-      },
     }),
   ]);
+
+  const data = await Promise.all(
+    classList.map(async (classItem) => {
+      const sections = await getAllSectionsByClassId(classItem.id);
+      return {
+        ...classItem,
+        Section: sections,
+      };
+    })
+  );
 
   return {
     page,
     total,
     limit,
-    data: classList,
+    data,
   };
 }
 
@@ -140,6 +157,7 @@ export async function addClass(classPayload: CreateClassModel) {
       classId: createdClass.id,
       mediumId: section.mediumId,
       groupIds: section.groupIds,
+      academicYearId: session.currentBatch,
     };
     addSection(createSectionModel);
   });
@@ -356,6 +374,25 @@ export async function unMapStaffsFromClass(
     })
   );
   return response;
+}
+
+export async function removeClassIncharge(
+  academicYearId: string,
+  staffId: string,
+  sectionId: string
+) {
+  return await db.academicSubjectForStaff.updateMany({
+    where: {
+      academicYearId,
+      staffId,
+      sectionId,
+      isIncharge: true,
+      deletedAt: null,
+    },
+    data: {
+      deletedAt: new Date(),
+    },
+  });
 }
 
 export async function getAllSubjectByClassId(id: string) {

@@ -56,6 +56,7 @@ export const ADD_SUBJECT = `ADD_SUBJECT`;
 export const ADD_GROUP = `ADD_GROUP`;
 export const ADD_SECTION = `ADD_SECTION`;
 export const GET_SECTION_BY_ID = `GET_SECTION_BY_ID`;
+export const COPY_SECTION = `COPY_SECTION`;
 
 export const DELETE_SUBJECT_BY_ID = `DELETE_SUBJECT_BY_ID`;
 export const UPDATE_SUBJECT_BY_ID = `UPDATE_SUBJECT_BY_ID`;
@@ -153,6 +154,7 @@ export const EXAM_MARK_ENTRY = `EXAM_MARK_ENTRY`;
 export const UPDATE_STAFF_BY_ID = `UPDATE_STAFF_BY_ID`;
 export const GET_SUBJECT_LIST_BY_STAFF_ID = `GET_SUBJECT_LIST_BY_STAFF_ID`;
 export const UNASSIGN_STAFF_SECTION_BY_ID = `UNASSIGN_STAFF_SECTION_BY_ID`;
+export const UNASSIGN_CLASS_INCHARGE_BY_ID = `UNASSIGN_CLASS_INCHARGE_BY_ID`;
 export const ADD_COMMUNITY = `ADD_COMMUNITY`;
 export const ADD_LANGUAGE = `ADD_LANGUAGE`;
 export const ADD_STAFF_CATEGORY = `ADD_STAFF_CATEGORY`;
@@ -220,6 +222,8 @@ export const UPDATE_ROLLNUMBERS = `UPDATE_ROLLNUMBERS`;
 export const SESSION_UPDATE = `SESSION_UPDATE`;
 export const ADD_ROLE = `ADD_ROLE`;
 export const GET_ROLE_LIST = `GET_ROLE_LIST`;
+export const ASSIGN_USERS_TO_ROLE = `ASSIGN_USERS_TO_ROLE`;
+export const GET_ROLE_BY_ID = `GET_ROLE_BY_ID`;
 
 export default <EndpointDetails>{
   ...ExamAnalyticsEndpoints,
@@ -457,6 +461,10 @@ export default <EndpointDetails>{
   [GET_SECTION_BY_ID]: {
     requestType: `GET`,
     endpoint: `/api/section/[id]`,
+  },
+  [COPY_SECTION]: {
+    requestType: `POST`,
+    endpoint: `/api/section/copy`,
   },
   [GET_SECTION_BY_CLASS_GROUP]: {
     requestType: `PUT`,
@@ -820,6 +828,10 @@ export default <EndpointDetails>{
     requestType: `DELETE`,
     endpoint: `/api/class/[id]/staffs/[staffId]/subjects`,
   },
+  [UNASSIGN_CLASS_INCHARGE_BY_ID]: {
+    requestType: `DELETE`,
+    endpoint: `/api/class/[id]/incharge/[staffId]/section/[sectionId]`,
+  },
   [ADD_COMMUNITY]: {
     requestType: 'POST',
     endpoint: '/api/community',
@@ -1083,5 +1095,13 @@ export default <EndpointDetails>{
   [GET_ROLE_LIST]: {
     requestType: 'GET',
     endpoint: '/api/role',
+  },
+  [ASSIGN_USERS_TO_ROLE]: {
+    requestType: 'POST',
+    endpoint: '/api/role/[roleId]/assign',
+  },
+  [GET_ROLE_BY_ID]: {
+    requestType: 'GET',
+    endpoint: '/api/role/[roleId]',
   },
 };

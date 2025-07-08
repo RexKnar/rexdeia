@@ -11,6 +11,7 @@ import {
 
 type SectionFilter = {
   isActive?: boolean;
+  requestAcademicYearId?: string;
 };
 
 export async function deleteSectionById(id: string) {
@@ -26,10 +27,12 @@ export async function deleteSectionById(id: string) {
 }
 
 export async function getSectionById(id: string) {
+  const session = await getServerSession(authOptions);
+  const academicYearId = session.currentBatch;
   const sectionDetails = await db.section.findFirst({
     where: {
       id: id,
-      isActive: true,
+      academicYearId: academicYearId,
     },
     include: {
       medium: true,
@@ -50,9 +53,12 @@ export async function getSectionById(id: string) {
 }
 
 export async function getAllSectionsByClassId(classId: string) {
+  const session = await getServerSession(authOptions);
+  const academicYearId = session.currentBatch;
   return db.section.findMany({
     where: {
       classId: classId,
+      academicYearId: academicYearId,
     },
   });
 }
@@ -62,17 +68,18 @@ export async function getSectionsWithFilter(
   filter: SectionFilter & { academicYearId?: string }
 ) {
   const session = await getServerSession(authOptions);
-  const academicYearId = filter.academicYearId ?? session.currentBatch;
+
+  const { isActive, requestAcademicYearId } = filter;
+  const academicYearId = requestAcademicYearId ?? session.currentBatch;
 
   if (!academicYearId) {
     throw new Error('No active academic year found');
   }
 
-  const { isActive } = filter;
-
   const whereClause = {
     classId,
     isDeleted: false,
+    academicYearId: academicYearId,
   };
 
   if (isActive !== undefined) {
@@ -223,6 +230,8 @@ export async function updateSectionById(
 }
 
 export async function addSection(sectionDetails: CreateSectionModel) {
+  const session = await getServerSession(authOptions);
+  const academicYearId = session.currentBatch;
   return await db.$transaction(async (prisma) => {
     const createdSection = await prisma.section.create({
       data: {
@@ -230,6 +239,7 @@ export async function addSection(sectionDetails: CreateSectionModel) {
         isActive: sectionDetails.isActive,
         classId: sectionDetails.classId,
         mediumId: sectionDetails.mediumId,
+        academicYearId: academicYearId,
       },
     });
     return sectionDetails.groupIds.map(async (groupId) => {
@@ -283,6 +293,7 @@ export async function getSectionsBySubjectIdClassId(filter: {
   classId: string;
   subjectId: string;
 }) {
+  const session = await getServerSession(authOptions);
   const groups = await db.subjectToGroup.findMany({
     where: {
       subjectId: filter.subjectId,
@@ -302,6 +313,7 @@ export async function getSectionsBySubjectIdClassId(filter: {
       },
       section: {
         classId: filter.classId,
+        academicYearId: session.currentBatch,
       },
     },
     select: {

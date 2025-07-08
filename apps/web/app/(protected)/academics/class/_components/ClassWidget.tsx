@@ -37,10 +37,10 @@ export function ClassWidget({ classDetails }) {
               variant="outline"
               className={cn(
                 'w-18 ml-2 h-5 rounded-lg border-none  px-2 py-1 text-center text-sm font-medium text-teal-800',
-                classDetails.isActive ? 'bg-teal-100' : 'bg-red-300'
+                classDetails?.isActive ? 'bg-teal-100' : 'bg-red-300'
               )}
             >
-              {classDetails.isActive ? 'Active' : 'Inactive'}
+              {classDetails?.isActive ? 'Active' : 'Inactive'}
             </Button>
           </div>
         </div>
@@ -50,7 +50,7 @@ export function ClassWidget({ classDetails }) {
               key={index}
               className={cn(
                 'h-7 w-7 text-center',
-                section.isActive
+                section?.isActive
                   ? 'bg-primary text-white hover:bg-primary'
                   : 'bg-gray-400 text-black hover:bg-gray-400'
               )}

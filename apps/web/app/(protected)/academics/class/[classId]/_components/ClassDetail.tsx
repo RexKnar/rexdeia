@@ -26,6 +26,7 @@ import { PageTitle } from '@/components/PageTitle';
 
 import { useGetClassByIdQuery } from '../../../../../../lib/queries/class/useGetClassByIdQuery';
 import { AssignSubjectToStudentFlyout } from '../_modals/AssignSubjectToStudent';
+import { CopySectionFlyout } from '../section/[sectionId]/_modals/CopySectionFlyout';
 import { ExamLists } from './ExamLists';
 import { SectionList } from './SectionList';
 import { StaffList } from './StaffList';
@@ -58,6 +59,11 @@ const UnassignStaffFlyout = dynamic(() =>
   )
 );
 
+const UnassignInchargeFlyout = dynamic(() =>
+  import('../_modals/UnassignInchargeFlyout').then(
+    (mod) => mod.UnassignInchargeFlyout
+  )
+);
 export function ClassDetail() {
   const pathname = usePathname();
   const router = useRouter();
@@ -244,16 +250,29 @@ export function ClassDetail() {
                 <TabsContent value="Sections">
                   <section className="pt-5">
                     <SectionList />
-                    <Button
-                      onClick={() => {
-                        const params = new URLSearchParams(searchParams);
-                        params.set('isSectionFlyoutOpen', 'true');
-                        router.replace(pathname + '?' + params.toString());
-                      }}
-                      className="absolute right-0 top-0"
-                    >
-                      Add Section
-                    </Button>
+                    <div className="absolute right-0 top-0 flex flex-row gap-3">
+                      {' '}
+                      <Button
+                        onClick={() => {
+                          const params = new URLSearchParams(searchParams);
+                          params.set('isCopySectionFlyoutOpen', 'true');
+                          router.replace(pathname + '?' + params.toString());
+                        }}
+                        className=""
+                      >
+                        Copy Section
+                      </Button>
+                      <Button
+                        onClick={() => {
+                          const params = new URLSearchParams(searchParams);
+                          params.set('isSectionFlyoutOpen', 'true');
+                          router.replace(pathname + '?' + params.toString());
+                        }}
+                        className=""
+                      >
+                        Add Section
+                      </Button>
+                    </div>
                   </section>
                 </TabsContent>
                 <TabsContent value="Assessments">
@@ -286,8 +305,10 @@ export function ClassDetail() {
       <AssignStaffClassDetailPageFlyout />
       <UpdateClassFlyout />
       <SaveSectionFlyout />
+      <CopySectionFlyout />
       <AddSubjectFlyout />
       <UnassignStaffFlyout />
+      <UnassignInchargeFlyout />
       <AssignSubjectToStudentFlyout />
     </section>
   );
