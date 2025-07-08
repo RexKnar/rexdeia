@@ -32,3 +32,5 @@ export type ModuleAccessModel = {
 };
 
 export type AddRoleModel = Pick<RoleModel, 'name' | 'moduleAccess'>;
+
+export type UpdateRoleModel = Pick<RoleModel, 'id' | 'name' | 'moduleAccess'>;
