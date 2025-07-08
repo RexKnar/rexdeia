@@ -142,3 +142,43 @@ export async function getRoleById(roleId: string) {
 
   return role;
 }
+
+export async function editRoleById(
+  roleId: string,
+  data: {
+    name: string;
+    isActive: boolean;
+    moduleAccess: {
+      module: string;
+      create: boolean;
+      read: boolean;
+      update: boolean;
+      delete: boolean;
+    }[];
+  }
+) {
+  const session = await getServerSession(authOptions);
+
+  const role = await db.role.update({
+    where: {
+      id: roleId,
+      organizationId: session.organizationId,
+      branchId: session.branchId,
+    },
+    data: {
+      name: data.name,
+      moduleAccess: {
+        deleteMany: {},
+        create: data.moduleAccess.map((access) => ({
+          module: access.module,
+          create: access.create,
+          read: access.read,
+          update: access.update,
+          delete: access.delete,
+        })),
+      },
+    },
+  });
+
+  return role;
+}
