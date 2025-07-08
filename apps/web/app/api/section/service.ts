@@ -69,7 +69,7 @@ export async function getSectionsWithFilter(
 ) {
   const session = await getServerSession(authOptions);
 
-  const { isActive, requestAcademicYearId } = filter;
+  const { isActive, academicYearId: requestAcademicYearId } = filter;
   const academicYearId = requestAcademicYearId ?? session.currentBatch;
 
   if (!academicYearId) {
@@ -79,7 +79,7 @@ export async function getSectionsWithFilter(
   const whereClause = {
     classId,
     isDeleted: false,
-    academicYearId: academicYearId,
+    academicYearId,
   };
 
   if (isActive !== undefined) {
@@ -92,9 +92,7 @@ export async function getSectionsWithFilter(
     }),
     db.section.findMany({
       where: whereClause,
-      orderBy: {
-        name: 'asc',
-      },
+      orderBy: { name: 'asc' },
       select: {
         id: true,
         name: true,

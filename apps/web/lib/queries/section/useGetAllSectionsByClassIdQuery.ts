@@ -5,11 +5,6 @@ import { makeAPICall } from '../../api';
 import { SectionModel } from '../../domain/section';
 import { GET_ALL_SECTIONS_BY_CLASS_ID } from '../../endpoints';
 
-type SectionFilter = {
-  isActive?: boolean;
-  academicYearId?: string;
-};
-
 function getAllSectionByClassId(
   {
     classId,
