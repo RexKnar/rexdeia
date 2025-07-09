@@ -226,6 +226,7 @@ export const GET_ROLE_BY_ID = `GET_ROLE_BY_ID`;
 export const UPDATE_ROLE_BY_ID = `UPDATE_ROLE_BY_ID`;
 export const DELETE_ROLE_MODULE = `DELETE_ROLE_MODULE`;
 export const ASSIGN_USERS_TO_ROLE = `ASSIGN_USERS_TO_ROLE`;
+export const ADD_ROLE_MODULE_ACCESS = `ADD_ROLE_MODULE_ACCESS`;
 
 export default <EndpointDetails>{
   ...ExamAnalyticsEndpoints,
@@ -1113,5 +1114,9 @@ export default <EndpointDetails>{
   [ASSIGN_USERS_TO_ROLE]: {
     requestType: 'POST',
     endpoint: '/api/role/[roleId]/assign',
+  },
+  [ADD_ROLE_MODULE_ACCESS]: {
+    requestType: 'POST',
+    endpoint: '/api/role/[roleId]/module-access',
   },
 };
