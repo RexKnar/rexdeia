@@ -8,6 +8,11 @@ export async function getOrganisationsByUserId(userId: string) {
     include: {
       branch: true,
       organization: true,
+      role: {
+        include: {
+          moduleAccess: true,
+        },
+      },
     },
   });
 }

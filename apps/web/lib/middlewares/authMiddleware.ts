@@ -2,8 +2,11 @@
 
 import { jwtVerify } from 'jose';
 import { authOptions } from 'lib/auth';
+import { PermissionManager } from 'lib/auth/permission';
+import { NextApiRequest, NextApiResponse } from 'next';
 import { NextRequest } from 'next/server';
 import { getServerSession } from 'next-auth';
+import { Permission, Session } from 'types/auth';
 
 // Helper to generate secret key for JWT verification
 async function generateSecretKey() {
@@ -66,5 +69,39 @@ export async function authenticate(request: NextRequest) {
     isAuthenticated: false,
     error: 'No authentication provided',
     type: null,
+  };
+}
+
+export function withAuth(
+  module: string,
+  permission: Permission,
+  handler: (req: NextApiRequest, res: NextApiResponse) => Promise<void>
+) {
+  return async function (req: NextApiRequest, res: NextApiResponse) {
+    try {
+      const session = (await getServerSession(
+        req,
+        res,
+        authOptions
+      )) as Session;
+
+      if (!session) {
+        return res.status(401).json({ error: 'Unauthorized' });
+      }
+
+      const permissionManager = new PermissionManager(session);
+
+      if (!permissionManager.hasPermission(module, permission)) {
+        return res.status(403).json({ error: 'Insufficient permissions' });
+      }
+
+      // Add permission manager to request for use in handler
+      (req as any).permissionManager = permissionManager;
+      (req as any).session = session;
+
+      return handler(req, res);
+    } catch (error) {
+      return res.status(500).json({ error: 'Internal server error' });
+    }
   };
 }
