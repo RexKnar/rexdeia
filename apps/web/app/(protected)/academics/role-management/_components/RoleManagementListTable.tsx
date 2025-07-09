@@ -36,6 +36,7 @@ import { LinkButton } from '@/components/LinkButton';
 import { DeleteConfirmationModal } from '@/components/modals/DeleteConfirmationModal';
 
 import { RoleModel } from '../../../../../lib/domain/role';
+import { AddRoleModuleFlyout } from '../_modals/AddRoleModuleManagementFlyout';
 import { EditRoleManagementFlyout } from '../_modals/EditRoleManagementFlyout';
 
 export function RoleManagementListTable() {
@@ -219,7 +220,7 @@ export function RoleManagementListTable() {
                 className="flex items-center gap-2 border-gray-700 text-sm text-gray-700"
                 onClick={() => {
                   const params = new URLSearchParams(searchParams);
-                  params.set('isPermissionFlyoutOpen', 'true');
+                  params.set('isAddRoleModuleFlyoutOpen', 'true');
                   params.set('roleId', row.original.id);
                   router.replace(pathname + '?' + params.toString());
                 }}
@@ -416,6 +417,7 @@ export function RoleManagementListTable() {
       />
 
       <EditRoleManagementFlyout />
+      <AddRoleModuleFlyout />
     </section>
   );
 }
