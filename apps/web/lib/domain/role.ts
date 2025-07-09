@@ -12,6 +12,7 @@ export type RoleModel = {
     userId: string;
   }[];
   moduleAccess: {
+    id: string;
     module: string;
     create: boolean;
     read: boolean;
