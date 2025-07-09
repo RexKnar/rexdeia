@@ -4,7 +4,7 @@ import { authOptions } from 'lib/auth';
 import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 
-import { editRoleById, getRoleById } from '../service';
+import { deleteRoleModuleById, editRoleById, getRoleById } from '../service';
 
 /**
  * @swagger
@@ -119,6 +119,66 @@ export async function PUT(
     const body = await request.json();
 
     const updatedRole = await editRoleById(roleId, body);
+
+    return NextResponse.json(updatedRole, { status: 200 });
+  } catch (error: any) {
+    return NextResponse.json(
+      { error: error.message || 'Something went wrong' },
+      { status: 500 }
+    );
+  }
+}
+
+/**
+ * @swagger
+ * /api/role/{roleId}:
+ *   delete:
+ *     summary: Update a role
+ *     parameters:
+ *       - in: path
+ *         name: roleId
+ *         required: true
+ *         schema:
+ *           type: string
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *               isActive:
+ *                 type: boolean
+ *               moduleAccess:
+ *                 type: array
+ *                 items:
+ *                   type: object
+ *     responses:
+ *       200:
+ *         description: Role updated
+ *       400:
+ *         description: Bad request
+ *       401:
+ *         description: Unauthorized
+ *       500:
+ *         description: Server error
+ */
+export async function DELETE(
+  request: NextRequest,
+  { params }: { params: { roleId: string } }
+) {
+  const session = await getServerSession(authOptions);
+
+  if (!session) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
+
+  try {
+    const roleId = params.roleId;
+
+    const updatedRole = await deleteRoleModuleById(roleId);
 
     return NextResponse.json(updatedRole, { status: 200 });
   } catch (error: any) {

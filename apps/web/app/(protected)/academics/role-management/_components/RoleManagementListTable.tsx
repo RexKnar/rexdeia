@@ -9,8 +9,9 @@ import {
   getSortedRowModel,
   useReactTable,
 } from '@tanstack/react-table';
+import { useDeleteModuleAccessByIdMutation } from 'lib/queries/role-management/useDeleteModuleAccessByIdMutationQuery';
 import { useGetRoleListQuery } from 'lib/queries/role-management/useGetRoleListMutationQuery';
-import { Pencil, PlusCircleIcon, Trash2, UserPlus } from 'lucide-react';
+import { Pencil, PlusCircleIcon, Trash, Trash2, UserPlus } from 'lucide-react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import React, { useCallback, useState } from 'react';
 import { When } from 'react-if';
@@ -20,6 +21,7 @@ import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
+  useToast,
 } from 'ui';
 import {
   Table,
@@ -34,21 +36,50 @@ import { LinkButton } from '@/components/LinkButton';
 import { DeleteConfirmationModal } from '@/components/modals/DeleteConfirmationModal';
 
 import { RoleModel } from '../../../../../lib/domain/role';
+import { AddRoleModuleFlyout } from '../_modals/AddRoleModuleManagementFlyout';
 import { EditRoleManagementFlyout } from '../_modals/EditRoleManagementFlyout';
 
 export function RoleManagementListTable() {
   const [showRoleDeleteConfirmationModal, setShowRoleDeleteConfirmationModal] =
     useState(false);
   const [selectedRole, setSelectedRole] = useState<RoleModel | null>(null);
+  const [showModuleAccessDeleteModal, setShowModuleAccessDeleteModal] =
+    useState(false);
+  const [selectedModuleAccessId, setSelectedModuleAccessId] = useState<
+    string | null
+  >(null);
+  const [selectedModuleName, setSelectedModuleName] = useState<string | null>(
+    null
+  );
+
   const pathname = usePathname();
   const router = useRouter();
   const searchParams = useSearchParams();
+  const { toast } = useToast();
 
   const page = parseInt(searchParams.get('page') || '1');
   const limit = parseInt(searchParams.get('limit') || '10');
 
   const { data: getRoleListResponse, isLoading: isRoleListLoading } =
     useGetRoleListQuery(page, limit);
+
+  const { mutateAsync: deleteModuleAccess } =
+    useDeleteModuleAccessByIdMutation();
+  const handleDeleteModuleAccess = async (id: string) => {
+    try {
+      await deleteModuleAccess(id);
+      toast({
+        title: 'Success',
+        description: 'Role deleted successfully!',
+      });
+    } catch (error) {
+      toast({
+        title: 'Error',
+        description: 'Failed to delete role',
+        variant: 'destructive',
+      });
+    }
+  };
 
   const columns: ColumnDef<RoleModel>[] = [
     {
@@ -86,13 +117,26 @@ export function RoleManagementListTable() {
                     <div className="mb-2 text-sm font-semibold capitalize text-indigo-700">
                       {access.module}
                     </div>
-                    <Button
-                      variant="ghost"
-                      className="mb-2 h-8 w-8 p-1"
-                      onClick={() => handleEditRole(row.original)}
-                    >
-                      <Pencil size={16} className="text-gray-600" />
-                    </Button>
+                    <div>
+                      <Button
+                        variant="ghost"
+                        className="mb-2 h-8 w-8 p-1"
+                        onClick={() => handleEditRole(row.original)}
+                      >
+                        <Pencil size={16} className="text-gray-600" />
+                      </Button>
+                      <Button
+                        variant="ghost"
+                        className="mb-2 h-8 w-8 p-1"
+                        onClick={() => {
+                          setSelectedModuleAccessId(access.id);
+                          setShowModuleAccessDeleteModal(true);
+                          setSelectedModuleName(access.module);
+                        }}
+                      >
+                        <Trash size={16} className="text-red-400" />
+                      </Button>
+                    </div>{' '}
                   </div>
                   <div className="flex gap-2">
                     <Tooltip>
@@ -176,7 +220,7 @@ export function RoleManagementListTable() {
                 className="flex items-center gap-2 border-gray-700 text-sm text-gray-700"
                 onClick={() => {
                   const params = new URLSearchParams(searchParams);
-                  params.set('isPermissionFlyoutOpen', 'true');
+                  params.set('isAddRoleModuleFlyoutOpen', 'true');
                   params.set('roleId', row.original.id);
                   router.replace(pathname + '?' + params.toString());
                 }}
@@ -356,7 +400,24 @@ export function RoleManagementListTable() {
           setSelectedRole(null);
         }}
       />
+      <DeleteConfirmationModal
+        open={showModuleAccessDeleteModal}
+        description={`Are you sure you want to delete "${selectedModuleName}" access?`}
+        onDeleteClick={async () => {
+          if (selectedModuleAccessId) {
+            await handleDeleteModuleAccess(selectedModuleAccessId);
+            setSelectedModuleAccessId(null);
+            setShowModuleAccessDeleteModal(false);
+          }
+        }}
+        onCancelClick={() => {
+          setShowModuleAccessDeleteModal(false);
+          setSelectedModuleAccessId(null);
+        }}
+      />
+
       <EditRoleManagementFlyout />
+      <AddRoleModuleFlyout />
     </section>
   );
 }
