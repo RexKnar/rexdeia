@@ -56,6 +56,7 @@ export async function getAllRoleList(page: number, limit: number) {
         name: true,
         moduleAccess: {
           select: {
+            id: true,
             module: true,
             create: true,
             read: true,
@@ -112,6 +113,7 @@ export async function getRoleById(roleId: string) {
       name: true,
       moduleAccess: {
         select: {
+          id: true,
           module: true,
           create: true,
           read: true,
@@ -181,4 +183,12 @@ export async function editRoleById(
   });
 
   return role;
+}
+
+export async function deleteRoleModuleById(moduleAccessId: string) {
+  return await db.moduleAccess.deleteMany({
+    where: {
+      id: moduleAccessId,
+    },
+  });
 }
