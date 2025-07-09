@@ -60,6 +60,7 @@ export const authOptions: NextAuthOptions = {
         session.organizationId = token.organizationId as string;
         session.currentBatch = token.currentBatch as string;
         session.user.createdBranches = token.createdBranches as any[];
+        session.user.organizationRole = token.organizationRole as any[];
         session.organizationName = token.organizationName as string;
         session.institute = token.institute as string;
       }
@@ -74,7 +75,11 @@ export const authOptions: NextAuthOptions = {
         },
         include: {
           createdBranches: true,
-          userOrganizations: true,
+          userOrganizations: {
+            include: {
+              role: true,
+            },
+          },
         },
       });
 
@@ -110,6 +115,7 @@ export const authOptions: NextAuthOptions = {
         token.organizationName = session.organizationName;
         token.institute = session.institute;
         token.currentBatch = session.currentBatch;
+        token.organizationRole = session.organizationRole;
         if (session.currentBatch) {
           token.currentBatch = session.currentBatch;
         } else {
@@ -122,7 +128,6 @@ export const authOptions: NextAuthOptions = {
           token.currentBatch = academicDetails?.id ?? '';
         }
       }
-
       return {
         ...token,
         id: dbUser.id,

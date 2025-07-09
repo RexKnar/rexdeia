@@ -3,7 +3,7 @@ import { getServerSession } from 'next-auth';
 import { Suspense } from 'react';
 
 import { authOptions } from '../../../../lib/auth';
-import { isAuthenticated } from '../../../../lib/utils/auth';
+import { isAuthenticated } from '../../../../lib/utils/auth-helpers';
 import { AcademicYearListTable } from './_components/AcademicYearListTable';
 import { AcademicYearPageHeader } from './_components/AcademicYearPageHeader';
 

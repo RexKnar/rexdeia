@@ -24,6 +24,7 @@ declare module 'next-auth' {
       password: string;
       username?: string | null;
       role: UserRole;
+      organizationRole?: any | null;
       createdBranches?: {
         id: string;
         name: string;
