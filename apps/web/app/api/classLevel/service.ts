@@ -4,10 +4,12 @@ import { ClassLevelModel } from 'lib/domain/classLevel';
 import { getServerSession } from 'next-auth';
 
 export async function addClassLevel(data: ClassLevelModel) {
+  const session = await getServerSession(authOptions);
   return await db.classLevel.create({
     data: {
       name: data.name,
       isActive: data.isActive,
+      organizationId: session.organizationId,
     },
   });
 }
@@ -17,12 +19,7 @@ export async function getAllClassLevel() {
   return await db.classLevel.findMany({
     where: {
       isDeleted: false,
-      ClassLevelIncharge: {
-        some: {
-          organizationId: session.organizationId,
-          branchId: session.branchId,
-        },
-      },
+      organizationId: session.organizationId,
     },
     include: {
       ClassLevelIncharge: {
