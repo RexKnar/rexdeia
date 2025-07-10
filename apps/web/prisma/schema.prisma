@@ -215,6 +215,7 @@ model Branch {
   term                       Term[]
   users                      UserOrganization[]
   subjectType                subjectType[]
+  ClassLevelIncharge         ClassLevelIncharge[]
 }
 
 model Organization {
@@ -237,6 +238,7 @@ model Organization {
   staff                Staff[]
   Student              Student[]
   users                UserOrganization[]
+  ClassLevelIncharge   ClassLevelIncharge[]
 }
 
 model UserOrganization {
@@ -844,6 +846,8 @@ model Staff {
   staffCategory                StaffCategory?            @relation(fields: [staffCategoryId], references: [id])
   user                         User                      @relation(fields: [userId], references: [id])
   staffSections                StaffSection[]
+  ClassLevel                   ClassLevel[]
+  ClassLevelIncharge           ClassLevelIncharge[]
 }
 
 model Batch {
@@ -869,6 +873,7 @@ model Batch {
   StudentElectiveSubject  StudentElectiveSubject[]
   StudentMapping          StudentMapping[]
   Section                 Section[]
+  ClassLevelIncharge      ClassLevelIncharge[]
 }
 
 model Class {
@@ -1216,16 +1221,33 @@ model Designation {
 }
 
 model ClassLevel {
-  id           String         @id @default(uuid()) @map("_id") @db.Uuid
-  name         String
-  isActive     Boolean
-  createdAt    DateTime?      @default(now())
-  updatedAt    DateTime?      @default(now())
-  isDeleted    Boolean        @default(false)
-  class        Class[]
-  levelConfig  LevelConfig[]
-  periodMaster PeriodMaster[]
-  RangeScales  RangeScales[]
+  id                 String               @id @default(uuid()) @map("_id") @db.Uuid
+  name               String
+  isActive           Boolean
+  createdAt          DateTime?            @default(now())
+  updatedAt          DateTime?            @default(now())
+  isDeleted          Boolean              @default(false)
+  class              Class[]
+  levelConfig        LevelConfig[]
+  periodMaster       PeriodMaster[]
+  RangeScales        RangeScales[]
+  Staff              Staff?               @relation(fields: [staffId], references: [id])
+  staffId            String?              @db.Uuid
+  ClassLevelIncharge ClassLevelIncharge[]
+}
+
+model ClassLevelIncharge {
+  id             String       @id @default(uuid()) @map("_id") @db.Uuid
+  staffId        String       @db.Uuid
+  classLevelId   String       @db.Uuid
+  academicYearId String       @db.Uuid
+  academicYear   Batch        @relation(fields: [academicYearId], references: [id])
+  classLevel     ClassLevel   @relation(fields: [classLevelId], references: [id])
+  staff          Staff        @relation(fields: [staffId], references: [id])
+  organizationId String       @db.Uuid
+  organization   Organization @relation(fields: [organizationId], references: [id])
+  branchId       String       @db.Uuid
+  branch         Branch       @relation(fields: [branchId], references: [id])
 }
 
 model LevelConfig {
