@@ -3,6 +3,7 @@ import { LevelConfigModel } from './levelConfig';
 import { PeriodMasterModel } from './periodMaster';
 
 export type ClassLevelModel = {
+  ClassLevelIncharge: ClassLevelIncharge[];
   id: string;
   name: string;
   isActive: boolean;
@@ -19,3 +20,11 @@ export type UpdateClassLevelModel = Pick<
   ClassLevelModel,
   'id' | 'name' | 'isActive'
 >;
+
+export type ClassLevelIncharge = {
+  id: string;
+  staff: {
+    id: string;
+    firstName: string;
+  };
+};
