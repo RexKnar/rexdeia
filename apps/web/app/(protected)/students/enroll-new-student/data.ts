@@ -243,7 +243,7 @@ export const admissionForm = {
           placeholder: 'Enter your EMIS Number',
           validationRules: {
             required: {
-              value: false,
+              value: true,
               message: 'EMIS Number is required',
             },
           },
@@ -1197,7 +1197,7 @@ export const admissionForm = {
           options: [],
           validationRules: {
             required: {
-              value: false,
+              value: true,
               message: 'Academic Year is required',
             },
           },
@@ -1237,7 +1237,7 @@ export const admissionForm = {
           placeholder: 'Enter your aadhar card number',
           validationRules: {
             required: {
-              value: false,
+              value: true,
               message: 'Aadhar Card Number is required',
             },
           },
