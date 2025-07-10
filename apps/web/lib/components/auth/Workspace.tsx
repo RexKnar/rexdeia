@@ -13,6 +13,7 @@ type WorkspaceProps = {
   organizationId: string;
   organizationName: string;
   institute: string;
+  organizationRole: any;
 };
 
 export function Workspace({
@@ -20,6 +21,7 @@ export function Workspace({
   organizationId,
   institute,
   organizationName,
+  organizationRole,
 }: WorkspaceProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -65,6 +67,7 @@ export function Workspace({
           organizationId,
           institute,
           organizationName,
+          organizationRole,
           currentBatch: currentBatch ?? '',
         });
       }
@@ -73,6 +76,7 @@ export function Workspace({
         organizationId,
         institute,
         organizationName,
+        organizationRole,
         currentBatch: currentBatch ?? '',
       });
       if (callBackUrl) {

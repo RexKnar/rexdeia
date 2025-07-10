@@ -29,6 +29,7 @@ export default async function Page() {
       organizationId={userOrganizations[0].organizationId}
       organizationName={userOrganizations[0].organization.name}
       institute={userOrganizations[0].organization.institute}
+      organizationRole={userOrganizations[0].role}
     />
   ) : (
     <section className="card">

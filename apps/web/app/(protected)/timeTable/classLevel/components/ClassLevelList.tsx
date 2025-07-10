@@ -12,7 +12,7 @@ import {
 import { ClassLevelModel } from 'lib/domain/classLevel';
 import { useDeleteClassLevelMutationQuery } from 'lib/queries/classLevel/useDeleteClassLevelMutationQuery';
 import { useGetClassLevelListQuery } from 'lib/queries/classLevel/useGetClassLevelsListQuery';
-import { Eye, Loader2, Pencil, Trash2 } from 'lucide-react';
+import { Eye, Loader2, Pencil, Plus, Trash2 } from 'lucide-react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 import { When } from 'react-if';
@@ -175,6 +175,27 @@ export function ClassLevelList() {
                     </TableCell>
                   ))}
                   <TableCell className="w-52">
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <Button
+                          onClick={() => {
+                            const params = new URLSearchParams(searchParams);
+                            params.set('isStaffClassLevelFlyoutOpen', 'true');
+                            params.set('classLevelId', row.original.id);
+                            router.push(pathname + '?' + params.toString());
+                          }}
+                          className="mr-2 h-auto px-3 py-2"
+                          variant="mild"
+                        >
+                          <Plus size={12} className="text-center text-black" />
+                        </Button>
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p>
+                          <span>Add Staff</span>
+                        </p>
+                      </TooltipContent>
+                    </Tooltip>
                     <Tooltip>
                       <TooltipTrigger asChild>
                         <Button

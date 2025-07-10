@@ -87,3 +87,17 @@ export async function deleteExamById(id: string) {
     },
   });
 }
+
+export async function updateBlockExam(id: string, shouldBlock: boolean) {
+  const session = await getServerSession(authOptions);
+
+  return db.exam.update({
+    where: {
+      id,
+      branchId: session?.branchId,
+    },
+    data: {
+      blockMarkEntry: shouldBlock,
+    },
+  });
+}

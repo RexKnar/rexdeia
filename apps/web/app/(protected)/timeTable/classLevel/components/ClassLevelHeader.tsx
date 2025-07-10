@@ -5,6 +5,8 @@ import { Button } from 'ui';
 
 import { PageTitle } from '@/components/PageTitle';
 
+import { AddStaffInClassLevelFlyout } from '../_modal/AddStaffInClassLevelFlyout';
+
 const SaveClassLevelFlyout = dynamic(() =>
   import('../_modal/SaveClassLevelFlyout').then(
     (mod) => mod.SaveClassLevelFlyout
@@ -32,6 +34,7 @@ export function ClassLevelPageHeader() {
         </Button>
       </section>
       <SaveClassLevelFlyout />
+      <AddStaffInClassLevelFlyout />
     </>
   );
 }
