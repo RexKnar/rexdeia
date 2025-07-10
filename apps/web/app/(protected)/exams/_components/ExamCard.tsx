@@ -36,6 +36,7 @@ export function ExamCard({
   const { setParams } = useQueryParams();
   const { watch, setValue, register } = useForm({
     defaultValues: {
+      isClosed,
       blockMarkEntry: false,
     },
   });
