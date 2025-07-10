@@ -19,6 +19,7 @@ type ExamCardProps = {
   cardColor?: string;
   isClosed?: Boolean;
   setSelectedExam?: any;
+  blockMarkEntry?: Boolean;
 };
 
 export function ExamCard({
@@ -33,7 +34,11 @@ export function ExamCard({
   setSelectedExam,
 }: ExamCardProps) {
   const { setParams } = useQueryParams();
-  const { watch, setValue, register } = useForm();
+  const { watch, setValue, register } = useForm({
+    defaultValues: {
+      blockMarkEntry: false,
+    },
+  });
   useEffect(() => {
     setValue('isClosed', isClosed);
   }, [isClosed]);
@@ -86,16 +91,19 @@ export function ExamCard({
           </LinkButton>
           <div className="flex items-center">
             <Switch
-              id="isClosed"
-              checked={!watch('isClosed')}
-              {...register('isClosed')}
+              id="blockMarkEntry"
+              checked={watch('blockMarkEntry')}
+              {...register('blockMarkEntry')}
               onCheckedChange={(value) => {
-                setValue('isClosed', !value);
+                setValue('blockMarkEntry', value);
                 setSelectedExam({ id: examId, name: examName });
               }}
             />
-            <label htmlFor="isClosed" className="ml-2 text-sm font-semibold">
-              {watch('isClosed') ? 'Closed' : 'Open'}
+            <label
+              htmlFor="blockMarkEntry"
+              className="ml-2 text-sm font-semibold"
+            >
+              {watch('blockMarkEntry') ? 'Blocked' : 'Open'}
             </label>
           </div>
         </div>

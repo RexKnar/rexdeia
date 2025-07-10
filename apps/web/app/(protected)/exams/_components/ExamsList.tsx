@@ -1,10 +1,11 @@
 'use client';
 
+import { useToggleExamBlockMutationQuery } from 'lib/queries/exams/block/useUpdateExamBlockMutationQuery';
 import { useGetExamListQuery } from 'lib/queries/exams/useGetExamListQuery';
 import { Loader2 } from 'lucide-react';
 import { useState } from 'react';
 
-import { DeleteConfirmationModal } from '@/components/modals/DeleteConfirmationModal';
+import { BlockConfirmationModal } from '@/components/modals/BlockConfirmationModal';
 import { useQueryParams } from '@/hooks/useQueryParams';
 
 import { ExamCard } from './ExamCard';
@@ -25,6 +26,8 @@ export function ExamsList() {
     useState(false);
   const [selectedExam, setSelectedExam] = useState<any>();
 
+  const { mutateAsync: toggleExamBlock } = useToggleExamBlockMutationQuery();
+
   const { data: examListResponse, isLoading: isExamListLoading } =
     useGetExamListQuery({ page, limit });
 
@@ -33,6 +36,20 @@ export function ExamsList() {
     setShowBlockConfirmationModal(true);
   };
 
+  const handleBlockToggle = async () => {
+    if (!selectedExam) return;
+
+    try {
+      await toggleExamBlock({
+        examId: selectedExam.id,
+        blockMarkEntry: !selectedExam.blockMarkEntry,
+      });
+    } catch (err) {
+      console.error('Failed to toggle mark entry block:', err);
+    } finally {
+      setShowBlockConfirmationModal(false);
+    }
+  };
   if (isExamListLoading) {
     return (
       <div className="flex items-center justify-center">
@@ -57,21 +74,17 @@ export function ExamsList() {
             className="lg:w-[32.2%] "
             cardColor={cardColors[index % cardColors.length]}
             setSelectedExam={handleSelectedExam}
+            blockMarkEntry={exam.blockMarkEntry}
           />
         ))}
       </div>
-      <DeleteConfirmationModal
+      <BlockConfirmationModal
         open={showBlockConfirmationModal}
-        description={`Are you sure you want to ${selectedExam?.id} "${selectedExam?.name}"`}
-        onDeleteClick={async () => {
-          if (selectedExam) {
-            // await deleteBatchAsync(exam?.id);
-            setShowBlockConfirmationModal(false);
-          }
-        }}
-        onCancelClick={() => {
-          setShowBlockConfirmationModal(false);
-        }}
+        isBlockAction={selectedExam?.blockMarkEntry === false}
+        title={`Are you sure you want to ${selectedExam?.blockMarkEntry === false ? 'block' : 'unblock'} "${selectedExam?.name}"?`}
+        description={`This will ${selectedExam?.blockMarkEntry === false ? 'disable' : 'enable'} mark entry.`}
+        onConfirmClick={handleBlockToggle}
+        onCancelClick={() => setShowBlockConfirmationModal(false)}
       />
     </div>
   );
