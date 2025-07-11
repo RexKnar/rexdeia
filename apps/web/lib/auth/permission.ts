@@ -14,6 +14,9 @@ export class PermissionManager {
     const moduleAccess = this.session.user?.organizationRole?.moduleAccess.find(
       (access) => access.module === module
     );
+    if (this.hasRole('Admin')) {
+      return true;
+    }
 
     if (!moduleAccess) {
       return false;
