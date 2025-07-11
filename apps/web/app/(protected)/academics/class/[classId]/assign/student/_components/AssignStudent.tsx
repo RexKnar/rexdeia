@@ -1,5 +1,5 @@
 'use client';
-/* eslint-disable react-hooks/exhaustive-deps */
+
 import { AssignStudentsToClassModel } from 'lib/domain/student';
 import { useGetBatchesListQuery } from 'lib/queries/batches/useGetBatchesListQuery';
 import { useGetClassListQuery } from 'lib/queries/class/useGetClassListQuery';
@@ -53,6 +53,8 @@ export function AssignStudents() {
   const [selectedStudents, setSelectedStudents] = useState([]);
   const [studentListMaster, setStudentListMaster] = useState([]);
   const [selectAll, setSelectAll] = useState(false);
+  const [allSelectedForDeselection, setAllSelectedForDeselection] =
+    useState(false);
 
   useEffect(() => {
     if (classId) setClassIdToGetStudent(classId);
@@ -145,15 +147,12 @@ export function AssignStudents() {
 
     setSelectedStudents([...selectedStudents, ...selectedStudentsToAdd]);
 
-    selectedStudentIds.forEach((id) => {
-      const indexToRemove = studentListMaster.findIndex(
-        (student) => student.id === id
-      );
-      if (indexToRemove !== -1) {
-        studentListMaster.splice(indexToRemove, 1);
-      }
-    });
+    setStudentListMaster((prevMaster) =>
+      prevMaster.filter((student) => !selectedStudentIds.includes(student.id))
+    );
+
     setSelectedStudentIds([]);
+    setSelectAll(false);
   };
 
   useEffect(() => {
@@ -169,37 +168,59 @@ export function AssignStudents() {
     });
 
     setStudentListMaster(selectedStudentsToAdd);
-  }, [selectedStudents]);
-  const handleDeselectAll = () => {
-    setDeselectedStudentIds([]);
-  };
-  const handleRemoveSelected = () => {
-    const updatedSelectedStudents = selectedStudents.filter((student) => {
-      const removeIndex = deselectedStudentIds.indexOf(student.id);
-      if (removeIndex < 0) return student;
-    });
-    setSelectedStudents(updatedSelectedStudents);
-  };
-  const handleRemoveStudent = (studentId) => {
-    const removedStudent = selectedStudents.find(
-      (student) => student.id === studentId
-    );
-    if (removedStudent) {
-      const updatedSelectedStudents = selectedStudents.filter(
-        (student) => student.id !== studentId
-      );
-      setSelectedStudents(updatedSelectedStudents);
+  }, [selectedStudents, getStudentListResponse]);
+
+  const handleDeselectAll = (checked: boolean) => {
+    const allIds = selectedStudents.map((s) => s.id);
+    if (checked) {
+      setDeselectedStudentIds(allIds);
+    } else {
+      setDeselectedStudentIds([]);
     }
   };
 
-  const handleSelectAll = () => {
-    setSelectAll(!selectAll);
+  useEffect(() => {
+    const allStudentIdsInSelectedList = selectedStudents.map((s) => s.id);
+    setAllSelectedForDeselection(
+      allStudentIdsInSelectedList.length > 0 &&
+        allStudentIdsInSelectedList.every((id) =>
+          deselectedStudentIds.includes(id)
+        )
+    );
+  }, [selectedStudents, deselectedStudentIds]);
 
+  const handleRemoveSelected = () => {
+    const updated = selectedStudents.filter(
+      (student) => !deselectedStudentIds.includes(student.id)
+    );
+    setSelectedStudents(updated);
+    setDeselectedStudentIds([]);
+    setAllSelectedForDeselection(false);
+  };
+
+  const handleRemoveStudent = (studentId) => {
+    const updatedSelectedStudents = selectedStudents.filter(
+      (student) => student.id !== studentId
+    );
+    setSelectedStudents(updatedSelectedStudents);
+    setDeselectedStudentIds((prev) => prev.filter((id) => id !== studentId));
+  };
+
+  const handleSelectAll = () => {
     const allStudentIds = studentListMaster?.map((student) => student.id) || [];
 
-    setSelectedStudentIds(selectAll ? [] : allStudentIds);
-    !selectAll;
+    const shouldSelectAll = !selectAll;
+
+    setSelectAll(shouldSelectAll);
+    setSelectedStudentIds(shouldSelectAll ? allStudentIds : []);
   };
+  useEffect(() => {
+    const allStudentIds = studentListMaster?.map((s) => s.id) || [];
+    setSelectAll(
+      allStudentIds.length > 0 &&
+        allStudentIds.every((id) => selectedStudentIds.includes(id))
+    );
+  }, [selectedStudentIds, studentListMaster]);
 
   useEffect(() => {
     register('sectionId');
@@ -214,6 +235,10 @@ export function AssignStudents() {
     await mutateCreateStudentsAsync(assignStudentPayload);
 
     setSelectedStudents([]);
+    setSelectedStudentIds([]);
+    setDeselectedStudentIds([]);
+    setSelectAll(false);
+    setAllSelectedForDeselection(false);
   };
 
   useEffect(() => {
@@ -288,27 +313,27 @@ export function AssignStudents() {
             </section>
             <section className="flex justify-between p-2">
               <div className="mt-2 text-sm text-gray-800">All Students</div>
-              <div className="flex">
-                <Button variant="outline" className="h-8 px-2" type="button">
-                  <Checkbox
-                    className="mr-3 h-4 w-4 border-2 border-dashed"
-                    onCheckedChange={handleSelectAll}
-                  />
-                  Select All
-                </Button>
-                {studentListMaster &&
-                  studentListMaster.some((x) =>
-                    selectedStudentIds.includes(x.id)
-                  ) && (
-                    <Button
-                      className="ml-3 h-8 px-2"
-                      onClick={handleBulkAssign}
-                      type="button"
-                    >
-                      Assign Selected
-                    </Button>
-                  )}
+              <div className="border-input hover:bg-accent hover:text-accent-foreground focus-visible:ring-ring ring-offset-background inline-flex h-8 items-center justify-center rounded-md border border-primary px-2 text-sm font-medium text-primary transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50">
+                <Checkbox
+                  className="mr-3 h-4 w-4 border-2 border-dashed"
+                  onCheckedChange={handleSelectAll}
+                  checked={selectAll}
+                  id="selectAllStudentsAssign"
+                />
+                <label htmlFor="selectAllStudentsAssign">Select All</label>
               </div>
+              {studentListMaster &&
+                studentListMaster.some((x) =>
+                  selectedStudentIds.includes(x.id)
+                ) && (
+                  <Button
+                    className="ml-3 h-8 px-2"
+                    onClick={handleBulkAssign}
+                    type="button"
+                  >
+                    Assign Selected
+                  </Button>
+                )}
             </section>
             <section>
               <Table>
@@ -319,6 +344,7 @@ export function AssignStudents() {
                         <div className="mb-2 flex items-center">
                           <Checkbox
                             className="mt-2"
+                            checked={selectedStudentIds.includes(student.id)}
                             onCheckedChange={() => {
                               handleActualStudentCheckboxChange(student.id);
                             }}
@@ -397,7 +423,7 @@ export function AssignStudents() {
                   <Select
                     autoComplete="off"
                     {...register('sectionId', {
-                      required: ' Section is Requeired',
+                      required: ' Section is Required',
                     })}
                     value={watch('sectionId')}
                     onValueChange={(value) => {
@@ -442,7 +468,7 @@ export function AssignStudents() {
                   <Select
                     autoComplete="off"
                     {...register('groupId', {
-                      required: 'Group is  Requeired',
+                      required: 'Group is Required',
                     })}
                     value={watch('groupId')}
                     onValueChange={(value) => {
@@ -479,7 +505,7 @@ export function AssignStudents() {
                   <Select
                     autoComplete="off"
                     {...register('academicYear', {
-                      required: 'Academic year is Requeired',
+                      required: 'Academic year is Required',
                     })}
                     value={watch('academicYear')}
                     onValueChange={(value) => {
@@ -519,14 +545,17 @@ export function AssignStudents() {
                 Selected Students
               </div>
               <div className="flex">
-                <Button
-                  className="h-8 border border-red-500 bg-zinc-50 px-2 text-red-500 hover:bg-zinc-50"
-                  onClick={handleDeselectAll}
-                  type="button"
-                >
-                  <Checkbox className="mr-3 h-4 w-4  border-2 border-dashed border-red-500 data-[state=checked]:bg-red-500" />
-                  Deselect All
-                </Button>
+                <div className="inline-flex h-8 items-center justify-center rounded-md border border-red-500 bg-zinc-50 px-2 text-sm font-medium text-red-500 transition-colors hover:bg-zinc-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50">
+                  <Checkbox
+                    className="mr-3 h-4 w-4  border-2 border-dashed border-red-500 data-[state=checked]:bg-red-500"
+                    checked={allSelectedForDeselection}
+                    onCheckedChange={handleDeselectAll}
+                    id="deselectAllStudentsAssign"
+                  />
+                  <label htmlFor="deselectAllStudentsAssign">
+                    Deselect All
+                  </label>
+                </div>
                 {selectedStudents &&
                   selectedStudents.some((x) =>
                     deselectedStudentIds.includes(x.id)
