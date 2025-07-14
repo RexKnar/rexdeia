@@ -10,19 +10,24 @@ import { Staff } from '../../domain/staff';
 import { GET_STAFF_LIST } from '../../endpoints';
 
 function getStaffList(
-  { page, limit }: { page: number; limit: number },
+  {
+    page,
+    limit,
+    searchTerm,
+  }: { page: number; limit: number; searchTerm: string },
   options?: UseQueryOptions<PaginatedResponse<Staff>>
 ): UseQueryOptions<PaginatedResponse<Staff>> {
   return {
     ...options,
-    queryKey: [GET_STAFF_LIST, page, limit],
+    queryKey: [GET_STAFF_LIST, page, limit, searchTerm],
     queryFn: async () => {
       return await makeAPICall<PaginatedResponse<Staff>>(
         GET_STAFF_LIST,
         {},
         {
-          page: page,
-          limit: limit,
+          page,
+          limit,
+          searchTerm,
         },
         {}
       );
@@ -31,8 +36,12 @@ function getStaffList(
 }
 
 export function useGetAllStaffListQuery(
-  { page, limit }: { page: number; limit: number },
+  {
+    page,
+    limit,
+    searchTerm,
+  }: { page: number; limit: number; searchTerm: string },
   options?: UseQueryOptions<PaginatedResponse<Staff>>
 ): UseQueryResult<PaginatedResponse<Staff>> {
-  return useQuery(getStaffList({ page, limit }, options));
+  return useQuery(getStaffList({ page, limit, searchTerm }, options));
 }
