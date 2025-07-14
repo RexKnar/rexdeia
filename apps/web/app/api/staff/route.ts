@@ -68,6 +68,7 @@ export async function POST(request: NextRequest) {
 
 export async function GET(request: NextRequest) {
   const session = await getServerSession(authOptions);
+
   if (!session) {
     return new NextResponse(JSON.stringify({ error: 'UNAUTHORIZED' }), {
       status: StatusCodes.UNAUTHORIZED,
@@ -75,18 +76,35 @@ export async function GET(request: NextRequest) {
   }
 
   try {
-    const page = parseInt(request.nextUrl.searchParams.get('page')) || 1;
-    const limit = parseInt(request.nextUrl.searchParams.get('limit')) || 10;
+    const searchParams = request.nextUrl.searchParams;
 
-    const paginatedStaffResult = await getStaffList(page, limit);
+    const page = parseInt(searchParams.get('page') || '1', 10);
+    const limit = parseInt(searchParams.get('limit') || '10', 10);
+    const searchTerm = searchParams.get('searchTerm') || '';
+
+    const paginatedStaffResult = await getStaffList(page, limit, searchTerm);
+
     return new NextResponse(JSON.stringify(paginatedStaffResult), {
       status: StatusCodes.OK,
+      headers: {
+        'Content-Type': 'application/json',
+      },
     });
   } catch (e) {
     captureException(e);
-    return new NextResponse(e, {
-      status: StatusCodes.BAD_REQUEST,
-    });
+
+    return new NextResponse(
+      JSON.stringify({
+        error: 'Something went wrong',
+        message: (e as Error).message,
+      }),
+      {
+        status: StatusCodes.BAD_REQUEST,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }
+    );
   }
 }
 

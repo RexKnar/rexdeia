@@ -20,6 +20,7 @@ import {
   MailPlusIcon,
   Pencil,
   PhoneCallIcon,
+  Search,
   Trash2,
 } from 'lucide-react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
@@ -51,6 +52,7 @@ export function StaffList() {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
+  const [searchTerm, setSearchTerm] = useState('');
 
   const columns: ColumnDef<Staff>[] = [
     {
@@ -187,7 +189,9 @@ export function StaffList() {
     useGetAllStaffListQuery({
       page,
       limit,
+      searchTerm,
     });
+
   const handleEditClick = (studentId) => {
     router.push(`/staffs/${studentId}/edit`);
   };
@@ -219,6 +223,20 @@ export function StaffList() {
 
   return (
     <section>
+      <div className="relative">
+        <input
+          type="search"
+          placeholder="Search Staffs..."
+          className="h-9 w-64 rounded-md border border-gray-300 px-3 pr-8 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+        />
+
+        <Search
+          className="absolute right-2.5 top-2.5 text-gray-500"
+          size={16}
+        />
+      </div>
       <div className="rounded-md ">
         <Table>
           <TableHeader>

@@ -173,24 +173,60 @@ export async function addStaff(staff: AddStaffModel) {
   });
 }
 
-export async function getStaffList(page: number, limit: number) {
+export async function getStaffList(
+  page: number,
+  limit: number,
+  searchTerm: string
+) {
   const session = await getServerSession(authOptions);
+
+  const searchFields = [
+    'firstName',
+    'middleName',
+    'lastName',
+    'email',
+    'mobile',
+    'aadharCardNumber',
+    'employeeId',
+    'fatherName',
+    'motherName',
+    'spouseName',
+    'subjectHandling',
+    'collegeName',
+    'branchName',
+  ] as const;
+
+  const baseCondition = {
+    status: 'Active',
+    branchId: session.branchId,
+    organizationId: session.organizationId,
+  };
+
+  const whereCondition: any = {
+    ...baseCondition,
+    ...(searchTerm
+      ? {
+          OR: searchFields.map((field) => ({
+            [field]: {
+              contains: searchTerm,
+              mode: 'insensitive',
+            },
+          })),
+        }
+      : {}),
+  };
 
   const [staffList, total] = await Promise.all([
     db.staff.findMany({
       take: limit,
       skip: (page - 1) * limit,
-      where: {
-        status: 'Active',
-        branchId: session.branchId,
-        organizationId: session.organizationId,
+      where: whereCondition,
+      orderBy: {
+        firstName: 'asc',
       },
     }),
     db.staff.count({
-      where: {
-        branchId: session.branchId,
-        organizationId: session.organizationId,
-      },
+      where: whereCondition,
     }),
   ]);
 
