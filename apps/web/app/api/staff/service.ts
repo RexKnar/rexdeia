@@ -176,7 +176,7 @@ export async function addStaff(staff: AddStaffModel) {
 export async function getStaffList(
   page: number,
   limit: number,
-  searchTerm: string
+  searchTerm?: string
 ) {
   const session = await getServerSession(authOptions);
 
@@ -188,8 +188,6 @@ export async function getStaffList(
     'mobile',
     'aadharCardNumber',
     'employeeId',
-    'fatherName',
-    'motherName',
     'spouseName',
     'subjectHandling',
     'collegeName',
