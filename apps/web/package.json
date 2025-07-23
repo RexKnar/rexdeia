@@ -60,7 +60,7 @@
     "recharts": "^2.12.7",
     "server-only": "^0.0.1",
     "swagger-ui-react": "^5.10.3",
-    "tailwindcss": "3.4.3",
+    "tailwindcss": "3.4.17",
     "ui": "workspace:*",
     "utils": "workspace:*",
     "xlsx": "^0.18.5",
