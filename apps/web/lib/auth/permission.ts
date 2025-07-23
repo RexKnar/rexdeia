@@ -11,9 +11,12 @@ export class PermissionManager {
    * Check if user has specific permission for a module
    */
   hasPermission(module: string, permission: Permission): boolean {
-    const moduleAccess = this.session.user.organizationRole.moduleAccess.find(
+    const moduleAccess = this.session.user?.organizationRole?.moduleAccess.find(
       (access) => access.module === module
     );
+    if (this.hasRole('Admin')) {
+      return true;
+    }
 
     if (!moduleAccess) {
       return false;
@@ -26,7 +29,7 @@ export class PermissionManager {
    * Check if user has any permission for a module
    */
   hasAnyPermission(module: string): boolean {
-    const moduleAccess = this.session.user.organizationRole.moduleAccess.find(
+    const moduleAccess = this.session.user?.organizationRole?.moduleAccess.find(
       (access) => access.module === module
     );
 
@@ -46,7 +49,7 @@ export class PermissionManager {
    * Get all permissions for a specific module
    */
   getModulePermissions(module: string) {
-    const moduleAccess = this.session.user.organizationRole.moduleAccess.find(
+    const moduleAccess = this.session.user?.organizationRole?.moduleAccess.find(
       (access) => access.module === module
     );
 
@@ -71,7 +74,7 @@ export class PermissionManager {
    * Get all accessible modules
    */
   getAccessibleModules(): string[] {
-    return this.session.user.organizationRole.moduleAccess
+    return this.session.user?.organizationRole?.moduleAccess
       .filter((access) => access.read) // At least read permission
       .map((access) => access.module);
   }
@@ -98,6 +101,6 @@ export class PermissionManager {
    * Check if user has organization role
    */
   hasOrganizationRole(roleName: string): boolean {
-    return this.session.user.organizationRole.name === roleName;
+    return this.session.user?.organizationRole.name === roleName;
   }
 }

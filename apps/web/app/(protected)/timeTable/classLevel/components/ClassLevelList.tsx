@@ -12,7 +12,7 @@ import {
 import { ClassLevelModel } from 'lib/domain/classLevel';
 import { useDeleteClassLevelMutationQuery } from 'lib/queries/classLevel/useDeleteClassLevelMutationQuery';
 import { useGetClassLevelListQuery } from 'lib/queries/classLevel/useGetClassLevelsListQuery';
-import { Eye, Loader2, Pencil, Trash2 } from 'lucide-react';
+import { Eye, Loader2, Pencil, Trash2, UserPlus } from 'lucide-react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 import { When } from 'react-if';
@@ -42,6 +42,23 @@ const columns: ColumnDef<ClassLevelModel>[] = [
           Class Level Name
         </Button>
       );
+    },
+  },
+  {
+    accessorKey: 'ClassLevelIncharge',
+    header: ({ column }) => (
+      <Button
+        variant="ghost"
+        className="px-0"
+        onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+      >
+        Class Level Incharge
+      </Button>
+    ),
+    cell: ({ row }) => {
+      const inchargeList = row.original.ClassLevelIncharge;
+      const staffName = inchargeList?.[0]?.staff?.firstName || '—';
+      return <span>{staffName}</span>;
     },
   },
   {
@@ -175,6 +192,30 @@ export function ClassLevelList() {
                     </TableCell>
                   ))}
                   <TableCell className="w-52">
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <Button
+                          onClick={() => {
+                            const params = new URLSearchParams(searchParams);
+                            params.set('isStaffClassLevelFlyoutOpen', 'true');
+                            params.set('classLevelId', row.original.id);
+                            router.push(pathname + '?' + params.toString());
+                          }}
+                          className="mr-2 h-auto px-3 py-2"
+                          variant="mild"
+                        >
+                          <UserPlus
+                            size={12}
+                            className="text-center text-black"
+                          />
+                        </Button>
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p>
+                          <span>Assign Staff</span>
+                        </p>
+                      </TooltipContent>
+                    </Tooltip>
                     <Tooltip>
                       <TooltipTrigger asChild>
                         <Button

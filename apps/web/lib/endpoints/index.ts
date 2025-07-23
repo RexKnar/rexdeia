@@ -109,6 +109,7 @@ export const ADD_EXAM_CONFIGURATION_BY_EXAM_ID = `ADD_EXAM_CONFIGURATION_BY_EXAM
 export const GET_EXAM_LIST = `GET_EXAM_LIST`;
 export const ADD_EXAM = `ADD_EXAM`;
 export const UPDATE_EXAM = `UPDATE_EXAM`;
+export const UPDATE_EXAM_BLOCK_STATUS = 'UPDATE_EXAM_BLOCK_STATUS';
 export const GET_EXAM_BY_CLASS_SECTION = `GET_EXAM_BY_CLASS_SECTION`;
 export const GET_EXAM_BY_SECTION_ID = `GET_EXAM_BY_SECTION_ID`; //new
 export const GET_SUBJECTS_WITH_FORMATS_BY_EXAM = `GET_SUBJECTS_WITH_FORMATS_BY_EXAM`;
@@ -182,6 +183,7 @@ export const DELETE_EMPLOYMENT_TYPE_BY_ID = `DELETE_EMPLOYMENT_TYPE_BY_ID`;
 export const GET_SUBJECTS_BY_CLASS_AND_GROUP_ID = `GET_SUBJECTS_BY_CLASS_AND_GROUP_ID`;
 export const ADD_CLASSLEVEL = `ADD_CLASSLEVEL`;
 export const GET_CLASSLEVELS_LIST = `GET_CLASSLEVELS_LIST`;
+export const ASSIGN_STAFF_CLASSLEVEL = `ASSIGN_STAFF_CLASSLEVEL`;
 export const GET_CLASSLEVEL_BY_ID = `GET_CLASSLEVEL_BY_ID`;
 export const GET_CLASSES_BY_CLASSLEVEL_ID = `GET_CLASSES_BY_CLASSLEVEL_ID`;
 export const GET_STUDENTS_BY_CLASSLEVEL_ID = `GET_STUDENTS_BY_CLASSLEVEL_ID`;
@@ -673,6 +675,10 @@ export default <EndpointDetails>{
     requestType: `PUT`,
     endpoint: `/api/exam/[id]`,
   },
+  [UPDATE_EXAM_BLOCK_STATUS]: {
+    requestType: `PUT`,
+    endpoint: `/api/exam/[id]/block`,
+  },
   [GET_EXAM_BY_CLASS_SECTION]: {
     requestType: `PUT`,
     endpoint: `/api/exam/mark-entry`,
@@ -946,6 +952,10 @@ export default <EndpointDetails>{
   [GET_CLASSLEVEL_BY_ID]: {
     requestType: 'GET',
     endpoint: '/api/classLevel/[id]',
+  },
+  [ASSIGN_STAFF_CLASSLEVEL]: {
+    requestType: 'POST',
+    endpoint: '/api/classLevel/[id]/staff',
   },
   [GET_CLASSES_BY_CLASSLEVEL_ID]: {
     requestType: 'GET',
