@@ -86,6 +86,7 @@ export function AssignStaffClassDetailPageFlyout() {
   const { data: getStaffListResponse } = useGetAllStaffListQuery({
     page,
     limit,
+    searchTerm: '',
   });
 
   const { data: subjectListResponse } = useGetSubjectListByClassIdQuery(
