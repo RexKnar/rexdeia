@@ -31,7 +31,7 @@ function getStaffList(
 }
 
 export function useGetAllStaffListQuery(
-  { page, limit }: { page: number; limit: number },
+  { page, limit }: { page: number; limit: number; searchTerm?: string },
   options?: UseQueryOptions<PaginatedResponse<Staff>>
 ): UseQueryResult<PaginatedResponse<Staff>> {
   return useQuery(getStaffList({ page, limit }, options));
