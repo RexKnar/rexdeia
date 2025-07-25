@@ -43,7 +43,11 @@ export function AddStaffInClassLevelFlyout() {
     },
   });
 
-  const { data: staffList } = useGetAllStaffListQuery({ page, limit });
+  const { data: staffList } = useGetAllStaffListQuery({
+    page,
+    limit,
+    searchTerm: '',
+  });
 
   const { mutateAsync: assignStaffToClassLevel, isPending } =
     useAssignStaffToClassLevelMutationQuery(page, limit);
