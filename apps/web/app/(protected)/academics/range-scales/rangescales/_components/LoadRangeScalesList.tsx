@@ -9,6 +9,7 @@ import {
   useReactTable,
 } from '@tanstack/react-table';
 import { RangeScaleModel } from 'lib/domain/analytics/rangeAnalytics';
+import { useAddRangeScaleMutationQuery } from 'lib/queries/analytics/rangeScales/useAddRangeScaleMutationQuery';
 import { useDeleteRangeMutationQuery } from 'lib/queries/analytics/rangeScales/useDeleteRangeMutationQuery';
 import { useGetRangeScalesQuery } from 'lib/queries/analytics/rangeScales/useGetRangeScalesQuery';
 import { useGetBatchesListQuery } from 'lib/queries/batches/useGetBatchesListQuery';
@@ -38,7 +39,6 @@ import {
   TableRow,
 } from 'ui/components/ui/Table';
 
-import { DeleteConfirmationModal } from '@/components/modals/DeleteConfirmationModal';
 import { PageTitle } from '@/components/PageTitle';
 
 const LoadRangeScalesList = () => {
@@ -78,12 +78,38 @@ const LoadRangeScalesList = () => {
     }
   );
 
-  const {
-    isError: isDeleteRangeError,
-    isSuccess: isDeleteSuccess,
-    mutateAsync: deleteRangeAsync,
-  } = useDeleteRangeMutationQuery();
+  const { isError: isDeleteRangeError, isSuccess: isDeleteSuccess } =
+    useDeleteRangeMutationQuery();
 
+  const { mutateAsync: mutateAddRangeScaleAsync } =
+    useAddRangeScaleMutationQuery();
+
+  async function saveNewRange() {
+    stableRangeScaleData;
+    // if (selectedRange) {
+    //   const newRange = {
+    //     ...selectedRange,
+    //     rangeOf: selectedRange.rangeOf,
+    //     startValue: selectedRange.startValue,
+    //     endValue: selectedRange.endValue,
+    //     order: selectedRange.order,
+    //   };
+    //   mutateAddRangeScaleAsync(newRange);
+    // }
+
+    try {
+      const requestPayload = stableRangeScaleData.map((field) => ({
+        startValue: field.startValue,
+        endValue: field.endValue,
+        order: Number(field.order) as number,
+        rangeOf: field.rangeOf,
+        classLevelId: field.classLevelId,
+      }));
+      await mutateAddRangeScaleAsync(requestPayload);
+    } catch (error) {
+      console.error(error);
+    }
+  }
   useEffect(() => {
     if (isDeleteRangeError) {
       toast({
@@ -155,6 +181,7 @@ const LoadRangeScalesList = () => {
         <PageTitle title="Copy Range Scales" />
         <div className="grid grid-cols-2 items-center gap-2">
           <Text>Select AcademicYear</Text>
+          {showDeleteConfirmationModal && ''}
           <Select
             value={selectedAcademicYearId}
             onValueChange={(val) => setSelectedAcademicYearId(val)}
@@ -243,8 +270,27 @@ const LoadRangeScalesList = () => {
         </Table>
       )}
 
+      <div className="flex justify-end">
+        <Button
+          variant="outline"
+          onClick={() => {
+            setSelectedRange(null);
+          }}
+        >
+          Clear
+        </Button>
+        <Button
+          variant="default"
+          onClick={() => {
+            saveNewRange();
+          }}
+        >
+          Save
+        </Button>
+      </div>
+
       <When condition={!!selectedRange}>
-        <DeleteConfirmationModal
+        {/* <DeleteConfirmationModal
           open={showDeleteConfirmationModal}
           description={`Are you sure you want to delete "${selectedRange?.startValue} < ${selectedRange?.endValue}"?`}
           onDeleteClick={async () => {
@@ -254,7 +300,7 @@ const LoadRangeScalesList = () => {
             }
           }}
           onCancelClick={() => setShowDeleteConfirmationModal(false)}
-        />
+        /> */}
       </When>
     </section>
   );

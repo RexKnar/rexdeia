@@ -435,6 +435,26 @@ export const menuItem = {
     },
   ],
   TeachingStaff: [
+    // {
+    //   id: 'analytics',
+    //   label: 'Analytics',
+    //   icon: GraduationCap,
+    //   path: '',
+    //   children: [
+    //     {
+    //       id: 'master-marks',
+    //       label: 'Master Marks',
+    //       icon: FileText,
+    //       path: '/staffs/00ea7e77-1a3a-484f-b027-da560b2ddb3d/exam/mark-list',
+    //     },
+    //     {
+    //       id: 'range',
+    //       label: 'Range',
+    //       icon: FileText,
+    //       path: '/analytics/mark-list',
+    //     },
+    //   ],
+    // },
     {
       id: 'analytics',
       label: 'Analytics',
@@ -442,16 +462,16 @@ export const menuItem = {
       path: '',
       children: [
         {
-          id: 'master-marks',
-          label: 'Master Marks',
+          id: 'dashboard',
+          label: 'Dashboard',
           icon: FileText,
-          path: '/staffs/00ea7e77-1a3a-484f-b027-da560b2ddb3d/exam/mark-list',
+          path: '/analytics',
         },
         {
-          id: 'range',
-          label: 'Range',
+          id: 'master-marks',
+          label: 'Master',
           icon: FileText,
-          path: '/analytics/mark-list',
+          path: '/analytics/master',
         },
       ],
     },
