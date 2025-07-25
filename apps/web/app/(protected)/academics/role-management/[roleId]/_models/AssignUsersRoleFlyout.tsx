@@ -52,6 +52,7 @@ export function AssignUsersRoleFlyout() {
   const { data: getStaffListResponse } = useGetAllStaffListQuery({
     page: 1,
     limit: 9999,
+    searchTerm: searchParams.get('search') || '',
   });
 
   const { mutateAsync: mutateAssignUsersToRoleAsync } =
