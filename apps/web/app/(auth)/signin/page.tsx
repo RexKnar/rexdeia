@@ -3,9 +3,16 @@ import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import { getServerSession } from 'next-auth';
 import { Suspense } from 'react';
-import { Text } from 'ui';
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+  Text,
+} from 'ui';
 
-import { SignInForm } from '@/components/auth/SignInForm';
+import { NewSignInForm } from '@/components/auth/NewSignIn';
 import { Footer } from '@/components/Footer';
 
 import { authOptions } from '../../../lib/auth';
@@ -24,48 +31,103 @@ export default async function Page() {
   }
 
   return (
-    <section className="flex h-screen flex-col  overflow-x-hidden sm:flex-row">
-      <section
-        className=" ml-52 mt-10 h-5/6 w-2/5 rounded-2xl  px-12 py-36"
-        style={{
-          backgroundImage: 'url(/assets/images/signin-banner.png)',
-        }}
-      >
-        <h1>Simplify. Streamline. Succeed.</h1>
-        <p>
-          From attendance to assessments, our school management system makes it
-          easy to handle it all—so you can focus on what truly matters: student
-          success.
-        </p>
-      </section>
-      <section className="flex h-screen translate-y-0 transform flex-col overflow-x-hidden  opacity-100 transition-all duration-500 ease-in-out sm:w-2/3 md:w-1/2 md:justify-between lg:w-1/2 xl:w-1/3 xl:justify-between 2xl:justify-center">
-        <div>
-          <Image src={logo} className="pt-10" alt={'logo'} width={100}></Image>
-          <div className="mt-[2rem]">
-            <Text variant="xl-bold" className="">
-              Log in to Your Account
-            </Text>
-            <Text variant="sm-regular" className="text-gray-800">
-              Welcome back! Select method to log in:
-            </Text>
+    <section className="flex w-full items-center justify-center bg-white lg:h-screen xl:bg-slate-50">
+      <div className="flex w-8/12 justify-between rounded-2xl xl:border xl:shadow-xl">
+        <div className=" md:w-full xl:w-1/2 xl:px-24 xl:py-2">
+          <div>
+            <Image
+              src={logo}
+              className="pt-10"
+              alt={'logo'}
+              width={100}
+            ></Image>
+            <div className="mt-[3rem]">
+              <Text variant="xl-semibold" className="">
+                Welcome
+              </Text>
+              <Text variant="sm-regular" className="text-gray-800">
+                Sign in to your account to get started.
+              </Text>
+            </div>
             <Suspense>
-              <SignInForm />
+              <NewSignInForm />
             </Suspense>
             <Text
               variant="sm-semibold"
-              className="mt-12 text-center  text-gray-800"
+              className="mt-12 text-center text-gray-800"
             >
               Don&apos;t have an account?
-              <Link href="#" className="text-blue-600 ">
-                Create an account
-              </Link>
             </Text>
+            <Link
+              href="/signup"
+              className="mt-3 flex w-full justify-center rounded-md border-2 border-gray-300 bg-transparent p-2 text-sm font-semibold text-primary hover:bg-primary hover:text-white"
+            >
+              Signup
+            </Link>
           </div>
-          <div className="pt-16">
+          <div className="">
             <Footer />
           </div>
         </div>
-      </section>
+
+        <div className="hidden w-1/2 rounded-br-2xl rounded-tr-2xl bg-primary xl:block">
+          <Carousel>
+            <CarouselContent>
+              <CarouselItem>
+                <div
+                  className="h-[400px] rounded-tr-2xl  bg-cover"
+                  style={{
+                    backgroundImage: 'url(/assets/images/signin-banner.png)',
+                  }}
+                />
+
+                <h1 className="py-5 text-center font-bold text-white">
+                  Simplify. Streamline. Succeed.
+                </h1>
+                <p className="px-5 py-2 font-light text-white ">
+                  From attendance to assessments, our school management system
+                  makes it easy to handle it all—so you can focus on what truly
+                  matters: student success.
+                </p>
+              </CarouselItem>
+              <CarouselItem>
+                <div
+                  className="h-[400px] rounded-tr-2xl  bg-cover"
+                  style={{
+                    backgroundImage: 'url(/assets/images/signin-banner.png)',
+                  }}
+                />
+                <h1 className="py-5 text-center font-bold text-white">
+                  Simplify. Streamline. Succeed.
+                </h1>
+                <p className="px-5 py-2 font-light text-white ">
+                  From attendance to assessments, our school management system
+                  makes it easy to handle it all—so you can focus on what truly
+                  matters: student success.
+                </p>
+              </CarouselItem>
+              <CarouselItem>
+                <div
+                  className="h-[400px] rounded-tr-2xl  bg-cover"
+                  style={{
+                    backgroundImage: 'url(/assets/images/signin-banner.png)',
+                  }}
+                />
+                <h1 className="py-5 text-center font-bold text-white">
+                  Simplify. Streamline. Succeed.
+                </h1>
+                <p className="px-5 py-2 font-light text-white ">
+                  From attendance to assessments, our school management system
+                  makes it easy to handle it all—so you can focus on what truly
+                  matters: student success.
+                </p>
+              </CarouselItem>
+            </CarouselContent>
+            <CarouselPrevious className="left-5 h-6 w-6 -translate-x-1 rounded-full p-0 hover:bg-white " />
+            <CarouselNext className="right-5 h-6 w-6 translate-x-1 rounded-full p-0 hover:bg-white " />
+          </Carousel>
+        </div>
+      </div>
     </section>
   );
 }
