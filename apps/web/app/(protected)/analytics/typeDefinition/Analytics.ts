@@ -43,6 +43,12 @@ export interface Analytics {
     overall: number;
     studentList: { male: Student[]; female: Student[]; overall: Student[] };
   };
+  averageMarkAppeared: {
+    male: number;
+    female: number;
+    overall: number;
+    studentList: { male: Student[]; female: Student[]; overall: Student[] };
+  };
   passPercentage: {
     male: number;
     female: number;

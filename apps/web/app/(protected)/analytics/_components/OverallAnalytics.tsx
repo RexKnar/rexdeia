@@ -101,6 +101,12 @@ export default function OverallAnalytics({
           overall: 0,
           studentList: { male: [], female: [], overall: [] },
         },
+        averageMarkAppeared: {
+          male: 0,
+          female: 0,
+          overall: 0,
+          studentList: { male: [], female: [], overall: [] },
+        },
         passPercentage: {
           male: 0,
           female: 0,
@@ -266,6 +272,9 @@ export default function OverallAnalytics({
         if (totalStudents[category] > 0) {
           result.averageMark[category] =
             totalMarks[category] / totalStudents[category];
+          result.averageMarkAppeared[category] =
+            totalMarks[category] / totalStudents[category] -
+            result.absent[category];
           result.lowestMark[category] =
             result.lowestMark[category] === Infinity
               ? 0
@@ -591,6 +600,21 @@ export default function OverallAnalytics({
               </Text>
               <Text className="text-primary-800">
                 F: {subjectAnalytics?.averageMark.female.toFixed(2)}
+              </Text>
+            </div>
+          </div>
+        </TableCell>
+        <TableCell>
+          <div className="flex flex-col justify-evenly">
+            <Text className="size-lg text-center font-semibold">
+              {subjectAnalytics?.averageMarkAppeared.overall.toFixed(2)}
+            </Text>
+            <div className="flex justify-evenly">
+              <Text className="text-primary-800">
+                M: {subjectAnalytics?.averageMarkAppeared.male.toFixed(2)}
+              </Text>
+              <Text className="text-primary-800">
+                F: {subjectAnalytics?.averageMarkAppeared.female.toFixed(2)}
               </Text>
             </div>
           </div>
@@ -956,6 +980,11 @@ export default function OverallAnalytics({
                       <Text className="size-lg font-semibold">Average</Text>
                     </TableCell>
                     <TableCell>
+                      <Text className="size-lg font-semibold">
+                        Average(App)
+                      </Text>
+                    </TableCell>
+                    <TableCell>
                       <Text className="size-lg font-semibold">No. of Pass</Text>
                     </TableCell>
                     <TableCell>
@@ -970,11 +999,11 @@ export default function OverallAnalytics({
                       <Text className="size-lg font-semibold">Failure %</Text>
                     </TableCell>
                     <TableCell>
-                      <Text className="size-lg font-semibold">Pass(A) %</Text>
+                      <Text className="size-lg font-semibold">Pass(App) %</Text>
                     </TableCell>
                     <TableCell>
                       <Text className="size-lg font-semibold">
-                        Failure(A) %
+                        Failure(App) %
                       </Text>
                     </TableCell>
                     <TableCell>
@@ -1005,6 +1034,7 @@ export default function OverallAnalytics({
                         {overallStats.avgMark?.toFixed(2)}
                       </Text>
                     </TableCell>
+                    <TableCell className=""></TableCell>
                     <TableCell>
                       <Button
                         variant="ghost"
