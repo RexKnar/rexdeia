@@ -123,6 +123,12 @@ function analyzeSubjectPerformance(
       overall: 0,
       studentList: { male: [], female: [], overall: [] },
     },
+    averageMarkAppeared: {
+      male: 0,
+      female: 0,
+      overall: 0,
+      studentList: { male: [], female: [], overall: [] },
+    },
     passPercentage: {
       male: 0,
       female: 0,
@@ -272,6 +278,9 @@ function analyzeSubjectPerformance(
     if (totalStudents[category] > 0) {
       result.averageMark[category] =
         totalMarks[category] / totalStudents[category];
+      result.averageMarkAppeared[category] =
+        totalMarks[category] / totalStudents[category] -
+        result.absent[category];
       result.lowestMark[category] =
         result.lowestMark[category] === Infinity
           ? 0
