@@ -24,7 +24,8 @@ import {
   Trash2,
 } from 'lucide-react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import React, { useCallback, useState } from 'react';
+import { now } from 'next-auth/client/_utils';
+import React, { useCallback, useEffect, useState } from 'react';
 import { When } from 'react-if';
 import {
   Avatar,
@@ -49,9 +50,11 @@ import { Staff } from '../../../../../lib/domain/staff';
 import { useGetAllStaffListQuery } from '../../../../../lib/queries/staff/useGetAllStaffListQuery';
 
 export function StaffList() {
+  const timing = now();
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
+  const [searchInput, setSearchInput] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
 
   const columns: ColumnDef<Staff>[] = [
@@ -185,6 +188,14 @@ export function StaffList() {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
 
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setSearchTerm(searchInput);
+    }, 300); // debounce delay
+
+    return () => clearTimeout(handler); // cleanup on input change
+  }, [searchInput]);
+
   const { data: getStaffListResponse, isLoading: isStaffListLoading } =
     useGetAllStaffListQuery({
       page,
@@ -228,15 +239,15 @@ export function StaffList() {
           type="search"
           placeholder="Search Staffs..."
           className="h-9 w-64 rounded-md border border-gray-300 px-3 pr-8 focus:outline-none focus:ring-2 focus:ring-blue-500"
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
+          value={searchInput}
+          onChange={(e) => setSearchInput(e.target.value)}
         />
-
         <Search
           className="absolute right-2.5 top-2.5 text-gray-500"
           size={16}
         />
       </div>
+      <h1>{timing}</h1>
       <div className="rounded-md ">
         <Table>
           <TableHeader>
