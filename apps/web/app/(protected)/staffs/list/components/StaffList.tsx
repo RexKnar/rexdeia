@@ -24,6 +24,7 @@ import {
   Trash2,
 } from 'lucide-react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { now } from 'next-auth/client/_utils';
 import React, { useCallback, useEffect, useState } from 'react';
 import { When } from 'react-if';
 import {
@@ -49,6 +50,7 @@ import { Staff } from '../../../../../lib/domain/staff';
 import { useGetAllStaffListQuery } from '../../../../../lib/queries/staff/useGetAllStaffListQuery';
 
 export function StaffList() {
+  const timing = now();
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -245,6 +247,7 @@ export function StaffList() {
           size={16}
         />
       </div>
+      <h1>{timing}</h1>
       <div className="rounded-md ">
         <Table>
           <TableHeader>
