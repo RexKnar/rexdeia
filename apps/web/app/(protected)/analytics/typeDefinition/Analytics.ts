@@ -80,6 +80,12 @@ export interface Analytics {
     studentList: { male: Student[]; female: Student[]; overall: Student[] };
   };
   absent: { male: number; female: number; overall: number; studentList: any };
+  overallAbsent: {
+    male: number;
+    female: number;
+    overall: number;
+    studentList: any;
+  };
   markEntry: {
     male: number;
     female: number;
