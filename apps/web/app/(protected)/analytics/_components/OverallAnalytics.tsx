@@ -143,6 +143,12 @@ export default function OverallAnalytics({
           overall: 0,
           studentList: { male: [], female: [], overall: [] },
         },
+        overallAbsent: {
+          male: 0,
+          female: 0,
+          overall: 0,
+          studentList: { male: [], female: [], overall: [] },
+        },
         markEntry: {
           male: 0,
           female: 0,
@@ -195,6 +201,10 @@ export default function OverallAnalytics({
           result.absent.overall++;
           result.absent.studentList.overall.push(student);
           result.absent.studentList[gender].push(student);
+          result.overallAbsent[gender]++;
+          result.overallAbsent.overall++;
+          result.overallAbsent.studentList.overall.push(student);
+          result.overallAbsent.studentList[gender].push(student);
         }
         if (subject?.marks?.length === 0) {
           result.markEntry[gender]++;
@@ -322,6 +332,7 @@ export default function OverallAnalytics({
 
   const overallStats = useMemo(() => {
     let totalMarks = 0,
+      appearedTotalMarks = 0,
       totalStudents = 0,
       totalPass = 0,
       totalPassStudents = [],
@@ -331,10 +342,17 @@ export default function OverallAnalytics({
       highestMarkStudents = [],
       lowestMark = 0,
       lowestMarkStudents = [],
-      isFirst = true;
+      isFirst = true,
+      overallAbsent = 0;
 
     students.forEach((student) => {
+      if (student.overallAbsentStatus) {
+        overallAbsent++;
+      } else {
+        appearedTotalMarks += student.totalMark;
+      }
       totalMarks += student.totalMark;
+
       totalStudents++;
       if (student.failingStatus) {
         totalFail++;
@@ -344,11 +362,13 @@ export default function OverallAnalytics({
         totalPassStudents.push(student);
       }
       let oldHighestMark = highestMark;
-      highestMark = Math.max(highestMark, student.totalMark);
-      if (highestMark != oldHighestMark) {
-        highestMarkStudents = [student];
-      } else {
+      if (student.totalMark == highestMark) {
         highestMarkStudents.push(student);
+      } else {
+        highestMark = Math.max(highestMark, student.totalMark);
+        if (highestMark != oldHighestMark) {
+          highestMarkStudents = [student];
+        }
       }
 
       if (student.attendance) {
@@ -357,11 +377,13 @@ export default function OverallAnalytics({
           isFirst = false;
         } else {
           let oldLowestMark = lowestMark;
-          lowestMark = Math.min(lowestMark, student.totalMark);
-          if (lowestMark != oldLowestMark) {
-            lowestMarkStudents = [student];
-          } else {
+          if (lowestMark == student.totalMark) {
             lowestMarkStudents.push(student);
+          } else {
+            lowestMark = Math.min(lowestMark, student.totalMark);
+            if (lowestMark != oldLowestMark) {
+              lowestMarkStudents = [student];
+            }
           }
         }
       }
@@ -369,20 +391,21 @@ export default function OverallAnalytics({
 
     return {
       avgMark: totalStudents > 0 ? totalMarks / totalStudents : 0,
+      appearedAvgMark: appearedTotalMarks / (totalStudents - overallAbsent),
       totalPass: { count: totalPass, students: totalPassStudents },
       totalFail: { count: totalFail, students: totalFailStudents },
       passCount: totalPass,
       failCount: totalFail,
       passPercentage: calculatePercentage(totalPass, totalStudents),
       failPercentage: calculatePercentage(totalFail, totalStudents),
-      // passPercentageExcludingAbsent: calculatePercentage(
-      //   totalPass,
-      //   totalStudents
-      // ),
-      // failPercentageExcludingAbsent: calculatePercentage(
-      //   totalFail,
-      //   totalStudents
-      // ),
+      passPercentageExcludingAbsent: calculatePercentage(
+        totalPass,
+        totalStudents - overallAbsent
+      ),
+      failPercentageExcludingAbsent: calculatePercentage(
+        totalFail - overallAbsent,
+        totalStudents - overallAbsent
+      ),
       highest: { mark: highestMark, students: highestMarkStudents },
       lowest: { mark: lowestMark, students: lowestMarkStudents },
       highestMark,
@@ -1034,7 +1057,9 @@ export default function OverallAnalytics({
                         {overallStats.avgMark?.toFixed(2)}
                       </Text>
                     </TableCell>
-                    <TableCell className=""></TableCell>
+                    <TableCell className="">
+                      {overallStats.appearedAvgMark?.toFixed(2)}
+                    </TableCell>
                     <TableCell>
                       <Button
                         variant="ghost"
@@ -1080,10 +1105,16 @@ export default function OverallAnalytics({
                       </Text>
                     </TableCell>
                     <TableCell>
-                      <Text className="size-lg font-semibold">-</Text>
+                      <Text className="size-lg font-semibold">
+                        {overallStats.passPercentageExcludingAbsent?.toFixed(2)}
+                        %
+                      </Text>
                     </TableCell>
                     <TableCell>
-                      <Text className="size-lg font-semibold">-</Text>
+                      <Text className="size-lg font-semibold">
+                        {overallStats.failPercentageExcludingAbsent?.toFixed(2)}
+                        %
+                      </Text>
                     </TableCell>
                     <TableCell>
                       <Button

@@ -60,54 +60,54 @@ export async function copyClass(payload: any) {
           });
 
           if (!section) {
-            throw new Error(
-              `Section not found: ${examGroup.section.name} for class ${examGroup.section.classId}`
+            // throw new Error(
+            //   `Section not found: ${examGroup.section.name} for class ${examGroup.section.classId}`
+            // );
+          } else {
+            const newExamGroup = await prisma.examGroup.create({
+              data: {
+                totalMarks: examGroup.totalMarks,
+                classId: examGroup.classId,
+                examId: newExam.id,
+                sectionId: section.id,
+              },
+            });
+
+            await Promise.all(
+              examGroup.examSubject.map(async (examSubject) => {
+                const newExamSubject = await prisma.examSubject.create({
+                  data: {
+                    subjectId: examSubject.subjectId,
+                    groupId: examSubject.groupId,
+                    examGroupId: newExamGroup.id,
+                    minMark: examSubject.minMark,
+                    totalMarks: examSubject.totalMarks,
+                    convertTo: examSubject.convertTo,
+                  },
+                });
+
+                await Promise.all(
+                  examSubject.examSubjectPartition.map((partition) =>
+                    prisma.examSubjectPartition.create({
+                      data: {
+                        subjectId: partition.subjectId,
+                        examSubjectId: newExamSubject.id,
+                        assessmentFormatId: partition.assessmentFormatId,
+                        minMark: partition.minMark,
+                        convertTo: partition.convertTo,
+                        totalMarks: partition.totalMarks,
+                        order: partition.order,
+                        examGroupId: newExamGroup.id,
+                        dateToConduct: partition.dateToConduct,
+                        excludeSubjectValidation:
+                          partition.excludeSubjectValidation,
+                      },
+                    })
+                  )
+                );
+              })
             );
           }
-
-          const newExamGroup = await prisma.examGroup.create({
-            data: {
-              totalMarks: examGroup.totalMarks,
-              classId: examGroup.classId,
-              examId: newExam.id,
-              sectionId: section.id,
-            },
-          });
-
-          await Promise.all(
-            examGroup.examSubject.map(async (examSubject) => {
-              const newExamSubject = await prisma.examSubject.create({
-                data: {
-                  subjectId: examSubject.subjectId,
-                  groupId: examSubject.groupId,
-                  examGroupId: newExamGroup.id,
-                  minMark: examSubject.minMark,
-                  totalMarks: examSubject.totalMarks,
-                  convertTo: examSubject.convertTo,
-                },
-              });
-
-              await Promise.all(
-                examSubject.examSubjectPartition.map((partition) =>
-                  prisma.examSubjectPartition.create({
-                    data: {
-                      subjectId: partition.subjectId,
-                      examSubjectId: newExamSubject.id,
-                      assessmentFormatId: partition.assessmentFormatId,
-                      minMark: partition.minMark,
-                      convertTo: partition.convertTo,
-                      totalMarks: partition.totalMarks,
-                      order: partition.order,
-                      examGroupId: newExamGroup.id,
-                      dateToConduct: partition.dateToConduct,
-                      excludeSubjectValidation:
-                        partition.excludeSubjectValidation,
-                    },
-                  })
-                )
-              );
-            })
-          );
         }
 
         return {

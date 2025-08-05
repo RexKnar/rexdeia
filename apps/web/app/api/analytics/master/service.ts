@@ -165,6 +165,12 @@ function analyzeSubjectPerformance(
       overall: 0,
       studentList: { male: [], female: [], overall: [] },
     },
+    overallAbsent: {
+      male: 0,
+      female: 0,
+      overall: 0,
+      studentList: { male: [], female: [], overall: [] },
+    },
     markEntry: {
       male: 0,
       female: 0,

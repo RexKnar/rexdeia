@@ -116,6 +116,7 @@ export async function getStudentMarksByFilter(
     let subjectMasters = [];
     let attendance = false;
     let centumCount = 0;
+    let overallAbsentStatus = false;
 
     const subjects = examSubject.map((examSubject) => {
       const examSubjectPartition = examSubject.examSubjectPartition;
@@ -125,6 +126,7 @@ export async function getStudentMarksByFilter(
       let failingStatus = false;
       let failingOn = [];
       let absentStatus = true;
+
       let absentOn = [];
       let centum = true;
 
@@ -192,6 +194,7 @@ export async function getStudentMarksByFilter(
 
       if (marks.length == absentOn.length) {
         absentStatus = true;
+        overallAbsentStatus = true;
       }
       totalMark += subjectTotalMark;
 
@@ -238,6 +241,7 @@ export async function getStudentMarksByFilter(
     studentDetail['subjectFailed'] = subjectFailed;
     studentDetail['failingStatus'] = subjectFailed > 0 ? true : false;
     studentDetail['totalPercentage'] = (totalMark / actualTotalMarks) * 100;
+    studentDetail['overallAbsentStatus'] = overallAbsentStatus;
     studentDetail['attendance'] = attendance;
     studentDetail['section'] = {
       id: student.section.id || null,
