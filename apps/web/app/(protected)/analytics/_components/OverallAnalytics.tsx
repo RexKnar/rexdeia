@@ -71,6 +71,12 @@ export default function OverallAnalytics({
           overall: 0,
           studentList: { male: [], female: [], overall: [] },
         },
+        totalFailExcludingAbsent: {
+          male: 0,
+          female: 0,
+          overall: 0,
+          studentList: { male: [], female: [], overall: [] },
+        },
         highestMark: {
           male: 0,
           female: 0,
@@ -253,11 +259,20 @@ export default function OverallAnalytics({
           }
         }
 
-        if (subject.failingStatus && !subject.absentStatus) {
+        if (
+          (subject.absentStatus || subject.failingStatus) &&
+          subject?.marks?.length > 0
+        ) {
           result.numberOfFailStudents[gender]++;
           result.numberOfFailStudents.overall++;
           result.numberOfFailStudents.studentList.overall.push(student);
           result.numberOfFailStudents.studentList[gender].push(student);
+        }
+        if (subject.failingStatus && !subject.absentStatus) {
+          result.totalFailExcludingAbsent[gender]++;
+          result.totalFailExcludingAbsent.overall++;
+          result.totalFailExcludingAbsent.studentList.overall.push(student);
+          result.totalFailExcludingAbsent.studentList[gender].push(student);
         } else if (!subject.failingStatus && !subject.absentStatus) {
           result.numberOfPassStudents[gender]++;
           result.numberOfPassStudents.overall++;
@@ -337,7 +352,9 @@ export default function OverallAnalytics({
       totalPass = 0,
       totalPassStudents = [],
       totalFail = 0,
+      totalFailExcludingAbsent = 0,
       totalFailStudents = [],
+      totalFailExcludingAbsentStudents = [],
       highestMark = 0,
       highestMarkStudents = [],
       lowestMark = 0,
@@ -357,10 +374,15 @@ export default function OverallAnalytics({
       if (student.failingStatus) {
         totalFail++;
         totalFailStudents.push(student);
+        if (!student.overallAbsentStatus) {
+          totalFailExcludingAbsent++;
+          totalFailExcludingAbsentStudents.push(student);
+        }
       } else {
         totalPass++;
         totalPassStudents.push(student);
       }
+
       let oldHighestMark = highestMark;
       if (student.totalMark == highestMark) {
         highestMarkStudents.push(student);
@@ -394,6 +416,10 @@ export default function OverallAnalytics({
       appearedAvgMark: appearedTotalMarks / (totalStudents - overallAbsent),
       totalPass: { count: totalPass, students: totalPassStudents },
       totalFail: { count: totalFail, students: totalFailStudents },
+      totalFailExcludingAbsent: {
+        count: totalFail - overallAbsent,
+        students: totalFailExcludingAbsentStudents,
+      },
       passCount: totalPass,
       failCount: totalFail,
       passPercentage: calculatePercentage(totalPass, totalStudents),
@@ -737,6 +763,53 @@ export default function OverallAnalytics({
         </TableCell>
         <TableCell>
           <div className="flex flex-col justify-evenly">
+            <Button
+              variant="ghost"
+              className="size-lg text-center font-semibold"
+              onClick={() =>
+                handleOpenStudentListDialog(
+                  subjectAnalytics.totalFailExcludingAbsent.studentList.overall,
+                  'Failed Students List',
+                  'Overall',
+                  [subject]
+                )
+              }
+            >
+              {subjectAnalytics?.totalFailExcludingAbsent.overall}
+            </Button>
+            <div className="flex justify-evenly text-primary-800">
+              <Button
+                variant="ghost"
+                onClick={() =>
+                  handleOpenStudentListDialog(
+                    subjectAnalytics.totalFailExcludingAbsent.studentList.male,
+                    'Failed Students List',
+                    'Male',
+                    [subject]
+                  )
+                }
+              >
+                M: {subjectAnalytics?.totalFailExcludingAbsent.male}
+              </Button>
+              <Button
+                variant="ghost"
+                onClick={() =>
+                  handleOpenStudentListDialog(
+                    subjectAnalytics.totalFailExcludingAbsent.studentList
+                      .female,
+                    'Failed Students List',
+                    'Female',
+                    [subject]
+                  )
+                }
+              >
+                F: {subjectAnalytics?.totalFailExcludingAbsent.female}
+              </Button>
+            </div>
+          </div>
+        </TableCell>
+        <TableCell>
+          <div className="flex flex-col justify-evenly">
             <Text className="size-lg text-center font-semibold">
               {subjectAnalytics?.passPercentage.overall.toFixed(2)}%
             </Text>
@@ -1016,6 +1089,11 @@ export default function OverallAnalytics({
                       </Text>
                     </TableCell>
                     <TableCell>
+                      <Text className="size-lg font-semibold">
+                        No. of Failures(App)
+                      </Text>
+                    </TableCell>
+                    <TableCell>
                       <Text className="size-lg font-semibold">Pass %</Text>
                     </TableCell>
                     <TableCell>
@@ -1091,6 +1169,23 @@ export default function OverallAnalytics({
                       >
                         <Text className="size-lg font-semibold">
                           {overallStats.totalFail.count}
+                        </Text>
+                      </Button>
+                    </TableCell>
+                    <TableCell>
+                      <Button
+                        variant="ghost"
+                        onClick={() =>
+                          handleOpenStudentListDialog(
+                            overallStats.totalFailExcludingAbsent.students,
+                            'Total Fail List',
+                            'Overall',
+                            subjectList
+                          )
+                        }
+                      >
+                        <Text className="size-lg font-semibold">
+                          {overallStats.totalFailExcludingAbsent.count}
                         </Text>
                       </Button>
                     </TableCell>
