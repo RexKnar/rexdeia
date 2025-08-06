@@ -360,11 +360,13 @@ export default function OverallAnalytics({
       lowestMark = 0,
       lowestMarkStudents = [],
       isFirst = true,
-      overallAbsent = 0;
+      overallAbsent = 0,
+      overallAbsentStudents = [];
 
     students.forEach((student) => {
       if (student.overallAbsentStatus) {
         overallAbsent++;
+        overallAbsentStudents.push(student);
       } else {
         appearedTotalMarks += student.totalMark;
       }
@@ -414,6 +416,10 @@ export default function OverallAnalytics({
     return {
       avgMark: totalStudents > 0 ? totalMarks / totalStudents : 0,
       appearedAvgMark: appearedTotalMarks / (totalStudents - overallAbsent),
+      overallAbsent: {
+        count: overallAbsent,
+        students: overallAbsentStudents,
+      },
       totalPass: { count: totalPass, students: totalPassStudents },
       totalFail: { count: totalFail, students: totalFailStudents },
       totalFailExcludingAbsent: {
@@ -1129,7 +1135,23 @@ export default function OverallAnalytics({
                     <TableCell className=""></TableCell>
                     <TableCell className=""></TableCell>
                     <TableCell className=""></TableCell>
-                    <TableCell className=""></TableCell>
+                    <TableCell>
+                      <Button
+                        variant="ghost"
+                        onClick={() =>
+                          handleOpenStudentListDialog(
+                            overallStats.overallAbsent.students,
+                            'Total Absent List',
+                            'Overall',
+                            subjectList
+                          )
+                        }
+                      >
+                        <Text className="size-lg font-semibold">
+                          {overallStats.overallAbsent.count}
+                        </Text>
+                      </Button>
+                    </TableCell>
                     <TableCell>
                       <Text className="size-lg font-semibold">
                         {overallStats.avgMark?.toFixed(2)}
