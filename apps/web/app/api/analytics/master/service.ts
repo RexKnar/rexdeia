@@ -93,6 +93,12 @@ function analyzeSubjectPerformance(
       overall: 0,
       studentList: { male: [], female: [], overall: [] },
     },
+    totalFailExcludingAbsent: {
+      male: 0,
+      female: 0,
+      overall: 0,
+      studentList: { male: [], female: [], overall: [] },
+    },
     highestMark: {
       male: 0,
       female: 0,
