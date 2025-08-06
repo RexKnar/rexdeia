@@ -13,6 +13,12 @@ export interface Analytics {
     overall: number;
     studentList: { male: Student[]; female: Student[]; overall: Student[] };
   };
+  totalFailExcludingAbsent: {
+    male: number;
+    female: number;
+    overall: number;
+    studentList: { male: Student[]; female: Student[]; overall: Student[] };
+  };
   highestMark: {
     male: number;
     female: number;
