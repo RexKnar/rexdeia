@@ -396,17 +396,20 @@ export default function OverallAnalytics({
       }
 
       if (student.attendance) {
-        if (isFirst) {
-          lowestMark = student.totalMark;
-          isFirst = false;
-        } else {
-          let oldLowestMark = lowestMark;
-          if (lowestMark == student.totalMark) {
-            lowestMarkStudents.push(student);
+        if (!student.overallAbsentStatus) {
+          if (isFirst) {
+            lowestMark = student.totalMark;
+            lowestMarkStudents = [student];
+            isFirst = false;
           } else {
-            lowestMark = Math.min(lowestMark, student.totalMark);
-            if (lowestMark != oldLowestMark) {
-              lowestMarkStudents = [student];
+            let oldLowestMark = lowestMark;
+            if (lowestMark == student.totalMark) {
+              lowestMarkStudents.push(student);
+            } else {
+              lowestMark = Math.min(lowestMark, student.totalMark);
+              if (lowestMark != oldLowestMark) {
+                lowestMarkStudents = [student];
+              }
             }
           }
         }
