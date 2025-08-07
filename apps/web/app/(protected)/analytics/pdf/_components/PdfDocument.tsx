@@ -137,11 +137,11 @@ const StudentMarksPDFGenerator: React.FC<StudentMarksPDFGeneratorProps> = ({
         cellWidth: 'auto',
       },
       columnStyles: {
-        0: { cellWidth: 8 },
+        0: { cellWidth: 6 },
         1: { cellWidth: 45 },
-        2: { cellWidth: 8 },
+        2: { cellWidth: 7 },
         [totalCell - 2]: { cellWidth: 15 }, // Total column
-        [totalCell - 1]: { cellWidth: 8 },
+        [totalCell - 1]: { cellWidth: 11 },
       },
       didParseCell: function (data) {
         if (data.section === 'head') {
