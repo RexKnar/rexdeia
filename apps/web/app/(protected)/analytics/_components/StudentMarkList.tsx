@@ -384,9 +384,10 @@ export default function StudentMarkList({
                       tableValues.push(`${subjectTotal}`);
                       // failingStatus = true;
                     } else {
-                      tableValues.push(
-                        `${subjectTotal}(${studentDetail.grade})`
-                      );
+                      const grade = studentDetail?.failingStatus
+                        ? 'F'
+                        : studentDetail?.grade;
+                      tableValues.push(`${subjectTotal}(${grade})`);
                     }
                   } else {
                     tableValues.push('A');
