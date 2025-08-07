@@ -381,14 +381,13 @@ export default function StudentMarkList({
                     const subjectTotal =
                       Number(studentDetail?.subjectTotalMark) || 0;
                     if (studentDetail?.failingStatus) {
-                      tableValues.push(
-                        `${subjectTotal}(${studentDetail.grade})`
-                      );
+                      tableValues.push(`${subjectTotal}`);
                       // failingStatus = true;
                     } else {
-                      tableValues.push(
-                        `${subjectTotal}(${studentDetail.grade})`
-                      );
+                      const grade = studentDetail?.failingStatus
+                        ? 'F'
+                        : studentDetail?.grade;
+                      tableValues.push(`${subjectTotal}(${grade})`);
                     }
                   } else {
                     tableValues.push('A');
@@ -405,10 +404,12 @@ export default function StudentMarkList({
               })
             );
             const finalTotal = totalMark | 0;
-            // const finalStatus = failingStatus ? 'F' : 'P';
-            tableValues.push(`${finalTotal}(${student.grade})`);
+            const failStatus = student?.failingStatus;
+            const finalStatus = failStatus ? 'F' : 'P';
+            const grade = failStatus ? 'F' : student?.grade;
+            tableValues.push(`${finalTotal}(${finalStatus})`);
 
-            tableValues.push(student.rank.toString());
+            tableValues.push(`${student.rank.toString()}(${grade})`);
 
             return tableValues;
           })
