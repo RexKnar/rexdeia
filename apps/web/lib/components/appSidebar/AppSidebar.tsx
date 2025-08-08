@@ -31,7 +31,7 @@ export function AppSidebar() {
       : menuItem[userRole] || [];
 
   return (
-    <Sidebar className="bg-white">
+    <Sidebar className="bg-white" collapsible="icon">
       <SidebarHeader />
       <Suspense>
         <ChooseBatch />

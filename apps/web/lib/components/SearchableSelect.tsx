@@ -58,11 +58,12 @@ export const SearchableSelect: React.FC<SearchableSelectProps> = ({
   const handleOpenChange = (isOpen: boolean) => {
     if (isOpen) {
       setOpen(true);
-      setShouldFocus(true);
+      // setShouldFocus(true);
     } else {
-      setOpen(false);
+      // setOpen(false);
       setSearch('');
-      setShouldFocus(false);
+      // setShouldFocus(false);
+      setOpen(false);
     }
   };
 
@@ -91,9 +92,14 @@ export const SearchableSelect: React.FC<SearchableSelectProps> = ({
           onEscapeKeyDown={() => {
             setOpen(false);
           }}
-          onPointerDownOutside={() => {
-            setOpen(false);
-          }}
+          // onPointerDownOutside={(e) => {
+          //   if (
+          //     inputRef.current &&
+          //     !inputRef.current.contains(e.target as Node)
+          //   ) {
+          //     setOpen(false);
+          //   }
+          // }}
         >
           <div className="sticky top-0 z-10 border-b bg-white p-2">
             <Input
