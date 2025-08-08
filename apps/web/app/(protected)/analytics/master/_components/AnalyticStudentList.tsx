@@ -101,7 +101,7 @@ export function AnalyticStudentList() {
 
   return (
     <>
-      <section className="p-6 space-y-2 bg-white rounded-md">
+      <section className="space-y-2 rounded-md bg-white p-6">
         <div className="flex flex-wrap gap-4">
           <div className="w-full md:w-4/12">
             <SearchableSelect
@@ -159,7 +159,7 @@ export function AnalyticStudentList() {
       </section>
       {markDetails ? (
         <Tabs defaultValue="overall" className="border-0 ">
-          <TabsList className="justify-start w-full border-b-2 border-gray-100">
+          <TabsList className="w-full justify-start border-b-2 border-gray-100">
             <TabsTrigger
               value="overall"
               className="mr-2 text-base focus:border-b-4 focus:border-primary print:hidden"
@@ -258,7 +258,7 @@ export function AnalyticStudentList() {
           </TabsContent>
         </Tabs>
       ) : (
-        <section className="p-6 mt-4 space-y-4 overflow-x-auto bg-white rounded-md print:m-0 print:p-0 ">
+        <section className="mt-4 space-y-4 overflow-x-auto rounded-md bg-white p-6 print:m-0 print:p-0 ">
           {isStudentDetailsLoading ? (
             <DataLoadingPlaceholder
               image={dataSegmentationGif}
