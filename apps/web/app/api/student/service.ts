@@ -26,6 +26,7 @@ export async function getStudentById(id: string) {
       studentMapping: {
         where: {
           isCurrent: true,
+          batchId: session.currentBatch,
         },
         select: {
           rollNumber: true,

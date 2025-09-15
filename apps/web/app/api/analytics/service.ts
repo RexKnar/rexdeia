@@ -192,7 +192,7 @@ export async function getStudentMarksByFilter(
         subjectPassed++;
       }
 
-      if (marks.length == absentOn.length) {
+      if (marks.length == absentOn.length && marks.length > 0) {
         absentStatus = true;
         overallAbsentStatus = true;
       }
