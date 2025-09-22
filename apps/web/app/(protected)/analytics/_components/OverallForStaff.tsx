@@ -475,14 +475,12 @@ export default function OverallForStaff({
       const pdfRowValue = [];
       pdfRowValue.push(`${subject.subject.name}`);
       pdfRowValue.push(subjectAnalytics?.totalStudents.overall);
-      pdfRowValue.push(subjectAnalytics?.markEntry.overall);
       pdfRowValue.push(subjectAnalytics?.attendance.overall);
       pdfRowValue.push(subjectAnalytics?.absent.overall);
       pdfRowValue.push(subjectAnalytics?.numberOfPassStudents.overall);
       pdfRowValue.push(subjectAnalytics?.numberOfFailStudents.overall);
-      pdfRowValue.push(subjectAnalytics?.averageMark.overall.toFixed(2));
       pdfRowValue.push(subjectAnalytics?.passPercentage.overall.toFixed(2));
-      pdfRowValue.push(subjectAnalytics?.failPercentage.overall.toFixed(2));
+      pdfRowValue.push(subjectAnalytics?.averageMark.overall.toFixed(2));
       pdfRowValue.push(subjectAnalytics?.highestMark.overall);
       pdfRowValue.push(subjectAnalytics?.lowestMark.overall);
       pdfRowValue.push(subjectAnalytics?.centum.overall);
