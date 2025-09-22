@@ -309,7 +309,7 @@ export default function OverallAnalytics({
             result?.attendance[category]
           );
           result.failPercentageExcludingAbsent[category] = calculatePercentage(
-            result.numberOfFailStudents[category],
+            result.totalFailExcludingAbsent[category],
             result?.attendance[category]
           );
 
