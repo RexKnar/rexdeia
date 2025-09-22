@@ -58,23 +58,25 @@ export default function RangeAnalyticsTable({
     let femaleStudents = [];
     if (rangeType === 'SubjectMarks') {
       markList.forEach((student) => {
-        student.subjects.forEach((subject) => {
-          if (subject.id === subjectId) {
-            const mark = parseFloat(subject.subjectTotalMark);
-            overallTotalCount++;
-            if (mark >= startValue && mark <= endValue) {
-              if (student.gender.toLowerCase() === 'female') {
-                femaleCount++;
-                femaleStudents.push(student);
-              } else if (student.gender.toLowerCase() === 'male') {
-                maleCount++;
-                maleStudents.push(student);
+        if (!student.overallAbsentStatus) {
+          student.subjects.forEach((subject) => {
+            if (subject.id === subjectId) {
+              const mark = parseFloat(subject.subjectTotalMark);
+              overallTotalCount++;
+              if (mark >= startValue && mark <= endValue) {
+                if (student.gender.toLowerCase() === 'female') {
+                  femaleCount++;
+                  femaleStudents.push(student);
+                } else if (student.gender.toLowerCase() === 'male') {
+                  maleCount++;
+                  maleStudents.push(student);
+                }
+                totalCount++;
+                students.push(student);
               }
-              totalCount++;
-              students.push(student);
             }
-          }
-        });
+          });
+        }
       });
       overallPercentage = (totalCount / overallTotalCount) * 100;
       malePercentage = (maleCount / overallTotalCount) * 100;
