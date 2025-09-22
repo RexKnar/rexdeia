@@ -18,6 +18,7 @@ import dataSegmentationGif from '../../../../public/assets/images/data-segmentat
 import { OverallStudentListDialog } from '../_modals/OverallStudentListDialog';
 import OverallForStaffPDFGenerator from '../pdf/_components/PdfOverallForStaff';
 import { Analytics } from '../typeDefinition/Analytics';
+import { downloadSubjectWiseOverallXLSX } from '../XLSX/excelExports';
 import { DataLoadingPlaceholder } from './DataLoadingPlaceholder';
 
 const calculatePercentage = (part: number, whole: number) =>
@@ -178,6 +179,7 @@ export default function OverallForStaff({
       };
 
       let totalMarks = { male: 0, female: 0, overall: 0 };
+      let appearedTotalMarks = { male: 0, female: 0, overall: 0 };
       let totalStudents = { male: 0, female: 0, overall: 0 };
 
       students.forEach((student) => {
@@ -200,6 +202,8 @@ export default function OverallForStaff({
         totalStudents.overall++;
 
         if (!subject.absentStatus && subject?.marks?.length > 0) {
+          appearedTotalMarks[gender] += mark;
+          appearedTotalMarks.overall += mark;
           result.attendance[gender]++;
           result.attendance.overall++;
           result.attendance.studentList.overall.push(student);
@@ -300,8 +304,7 @@ export default function OverallForStaff({
           result.averageMark[category] =
             totalMarks[category] / totalStudents[category];
           result.averageMarkAppeared[category] =
-            totalMarks[category] / totalStudents[category] -
-            result.absent[category];
+            appearedTotalMarks[category] / result?.attendance[category];
           result.lowestMark[category] =
             result.lowestMark[category] === Infinity
               ? 0
@@ -475,9 +478,9 @@ export default function OverallForStaff({
       pdfRowValue.push(subjectAnalytics?.markEntry.overall);
       pdfRowValue.push(subjectAnalytics?.attendance.overall);
       pdfRowValue.push(subjectAnalytics?.absent.overall);
-      pdfRowValue.push(subjectAnalytics?.averageMark.overall.toFixed(2));
       pdfRowValue.push(subjectAnalytics?.numberOfPassStudents.overall);
       pdfRowValue.push(subjectAnalytics?.numberOfFailStudents.overall);
+      pdfRowValue.push(subjectAnalytics?.averageMark.overall.toFixed(2));
       pdfRowValue.push(subjectAnalytics?.passPercentage.overall.toFixed(2));
       pdfRowValue.push(subjectAnalytics?.failPercentage.overall.toFixed(2));
       pdfRowValue.push(subjectAnalytics?.highestMark.overall);
@@ -861,21 +864,6 @@ export default function OverallForStaff({
         <TableCell>
           <div className="flex flex-col justify-evenly">
             <Text className="size-lg text-center font-semibold">
-              {subjectAnalytics?.failPercentage.overall.toFixed(2)}%
-            </Text>
-            <div className="flex justify-evenly">
-              <Text className="text-primary-800">
-                M: {subjectAnalytics?.failPercentage.male.toFixed(2)}%
-              </Text>
-              <Text className="text-primary-800">
-                F: {subjectAnalytics?.failPercentage.female.toFixed(2)}%
-              </Text>
-            </div>
-          </div>
-        </TableCell>
-        <TableCell>
-          <div className="flex flex-col justify-evenly">
-            <Text className="size-lg text-center font-semibold">
               {subjectAnalytics?.passPercentageExcludingAbsent.overall.toFixed(
                 2
               )}
@@ -1085,6 +1073,21 @@ export default function OverallForStaff({
                   sectionDetails={sectionDetails}
                 />
               )}
+              <Button
+                variant="outline"
+                onClick={() =>
+                  downloadSubjectWiseOverallXLSX(
+                    subjectList,
+                    analytics,
+                    examDetails,
+                    classDetails,
+                    overallStats,
+                    sectionDetails
+                  )
+                }
+              >
+                Download XLSX <TableIcon className="ml-2 h-4 w-4" />
+              </Button>
               <Table>
                 <TableHeader>
                   <TableRow className="mt-5 bg-primary-300 text-center">
@@ -1101,14 +1104,7 @@ export default function OverallForStaff({
                     <TableCell className="text-center">
                       <Text className="size-lg font-semibold">Absent</Text>
                     </TableCell>
-                    <TableCell>
-                      <Text className="size-lg font-semibold">Average</Text>
-                    </TableCell>
-                    <TableCell>
-                      <Text className="size-lg font-semibold">
-                        Average(App)
-                      </Text>
-                    </TableCell>
+
                     <TableCell>
                       <Text className="size-lg font-semibold">No. of Pass</Text>
                     </TableCell>
@@ -1125,8 +1121,16 @@ export default function OverallForStaff({
                     <TableCell>
                       <Text className="size-lg font-semibold">Pass %</Text>
                     </TableCell>
+                    {/* <TableCell>
+                      <Text className="font-semibold size-lg">Failure %</Text>
+                    </TableCell> */}
                     <TableCell>
-                      <Text className="size-lg font-semibold">Failure %</Text>
+                      <Text className="size-lg font-semibold">Average</Text>
+                    </TableCell>
+                    <TableCell>
+                      <Text className="size-lg font-semibold">
+                        Average(App)
+                      </Text>
                     </TableCell>
                     <TableCell>
                       <Text className="size-lg font-semibold">Pass(App) %</Text>
@@ -1174,14 +1178,6 @@ export default function OverallForStaff({
                           {overallStats.overallAbsent.count}
                         </Text>
                       </Button>
-                    </TableCell>
-                    <TableCell>
-                      <Text className="size-lg font-semibold">
-                        {overallStats.avgMark?.toFixed(2)}
-                      </Text>
-                    </TableCell>
-                    <TableCell className="">
-                      {overallStats.appearedAvgMark?.toFixed(2)}
                     </TableCell>
                     <TableCell>
                       <Button
@@ -1234,14 +1230,18 @@ export default function OverallForStaff({
                         </Text>
                       </Button>
                     </TableCell>
+
                     <TableCell>
                       <Text className="size-lg font-semibold">
-                        {overallStats.passPercentage?.toFixed(2)}%
+                        {overallStats.avgMark?.toFixed(2)}
                       </Text>
+                    </TableCell>
+                    <TableCell className="">
+                      {overallStats.appearedAvgMark?.toFixed(2)}
                     </TableCell>
                     <TableCell>
                       <Text className="size-lg font-semibold">
-                        {overallStats.failPercentage?.toFixed(2)}%
+                        {overallStats.passPercentage?.toFixed(2)}%
                       </Text>
                     </TableCell>
                     <TableCell>
