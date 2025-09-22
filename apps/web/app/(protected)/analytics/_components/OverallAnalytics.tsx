@@ -176,6 +176,7 @@ export default function OverallAnalytics({
       };
 
       let totalMarks = { male: 0, female: 0, overall: 0 };
+      let appearedTotalMarks = { male: 0, female: 0, overall: 0 };
       let totalStudents = { male: 0, female: 0, overall: 0 };
 
       students.forEach((student) => {
@@ -198,6 +199,8 @@ export default function OverallAnalytics({
         totalStudents.overall++;
 
         if (!subject.absentStatus && subject?.marks?.length > 0) {
+          appearedTotalMarks[gender] += mark;
+          appearedTotalMarks.overall += mark;
           result.attendance[gender]++;
           result.attendance.overall++;
           result.attendance.studentList.overall.push(student);
@@ -298,8 +301,7 @@ export default function OverallAnalytics({
           result.averageMark[category] =
             totalMarks[category] / totalStudents[category];
           result.averageMarkAppeared[category] =
-            totalMarks[category] / totalStudents[category] -
-            result.absent[category];
+            appearedTotalMarks[category] / result?.attendance[category];
           result.lowestMark[category] =
             result.lowestMark[category] === Infinity
               ? 0
