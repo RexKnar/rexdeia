@@ -15,6 +15,7 @@ import dataSegmentationGif from '../../../../../public/assets/images/data-segmen
 import noClassListImage from '../../../../../public/assets/images/options.svg';
 import { DataLoadingPlaceholder } from '../../_components/DataLoadingPlaceholder';
 import OverallAnalytics from '../../_components/OverallAnalytics';
+import OverallForStaff from '../../_components/OverallForStaff';
 import RangeAnalyticsTable from '../../_components/RangeAnalyticsTable';
 import SectionAnalytics from '../../_components/SectionAnalytics';
 import StudentMarkList from '../../_components/StudentMarkList';
@@ -166,6 +167,9 @@ export function AnalyticStudentList() {
             >
               Overall-Analytics
             </TabsTrigger>
+            <TabsTrigger value="overallForStaff" className="mr-2 text-base">
+              Overall for Staff
+            </TabsTrigger>
             <TabsTrigger
               value="sectionAnalytics"
               className="mr-2 text-base focus:border-b-4 focus:border-primary print:hidden"
@@ -197,6 +201,19 @@ export function AnalyticStudentList() {
           <TabsContent className="w-full" value="overall">
             <section>
               <OverallAnalytics
+                examId={examId}
+                classId={classId}
+                sectionId={sectionId}
+                students={studentMarkList}
+                examDetails={examDetail}
+                sectionDetails={sectionDetail}
+                classDetails={classDetail}
+              />
+            </section>
+          </TabsContent>
+          <TabsContent className="w-full" value="overallForStaff">
+            <section>
+              <OverallForStaff
                 examId={examId}
                 classId={classId}
                 sectionId={sectionId}
