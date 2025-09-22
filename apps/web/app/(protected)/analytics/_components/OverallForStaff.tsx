@@ -1123,20 +1123,21 @@ export default function OverallForStaff({
                     {/* <TableCell>
                       <Text className="font-semibold size-lg">Failure %</Text>
                     </TableCell> */}
-                    <TableCell>
-                      <Text className="size-lg font-semibold">Average</Text>
-                    </TableCell>
-                    <TableCell>
-                      <Text className="size-lg font-semibold">
-                        Average(App)
-                      </Text>
-                    </TableCell>
+
                     <TableCell>
                       <Text className="size-lg font-semibold">Pass(App) %</Text>
                     </TableCell>
                     <TableCell>
                       <Text className="size-lg font-semibold">
                         Failure(App) %
+                      </Text>
+                    </TableCell>
+                    <TableCell>
+                      <Text className="size-lg font-semibold">Average</Text>
+                    </TableCell>
+                    <TableCell>
+                      <Text className="size-lg font-semibold">
+                        Average(App)
                       </Text>
                     </TableCell>
                     <TableCell>
