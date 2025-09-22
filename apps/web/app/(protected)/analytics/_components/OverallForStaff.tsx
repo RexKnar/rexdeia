@@ -674,36 +674,7 @@ export default function OverallForStaff({
             </div>
           </div>
         </TableCell>
-        <TableCell>
-          <div className="flex flex-col justify-evenly">
-            <Text className="size-lg text-center font-semibold">
-              {subjectAnalytics?.averageMark.overall.toFixed(2)}
-            </Text>
-            <div className="flex justify-evenly">
-              <Text className="text-primary-800">
-                M: {subjectAnalytics?.averageMark.male.toFixed(2)}
-              </Text>
-              <Text className="text-primary-800">
-                F: {subjectAnalytics?.averageMark.female.toFixed(2)}
-              </Text>
-            </div>
-          </div>
-        </TableCell>
-        <TableCell>
-          <div className="flex flex-col justify-evenly">
-            <Text className="size-lg text-center font-semibold">
-              {subjectAnalytics?.averageMarkAppeared.overall.toFixed(2)}
-            </Text>
-            <div className="flex justify-evenly">
-              <Text className="text-primary-800">
-                M: {subjectAnalytics?.averageMarkAppeared.male.toFixed(2)}
-              </Text>
-              <Text className="text-primary-800">
-                F: {subjectAnalytics?.averageMarkAppeared.female.toFixed(2)}
-              </Text>
-            </div>
-          </div>
-        </TableCell>
+
         <TableCell>
           <div className="flex flex-col justify-evenly">
             <Button
@@ -907,6 +878,36 @@ export default function OverallForStaff({
                   2
                 )}
                 %
+              </Text>
+            </div>
+          </div>
+        </TableCell>
+        <TableCell>
+          <div className="flex flex-col justify-evenly">
+            <Text className="size-lg text-center font-semibold">
+              {subjectAnalytics?.averageMark.overall.toFixed(2)}
+            </Text>
+            <div className="flex justify-evenly">
+              <Text className="text-primary-800">
+                M: {subjectAnalytics?.averageMark.male.toFixed(2)}
+              </Text>
+              <Text className="text-primary-800">
+                F: {subjectAnalytics?.averageMark.female.toFixed(2)}
+              </Text>
+            </div>
+          </div>
+        </TableCell>
+        <TableCell>
+          <div className="flex flex-col justify-evenly">
+            <Text className="size-lg text-center font-semibold">
+              {subjectAnalytics?.averageMarkAppeared.overall.toFixed(2)}
+            </Text>
+            <div className="flex justify-evenly">
+              <Text className="text-primary-800">
+                M: {subjectAnalytics?.averageMarkAppeared.male.toFixed(2)}
+              </Text>
+              <Text className="text-primary-800">
+                F: {subjectAnalytics?.averageMarkAppeared.female.toFixed(2)}
               </Text>
             </div>
           </div>
