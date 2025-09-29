@@ -159,7 +159,7 @@ function analyzeSubjectPerformance(
       overall: 0,
       studentList: { male: [], female: [], overall: [] },
     },
-    attendance: {
+    appeared: {
       male: 0,
       female: 0,
       overall: 0,
@@ -177,7 +177,7 @@ function analyzeSubjectPerformance(
       overall: 0,
       studentList: { male: [], female: [], overall: [] },
     },
-    markEntry: {
+    pendingMarkEntry: {
       male: 0,
       female: 0,
       overall: 0,
@@ -220,10 +220,10 @@ function analyzeSubjectPerformance(
     totalStudents.overall++;
 
     if (!subject.absentStatus && subject?.marks?.length > 0) {
-      result.attendance[gender]++;
-      result.attendance.overall++;
-      result.attendance.studentList.overall.push(student);
-      result.attendance.studentList[gender].push(student);
+      result.appeared[gender]++;
+      result.appeared.overall++;
+      result.appeared.studentList.overall.push(student);
+      result.appeared.studentList[gender].push(student);
     } else if (subject.absentStatus && subject?.marks?.length > 0) {
       result.absent[gender]++;
       result.absent.overall++;
@@ -231,10 +231,10 @@ function analyzeSubjectPerformance(
       result.absent.studentList[gender].push(student);
     }
     if (subject?.marks?.length === 0) {
-      result.markEntry[gender]++;
-      result.markEntry.overall++;
-      result.markEntry.studentList.overall.push(student);
-      result.markEntry.studentList[gender].push(student);
+      result.pendingMarkEntry[gender]++;
+      result.pendingMarkEntry.overall++;
+      result.pendingMarkEntry.studentList.overall.push(student);
+      result.pendingMarkEntry.studentList[gender].push(student);
     }
 
     if (mark > result.highestMark[gender]) {
@@ -299,11 +299,11 @@ function analyzeSubjectPerformance(
           : result.lowestMark[category];
       result.passPercentageExcludingAbsent[category] = calculatePercentage(
         result.numberOfPassStudents[category],
-        result?.attendance[category]
+        result?.appeared[category]
       );
       result.failPercentageExcludingAbsent[category] = calculatePercentage(
         result.numberOfFailStudents[category],
-        result?.attendance[category]
+        result?.appeared[category]
       );
 
       result.passPercentage[category] = calculatePercentage(
