@@ -137,7 +137,7 @@ export default function OverallAnalytics({
           overall: 0,
           studentList: { male: [], female: [], overall: [] },
         },
-        attendance: {
+        appeared: {
           male: 0,
           female: 0,
           overall: 0,
@@ -155,7 +155,7 @@ export default function OverallAnalytics({
           overall: 0,
           studentList: { male: [], female: [], overall: [] },
         },
-        markEntry: {
+        pendingMarkEntry: {
           male: 0,
           female: 0,
           overall: 0,
@@ -201,10 +201,10 @@ export default function OverallAnalytics({
         if (!subject.absentStatus && subject?.marks?.length > 0) {
           appearedTotalMarks[gender] += mark;
           appearedTotalMarks.overall += mark;
-          result.attendance[gender]++;
-          result.attendance.overall++;
-          result.attendance.studentList.overall.push(student);
-          result.attendance.studentList[gender].push(student);
+          result.appeared[gender]++;
+          result.appeared.overall++;
+          result.appeared.studentList.overall.push(student);
+          result.appeared.studentList[gender].push(student);
         } else if (subject.absentStatus && subject?.marks?.length > 0) {
           result.absent[gender]++;
           result.absent.overall++;
@@ -216,10 +216,10 @@ export default function OverallAnalytics({
           result.overallAbsent.studentList[gender].push(student);
         }
         if (subject?.marks?.length === 0) {
-          result.markEntry[gender]++;
-          result.markEntry.overall++;
-          result.markEntry.studentList.overall.push(student);
-          result.markEntry.studentList[gender].push(student);
+          result.pendingMarkEntry[gender]++;
+          result.pendingMarkEntry.overall++;
+          result.pendingMarkEntry.studentList.overall.push(student);
+          result.pendingMarkEntry.studentList[gender].push(student);
         }
 
         if (mark > result.highestMark[gender]) {
@@ -301,18 +301,18 @@ export default function OverallAnalytics({
           result.averageMark[category] =
             totalMarks[category] / totalStudents[category];
           result.averageMarkAppeared[category] =
-            appearedTotalMarks[category] / result?.attendance[category];
+            appearedTotalMarks[category] / result?.appeared[category];
           result.lowestMark[category] =
             result.lowestMark[category] === Infinity
               ? 0
               : result.lowestMark[category];
           result.passPercentageExcludingAbsent[category] = calculatePercentage(
             result.numberOfPassStudents[category],
-            result?.attendance[category]
+            result?.appeared[category]
           );
           result.failPercentageExcludingAbsent[category] = calculatePercentage(
             result.totalFailExcludingAbsent[category],
-            result?.attendance[category]
+            result?.appeared[category]
           );
 
           result.passPercentage[category] = calculatePercentage(
@@ -397,7 +397,7 @@ export default function OverallAnalytics({
         }
       }
 
-      if (student.attendance) {
+      if (student.appeared) {
         if (!student.overallAbsentStatus) {
           if (isFirst) {
             lowestMark = student.totalMark;
@@ -516,41 +516,41 @@ export default function OverallAnalytics({
               className="size-lg text-center font-semibold"
               onClick={() =>
                 handleOpenStudentListDialog(
-                  subjectAnalytics.markEntry.studentList.overall,
+                  subjectAnalytics.pendingMarkEntry.studentList.overall,
                   'Pending Mark Entry List',
                   'Overall',
                   [subject]
                 )
               }
             >
-              {subjectAnalytics?.markEntry.overall}
+              {subjectAnalytics?.pendingMarkEntry.overall}
             </Button>
             <div className="size-lg flex justify-evenly text-center text-primary-800">
               <Button
                 variant="ghost"
                 onClick={() =>
                   handleOpenStudentListDialog(
-                    subjectAnalytics.markEntry.studentList.male,
+                    subjectAnalytics.pendingMarkEntry.studentList.male,
                     'Pending Mark Entry List',
                     'Male',
                     [subject]
                   )
                 }
               >
-                M: {subjectAnalytics?.markEntry.male}
+                M: {subjectAnalytics?.pendingMarkEntry.male}
               </Button>
               <Button
                 variant="ghost"
                 onClick={() =>
                   handleOpenStudentListDialog(
-                    subjectAnalytics.markEntry.studentList.female,
+                    subjectAnalytics.pendingMarkEntry.studentList.female,
                     'Pending Mark Entry List',
                     'Female',
                     [subject]
                   )
                 }
               >
-                F: {subjectAnalytics?.markEntry.female}
+                F: {subjectAnalytics?.pendingMarkEntry.female}
               </Button>
             </div>
           </div>
@@ -562,7 +562,7 @@ export default function OverallAnalytics({
               variant="ghost"
               onClick={() =>
                 handleOpenStudentListDialog(
-                  subjectAnalytics.attendance.studentList.overall,
+                  subjectAnalytics.appeared.studentList.overall,
                   'Appeared Students List',
                   'Overall',
                   [subject]
@@ -570,7 +570,7 @@ export default function OverallAnalytics({
               }
             >
               <Text className="size-lg text-center font-semibold">
-                {subjectAnalytics?.attendance.overall}
+                {subjectAnalytics?.appeared.overall}
               </Text>
             </Button>
             <div className="flex justify-evenly text-primary-800">
@@ -578,27 +578,27 @@ export default function OverallAnalytics({
                 variant="ghost"
                 onClick={() =>
                   handleOpenStudentListDialog(
-                    subjectAnalytics.attendance.studentList.male,
+                    subjectAnalytics.appeared.studentList.male,
                     'Appeared Students List',
                     'Male',
                     [subject]
                   )
                 }
               >
-                M: {subjectAnalytics?.attendance.male}
+                M: {subjectAnalytics?.appeared.male}
               </Button>
               <Button
                 variant="ghost"
                 onClick={() =>
                   handleOpenStudentListDialog(
-                    subjectAnalytics.attendance.studentList.female,
+                    subjectAnalytics.appeared.studentList.female,
                     'Appeared Students List',
                     'Female',
                     [subject]
                   )
                 }
               >
-                F: {subjectAnalytics?.attendance.female}
+                F: {subjectAnalytics?.appeared.female}
               </Button>
             </div>
           </div>

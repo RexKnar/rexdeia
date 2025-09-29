@@ -44,6 +44,7 @@ export default function OverallForStaff({
   const [analytics, setAnalytics] = useState<Map<string, Analytics>>(new Map());
   const [pdfTableHeader, setPdfTableHeader] = useState([]);
   const [pdfTableValues, setPdfTableValues] = useState([]);
+  const [pdfTableOverallValues, setPdfTableOverallValues] = useState([]);
   const [modalStudentList, setModalStudentList] = useState([]);
   const [modalSubjectList, setModalSubjectList] = useState([]);
   const [modalTitle, setModalTitle] = useState('');
@@ -140,7 +141,7 @@ export default function OverallForStaff({
           overall: 0,
           studentList: { male: [], female: [], overall: [] },
         },
-        attendance: {
+        appeared: {
           male: 0,
           female: 0,
           overall: 0,
@@ -158,7 +159,7 @@ export default function OverallForStaff({
           overall: 0,
           studentList: { male: [], female: [], overall: [] },
         },
-        markEntry: {
+        pendingMarkEntry: {
           male: 0,
           female: 0,
           overall: 0,
@@ -204,10 +205,10 @@ export default function OverallForStaff({
         if (!subject.absentStatus && subject?.marks?.length > 0) {
           appearedTotalMarks[gender] += mark;
           appearedTotalMarks.overall += mark;
-          result.attendance[gender]++;
-          result.attendance.overall++;
-          result.attendance.studentList.overall.push(student);
-          result.attendance.studentList[gender].push(student);
+          result.appeared[gender]++;
+          result.appeared.overall++;
+          result.appeared.studentList.overall.push(student);
+          result.appeared.studentList[gender].push(student);
         } else if (subject.absentStatus && subject?.marks?.length > 0) {
           result.absent[gender]++;
           result.absent.overall++;
@@ -219,10 +220,10 @@ export default function OverallForStaff({
           result.overallAbsent.studentList[gender].push(student);
         }
         if (subject?.marks?.length === 0) {
-          result.markEntry[gender]++;
-          result.markEntry.overall++;
-          result.markEntry.studentList.overall.push(student);
-          result.markEntry.studentList[gender].push(student);
+          result.pendingMarkEntry[gender]++;
+          result.pendingMarkEntry.overall++;
+          result.pendingMarkEntry.studentList.overall.push(student);
+          result.pendingMarkEntry.studentList[gender].push(student);
         }
 
         if (mark > result.highestMark[gender]) {
@@ -304,18 +305,18 @@ export default function OverallForStaff({
           result.averageMark[category] =
             totalMarks[category] / totalStudents[category];
           result.averageMarkAppeared[category] =
-            appearedTotalMarks[category] / result?.attendance[category];
+            appearedTotalMarks[category] / result?.appeared[category];
           result.lowestMark[category] =
             result.lowestMark[category] === Infinity
               ? 0
               : result.lowestMark[category];
           result.passPercentageExcludingAbsent[category] = calculatePercentage(
             result.numberOfPassStudents[category],
-            result?.attendance[category]
+            result?.appeared[category]
           );
           result.failPercentageExcludingAbsent[category] = calculatePercentage(
-            result.numberOfFailStudents[category],
-            result?.attendance[category]
+            result.totalFailExcludingAbsent[category],
+            result?.appeared[category]
           );
 
           result.passPercentage[category] = calculatePercentage(
@@ -400,25 +401,25 @@ export default function OverallForStaff({
         }
       }
 
-      if (student.attendance) {
-        if (!student.overallAbsentStatus) {
-          if (isFirst) {
-            lowestMark = student.totalMark;
-            lowestMarkStudents = [student];
-            isFirst = false;
+      // if (student.appeared) {
+      if (!student.overallAbsentStatus) {
+        if (isFirst) {
+          lowestMark = student.totalMark;
+          lowestMarkStudents = [student];
+          isFirst = false;
+        } else {
+          let oldLowestMark = lowestMark;
+          if (lowestMark == student.totalMark) {
+            lowestMarkStudents.push(student);
           } else {
-            let oldLowestMark = lowestMark;
-            if (lowestMark == student.totalMark) {
-              lowestMarkStudents.push(student);
-            } else {
-              lowestMark = Math.min(lowestMark, student.totalMark);
-              if (lowestMark != oldLowestMark) {
-                lowestMarkStudents = [student];
-              }
+            lowestMark = Math.min(lowestMark, student.totalMark);
+            if (lowestMark != oldLowestMark) {
+              lowestMarkStudents = [student];
             }
           }
         }
       }
+      // }
     });
 
     return {
@@ -475,12 +476,16 @@ export default function OverallForStaff({
       const pdfRowValue = [];
       pdfRowValue.push(`${subject.subject.name}`);
       pdfRowValue.push(subjectAnalytics?.totalStudents.overall);
-      pdfRowValue.push(subjectAnalytics?.attendance.overall);
+      pdfRowValue.push(subjectAnalytics?.appeared.overall);
       pdfRowValue.push(subjectAnalytics?.absent.overall);
       pdfRowValue.push(subjectAnalytics?.numberOfPassStudents.overall);
-      pdfRowValue.push(subjectAnalytics?.numberOfFailStudents.overall);
-      pdfRowValue.push(subjectAnalytics?.passPercentage.overall.toFixed(2));
-      pdfRowValue.push(subjectAnalytics?.averageMark.overall.toFixed(2));
+      pdfRowValue.push(subjectAnalytics?.totalFailExcludingAbsent.overall);
+      pdfRowValue.push(
+        subjectAnalytics?.passPercentageExcludingAbsent.overall.toFixed(2)
+      );
+      pdfRowValue.push(
+        subjectAnalytics?.averageMarkAppeared.overall.toFixed(2)
+      );
       pdfRowValue.push(subjectAnalytics?.highestMark.overall);
       pdfRowValue.push(subjectAnalytics?.lowestMark.overall);
       pdfRowValue.push(subjectAnalytics?.centum.overall);
@@ -489,6 +494,25 @@ export default function OverallForStaff({
 
     setPdfTableValues(finalPdfRowValue);
   }, [analytics]);
+
+  useEffect(() => {
+    const pdfTableOverall = [];
+    const pdfRowValue = [];
+    pdfRowValue.push(`Overall`);
+    pdfRowValue.push('-');
+    pdfRowValue.push('-');
+    pdfRowValue.push('-');
+    pdfRowValue.push(overallStats.totalPass.count);
+    pdfRowValue.push(overallStats.totalFailExcludingAbsent.count);
+    pdfRowValue.push(overallStats.passPercentageExcludingAbsent.toFixed(2));
+    pdfRowValue.push(overallStats.appearedAvgMark?.toFixed(2));
+    pdfRowValue.push(overallStats.highestMark.toFixed(2));
+    pdfRowValue.push(overallStats.lowestMark);
+    pdfRowValue.push('-');
+    pdfTableOverall.push(pdfRowValue);
+
+    setPdfTableOverallValues(pdfTableOverall);
+  }, [overallStats]);
 
   const renderSubjectRow = (subject) => {
     const subjectAnalytics = analytics.get(subject.id);
@@ -541,41 +565,41 @@ export default function OverallForStaff({
               className="size-lg text-center font-semibold"
               onClick={() =>
                 handleOpenStudentListDialog(
-                  subjectAnalytics.markEntry.studentList.overall,
+                  subjectAnalytics.pendingMarkEntry.studentList.overall,
                   'Pending Mark Entry List',
                   'Overall',
                   [subject]
                 )
               }
             >
-              {subjectAnalytics?.markEntry.overall}
+              {subjectAnalytics?.pendingMarkEntry.overall}
             </Button>
             <div className="size-lg flex justify-evenly text-center text-primary-800">
               <Button
                 variant="ghost"
                 onClick={() =>
                   handleOpenStudentListDialog(
-                    subjectAnalytics.markEntry.studentList.male,
+                    subjectAnalytics.pendingMarkEntry.studentList.male,
                     'Pending Mark Entry List',
                     'Male',
                     [subject]
                   )
                 }
               >
-                M: {subjectAnalytics?.markEntry.male}
+                M: {subjectAnalytics?.pendingMarkEntry.male}
               </Button>
               <Button
                 variant="ghost"
                 onClick={() =>
                   handleOpenStudentListDialog(
-                    subjectAnalytics.markEntry.studentList.female,
+                    subjectAnalytics.pendingMarkEntry.studentList.female,
                     'Pending Mark Entry List',
                     'Female',
                     [subject]
                   )
                 }
               >
-                F: {subjectAnalytics?.markEntry.female}
+                F: {subjectAnalytics?.pendingMarkEntry.female}
               </Button>
             </div>
           </div>
@@ -587,7 +611,7 @@ export default function OverallForStaff({
               variant="ghost"
               onClick={() =>
                 handleOpenStudentListDialog(
-                  subjectAnalytics.attendance.studentList.overall,
+                  subjectAnalytics.appeared.studentList.overall,
                   'Appeared Students List',
                   'Overall',
                   [subject]
@@ -595,7 +619,7 @@ export default function OverallForStaff({
               }
             >
               <Text className="size-lg text-center font-semibold">
-                {subjectAnalytics?.attendance.overall}
+                {subjectAnalytics?.appeared.overall}
               </Text>
             </Button>
             <div className="flex justify-evenly text-primary-800">
@@ -603,27 +627,27 @@ export default function OverallForStaff({
                 variant="ghost"
                 onClick={() =>
                   handleOpenStudentListDialog(
-                    subjectAnalytics.attendance.studentList.male,
+                    subjectAnalytics.appeared.studentList.male,
                     'Appeared Students List',
                     'Male',
                     [subject]
                   )
                 }
               >
-                M: {subjectAnalytics?.attendance.male}
+                M: {subjectAnalytics?.appeared.male}
               </Button>
               <Button
                 variant="ghost"
                 onClick={() =>
                   handleOpenStudentListDialog(
-                    subjectAnalytics.attendance.studentList.female,
+                    subjectAnalytics.appeared.studentList.female,
                     'Appeared Students List',
                     'Female',
                     [subject]
                   )
                 }
               >
-                F: {subjectAnalytics?.attendance.female}
+                F: {subjectAnalytics?.appeared.female}
               </Button>
             </div>
           </div>
@@ -1063,15 +1087,16 @@ export default function OverallForStaff({
         <section>
           {subjectList ? (
             <div className="space-y-4 overflow-x-auto rounded-md bg-white p-6 print:m-0 print:p-0">
-              {pdfTableValues?.length > 0 && (
-                <OverallForStaffPDFGenerator
-                  headingList={pdfTableHeader as any}
-                  tableValues={pdfTableValues}
-                  examDetails={examDetails}
-                  classDetails={classDetails}
-                  sectionDetails={sectionDetails}
-                />
-              )}
+              {pdfTableValues?.length > 0 &&
+                pdfTableOverallValues?.length > 0 && (
+                  <OverallForStaffPDFGenerator
+                    headingList={pdfTableHeader as any}
+                    tableValues={[...pdfTableValues, ...pdfTableOverallValues]}
+                    examDetails={examDetails}
+                    classDetails={classDetails}
+                    sectionDetails={sectionDetails}
+                  />
+                )}
               <Button
                 variant="outline"
                 onClick={() =>
@@ -1233,14 +1258,6 @@ export default function OverallForStaff({
 
                     <TableCell>
                       <Text className="size-lg font-semibold">
-                        {overallStats.avgMark?.toFixed(2)}
-                      </Text>
-                    </TableCell>
-                    <TableCell className="">
-                      {overallStats.appearedAvgMark?.toFixed(2)}
-                    </TableCell>
-                    <TableCell>
-                      <Text className="size-lg font-semibold">
                         {overallStats.passPercentage?.toFixed(2)}%
                       </Text>
                     </TableCell>
@@ -1254,6 +1271,16 @@ export default function OverallForStaff({
                       <Text className="size-lg font-semibold">
                         {overallStats.failPercentageExcludingAbsent?.toFixed(2)}
                         %
+                      </Text>
+                    </TableCell>
+                    <TableCell>
+                      <Text className="size-lg font-semibold">
+                        {overallStats.avgMark?.toFixed(2)}
+                      </Text>
+                    </TableCell>
+                    <TableCell>
+                      <Text className="size-lg font-semibold">
+                        {overallStats.appearedAvgMark?.toFixed(2)}
                       </Text>
                     </TableCell>
                     <TableCell>

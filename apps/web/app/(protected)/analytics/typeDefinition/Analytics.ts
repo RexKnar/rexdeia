@@ -79,7 +79,7 @@ export interface Analytics {
     overall: number;
     studentList: { male: Student[]; female: Student[]; overall: Student[] };
   };
-  attendance: {
+  appeared: {
     male: number;
     female: number;
     overall: number;
@@ -92,7 +92,7 @@ export interface Analytics {
     overall: number;
     studentList: any;
   };
-  markEntry: {
+  pendingMarkEntry: {
     male: number;
     female: number;
     overall: number;
