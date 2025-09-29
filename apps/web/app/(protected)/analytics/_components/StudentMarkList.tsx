@@ -433,6 +433,11 @@ export default function StudentMarkList({
       );
     });
   };
+  const filterValidStudents = (students) => {
+    return students.filter((student) => {
+      return !student.overallAbsentStatus; // rank should be greater than or equal to 1
+    });
+  };
   const getTopNStudents = (n) => {
     const validStudents = filterValidRanks([...students]);
     const sortedStudents = validStudents.sort((a, b) => a.rank - b.rank);
@@ -440,9 +445,11 @@ export default function StudentMarkList({
   };
 
   const getBottomNStudents = (n) => {
-    const validStudents = filterValidRanks([...students]);
-    const sortedStudents = validStudents.sort((a, b) => a.rank - b.rank);
-    const bottomStudents = sortedStudents.slice(-n);
+    const validStudents = filterValidStudents([...students]);
+    const sortedStudents = validStudents.sort(
+      (a, b) => a.totalMark - b.totalMark
+    );
+    const bottomStudents = sortedStudents.slice(0, n);
     return bottomStudents.reverse();
   };
 
@@ -521,59 +528,6 @@ export default function StudentMarkList({
                   </div>
                 </div>
               </div>
-              {/* <div className="relative ">
-                <div className="relative h-[50vh]">
-                  <Table className="border-1 ">
-                    <TableHeader className="sticky top-0 z-20 bg-primary-300">
-                      {table.getHeaderGroups().map((headerGroup) => (
-                        <TableRow
-                          key={headerGroup.id}
-                          className=" bg-primary-300"
-                        >
-                          {headerGroup.headers.map((header, index) => (
-                            <TableCell
-                              key={header.id}
-                              className={`
-            ${index === 0 ? 'sticky left-0 z-30 bg-primary-300 ' : ''}
-            ${index === 1 ? 'sticky left-16 z-30 bg-primary-300 ' : ''}
-            p-4 text-sm
-          `}
-                            >
-                              {header.isPlaceholder
-                                ? null
-                                : flexRender(
-                                    header.column.columnDef.header,
-                                    header.getContext()
-                                  )}
-                            </TableCell>
-                          ))}
-                        </TableRow>
-                      ))}
-                    </TableHeader>
-                    <TableBody>
-                      {table.getRowModel().rows.map((row) => (
-                        <TableRow key={row.id}>
-                          {row.getVisibleCells().map((cell, index) => (
-                            <TableCell
-                              key={cell.id}
-                              className={`
-            ${index === 0 ? 'sticky left-0  z-10 bg-white ' : ''}
-            ${index === 1 ? 'sticky left-16 z-10 bg-white ' : ''}
-            p-4 text-sm
-          `}
-                            >
-                              {flexRender(
-                                cell.column.columnDef.cell,
-                                cell.getContext()
-                              )}
-                            </TableCell>
-                          ))}
-                        </TableRow>
-                      ))}
-                    </TableBody>
-                  </Table>
-                </div>
-              </div> */}
 
               <div className="relative rounded-md border">
                 <div className="overflow-auto ">
