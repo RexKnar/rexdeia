@@ -401,25 +401,25 @@ export default function OverallForStaff({
         }
       }
 
-      if (student.appeared) {
-        if (!student.overallAbsentStatus) {
-          if (isFirst) {
-            lowestMark = student.totalMark;
-            lowestMarkStudents = [student];
-            isFirst = false;
+      // if (student.appeared) {
+      if (!student.overallAbsentStatus) {
+        if (isFirst) {
+          lowestMark = student.totalMark;
+          lowestMarkStudents = [student];
+          isFirst = false;
+        } else {
+          let oldLowestMark = lowestMark;
+          if (lowestMark == student.totalMark) {
+            lowestMarkStudents.push(student);
           } else {
-            let oldLowestMark = lowestMark;
-            if (lowestMark == student.totalMark) {
-              lowestMarkStudents.push(student);
-            } else {
-              lowestMark = Math.min(lowestMark, student.totalMark);
-              if (lowestMark != oldLowestMark) {
-                lowestMarkStudents = [student];
-              }
+            lowestMark = Math.min(lowestMark, student.totalMark);
+            if (lowestMark != oldLowestMark) {
+              lowestMarkStudents = [student];
             }
           }
         }
       }
+      // }
     });
 
     return {
