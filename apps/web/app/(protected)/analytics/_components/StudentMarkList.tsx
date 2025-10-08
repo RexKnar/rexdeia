@@ -380,15 +380,15 @@ export default function StudentMarkList({
                   if (!studentDetail?.absentStatus) {
                     const subjectTotal =
                       Number(studentDetail?.subjectTotalMark) || 0;
-                    if (studentDetail?.failingStatus) {
-                      tableValues.push(`${subjectTotal}`);
-                      // failingStatus = true;
-                    } else {
-                      const grade = studentDetail?.failingStatus
-                        ? 'F'
-                        : studentDetail?.grade;
-                      tableValues.push(`${subjectTotal}(${grade})`);
-                    }
+                    // if (studentDetail?.failingStatus) {
+                    //   tableValues.push(`${subjectTotal}`);
+                    //   // failingStatus = true;
+                    // } else {
+                    const grade = studentDetail?.failingStatus
+                      ? 'F'
+                      : studentDetail?.grade;
+                    tableValues.push(`${subjectTotal}(${grade})`);
+                    // }
                   } else {
                     tableValues.push('A');
                   }
