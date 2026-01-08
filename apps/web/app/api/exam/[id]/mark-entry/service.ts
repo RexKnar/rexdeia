@@ -89,14 +89,14 @@ async function checkMarkEntryPermission(
       };
     }
 
-    if (correctionDate && now >= correctionDate) {
+    if (correctionDate && now > correctionDate) {
       return {
         canEnterMarks: false,
         message: 'Mark entry correction period has ended',
       };
     }
 
-    if (!correctionDate && now >= endDate) {
+    if (!correctionDate && now > endDate) {
       return {
         canEnterMarks: false,
         message: 'Mark entry period has ended',
@@ -112,7 +112,7 @@ async function checkMarkEntryPermission(
         message: 'Mark entry has not started yet',
       };
     }
-    if (now >= endDate) {
+    if (now > endDate) {
       return {
         canEnterMarks: false,
         message: 'Mark entry period has ended',
