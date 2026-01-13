@@ -2,6 +2,7 @@ import { captureException } from '@sentry/nextjs';
 import { getOrganisationsByUserId } from 'app/api/user/organization/service';
 import { StatusCodes } from 'http-status-codes';
 import { authOptions } from 'lib/auth';
+import { db } from 'lib/db';
 import { NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 
@@ -12,9 +13,17 @@ export async function PUT() {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
     const userOrganizations = await getOrganisationsByUserId(session.user.id);
+
     const { branchId, organizationId } = userOrganizations[0];
     const organizationName = userOrganizations[0].organization.name;
     const institute = userOrganizations[0].organization.institute;
+    // Get academic details (matching your session logic)
+    const academicDetails = await db.batch.findFirst({
+      where: {
+        currentAcademicYear: true,
+        branchId: branchId,
+      },
+    });
 
     // Build the new session update object
     const updatedSessionData = {
@@ -23,6 +32,7 @@ export async function PUT() {
       organizationId,
       institute,
       organizationName,
+      currentBatch: academicDetails?.id,
     };
 
     // Trigger token update logic
