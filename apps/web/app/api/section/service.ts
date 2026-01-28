@@ -68,6 +68,7 @@ export async function getSectionsWithFilter(
   filter: SectionFilter & { academicYearId?: string }
 ) {
   const session = await getServerSession(authOptions);
+  console.log(`New Mobile app hit`, session);
 
   const { isActive, academicYearId: requestAcademicYearId } = filter;
   const academicYearId = requestAcademicYearId ?? session.currentBatch;

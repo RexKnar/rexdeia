@@ -4,15 +4,20 @@ import { StatusCodes } from 'http-status-codes';
 import { authOptions } from 'lib/auth';
 import { NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
+import { getAllBatchesWithFilter } from '../batch/[id]/service';
 
-export async function PUT(request: Request) {
+export async function PUT() {
   try {
     const session = await getServerSession(authOptions);
     if (!session) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
-    const payload = await request.json();
     const userOrganizations = await getOrganisationsByUserId(session.user.id);
+    const currentBatch = await getAllBatchesWithFilter(
+      1,
+      1,
+      { isActive: true }
+    );
     const { branchId, organizationId } = userOrganizations[0];
     const organizationName = userOrganizations[0].organization.name;
     const institute = userOrganizations[0].organization.institute;
@@ -24,7 +29,7 @@ export async function PUT(request: Request) {
       organizationId,
       institute,
       organizationName,
-      currentBatch: payload.currentBatch,
+      currentBatch: currentBatch.data[0].id,
     };
 
     // Trigger token update logic
@@ -33,7 +38,7 @@ export async function PUT(request: Request) {
         id: session.user.id,
         name: session.user.name,
         email: session.user.email,
-        currentBatch: payload.currentBatch,
+        currentBatch: currentBatch.data[0].id,
         ...session,
       },
       user: session.user,
