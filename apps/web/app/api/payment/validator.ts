@@ -1,16 +1,21 @@
 import { captureException } from '@sentry/nextjs';
 import { z } from 'zod';
 
-import { AddPaymentModel } from './models';
+export const addPaymentSchema = z.object({
+  amount: z.number().positive(),
+  associationType: z.string().min(1),
+  associationEntityId: z.string().min(1),
+});
 
-const schema = z.object({});
+export type AddPaymentPayload = z.infer<typeof addPaymentSchema>;
 
-export async function validateAddPayment(payment: AddPaymentModel) {
+export async function validateAddPayment(
+  payload: unknown
+): Promise<AddPaymentPayload> {
   try {
-    schema.parse(payment);
+    return addPaymentSchema.parse(payload);
   } catch (e) {
     captureException(e);
     return Promise.reject(e);
   }
-  return schema.parse(payment);
 }

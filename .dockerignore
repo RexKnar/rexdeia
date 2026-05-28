@@ -24,6 +24,11 @@ dist/
 .env*
 *.pem
 
+# Secrets / service-account credentials (never bake into the image)
+**/keyfile*.json
+**/*serviceaccount*.json
+*.key
+
 # Miscellaneous Files
 .DS_Store
 .turbo

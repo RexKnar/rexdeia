@@ -2,60 +2,51 @@
 import type { NextRequest } from 'next/server';
 import { NextResponse } from 'next/server';
 
+const ALLOWED_METHODS = 'GET, POST, PUT, DELETE, OPTIONS, PATCH';
+const ALLOWED_HEADERS =
+  'Content-Type, Authorization, X-Requested-With, X-HTTP-Method-Override, Accept';
+
+// Localhost origins are only allowed outside production so local web/Flutter
+// development keeps working without configuration.
+const DEV_FALLBACK_ORIGINS = [
+  'http://localhost:3000',
+  'http://localhost',
+  'http://10.0.2.2',
+];
+
+// Configure production origins via the ALLOWED_ORIGINS env var
+// (comma-separated, e.g. "https://app.rexdeia.com,https://admin.rexdeia.com").
+function getAllowedOrigins(): string[] {
+  const fromEnv = (process.env.ALLOWED_ORIGINS || '')
+    .split(',')
+    .map((o) => o.trim())
+    .filter(Boolean);
+
+  if (fromEnv.length > 0) {
+    return fromEnv;
+  }
+
+  return process.env.NODE_ENV === 'production' ? [] : DEV_FALLBACK_ORIGINS;
+}
+
 export function middleware(req: NextRequest) {
-  const res = NextResponse.next();
-
-  // Get origin from request
   const origin = req.headers.get('origin') || '';
+  const isAllowedOrigin = origin !== '' && getAllowedOrigins().includes(origin);
 
-  // Define allowed origins
-  const allowedOrigins = [
-    // Add your Flutter app's origins here for production
-    // For example:
-    // 'https://your-flutter-app-domain.com',
-    // For development with Flutter:
-    'http://localhost',
-    'http://localhost:3000',
-    // If needed for Android emulator:
-    'http://10.0.2.2',
-    // You can keep '*' during development and testing
-    '*',
-  ];
+  const res =
+    req.method === 'OPTIONS'
+      ? new NextResponse(null, { status: 204 })
+      : NextResponse.next();
 
-  // Check if the origin is allowed
-  // In production, replace this condition with a check against specific origins
-  // const isAllowedOrigin = allowedOrigins.includes(origin);
-  // For now, we'll allow all origins during development:
-  const isAllowedOrigin = true; // or use: allowedOrigins.includes(origin)
-
-  // Set CORS headers
-  res.headers.set(
-    'Access-Control-Allow-Origin',
-    isAllowedOrigin ? origin : allowedOrigins[0]
-  );
-
-  res.headers.set(
-    'Access-Control-Allow-Methods',
-    'GET, POST, PUT, DELETE, OPTIONS, PATCH'
-  );
-
-  res.headers.set(
-    'Access-Control-Allow-Headers',
-    'Content-Type, Authorization, X-Requested-With, X-HTTP-Method-Override, Accept'
-  );
-
-  // Allow credentials (cookies, authorization headers, etc.)
-  res.headers.set('Access-Control-Allow-Credentials', 'true');
-
-  // Cache preflight requests for 86400 seconds (24 hours)
-  res.headers.set('Access-Control-Max-Age', '86400');
-
-  // Handle OPTIONS preflight requests
-  if (req.method === 'OPTIONS') {
-    return new NextResponse(null, {
-      status: 204,
-      headers: res.headers,
-    });
+  // Only emit CORS headers for explicitly allowed origins. Credentials are
+  // NEVER combined with a wildcard or a blindly reflected origin.
+  if (isAllowedOrigin) {
+    res.headers.set('Access-Control-Allow-Origin', origin);
+    res.headers.set('Access-Control-Allow-Credentials', 'true');
+    res.headers.set('Vary', 'Origin');
+    res.headers.set('Access-Control-Allow-Methods', ALLOWED_METHODS);
+    res.headers.set('Access-Control-Allow-Headers', ALLOWED_HEADERS);
+    res.headers.set('Access-Control-Max-Age', '86400');
   }
 
   return res;

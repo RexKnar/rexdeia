@@ -1,11 +1,15 @@
 import { captureException } from '@sentry/nextjs';
 import { StatusCodes } from 'http-status-codes';
+import { requireSession } from 'lib/utils/api-auth';
 import { NextRequest, NextResponse } from 'next/server';
 
 import { addDepartment, deleteDeparment, editDepartment } from './service';
 import { validateAddDepartment } from './validator';
 
 export async function POST(request: NextRequest) {
+  const { response } = await requireSession();
+  if (response) return response;
+
   const payload = await request.json();
   try {
     await validateAddDepartment(payload);
@@ -22,6 +26,9 @@ export async function POST(request: NextRequest) {
 }
 
 export async function DELETE(request: NextRequest) {
+  const { response } = await requireSession();
+  if (response) return response;
+
   const payload = await request.json();
   try {
     const deleteResponse = await deleteDeparment(payload.departmentId);
@@ -37,6 +44,9 @@ export async function DELETE(request: NextRequest) {
 }
 
 export async function PUT(request: NextRequest) {
+  const { response } = await requireSession();
+  if (response) return response;
+
   const payload = await request.json();
   try {
     await validateAddDepartment(payload);

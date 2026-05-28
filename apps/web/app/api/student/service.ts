@@ -1,4 +1,5 @@
 import { UserRole } from '@prisma/client';
+import bcrypt from 'bcrypt';
 import { authOptions } from 'lib/auth';
 import { db } from 'lib/db';
 import { AddStudentModel, UpdateStudentModel } from 'lib/domain/student';
@@ -87,7 +88,9 @@ export async function addStudent(student: AddStudentModel) {
   if (!user) {
     user = await db.user.create({
       data: {
-        password: `${student.phoneNumber}`,
+        // Initial password is the student's phone number (so they can sign in
+        // with info they already know), but it is hashed, never stored in plaintext.
+        password: await bcrypt.hash(`${student.phoneNumber}`, 10),
         name: student.firstName,
         email: student.emailId,
         username: student.emailId,

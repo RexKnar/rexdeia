@@ -1,11 +1,6 @@
-import { Storage } from '@google-cloud/storage';
 import { nanoid } from 'nanoid';
-import path from 'path';
 
-const storage = new Storage({
-  projectId: process.env.NEXT_GCLOUD_PROJECT_ID,
-  keyFilename: path.resolve('./keyfile.json'),
-});
+import { storage } from '../../../lib/gcs';
 
 export async function uploadFileToGCS(
   bucketName: string,

@@ -1,5 +1,6 @@
 import { captureException } from '@sentry/nextjs';
 import { StatusCodes } from 'http-status-codes';
+import { requireSession } from 'lib/utils/api-auth';
 import multer from 'multer';
 import { NextRequest, NextResponse } from 'next/server';
 
@@ -11,6 +12,9 @@ const upload = multer({
 });
 
 export async function POST(request: NextRequest) {
+  const { response } = await requireSession();
+  if (response) return response;
+
   const formData = await request.formData();
   const file: File | null = formData.get('file') as unknown as File;
 
