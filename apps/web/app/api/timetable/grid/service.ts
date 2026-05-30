@@ -59,7 +59,7 @@ export async function getTimetableGrid(sectionId: string) {
       })
     : null;
 
-  const [days, staffWithSubjects, entries] = await Promise.all([
+  const [days, staffWithSubjects, entries, dayOffRows] = await Promise.all([
     db.days.findMany({
       where: { isActive: true, isDeleted: false },
       orderBy: { createdAt: 'asc' },
@@ -75,6 +75,10 @@ export async function getTimetableGrid(sectionId: string) {
         subjectId: true,
         staffId: true,
       },
+    }),
+    db.timetableDayOff.findMany({
+      where: { academicYearId, sectionId },
+      select: { dayId: true },
     }),
   ]);
 
@@ -123,6 +127,7 @@ export async function getTimetableGrid(sectionId: string) {
     staff,
     entries,
     conflicts,
+    dayOffs: dayOffRows.map((d) => d.dayId),
   };
 }
 
@@ -195,9 +200,42 @@ export async function saveTimetableGrid(payload: SaveTimetableGridModel) {
   const session = await getServerSession(authOptions);
   const academicYearId = session.currentBatch;
   const { sectionId, entries } = payload;
+  const dayOffs = payload.dayOffs ?? [];
+  const offSet = new Set(dayOffs);
 
   return db.$transaction(async (tx) => {
+    // Sync day-off records for the section.
+    const existingOffs = await tx.timetableDayOff.findMany({
+      where: { academicYearId, sectionId },
+      select: { id: true, dayId: true },
+    });
+    for (const off of existingOffs) {
+      if (!offSet.has(off.dayId)) {
+        await tx.timetableDayOff.delete({ where: { id: off.id } });
+      }
+    }
+    for (const dayId of dayOffs) {
+      if (!existingOffs.some((o) => o.dayId === dayId)) {
+        await tx.timetableDayOff.create({
+          data: {
+            academicYearId,
+            sectionId,
+            dayId,
+            branchId: session.branchId,
+            organizationId: session.organizationId,
+          },
+        });
+      }
+    }
+    // An off day carries no period assignments.
+    if (dayOffs.length) {
+      await tx.timetableEntry.deleteMany({
+        where: { academicYearId, sectionId, dayId: { in: dayOffs } },
+      });
+    }
+
     for (const cell of entries) {
+      if (offSet.has(cell.dayId)) continue;
       const existing = await tx.timetableEntry.findFirst({
         where: { academicYearId, sectionId, dayId: cell.dayId, slotId: cell.slotId },
         select: { id: true },

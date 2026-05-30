@@ -85,6 +85,7 @@ export type TimetableGridData = {
   staff: GridStaff[];
   entries: GridEntry[];
   conflicts: GridConflict[];
+  dayOffs: string[];
 };
 
 export type SaveTimetableGridModel = {
@@ -95,6 +96,7 @@ export type SaveTimetableGridModel = {
     subjectId: string | null;
     staffId: string | null;
   }[];
+  dayOffs: string[];
 };
 
 // --- Staff attendance & substitution ---

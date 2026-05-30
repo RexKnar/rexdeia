@@ -220,6 +220,7 @@ model Branch {
   TimetableSubstitution      TimetableSubstitution[]
   StaffAttendance            StaffAttendance[]
   StudentAttendance          StudentAttendance[]
+  TimetableDayOff            TimetableDayOff[]
 }
 
 model Organization {
@@ -249,6 +250,7 @@ model Organization {
   TimetableSubstitution TimetableSubstitution[]
   StaffAttendance      StaffAttendance[]
   StudentAttendance    StudentAttendance[]
+  TimetableDayOff      TimetableDayOff[]
 }
 
 model UserOrganization {
@@ -892,6 +894,7 @@ model Batch {
   ClassLevelIncharge      ClassLevelIncharge[]
   timetableEntries        TimetableEntry[]
   studentAttendance       StudentAttendance[]
+  timetableDayOffs        TimetableDayOff[]
 }
 
 model Class {
@@ -975,6 +978,7 @@ model Section {
   subjectId               String?                   @db.Uuid
   timetableEntries        TimetableEntry[]
   studentAttendance       StudentAttendance[]
+  timetableDayOffs        TimetableDayOff[]
 }
 
 model SectionToGroups {
@@ -1299,6 +1303,7 @@ model Days {
   isDeleted    Boolean        @default(false)
   periodMaster PeriodMaster[]
   timetableEntries TimetableEntry[]
+  timetableDayOffs TimetableDayOff[]
 }
 
 model PeriodType {
@@ -1617,4 +1622,24 @@ model StudentAttendance {
   @@unique([studentId, date, slotId])
   @@index([sectionId, date])
   @@index([studentId, date])
+}
+
+/// Marks an entire weekday as off (holiday / weekly off) for a section in an
+/// academic year — that day carries no period assignments.
+model TimetableDayOff {
+  id             String       @id @default(uuid()) @map("_id") @db.Uuid
+  academicYearId String       @db.Uuid
+  sectionId      String       @db.Uuid
+  dayId          String       @db.Uuid
+  branchId       String       @db.Uuid
+  organizationId String       @db.Uuid
+  createdAt      DateTime?    @default(now())
+  updatedAt      DateTime?    @default(now())
+  academicYear   Batch        @relation(fields: [academicYearId], references: [id])
+  section        Section      @relation(fields: [sectionId], references: [id])
+  day            Days         @relation(fields: [dayId], references: [id])
+  branch         Branch       @relation(fields: [branchId], references: [id])
+  organization   Organization @relation(fields: [organizationId], references: [id])
+
+  @@unique([academicYearId, sectionId, dayId])
 }
