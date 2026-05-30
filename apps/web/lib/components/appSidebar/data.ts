@@ -432,6 +432,12 @@ export const menuItem = {
           path: '/timeTable/staff-attendance',
         },
         {
+          id: 'timetable-attendance-report',
+          label: 'Attendance Report',
+          icon: null,
+          path: '/timeTable/attendance-report',
+        },
+        {
           id: 'period_master',
           label: 'Period Master',
           icon: null,

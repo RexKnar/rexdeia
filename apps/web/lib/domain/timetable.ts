@@ -212,3 +212,22 @@ export type SaveStudentAttendanceModel = {
   slotId?: string | null;
   statuses: { studentId: string; status: AttendanceStatus }[];
 };
+
+// --- Attendance report ---
+
+export type AttendanceReportRow = {
+  studentId: string;
+  name: string;
+  rollNumber: number | null;
+  present: number;
+  absent: number;
+  leave: number;
+  total: number;
+  percentage: number;
+};
+
+export type AttendanceReportData = {
+  from: string;
+  to: string;
+  rows: AttendanceReportRow[];
+};
