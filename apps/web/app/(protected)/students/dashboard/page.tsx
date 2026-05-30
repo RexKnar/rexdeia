@@ -3,31 +3,26 @@ import Link from 'next/link';
 import { Suspense } from 'react';
 
 import noStudentData from '../../../../public/assets/images/no-student-data.svg';
-import { getRecentlyAddedStudentsList } from '../../../api/student/service';
+import {
+  getRecentlyAddedStudentsList,
+  getStudentDashboardStats,
+} from '../../../api/student/service';
 import { RecentEnrolledStudents } from './_components/RecentEnrolledStudents';
 import { StudentDashboardBanner } from './_components/StudentDashboardBanner';
-import { StudentsWidgetContainer } from './_components/StudentsWidgetContainer';
+import { StudentsOverview } from './_components/StudentsOverview';
 
 export default async function Page() {
-  const studentsList = await getRecentlyAddedStudentsList({
-    count: 5,
-  });
+  const [studentsList, stats] = await Promise.all([
+    getRecentlyAddedStudentsList({ count: 5 }),
+    getStudentDashboardStats(),
+  ]);
 
   return (
     <section className="flex flex-col gap-4 p-4 sm:p-6 md:p-8">
       <StudentDashboardBanner />
-      <section className="flex flex-col gap-3 rounded-md bg-white p-6 shadow-sm sm:p-8">
-        <section>
-          <p className="text-lg font-semibold text-gray-800 sm:text-xl">
-            Students Overview
-          </p>
-          <p className="text-sm text-gray-700 sm:text-base">
-            This section provides a comprehensive overview of student
-            statistics.
-          </p>
-          <StudentsWidgetContainer />
-        </section>
-      </section>
+
+      <StudentsOverview stats={stats} />
+
       <section className="flex flex-col gap-3 rounded-md bg-white p-6 shadow-sm sm:p-8">
         <section>
           <p className="text-lg font-semibold text-gray-800 sm:text-xl">

@@ -142,6 +142,9 @@ export async function addStudent(student: AddStudentModel) {
             groupId: student.additionalAttributes.joiningGroup,
             classId: student.additionalAttributes.joiningClass,
             mediumId: student.additionalAttributes.joiningMedium,
+            // Attribute the joining mapping to the selected academic year so the
+            // student is counted for that year (matches CSV upload / promotion).
+            batchId: session.currentBatch,
           },
         ],
       },
@@ -283,6 +286,287 @@ export async function updateStudentById(
       ...updateStudentDetails,
     },
   });
+}
+
+export type MediumBreakdown = {
+  mediumId: string | null;
+  mediumName: string;
+  total: number;
+  boys: number;
+  girls: number;
+  others: number;
+};
+
+export type ClassBreakdown = {
+  classId: string;
+  className: string;
+  total: number;
+  boys: number;
+  girls: number;
+  others: number;
+};
+
+export type StudentDashboardStats = {
+  hasBatchSelected: boolean;
+  total: number;
+  boys: number;
+  girls: number;
+  others: number;
+  newAdmissions: number;
+  discontinued: number;
+  mediums: MediumBreakdown[];
+  classes: ClassBreakdown[];
+};
+
+const UNSPECIFIED_MEDIUM = 'Unspecified';
+
+function genderBucket(gender: string | null): 'boys' | 'girls' | 'others' {
+  const normalized = (gender ?? '').trim().toLowerCase();
+  if (normalized === 'male') return 'boys';
+  if (normalized === 'female') return 'girls';
+  return 'others';
+}
+
+/**
+ * Aggregated statistics for the Students dashboard, scoped to the academic year
+ * currently selected in the sidebar (session.currentBatch).
+ *
+ * A student belongs to an academic year through their StudentMapping for that
+ * batch. Active = isCurrent mapping; "Discontinued / Transferred" = archived
+ * mapping (isCurrent: false). Medium and class are read from the mapping; gender
+ * from the student. New admissions are students whose joining batch is this year.
+ */
+export async function getStudentDashboardStats(): Promise<StudentDashboardStats> {
+  const session = await getServerSession(authOptions);
+
+  const empty: StudentDashboardStats = {
+    hasBatchSelected: false,
+    total: 0,
+    boys: 0,
+    girls: 0,
+    others: 0,
+    newAdmissions: 0,
+    discontinued: 0,
+    mediums: [],
+    classes: [],
+  };
+
+  if (!session?.currentBatch) {
+    return empty;
+  }
+
+  const branchScope = {
+    branchId: session.branchId,
+    organizationId: session.organizationId,
+  };
+
+  const [activeMappings, archived, newAdmissions] = await Promise.all([
+    db.studentMapping.findMany({
+      where: {
+        batchId: session.currentBatch,
+        isCurrent: true,
+        student: {
+          isDeleted: false,
+          status: 'Active',
+          ...branchScope,
+        },
+      },
+      select: {
+        classId: true,
+        mediumId: true,
+        class: { select: { name: true } },
+        medium: { select: { name: true } },
+        student: { select: { gender: true } },
+      },
+    }),
+    // Discontinued / Transferred / TC are all represented as archived mappings
+    // (isCurrent: false) within the selected academic year. Count distinct
+    // students so multiple archived mappings don't inflate the number.
+    db.studentMapping.findMany({
+      where: {
+        batchId: session.currentBatch,
+        isCurrent: false,
+        student: {
+          isDeleted: false,
+          ...branchScope,
+        },
+      },
+      select: { studentId: true },
+      distinct: ['studentId'],
+    }),
+    db.student.count({
+      where: {
+        batchId: session.currentBatch,
+        isDeleted: false,
+        ...branchScope,
+      },
+    }),
+  ]);
+
+  const mediumMap = new Map<string, MediumBreakdown>();
+  const classMap = new Map<string, ClassBreakdown>();
+  let boys = 0;
+  let girls = 0;
+  let others = 0;
+
+  for (const mapping of activeMappings) {
+    const bucket = genderBucket(mapping.student?.gender ?? null);
+    if (bucket === 'boys') boys += 1;
+    else if (bucket === 'girls') girls += 1;
+    else others += 1;
+
+    const mediumKey = mapping.mediumId ?? 'unspecified';
+    const medium = mediumMap.get(mediumKey) ?? {
+      mediumId: mapping.mediumId,
+      mediumName: mapping.medium?.name ?? UNSPECIFIED_MEDIUM,
+      total: 0,
+      boys: 0,
+      girls: 0,
+      others: 0,
+    };
+    medium.total += 1;
+    medium[bucket] += 1;
+    mediumMap.set(mediumKey, medium);
+
+    if (mapping.classId) {
+      const klass = classMap.get(mapping.classId) ?? {
+        classId: mapping.classId,
+        className: mapping.class?.name ?? 'Unknown',
+        total: 0,
+        boys: 0,
+        girls: 0,
+        others: 0,
+      };
+      klass.total += 1;
+      klass[bucket] += 1;
+      classMap.set(mapping.classId, klass);
+    }
+  }
+
+  return {
+    hasBatchSelected: true,
+    total: activeMappings.length,
+    boys,
+    girls,
+    others,
+    newAdmissions,
+    discontinued: archived.length,
+    mediums: Array.from(mediumMap.values()).sort((a, b) => b.total - a.total),
+    classes: Array.from(classMap.values()).sort((a, b) => b.total - a.total),
+  };
+}
+
+export type DashboardRosterScope = 'active' | 'discontinued' | 'newAdmissions';
+
+export type DashboardRosterFilter = {
+  scope: DashboardRosterScope;
+  mediumId?: string;
+  classId?: string;
+};
+
+export type RosterRow = {
+  id: string;
+  name: string;
+  className: string;
+  sectionName: string;
+  mediumName: string;
+  gender: string;
+  rollNumber: number | null;
+  status: string;
+};
+
+function fullName(student: {
+  firstName: string;
+  middleName?: string | null;
+  lastName?: string | null;
+}) {
+  return [student.firstName, student.middleName, student.lastName]
+    .filter(Boolean)
+    .join(' ')
+    .trim();
+}
+
+/**
+ * Returns the full (non-paginated) student roster for the selected academic
+ * year, filtered by the dashboard area that was clicked. Used to populate the
+ * drill-down dialog and its Excel / PDF exports.
+ *
+ * - scope "active": students with a current mapping in the year.
+ * - scope "newAdmissions": active students whose joining batch is this year.
+ * - scope "discontinued": students with an archived mapping (isCurrent: false).
+ */
+export async function getStudentRosterForDashboard(
+  filter: DashboardRosterFilter
+): Promise<RosterRow[]> {
+  const session = await getServerSession(authOptions);
+
+  if (!session?.currentBatch) {
+    return [];
+  }
+
+  const studentScope = {
+    isDeleted: false,
+    branchId: session.branchId,
+    organizationId: session.organizationId,
+    ...(filter.scope === 'newAdmissions' && { batchId: session.currentBatch }),
+    ...(filter.scope !== 'discontinued' && { status: 'Active' as const }),
+  };
+
+  const mappings = await db.studentMapping.findMany({
+    where: {
+      batchId: session.currentBatch,
+      isCurrent: filter.scope !== 'discontinued',
+      ...(filter.mediumId && { mediumId: filter.mediumId }),
+      ...(filter.classId && { classId: filter.classId }),
+      student: studentScope,
+    },
+    select: {
+      studentId: true,
+      rollNumber: true,
+      remark: true,
+      class: { select: { name: true } },
+      section: { select: { name: true } },
+      medium: { select: { name: true } },
+      student: {
+        select: {
+          firstName: true,
+          middleName: true,
+          lastName: true,
+          gender: true,
+        },
+      },
+    },
+    orderBy: [{ class: { name: 'asc' } }, { rollNumber: 'asc' }],
+  });
+
+  const seen = new Set<string>();
+  const rows: RosterRow[] = [];
+
+  for (const mapping of mappings) {
+    // Archived students can have more than one mapping in a year; keep the first.
+    if (filter.scope === 'discontinued') {
+      if (seen.has(mapping.studentId)) continue;
+      seen.add(mapping.studentId);
+    }
+
+    rows.push({
+      id: mapping.studentId,
+      name: fullName(mapping.student),
+      className: mapping.class?.name ?? '-',
+      sectionName: mapping.section?.name ?? '-',
+      mediumName: mapping.medium?.name ?? '-',
+      gender: mapping.student?.gender ?? '-',
+      rollNumber: mapping.rollNumber ?? null,
+      status:
+        filter.scope === 'discontinued'
+          ? mapping.remark?.trim()
+            ? `Discontinued (${mapping.remark.trim()})`
+            : 'Discontinued / Transferred'
+          : 'Active',
+    });
+  }
+
+  return rows;
 }
 
 export async function getRecentlyAddedStudentsList({

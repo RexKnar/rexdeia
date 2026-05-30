@@ -10,6 +10,7 @@ type StudentWidgetProps = {
   readonly label: string;
   readonly icon: LucideIcon;
   readonly className?: string;
+  readonly onClick?: () => void;
 };
 
 export function DashboardWidget({
@@ -17,6 +18,7 @@ export function DashboardWidget({
   label,
   className,
   icon: Icon,
+  onClick,
 }: StudentWidgetProps) {
   const count = useMotionValue(0);
   const roundedValue = useTransform(count, Math.round);
@@ -32,8 +34,10 @@ export function DashboardWidget({
 
   return (
     <section
+      onClick={onClick}
       className={cn(
-        'flex w-full max-w-xs flex-col gap-4 rounded-md border-[1.5px] bg-white p-4 shadow-sm transition-all duration-150 hover:border-gray-700 sm:max-w-sm md:max-w-md lg:w-96'
+        'flex w-full max-w-xs flex-col gap-4 rounded-md border-[1.5px] bg-white p-4 shadow-sm transition-all duration-150 hover:border-gray-700 sm:max-w-sm md:max-w-md lg:w-96',
+        onClick && 'cursor-pointer hover:border-primary hover:shadow-md'
       )}
     >
       <div className="text-sm font-medium tracking-wide text-gray-700">
