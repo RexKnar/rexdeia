@@ -528,6 +528,12 @@ export const menuItem = {
       ],
     },
     {
+      id: 'my-timetable',
+      label: 'My Timetable',
+      icon: FileText,
+      path: '/timeTable/my-timetable',
+    },
+    {
       id: 'class-list',
       label: 'Class List',
       icon: FileText,

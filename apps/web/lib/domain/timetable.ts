@@ -142,3 +142,36 @@ export type SaveSubstitutionModel = {
   substituteStaffId: string | null;
   reason?: string;
 };
+
+// --- Staff roster / timetable ---
+
+export type RosterPeriod = {
+  entryId: string;
+  slotLabel: string;
+  startTime: string;
+  endTime: string;
+  sectionName: string;
+  subjectName: string;
+};
+
+export type RosterTodayPeriod = {
+  slotLabel: string;
+  startTime: string;
+  endTime: string;
+  sectionName: string;
+  subjectName: string;
+  type: 'regular' | 'covered' | 'substitution';
+  otherStaffName?: string;
+};
+
+export type StaffRosterData = {
+  staff: { id: string; name: string } | null;
+  days: { id: string; name: string }[];
+  weeklyByDay: Record<string, RosterPeriod[]>;
+  today: {
+    date: string;
+    dayId: string | null;
+    dayName: string;
+    periods: RosterTodayPeriod[];
+  } | null;
+};
