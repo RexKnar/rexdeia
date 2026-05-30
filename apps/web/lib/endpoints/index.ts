@@ -204,6 +204,11 @@ export const GET_PERIOD_TYPES_LIST = `GET_PERIOD_TYPES_LIST`;
 export const GET_PERIOD_TYPE_BY_ID = `GET_PERIOD_TYPE_BY_ID`;
 export const UPDATE_PERIOD_TYPE_BY_ID = `UPDATE_PERIOD_TYPE_BY_ID`;
 export const DELETE_PERIOD_TYPE_BY_ID = `DELETE_PERIOD_TYPE_BY_ID`;
+export const GET_TIMETABLE_STRUCTURES = `GET_TIMETABLE_STRUCTURES`;
+export const SAVE_TIMETABLE_STRUCTURE = `SAVE_TIMETABLE_STRUCTURE`;
+export const GET_TIMETABLE_STRUCTURE_BY_ID = `GET_TIMETABLE_STRUCTURE_BY_ID`;
+export const UPDATE_TIMETABLE_STRUCTURE = `UPDATE_TIMETABLE_STRUCTURE`;
+export const DELETE_TIMETABLE_STRUCTURE = `DELETE_TIMETABLE_STRUCTURE`;
 export const ADD_PERIOD_MASTER = `ADD_PERIOD_MASTER`;
 export const GET_PERIOD_MASTERS_LIST = `GET_PERIOD_MASTERS_LIST`;
 export const GET_PERIOD_MASTER_BY_ID = `GET_PERIOD_MASTER_BY_ID`;
@@ -1032,6 +1037,26 @@ export default <EndpointDetails>{
   [DELETE_PERIOD_TYPE_BY_ID]: {
     requestType: 'DELETE',
     endpoint: '/api/periodType/[id]',
+  },
+  [GET_TIMETABLE_STRUCTURES]: {
+    requestType: 'GET',
+    endpoint: '/api/timetable/structure',
+  },
+  [SAVE_TIMETABLE_STRUCTURE]: {
+    requestType: 'POST',
+    endpoint: '/api/timetable/structure',
+  },
+  [GET_TIMETABLE_STRUCTURE_BY_ID]: {
+    requestType: 'GET',
+    endpoint: '/api/timetable/structure/[id]',
+  },
+  [UPDATE_TIMETABLE_STRUCTURE]: {
+    requestType: 'PUT',
+    endpoint: '/api/timetable/structure/[id]',
+  },
+  [DELETE_TIMETABLE_STRUCTURE]: {
+    requestType: 'DELETE',
+    endpoint: '/api/timetable/structure/[id]',
   },
   [ADD_PERIOD_MASTER]: {
     requestType: 'POST',

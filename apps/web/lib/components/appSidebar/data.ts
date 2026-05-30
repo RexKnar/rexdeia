@@ -414,6 +414,12 @@ export const menuItem = {
           path: '/timeTable/classLevel',
         },
         {
+          id: 'timetable-structure',
+          label: 'Timetable Structure',
+          icon: null,
+          path: '/timeTable/structure',
+        },
+        {
           id: 'period_master',
           label: 'Period Master',
           icon: null,
