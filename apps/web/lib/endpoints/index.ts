@@ -216,6 +216,8 @@ export const MARK_STAFF_ATTENDANCE = `MARK_STAFF_ATTENDANCE`;
 export const GET_STAFF_SUBSTITUTION = `GET_STAFF_SUBSTITUTION`;
 export const SAVE_STAFF_SUBSTITUTION = `SAVE_STAFF_SUBSTITUTION`;
 export const GET_STAFF_ROSTER = `GET_STAFF_ROSTER`;
+export const GET_STUDENT_ATTENDANCE = `GET_STUDENT_ATTENDANCE`;
+export const SAVE_STUDENT_ATTENDANCE = `SAVE_STUDENT_ATTENDANCE`;
 export const ADD_PERIOD_MASTER = `ADD_PERIOD_MASTER`;
 export const GET_PERIOD_MASTERS_LIST = `GET_PERIOD_MASTERS_LIST`;
 export const GET_PERIOD_MASTER_BY_ID = `GET_PERIOD_MASTER_BY_ID`;
@@ -1092,6 +1094,14 @@ export default <EndpointDetails>{
   [GET_STAFF_ROSTER]: {
     requestType: 'GET',
     endpoint: '/api/timetable/roster',
+  },
+  [GET_STUDENT_ATTENDANCE]: {
+    requestType: 'GET',
+    endpoint: '/api/timetable/student-attendance',
+  },
+  [SAVE_STUDENT_ATTENDANCE]: {
+    requestType: 'POST',
+    endpoint: '/api/timetable/student-attendance',
   },
   [ADD_PERIOD_MASTER]: {
     requestType: 'POST',

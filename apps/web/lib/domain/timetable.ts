@@ -175,3 +175,40 @@ export type StaffRosterData = {
     periods: RosterTodayPeriod[];
   } | null;
 };
+
+// --- Student attendance ---
+
+export type StudentAttendanceScope =
+  | 'period'
+  | 'morning'
+  | 'afternoon'
+  | 'daily';
+
+export type StudentAttendanceSlot = {
+  id: string;
+  label: string;
+  startTime: string;
+  endTime: string;
+  session: DaySession;
+};
+
+export type StudentAttendanceRow = {
+  studentId: string;
+  name: string;
+  rollNumber: number | null;
+  status: AttendanceStatus | null;
+};
+
+export type StudentAttendanceData = {
+  structureMissing: boolean;
+  slots: StudentAttendanceSlot[];
+  students: StudentAttendanceRow[];
+};
+
+export type SaveStudentAttendanceModel = {
+  sectionId: string;
+  date: string;
+  scope: StudentAttendanceScope;
+  slotId?: string | null;
+  statuses: { studentId: string; status: AttendanceStatus }[];
+};
