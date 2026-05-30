@@ -420,6 +420,18 @@ export const menuItem = {
           path: '/timeTable/structure',
         },
         {
+          id: 'timetable-period-table',
+          label: 'Period Table',
+          icon: null,
+          path: '/timeTable/period-table',
+        },
+        {
+          id: 'timetable-staff-attendance',
+          label: 'Staff Attendance',
+          icon: null,
+          path: '/timeTable/staff-attendance',
+        },
+        {
           id: 'period_master',
           label: 'Period Master',
           icon: null,

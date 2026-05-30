@@ -43,3 +43,102 @@ export type TimetableStructureModel = {
   classLevel?: { id: string; name: string } | null;
   slots: TimetableSlotModel[];
 };
+
+// --- Period table (grid) ---
+
+export type GridDay = { id: string; name: string };
+export type GridSubject = { id: string; name: string };
+export type GridStaff = { id: string; name: string; subjectIds: string[] };
+
+export type GridEntry = {
+  id?: string;
+  dayId: string;
+  slotId: string;
+  subjectId: string | null;
+  staffId: string | null;
+};
+
+export type GridConflict = {
+  dayId: string;
+  slotId: string;
+  staffId: string;
+  staffName: string;
+  withSection: string;
+  time: string;
+};
+
+export type TimetableGridData = {
+  section: {
+    id: string;
+    name: string;
+    classId: string;
+    className: string;
+    classLevelId: string | null;
+  };
+  structure: {
+    id: string;
+    dayStartTime: string;
+    slots: TimetableSlotModel[];
+  } | null;
+  days: GridDay[];
+  subjects: GridSubject[];
+  staff: GridStaff[];
+  entries: GridEntry[];
+  conflicts: GridConflict[];
+};
+
+export type SaveTimetableGridModel = {
+  sectionId: string;
+  entries: {
+    dayId: string;
+    slotId: string;
+    subjectId: string | null;
+    staffId: string | null;
+  }[];
+};
+
+// --- Staff attendance & substitution ---
+
+export type AttendanceStatus = 'Present' | 'Absent' | 'Leave';
+
+export type StaffDayRow = {
+  id: string;
+  name: string;
+  status: AttendanceStatus | null;
+};
+
+export type StaffAttendanceDayData = {
+  dayId: string | null;
+  dayName: string;
+  staff: StaffDayRow[];
+};
+
+export type MarkStaffAttendanceModel = {
+  staffId: string;
+  date: string;
+  status: AttendanceStatus;
+  remark?: string;
+};
+
+export type SubstitutionPeriod = {
+  entryId: string;
+  slotLabel: string;
+  time: string;
+  sectionName: string;
+  subjectName: string;
+  substituteStaffId: string | null;
+};
+
+export type StaffSubstitutionData = {
+  dayId: string | null;
+  periods: SubstitutionPeriod[];
+  candidates: { id: string; name: string }[];
+};
+
+export type SaveSubstitutionModel = {
+  date: string;
+  entryId: string;
+  originalStaffId?: string | null;
+  substituteStaffId: string | null;
+  reason?: string;
+};

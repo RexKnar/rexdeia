@@ -209,6 +209,12 @@ export const SAVE_TIMETABLE_STRUCTURE = `SAVE_TIMETABLE_STRUCTURE`;
 export const GET_TIMETABLE_STRUCTURE_BY_ID = `GET_TIMETABLE_STRUCTURE_BY_ID`;
 export const UPDATE_TIMETABLE_STRUCTURE = `UPDATE_TIMETABLE_STRUCTURE`;
 export const DELETE_TIMETABLE_STRUCTURE = `DELETE_TIMETABLE_STRUCTURE`;
+export const GET_TIMETABLE_GRID = `GET_TIMETABLE_GRID`;
+export const SAVE_TIMETABLE_GRID = `SAVE_TIMETABLE_GRID`;
+export const GET_STAFF_ATTENDANCE = `GET_STAFF_ATTENDANCE`;
+export const MARK_STAFF_ATTENDANCE = `MARK_STAFF_ATTENDANCE`;
+export const GET_STAFF_SUBSTITUTION = `GET_STAFF_SUBSTITUTION`;
+export const SAVE_STAFF_SUBSTITUTION = `SAVE_STAFF_SUBSTITUTION`;
 export const ADD_PERIOD_MASTER = `ADD_PERIOD_MASTER`;
 export const GET_PERIOD_MASTERS_LIST = `GET_PERIOD_MASTERS_LIST`;
 export const GET_PERIOD_MASTER_BY_ID = `GET_PERIOD_MASTER_BY_ID`;
@@ -1057,6 +1063,30 @@ export default <EndpointDetails>{
   [DELETE_TIMETABLE_STRUCTURE]: {
     requestType: 'DELETE',
     endpoint: '/api/timetable/structure/[id]',
+  },
+  [GET_TIMETABLE_GRID]: {
+    requestType: 'GET',
+    endpoint: '/api/timetable/grid',
+  },
+  [SAVE_TIMETABLE_GRID]: {
+    requestType: 'POST',
+    endpoint: '/api/timetable/grid',
+  },
+  [GET_STAFF_ATTENDANCE]: {
+    requestType: 'GET',
+    endpoint: '/api/timetable/staff-attendance',
+  },
+  [MARK_STAFF_ATTENDANCE]: {
+    requestType: 'POST',
+    endpoint: '/api/timetable/staff-attendance',
+  },
+  [GET_STAFF_SUBSTITUTION]: {
+    requestType: 'GET',
+    endpoint: '/api/timetable/substitution',
+  },
+  [SAVE_STAFF_SUBSTITUTION]: {
+    requestType: 'POST',
+    endpoint: '/api/timetable/substitution',
   },
   [ADD_PERIOD_MASTER]: {
     requestType: 'POST',
