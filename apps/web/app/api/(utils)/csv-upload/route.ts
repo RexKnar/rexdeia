@@ -11,8 +11,8 @@ const upload = multer({
 });
 
 export async function POST(request: NextRequest) {
-  const { response } = await requireSession();
-  if (response) return response;
+  const { response: authResponse } = await requireSession();
+  if (authResponse) return authResponse;
 
   const formData = await request.formData();
   const file: File | null = formData.get('file') as unknown as File;

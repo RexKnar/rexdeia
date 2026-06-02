@@ -2,6 +2,11 @@ module.exports = {
   reactStrictMode: true,
   transpilePackages: ['ui'],
   swcMinify: true,
+  // Lint runs as a separate step; don't fail production builds on lint
+  // violations (type-checking still runs during the build).
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
   experimental: {
     // Shrinks the dev module graph and improves prod tree-shaking by pulling
     // only the used members of these barrel packages instead of the whole index.
