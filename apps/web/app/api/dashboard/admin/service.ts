@@ -1,5 +1,8 @@
 import { calculatePercentage } from 'app/api/analytics/master/comparison/service';
-import { getStaffWiseMarkAnalytics } from 'app/api/analytics/master/comparison/staff/service';
+import {
+  analyzeSubjectPerformance,
+  getStaffListByClass,
+} from 'app/api/analytics/master/comparison/staff/service';
 import { getStudentMarksByFilter } from 'app/api/analytics/service';
 import { normalizeDate } from 'app/api/timetable/shared';
 import { getStaffAttendanceForDate } from 'app/api/timetable/staff-attendance/service';
@@ -7,6 +10,8 @@ import { authOptions } from 'lib/auth';
 import { db } from 'lib/db';
 import { AttendanceStatus } from 'lib/domain/timetable';
 import { getServerSession } from 'next-auth';
+
+import { resolveDashboardScope } from '../scope';
 
 export type ExamSummary = {
   id: string;
@@ -28,18 +33,40 @@ export type AttendanceCounts = {
 
 type ExamStatus = 'ongoing' | 'completed' | 'upcoming';
 
-/** Active-student count for the current branch + academic year. */
-function currentStudentWhere(branchId: string, batchId: string) {
+/** Active-student count clause for the current branch + academic year, scoped to sections when set. */
+function studentWhere(
+  branchId: string,
+  batchId: string,
+  sectionIds: string[] | null
+) {
   return {
     isCurrent: true,
     onHold: false,
     batchId,
+    ...(sectionIds !== null ? { sectionId: { in: sectionIds } } : {}),
     student: {
       isDeleted: false,
       status: 'Active' as const,
       branchId,
     },
   };
+}
+
+/** Distinct staff teaching the given sections in the current academic year. */
+async function scopedStaffIds(
+  sectionIds: string[],
+  batchId: string
+): Promise<string[]> {
+  const rows = await db.academicSubjectForStaff.findMany({
+    where: {
+      sectionId: { in: sectionIds },
+      academicYearId: batchId,
+      deletedAt: null,
+    },
+    select: { staffId: true },
+    distinct: ['staffId'],
+  });
+  return rows.map((r) => r.staffId);
 }
 
 /** Collapse a student's multiple period statuses into one (Absent > Leave > Present). */
@@ -60,7 +87,7 @@ function computeExamStatus(
 }
 
 /**
- * Branch-wide pass/fail/absent aggregation for one exam.
+ * Pass/fail/absent aggregation for one exam, optionally scoped to sections.
  *
  * IMPORTANT: never call `getStudentMarksByFilter` without a section filter — it
  * destructures `student.section.ExamGroup[0]` and throws for sections not part
@@ -68,10 +95,14 @@ function computeExamStatus(
  * and aggregate per-section, reusing the existing per-student pass/fail flags.
  */
 export async function getExamBranchSummary(
-  examId: string
+  examId: string,
+  sectionIds: string[] | null = null
 ): Promise<Omit<ExamSummary, 'id' | 'name'>> {
   const groups = await db.examGroup.findMany({
-    where: { examId },
+    where: {
+      examId,
+      ...(sectionIds !== null ? { sectionId: { in: sectionIds } } : {}),
+    },
     select: { classId: true, sectionId: true },
   });
 
@@ -108,7 +139,7 @@ export async function getExamBranchSummary(
   };
 }
 
-/** Pick the ongoing and last-completed exams by mark-entry window. */
+/** Pick the ongoing and last-completed exams by mark-entry window (branch timeline). */
 async function getDashboardExams(branchId: string, batchId: string) {
   const now = new Date();
 
@@ -140,10 +171,11 @@ async function getDashboardExams(branchId: string, batchId: string) {
 }
 
 async function buildExamSummary(
-  exam: { id: string; name: string } | null
+  exam: { id: string; name: string } | null,
+  sectionIds: string[] | null
 ): Promise<ExamSummary | null> {
   if (!exam) return null;
-  const summary = await getExamBranchSummary(exam.id);
+  const summary = await getExamBranchSummary(exam.id, sectionIds);
   return { id: exam.id, name: exam.name, ...summary };
 }
 
@@ -151,19 +183,30 @@ export async function getAdminDashboardSummary() {
   const session = await getServerSession(authOptions);
   const branchId = session.branchId;
   const batchId = session.currentBatch;
+  const { sectionIds, label } = await resolveDashboardScope();
 
   const [totalStudents, totalStaff, exams] = await Promise.all([
-    db.studentMapping.count({ where: currentStudentWhere(branchId, batchId) }),
-    db.staff.count({ where: { branchId, status: 'Active' } }),
+    db.studentMapping.count({
+      where: studentWhere(branchId, batchId, sectionIds),
+    }),
+    sectionIds === null
+      ? db.staff.count({ where: { branchId, status: 'Active' } })
+      : scopedStaffIds(sectionIds, batchId).then((ids) => ids.length),
     getDashboardExams(branchId, batchId),
   ]);
 
   const [ongoingExam, lastCompletedExam] = await Promise.all([
-    buildExamSummary(exams.ongoing),
-    buildExamSummary(exams.lastCompleted),
+    buildExamSummary(exams.ongoing, sectionIds),
+    buildExamSummary(exams.lastCompleted, sectionIds),
   ]);
 
-  return { totalStudents, totalStaff, ongoingExam, lastCompletedExam };
+  return {
+    totalStudents,
+    totalStaff,
+    ongoingExam,
+    lastCompletedExam,
+    scopeLabel: label,
+  };
 }
 
 export async function getAdminAttendanceOverview(
@@ -173,6 +216,7 @@ export async function getAdminAttendanceOverview(
   const session = await getServerSession(authOptions);
   const branchId = session.branchId;
   const batchId = session.currentBatch;
+  const { sectionIds } = await resolveDashboardScope();
   const date = normalizeDate(dateStr);
   const sessionName = sessionScope === 'afternoon' ? 'Afternoon' : 'Morning';
 
@@ -184,11 +228,14 @@ export async function getAdminAttendanceOverview(
         academicYearId: batchId,
         level: 'Period',
         session: sessionName,
+        ...(sectionIds !== null ? { sectionId: { in: sectionIds } } : {}),
       },
       select: { studentId: true, status: true },
     }),
     getStaffAttendanceForDate(dateStr),
-    db.studentMapping.count({ where: currentStudentWhere(branchId, batchId) }),
+    db.studentMapping.count({
+      where: studentWhere(branchId, batchId, sectionIds),
+    }),
   ]);
 
   const byStudent = new Map<string, AttendanceStatus[]>();
@@ -209,15 +256,22 @@ export async function getAdminAttendanceOverview(
   });
   const studentsMarked = sPresent + sAbsent + sLeave;
 
+  // Scope the staff overview to staff teaching the scoped sections.
+  let staffList = staffData.staff;
+  if (sectionIds !== null) {
+    const ids = new Set(await scopedStaffIds(sectionIds, batchId));
+    staffList = staffData.staff.filter((s) => ids.has(s.id));
+  }
+
   let pPresent = 0;
   let pAbsent = 0;
   let pLeave = 0;
-  staffData.staff.forEach((s) => {
+  staffList.forEach((s) => {
     if (s.status === 'Present') pPresent++;
     else if (s.status === 'Absent') pAbsent++;
     else if (s.status === 'Leave') pLeave++;
   });
-  const staffTotal = staffData.staff.length;
+  const staffTotal = staffList.length;
   const staffMarked = pPresent + pAbsent + pLeave;
 
   return {
@@ -238,9 +292,10 @@ export async function getAdminAttendanceOverview(
   };
 }
 
-/** All exams for the current branch + academic year, tagged with status. */
+/** Exams for the current branch + academic year, tagged with status; scoped to the caller's sections. */
 export async function getBranchExams() {
   const session = await getServerSession(authOptions);
+  const { sectionIds } = await resolveDashboardScope();
   const now = new Date();
 
   const exams = await db.exam.findMany({
@@ -248,6 +303,9 @@ export async function getBranchExams() {
       isDeleted: false,
       branchId: session.branchId,
       batchId: session.currentBatch,
+      ...(sectionIds !== null
+        ? { examGroup: { some: { sectionId: { in: sectionIds } } } }
+        : {}),
     },
     orderBy: { markEntryOpenDate: 'desc' },
     select: {
@@ -266,27 +324,61 @@ export async function getBranchExams() {
 }
 
 /**
- * Branch-wide staff-wise analytics for one exam: runs the existing
- * `getStaffWiseMarkAnalytics` once per participating class and concatenates the
- * per-staff results, plus the overall summary block for the page header.
+ * Staff-wise analytics for one exam, scoped to the caller's sections.
+ *
+ * Crash-safe: builds the student mark list by calling `getStudentMarksByFilter`
+ * once per section (never per-class without a section filter), then reuses
+ * `getStaffListByClass` + `analyzeSubjectPerformance` and keeps only in-scope
+ * sections that participate in the exam.
  */
 export async function getExamBranchStaffWise(examId: string) {
+  const { sectionIds } = await resolveDashboardScope();
+
   const groups = await db.examGroup.findMany({
-    where: { examId },
-    select: { classId: true },
+    where: {
+      examId,
+      ...(sectionIds !== null ? { sectionId: { in: sectionIds } } : {}),
+    },
+    select: { classId: true, sectionId: true },
   });
+  const scopedSections = new Set(groups.map((g) => g.sectionId));
   const classIds = Array.from(new Set(groups.map((g) => g.classId)));
+
+  // Safe per-section student marks for every participating section.
+  const seen = new Set<string>();
+  const studentsMarkList: any[] = [];
+  for (const group of groups) {
+    if (seen.has(group.sectionId)) continue;
+    seen.add(group.sectionId);
+    const students = await getStudentMarksByFilter({
+      examId,
+      classId: group.classId,
+      sectionId: group.sectionId,
+    });
+    studentsMarkList.push(...students);
+  }
 
   const staffWise: any[] = [];
   for (const classId of classIds) {
-    const result = await getStaffWiseMarkAnalytics({
-      examId,
-      classId,
-      pagination: { page: 1, limit: 9999 },
-    });
-    staffWise.push(...result);
+    const staffList = await getStaffListByClass(classId);
+    for (const staff of staffList as any[]) {
+      const items = (staff.academicSubjects ?? []).filter(
+        (a: any) => a.section && scopedSections.has(a.section.id)
+      );
+      if (!items.length) continue;
+      const analytics = items.map((a: any) => ({
+        ...analyzeSubjectPerformance(
+          a.subject?.id,
+          a.section?.id,
+          studentsMarkList
+        ),
+        section: a.section,
+        subject: a.subject,
+      }));
+      staffWise.push({ ...staff, analytics });
+    }
   }
 
-  const summary = await getExamBranchSummary(examId);
+  const summary = await getExamBranchSummary(examId, sectionIds);
   return { staffWise, summary };
 }

@@ -4,7 +4,7 @@ import { requireDashboardRole } from '../../../../lib/auth/resolveDashboardRole'
 import { ExamAnalyticsClient } from './_components/ExamAnalyticsClient';
 
 export default async function Page() {
-  await requireDashboardRole(['admin', 'tech']);
+  await requireDashboardRole(['admin', 'tech', 'ahm', 'classTeacher']);
 
   return (
     <section>

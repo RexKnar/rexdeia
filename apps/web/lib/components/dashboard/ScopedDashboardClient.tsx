@@ -16,15 +16,11 @@ import {
 import { useState } from 'react';
 import { cn } from 'utils';
 
-import { StatCard } from '@/components/dashboard/StatCard';
-import { LinkButton } from '@/components/LinkButton';
-
-import {
-  AttendanceCounts,
-  ExamSummary,
-} from '../../../../../lib/queries/dashboard/types';
-import { useAdminAttendanceOverviewQuery } from '../../../../../lib/queries/dashboard/useAdminAttendanceOverviewQuery';
-import { useAdminDashboardSummaryQuery } from '../../../../../lib/queries/dashboard/useAdminDashboardSummaryQuery';
+import { AttendanceCounts, ExamSummary } from '../../queries/dashboard/types';
+import { useAdminAttendanceOverviewQuery } from '../../queries/dashboard/useAdminAttendanceOverviewQuery';
+import { useAdminDashboardSummaryQuery } from '../../queries/dashboard/useAdminDashboardSummaryQuery';
+import { LinkButton } from '../LinkButton';
+import { StatCard } from './StatCard';
 
 function todayStr(): string {
   return new Date().toISOString().slice(0, 10);
@@ -142,7 +138,27 @@ function AttendancePanel({
   );
 }
 
-export function AdminDashboardClient() {
+const EMPTY_COUNTS: AttendanceCounts = {
+  present: 0,
+  absent: 0,
+  leave: 0,
+  notMarked: 0,
+  total: 0,
+};
+
+type ScopedDashboardClientProps = {
+  /** Where the "Full Exam Analytics" card links to. */
+  examAnalyticsHref: string;
+};
+
+/**
+ * Role-scoped dashboard body shared by the admin, AHM and class-teacher
+ * dashboards. The API endpoints scope all numbers by the caller's role, so this
+ * component is identical across roles — only the exam-analytics link differs.
+ */
+export function ScopedDashboardClient({
+  examAnalyticsHref,
+}: ScopedDashboardClientProps) {
   const [session, setSession] = useState<'morning' | 'afternoon'>('morning');
   const date = todayStr();
 
@@ -153,16 +169,20 @@ export function AdminDashboardClient() {
 
   return (
     <section className="space-y-8">
+      {summary?.scopeLabel && (
+        <p className="-mt-3 text-sm text-gray-500">{summary.scopeLabel}</p>
+      )}
+
       {/* Counts + quick links */}
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-4">
         <StatCard
-          label="Total Students"
+          label="Students"
           value={summary?.totalStudents ?? '—'}
           icon={GraduationCap}
           accent="bg-indigo-100 text-indigo-700"
         />
         <StatCard
-          label="Total Staff"
+          label="Staff"
           value={summary?.totalStaff ?? '—'}
           icon={Users}
           accent="bg-blue-100 text-blue-700"
@@ -172,7 +192,7 @@ export function AdminDashboardClient() {
             <BarChart3 size={18} className="text-primary" />
             Exam Analytics
           </div>
-          <LinkButton url="/admin/exam-analytics" variant="primary" size="sm">
+          <LinkButton url={examAnalyticsHref} variant="primary" size="sm">
             View full analytics
           </LinkButton>
         </div>
@@ -244,28 +264,12 @@ export function AdminDashboardClient() {
           <AttendancePanel
             heading="Students"
             note={session === 'morning' ? 'Morning' : 'Afternoon'}
-            counts={
-              attendanceQuery.data?.students ?? {
-                present: 0,
-                absent: 0,
-                leave: 0,
-                notMarked: 0,
-                total: 0,
-              }
-            }
+            counts={attendanceQuery.data?.students ?? EMPTY_COUNTS}
           />
           <AttendancePanel
             heading="Staff"
             note="Daily"
-            counts={
-              attendanceQuery.data?.staff ?? {
-                present: 0,
-                absent: 0,
-                leave: 0,
-                notMarked: 0,
-                total: 0,
-              }
-            }
+            counts={attendanceQuery.data?.staff ?? EMPTY_COUNTS}
           />
         </div>
       </div>

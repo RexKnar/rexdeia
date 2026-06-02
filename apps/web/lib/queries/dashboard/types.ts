@@ -13,6 +13,7 @@ export type AdminDashboardSummary = {
   totalStaff: number;
   ongoingExam: ExamSummary | null;
   lastCompletedExam: ExamSummary | null;
+  scopeLabel: string | null;
 };
 
 export type AttendanceCounts = {
