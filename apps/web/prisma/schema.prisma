@@ -221,6 +221,7 @@ model Branch {
   StaffAttendance            StaffAttendance[]
   StudentAttendance          StudentAttendance[]
   TimetableDayOff            TimetableDayOff[]
+  Holiday                    Holiday[]
 }
 
 model Organization {
@@ -251,6 +252,7 @@ model Organization {
   StaffAttendance      StaffAttendance[]
   StudentAttendance    StudentAttendance[]
   TimetableDayOff      TimetableDayOff[]
+  Holiday              Holiday[]
 }
 
 model UserOrganization {
@@ -268,6 +270,7 @@ model UserOrganization {
 model Role {
   id               String             @id @default(uuid()) @map("_id") @db.Uuid
   name             String
+  roleType         RoleType?
   organizationId   String             @db.Uuid
   branchId         String?            @db.Uuid
   moduleAccess     ModuleAccess[]
@@ -895,6 +898,7 @@ model Batch {
   timetableEntries        TimetableEntry[]
   studentAttendance       StudentAttendance[]
   timetableDayOffs        TimetableDayOff[]
+  holidays                Holiday[]
 }
 
 model Class {
@@ -1403,6 +1407,14 @@ enum UserRole {
   AHM
 }
 
+enum RoleType {
+  admin
+  hm
+  ahm
+  staff
+  tech
+}
+
 enum TestType {
   UnitTest
   TermTest
@@ -1642,4 +1654,25 @@ model TimetableDayOff {
   organization   Organization @relation(fields: [organizationId], references: [id])
 
   @@unique([academicYearId, sectionId, dayId])
+}
+
+/// A school holiday (single day or a date range) for a branch + academic year.
+/// Shown to staff and students and excluded from period-count calculations.
+model Holiday {
+  id             String       @id @default(uuid()) @map("_id") @db.Uuid
+  name           String
+  description    String?
+  startDate      DateTime     @db.Date
+  endDate        DateTime     @db.Date
+  academicYearId String       @db.Uuid
+  branchId       String       @db.Uuid
+  organizationId String       @db.Uuid
+  createdAt      DateTime?    @default(now())
+  updatedAt      DateTime?    @default(now())
+  academicYear   Batch        @relation(fields: [academicYearId], references: [id])
+  branch         Branch       @relation(fields: [branchId], references: [id])
+  organization   Organization @relation(fields: [organizationId], references: [id])
+
+  @@index([branchId, academicYearId])
+  @@index([startDate])
 }

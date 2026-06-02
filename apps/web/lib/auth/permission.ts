@@ -103,4 +103,12 @@ export class PermissionManager {
   hasOrganizationRole(roleName: string): boolean {
     return this.session.user?.organizationRole.name === roleName;
   }
+
+  /**
+   * Get the static roleType classifier of the user's organization role
+   * (admin | hm | ahm | staff | tech), if set.
+   */
+  getRoleType() {
+    return this.session.user?.organizationRole?.roleType ?? null;
+  }
 }

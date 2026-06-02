@@ -19,6 +19,15 @@ export function weekdayName(date: Date): string {
   return WEEKDAYS[date.getUTCDay()];
 }
 
+/** Format a Date (stored as @db.Date, UTC midnight) back to YYYY-MM-DD. */
+export function toDateStr(date: Date): string {
+  return date.toISOString().slice(0, 10);
+}
+
+export function todayStr(): string {
+  return new Date().toISOString().slice(0, 10);
+}
+
 export function staffFullName(staff: {
   firstName?: string | null;
   middleName?: string | null;

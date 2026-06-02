@@ -53,13 +53,22 @@ export function StudentAttendanceManager() {
     { enabled: !!classId }
   );
 
-  const queryEnabled =
-    !!sectionId && !!date && (scope !== 'period' || !!slotId);
+  // Always enabled once a section + date are chosen so the period list loads
+  // (the period dropdown needs the slots before one can be selected).
+  const queryEnabled = !!sectionId && !!date;
   const { data, isFetching } = useGetStudentAttendanceQuery(
     { sectionId, date, scope, slotId: scope === 'period' ? slotId : undefined },
     { enabled: queryEnabled }
   );
   const saveMutation = useSaveStudentAttendanceMutationQuery();
+
+  // The period slots covered by the current scope (for the "marking" hint).
+  const coveredSlots = (data?.slots ?? []).filter((s) => {
+    if (scope === 'daily') return true;
+    if (scope === 'morning') return s.session === 'Morning';
+    if (scope === 'afternoon') return s.session === 'Afternoon';
+    return s.id === slotId; // period
+  });
 
   // Default unmarked students to Present so the common "everyone present" case
   // is one click away.
@@ -171,11 +180,41 @@ export function StudentAttendanceManager() {
               <option value="">— Select period —</option>
               {(data?.slots ?? []).map((slot) => (
                 <option key={slot.id} value={slot.id}>
-                  {slot.label} ({slot.startTime}–{slot.endTime})
+                  {slot.label}
+                  {slot.subjectName ? ` · ${slot.subjectName}` : ''}
+                  {slot.staffName ? ` (${slot.staffName})` : ''}
                 </option>
               ))}
             </select>
           )}
+
+          {/* Which periods this selection will mark */}
+          <div className="flex w-full flex-wrap items-center gap-2 border-t pt-3 text-xs text-gray-600">
+            <span className="font-medium text-gray-500">Marking:</span>
+            {scope === 'daily' ? (
+              <span className="rounded-full bg-indigo-100 px-2 py-0.5 text-indigo-800">
+                Whole day{' '}
+                {coveredSlots.length > 0 && `(${coveredSlots.length} periods)`}
+              </span>
+            ) : coveredSlots.length === 0 ? (
+              <span className="text-gray-400">
+                {scope === 'period'
+                  ? 'select a period above'
+                  : 'no periods in this session'}
+              </span>
+            ) : (
+              coveredSlots.map((slot) => (
+                <span
+                  key={slot.id}
+                  className="rounded-full bg-emerald-100 px-2 py-0.5 text-emerald-800"
+                >
+                  {slot.label}
+                  {slot.subjectName ? ` · ${slot.subjectName}` : ' · No class'}
+                  {slot.staffName ? ` (${slot.staffName})` : ''}
+                </span>
+              ))
+            )}
+          </div>
         </section>
       )}
 

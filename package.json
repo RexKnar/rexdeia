@@ -27,6 +27,11 @@
     "pnpm": ">=8.7.1"
   },
   "volta": {
-    "node": "20.19.0"
+    "node": "26.2.0"
+  },
+  "pnpm": {
+    "patchedDependencies": {
+      "buffer-equal-constant-time@1.0.1": "patches/buffer-equal-constant-time@1.0.1.patch"
+    }
   }
 }

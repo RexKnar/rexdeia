@@ -1,5 +1,7 @@
 import { authOptions } from 'lib/auth';
+import { PeriodStatsCard } from 'lib/components/PeriodStatsCard';
 import { StaffRoster } from 'lib/components/StaffRoster';
+import { UpcomingHolidays } from 'lib/components/UpcomingHolidays';
 import { redirect } from 'next/navigation';
 import { getServerSession } from 'next-auth';
 import { Suspense } from 'react';
@@ -23,6 +25,10 @@ export default async function Page() {
           </p>
         </section>
         <StaffRoster />
+        <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
+          <PeriodStatsCard scope="staff" title="My Period Statistics" />
+          <UpcomingHolidays />
+        </div>
       </Suspense>
     </section>
   );

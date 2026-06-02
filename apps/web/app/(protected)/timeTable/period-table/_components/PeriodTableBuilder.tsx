@@ -1,6 +1,8 @@
 'use client';
 
 import { TimetableGridData } from 'lib/domain/timetable';
+import { PeriodStatsCard } from 'lib/components/PeriodStatsCard';
+import { UpcomingHolidays } from 'lib/components/UpcomingHolidays';
 import { useGetClassListQuery } from 'lib/queries/class/useGetClassListQuery';
 import { useGetAllSectionByClassIdQuery } from 'lib/queries/section/useGetAllSectionsByClassIdQuery';
 import { useGetTimetableGridQuery } from 'lib/queries/timetable/useGetTimetableGridQuery';
@@ -214,6 +216,15 @@ export function PeriodTableBuilder() {
               Save Timetable
             </Button>
           </section>
+
+          <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
+            <PeriodStatsCard
+              scope="section"
+              id={sectionId}
+              title="Section Period Statistics"
+            />
+            <UpcomingHolidays />
+          </div>
         </>
       )}
     </div>

@@ -219,6 +219,14 @@ export const GET_STAFF_ROSTER = `GET_STAFF_ROSTER`;
 export const GET_STUDENT_ATTENDANCE = `GET_STUDENT_ATTENDANCE`;
 export const SAVE_STUDENT_ATTENDANCE = `SAVE_STUDENT_ATTENDANCE`;
 export const GET_ATTENDANCE_REPORT = `GET_ATTENDANCE_REPORT`;
+export const GET_HOLIDAYS = `GET_HOLIDAYS`;
+export const SAVE_HOLIDAY = `SAVE_HOLIDAY`;
+export const DELETE_HOLIDAY = `DELETE_HOLIDAY`;
+export const GET_PERIOD_STATS = `GET_PERIOD_STATS`;
+export const GET_ADMIN_DASHBOARD_SUMMARY = `GET_ADMIN_DASHBOARD_SUMMARY`;
+export const GET_ADMIN_ATTENDANCE_OVERVIEW = `GET_ADMIN_ATTENDANCE_OVERVIEW`;
+export const GET_BRANCH_EXAMS = `GET_BRANCH_EXAMS`;
+export const GET_EXAM_BRANCH_ANALYTICS = `GET_EXAM_BRANCH_ANALYTICS`;
 export const ADD_PERIOD_MASTER = `ADD_PERIOD_MASTER`;
 export const GET_PERIOD_MASTERS_LIST = `GET_PERIOD_MASTERS_LIST`;
 export const GET_PERIOD_MASTER_BY_ID = `GET_PERIOD_MASTER_BY_ID`;
@@ -1107,6 +1115,38 @@ export default <EndpointDetails>{
   [GET_ATTENDANCE_REPORT]: {
     requestType: 'GET',
     endpoint: '/api/timetable/attendance-report',
+  },
+  [GET_HOLIDAYS]: {
+    requestType: 'GET',
+    endpoint: '/api/timetable/holiday',
+  },
+  [SAVE_HOLIDAY]: {
+    requestType: 'POST',
+    endpoint: '/api/timetable/holiday',
+  },
+  [DELETE_HOLIDAY]: {
+    requestType: 'DELETE',
+    endpoint: '/api/timetable/holiday/[id]',
+  },
+  [GET_PERIOD_STATS]: {
+    requestType: 'GET',
+    endpoint: '/api/timetable/period-stats',
+  },
+  [GET_ADMIN_DASHBOARD_SUMMARY]: {
+    requestType: 'GET',
+    endpoint: '/api/dashboard/admin/summary',
+  },
+  [GET_ADMIN_ATTENDANCE_OVERVIEW]: {
+    requestType: 'GET',
+    endpoint: '/api/dashboard/admin/attendance',
+  },
+  [GET_BRANCH_EXAMS]: {
+    requestType: 'GET',
+    endpoint: '/api/dashboard/admin/exams',
+  },
+  [GET_EXAM_BRANCH_ANALYTICS]: {
+    requestType: 'GET',
+    endpoint: '/api/dashboard/admin/exam-analytics',
   },
   [ADD_PERIOD_MASTER]: {
     requestType: 'POST',

@@ -1,4 +1,5 @@
 'use client';
+import { LayoutDashboard } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import { Suspense, useEffect, useState } from 'react';
 import {
@@ -25,10 +26,20 @@ export function AppSidebar() {
     setOrganizationType(session?.institute);
   }, [session, status]);
 
-  const menus =
+  const roleMenus =
     organizationType == 'others'
       ? instituteMenu[userRole] || []
       : menuItem[userRole] || [];
+
+  // "/" server-resolves the user's roleType (and incharge data) and redirects
+  // to their role-specific dashboard (HM / AHM / Staff / class teacher).
+  const dashboardItem = {
+    id: 'role-dashboard',
+    label: 'Dashboard',
+    icon: LayoutDashboard,
+    path: '/',
+  };
+  const menus = [dashboardItem, ...roleMenus];
 
   return (
     <Sidebar className="bg-white" collapsible="icon">

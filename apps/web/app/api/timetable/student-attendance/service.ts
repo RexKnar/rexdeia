@@ -8,7 +8,7 @@ import {
 } from 'lib/domain/timetable';
 import { getServerSession } from 'next-auth';
 
-import { normalizeDate, staffFullName } from '../shared';
+import { normalizeDate, resolveDayId, staffFullName } from '../shared';
 
 /** Period slots (with session) of the structure for a section's class level. */
 async function getSectionPeriodSlots(
@@ -127,9 +127,40 @@ export async function getStudentAttendance(
     byStudent.set(r.studentId, arr);
   });
 
+  // Attach the subject + staff assigned to each period for this date's weekday,
+  // so the UI can show what class each period is.
+  const dayId = await resolveDayId(date);
+  const assignmentBySlot = new Map<
+    string,
+    { subjectName: string | null; staffName: string | null }
+  >();
+  if (dayId) {
+    const entries = await db.timetableEntry.findMany({
+      where: { academicYearId, sectionId, dayId, isDeleted: false },
+      select: {
+        slotId: true,
+        subject: { select: { name: true } },
+        staff: {
+          select: { firstName: true, middleName: true, lastName: true },
+        },
+      },
+    });
+    entries.forEach((e) =>
+      assignmentBySlot.set(e.slotId, {
+        subjectName: e.subject?.name ?? null,
+        staffName: e.staff ? staffFullName(e.staff) : null,
+      })
+    );
+  }
+  const enrichedSlots = slots.map((s) => ({
+    ...s,
+    subjectName: assignmentBySlot.get(s.id)?.subjectName ?? null,
+    staffName: assignmentBySlot.get(s.id)?.staffName ?? null,
+  }));
+
   return {
     structureMissing: slots.length === 0,
-    slots,
+    slots: enrichedSlots,
     students: mappings.map((m) => ({
       studentId: m.student.id,
       name: staffFullName(m.student),

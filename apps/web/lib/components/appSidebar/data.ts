@@ -438,6 +438,18 @@ export const menuItem = {
           path: '/timeTable/attendance-report',
         },
         {
+          id: 'timetable-holidays',
+          label: 'Holidays',
+          icon: null,
+          path: '/timeTable/holidays',
+        },
+        {
+          id: 'timetable-student-attendance',
+          label: 'Student Attendance',
+          icon: null,
+          path: '/academics/student-attendance',
+        },
+        {
           id: 'period_master',
           label: 'Period Master',
           icon: null,
@@ -538,6 +550,12 @@ export const menuItem = {
       label: 'My Timetable',
       icon: FileText,
       path: '/timeTable/my-timetable',
+    },
+    {
+      id: 'student-attendance',
+      label: 'Student Attendance',
+      icon: FileText,
+      path: '/academics/student-attendance',
     },
     {
       id: 'class-list',

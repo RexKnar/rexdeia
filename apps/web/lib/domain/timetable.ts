@@ -192,6 +192,8 @@ export type StudentAttendanceSlot = {
   startTime: string;
   endTime: string;
   session: DaySession;
+  subjectName: string | null;
+  staffName: string | null;
 };
 
 export type StudentAttendanceRow = {
@@ -232,4 +234,36 @@ export type AttendanceReportData = {
   from: string;
   to: string;
   rows: AttendanceReportRow[];
+};
+
+// --- Holidays ---
+
+export type HolidayModel = {
+  id: string;
+  name: string;
+  description?: string | null;
+  startDate: string;
+  endDate: string;
+};
+
+export type SaveHolidayModel = {
+  name: string;
+  description?: string;
+  startDate: string;
+  endDate: string;
+};
+
+// --- Period statistics ---
+
+export type PeriodStatsScope = 'staff' | 'section';
+
+export type PeriodStatsData = {
+  from: string;
+  to: string;
+  today: string;
+  totalPeriods: number;
+  completedPeriods: number;
+  remainingPeriods: number;
+  workingDays: number;
+  holidayDays: number;
 };

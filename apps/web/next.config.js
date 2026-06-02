@@ -2,6 +2,11 @@ module.exports = {
   reactStrictMode: true,
   transpilePackages: ['ui'],
   swcMinify: true,
+  experimental: {
+    // Shrinks the dev module graph and improves prod tree-shaking by pulling
+    // only the used members of these barrel packages instead of the whole index.
+    optimizePackageImports: ['ui', 'lucide-react', 'date-fns'],
+  },
   images: {
     domains: ['storage.googleapis.com','rexcoders.online', 'process.fs.teachablecdn.com'],
   },

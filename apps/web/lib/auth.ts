@@ -99,15 +99,15 @@ export const authOptions: NextAuthOptions = {
         });
       }
 
+      // Resolve the staff record for any user that has one (not just
+      // TeachingStaff) so role derivation (AHM / class teacher) can rely on it.
       let staffId = null;
-      if (token.role === 'TeachingStaff') {
-        const dbStaff = await db.staff.findFirst({
-          where: {
-            email: token.email,
-          },
-        });
-        staffId = dbStaff.id || null;
-      }
+      const dbStaff = await db.staff.findFirst({
+        where: {
+          email: token.email,
+        },
+      });
+      staffId = dbStaff?.id || null;
 
       if (trigger === 'update' && session.organizationId && session.branchId) {
         token.branchId = session.branchId;
