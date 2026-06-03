@@ -215,6 +215,13 @@ model Branch {
   users                      UserOrganization[]
   subjectType                subjectType[]
   ClassLevelIncharge         ClassLevelIncharge[]
+  TimetableStructure         TimetableStructure[]
+  TimetableEntry             TimetableEntry[]
+  TimetableSubstitution      TimetableSubstitution[]
+  StaffAttendance            StaffAttendance[]
+  StudentAttendance          StudentAttendance[]
+  TimetableDayOff            TimetableDayOff[]
+  Holiday                    Holiday[]
 }
 
 model Organization {
@@ -239,6 +246,13 @@ model Organization {
   users                UserOrganization[]
   ClassLevelIncharge   ClassLevelIncharge[]
   ClassLevel           ClassLevel[]
+  TimetableStructure   TimetableStructure[]
+  TimetableEntry       TimetableEntry[]
+  TimetableSubstitution TimetableSubstitution[]
+  StaffAttendance      StaffAttendance[]
+  StudentAttendance    StudentAttendance[]
+  TimetableDayOff      TimetableDayOff[]
+  Holiday              Holiday[]
 }
 
 model UserOrganization {
@@ -256,6 +270,7 @@ model UserOrganization {
 model Role {
   id               String             @id @default(uuid()) @map("_id") @db.Uuid
   name             String
+  roleType         RoleType?
   organizationId   String             @db.Uuid
   branchId         String?            @db.Uuid
   moduleAccess     ModuleAccess[]
@@ -718,6 +733,7 @@ model Student {
   user                   User                     @relation(fields: [userId], references: [id])
   StudentElectiveSubject StudentElectiveSubject[]
   studentMapping         StudentMapping[]
+  studentAttendance      StudentAttendance[]
 
   @@index([firstName, lastName, emisNumber, phoneNumber, emailId, aadharCardNumber])
 }
@@ -848,6 +864,11 @@ model Staff {
   staffSections                StaffSection[]
   ClassLevel                   ClassLevel[]
   ClassLevelIncharge           ClassLevelIncharge[]
+  timetableEntries             TimetableEntry[]
+  staffAttendance              StaffAttendance[]
+  substitutionsAsOriginal      TimetableSubstitution[]   @relation("SubstitutionOriginalStaff")
+  substitutionsAsSubstitute    TimetableSubstitution[]   @relation("SubstitutionSubstituteStaff")
+  studentAttendanceMarked      StudentAttendance[]       @relation("StudentAttendanceMarkedBy")
 }
 
 model Batch {
@@ -874,6 +895,10 @@ model Batch {
   StudentMapping          StudentMapping[]
   Section                 Section[]
   ClassLevelIncharge      ClassLevelIncharge[]
+  timetableEntries        TimetableEntry[]
+  studentAttendance       StudentAttendance[]
+  timetableDayOffs        TimetableDayOff[]
+  holidays                Holiday[]
 }
 
 model Class {
@@ -955,6 +980,9 @@ model Section {
   staffId                 String?                   @db.Uuid
   Subject                 Subject?                  @relation(fields: [subjectId], references: [id])
   subjectId               String?                   @db.Uuid
+  timetableEntries        TimetableEntry[]
+  studentAttendance       StudentAttendance[]
+  timetableDayOffs        TimetableDayOff[]
 }
 
 model SectionToGroups {
@@ -1006,6 +1034,7 @@ model Subject {
   ExamSubjectPartition      ExamSubjectPartition[]
   marks                     Mark[]
   periods                   Periods[]
+  timetableEntries          TimetableEntry[]
   Section                   Section[]
   StudentElectiveSubject    StudentElectiveSubject[]
   branch                    Branch?                     @relation(fields: [branchId], references: [id])
@@ -1236,6 +1265,7 @@ model ClassLevel {
   Staff              Staff?               @relation(fields: [staffId], references: [id])
   staffId            String?              @db.Uuid
   ClassLevelIncharge ClassLevelIncharge[]
+  timetableStructures TimetableStructure[]
 }
 
 model ClassLevelIncharge {
@@ -1276,6 +1306,8 @@ model Days {
   updatedAt    DateTime?      @default(now())
   isDeleted    Boolean        @default(false)
   periodMaster PeriodMaster[]
+  timetableEntries TimetableEntry[]
+  timetableDayOffs TimetableDayOff[]
 }
 
 model PeriodType {
@@ -1286,6 +1318,7 @@ model PeriodType {
   updatedAt    DateTime?      @default(now())
   isDeleted    Boolean        @default(false)
   periodMaster PeriodMaster[]
+  timetableSlots TimetableSlot[]
 }
 
 model PeriodMode {
@@ -1374,6 +1407,14 @@ enum UserRole {
   AHM
 }
 
+enum RoleType {
+  admin
+  hm
+  ahm
+  staff
+  tech
+}
+
 enum TestType {
   UnitTest
   TermTest
@@ -1412,4 +1453,226 @@ enum AdmissionStatus {
 enum RangeType {
   SubjectMarks
   TotalMarks
+}
+
+// ---------------------------------------------------------------------------
+// Timetable & Attendance (Phase 0 — additive only)
+// ---------------------------------------------------------------------------
+
+enum SlotKind {
+  Period
+  Interval
+}
+
+enum IntervalType {
+  Lunch
+  RefreshmentBreak
+  Other
+}
+
+enum DaySession {
+  Morning
+  Afternoon
+}
+
+enum AttendanceStatus {
+  Present
+  Absent
+  Leave
+}
+
+enum StudentAttendanceLevel {
+  Period
+  Daily
+}
+
+/// The timetable "master" structure for a class level: day start time plus the
+/// ordered list of period/interval slots (durations, types, timings).
+model TimetableStructure {
+  id             String          @id @default(uuid()) @map("_id") @db.Uuid
+  name           String
+  classLevelId   String          @db.Uuid
+  branchId       String          @db.Uuid
+  organizationId String          @db.Uuid
+  dayStartTime   String
+  isActive       Boolean         @default(true)
+  isDeleted      Boolean         @default(false)
+  createdAt      DateTime?       @default(now())
+  updatedAt      DateTime?       @default(now())
+  classLevel     ClassLevel      @relation(fields: [classLevelId], references: [id])
+  branch         Branch          @relation(fields: [branchId], references: [id])
+  organization   Organization    @relation(fields: [organizationId], references: [id])
+  slots          TimetableSlot[]
+
+  @@index([classLevelId, branchId])
+}
+
+/// A single ordered slot in a structure. kind=Period carries a periodType;
+/// kind=Interval carries an intervalType. Position (order) captures "after which
+/// period" an interval falls. session marks morning/afternoon for bulk attendance.
+model TimetableSlot {
+  id                String              @id @default(uuid()) @map("_id") @db.Uuid
+  structureId       String              @db.Uuid
+  order             Int
+  kind              SlotKind
+  label             String
+  startTime         String
+  endTime           String
+  durationMins      Int
+  session           DaySession
+  periodTypeId      String?             @db.Uuid
+  intervalType      IntervalType?
+  isDeleted         Boolean             @default(false)
+  createdAt         DateTime?           @default(now())
+  updatedAt         DateTime?           @default(now())
+  structure         TimetableStructure  @relation(fields: [structureId], references: [id])
+  periodType        PeriodType?         @relation(fields: [periodTypeId], references: [id])
+  entries           TimetableEntry[]
+  studentAttendance StudentAttendance[]
+
+  @@index([structureId, order])
+}
+
+/// Per academic-year, per-section, per-weekday assignment of a subject + default
+/// staff to a period slot.
+model TimetableEntry {
+  id             String                  @id @default(uuid()) @map("_id") @db.Uuid
+  academicYearId String                  @db.Uuid
+  sectionId      String                  @db.Uuid
+  dayId          String                  @db.Uuid
+  slotId         String                  @db.Uuid
+  subjectId      String?                 @db.Uuid
+  staffId        String?                 @db.Uuid
+  branchId       String                  @db.Uuid
+  organizationId String                  @db.Uuid
+  isDeleted      Boolean                 @default(false)
+  createdAt      DateTime?               @default(now())
+  updatedAt      DateTime?               @default(now())
+  academicYear   Batch                   @relation(fields: [academicYearId], references: [id])
+  section        Section                 @relation(fields: [sectionId], references: [id])
+  day            Days                    @relation(fields: [dayId], references: [id])
+  slot           TimetableSlot           @relation(fields: [slotId], references: [id])
+  subject        Subject?                @relation(fields: [subjectId], references: [id])
+  staff          Staff?                  @relation(fields: [staffId], references: [id])
+  branch         Branch                  @relation(fields: [branchId], references: [id])
+  organization   Organization            @relation(fields: [organizationId], references: [id])
+  substitutions  TimetableSubstitution[]
+
+  @@unique([academicYearId, sectionId, dayId, slotId])
+  @@index([academicYearId, sectionId])
+  @@index([staffId])
+}
+
+/// A date-specific override of a TimetableEntry's staff (e.g. for an absence).
+model TimetableSubstitution {
+  id                String         @id @default(uuid()) @map("_id") @db.Uuid
+  date              DateTime       @db.Date
+  entryId           String         @db.Uuid
+  originalStaffId   String?        @db.Uuid
+  substituteStaffId String         @db.Uuid
+  reason            String?
+  branchId          String         @db.Uuid
+  organizationId    String         @db.Uuid
+  createdAt         DateTime?      @default(now())
+  updatedAt         DateTime?      @default(now())
+  entry             TimetableEntry @relation(fields: [entryId], references: [id])
+  originalStaff     Staff?         @relation("SubstitutionOriginalStaff", fields: [originalStaffId], references: [id])
+  substituteStaff   Staff          @relation("SubstitutionSubstituteStaff", fields: [substituteStaffId], references: [id])
+  branch            Branch         @relation(fields: [branchId], references: [id])
+  organization      Organization   @relation(fields: [organizationId], references: [id])
+
+  @@unique([entryId, date])
+  @@index([date])
+}
+
+/// Daily staff attendance. Absent/Leave feeds the substitution flow.
+model StaffAttendance {
+  id             String           @id @default(uuid()) @map("_id") @db.Uuid
+  staffId        String           @db.Uuid
+  date           DateTime         @db.Date
+  status         AttendanceStatus
+  remark         String?
+  branchId       String           @db.Uuid
+  organizationId String           @db.Uuid
+  createdAt      DateTime?        @default(now())
+  updatedAt      DateTime?        @default(now())
+  staff          Staff            @relation(fields: [staffId], references: [id])
+  branch         Branch           @relation(fields: [branchId], references: [id])
+  organization   Organization     @relation(fields: [organizationId], references: [id])
+
+  @@unique([staffId, date])
+  @@index([date])
+}
+
+/// Student attendance. level=Period rows carry a slotId (one per period); a
+/// daily record has level=Daily and no slot. Morning/Afternoon bulk marking
+/// writes Period rows for the matching session's slots.
+model StudentAttendance {
+  id              String                 @id @default(uuid()) @map("_id") @db.Uuid
+  studentId       String                 @db.Uuid
+  sectionId       String                 @db.Uuid
+  academicYearId  String                 @db.Uuid
+  date            DateTime               @db.Date
+  level           StudentAttendanceLevel
+  slotId          String?                @db.Uuid
+  session         DaySession?
+  status          AttendanceStatus
+  markedByStaffId String?                @db.Uuid
+  remark          String?
+  branchId        String                 @db.Uuid
+  organizationId  String                 @db.Uuid
+  createdAt       DateTime?              @default(now())
+  updatedAt       DateTime?              @default(now())
+  student         Student                @relation(fields: [studentId], references: [id])
+  section         Section                @relation(fields: [sectionId], references: [id])
+  academicYear    Batch                  @relation(fields: [academicYearId], references: [id])
+  slot            TimetableSlot?         @relation(fields: [slotId], references: [id])
+  markedByStaff   Staff?                 @relation("StudentAttendanceMarkedBy", fields: [markedByStaffId], references: [id])
+  branch          Branch                 @relation(fields: [branchId], references: [id])
+  organization    Organization           @relation(fields: [organizationId], references: [id])
+
+  @@unique([studentId, date, slotId])
+  @@index([sectionId, date])
+  @@index([studentId, date])
+}
+
+/// Marks an entire weekday as off (holiday / weekly off) for a section in an
+/// academic year — that day carries no period assignments.
+model TimetableDayOff {
+  id             String       @id @default(uuid()) @map("_id") @db.Uuid
+  academicYearId String       @db.Uuid
+  sectionId      String       @db.Uuid
+  dayId          String       @db.Uuid
+  branchId       String       @db.Uuid
+  organizationId String       @db.Uuid
+  createdAt      DateTime?    @default(now())
+  updatedAt      DateTime?    @default(now())
+  academicYear   Batch        @relation(fields: [academicYearId], references: [id])
+  section        Section      @relation(fields: [sectionId], references: [id])
+  day            Days         @relation(fields: [dayId], references: [id])
+  branch         Branch       @relation(fields: [branchId], references: [id])
+  organization   Organization @relation(fields: [organizationId], references: [id])
+
+  @@unique([academicYearId, sectionId, dayId])
+}
+
+/// A school holiday (single day or a date range) for a branch + academic year.
+/// Shown to staff and students and excluded from period-count calculations.
+model Holiday {
+  id             String       @id @default(uuid()) @map("_id") @db.Uuid
+  name           String
+  description    String?
+  startDate      DateTime     @db.Date
+  endDate        DateTime     @db.Date
+  academicYearId String       @db.Uuid
+  branchId       String       @db.Uuid
+  organizationId String       @db.Uuid
+  createdAt      DateTime?    @default(now())
+  updatedAt      DateTime?    @default(now())
+  academicYear   Batch        @relation(fields: [academicYearId], references: [id])
+  branch         Branch       @relation(fields: [branchId], references: [id])
+  organization   Organization @relation(fields: [organizationId], references: [id])
+
+  @@index([branchId, academicYearId])
+  @@index([startDate])
 }

@@ -1,18 +1,13 @@
-import { Storage } from '@google-cloud/storage';
 import { captureException } from '@sentry/nextjs';
 import { StatusCodes } from 'http-status-codes';
 import { authOptions } from 'lib/auth';
+import { storage } from 'lib/gcs';
 import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
-import path from 'path';
 
 import { deleteFileFromGCS, uploadFileToGCS } from './service';
 
 export const runtime = 'nodejs';
-const storage = new Storage({
-  projectId: process.env.NEXT_GCLOUD_PROJECT_ID,
-  keyFilename: path.resolve('./keyfile.json'),
-});
 
 // const bucket = process.env.NEXT_GCS_BUCKET_NAME || '';
 

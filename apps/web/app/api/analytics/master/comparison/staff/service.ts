@@ -160,7 +160,7 @@ export async function getStaffListByClass(classId?: string) {
   return result.map(({ sortOrder, ...staffDetails }) => staffDetails);
 }
 
-function analyzeSubjectPerformance(
+export function analyzeSubjectPerformance(
   subjectId: string,
   sectionId: string,
   studentsMarkList: any[] = []

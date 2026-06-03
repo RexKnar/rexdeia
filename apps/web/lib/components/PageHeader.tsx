@@ -1,5 +1,6 @@
 'use client';
 
+import { useGetAllStaffListQuery } from 'lib/queries/staff/useGetAllStaffListQuery';
 import { useGetStudentSearchListQuery } from 'lib/queries/students/useGetStudentSearchListQuery';
 import { Search } from 'lucide-react';
 import Link from 'next/link';
@@ -18,18 +19,39 @@ export function PageHeader() {
   const pageSize = 9999;
   const searchRef = useRef(null);
 
+  const searchEnabled = searchTerm.length >= 2;
+
   const {
     data: studentList,
-    isLoading,
-    error,
+    isLoading: isStudentsLoading,
+    error: studentsError,
   } = useGetStudentSearchListQuery(
     { searchTerm, page, pageSize },
     {
-      enabled: searchTerm.length >= 2,
+      enabled: searchEnabled,
       refetchOnWindowFocus: false,
       staleTime: 10000,
     }
   );
+
+  const {
+    data: staffList,
+    isLoading: isStaffLoading,
+    error: staffError,
+  } = useGetAllStaffListQuery(
+    { page: 1, limit: 50, searchTerm },
+    {
+      enabled: searchEnabled,
+      refetchOnWindowFocus: false,
+      staleTime: 10000,
+    }
+  );
+
+  const isLoading = isStudentsLoading || isStaffLoading;
+  const error = studentsError || staffError;
+  const students = studentList?.data ?? [];
+  const staff = staffList?.data ?? [];
+  const hasResults = students.length > 0 || staff.length > 0;
 
   useEffect(() => {
     function handleClickOutside(event) {
@@ -59,7 +81,7 @@ export function PageHeader() {
               <div className="relative">
                 <input
                   type="search"
-                  placeholder="Search students..."
+                  placeholder="Search students & staff..."
                   className="h-9 w-64 rounded-md border border-gray-300 px-3 pr-8 focus:outline-none focus:ring-2 focus:ring-blue-500"
                   value={searchTerm}
                   onChange={handleSearchChange}
@@ -71,7 +93,7 @@ export function PageHeader() {
                 />
               </div>
 
-              {isDropdownOpen && searchTerm.length >= 2 && (
+              {isDropdownOpen && searchEnabled && (
                 <div className="absolute mt-1 w-full rounded-md border border-gray-200 bg-white shadow-lg">
                   {isLoading ? (
                     <div className="flex justify-center p-4">
@@ -81,51 +103,89 @@ export function PageHeader() {
                     <Alert variant="destructive" className="m-2">
                       Something Went Wrong !
                     </Alert>
-                  ) : studentList?.data?.length === 0 ? (
+                  ) : !hasResults ? (
                     <div className="p-4 text-sm text-gray-500">
                       <Text variant="sm-medium"> No results found</Text>
                     </div>
-                  ) : studentList?.data ? (
+                  ) : (
                     <div className="max-h-[400px] overflow-y-auto">
-                      <div className="border-b p-2 text-sm text-gray-600">
-                        Found {studentList.total} results
-                      </div>
-                      {studentList.data.map((student) => (
-                        <Link href={`/students/${student.id}`} key={student.id}>
-                          <button
-                            key={student.id}
-                            className="w-full px-4 py-2 text-left hover:bg-gray-50 focus:bg-gray-50 focus:outline-none"
-                            onClick={() => {
-                              setIsDropdownOpen(false);
-                            }}
-                          >
-                            <div className="flex items-center gap-3">
-                              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gray-200">
-                                {student.firstName[0]}
-                              </div>
-                              <div>
-                                <div className="font-medium">
-                                  <Text variant="xs-medium">
-                                    {student.firstName} {student.lastName}
-                                  </Text>
+                      {/* Students */}
+                      {students.length > 0 && (
+                        <>
+                          <div className="border-b bg-gray-50 p-2 text-xs font-semibold uppercase tracking-wide text-gray-500">
+                            Students ({studentList?.total ?? students.length})
+                          </div>
+                          {students.map((student) => (
+                            <Link
+                              href={`/students/${student.id}`}
+                              key={student.id}
+                            >
+                              <button
+                                className="w-full px-4 py-2 text-left hover:bg-gray-50 focus:bg-gray-50 focus:outline-none"
+                                onClick={() => setIsDropdownOpen(false)}
+                              >
+                                <div className="flex items-center gap-3">
+                                  <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gray-200">
+                                    {student.firstName?.[0] ?? '?'}
+                                  </div>
+                                  <div>
+                                    <div className="font-medium">
+                                      <Text variant="xs-medium">
+                                        {student.firstName} {student.lastName}
+                                      </Text>
+                                    </div>
+                                    <div className="text-sm text-gray-500">
+                                      {student?.studentMapping?.map(
+                                        (academics, index) => (
+                                          <span key={index}>
+                                            <b>{academics?.class?.name}</b> -{' '}
+                                            <b>{academics?.section?.name}</b>
+                                          </span>
+                                        )
+                                      )}
+                                    </div>
+                                  </div>
                                 </div>
-                                <div className="text-sm text-gray-500">
-                                  {student?.studentMapping.map(
-                                    (academics, index) => (
-                                      <span key={index}>
-                                        <b>{academics?.class?.name}</b> -{' '}
-                                        <b>{academics?.section?.name}</b>
-                                      </span>
-                                    )
-                                  )}
+                              </button>
+                            </Link>
+                          ))}
+                        </>
+                      )}
+
+                      {/* Staff */}
+                      {staff.length > 0 && (
+                        <>
+                          <div className="border-b border-t bg-gray-50 p-2 text-xs font-semibold uppercase tracking-wide text-gray-500">
+                            Staff ({staffList?.total ?? staff.length})
+                          </div>
+                          {staff.map((member) => (
+                            <Link href={`/staffs/${member.id}`} key={member.id}>
+                              <button
+                                className="w-full px-4 py-2 text-left hover:bg-gray-50 focus:bg-gray-50 focus:outline-none"
+                                onClick={() => setIsDropdownOpen(false)}
+                              >
+                                <div className="flex items-center gap-3">
+                                  <div className="flex h-8 w-8 items-center justify-center rounded-full bg-blue-100 text-blue-700">
+                                    {member.firstName?.[0] ?? '?'}
+                                  </div>
+                                  <div>
+                                    <div className="font-medium">
+                                      <Text variant="xs-medium">
+                                        {member.firstName} {member.lastName}
+                                      </Text>
+                                    </div>
+                                    <div className="text-sm text-gray-500">
+                                      {member.email || member.mobile || 'Staff'}
+                                    </div>
+                                  </div>
                                 </div>
-                              </div>
-                            </div>
-                          </button>
-                        </Link>
-                      ))}
+                              </button>
+                            </Link>
+                          ))}
+                        </>
+                      )}
                     </div>
-                  ) : null}
+                  )}
                 </div>
               )}
             </div>

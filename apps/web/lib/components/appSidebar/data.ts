@@ -414,6 +414,42 @@ export const menuItem = {
           path: '/timeTable/classLevel',
         },
         {
+          id: 'timetable-structure',
+          label: 'Timetable Structure',
+          icon: null,
+          path: '/timeTable/structure',
+        },
+        {
+          id: 'timetable-period-table',
+          label: 'Period Table',
+          icon: null,
+          path: '/timeTable/period-table',
+        },
+        {
+          id: 'timetable-staff-attendance',
+          label: 'Staff Attendance',
+          icon: null,
+          path: '/timeTable/staff-attendance',
+        },
+        {
+          id: 'timetable-attendance-report',
+          label: 'Attendance Report',
+          icon: null,
+          path: '/timeTable/attendance-report',
+        },
+        {
+          id: 'timetable-holidays',
+          label: 'Holidays',
+          icon: null,
+          path: '/timeTable/holidays',
+        },
+        {
+          id: 'timetable-student-attendance',
+          label: 'Student Attendance',
+          icon: null,
+          path: '/academics/student-attendance',
+        },
+        {
           id: 'period_master',
           label: 'Period Master',
           icon: null,
@@ -508,6 +544,18 @@ export const menuItem = {
           path: '/exams/mark-entry',
         },
       ],
+    },
+    {
+      id: 'my-timetable',
+      label: 'My Timetable',
+      icon: FileText,
+      path: '/timeTable/my-timetable',
+    },
+    {
+      id: 'student-attendance',
+      label: 'Student Attendance',
+      icon: FileText,
+      path: '/academics/student-attendance',
     },
     {
       id: 'class-list',

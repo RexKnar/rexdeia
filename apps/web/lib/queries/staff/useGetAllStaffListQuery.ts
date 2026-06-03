@@ -15,7 +15,7 @@ function getStaffList(
     limit,
     searchTerm,
   }: { page: number; limit: number; searchTerm: string },
-  options?: UseQueryOptions<PaginatedResponse<Staff>>
+  options?: Partial<UseQueryOptions<PaginatedResponse<Staff>>>
 ): UseQueryOptions<PaginatedResponse<Staff>> {
   return {
     ...options,
@@ -41,7 +41,7 @@ export function useGetAllStaffListQuery(
     limit,
     searchTerm,
   }: { page: number; limit: number; searchTerm: string },
-  options?: UseQueryOptions<PaginatedResponse<Staff>>
+  options?: Partial<UseQueryOptions<PaginatedResponse<Staff>>>
 ): UseQueryResult<PaginatedResponse<Staff>> {
   return useQuery(getStaffList({ page, limit, searchTerm }, options));
 }

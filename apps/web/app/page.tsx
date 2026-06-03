@@ -2,6 +2,10 @@ import { redirect } from 'next/navigation';
 import { getServerSession } from 'next-auth';
 
 import { authOptions } from '../lib/auth';
+import {
+  dashboardPathForRole,
+  resolveDashboardRole,
+} from '../lib/auth/resolveDashboardRole';
 
 export default async function Page() {
   const session = await getServerSession(authOptions);
@@ -9,5 +13,6 @@ export default async function Page() {
     redirect('/signin');
   }
 
-  redirect('/admission/dashboard');
+  const role = await resolveDashboardRole(session);
+  redirect(dashboardPathForRole(role));
 }

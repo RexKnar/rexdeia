@@ -3,7 +3,7 @@ import { redirect } from 'next/navigation';
 import { getServerSession } from 'next-auth';
 import { Suspense } from 'react';
 
-import { ExamAnalytics } from './_components/ExamAnalytics';
+import { AnalyticsDashboard } from './_components/AnalyticsDashboard';
 import { StudentAnalyticsHeader } from './_components/StudentAnalyticsPageheader';
 
 export default async function Page() {
@@ -13,10 +13,10 @@ export default async function Page() {
   }
 
   return (
-    <section className="space-y-2 rounded-md p-4">
+    <section className="space-y-4 rounded-md p-4">
       <Suspense>
         <StudentAnalyticsHeader />
-        <ExamAnalytics />
+        <AnalyticsDashboard />
       </Suspense>
     </section>
   );

@@ -2,7 +2,12 @@
 module.exports = {
   darkMode: ['class'],
   content: [
-    '../../packages/ui/**/*.{js,ts,jsx,tsx}',
+    // Scoped to the ui package's actual source dirs (not `**` from the package
+    // root) so Tailwind never crawls packages/ui/node_modules — that recursion
+    // is what triggers the "matching all of node_modules" perf warning.
+    '../../packages/ui/*.{js,ts,jsx,tsx}',
+    '../../packages/ui/components/**/*.{js,ts,jsx,tsx}',
+    '../../packages/ui/hooks/**/*.{js,ts,jsx,tsx}',
     './src/**/*.{js,ts,jsx,tsx}',
     'app/**/*.{js,ts,jsx,tsx}',
     'lib/**/*.{js,ts,jsx,tsx}',

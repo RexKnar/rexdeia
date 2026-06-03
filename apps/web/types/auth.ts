@@ -8,9 +8,12 @@ export interface ModuleAccess {
   delete: boolean;
 }
 
+export type RoleType = 'admin' | 'hm' | 'ahm' | 'staff' | 'tech';
+
 export interface OrganizationRole {
   id: string;
   name: string;
+  roleType?: RoleType | null;
   organizationId: string;
   branchId: string;
   moduleAccess: ModuleAccess[];

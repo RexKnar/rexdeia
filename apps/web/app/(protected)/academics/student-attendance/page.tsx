@@ -3,7 +3,7 @@ import { getServerSession } from 'next-auth';
 import { Suspense } from 'react';
 
 import { authOptions } from '../../../../lib/auth';
-import { StudentAttendanceListTable } from './_components/StudentAttendanceListTable';
+import { StudentAttendanceManager } from './_components/StudentAttendanceManager';
 import { StudentAttendancePageHeader } from './_components/StudentAttendancePageHeader';
 
 export default async function Page() {
@@ -13,11 +13,15 @@ export default async function Page() {
   }
 
   return (
-    <section className="flex flex-col gap-6">
+    <section className="flex flex-col gap-4">
       <Suspense>
         <StudentAttendancePageHeader />
-        <section className="space-y-2 rounded-md p-4">
-          <StudentAttendanceListTable />
+        <section className="space-y-2 rounded-md p-2 sm:p-4">
+          <p className="px-2 text-sm text-gray-600">
+            Mark student attendance for a section and date — for the full day, a
+            whole session (morning/afternoon), or a specific period.
+          </p>
+          <StudentAttendanceManager />
         </section>
       </Suspense>
     </section>

@@ -1,0 +1,22 @@
+NODE_ENV=development
+NEXTAUTH_URL=http://localhost:3000
+NEXT_PUBLIC_API_URL=http://localhost:3000
+NEXTAUTH_SECRET=2b7e151628aed2a6abf7158809cf4f3c762e7160f38b4da56a784d9045190cba
+DATABASE_URL=postgresql://postgres:admin@localhost:5432/rexdeia_test
+# DATABASE_URL=postgresql://postgres:rexCoders123@rexdeia-new.cvoss4icyh2c.ap-south-1.rds.amazonaws.com:5432/rexdeia
+# DATABASE_URL="postgresql://postgres:rexdeia%402024@103.104.48.5:5432/rexdeia_testing"
+# DATABASE_URL="postgresql://postgres:rexdeia%402024@103.104.48.5:5432/rexdeia_live"
+# 103.78.239.152
+
+# postgresql://postgres:rexCoders123@rexdeia-new.cvoss4icyh2c.ap-south-1.rds.amazonaws.com:5432/rexdeia
+NEXT_SITE_NAME=Rexdeia 
+NEXT_RAZORPAY_KEY_ID=rzp_test_FgPdhSoHy5q9CO
+NEXT_RAZORPAY_KEY_SECRET=xt6nQmfxv4bjKZdC0xEU14ei
+# NEXT_PUBLIC_ZOHO_SALESIQ_WIDGET_CODE=siq5f54d9690e6a1b3453aa252fa32856e9d676d3ef7876ff962cbdcf05a99278df
+SENTRY_DSN=https://4079002e0c9397054e638dff15dd5a9f@o4507098064486400.ingest.de.sentry.io/4507098068942928
+NEXT_PUBLIC_SENTRY_DSN=https://4079002e0c9397054e638dff15dd5a9f@o4507098064486400.ingest.de.sentry.io/4507098068942928
+# PGSSLMODE=require PGPASSWORD=0uN57Hh8163hv8h3YzYzPAT6 psql -h singularly-wired-imp-pdt.a1.pgedge.io -p 5432 -U admin -d rexdeia
+NODE_OPTIONS=--max_old_space_size=8096
+NEXT_GCLOUD_PROJECT_ID=sixth-oxygen-445513-g7
+NEXT_GCLOUD_STORAGE_BUCKET=rexcoders
+JWT_SECRET=rexdeia_jwt
