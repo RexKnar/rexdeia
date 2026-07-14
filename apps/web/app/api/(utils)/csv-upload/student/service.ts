@@ -4,7 +4,8 @@ import { db } from 'lib/db';
 import { getServerSession } from 'next-auth';
 
 export async function addStudentCSV(studentDetails: any) {
-  const promises = [];
+  const newStudents = [];
+  const promotedStudents = [];
   const failedStudents = [];
   const session = await getServerSession(authOptions);
 
@@ -131,7 +132,9 @@ export async function addStudentCSV(studentDetails: any) {
             emisNumber: studentDetail.EMISId,
           },
         });
+
         if (!student && aadhaar) {
+          // --- NEW STUDENT: create student record + mapping ---
           const createdStudent = await db.student.create({
             data: {
               ...studentWithoutBatchId,
@@ -188,7 +191,7 @@ export async function addStudentCSV(studentDetails: any) {
             },
           });
 
-          promises.push(createdStudent);
+          newStudents.push(createdStudent);
           await db.admissionForm.create({
             data: {
               createdAt: new Date(),
@@ -206,7 +209,31 @@ export async function addStudentCSV(studentDetails: any) {
               status: 'DirectStudentEntry',
             },
           });
-          promises.push(createdStudent);
+        } else if (student) {
+          // --- RETURNING STUDENT: promote only if not already enrolled in current year ---
+          const existingMapping = await db.studentMapping.findFirst({
+            where: {
+              studentId: student.id,
+              batchId: session.currentBatch,
+            },
+          });
+
+          if (!existingMapping) {
+            // No mapping for this academic year yet — promote the student
+            await db.studentMapping.create({
+              data: {
+                studentId: student.id,
+                classId: classDetail.id,
+                sectionId: sectionDetail.id,
+                groupId: groupDetail?.id || '',
+                mediumId: mediumDetail?.id || '',
+                batchId: session.currentBatch,
+                isCurrent: true,
+              },
+            });
+            promotedStudents.push(student);
+          }
+          // If existingMapping is found, silently skip — student is already enrolled
         }
       }
     } catch (rowError: any) {
@@ -220,8 +247,11 @@ export async function addStudentCSV(studentDetails: any) {
 
   return {
     success: true,
-    createdCount: promises.length / 2,
+    createdCount: newStudents.length,
+    promotedCount: promotedStudents.length,
     failedCount: failedStudents.length,
     failedStudents,
   };
 }
+
+

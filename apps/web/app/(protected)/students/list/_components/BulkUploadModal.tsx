@@ -152,7 +152,8 @@ export function BulkUploadModal() {
   const [isLoading, setIsLoading] = useState(false);
   const [uploadResult, setUploadResult] = useState<{
     success: boolean;
-    count?: number;
+    createdCount?: number;
+    promotedCount?: number;
     message?: string;
     failedStudents?: Array<{ name: string; error: string }>;
   } | null>(null);
@@ -336,33 +337,41 @@ export function BulkUploadModal() {
 
       // Check if result is the new structured success/failure object
       if (result && result.success) {
-        const count = result.createdCount;
-        const failedCount = result.failedCount;
+        const createdCount = result.createdCount || 0;
+        const promotedCount = result.promotedCount || 0;
+        const failedCount = result.failedCount || 0;
         const failedList = result.failedStudents || [];
+
+        const parts: string[] = [];
+        if (createdCount > 0) parts.push(`${createdCount} new student${createdCount !== 1 ? 's' : ''} added`);
+        if (promotedCount > 0) parts.push(`${promotedCount} existing student${promotedCount !== 1 ? 's' : ''} promoted to current year`);
+        const summaryLine = parts.length > 0 ? parts.join(', ') : 'No changes made';
 
         if (failedCount > 0) {
           setUploadResult({
             success: true,
-            count: count,
-            message: `Import completed with warnings: ${count} students successfully imported. ${failedCount} students failed to import due to duplicate credentials or missing references.`,
+            createdCount,
+            promotedCount,
+            message: `Import completed with warnings: ${summaryLine}. ${failedCount} student${failedCount !== 1 ? 's' : ''} failed due to duplicate credentials or missing references.`,
             failedStudents: failedList,
           });
 
           toast({
             title: 'Import Completed with Warnings',
-            description: `Imported ${count} students. ${failedCount} failed.`,
+            description: `${summaryLine}. ${failedCount} failed.`,
             variant: 'default',
           });
         } else {
           setUploadResult({
             success: true,
-            count: count,
-            message: `All ${count} students successfully imported and assigned to classes, sections, and groups.`,
+            createdCount,
+            promotedCount,
+            message: `${summaryLine}.`,
           });
 
           toast({
             title: 'Import Successful',
-            description: `Successfully imported all ${count} students.`,
+            description: summaryLine,
             variant: 'default',
           });
         }
@@ -377,7 +386,8 @@ export function BulkUploadModal() {
           const count = Math.ceil(result.length / 2);
           setUploadResult({
             success: true,
-            count: count,
+            createdCount: count,
+            promotedCount: 0,
             message: `${count} students successfully imported and assigned to classes, sections, and groups.`,
           });
 
