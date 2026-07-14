@@ -76,6 +76,20 @@ export async function updateExamById(id: string, payload: UpdateExamModel) {
 export async function deleteExamById(id: string) {
   const session = await getServerSession(authOptions);
 
+  const markCount = await db.mark.count({
+    where: {
+      examSubject: {
+        examGroup: {
+          examId: id,
+        },
+      },
+    },
+  });
+
+  if (markCount > 0) {
+    throw new Error('CANNOT_DELETE_EXAM_WITH_MARKS');
+  }
+
   return db.exam.update({
     where: {
       id: id,

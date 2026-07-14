@@ -15,6 +15,7 @@ export type ExamModel = {
   markEntryEndDate?: Date;
   markEntryCorrectionDate?: Date;
   blockMarkEntry?: Boolean;
+  hasMarks?: boolean;
 };
 
 export type CreateExamModel = Omit<

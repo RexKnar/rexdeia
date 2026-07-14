@@ -14,6 +14,7 @@ export async function getExamsList(page: number, limit: number, batchId?: string
       where: {
         branchId: session.branchId,
         batchId: targetBatchId,
+        isDeleted: false,
       },
       include: {
         examType: {
@@ -40,15 +41,34 @@ export async function getExamsList(page: number, limit: number, batchId?: string
       where: {
         branchId: session.branchId,
         batchId: targetBatchId,
+        isDeleted: false,
       },
     }),
   ]);
+
+  const examsWithMarks = await Promise.all(
+    data.map(async (exam) => {
+      const markCount = await db.mark.count({
+        where: {
+          examSubject: {
+            examGroup: {
+              examId: exam.id,
+            },
+          },
+        },
+      });
+      return {
+        ...exam,
+        hasMarks: markCount > 0,
+      };
+    })
+  );
 
   return {
     page,
     total,
     limit,
-    data,
+    data: examsWithMarks,
   };
 }
 

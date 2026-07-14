@@ -109,6 +109,7 @@ export const ADD_EXAM_CONFIGURATION_BY_EXAM_ID = `ADD_EXAM_CONFIGURATION_BY_EXAM
 export const GET_EXAM_LIST = `GET_EXAM_LIST`;
 export const ADD_EXAM = `ADD_EXAM`;
 export const UPDATE_EXAM = `UPDATE_EXAM`;
+export const DELETE_EXAM = `DELETE_EXAM`;
 export const UPDATE_EXAM_BLOCK_STATUS = 'UPDATE_EXAM_BLOCK_STATUS';
 export const GET_EXAM_BY_CLASS_SECTION = `GET_EXAM_BY_CLASS_SECTION`;
 export const GET_EXAM_BY_SECTION_ID = `GET_EXAM_BY_SECTION_ID`; //new
@@ -696,6 +697,10 @@ export default <EndpointDetails>{
   },
   [UPDATE_EXAM]: {
     requestType: `PUT`,
+    endpoint: `/api/exam/[id]`,
+  },
+  [DELETE_EXAM]: {
+    requestType: `DELETE`,
     endpoint: `/api/exam/[id]`,
   },
   [UPDATE_EXAM_BLOCK_STATUS]: {
