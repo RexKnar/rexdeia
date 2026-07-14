@@ -27,17 +27,16 @@ export function useUpdateExamDetailMutationQuery(page: number, limit: number) {
 
       queryClient.setQueryData(
         [GET_EXAM_LIST, page, limit],
-        (existingExam: PaginatedResponse<ExamModel>) => {
+        (existingExam?: PaginatedResponse<ExamModel>) => {
+          if (!existingExam || !existingExam.data) return existingExam;
           return {
             ...existingExam,
-            data: [
-              ...existingExam.data.map((exam) => {
-                if (exam.id === payload.id) {
-                  return { ...payload, isUpdating: true };
-                }
-                return exam;
-              }),
-            ],
+            data: existingExam.data.map((exam) => {
+              if (exam.id === payload.id) {
+                return { ...exam, ...payload, isUpdating: true } as any;
+              }
+              return exam;
+            }),
           };
         }
       );
@@ -45,10 +44,12 @@ export function useUpdateExamDetailMutationQuery(page: number, limit: number) {
       return { previousExam };
     },
     onError: (error, _, context) => {
-      queryClient.setQueryData(
-        [GET_EXAM_LIST, page, limit],
-        context.previousExam
-      );
+      if (context?.previousExam) {
+        queryClient.setQueryData(
+          [GET_EXAM_LIST, page, limit],
+          context.previousExam
+        );
+      }
     },
     onSuccess: async () => {
       await queryClient.refetchQueries({
