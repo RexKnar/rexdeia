@@ -3,18 +3,20 @@
 import React, { useState, useRef } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
   Button,
+  Input,
   Select,
   SelectContent,
+  SelectGroup,
   SelectItem,
   SelectTrigger,
   SelectValue,
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+  Text,
   toast,
 } from 'ui';
 import {
@@ -419,75 +421,84 @@ export function BulkUploadModal() {
     setUploadResult(null);
   };
 
+  const handleOnOpenChange = (isOpen: boolean) => {
+    setOpen(isOpen);
+    if (!isOpen) {
+      resetState();
+    }
+  };
+
   return (
-    <Dialog open={open} onOpenChange={(val) => { setOpen(val); if (!val) resetState(); }}>
-      <DialogTrigger asChild>
+    <Sheet open={open} onOpenChange={handleOnOpenChange}>
+      <SheetTrigger asChild>
         <Button variant="outline" className="flex items-center gap-2 border-primary text-primary hover:bg-primary/10">
           <Upload size={16} />
           Bulk Upload (CSV)
         </Button>
-      </DialogTrigger>
-      <DialogContent className="max-w-3xl max-h-[85vh] overflow-y-auto bg-slate-950 text-slate-100 border-slate-800 p-6 shadow-2xl rounded-xl">
-        <DialogHeader className="mb-4">
-          <DialogTitle className="text-xl font-bold bg-gradient-to-r from-blue-400 to-indigo-400 bg-clip-text text-transparent flex items-center gap-2">
-            Bulk Upload Students
-          </DialogTitle>
-          <DialogDescription className="text-slate-400">
-            Upload student records from a CSV file, normalize headers, and map student sections to academic groups.
-          </DialogDescription>
-        </DialogHeader>
+      </SheetTrigger>
+      <SheetContent side="right" className="bg-white p-10 sm:max-w-xl overflow-y-auto">
+        <SheetHeader className="mb-4">
+          <SheetTitle className="mb-5">
+            <div className="flex items-center">
+              <Upload size={20} strokeWidth={1.5} className="text-gray-700" />
+              <Text variant="lg-semibold" className="ml-2 text-gray-800">
+                Bulk Upload Students
+              </Text>
+            </div>
+          </SheetTitle>
+          <hr className="border-t border-gray-300" />
+        </SheetHeader>
 
-        <div className="space-y-6">
+        <div className="space-y-6 mt-5">
           {/* Main upload state */}
           {!file && !uploadResult && (
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="flex flex-col space-y-6">
               {/* Drag Zone */}
-              <div className="md:col-span-2">
-                <div
-                  onDragEnter={handleDrag}
-                  onDragOver={handleDrag}
-                  onDragLeave={handleDrag}
-                  onDrop={handleDrop}
-                  onClick={triggerFileSelect}
-                  className={`border-2 border-dashed rounded-xl p-8 flex flex-col items-center justify-center cursor-pointer transition-all duration-300 min-h-[220px] ${dragActive
-                      ? 'border-indigo-500 bg-indigo-500/10 shadow-[0_0_15px_rgba(99,102,241,0.2)]'
-                      : 'border-slate-800 bg-slate-900/40 hover:border-slate-700 hover:bg-slate-900/60'
-                    }`}
-                >
-                  <input
-                    ref={fileInputRef}
-                    type="file"
-                    accept=".csv"
-                    className="hidden"
-                    onChange={handleFileChange}
-                  />
-                  <div className="p-4 bg-slate-900 rounded-full text-indigo-400 mb-3 border border-slate-800 shadow-inner group-hover:scale-110 transition-transform">
-                    <Upload size={28} className={dragActive ? 'animate-bounce' : ''} />
-                  </div>
-                  <p className="text-sm font-medium text-slate-200">
-                    Drag and drop your CSV file here, or <span className="text-indigo-400 font-semibold hover:underline">browse</span>
-                  </p>
-                  <p className="text-xs text-slate-500 mt-1">Supports standard CSV files up to 10MB</p>
+              <div
+                onDragEnter={handleDrag}
+                onDragOver={handleDrag}
+                onDragLeave={handleDrag}
+                onDrop={handleDrop}
+                onClick={triggerFileSelect}
+                className={`border-2 border-dashed rounded-xl p-8 flex flex-col items-center justify-center cursor-pointer transition-all duration-300 min-h-[200px] ${
+                  dragActive
+                    ? 'border-primary bg-primary/5 shadow-md'
+                    : 'border-gray-300 bg-gray-50 hover:border-gray-400 hover:bg-gray-100'
+                }`}
+              >
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  accept=".csv"
+                  className="hidden"
+                  onChange={handleFileChange}
+                />
+                <div className="p-4 bg-white rounded-full text-primary mb-3 border border-gray-200 shadow-sm group-hover:scale-110 transition-transform">
+                  <Upload size={28} className={dragActive ? 'animate-bounce' : ''} />
                 </div>
+                <p className="text-sm font-medium text-gray-700">
+                  Drag and drop your CSV file here, or <span className="text-primary font-semibold hover:underline">browse</span>
+                </p>
+                <p className="text-xs text-gray-400 mt-1">Supports standard CSV files up to 10MB</p>
               </div>
 
               {/* Template & Help */}
-              <div className="bg-slate-900/50 border border-slate-900 rounded-xl p-4 flex flex-col justify-between space-y-4">
+              <div className="bg-gray-50 border border-gray-200 rounded-xl p-5 flex flex-col justify-between space-y-4">
                 <div>
-                  <h4 className="text-xs font-semibold uppercase tracking-wider text-indigo-400 mb-2 flex items-center gap-1">
-                    <Info size={14} /> Getting Started
+                  <h4 className="text-sm font-semibold text-gray-800 mb-2 flex items-center gap-1.5">
+                    <Info size={16} className="text-primary" /> Getting Started
                   </h4>
-                  <p className="text-xs text-slate-400 leading-relaxed">
-                    Make sure your CSV file includes columns like <code className="text-slate-200">Name</code>, <code className="text-slate-200">Aadhaar Number</code>, <code className="text-slate-200">Class</code>, and <code className="text-slate-200">Section</code>.
+                  <p className="text-xs text-gray-600 leading-relaxed">
+                    Make sure your CSV file includes columns like <code className="bg-gray-200 px-1 rounded text-gray-800 font-mono text-[11px]">Name</code>, <code className="bg-gray-200 px-1 rounded text-gray-800 font-mono text-[11px]">Aadhaar Number</code>, <code className="bg-gray-200 px-1 rounded text-gray-800 font-mono text-[11px]">Class</code>, and <code className="bg-gray-200 px-1 rounded text-gray-800 font-mono text-[11px]">Section</code>.
                   </p>
-                  <p className="text-xs text-slate-400 mt-2 leading-relaxed">
+                  <p className="text-xs text-gray-500 mt-2 leading-relaxed">
                     Slight spelling errors in column headers are automatically resolved (e.g. `Pin code` or `EMIS Id`).
                   </p>
                 </div>
                 <Button
                   onClick={downloadSampleCSV}
                   variant="outline"
-                  className="w-full text-xs flex items-center justify-center gap-2 border-slate-800 text-slate-300 hover:bg-slate-800"
+                  className="w-full text-xs flex items-center justify-center gap-2 border-gray-300 text-gray-700 hover:bg-gray-100 bg-white"
                 >
                   <Download size={14} />
                   Download Sample CSV
@@ -500,12 +511,12 @@ export function BulkUploadModal() {
           {file && !uploadResult && !isLoading && (
             <div className="space-y-6 animate-in fade-in-50 duration-300">
               {/* Selected File Header */}
-              <div className="flex items-center justify-between p-3 bg-slate-900/80 border border-slate-900 rounded-lg">
+              <div className="flex items-center justify-between p-3 bg-gray-50 border border-gray-200 rounded-lg">
                 <div className="flex items-center gap-3">
-                  <FileText className="text-indigo-400" size={20} />
+                  <FileText className="text-primary" size={20} />
                   <div>
-                    <p className="text-sm font-semibold text-slate-200">{file.name}</p>
-                    <p className="text-xs text-slate-500">
+                    <p className="text-sm font-semibold text-gray-800">{file.name}</p>
+                    <p className="text-xs text-gray-500">
                       {(file.size / 1024).toFixed(1)} KB • {parsedRows.length} students detected
                     </p>
                   </div>
@@ -513,7 +524,7 @@ export function BulkUploadModal() {
                 <Button
                   variant="ghost"
                   onClick={resetState}
-                  className="text-xs text-rose-400 hover:text-rose-300 hover:bg-rose-500/10 h-8 px-2"
+                  className="text-xs text-rose-600 hover:text-rose-700 hover:bg-rose-50 h-8 px-2"
                 >
                   Clear File
                 </Button>
@@ -521,25 +532,25 @@ export function BulkUploadModal() {
 
               {/* Section to Group Mapping Section */}
               {detectedSections.length > 0 ? (
-                <div className="border border-slate-900 rounded-xl bg-slate-900/30 p-4 space-y-4">
+                <div className="border border-gray-200 rounded-xl bg-gray-50 p-4 space-y-4">
                   <div>
-                    <h3 className="text-sm font-semibold text-indigo-400 flex items-center gap-2">
-                      <RefreshCw size={16} className="animate-spin-slow text-indigo-400" />
+                    <h3 className="text-sm font-semibold text-gray-800 flex items-center gap-2">
+                      <RefreshCw size={16} className="animate-spin-slow text-primary" />
                       Section-to-Group Mapping Required
                     </h3>
-                    <p className="text-xs text-slate-400 mt-0.5">
+                    <p className="text-xs text-gray-500 mt-0.5">
                       Map each unique section detected in the CSV file to an academic group in the system.
                     </p>
                   </div>
 
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-h-[200px] overflow-y-auto pr-1">
+                  <div className="grid grid-cols-1 gap-3 max-h-[220px] overflow-y-auto pr-1">
                     {detectedSections.map((section) => (
                       <div
                         key={section}
-                        className="flex items-center justify-between p-3 rounded-lg bg-slate-950 border border-slate-900"
+                        className="flex items-center justify-between p-3 rounded-lg bg-white border border-gray-200"
                       >
-                        <span className="text-sm font-medium text-slate-300">
-                          Section <span className="text-indigo-400 font-bold">{section}</span>
+                        <span className="text-sm font-medium text-gray-700">
+                          Section <span className="text-primary font-bold">{section}</span>
                         </span>
                         <div className="w-[180px]">
                           <Select
@@ -548,22 +559,24 @@ export function BulkUploadModal() {
                               setSectionGroupMap((prev) => ({ ...prev, [section]: val }))
                             }
                           >
-                            <SelectTrigger className="w-full text-xs h-8 bg-slate-900 border-slate-800 text-slate-200">
+                            <SelectTrigger className="w-full text-xs h-8 bg-white border-gray-200 text-gray-800">
                               <SelectValue placeholder="Select Group" />
                             </SelectTrigger>
-                            <SelectContent className="bg-slate-900 border-slate-800 text-slate-200">
-                              <SelectItem value="General" className="text-xs hover:bg-slate-800">
-                                General
-                              </SelectItem>
-                              {groupsList.map((group) => (
-                                <SelectItem
-                                  key={group.id}
-                                  value={group.name}
-                                  className="text-xs hover:bg-slate-800"
-                                >
-                                  {group.name}
+                            <SelectContent className="bg-white border-gray-200 text-gray-800">
+                              <SelectGroup>
+                                <SelectItem value="General" className="text-xs hover:bg-gray-50">
+                                  General
                                 </SelectItem>
-                              ))}
+                                {groupsList.map((group) => (
+                                  <SelectItem
+                                    key={group.id}
+                                    value={group.name}
+                                    className="text-xs hover:bg-gray-50"
+                                  >
+                                    {group.name}
+                                  </SelectItem>
+                                ))}
+                              </SelectGroup>
                             </SelectContent>
                           </Select>
                         </div>
@@ -572,7 +585,7 @@ export function BulkUploadModal() {
                   </div>
                 </div>
               ) : (
-                <div className="flex items-center gap-2 p-3 bg-amber-500/10 border border-amber-500/20 text-amber-400 rounded-lg">
+                <div className="flex items-center gap-2 p-3 bg-amber-50 border border-amber-200 text-amber-600 rounded-lg">
                   <AlertTriangle size={18} />
                   <span className="text-xs">
                     No Section column detected. Students will be imported without section-to-group mappings.
@@ -584,7 +597,7 @@ export function BulkUploadModal() {
               <div className="flex justify-end pt-2">
                 <Button
                   onClick={handleUpload}
-                  className="bg-indigo-600 hover:bg-indigo-500 text-white font-medium text-sm flex items-center gap-2 px-6 shadow-lg shadow-indigo-600/20"
+                  className="bg-primary hover:bg-primary/90 text-white font-medium text-sm flex items-center gap-2 px-6 shadow-md"
                 >
                   Import {parsedRows.length} Students
                 </Button>
@@ -595,10 +608,10 @@ export function BulkUploadModal() {
           {/* Loading State */}
           {isLoading && (
             <div className="flex flex-col items-center justify-center p-12 space-y-4">
-              <Loader2 className="animate-spin text-indigo-500" size={40} />
+              <Loader2 className="animate-spin text-primary" size={40} />
               <div className="text-center">
-                <p className="text-sm font-semibold text-slate-200">Uploading and assigning students...</p>
-                <p className="text-xs text-slate-500 mt-1">
+                <p className="text-sm font-semibold text-gray-800">Uploading and assigning students...</p>
+                <p className="text-xs text-gray-500 mt-1">
                   Parsing details, creating users, and establishing mappings. Do not close this modal.
                 </p>
               </div>
@@ -607,27 +620,27 @@ export function BulkUploadModal() {
 
           {/* Result State */}
           {uploadResult && (
-            <div className="p-6 rounded-xl border animate-in zoom-in-95 duration-200 flex flex-col items-center text-center space-y-4 bg-slate-900/20 border-slate-900 w-full">
+            <div className="p-6 rounded-xl border animate-in zoom-in-95 duration-200 flex flex-col items-center text-center space-y-4 bg-gray-50 border-gray-200 w-full">
               {uploadResult.success ? (
                 <>
-                  <div className="p-3 bg-emerald-500/10 rounded-full text-emerald-400 border border-emerald-500/20 shadow-[0_0_15px_rgba(16,185,129,0.1)]">
+                  <div className="p-3 bg-emerald-50 rounded-full text-emerald-600 border border-emerald-100 shadow-sm">
                     <CheckCircle2 size={36} />
                   </div>
-                  <h3 className="text-lg font-bold text-slate-100">Upload Completed!</h3>
-                  <p className="text-sm text-slate-400 max-w-md leading-relaxed">
+                  <h3 className="text-lg font-bold text-gray-800">Upload Completed!</h3>
+                  <p className="text-sm text-gray-600 max-w-md leading-relaxed">
                     {uploadResult.message}
                   </p>
 
                   {uploadResult.failedStudents && uploadResult.failedStudents.length > 0 && (
-                    <div className="w-full text-left bg-slate-950/80 border border-slate-800 rounded-lg p-4 mt-2 max-h-[220px] overflow-y-auto">
-                      <p className="text-xs font-semibold text-rose-400 mb-2 flex items-center gap-1.5">
+                    <div className="w-full text-left bg-white border border-gray-200 rounded-lg p-4 mt-2 max-h-[220px] overflow-y-auto">
+                      <p className="text-xs font-semibold text-rose-600 mb-2 flex items-center gap-1.5">
                         <AlertTriangle size={14} />
                         Failed Records ({uploadResult.failedStudents.length})
                       </p>
                       <div className="space-y-1.5">
                         {uploadResult.failedStudents.map((f, idx) => (
-                          <div key={idx} className="text-xs border-b border-slate-900 pb-1.5 last:border-0 last:pb-0 font-sans">
-                            <span className="font-semibold text-slate-300">{f.name}</span>: <span className="text-slate-400">{f.error}</span>
+                          <div key={idx} className="text-xs border-b border-gray-100 pb-1.5 last:border-0 last:pb-0 font-sans">
+                            <span className="font-semibold text-gray-700">{f.name}</span>: <span className="text-gray-500">{f.error}</span>
                           </div>
                         ))}
                       </div>
@@ -636,14 +649,14 @@ export function BulkUploadModal() {
                 </>
               ) : (
                 <>
-                  <div className="p-3 bg-rose-500/10 rounded-full text-rose-400 border border-rose-500/20 shadow-[0_0_15px_rgba(239,68,68,0.1)]">
+                  <div className="p-3 bg-rose-50 rounded-full text-rose-600 border border-rose-100 shadow-sm">
                     <AlertTriangle size={36} />
                   </div>
-                  <h3 className="text-lg font-bold text-slate-100">Upload Failed</h3>
-                  <p className="text-sm text-rose-400 max-w-md leading-relaxed">
+                  <h3 className="text-lg font-bold text-gray-800">Upload Failed</h3>
+                  <p className="text-sm text-rose-600 max-w-md leading-relaxed">
                     {uploadResult.message}
                   </p>
-                  <p className="text-xs text-slate-500 max-w-sm mt-1">
+                  <p className="text-xs text-gray-500 max-w-sm mt-1">
                     Please ensure that the classes and sections listed in your CSV exist in the system and are spelled exactly matching the database.
                   </p>
                 </>
@@ -654,14 +667,14 @@ export function BulkUploadModal() {
                   <Button
                     onClick={resetState}
                     variant="outline"
-                    className="border-slate-800 text-slate-300 hover:bg-slate-800"
+                    className="border-gray-200 text-gray-700 hover:bg-gray-100"
                   >
                     Try Again
                   </Button>
                 )}
                 <Button
                   onClick={() => setOpen(false)}
-                  className="bg-indigo-600 hover:bg-indigo-500 text-white px-6"
+                  className="bg-primary hover:bg-primary/90 text-white px-6"
                 >
                   Close
                 </Button>
@@ -669,7 +682,7 @@ export function BulkUploadModal() {
             </div>
           )}
         </div>
-      </DialogContent>
-    </Dialog>
+      </SheetContent>
+    </Sheet>
   );
 }
