@@ -4,16 +4,22 @@ import { db } from 'lib/db';
 import { getServerSession } from 'next-auth';
 
 export async function addStudentCSV(studentDetails: any) {
-  try {
-    const promises = [];
-    const session = await getServerSession(authOptions);
-    for (const studentDetail of studentDetails) {
+  const promises = [];
+  const failedStudents = [];
+  const session = await getServerSession(authOptions);
+
+  for (const studentDetail of studentDetails) {
+    try {
       if (studentDetail.Name && studentDetail.AadhaarNumber) {
         const classDetail = await db.class.findFirst({
           where: {
             name: studentDetail.Class,
           },
         });
+
+        if (!classDetail) {
+          throw new Error(`Class "${studentDetail.Class}" not found`);
+        }
 
         const sectionDetail = await db.section.findFirst({
           where: {
@@ -22,6 +28,10 @@ export async function addStudentCSV(studentDetails: any) {
             academicYearId: session.currentBatch,
           },
         });
+
+        if (!sectionDetail) {
+          throw new Error(`Section "${studentDetail.Section}" not found in Class "${studentDetail.Class}"`);
+        }
 
         const communityDetail = await db.community.findFirst({
           where: {
@@ -46,23 +56,31 @@ export async function addStudentCSV(studentDetails: any) {
           },
         });
 
+        // Resolve masked Aadhaar numbers to avoid collisions
+        let aadhaar = studentDetail.AadhaarNumber;
+        if (aadhaar && (aadhaar.toLowerCase().includes('x') || aadhaar.length < 12)) {
+          if (studentDetail.EMISId) {
+            aadhaar = studentDetail.EMISId;
+          }
+        }
+
         let user = await db.user.findFirst({
           where: {
-            username: studentDetail.AadhaarNumber + '@gmail.com',
+            username: aadhaar + '@gmail.com',
           },
         });
         if (!user) {
           const hashedPassword = await bcrypt.hash(
-            studentDetail.Mobile || studentDetail?.PhoneNumber,
+            studentDetail.Mobile || studentDetail?.PhoneNumber || 'Password@123',
             10
           );
           user = await db.user.create({
             data: {
               password: hashedPassword,
               name: studentDetail.Name,
-              email: studentDetail.AadhaarNumber + '@gmail.com',
-              username: studentDetail.AadhaarNumber + '@gmail.com',
-              phoneNumber: studentDetail.Mobile || studentDetail?.PhoneNumber,
+              email: aadhaar + '@gmail.com',
+              username: aadhaar + '@gmail.com',
+              phoneNumber: studentDetail.Mobile || studentDetail?.PhoneNumber || '',
               role: 'Student',
             },
           });
@@ -91,20 +109,20 @@ export async function addStudentCSV(studentDetails: any) {
         const studentWithoutBatchId = {
           firstName: studentDetail.Name,
           lastName: '',
-          aadharCardNumber: studentDetail.AadhaarNumber,
-          phoneNumber: studentDetail.Mobile || studentDetail?.PhoneNumber,
-          emailId: studentDetail.AadhaarNumber + '@gmail.com',
-          gender: studentDetail.Gender,
+          aadharCardNumber: aadhaar,
+          phoneNumber: studentDetail.Mobile || studentDetail?.PhoneNumber || '',
+          emailId: aadhaar + '@gmail.com',
+          gender: studentDetail.Gender || '-',
           emisNumber: studentDetail.EMISId,
-          fatherName: studentDetail.FatherName,
-          motherName: studentDetail.MotherName,
-          admissionNumber: studentDetail.AdmissionNumber,
-          bloodGroup: studentDetail.BloodGroup,
-          dob: studentDetail.DateOfBirth || studentDetail.DataOfBirth,
+          fatherName: studentDetail.FatherName || '',
+          motherName: studentDetail.MotherName || '',
+          admissionNumber: studentDetail.AdmissionNumber || '',
+          bloodGroup: studentDetail.BloodGroup || '',
+          dob: studentDetail.DateOfBirth || studentDetail.DataOfBirth || '',
           additionalAttributes: {
-            dateOfJoining: studentDetail.DateOfJoining,
-            residentialAddress: studentDetail.Address,
-            residentialPostalCode: studentDetail.PinCode,
+            dateOfJoining: studentDetail.DateOfJoining || '',
+            residentialAddress: studentDetail.Address || '',
+            residentialPostalCode: studentDetail.PinCode || '',
           },
         };
 
@@ -113,7 +131,7 @@ export async function addStudentCSV(studentDetails: any) {
             emisNumber: studentDetail.EMISId,
           },
         });
-        if (!student && studentDetail.AadhaarNumber) {
+        if (!student && aadhaar) {
           const createdStudent = await db.student.create({
             data: {
               ...studentWithoutBatchId,
@@ -123,9 +141,9 @@ export async function addStudentCSV(studentDetails: any) {
               studentMapping: {
                 create: [
                   {
-                    groupId: groupDetail.id,
+                    groupId: groupDetail?.id || '',
                     classId: classDetail.id,
-                    mediumId: mediumDetail.id,
+                    mediumId: mediumDetail?.id || '',
                     sectionId: sectionDetail.id,
                     batchId: session.currentBatch,
                   },
@@ -191,11 +209,19 @@ export async function addStudentCSV(studentDetails: any) {
           promises.push(createdStudent);
         }
       }
+    } catch (rowError: any) {
+      console.error(`Error importing student ${studentDetail.Name}:`, rowError);
+      failedStudents.push({
+        name: studentDetail.Name || 'Unknown Student',
+        error: rowError.message || 'Database error occurred',
+      });
     }
-
-    return promises;
-  } catch (e) {
-    console.error(e);
-    return e;
   }
+
+  return {
+    success: true,
+    createdCount: promises.length / 2,
+    failedCount: failedStudents.length,
+    failedStudents,
+  };
 }

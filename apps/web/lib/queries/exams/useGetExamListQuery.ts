@@ -10,12 +10,12 @@ import { PaginatedResponse } from '../../domain';
 import { GET_EXAM_LIST } from '../../endpoints';
 
 function getExamList(
-  { page, limit }: { page: number; limit: number },
-  options?: UseQueryOptions<PaginatedResponse<ExamModel>>
+  { page, limit, batchId }: { page: number; limit: number; batchId?: string },
+  options?: Partial<UseQueryOptions<PaginatedResponse<ExamModel>>>
 ): UseQueryOptions<PaginatedResponse<ExamModel>> {
   return {
     ...options,
-    queryKey: [GET_EXAM_LIST, page, limit],
+    queryKey: [GET_EXAM_LIST, page, limit, batchId],
     queryFn: async () => {
       return await makeAPICall<PaginatedResponse<ExamModel>>(
         GET_EXAM_LIST,
@@ -23,16 +23,17 @@ function getExamList(
         {
           page: page,
           limit: limit,
+          ...(batchId && { batchId }),
         },
         {}
       );
     },
-  };
+  } as UseQueryOptions<PaginatedResponse<ExamModel>>;
 }
 
 export function useGetExamListQuery(
-  { page, limit }: { page: number; limit: number },
-  options?: UseQueryOptions<PaginatedResponse<ExamModel>>
+  { page, limit, batchId }: { page: number; limit: number; batchId?: string },
+  options?: Partial<UseQueryOptions<PaginatedResponse<ExamModel>>>
 ): UseQueryResult<PaginatedResponse<ExamModel>> {
-  return useQuery(getExamList({ page, limit }, options));
+  return useQuery(getExamList({ page, limit, batchId }, options));
 }

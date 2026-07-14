@@ -38,8 +38,9 @@ export async function GET(request: NextRequest) {
   try {
     const page = parseInt(request.nextUrl.searchParams.get('page')) || 1;
     const limit = parseInt(request.nextUrl.searchParams.get('limit')) || 10;
+    const batchId = request.nextUrl.searchParams.get('batchId') || undefined;
 
-    const classList = await getExamsList(page, limit);
+    const classList = await getExamsList(page, limit, batchId);
     return new NextResponse(JSON.stringify(classList), {
       status: StatusCodes.OK,
     });

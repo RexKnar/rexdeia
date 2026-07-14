@@ -4,15 +4,16 @@ import { getServerSession } from 'next-auth';
 
 import { db } from '../../../lib/db';
 
-export async function getExamsList(page: number, limit: number) {
+export async function getExamsList(page: number, limit: number, batchId?: string) {
   const session = await getServerSession(authOptions);
+  const targetBatchId = batchId || session.currentBatch;
   const [data, total] = await db.$transaction([
     db.exam.findMany({
       take: limit,
       skip: (page - 1) * limit,
       where: {
         branchId: session.branchId,
-        batchId: session.currentBatch,
+        batchId: targetBatchId,
       },
       include: {
         examType: {
@@ -38,6 +39,7 @@ export async function getExamsList(page: number, limit: number) {
     db.exam.count({
       where: {
         branchId: session.branchId,
+        batchId: targetBatchId,
       },
     }),
   ]);

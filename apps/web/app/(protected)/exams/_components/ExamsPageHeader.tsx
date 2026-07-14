@@ -6,6 +6,7 @@ import { Button } from 'ui';
 import { PageTitle } from '@/components/PageTitle';
 
 import { SaveExamFlyout } from '../add/saveExamFlyout';
+import { CopyExamModal } from './CopyExamModal';
 
 export function ExamsPageHeader() {
   const pathname = usePathname();
@@ -16,17 +17,20 @@ export function ExamsPageHeader() {
     <>
       <section className="flex justify-between px-2">
         <PageTitle title="Exam List" />
-        <Button
-          variant="default"
-          onClick={async () => {
-            const params = new URLSearchParams(searchParams);
-            params.set('isSaveExamFlyoutOpen', 'true');
+        <div className="flex items-center gap-3">
+          <CopyExamModal />
+          <Button
+            variant="default"
+            onClick={async () => {
+              const params = new URLSearchParams(searchParams);
+              params.set('isSaveExamFlyoutOpen', 'true');
 
-            router.replace(pathname + '?' + params.toString());
-          }}
-        >
-          Add Exam
-        </Button>
+              router.replace(pathname + '?' + params.toString());
+            }}
+          >
+            Add Exam
+          </Button>
+        </div>
       </section>
       <SaveExamFlyout />
     </>
