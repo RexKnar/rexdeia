@@ -1,3 +1,4 @@
+import { randomUUID } from 'crypto';
 import { authOptions } from 'lib/auth';
 import { db } from 'lib/db';
 import { getServerSession } from 'next-auth';
@@ -5,6 +6,10 @@ import { getServerSession } from 'next-auth';
 export async function copyClass(payload: any) {
   const { examId, academicYearId: sourceAcademicYearId, name } = payload;
   const session = await getServerSession(authOptions);
+
+  if (!session || !session.currentBatch) {
+    return { success: false, error: 'Academic year session context not found' };
+  }
 
   const oldExam = await db.exam.findUnique({
     where: {
@@ -41,6 +46,74 @@ export async function copyClass(payload: any) {
   try {
     return await db.$transaction(
       async (prisma) => {
+        // Query all matching target sections first to avoid N+1 queries
+        const sectionNames = oldExam.examGroup.map((eg) => eg.section.name);
+        const classIds = oldExam.examGroup.map((eg) => eg.classId);
+
+        const targetSections = await prisma.section.findMany({
+          where: {
+            name: { in: sectionNames },
+            classId: { in: classIds },
+            academicYearId: session.currentBatch,
+            isDeleted: false,
+          },
+        });
+
+        const sectionMap = new Map<string, any>();
+        for (const sec of targetSections) {
+          sectionMap.set(`${sec.name}-${sec.classId}`, sec);
+        }
+
+        const examGroupsData: any[] = [];
+
+        for (const examGroup of oldExam.examGroup) {
+          const section = sectionMap.get(`${examGroup.section.name}-${examGroup.classId}`);
+          
+          if (section) {
+            const examGroupId = randomUUID();
+            
+            examGroupsData.push({
+              id: examGroupId,
+              totalMarks: examGroup.totalMarks,
+              classId: examGroup.classId,
+              sectionId: section.id,
+              examSubject: {
+                create: examGroup.examSubject.map((examSubject) => {
+                  const examSubjectId = randomUUID();
+                  return {
+                    id: examSubjectId,
+                    subjectId: examSubject.subjectId,
+                    groupId: examSubject.groupId,
+                    minMark: examSubject.minMark,
+                    totalMarks: examSubject.totalMarks,
+                    convertTo: examSubject.convertTo,
+                    examSubjectPartition: {
+                      create: examSubject.examSubjectPartition.map((partition) => {
+                        return {
+                          id: randomUUID(),
+                          subjectId: partition.subjectId,
+                          minMark: partition.minMark,
+                          totalMarks: partition.totalMarks,
+                          partitionName: partition.partitionName,
+                          assessmentFormatId: partition.assessmentFormatId,
+                          convertTo: partition.convertTo,
+                          dateToConduct: partition.dateToConduct,
+                          examGroupId: examGroupId,
+                          excludeSubjectValidation: partition.excludeSubjectValidation,
+                          order: partition.order,
+                        };
+                      }),
+                    },
+                  };
+                }),
+              },
+            });
+            console.log('[CopyExamDebug] Prepared nested examGroup:', examGroupId);
+          } else {
+            console.log('[CopyExamDebug] Skipping examGroup', examGroup.id, 'because section was not found in target batch');
+          }
+        }
+
         const newExam = await prisma.exam.create({
           data: {
             name: name || oldExam.name,
@@ -53,76 +126,13 @@ export async function copyClass(payload: any) {
             termId: oldExam.termId,
             batchId: session.currentBatch,
             examTypeId: oldExam.examTypeId,
+            examGroup: {
+              create: examGroupsData,
+            },
           },
         });
 
-        console.log('[CopyExamDebug] Created newExam:', newExam.id, 'for target batch:', session.currentBatch);
-
-        for (const examGroup of oldExam.examGroup) {
-          // Find the corresponding section in the target academic year by name and classId
-          const section = await prisma.section.findFirst({
-            where: {
-              name: examGroup.section.name,
-              classId: examGroup.classId,
-              academicYearId: session.currentBatch,
-              isDeleted: false,
-            },
-          });
-
-          console.log('[CopyExamDebug] Section lookup:', {
-            sectionName: examGroup.section.name,
-            classId: examGroup.classId,
-            academicYearId: session.currentBatch,
-            found: !!section,
-            id: section?.id,
-          });
-
-          if (section) {
-            const newExamGroup = await prisma.examGroup.create({
-              data: {
-                totalMarks: examGroup.totalMarks,
-                classId: examGroup.classId, // Class is global, use original classId
-                examId: newExam.id,
-                sectionId: section.id, // Section is batch-specific
-              },
-            });
-            console.log('[CopyExamDebug] Created newExamGroup:', newExamGroup.id);
-
-            for (const examSubject of examGroup.examSubject) {
-              const newExamSubject = await prisma.examSubject.create({
-                data: {
-                  subjectId: examSubject.subjectId, // Subject is global, use original subjectId
-                  groupId: examSubject.groupId, // Group is global, use original groupId
-                  examGroupId: newExamGroup.id,
-                  minMark: examSubject.minMark,
-                  totalMarks: examSubject.totalMarks,
-                  convertTo: examSubject.convertTo,
-                },
-              });
-              console.log('[CopyExamDebug] Created newExamSubject:', newExamSubject.id, 'for subjectId:', examSubject.subjectId);
-
-              for (const partition of examSubject.examSubjectPartition) {
-                const newPartition = await prisma.examSubjectPartition.create({
-                  data: {
-                    subjectId: partition.subjectId, // Subject is global
-                    examSubjectId: newExamSubject.id,
-                    assessmentFormatId: partition.assessmentFormatId,
-                    minMark: partition.minMark,
-                    convertTo: partition.convertTo,
-                    totalMarks: partition.totalMarks,
-                    order: partition.order,
-                    examGroupId: newExamGroup.id,
-                    dateToConduct: partition.dateToConduct,
-                    excludeSubjectValidation: partition.excludeSubjectValidation,
-                  },
-                });
-                console.log('[CopyExamDebug] Created partition:', newPartition.id);
-              }
-            }
-          } else {
-            console.log('[CopyExamDebug] Skipping examGroup', examGroup.id, 'because section was not found in target batch');
-          }
-        }
+        console.log('[CopyExamDebug] Created newExam with nested relations:', newExam.id);
 
         return {
           success: true,
@@ -141,3 +151,4 @@ export async function copyClass(payload: any) {
     };
   }
 }
+
