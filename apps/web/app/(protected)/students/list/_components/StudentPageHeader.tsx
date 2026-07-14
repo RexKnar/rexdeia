@@ -4,15 +4,19 @@ import { ProtectedComponent } from 'app/(auth)/_components/ProtectedComponent';
 
 import { LinkButton } from '@/components/LinkButton';
 import { PageTitle } from '@/components/PageTitle';
+import { BulkUploadModal } from './BulkUploadModal';
 
 export function StudentPageHeader() {
   return (
     <section className="flex justify-between px-2">
       <PageTitle title="Students List" className="mb-3" />
       <ProtectedComponent module="Students" permission="create">
-        <LinkButton variant="primary" url="enroll-new-student">
-          Add New Student
-        </LinkButton>
+        <div className="flex items-center gap-3">
+          <BulkUploadModal />
+          <LinkButton variant="primary" url="enroll-new-student">
+            Add New Student
+          </LinkButton>
+        </div>
       </ProtectedComponent>
     </section>
   );
