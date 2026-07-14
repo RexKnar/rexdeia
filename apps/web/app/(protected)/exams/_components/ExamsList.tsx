@@ -2,10 +2,13 @@
 
 import { useToggleExamBlockMutationQuery } from 'lib/queries/exams/block/useUpdateExamBlockMutationQuery';
 import { useGetExamListQuery } from 'lib/queries/exams/useGetExamListQuery';
+import { useDeleteExamMutationQuery } from 'lib/queries/exams/useDeleteExamMutationQuery';
 import { Loader2 } from 'lucide-react';
 import { useState } from 'react';
+import { toast } from 'ui';
 
 import { BlockConfirmationModal } from '@/components/modals/BlockConfirmationModal';
+import { DeleteConfirmationModal } from '@/components/modals/DeleteConfirmationModal';
 import { useQueryParams } from '@/hooks/useQueryParams';
 
 import { ExamCard } from './ExamCard';
@@ -26,7 +29,12 @@ export function ExamsList() {
     useState(false);
   const [selectedExam, setSelectedExam] = useState<any>();
 
+  const [showDeleteConfirmationModal, setShowDeleteConfirmationModal] =
+    useState(false);
+  const [selectedExamForDelete, setSelectedExamForDelete] = useState<any>();
+
   const { mutateAsync: toggleExamBlock } = useToggleExamBlockMutationQuery();
+  const { mutateAsync: deleteExam } = useDeleteExamMutationQuery(page, limit);
 
   const { data: examListResponse, isLoading: isExamListLoading } =
     useGetExamListQuery({ page, limit });
@@ -50,6 +58,34 @@ export function ExamsList() {
       setShowBlockConfirmationModal(false);
     }
   };
+
+  const handleDeleteClick = (exam: any) => {
+    setSelectedExamForDelete(exam);
+    setShowDeleteConfirmationModal(true);
+  };
+
+  const handleConfirmDelete = async () => {
+    if (!selectedExamForDelete) return;
+
+    try {
+      await deleteExam(selectedExamForDelete.id);
+      toast({
+        title: 'Exam Deleted',
+        description: `Successfully deleted exam "${selectedExamForDelete.name}".`,
+        variant: 'default',
+      });
+    } catch (err: any) {
+      console.error('Failed to delete exam:', err);
+      toast({
+        title: 'Delete Failed',
+        description: err.message || 'Could not delete exam.',
+        variant: 'default',
+      });
+    } finally {
+      setShowDeleteConfirmationModal(false);
+    }
+  };
+
   if (isExamListLoading) {
     return (
       <div className="flex items-center justify-center">
@@ -75,6 +111,8 @@ export function ExamsList() {
             cardColor={cardColors[index % cardColors.length]}
             setSelectedExam={handleSelectedExam}
             blockMarkEntry={exam.blockMarkEntry}
+            hasMarks={exam.hasMarks}
+            onDeleteClick={handleDeleteClick}
           />
         ))}
       </div>
@@ -85,6 +123,13 @@ export function ExamsList() {
         description={`This will ${selectedExam?.blockMarkEntry === false ? 'disable' : 'enable'} mark entry.`}
         onConfirmClick={handleBlockToggle}
         onCancelClick={() => setShowBlockConfirmationModal(false)}
+      />
+      <DeleteConfirmationModal
+        open={showDeleteConfirmationModal}
+        title={`Are you sure you want to delete "${selectedExamForDelete?.name}"?`}
+        description="This will permanently delete the exam configuration. This action cannot be undone."
+        onDeleteClick={handleConfirmDelete}
+        onCancelClick={() => setShowDeleteConfirmationModal(false)}
       />
     </div>
   );

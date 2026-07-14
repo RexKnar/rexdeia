@@ -1,6 +1,6 @@
 'use client';
 
-import { PencilIcon } from 'lucide-react';
+import { PencilIcon, Trash2 } from 'lucide-react';
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { Button, Switch } from 'ui';
@@ -20,6 +20,8 @@ type ExamCardProps = {
   isClosed?: Boolean;
   setSelectedExam?: any;
   blockMarkEntry?: Boolean;
+  hasMarks?: boolean;
+  onDeleteClick?: (exam: { id: string; name: string }) => void;
 };
 
 export function ExamCard({
@@ -32,6 +34,8 @@ export function ExamCard({
   cardColor,
   isClosed,
   setSelectedExam,
+  hasMarks,
+  onDeleteClick,
 }: ExamCardProps) {
   const { setParams } = useQueryParams();
   const { watch, setValue, register } = useForm({
@@ -45,7 +49,7 @@ export function ExamCard({
   }, [isClosed]);
   return (
     <div className={cn(`border-1 rounded-xl border p-4`, cardColor, className)}>
-      <div className="flex justify-between">
+      <div className="flex justify-between items-center">
         <h3 className="font-bold ">{examName}</h3>
         <p
           className={cn(
@@ -55,14 +59,25 @@ export function ExamCard({
         >
           {isActive ? 'Active' : 'Inactive'}
         </p>
-        <Button
-          variant="ghost"
-          onClick={() =>
-            setParams({ isSaveExamFlyoutOpen: 'true', examId: examId })
-          }
-        >
-          <PencilIcon className="ml-2 h-4 w-4 text-primary-900" />
-        </Button>
+        <div className="flex items-center gap-1">
+          <Button
+            variant="ghost"
+            onClick={() =>
+              setParams({ isSaveExamFlyoutOpen: 'true', examId: examId })
+            }
+          >
+            <PencilIcon className="h-4 w-4 text-primary-900" />
+          </Button>
+          {!hasMarks && (
+            <Button
+              variant="ghost"
+              onClick={() => onDeleteClick?.({ id: examId, name: examName })}
+              className="text-red-600 hover:text-red-700 hover:bg-red-50 p-2"
+            >
+              <Trash2 className="h-4 w-4" />
+            </Button>
+          )}
+        </div>
       </div>
       <div className="flex flex-wrap">
         <p className="py-3">

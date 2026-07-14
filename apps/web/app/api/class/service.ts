@@ -27,6 +27,77 @@ type SectionDataType = {
   sectionName: string;
   subjects: string[];
 };
+
+function romanToDecimal(roman: string): number {
+  const romanMap: Record<string, number> = {
+    I: 1, V: 5, X: 10, L: 50, C: 100, D: 500, M: 1000
+  };
+  
+  let total = 0;
+  let prevValue = 0;
+  
+  for (let i = roman.length - 1; i >= 0; i--) {
+    const char = roman[i].toUpperCase();
+    const currentValue = romanMap[char];
+    if (!currentValue) continue;
+    
+    if (currentValue < prevValue) {
+      total -= currentValue;
+    } else {
+      total += currentValue;
+    }
+    prevValue = currentValue;
+  }
+  
+  return total;
+}
+
+const prePrimaryMap: Record<string, number> = {
+  'NURSERY': -4,
+  'PREKG': -3,
+  'PRE-KG': -3,
+  'LKG': -2,
+  'UKG': -1,
+  'KG': -1
+};
+
+function getClassSortOrder(className: string): number {
+  const upperName = className.trim().toUpperCase();
+  for (const [key, val] of Object.entries(prePrimaryMap)) {
+    if (upperName.includes(key)) {
+      return val;
+    }
+  }
+  
+  const romanRegex = /^[IVXLCDM]+$/i;
+  const words = className.split(/[\s-]+/);
+  for (const word of words) {
+    const cleanWord = word.trim().toUpperCase();
+    if (romanRegex.test(cleanWord)) {
+      const val = romanToDecimal(cleanWord);
+      if (val > 0) return val;
+    }
+  }
+  
+  const matchDigits = className.match(/\d+/);
+  if (matchDigits) {
+    return parseInt(matchDigits[0], 10);
+  }
+  
+  return 999;
+}
+
+function sortClasses(classes: any[]) {
+  return [...classes].sort((a, b) => {
+    const orderA = getClassSortOrder(a.name);
+    const orderB = getClassSortOrder(b.name);
+    if (orderA !== orderB) {
+      return orderA - orderB;
+    }
+    return a.name.localeCompare(b.name);
+  });
+}
+
 export async function getClassList(page: number, limit: number) {
   const session = await getServerSession(authOptions);
   const [classList, total] = await Promise.all([
@@ -49,17 +120,21 @@ export async function getClassList(page: number, limit: number) {
     }),
   ]);
 
-  const data = classList.map(async (classItem) => {
-    const sections = await getAllSectionsByClassId(classItem.id);
-    return {
-      ...classItem,
-      Section: sections,
-    };
-  });
+  const resolvedData = await Promise.all(
+    classList.map(async (classItem) => {
+      const sections = await getAllSectionsByClassId(classItem.id);
+      return {
+        ...classItem,
+        Section: sections,
+      };
+    })
+  );
+
+  const sortedData = sortClasses(resolvedData);
 
   return {
     page,
-    data,
+    data: sortedData,
     limit,
     total,
   };
@@ -103,23 +178,26 @@ export async function getAllClassesWithFilter(
     })
   );
 
+  const sortedData = sortClasses(data);
+
   return {
     page,
     total,
     limit,
-    data,
+    data: sortedData,
   };
 }
 
 export async function getAllClassesByBatchId(batchId: string) {
   const session = await getServerSession(authOptions);
-  return db.class.findMany({
+  const classes = await db.class.findMany({
     where: {
       branchId: session.branchId,
       batchId: batchId,
       isActive: true,
     },
   });
+  return sortClasses(classes);
 }
 
 export async function addClass(classPayload: CreateClassModel) {
@@ -135,17 +213,17 @@ export async function addClass(classPayload: CreateClassModel) {
       },
       classLevel: classPayload.classLevelId
         ? {
-            connect: {
-              id: classPayload.classLevelId,
-            },
-          }
+          connect: {
+            id: classPayload.classLevelId,
+          },
+        }
         : null,
       grade: classPayload.gradeId
         ? {
-            connect: {
-              id: classPayload.gradeId,
-            },
-          }
+          connect: {
+            id: classPayload.gradeId,
+          },
+        }
         : null,
     },
   });
@@ -183,11 +261,11 @@ export async function getClassById(id: string) {
   const session = await getServerSession(authOptions);
   const response = id
     ? await db.class.findUnique({
-        where: {
-          id: id,
-          branchId: session.branchId,
-        },
-      })
+      where: {
+        id: id,
+        branchId: session.branchId,
+      },
+    })
     : null;
   return response;
 }
@@ -212,10 +290,10 @@ export async function updateClassById(
       },
       grade: updateClass.gradeId
         ? {
-            connect: {
-              id: updateClass.gradeId,
-            },
-          }
+          connect: {
+            id: updateClass.gradeId,
+          },
+        }
         : null,
     },
   });

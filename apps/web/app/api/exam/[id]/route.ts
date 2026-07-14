@@ -152,16 +152,26 @@ export async function DELETE(_request: Request, { params: { id } }) {
     const exam = await getExamById(id);
 
     if (exam) {
-      await deleteExamById(id);
-      return new Response(JSON.stringify({}), {
-        status: StatusCodes.OK,
-      });
+      try {
+        await deleteExamById(id);
+        return new Response(JSON.stringify({}), {
+          status: StatusCodes.OK,
+        });
+      } catch (err: any) {
+        if (err.message === 'CANNOT_DELETE_EXAM_WITH_MARKS') {
+          return new NextResponse(
+            JSON.stringify({ error: 'CANNOT_DELETE_EXAM_WITH_MARKS' }),
+            { status: StatusCodes.BAD_REQUEST }
+          );
+        }
+        throw err;
+      }
     } else {
       return new Response(JSON.stringify({ error: 'TERM_NOT_FOUND' }), {
         status: StatusCodes.NOT_FOUND,
       });
     }
-  } catch (e) {
+  } catch (e: any) {
     captureException(e);
     return new Response(JSON.stringify({ error: e.message }), {
       status: StatusCodes.INTERNAL_SERVER_ERROR,
