@@ -7,7 +7,7 @@ import { useGetGroupListQuery } from 'lib/queries/group/useGetGroupListQuery';
 import { useGetAllSectionByClassIdQuery } from 'lib/queries/section/useGetAllSectionsByClassIdQuery';
 import { useCreateStudentMutationByClassIdQuery } from 'lib/queries/students/useCreateStudentMutationByClassIdQuery';
 import { useGetStudentListForAssignQuery } from 'lib/queries/students/useGetStudentListForAssignQuery';
-import { ChevronDown, ChevronRight, Loader2, X } from 'lucide-react';
+import { ChevronDown, ChevronRight, Loader2, X, Archive } from 'lucide-react';
 import { useParams, useSearchParams } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -53,6 +53,7 @@ export function AssignStudents() {
   const [selectedStudents, setSelectedStudents] = useState([]);
   const [studentListMaster, setStudentListMaster] = useState([]);
   const [selectAll, setSelectAll] = useState(false);
+  const [includeArchived, setIncludeArchived] = useState(false);
   const [allSelectedForDeselection, setAllSelectedForDeselection] =
     useState(false);
 
@@ -76,6 +77,7 @@ export function AssignStudents() {
   const { data: getStudentListResponse } = useGetStudentListForAssignQuery(
     classIdToGetStudent,
     groupIdToGetStudent,
+    includeArchived,
     {
       enabled: !!classIdToGetStudent || !!groupIdToGetStudent,
     }
@@ -313,14 +315,32 @@ export function AssignStudents() {
             </section>
             <section className="flex justify-between p-2">
               <div className="mt-2 text-sm text-gray-800">All Students</div>
-              <div className="border-input hover:bg-accent hover:text-accent-foreground focus-visible:ring-ring ring-offset-background inline-flex h-8 items-center justify-center rounded-md border border-primary px-2 text-sm font-medium text-primary transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50">
-                <Checkbox
-                  className="mr-3 h-4 w-4 border-2 border-dashed"
-                  onCheckedChange={handleSelectAll}
-                  checked={selectAll}
-                  id="selectAllStudentsAssign"
-                />
-                <label htmlFor="selectAllStudentsAssign">Select All</label>
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setIncludeArchived((prev) => !prev);
+                    setSelectedStudentIds([]);
+                    setSelectAll(false);
+                  }}
+                  className={`flex items-center gap-1.5 rounded-md border px-2 py-1 text-xs font-medium transition-colors ${
+                    includeArchived
+                      ? 'border-amber-400 bg-amber-50 text-amber-700'
+                      : 'border-gray-300 bg-white text-gray-600 hover:bg-gray-50'
+                  }`}
+                >
+                  <Archive size={13} />
+                  {includeArchived ? 'Archived Shown' : 'Show Archived'}
+                </button>
+                <div className="border-input hover:bg-accent hover:text-accent-foreground focus-visible:ring-ring ring-offset-background inline-flex h-8 items-center justify-center rounded-md border border-primary px-2 text-sm font-medium text-primary transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50">
+                  <Checkbox
+                    className="mr-3 h-4 w-4 border-2 border-dashed"
+                    onCheckedChange={handleSelectAll}
+                    checked={selectAll}
+                    id="selectAllStudentsAssign"
+                  />
+                  <label htmlFor="selectAllStudentsAssign">Select All</label>
+                </div>
               </div>
               {studentListMaster &&
                 studentListMaster.some((x) =>
@@ -354,6 +374,11 @@ export function AssignStudents() {
                           </Avatar>
                           <div className="ml-4 mt-2">
                             <p className="font-semibold">{student.firstName}</p>
+                            {student.isArchived && (
+                              <span className="inline-flex items-center gap-1 rounded bg-amber-100 px-1.5 py-0.5 text-[10px] font-medium text-amber-700">
+                                <Archive size={10} /> Archived
+                              </span>
+                            )}
                           </div>
                         </div>
                       </TableCell>

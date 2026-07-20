@@ -135,6 +135,9 @@ export function configReducer(
         overrides: {},
       };
 
+    case 'LOAD_STATE':
+      return action.state;
+
     default:
       return state;
   }

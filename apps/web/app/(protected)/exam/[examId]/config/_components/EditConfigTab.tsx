@@ -12,10 +12,12 @@ export function EditConfigTab({
   examId,
   classList,
   isClassLoading,
+  academicYearId,
 }: {
   examId: string;
   classList: IdName[];
   isClassLoading: boolean;
+  academicYearId?: string;
 }) {
   const [mode, setMode] = useState<Mode>('single');
 
@@ -51,12 +53,14 @@ export function EditConfigTab({
           examId={examId}
           classList={classList}
           isClassLoading={isClassLoading}
+          academicYearId={academicYearId}
         />
       ) : (
         <BulkEditManager
           examId={examId}
           classList={classList}
           isClassLoading={isClassLoading}
+          academicYearId={academicYearId}
         />
       )}
     </div>

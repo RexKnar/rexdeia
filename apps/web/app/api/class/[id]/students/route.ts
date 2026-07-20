@@ -158,7 +158,9 @@ export async function PUT(request: Request, { params: { id } }) {
   }
 
   try {
-    const sections = await getAllStudentByClassIdForAssigning(id);
+    const body = await request.json().catch(() => ({}));
+    const includeArchived = body?.includeArchived === true;
+    const sections = await getAllStudentByClassIdForAssigning(id, includeArchived);
 
     return new NextResponse(JSON.stringify(sections), {
       status: StatusCodes.OK,
@@ -173,3 +175,4 @@ export async function PUT(request: Request, { params: { id } }) {
     });
   }
 }
+

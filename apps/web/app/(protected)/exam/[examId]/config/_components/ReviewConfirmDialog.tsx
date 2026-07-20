@@ -137,6 +137,7 @@ export function ReviewConfirmDialog({
         title: 'Configuration saved',
         description: `${ok} save${ok > 1 ? 's' : ''} completed successfully.`,
       });
+      localStorage.removeItem(`exam-config-state-${lookups.examId}`);
       onSaved();
       onClose();
     } else {

@@ -25,10 +25,12 @@ export function ExamConfigManager({
   examId,
   classList,
   isClassLoading,
+  academicYearId,
 }: {
   examId: string;
   classList: IdName[];
   isClassLoading: boolean;
+  academicYearId?: string;
 }) {
   const [classId, setClassId] = useState('');
   const [sectionIds, setSectionIds] = useState<string[]>([]);
@@ -37,7 +39,7 @@ export function ExamConfigManager({
 
   const { data: sectionResp, isLoading: sectionsLoading } =
     useGetAllSectionByClassIdQuery(
-      { classId, filter: FILTER },
+      { classId, filter: { isActive: true, academicYearId } },
       { enabled: !!classId }
     );
   const sections: IdName[] = (sectionResp?.data ?? []).map((s) => ({

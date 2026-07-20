@@ -7,16 +7,17 @@ import { GET_STUDENTS_LIST_FOR_ASSIGN } from '../../endpoints';
 function getStudentListByClassId(
   id: string,
   groupId: string,
+  includeArchived: boolean,
   options?: Partial<UseQueryOptions<Student[]>>
 ) {
   return {
     ...options,
-    queryKey: [GET_STUDENTS_LIST_FOR_ASSIGN, id],
+    queryKey: [GET_STUDENTS_LIST_FOR_ASSIGN, id, includeArchived],
     queryFn: async () => {
       return await makeAPICall<Student[]>(
         GET_STUDENTS_LIST_FOR_ASSIGN,
         { groupId: groupId },
-        {},
+        { includeArchived },
         { id }
       );
     },
@@ -26,7 +27,9 @@ function getStudentListByClassId(
 export function useGetStudentListForAssignQuery(
   id: string,
   groupId: string,
+  includeArchived: boolean,
   options?: Partial<UseQueryOptions<Student[]>>
 ) {
-  return useQuery(getStudentListByClassId(id, groupId, options));
+  return useQuery(getStudentListByClassId(id, groupId, includeArchived, options));
 }
+
