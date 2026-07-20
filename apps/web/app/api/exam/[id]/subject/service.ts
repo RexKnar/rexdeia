@@ -5,9 +5,9 @@ export async function getExamSubjectsByClassSectionId(
   classId?: string,
   sectionId?: string
 ) {
-  const groupWhereClause = sectionId
-    ? { examId, classId, sectionId }
-    : { examId, classId };
+  const groupWhereClause: any = { examId };
+  if (classId) groupWhereClause.classId = classId;
+  if (sectionId) groupWhereClause.sectionId = sectionId;
   const response = await db.examSubject.findMany({
     where: {
       examGroup: groupWhereClause,
@@ -74,9 +74,9 @@ export async function getExamSubjectsByMaster(
   classId?: string,
   sectionId?: string
 ) {
-  const groupWhereClause = sectionId
-    ? { examId, classId, sectionId }
-    : { examId, classId };
+  const groupWhereClause: any = { examId };
+  if (classId) groupWhereClause.classId = classId;
+  if (sectionId) groupWhereClause.sectionId = sectionId;
   const response = await db.examSubject.findMany({
     where: {
       examGroup: groupWhereClause,

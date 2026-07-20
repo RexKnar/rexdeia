@@ -3,8 +3,8 @@
 import { useGetClassListQuery } from 'lib/queries/class/useGetClassListQuery';
 import { useGetExamDetailQuery } from 'lib/queries/exams/useGetExamDetailQuery';
 import { CalendarDays, ClipboardList, Copy, RotateCcw } from 'lucide-react';
-import { useParams } from 'next/navigation';
-import { useCallback, useMemo, useReducer, useState } from 'react';
+import { useParams, useRouter } from 'next/navigation';
+import { useCallback, useEffect, useMemo, useReducer, useState } from 'react';
 import {
   Badge,
   Button,
@@ -19,7 +19,6 @@ import { selectionSummary } from '../_lib/buildSaveUnits';
 import { useAssessmentFormatsForSubjects } from '../_lib/useAssessmentFormatsForSubjects';
 import { configReducer } from '../_state/configReducer';
 import { IdName, initialConfigState } from '../_state/types';
-import { CopyFromExamDialog } from './CopyFromExamDialog';
 import { EditConfigTab } from './EditConfigTab';
 import { ReviewConfirmDialog } from './ReviewConfirmDialog';
 import { ScopeSelector } from './ScopeSelector';
@@ -30,12 +29,35 @@ const FILTER = { isActive: true };
 
 export function ExamConfigClient() {
   const examId = useParams<{ examId: string }>().examId;
+  const router = useRouter();
   const [state, dispatch] = useReducer(configReducer, initialConfigState);
   const [reviewOpen, setReviewOpen] = useState(false);
-  const [copyOpen, setCopyOpen] = useState(false);
 
   // Section name registry, populated by each class group as its sections load.
   const [sectionNames, setSectionNames] = useState<Record<string, string>>({});
+
+  // Sync state & sectionNames to localStorage
+  useEffect(() => {
+    localStorage.setItem(
+      `exam-config-state-${examId}`,
+      JSON.stringify({ state, sectionNames })
+    );
+  }, [state, sectionNames, examId]);
+
+  // Load state from localStorage on mount
+  useEffect(() => {
+    const saved = localStorage.getItem(`exam-config-state-${examId}`);
+    if (saved) {
+      try {
+        const parsed = JSON.parse(saved);
+        if (parsed.state) dispatch({ type: 'LOAD_STATE', state: parsed.state });
+        if (parsed.sectionNames) setSectionNames(parsed.sectionNames);
+      } catch (e) {
+        console.error('Error loading saved config state:', e);
+      }
+    }
+  }, [examId]);
+
   const registerNames = useCallback((map: Record<string, string>) => {
     setSectionNames((prev) => {
       let changed = false;
@@ -139,7 +161,13 @@ export function ExamConfigClient() {
             <Button
               variant="outline"
               size="sm"
-              onClick={() => setCopyOpen(true)}
+              onClick={() => {
+                localStorage.setItem(
+                  `exam-config-state-${examId}`,
+                  JSON.stringify({ state, sectionNames })
+                );
+                router.push(`/exam/${examId}/config/copy`);
+              }}
             >
               <Copy size={15} className="mr-2" /> Copy from exam
             </Button>
@@ -160,6 +188,7 @@ export function ExamConfigClient() {
               classList={classList}
               isClassLoading={classLoading}
               registerNames={registerNames}
+              academicYearId={examDetail?.academicYearId}
             />
           </div>
 
@@ -200,6 +229,7 @@ export function ExamConfigClient() {
             examId={examId}
             classList={classList}
             isClassLoading={classLoading}
+            academicYearId={examDetail?.academicYearId}
           />
         </TabsContent>
       </Tabs>
@@ -212,16 +242,6 @@ export function ExamConfigClient() {
           state={state}
           dispatch={dispatch}
           lookups={lookups}
-        />
-      )}
-
-      {copyOpen && (
-        <CopyFromExamDialog
-          open={copyOpen}
-          onClose={() => setCopyOpen(false)}
-          currentExamId={examId}
-          state={state}
-          dispatch={dispatch}
         />
       )}
     </div>

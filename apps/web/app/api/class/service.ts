@@ -548,7 +548,7 @@ export async function getAllStudentByClassIdForAssigning(id: string, includeArch
 
   // Only filter by isCurrent when not including archived students
   if (!includeArchived) {
-    where.isCurrent = true;
+    where.isCurrent = !includeArchived;
   }
 
   const studentList = await db.studentMapping.findMany({

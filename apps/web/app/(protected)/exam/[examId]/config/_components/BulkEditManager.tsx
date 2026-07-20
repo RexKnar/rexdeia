@@ -87,10 +87,12 @@ export function BulkEditManager({
   examId,
   classList,
   isClassLoading,
+  academicYearId,
 }: {
   examId: string;
   classList: IdName[];
   isClassLoading: boolean;
+  academicYearId?: string;
 }) {
   const { toast } = useToast();
   const queryClient = useQueryClient();
@@ -98,7 +100,7 @@ export function BulkEditManager({
 
   // Section names aren't needed here (loaded records already carry them), but
   // ScopeSelector requires the callback prop.
-  const registerNames = useCallback(() => {}, []);
+  const registerNames = useCallback(() => { }, []);
 
   const { records, partitionNames, isLoading } = useExistingConfigsForScope(
     state,
@@ -303,6 +305,7 @@ export function BulkEditManager({
           classList={classList}
           isClassLoading={isClassLoading}
           registerNames={registerNames}
+          academicYearId={academicYearId}
         />
       </div>
 
@@ -406,11 +409,10 @@ export function BulkEditManager({
                   return (
                     <div
                       key={name}
-                      className={`rounded-lg border p-3 ${
-                        edit.include
+                      className={`rounded-lg border p-3 ${edit.include
                           ? 'border-primary/40 bg-primary/5'
                           : 'border-gray-200 bg-gray-50/60'
-                      }`}
+                        }`}
                     >
                       <label className="mb-2 flex items-center gap-2 font-medium text-gray-800">
                         <input

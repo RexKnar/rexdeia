@@ -18,7 +18,7 @@ type ExamConfigSubjectModel = {
 
 type getSubjectInputModel = {
   examId: string;
-  sectionIds: string[];
+  sectionIds?: string[];
   subjectId: string;
 };
 
@@ -37,7 +37,7 @@ function getExamConfigSubjectDetailBySectionIds(
     queryFn: async () => {
       return await makeAPICall<ExamConfigSubjectModel[]>(
         GET_EXAM_CONFIG_SUBJECT_DETAIL_BY_SECTION_IDS,
-        { sectionIds },
+        { sectionIds: sectionIds ?? [] },
         {},
         { id: examId, subjectId: subjectId }
       );

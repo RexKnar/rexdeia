@@ -21,6 +21,7 @@ import SectionAnalytics from '../../_components/SectionAnalytics';
 import StudentMarkList from '../../_components/StudentMarkList';
 import SubjectwiseCountAnalysisTable from '../../_components/SubjectwiseCountAnalysisTable';
 import StaffAnalysisTable from '../../staff-analysis/_components/StaffAnalysisTable';
+import CustomRangeAnalyticsTable from '../../_components/CustomRangeAnalyticsTable';
 
 export function AnalyticStudentList() {
   const [studentMarkList, setStudentMarkList] = useState([]);
@@ -185,6 +186,9 @@ export function AnalyticStudentList() {
             <TabsTrigger value="rangeAnalytics" className="mr-2 text-base">
               Range Analytics
             </TabsTrigger>
+            <TabsTrigger value="customRangeAnalytics" className="mr-2 text-base">
+              Custom Range
+            </TabsTrigger>
             <TabsTrigger
               value="subjectCountAnalytics"
               className="mr-2 text-base"
@@ -244,6 +248,14 @@ export function AnalyticStudentList() {
                 markList={studentMarkList}
                 subjectList={subjects}
                 classId={classId}
+              />
+            </section>
+          </TabsContent>
+          <TabsContent className="w-full" value="customRangeAnalytics">
+            <section>
+              <CustomRangeAnalyticsTable
+                markList={studentMarkList}
+                subjectList={subjects}
               />
             </section>
           </TabsContent>

@@ -2,17 +2,12 @@
 
 import { useGetExamListQuery } from 'lib/queries/exams/useGetExamListQuery';
 import { useGetBatchesListQuery } from 'lib/queries/batches/useGetBatchesListQuery';
-import { Copy, Loader2 } from 'lucide-react';
-import { Dispatch, useEffect, useMemo, useState } from 'react';
+import { ArrowLeft, Copy, Loader2 } from 'lucide-react';
+import { useParams, useRouter } from 'next/navigation';
+import { useEffect, useMemo, useState } from 'react';
 import {
-  Badge,
   Button,
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
+  Card,
   Select,
   SelectContent,
   SelectItem,
@@ -22,31 +17,30 @@ import {
 } from 'ui';
 
 import {
-  ConfigAction,
   ConfigState,
   SharedPartition,
   SharedSubjectMarks,
 } from '../_state/types';
 
-/**
- * Copy the configuration from a PREVIOUS exam using a matrix-mapping UI.
- */
-export function CopyFromExamDialog({
-  open,
-  onClose,
-  currentExamId,
-  state,
-  dispatch,
-  lookups,
-}: {
-  open: boolean;
-  onClose: () => void;
-  currentExamId: string;
-  state: ConfigState;
-  dispatch: Dispatch<ConfigAction>;
-  lookups: any;
-}) {
+const defaultState: ConfigState = {
+  selectedClassIds: [],
+  sectionsByClass: {},
+  subjectsByClass: {},
+  subjectMarks: { totalMarks: '', convertTo: '', minMark: '' },
+  partitions: [],
+  overrides: {},
+};
+
+export default function CopyConfigPage() {
+  const params = useParams<{ examId: string }>();
+  const examId = params.examId;
+  const router = useRouter();
   const { toast } = useToast();
+
+  const [savedData, setSavedData] = useState<{ state: ConfigState; sectionNames: Record<string, string> } | null>(null);
+  const [currentAcademicItems, setCurrentAcademicItems] = useState<any[]>([]);
+  const [loadingStructure, setLoadingStructure] = useState(false);
+
   const [sourceExamId, setSourceExamId] = useState('');
   const [selectedBatchId, setSelectedBatchId] = useState('all');
   const [selections, setSelections] = useState<Record<string, string>>({});
@@ -54,6 +48,43 @@ export function CopyFromExamDialog({
   const [sourceSubjects, setSourceSubjects] = useState<{ id: string; name: string }[]>([]);
   const [sourceConfigs, setSourceConfigs] = useState<any[]>([]);
   const [loadingConfigs, setLoadingConfigs] = useState(false);
+
+  // Load parent state from localStorage if available
+  useEffect(() => {
+    const saved = localStorage.getItem(`exam-config-state-${examId}`);
+    if (saved) {
+      try {
+        setSavedData(JSON.parse(saved));
+      } catch (e) {
+        console.error('Error reading configuration state:', e);
+      }
+    }
+  }, [examId]);
+
+  // Load all current year classes, sections, and subjects from the structure API
+  useEffect(() => {
+    if (!examId) return;
+    setLoadingStructure(true);
+    fetch(`/api/exam/${examId}/config/copy/structure`)
+      .then((res) => {
+        if (!res.ok) throw new Error('Failed to load academic structure');
+        return res.json();
+      })
+      .then((data) => {
+        setCurrentAcademicItems(data ?? []);
+      })
+      .catch((err) => {
+        console.error('Error fetching academic structure:', err);
+        toast({
+          title: 'Error loading structure',
+          description: 'Could not load classes and sections for the current exam.',
+          variant: 'destructive',
+        });
+      })
+      .finally(() => {
+        setLoadingStructure(false);
+      });
+  }, [examId, toast]);
 
   const { batches } = useGetBatchesListQuery({
     page: 1,
@@ -66,33 +97,7 @@ export function CopyFromExamDialog({
     limit: 999,
     batchId: selectedBatchId === 'all' ? undefined : selectedBatchId,
   });
-  const exams = (examList?.data ?? []).filter((e) => e.id !== currentExamId);
-
-  // All selected class + section + subject combinations in the current builder scope
-  const selectedItems = useMemo(() => {
-    const items = [];
-    const classNameById = lookups?.classNameById || ((id: string) => id);
-    const sectionNameById = lookups?.sectionNameById || ((id: string) => id);
-
-    for (const classId of state.selectedClassIds) {
-      const sections = state.sectionsByClass[classId] ?? [];
-      const subjects = state.subjectsByClass[classId] ?? [];
-      for (const sectionId of sections) {
-        for (const subject of subjects) {
-          items.push({
-            classId,
-            sectionId,
-            subjectId: subject.subjectId,
-            className: classNameById(classId),
-            sectionName: sectionNameById(sectionId),
-            subjectName: subject.name,
-            key: `${classId}:${sectionId}:${subject.subjectId}`,
-          });
-        }
-      }
-    }
-    return items;
-  }, [state, lookups]);
+  const exams = (examList?.data ?? []).filter((e) => e.id !== examId);
 
   // Unique source class-sections list compiled from fetched source configs
   const sourceClassSections = useMemo(() => {
@@ -113,7 +118,7 @@ export function CopyFromExamDialog({
 
   // Fetch subjects and configs from the source exam
   useEffect(() => {
-    if (!sourceExamId) {
+    if (!sourceExamId || currentAcademicItems.length === 0) {
       setSourceSubjects([]);
       setSourceConfigs([]);
       setSelections({});
@@ -188,7 +193,7 @@ export function CopyFromExamDialog({
           const initialClassSections: Record<string, string> = {};
           const initialSelections: Record<string, string> = {};
 
-          for (const item of selectedItems) {
+          for (const item of currentAcademicItems) {
             // Find class/section matching current class and section names
             const matchingClassSec = classSecList.find(
               (cs) =>
@@ -239,11 +244,12 @@ export function CopyFromExamDialog({
     return () => {
       active = false;
     };
-  }, [sourceExamId, selectedItems, toast]);
-
-  const noSelection = selectedItems.length === 0;
+  }, [sourceExamId, currentAcademicItems, toast]);
 
   const apply = () => {
+    const parentState = savedData?.state || defaultState;
+    const parentSectionNames = savedData?.sectionNames || {};
+    const nextOverrides = { ...parentState.overrides };
     let copiedCount = 0;
 
     for (const [itemKey, sourceId] of Object.entries(selections)) {
@@ -271,19 +277,61 @@ export function CopyFromExamDialog({
           excludeSubjectValidation: Boolean(p.excludeSubjectValidation),
         }));
 
-      dispatch({
-        type: 'SET_OVERRIDE',
-        key: itemKey,
-        override: { subjectMarks: marks, partitions },
-      });
+      nextOverrides[itemKey] = { subjectMarks: marks, partitions };
+
+      // Also ensure this class/section/subject gets added to parent state lists if not present,
+      // so it is immediately rendered as an override in the builder scope.
+      const [classId, sectionId, subjectId] = itemKey.split(':');
+      
+      if (!parentState.selectedClassIds.includes(classId)) {
+        parentState.selectedClassIds.push(classId);
+      }
+      
+      const currentSections = parentState.sectionsByClass[classId] || [];
+      if (!currentSections.includes(sectionId)) {
+        parentState.sectionsByClass[classId] = [...currentSections, sectionId];
+      }
+
+      const currentSubjects = parentState.subjectsByClass[classId] || [];
+      if (!currentSubjects.some((s) => s.subjectId === subjectId)) {
+        const itemInfo = currentAcademicItems.find((itm) => itm.key === itemKey);
+        if (itemInfo) {
+          parentState.subjectsByClass[classId] = [
+            ...currentSubjects,
+            {
+              subjectId,
+              groupId: '', // can be blank as it's parsed as override
+              name: itemInfo.subjectName,
+            },
+          ];
+        }
+      }
+
+      // Record names so they are resolved
+      const itemInfo = currentAcademicItems.find((itm) => itm.key === itemKey);
+      if (itemInfo && !parentSectionNames[sectionId]) {
+        parentSectionNames[sectionId] = itemInfo.sectionName;
+      }
+
       copiedCount++;
     }
 
     if (copiedCount > 0) {
+      // Save updated overrides & structure scope back to localStorage
+      const nextState = {
+        ...parentState,
+        overrides: nextOverrides,
+      };
+      localStorage.setItem(
+        `exam-config-state-${examId}`,
+        JSON.stringify({ state: nextState, sectionNames: parentSectionNames })
+      );
+
       toast({
         title: 'Configuration copied',
-        description: `Successfully copied configuration templates for ${copiedCount} item(s). Review them in the overrides section before saving.`,
+        description: `Successfully copied configuration templates for ${copiedCount} item(s). Review and save them on the configuration builder screen.`,
       });
+      router.push(`/exam/${examId}/config`);
     } else {
       toast({
         title: 'No config copied',
@@ -291,83 +339,102 @@ export function CopyFromExamDialog({
         variant: 'destructive',
       });
     }
-    onClose();
   };
 
   const hasMappingsToCopy = Object.values(selections).some(Boolean);
 
   return (
-    <Dialog open={open} onOpenChange={(v) => !v && onClose()}>
-      <DialogContent className="max-w-2xl bg-white">
-        <DialogHeader>
-          <DialogTitle>Copy from previous exam configurations</DialogTitle>
-          <DialogDescription>
-            Map your current classes, sections, and subjects to configurations from a previous academic year's exam.
-          </DialogDescription>
-        </DialogHeader>
+    <div className="space-y-6 p-6">
+      {/* Title Bar */}
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-2">
+          <Button variant="ghost" size="sm" onClick={() => router.push(`/exam/${examId}/config`)}>
+            <ArrowLeft size={16} className="mr-2" /> Back
+          </Button>
+          <h1 className="text-xl font-bold tracking-tight text-gray-900">Copy Exam Configuration</h1>
+        </div>
+      </div>
 
-        {noSelection ? (
-          <div className="rounded-md bg-amber-50 p-3 text-sm text-amber-700">
-            Select at least one class, section and subject first in the main screen to configure mappings.
+      <Card className="p-6 bg-white space-y-6">
+        {/* Filters */}
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+          <div className="space-y-1.5">
+            <label className="text-xs font-semibold text-gray-500 uppercase tracking-wide">Copy from Academic Year</label>
+            <Select value={selectedBatchId} onValueChange={(val) => {
+              setSelectedBatchId(val);
+              setSourceExamId('');
+            }}>
+              <SelectTrigger className="w-full h-10">
+                <SelectValue placeholder="All Academic Years" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All Academic Years</SelectItem>
+                {batches.map((b) => (
+                  <SelectItem key={b.id} value={b.id}>
+                    {b.name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           </div>
-        ) : (
+
+          <div className="space-y-1.5">
+            <label className="text-xs font-semibold text-gray-500 uppercase tracking-wide">Source Exam</label>
+            <Select 
+              value={sourceExamId} 
+              onValueChange={setSourceExamId}
+              disabled={exams.length === 0}
+            >
+              <SelectTrigger className="w-full h-10">
+                <SelectValue placeholder={exams.length === 0 ? "No exams found" : "Choose source exam"} />
+              </SelectTrigger>
+              <SelectContent>
+                {exams.map((e) => (
+                  <SelectItem key={e.id} value={e.id}>
+                    {e.name} {e.batch?.name ? `(${e.batch.name})` : ''}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+        </div>
+
+        {/* Matrix Tabular View */}
+        {sourceExamId && (
           <div className="space-y-4">
-            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-              <div className="space-y-1.5">
-                <label className="text-xs font-semibold text-gray-500">Academic Year</label>
-                <Select value={selectedBatchId} onValueChange={(val) => {
-                  setSelectedBatchId(val);
-                  setSourceExamId(''); // reset selected exam on academic year change
-                }}>
-                  <SelectTrigger className="w-full">
-                    <SelectValue placeholder="All Academic Years" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="all">All Academic Years</SelectItem>
-                    {batches.map((b) => (
-                      <SelectItem key={b.id} value={b.id}>
-                        {b.name}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-
-              <div className="space-y-1.5">
-                <label className="text-xs font-semibold text-gray-500">Source Exam</label>
-                <Select 
-                  value={sourceExamId} 
-                  onValueChange={setSourceExamId}
-                  disabled={exams.length === 0}
-                >
-                  <SelectTrigger className="w-full">
-                    <SelectValue placeholder={exams.length === 0 ? "No exams found" : "Choose source exam"} />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {exams.map((e) => (
-                      <SelectItem key={e.id} value={e.id}>
-                        {e.name} {e.batch?.name ? `(${e.batch.name})` : ''}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-            </div>
-
-            {sourceExamId && (
-              <div className="rounded-lg border border-gray-200 bg-gray-50 p-4">
-                <h3 className="mb-3 text-xs font-semibold uppercase tracking-wider text-gray-500">
-                  Configuration Matrix
-                </h3>
-
-                {loadingConfigs ? (
-                  <div className="flex flex-col items-center justify-center py-8 text-sm text-gray-500">
-                    <Loader2 className="h-6 w-6 animate-spin text-primary mb-2" />
-                    <span>Loading available exam configurations…</span>
-                  </div>
-                ) : (
-                  <div className="max-h-[300px] overflow-y-auto space-y-2 pr-1">
-                    {selectedItems.map((item) => {
+            <div className="border border-gray-200 rounded-lg overflow-hidden">
+              <table className="w-full border-collapse text-left text-sm text-gray-500">
+                <thead className="bg-gray-50 text-xs font-semibold uppercase text-gray-700 border-b border-gray-200">
+                  <tr>
+                    <th scope="col" className="px-6 py-4">Current Class</th>
+                    <th scope="col" className="px-6 py-4">Current Section</th>
+                    <th scope="col" className="px-6 py-4">Current Subject</th>
+                    <th scope="col" className="px-6 py-4">Source Class &amp; Section</th>
+                    <th scope="col" className="px-6 py-4">Source Subject (Configuration)</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-gray-200 bg-white">
+                  {loadingStructure || loadingConfigs ? (
+                    <tr>
+                      <td colSpan={5} className="px-6 py-12 text-center text-gray-500">
+                        <div className="flex flex-col items-center justify-center gap-2">
+                          <Loader2 className="h-6 w-6 animate-spin text-primary" />
+                          <span>
+                            {loadingStructure
+                              ? 'Loading current year structures…'
+                              : 'Loading source exam configurations…'}
+                          </span>
+                        </div>
+                      </td>
+                    </tr>
+                  ) : currentAcademicItems.length === 0 ? (
+                    <tr>
+                      <td colSpan={5} className="px-6 py-8 text-center text-gray-400">
+                        No classes, sections, and subjects found in the current academic year.
+                      </td>
+                    </tr>
+                  ) : (
+                    currentAcademicItems.map((item) => {
                       const classSecKey = selectedSourceClassSections[item.key] || '';
                       const [cId, sId] = classSecKey ? classSecKey.split(':') : [undefined, undefined];
 
@@ -376,26 +443,16 @@ export function CopyFromExamDialog({
                       );
 
                       return (
-                        <div
-                          key={item.key}
-                          className="flex flex-col gap-2 rounded-md border border-gray-200 bg-white p-3 shadow-xs md:flex-row md:items-center md:justify-between"
-                        >
-                          {/* Column 1: Current item details */}
-                          <div className="w-full md:w-[150px] space-y-0.5">
-                            <div className="flex items-center gap-1.5 text-[11px] font-medium text-gray-400">
-                              <span>{item.className}</span>
-                              <span className="text-gray-300">·</span>
-                              <span>{item.sectionName}</span>
-                            </div>
-                            <div className="text-sm font-semibold text-gray-800">
-                              {item.subjectName}
-                            </div>
-                          </div>
-
-                          {/* Columns 2 & 3: Mappings Columns */}
-                          <div className="flex flex-col gap-2 sm:flex-row sm:items-center w-full md:w-auto">
-                            {/* Column 2: Source Section Dropdown */}
-                            <div className="w-full sm:w-[160px]">
+                        <tr key={item.key} className="hover:bg-gray-50/50">
+                          {/* Col 1: Class */}
+                          <td className="px-6 py-4 font-medium text-gray-900">{item.className}</td>
+                          {/* Col 2: Section */}
+                          <td className="px-6 py-4 font-medium text-gray-900">{item.sectionName}</td>
+                          {/* Col 3: Subject */}
+                          <td className="px-6 py-4 font-semibold text-primary">{item.subjectName}</td>
+                          {/* Col 4: Source Class & Section Dropdown */}
+                          <td className="px-6 py-3">
+                            <div className="w-[180px]">
                               <Select
                                 value={classSecKey}
                                 onValueChange={(val) => {
@@ -431,9 +488,10 @@ export function CopyFromExamDialog({
                                 </SelectContent>
                               </Select>
                             </div>
-
-                            {/* Column 3: Source Subject Dropdown */}
-                            <div className="w-full sm:w-[220px]">
+                          </td>
+                          {/* Col 5: Source Subject Dropdown */}
+                          <td className="px-6 py-3">
+                            <div className="w-[240px]">
                               <Select
                                 value={selections[item.key] || 'none'}
                                 onValueChange={(val) => {
@@ -457,29 +515,30 @@ export function CopyFromExamDialog({
                                 </SelectContent>
                               </Select>
                             </div>
-                          </div>
-                        </div>
+                          </td>
+                        </tr>
                       );
-                    })}
-                  </div>
-                )}
-              </div>
-            )}
+                    })
+                  )}
+                </tbody>
+              </table>
+            </div>
+
+            {/* Actions */}
+            <div className="flex items-center justify-end gap-3 pt-4 border-t border-gray-200">
+              <Button variant="outline" onClick={() => router.push(`/exam/${examId}/config`)}>
+                Cancel
+              </Button>
+              <Button
+                onClick={apply}
+                disabled={!hasMappingsToCopy || loadingConfigs || loadingStructure}
+              >
+                <Copy className="mr-2 h-4 w-4" /> Copy configuration
+              </Button>
+            </div>
           </div>
         )}
-
-        <DialogFooter>
-          <Button variant="outline" onClick={onClose}>
-            Cancel
-          </Button>
-          <Button
-            onClick={apply}
-            disabled={!hasMappingsToCopy || loadingConfigs}
-          >
-            <Copy className="mr-2 h-4 w-4" /> Copy configuration
-          </Button>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
+      </Card>
+    </div>
   );
 }

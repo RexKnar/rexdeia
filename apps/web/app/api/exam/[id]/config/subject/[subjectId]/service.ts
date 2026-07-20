@@ -60,12 +60,12 @@ export async function getConfigDetailBySectionSubjectId(
 export async function getConfigDetailBySectionIdsAndSubjectId(
   examId: string,
   subjectId: string,
-  sectionIds: string[]
+  sectionIds?: string[]
 ) {
   const response = await db.examGroup.findMany({
     where: {
       examId,
-      sectionId: { in: sectionIds },
+      ...(sectionIds && sectionIds.length > 0 ? { sectionId: { in: sectionIds } } : {}),
       examSubject: {
         some: { subjectId },
       },
@@ -74,6 +74,12 @@ export async function getConfigDetailBySectionIdsAndSubjectId(
       id: true,
       sectionId: true,
       section: {
+        select: {
+          id: true,
+          name: true,
+        },
+      },
+      class: {
         select: {
           id: true,
           name: true,
@@ -110,6 +116,7 @@ export async function getConfigDetailBySectionIdsAndSubjectId(
       group.examSubject.map((subject) => ({
         ...subject,
         section: group.section,
+        class: group.class,
       }))
     )
     .filter((subject) => subject.subjectId === subjectId);
@@ -124,6 +131,10 @@ export async function getConfigDetailBySectionIdsAndSubjectId(
     section: {
       id: subject.section?.id,
       name: subject.section?.name,
+    },
+    class: {
+      id: subject.class?.id,
+      name: subject.class?.name,
     },
     examSubjectPartition: subject.examSubjectPartition,
   }));

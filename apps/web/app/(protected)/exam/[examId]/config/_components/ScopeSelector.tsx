@@ -35,12 +35,14 @@ export function ScopeSelector({
   classList,
   isClassLoading,
   registerNames,
+  academicYearId,
 }: {
   state: ConfigState;
   dispatch: Dispatch<ConfigAction>;
   classList: IdName[];
   isClassLoading: boolean;
   registerNames: RegisterNames;
+  academicYearId?: string;
 }) {
   return (
     <div className="space-y-3">
@@ -93,6 +95,7 @@ export function ScopeSelector({
             state={state}
             dispatch={dispatch}
             registerNames={registerNames}
+            academicYearId={academicYearId}
           />
         ))}
       </div>
@@ -106,12 +109,14 @@ function ClassScopeGroup({
   state,
   dispatch,
   registerNames,
+  academicYearId,
 }: {
   classId: string;
   className: string;
   state: ConfigState;
   dispatch: Dispatch<ConfigAction>;
   registerNames: RegisterNames;
+  academicYearId?: string;
 }) {
   const [open, setOpen] = useState(true);
   const [subjectTypeId, setSubjectTypeId] = useState('');
@@ -121,7 +126,7 @@ function ClassScopeGroup({
 
   const { data: sectionResp, isLoading: sectionsLoading } =
     useGetAllSectionByClassIdQuery(
-      { classId, filter: FILTER },
+      { classId, filter: { isActive: true, academicYearId } },
       { enabled: !!classId }
     );
   const sections: IdName[] = useMemo(

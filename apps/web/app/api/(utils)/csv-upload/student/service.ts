@@ -2,6 +2,7 @@ import bcrypt from 'bcrypt';
 import { authOptions } from 'lib/auth';
 import { db } from 'lib/db';
 import { getServerSession } from 'next-auth';
+import { switchStudentToClass } from '../../../class/[id]/students/switch/service';
 
 export async function addStudentCSV(studentDetails: any) {
   const newStudents = [];
@@ -55,11 +56,22 @@ export async function addStudentCSV(studentDetails: any) {
   const returningStudentIds = existingStudents.map((s) => s.id);
   const existingMappings = returningStudentIds.length > 0
     ? await db.studentMapping.findMany({
-        where: { studentId: { in: returningStudentIds }, batchId: session.currentBatch },
-        select: { studentId: true },
-      })
+      where: {
+        studentId: { in: returningStudentIds },
+        batchId: session.currentBatch,
+        isCurrent: true,
+      },
+      select: { studentId: true, classId: true, sectionId: true },
+    })
     : [];
-  const alreadyMappedStudentIds = new Set(existingMappings.map((m) => m.studentId));
+
+  const activeMappings = new Map<string, { classId: string; sectionId: string | null }>();
+  for (const mapping of existingMappings) {
+    activeMappings.set(mapping.studentId, {
+      classId: mapping.classId,
+      sectionId: mapping.sectionId,
+    });
+  }
 
   // ─────────────────────────────────────────────────────────────────────────
   // STEP 3: Process each row — DB writes only, no lookups in this loop
@@ -179,8 +191,36 @@ export async function addStudentCSV(studentDetails: any) {
 
         newStudents.push(createdStudent);
       } else if (existingStudent) {
-        // ── RETURNING STUDENT: promote only if not already mapped this year ──
-        if (!alreadyMappedStudentIds.has(existingStudent.id)) {
+        // Resolve if they have an active mapping for this year/batch
+        const currentMapping = activeMappings.get(existingStudent.id);
+
+        if (currentMapping) {
+          // Student is already mapped in this batch.
+          // Check if class/section match the CSV row.
+          if (
+            currentMapping.classId !== classDetail.id ||
+            currentMapping.sectionId !== sectionDetail.id
+          ) {
+            // Reassign the student to the class and section available in the sheet
+            await switchStudentToClass({
+              studentId: existingStudent.id,
+              classId: classDetail.id,
+              sectionId: sectionDetail.id,
+              groupId: groupDetail?.id || '',
+              academicYear: session.currentBatch,
+            });
+
+            // Update in-memory mapping to reflect the switch
+            activeMappings.set(existingStudent.id, {
+              classId: classDetail.id,
+              sectionId: sectionDetail.id,
+            });
+
+            promotedStudents.push(existingStudent);
+          }
+          // If already mapped to the same class/section, silently skip
+        } else {
+          // Student is not mapped in this batch yet. Promote/map them.
           await db.studentMapping.create({
             data: {
               studentId: existingStudent.id,
@@ -192,11 +232,15 @@ export async function addStudentCSV(studentDetails: any) {
               isCurrent: true,
             },
           });
-          // Mark as mapped so re-imports within the same CSV don't duplicate
-          alreadyMappedStudentIds.add(existingStudent.id);
+
+          // Add to in-memory mapping to prevent duplicate mapping if repeated in CSV
+          activeMappings.set(existingStudent.id, {
+            classId: classDetail.id,
+            sectionId: sectionDetail.id,
+          });
+
           promotedStudents.push(existingStudent);
         }
-        // Already enrolled this year — silently skip
       }
     } catch (rowError: any) {
       console.error(`Error importing student ${studentDetail.Name}:`, rowError);

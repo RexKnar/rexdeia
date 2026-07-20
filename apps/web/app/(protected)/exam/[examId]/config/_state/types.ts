@@ -106,4 +106,5 @@ export type ConfigAction =
     }
   | { type: 'SET_OVERRIDE'; key: string; override: ItemOverride }
   | { type: 'CLEAR_OVERRIDE'; key: string }
+  | { type: 'LOAD_STATE'; state: ConfigState }
   | { type: 'RESET' };
