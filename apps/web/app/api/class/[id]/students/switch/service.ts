@@ -8,23 +8,24 @@ export async function switchStudentToClass(
     studentPayload;
 
   const response = await db.$transaction(async (prisma) => {
-    const updateExisting = await prisma.student.update({
-      where: { id: studentId },
+    // Step 1: Mark current academic year's student mapping as inactive
+    const updateExisting = await prisma.studentMapping.updateMany({
+      where: {
+        studentId: studentId,
+        batchId: academicYear,
+        isCurrent: true,
+      },
       data: {
-        studentMapping: {
-          updateMany: [
-            {
-              where: { studentId: studentId },
-              data: { isCurrent: false },
-            },
-          ],
-        },
+        isCurrent: false,
       },
     });
 
+    // Step 2: Create new StudentMapping for current batch & update active section/batch on Student
     const createNew = await prisma.student.update({
       where: { id: studentId },
       data: {
+        ...(sectionId && { sectionId }),
+        ...(academicYear && { batchId: academicYear }),
         studentMapping: {
           create: [
             {
@@ -32,6 +33,7 @@ export async function switchStudentToClass(
               classId,
               sectionId,
               batchId: academicYear,
+              isCurrent: true,
             },
           ],
         },

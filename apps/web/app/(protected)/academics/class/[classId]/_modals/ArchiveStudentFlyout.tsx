@@ -1,6 +1,7 @@
 import { useArchiveStudentMutationById } from 'lib/queries/students/useArchiveStudentMutationQuery';
 import { PlusCircle } from 'lucide-react';
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { useParams, usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { useSession } from 'next-auth/react';
 import { useForm } from 'react-hook-form';
 import {
   Button,
@@ -13,6 +14,8 @@ import {
 } from 'ui';
 
 export function ArchiveStudentFlyout() {
+  const { data: session } = useSession();
+  const { sectionId: routeSectionId } = useParams<{ sectionId?: string }>();
   const pathname = usePathname();
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -34,14 +37,22 @@ export function ArchiveStudentFlyout() {
     const params = new URLSearchParams(searchParams);
     params.set('isArchiveStudentFlyoutOpen', 'false');
     params.delete('studentId');
+    params.delete('sectionId');
+    params.delete('batchId');
     params.delete('isArchiveStudentFlyoutOpen');
 
     router.replace(pathname + '?' + params.toString());
   };
 
-  async function archiveStudent(payload) {
+  async function archiveStudent(payload: any) {
     try {
+      const sectionId = routeSectionId || searchParams.get('sectionId') || '';
+      const batchId = session?.currentBatch || searchParams.get('batchId') || '';
+
       payload['studentId'] = studentId;
+      payload['sectionId'] = sectionId;
+      payload['batchId'] = batchId;
+
       const response = await mutateArchiveStudentAsync(payload);
       if (response) {
         closeFlyout();
@@ -65,7 +76,7 @@ export function ArchiveStudentFlyout() {
                 <PlusCircle size={20} strokeWidth={1.5} />
 
                 <Text variant="lg-semibold" className="ml-2">
-                  Re-Assign Students
+                  Archive / Transfer Student
                 </Text>
               </div>
             </div>
@@ -76,7 +87,7 @@ export function ArchiveStudentFlyout() {
           <form onSubmit={handleSubmit(archiveStudent)}>
             <div className="mt-4">
               <label
-                htmlFor="type"
+                htmlFor="remark"
                 className="text-sm font-semibold text-gray-700"
               >
                 Remark

@@ -1,4 +1,5 @@
 'use client';
+
 import { MoreHorizontal } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
@@ -21,12 +22,22 @@ export function StudentCard(props: StudentCardProps) {
   const pathname = usePathname();
   const router = useRouter();
   const searchParams = useSearchParams();
+
+  const handleCardClick = () => {
+    window.open(`/students/${props.id}`, '_blank', 'noopener,noreferrer');
+  };
+
   return (
-    <div className="flex bg-white p-3">
+    <div
+      onClick={handleCardClick}
+      className="flex bg-white p-3 border border-gray-200 rounded-lg shadow-sm hover:shadow-md hover:border-indigo-300 transition-all cursor-pointer group"
+    >
       <div className="my-auto w-3/4 px-2">
-        <Text variant="base-bold">{props.name}</Text>
+        <Text variant="base-bold" className="group-hover:text-indigo-600 transition-colors">
+          {props.name}
+        </Text>
       </div>
-      <div className="my-auto w-1/4 ">
+      <div className="my-auto w-1/4" onClick={(e) => e.stopPropagation()}>
         <div className="float-end my-auto justify-end p-1">
           <DropdownMenu>
             <DropdownMenuTrigger className="flex items-center gap-2 outline-none">

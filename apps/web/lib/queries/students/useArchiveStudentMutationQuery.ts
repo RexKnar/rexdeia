@@ -10,7 +10,12 @@ import {
 export function useArchiveStudentMutationById() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: async (payload: { studentId: string; remark: string }) => {
+    mutationFn: async (payload: {
+      studentId: string;
+      sectionId?: string;
+      batchId?: string;
+      remark: string;
+    }) => {
       const updatedStudent = await makeAPICall<any>(
         ARCHIVE_STUDENT_BY_ID,
         payload,

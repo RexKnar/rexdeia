@@ -53,6 +53,8 @@ export async function PUT(request: NextRequest) {
     const payload = await request.json();
     const updateResponse = await archiveStudentById(
       payload.studentId,
+      payload.sectionId,
+      payload.batchId,
       payload.remark
     );
     if (updateResponse) {
