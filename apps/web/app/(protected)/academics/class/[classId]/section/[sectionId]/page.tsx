@@ -17,9 +17,9 @@ import { useGetSectionByIdQuery } from '../../../../../../../lib/queries/section
 import { AddSubjectFlyout } from '../../_modals/AddSubjectFlyout';
 import { UnassignInchargeFlyout } from '../../_modals/UnassignInchargeFlyout';
 import { UnassignStaffFlyout } from '../../_modals/UnassignStaffFlyout';
-import { StaffList } from './_components/StaffList';
-import { StudentList } from './_components/StudentList';
-import { SubjectList } from './_components/SubjectList';
+import { StaffList } from '../../_components/StaffList';
+import { StudentList } from '../../_components/StudentList';
+import { SubjectList } from '../../_components/SubjectList';
 
 const AssignStudentFlyout = dynamic(() =>
   import('../../_modals/AssignStudentFlyout').then(
