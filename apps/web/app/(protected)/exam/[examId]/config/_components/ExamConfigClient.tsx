@@ -3,8 +3,8 @@
 import { useGetClassListQuery } from 'lib/queries/class/useGetClassListQuery';
 import { useGetExamDetailQuery } from 'lib/queries/exams/useGetExamDetailQuery';
 import { CalendarDays, ClipboardList, Copy, RotateCcw } from 'lucide-react';
-import { useParams, useRouter } from 'next/navigation';
-import { useCallback, useEffect, useMemo, useReducer, useState } from 'react';
+import { useParams, useRouter, useSearchParams } from 'next/navigation';
+import { useCallback, useEffect, useMemo, useReducer, useRef, useState } from 'react';
 import {
   Badge,
   Button,
@@ -30,19 +30,21 @@ const FILTER = { isActive: true };
 export function ExamConfigClient() {
   const examId = useParams<{ examId: string }>().examId;
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const tabParam = searchParams.get('tab');
+  const [activeTab, setActiveTab] = useState(tabParam === 'edit' ? 'edit' : 'add');
   const [state, dispatch] = useReducer(configReducer, initialConfigState);
   const [reviewOpen, setReviewOpen] = useState(false);
 
+  useEffect(() => {
+    if (tabParam === 'edit' || tabParam === 'add') {
+      setActiveTab(tabParam);
+    }
+  }, [tabParam]);
+
   // Section name registry, populated by each class group as its sections load.
   const [sectionNames, setSectionNames] = useState<Record<string, string>>({});
-
-  // Sync state & sectionNames to localStorage
-  useEffect(() => {
-    localStorage.setItem(
-      `exam-config-state-${examId}`,
-      JSON.stringify({ state, sectionNames })
-    );
-  }, [state, sectionNames, examId]);
+  const isLoaded = useRef(false);
 
   // Load state from localStorage on mount
   useEffect(() => {
@@ -56,7 +58,17 @@ export function ExamConfigClient() {
         console.error('Error loading saved config state:', e);
       }
     }
+    isLoaded.current = true;
   }, [examId]);
+
+  // Sync state & sectionNames to localStorage only after initial load finishes
+  useEffect(() => {
+    if (!isLoaded.current) return;
+    localStorage.setItem(
+      `exam-config-state-${examId}`,
+      JSON.stringify({ state, sectionNames })
+    );
+  }, [state, sectionNames, examId]);
 
   const registerNames = useCallback((map: Record<string, string>) => {
     setSectionNames((prev) => {
@@ -149,7 +161,7 @@ export function ExamConfigClient() {
         </div>
       </div>
 
-      <Tabs defaultValue="add" className="space-y-5">
+      <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-5">
         <TabsList>
           <TabsTrigger value="add">Add configuration</TabsTrigger>
           <TabsTrigger value="edit">Edit configuration</TabsTrigger>

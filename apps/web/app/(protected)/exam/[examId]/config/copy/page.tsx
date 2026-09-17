@@ -31,6 +31,8 @@ const defaultState: ConfigState = {
   overrides: {},
 };
 
+const normalize = (s?: string) => (s ?? '').trim().toLowerCase().replace(/\s+/g, ' ');
+
 export default function CopyConfigPage() {
   const params = useParams<{ examId: string }>();
   const examId = params.examId;
@@ -48,6 +50,7 @@ export default function CopyConfigPage() {
   const [sourceSubjects, setSourceSubjects] = useState<{ id: string; name: string }[]>([]);
   const [sourceConfigs, setSourceConfigs] = useState<any[]>([]);
   const [loadingConfigs, setLoadingConfigs] = useState(false);
+  const [copying, setCopying] = useState(false);
 
   // Load parent state from localStorage if available
   useEffect(() => {
@@ -172,12 +175,16 @@ export default function CopyConfigPage() {
         if (active && res) {
           const { uniqueSubjects, configResults } = res;
           const flatResult = configResults.flat();
-          setSourceConfigs(flatResult);
+          // Deduplicate configs by examSubjectId
+          const uniqueConfigs = flatResult.filter(
+            (c, idx, arr) => arr.findIndex((x) => x.examSubjectId === c.examSubjectId) === idx
+          );
+          setSourceConfigs(uniqueConfigs);
 
           // Get unique source class sections list for auto-mapping lookup
           const classSecList: { key: string; className: string; sectionName: string }[] = [];
           const seen = new Set<string>();
-          for (const c of flatResult) {
+          for (const c of uniqueConfigs) {
             const key = `${c.class?.id}:${c.section?.id}`;
             if (c.class?.id && c.section?.id && !seen.has(key)) {
               seen.add(key);
@@ -189,7 +196,7 @@ export default function CopyConfigPage() {
             }
           }
 
-          // Auto-mapping by matching names
+          // Auto-mapping by matching names without blind fallbacks
           const initialClassSections: Record<string, string> = {};
           const initialSelections: Record<string, string> = {};
 
@@ -197,30 +204,29 @@ export default function CopyConfigPage() {
             // Find class/section matching current class and section names
             const matchingClassSec = classSecList.find(
               (cs) =>
-                cs.className.toLowerCase() === item.className.toLowerCase() &&
-                cs.sectionName.toLowerCase() === item.sectionName.toLowerCase()
-            ) || classSecList[0];
+                normalize(cs.className) === normalize(item.className) &&
+                normalize(cs.sectionName) === normalize(item.sectionName)
+            );
 
             if (matchingClassSec) {
               initialClassSections[item.key] = matchingClassSec.key;
 
               // Find config for this class/section matching current subject name
               const [cId, sId] = matchingClassSec.key.split(':');
-              const match = flatResult.find(
+              const match = uniqueConfigs.find(
                 (c) =>
                   c.class?.id === cId &&
                   c.section?.id === sId &&
-                  c.subjectName.toLowerCase() === item.subjectName.toLowerCase()
+                  normalize(c.subjectName) === normalize(item.subjectName)
               );
               if (match) {
                 initialSelections[item.key] = match.examSubjectId;
               } else {
-                // Fallback to the first configuration in that section
-                const fallback = flatResult.find((c) => c.class?.id === cId && c.section?.id === sId);
-                if (fallback) {
-                  initialSelections[item.key] = fallback.examSubjectId;
-                }
+                initialSelections[item.key] = '';
               }
+            } else {
+              initialClassSections[item.key] = '';
+              initialSelections[item.key] = '';
             }
           }
           setSelectedSourceClassSections(initialClassSections);
@@ -246,98 +252,86 @@ export default function CopyConfigPage() {
     };
   }, [sourceExamId, currentAcademicItems, toast]);
 
-  const apply = () => {
-    const parentState = savedData?.state || defaultState;
-    const parentSectionNames = savedData?.sectionNames || {};
-    const nextOverrides = { ...parentState.overrides };
-    let copiedCount = 0;
+  const apply = async () => {
+    const itemsToSave: any[] = [];
 
     for (const [itemKey, sourceId] of Object.entries(selections)) {
       if (!sourceId) continue;
       const config = sourceConfigs.find((c) => c.examSubjectId === sourceId);
       if (!config) continue;
 
-      const marks: SharedSubjectMarks = {
-        totalMarks: String(config.totalMarks ?? ''),
-        convertTo: String(config.convertTo ?? ''),
-        minMark: String(config.minMark ?? ''),
-      };
+      const itemInfo = currentAcademicItems.find((itm) => itm.key === itemKey);
+      const [classId, sectionId, subjectId] = itemKey.split(':');
 
-      const partitions: SharedPartition[] = (config.examSubjectPartition ?? [])
+      const partitions = (config.examSubjectPartition ?? [])
         .filter((p: any) => p?.assessmentFormat)
         .map((p: any) => ({
-          key: p.assessmentFormat.id,
-          name: p.assessmentFormat.name,
           assessmentFormatId: p.assessmentFormat.id,
-          totalMarks: String(p.totalMarks ?? ''),
-          convertTo: String(p.convertTo ?? ''),
-          minMark: String(p.minMark ?? ''),
-          dateToConduct: (p.dateToConduct ?? '').split('T')[0],
-          order: p.order ?? 0,
+          totalMarks: Number(p.totalMarks ?? 0),
+          convertTo: Number(p.convertTo ?? 0),
+          minMark: Number(p.minMark ?? 0),
+          dateToConduct: p.dateToConduct
+            ? new Date(p.dateToConduct).toISOString()
+            : new Date().toISOString(),
+          order: Number(p.order ?? 1),
           excludeSubjectValidation: Boolean(p.excludeSubjectValidation),
         }));
 
-      nextOverrides[itemKey] = { subjectMarks: marks, partitions };
-
-      // Also ensure this class/section/subject gets added to parent state lists if not present,
-      // so it is immediately rendered as an override in the builder scope.
-      const [classId, sectionId, subjectId] = itemKey.split(':');
-      
-      if (!parentState.selectedClassIds.includes(classId)) {
-        parentState.selectedClassIds.push(classId);
-      }
-      
-      const currentSections = parentState.sectionsByClass[classId] || [];
-      if (!currentSections.includes(sectionId)) {
-        parentState.sectionsByClass[classId] = [...currentSections, sectionId];
-      }
-
-      const currentSubjects = parentState.subjectsByClass[classId] || [];
-      if (!currentSubjects.some((s) => s.subjectId === subjectId)) {
-        const itemInfo = currentAcademicItems.find((itm) => itm.key === itemKey);
-        if (itemInfo) {
-          parentState.subjectsByClass[classId] = [
-            ...currentSubjects,
-            {
-              subjectId,
-              groupId: '', // can be blank as it's parsed as override
-              name: itemInfo.subjectName,
-            },
-          ];
-        }
-      }
-
-      // Record names so they are resolved
-      const itemInfo = currentAcademicItems.find((itm) => itm.key === itemKey);
-      if (itemInfo && !parentSectionNames[sectionId]) {
-        parentSectionNames[sectionId] = itemInfo.sectionName;
-      }
-
-      copiedCount++;
+      itemsToSave.push({
+        classId,
+        sectionId,
+        subjectId,
+        groupId: itemInfo?.groupId,
+        totalMarks: Number(config.totalMarks ?? 0),
+        convertTo: Number(config.convertTo ?? 0),
+        minMark: Number(config.minMark ?? 0),
+        partitions,
+      });
     }
 
-    if (copiedCount > 0) {
-      // Save updated overrides & structure scope back to localStorage
-      const nextState = {
-        ...parentState,
-        overrides: nextOverrides,
-      };
-      localStorage.setItem(
-        `exam-config-state-${examId}`,
-        JSON.stringify({ state: nextState, sectionNames: parentSectionNames })
-      );
-
+    if (itemsToSave.length === 0) {
       toast({
-        title: 'Configuration copied',
-        description: `Successfully copied configuration templates for ${copiedCount} item(s). Review and save them on the configuration builder screen.`,
-      });
-      router.push(`/exam/${examId}/config`);
-    } else {
-      toast({
-        title: 'No config copied',
+        title: 'No config selected',
         description: 'Please match at least one configuration to copy.',
         variant: 'destructive',
       });
+      return;
+    }
+
+    setCopying(true);
+    try {
+      const res = await fetch(`/api/exam/${examId}/config/copy`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ items: itemsToSave }),
+      });
+
+      if (!res.ok) {
+        const errData = await res.json().catch(() => ({}));
+        throw new Error(errData.error || 'Failed to save copied configurations');
+      }
+
+      const data = await res.json();
+
+      // Clean up localStorage draft since configurations are now safely saved in DB
+      localStorage.removeItem(`exam-config-state-${examId}`);
+
+      toast({
+        title: 'Configuration copied successfully',
+        description: `Successfully copied and saved ${data.copiedCount || itemsToSave.length} configuration(s) to this exam.`,
+      });
+
+      // Redirect to the edit tab where configurations are displayed
+      router.push(`/exam/${examId}/config?tab=edit`);
+    } catch (e: any) {
+      console.error('Error copying configuration:', e);
+      toast({
+        title: 'Copy failed',
+        description: e.message || 'Could not copy configurations to the exam.',
+        variant: 'destructive',
+      });
+    } finally {
+      setCopying(false);
     }
   };
 
@@ -411,12 +405,13 @@ export default function CopyConfigPage() {
                     <th scope="col" className="px-6 py-4">Current Subject</th>
                     <th scope="col" className="px-6 py-4">Source Class &amp; Section</th>
                     <th scope="col" className="px-6 py-4">Source Subject (Configuration)</th>
+                    <th scope="col" className="px-6 py-4">Partitions</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-200 bg-white">
                   {loadingStructure || loadingConfigs ? (
                     <tr>
-                      <td colSpan={5} className="px-6 py-12 text-center text-gray-500">
+                      <td colSpan={6} className="px-6 py-12 text-center text-gray-500">
                         <div className="flex flex-col items-center justify-center gap-2">
                           <Loader2 className="h-6 w-6 animate-spin text-primary" />
                           <span>
@@ -429,7 +424,7 @@ export default function CopyConfigPage() {
                     </tr>
                   ) : currentAcademicItems.length === 0 ? (
                     <tr>
-                      <td colSpan={5} className="px-6 py-8 text-center text-gray-400">
+                      <td colSpan={6} className="px-6 py-8 text-center text-gray-400">
                         No classes, sections, and subjects found in the current academic year.
                       </td>
                     </tr>
@@ -440,6 +435,17 @@ export default function CopyConfigPage() {
 
                       const availableConfigs = sourceConfigs.filter(
                         (c) => c.class?.id === cId && c.section?.id === sId
+                      );
+                      const uniqueAvailableConfigs = availableConfigs.filter(
+                        (c, idx, arr) => arr.findIndex((x) => x.examSubjectId === c.examSubjectId) === idx
+                      );
+
+                      const selectedSourceId = selections[item.key];
+                      const selectedConfig = uniqueAvailableConfigs.find(
+                        (c) => c.examSubjectId === selectedSourceId
+                      );
+                      const partitions = (selectedConfig?.examSubjectPartition ?? []).filter(
+                        (p: any) => p?.assessmentFormat
                       );
 
                       return (
@@ -467,7 +473,7 @@ export default function CopyConfigPage() {
                                     (c) =>
                                       c.class?.id === newClassId &&
                                       c.section?.id === newSecId &&
-                                      c.subjectName.toLowerCase() === item.subjectName.toLowerCase()
+                                      normalize(c.subjectName) === normalize(item.subjectName)
                                   );
 
                                   setSelections((prev) => ({
@@ -507,7 +513,7 @@ export default function CopyConfigPage() {
                                 </SelectTrigger>
                                 <SelectContent>
                                   <SelectItem value="none">Do not copy</SelectItem>
-                                  {availableConfigs.map((c) => (
+                                  {uniqueAvailableConfigs.map((c) => (
                                     <SelectItem key={c.examSubjectId} value={c.examSubjectId}>
                                       {c.subjectName} · {c.totalMarks} Marks
                                     </SelectItem>
@@ -515,6 +521,40 @@ export default function CopyConfigPage() {
                                 </SelectContent>
                               </Select>
                             </div>
+                          </td>
+                          {/* Col 6: Partitions Display */}
+                          <td className="px-6 py-3">
+                            {selectedSourceId && partitions.length > 0 ? (
+                              <div className="flex flex-wrap items-center gap-1.5 max-w-[360px]">
+                                {partitions.map((p: any, idx: number) => {
+                                  const formatName = p.assessmentFormat?.name || 'Partition';
+                                  const total = p.totalMarks;
+                                  const convert = p.convertTo;
+                                  const min = p.minMark;
+                                  return (
+                                    <span
+                                      key={p.id || p.assessmentFormat?.id || idx}
+                                      className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-xs font-medium bg-slate-100 text-slate-800 border border-slate-200"
+                                      title={`${formatName}: Total ${total}M, Convert ${convert}M, Min ${min}M`}
+                                    >
+                                      <span className="font-semibold text-slate-900">{formatName}</span>
+                                      <span className="text-slate-400">:</span>
+                                      <span className="text-primary font-semibold">{total}M</span>
+                                      {convert && String(convert) !== String(total) && (
+                                        <span className="text-gray-400 text-[10px]">conv {convert}</span>
+                                      )}
+                                      {min && (
+                                        <span className="text-amber-700 text-[10px]">min {min}</span>
+                                      )}
+                                    </span>
+                                  );
+                                })}
+                              </div>
+                            ) : selectedSourceId ? (
+                              <span className="text-xs text-gray-400 italic">No partitions</span>
+                            ) : (
+                              <span className="text-xs text-gray-300">—</span>
+                            )}
                           </td>
                         </tr>
                       );
@@ -531,9 +571,17 @@ export default function CopyConfigPage() {
               </Button>
               <Button
                 onClick={apply}
-                disabled={!hasMappingsToCopy || loadingConfigs || loadingStructure}
+                disabled={!hasMappingsToCopy || loadingConfigs || loadingStructure || copying}
               >
-                <Copy className="mr-2 h-4 w-4" /> Copy configuration
+                {copying ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Saving configurations…
+                  </>
+                ) : (
+                  <>
+                    <Copy className="mr-2 h-4 w-4" /> Copy configuration
+                  </>
+                )}
               </Button>
             </div>
           </div>
