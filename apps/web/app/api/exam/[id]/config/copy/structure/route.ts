@@ -81,13 +81,22 @@ export async function GET(
       const sectionId = section.id;
       const sectionName = section.name;
 
-      // Collect subjects from all groups in this section
+      // Collect subjects from all groups in this section, scoped strictly to this class
       const seenSubjectIds = new Set<string>();
+      const seenSubjectNames = new Set<string>();
       for (const sToG of section.sectionToGroups) {
         if (!sToG.group) continue;
         for (const subToG of sToG.group.subjectToGroup) {
-          if (!subToG.subject || seenSubjectIds.has(subToG.subject.id)) continue;
+          if (!subToG.subject) continue;
+          // Only include subjects belonging to this section's class
+          if (subToG.classId !== classId && subToG.subject.classId !== classId) continue;
+
+          const normalizedName = subToG.subject.name.trim().toLowerCase();
+          if (seenSubjectIds.has(subToG.subject.id) || seenSubjectNames.has(normalizedName)) {
+            continue;
+          }
           seenSubjectIds.add(subToG.subject.id);
+          seenSubjectNames.add(normalizedName);
 
           items.push({
             classId,
@@ -96,6 +105,7 @@ export async function GET(
             sectionName,
             subjectId: subToG.subject.id,
             subjectName: subToG.subject.name,
+            groupId: subToG.groupId || sToG.group.id,
             key: `${classId}:${sectionId}:${subToG.subject.id}`,
           });
         }
