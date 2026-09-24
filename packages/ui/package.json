@@ -45,7 +45,7 @@
   },
   "devDependencies": {
     "@types/react": "^18.2.21",
-    "@types/react-datepicker": "^6.0.0",
+    "@types/react-datepicker": "^7.0.0",
     "@types/react-dom": "^18.2.7",
     "configs": "workspace:*",
     "eslint": "^9.0.0",
