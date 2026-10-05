@@ -1,3 +1,6 @@
+import { authOptions } from 'lib/auth';
+import { redirect } from 'next/navigation';
+import { getServerSession } from 'next-auth';
 import NextTopLoader from 'nextjs-toploader';
 import { ReactNode, Suspense } from 'react';
 import { primaryColor, Toaster } from 'ui';
@@ -12,7 +15,12 @@ export const metadata = {
   description: 'Your one stop platform for all your academic needs',
 };
 
-export default function RootLayout({ children }: { children: ReactNode }) {
+export default async function RootLayout({ children }: { children: ReactNode }) {
+  const session = await getServerSession(authOptions);
+  if (!session) {
+    redirect('/signin');
+  }
+
   return (
     <SidebarProvider>
       <AppSidebar />

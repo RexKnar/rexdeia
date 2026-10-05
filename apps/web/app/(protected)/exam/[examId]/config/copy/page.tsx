@@ -132,54 +132,26 @@ export default function CopyConfigPage() {
     let active = true;
     setLoadingConfigs(true);
 
-    fetch(`/api/exam/${sourceExamId}/subject/`)
+    fetch(`/api/exam/${sourceExamId}/config/all`)
       .then((res) => {
-        if (!res.ok) throw new Error('Failed to fetch subjects');
+        if (!res.ok) throw new Error('Failed to fetch configurations');
         return res.json();
       })
-      .then((data) => {
-        if (!active) return;
-        const subjectsList = (data ?? [])
-          .map((d: any) => ({
-            id: d.subject?.id,
-            name: d.subject?.name,
-          }))
-          .filter((s: any) => s.id && s.name);
+      .then((uniqueConfigs: any[]) => {
+        if (!active || !Array.isArray(uniqueConfigs)) return;
 
-        const uniqueSubjects = subjectsList.filter(
-          (subject, index, self) =>
-            index === self.findIndex((t) => t.id === subject.id)
-        );
-
-        setSourceSubjects(uniqueSubjects);
-
-        // Fetch configs for each of these unique subjects in parallel
-        const fetchPromise = Promise.all(
-          uniqueSubjects.map(async (subj: any) => {
-            const res = await fetch(`/api/exam/${sourceExamId}/config/subject/${subj.id}`, {
-              method: 'PUT',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({ sectionIds: [] }),
+        // Derive unique subjects from the fetched configurations
+        const subjectsMap = new Map<string, { id: string; name: string }>();
+        for (const c of uniqueConfigs) {
+          if (c.subjectId && c.subjectName && !subjectsMap.has(c.subjectId)) {
+            subjectsMap.set(c.subjectId, {
+              id: c.subjectId,
+              name: c.subjectName,
             });
-            if (!res.ok) throw new Error(`Failed to fetch config for ${subj.name}`);
-            return res.json();
-          })
-        );
-
-        return fetchPromise.then((configResults) => ({
-          uniqueSubjects,
-          configResults,
-        }));
-      })
-      .then((res) => {
-        if (active && res) {
-          const { uniqueSubjects, configResults } = res;
-          const flatResult = configResults.flat();
-          // Deduplicate configs by examSubjectId
-          const uniqueConfigs = flatResult.filter(
-            (c, idx, arr) => arr.findIndex((x) => x.examSubjectId === c.examSubjectId) === idx
-          );
-          setSourceConfigs(uniqueConfigs);
+          }
+        }
+        setSourceSubjects(Array.from(subjectsMap.values()));
+        setSourceConfigs(uniqueConfigs);
 
           // Get unique source class sections list for auto-mapping lookup
           const classSecList: { key: string; className: string; sectionName: string }[] = [];
@@ -231,7 +203,6 @@ export default function CopyConfigPage() {
           }
           setSelectedSourceClassSections(initialClassSections);
           setSelections(initialSelections);
-        }
       })
       .catch((err) => {
         console.error('Error fetching source exam configurations:', err);
@@ -396,6 +367,11 @@ export default function CopyConfigPage() {
         {/* Matrix Tabular View */}
         {sourceExamId && (
           <div className="space-y-4">
+            <div className="flex items-center justify-between">
+              <p className="text-xs text-gray-500">
+                Already configured classes and sections are automatically excluded to avoid overwriting existing configurations.
+              </p>
+            </div>
             <div className="border border-gray-200 rounded-lg overflow-hidden">
               <table className="w-full border-collapse text-left text-sm text-gray-500">
                 <thead className="bg-gray-50 text-xs font-semibold uppercase text-gray-700 border-b border-gray-200">
@@ -424,8 +400,15 @@ export default function CopyConfigPage() {
                     </tr>
                   ) : currentAcademicItems.length === 0 ? (
                     <tr>
-                      <td colSpan={6} className="px-6 py-8 text-center text-gray-400">
-                        No classes, sections, and subjects found in the current academic year.
+                      <td colSpan={6} className="px-6 py-10 text-center text-gray-500">
+                        <div className="flex flex-col items-center justify-center gap-1.5">
+                          <p className="font-semibold text-gray-700">
+                            All classes and sections are already configured
+                          </p>
+                          <p className="text-xs text-gray-400 max-w-md">
+                            Every class and section for this exam already has an active configuration, or no unconfigured sections were found in the current academic year.
+                          </p>
+                        </div>
                       </td>
                     </tr>
                   ) : (

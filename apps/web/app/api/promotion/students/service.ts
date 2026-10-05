@@ -50,6 +50,17 @@ export async function promoteStudentToNewClass(
   payload: PromoteStudentsToNewClassModel
 ) {
   return await db.$transaction([
+    // Archive prior active mappings for promoted students
+    db.studentMapping.updateMany({
+      where: {
+        studentId: { in: payload.studentIds },
+        isCurrent: true,
+      },
+      data: {
+        isCurrent: false,
+      },
+    }),
+    // Create new current mappings
     ...payload.studentIds.map((studentId) =>
       db.studentMapping.create({
         data: {

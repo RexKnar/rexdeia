@@ -35,14 +35,19 @@ export async function GET(
   route: { params: { id: string } }
 ) {
   const session = await getServerSession(authOptions);
-  if (!session) {
+  if (!session?.organizationId) {
     return new NextResponse(JSON.stringify({ error: 'UNAUTHORIZED' }), {
       status: StatusCodes.UNAUTHORIZED,
     });
   }
   try {
-    const share = await getShareByFormId(route.params.id);
-    if (share && share.length != 0) {
+    const share: any = await getShareByFormId(route.params.id);
+    if (share && share.length !== 0) {
+      if (share[0]?.form && share[0]?.form?.organizationId !== session.organizationId) {
+        return new NextResponse(JSON.stringify({ message: 'FORBIDDEN' }), {
+          status: StatusCodes.FORBIDDEN,
+        });
+      }
       return new NextResponse(JSON.stringify(share), {
         status: StatusCodes.OK,
       });
@@ -56,7 +61,7 @@ export async function GET(
         }
       );
     }
-  } catch (e) {
+  } catch (e: any) {
     captureException(e);
     return new NextResponse(
       JSON.stringify({

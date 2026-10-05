@@ -55,9 +55,13 @@ export async function getStudentAttendance(
   sectionId: string,
   dateStr: string,
   scope: StudentAttendanceScope,
-  slotId?: string
+  slotId?: string,
+  sessionOverride?: any
 ): Promise<StudentAttendanceData> {
-  const session = await getServerSession(authOptions);
+  const session = sessionOverride ?? (await getServerSession(authOptions));
+  if (!session?.branchId) {
+    throw new Error('UNAUTHORIZED');
+  }
   const academicYearId = session.currentBatch;
   const date = normalizeDate(dateStr);
 
@@ -171,9 +175,13 @@ export async function getStudentAttendance(
 }
 
 export async function saveStudentAttendance(
-  payload: SaveStudentAttendanceModel
+  payload: SaveStudentAttendanceModel,
+  sessionOverride?: any
 ) {
-  const session = await getServerSession(authOptions);
+  const session = sessionOverride ?? (await getServerSession(authOptions));
+  if (!session?.branchId) {
+    throw new Error('UNAUTHORIZED');
+  }
   const academicYearId = session.currentBatch;
   const date = normalizeDate(payload.date);
   const { sectionId, scope, statuses } = payload;
@@ -213,43 +221,73 @@ export async function saveStudentAttendance(
       .map((s) => ({ id: s.id, session: sessionName }));
   }
 
-  return db.$transaction(async (tx) => {
-    for (const { studentId, status } of statuses) {
+  return db.$transaction(
+    async (tx) => {
       if (scope === 'daily') {
-        const existing = await tx.studentAttendance.findFirst({
-          where: { studentId, date, sectionId, level: 'Daily' },
-          select: { id: true },
+        const existingList = await tx.studentAttendance.findMany({
+          where: { sectionId, date, level: 'Daily' },
+          select: { id: true, studentId: true },
         });
-        if (existing) {
-          await tx.studentAttendance.update({
-            where: { id: existing.id },
-            data: { status, markedByStaffId },
+        const existingMap = new Map(
+          existingList.map((e) => [e.studentId, e.id])
+        );
+
+        const operations = statuses.map(({ studentId, status }) => {
+          const existingId = existingMap.get(studentId);
+          if (existingId) {
+            return tx.studentAttendance.update({
+              where: { id: existingId },
+              data: { status, markedByStaffId },
+            });
+          }
+          return tx.studentAttendance.create({
+            data: {
+              ...base,
+              studentId,
+              level: 'Daily',
+              status,
+              slotId: null,
+              session: null,
+            },
           });
-        } else {
-          await tx.studentAttendance.create({
-            data: { ...base, studentId, level: 'Daily', status, slotId: null, session: null },
-          });
+        });
+
+        for (let i = 0; i < operations.length; i += 50) {
+          await Promise.all(operations.slice(i, i + 50));
         }
-        continue;
+        return { success: true };
       }
 
-      for (const slot of targetSlots) {
-        await tx.studentAttendance.upsert({
-          where: {
-            studentId_date_slotId: { studentId, date, slotId: slot.id },
-          },
-          create: {
-            ...base,
-            studentId,
-            level: 'Period',
-            slotId: slot.id,
-            session: slot.session,
-            status,
-          },
-          update: { status, markedByStaffId },
-        });
+      const upsertOperations: any[] = [];
+      for (const { studentId, status } of statuses) {
+        for (const slot of targetSlots) {
+          upsertOperations.push(
+            tx.studentAttendance.upsert({
+              where: {
+                studentId_date_slotId: { studentId, date, slotId: slot.id },
+              },
+              create: {
+                ...base,
+                studentId,
+                level: 'Period',
+                slotId: slot.id,
+                session: slot.session,
+                status,
+              },
+              update: { status, markedByStaffId },
+            })
+          );
+        }
       }
+
+      for (let i = 0; i < upsertOperations.length; i += 50) {
+        await Promise.all(upsertOperations.slice(i, i + 50));
+      }
+      return { success: true };
+    },
+    {
+      timeout: 30000,
+      maxWait: 10000,
     }
-    return { success: true };
-  });
+  );
 }

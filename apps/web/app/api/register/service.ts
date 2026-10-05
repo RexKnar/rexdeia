@@ -67,8 +67,10 @@ export async function onBoardUserAndOrganization(user: UserToRegisterModel) {
     },
   });
 
+  const { password: _, ...userWithoutPassword } = createdUser as Record<string, any>;
+
   return {
-    ...createdUser,
+    ...userWithoutPassword,
     createdBranchId: createdBranch.id,
     createdOrganizationId: createdOrganization.id,
   };

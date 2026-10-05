@@ -1,0 +1,44 @@
+{
+  "cli": {
+    "version": ">= 9.0.0"
+  },
+  "build": {
+    "development": {
+      "developmentClient": true,
+      "distribution": "internal",
+      "channel": "development",
+      "node": "24.x",
+      "env": {
+        "EXPO_PUBLIC_API_URL": "https://rexdeia.vercel.app",
+        "DATABASE_URL": "postgresql://placeholder:placeholder@localhost:5432/placeholder"
+      }
+    },
+    "preview": {
+      "distribution": "internal",
+      "channel": "preview",
+      "node": "24.x",
+      "android": {
+        "buildType": "apk"
+      },
+      "env": {
+        "EXPO_PUBLIC_API_URL": "https://rexdeia.vercel.app",
+        "DATABASE_URL": "postgresql://placeholder:placeholder@localhost:5432/placeholder"
+      }
+    },
+    "production": {
+      "autoIncrement": true,
+      "channel": "production",
+      "node": "24.x",
+      "android": {
+        "buildType": "apk"
+      },
+      "env": {
+        "EXPO_PUBLIC_API_URL": "https://rexdeia.vercel.app",
+        "DATABASE_URL": "postgresql://placeholder:placeholder@localhost:5432/placeholder"
+      }
+    }
+  },
+  "submit": {
+    "production": {}
+  }
+}

@@ -6,7 +6,7 @@ import { ClassDetail } from './_components/ClassDetail';
 
 export default async function Page() {
   const session = await getServerSession(authOptions);
-  if (!session.branchId || !session.organizationId) {
+  if (!session || !session.branchId || !session.organizationId) {
     return redirect('/signIn?callbackUrl=/admission/add');
   }
 

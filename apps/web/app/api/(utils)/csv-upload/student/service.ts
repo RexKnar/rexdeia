@@ -73,6 +73,22 @@ export async function addStudentCSV(studentDetails: any) {
     });
   }
 
+  // Pre-compute default password hash and initialize memoization map to prevent CPU starvation
+  const defaultPasswordHash = await bcrypt.hash('Password@123', 10);
+  const passwordHashCache = new Map<string, string>();
+  passwordHashCache.set('Password@123', defaultPasswordHash);
+
+  const resolvePasswordHash = async (
+    plainPassword?: string
+  ): Promise<string> => {
+    const pwd = plainPassword || 'Password@123';
+    const cached = passwordHashCache.get(pwd);
+    if (cached) return cached;
+    const hashed = await bcrypt.hash(pwd, 10);
+    passwordHashCache.set(pwd, hashed);
+    return hashed;
+  };
+
   // ─────────────────────────────────────────────────────────────────────────
   // STEP 3: Process each row — DB writes only, no lookups in this loop
   // ─────────────────────────────────────────────────────────────────────────
@@ -113,10 +129,9 @@ export async function addStudentCSV(studentDetails: any) {
         });
 
         if (!user) {
-          const hashedPassword = await bcrypt.hash(
-            studentDetail.Mobile || studentDetail?.PhoneNumber || 'Password@123',
-            10
-          );
+          const plainPwd =
+            studentDetail.Mobile || studentDetail?.PhoneNumber || 'Password@123';
+          const hashedPassword = await resolvePasswordHash(plainPwd);
           user = await db.user.create({
             data: {
               password: hashedPassword,

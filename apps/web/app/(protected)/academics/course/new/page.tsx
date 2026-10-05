@@ -7,7 +7,7 @@ import { authOptions } from '../../../../../lib/auth';
 
 export default async function Page() {
   const session = await getServerSession(authOptions);
-  if (!session.branchId || !session.organizationId) {
+  if (!session || !session.branchId || !session.organizationId) {
     return redirect('/signin?callbackUrl=/academics/course/new');
   }
   return <CourseForm />;

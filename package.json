@@ -9,9 +9,6 @@
     "lint": "turbo run lint",
     "lint:fix": "turbo run lint -- --fix"
   },
-  "dependencies": {
-    "@radix-ui/react-checkbox": "^1.0.4"
-  },
   "devDependencies": {
     "@turbo/gen": "1.13.3",
     "eslint": "8.56.0",
@@ -23,11 +20,11 @@
   },
   "packageManager": "pnpm@9.4.0",
   "engines": {
-    "node": ">=18.17.1",
+    "node": ">=24.0.0",
     "pnpm": ">=8.7.1"
   },
   "volta": {
-    "node": "26.2.0"
+    "node": "24.0.0"
   },
   "pnpm": {
     "patchedDependencies": {

@@ -343,12 +343,15 @@ export async function getAllStaffsBySectionsIdWithSubjects(ids: string[]) {
   return result;
 }
 
-export async function getStaffsBySection(filter: GetStaffsFilter) {
-  const session = await getServerSession(authOptions);
+export async function getStaffsBySection(
+  filter: GetStaffsFilter,
+  passedSession?: any
+) {
+  const session = passedSession || (await getServerSession(authOptions));
   const staffs = await db.academicSubjectForStaff.findMany({
     where: {
       ...filter,
-      academicYearId: session.currentBatch,
+      ...(session?.currentBatch ? { academicYearId: session.currentBatch } : {}),
     },
     select: {
       staff: {
@@ -369,16 +372,33 @@ export async function getStaffsBySection(filter: GetStaffsFilter) {
   return uniqBy(staffsList, (staff) => staff.id);
 }
 
-export async function getSubjectByStaffId(id) {
-  const session = await getServerSession(authOptions);
-  const subjectResponse = await db.class.findMany({
+export async function getSubjectByStaffId(id: string, passedSession?: any) {
+  const session = passedSession || (await getServerSession(authOptions));
+
+  // Determine current academic batch
+  let batchId = session?.currentBatch;
+  if (!batchId) {
+    const activeBatch = await db.batch.findFirst({
+      where: {
+        currentAcademicYear: true,
+        AcademicSubjectForStaff: {
+          some: { deletedAt: null },
+        },
+      },
+      select: { id: true },
+    });
+    batchId = activeBatch?.id;
+  }
+
+  let subjectResponse = await db.class.findMany({
     where: {
       Section: {
         some: {
           academicSubjectForStaff: {
             some: {
               staffId: id,
-              academicYearId: session.currentBatch,
+              deletedAt: null,
+              ...(batchId ? { academicYearId: batchId } : {}),
             },
           },
         },
@@ -394,8 +414,8 @@ export async function getSubjectByStaffId(id) {
           academicSubjectForStaff: {
             where: {
               staffId: id,
-              isIncharge: false,
-              academicYearId: session.currentBatch,
+              deletedAt: null,
+              ...(batchId ? { academicYearId: batchId } : {}),
             },
             include: {
               subject: true,
@@ -406,17 +426,59 @@ export async function getSubjectByStaffId(id) {
     },
   });
 
+  if (subjectResponse.length === 0 && batchId) {
+    subjectResponse = await db.class.findMany({
+      where: {
+        Section: {
+          some: {
+            academicSubjectForStaff: {
+              some: {
+                staffId: id,
+                deletedAt: null,
+              },
+            },
+          },
+        },
+      },
+      select: {
+        id: true,
+        name: true,
+        Section: {
+          select: {
+            id: true,
+            name: true,
+            academicSubjectForStaff: {
+              where: {
+                staffId: id,
+                deletedAt: null,
+              },
+              include: {
+                subject: true,
+              },
+            },
+          },
+        },
+      },
+    });
+  }
+
   const response = subjectResponse.flatMap(({ id, name, ...rest }) => {
     const sections = rest.Section.filter(
       (section) => section?.academicSubjectForStaff.length
     ).flatMap(({ id: sectionId, name: sectionName, ...sectionRest }) => {
-      const subjects = sectionRest.academicSubjectForStaff.flatMap(
-        (academicSubject) => {
-          return academicSubject.subject;
-        }
+      const subjects = sectionRest.academicSubjectForStaff
+        .map((academicSubject) => academicSubject.subject)
+        .filter(Boolean);
+      const isClassIncharge = sectionRest.academicSubjectForStaff.some(
+        (as) => as.isIncharge === true
       );
 
-      return { id: sectionId, name: sectionName, subjects };
+      return {
+        id: sectionId,
+        name: sectionName,
+        isClassIncharge,
+        subjects,
+      };
     });
 
     return {

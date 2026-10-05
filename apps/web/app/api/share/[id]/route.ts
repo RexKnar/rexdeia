@@ -12,19 +12,15 @@ export async function GET(
   route: { params: { id: string } }
 ) {
   const session = await getServerSession(authOptions);
-  if (!session) {
+  if (!session?.organizationId) {
     return new NextResponse(JSON.stringify({ error: 'UNAUTHORIZED' }), {
       status: StatusCodes.UNAUTHORIZED,
     });
   }
   try {
-    const share = await getShareById(route.params.id);
+    const share: any = await getShareById(route.params.id);
 
-    if (share) {
-      return new NextResponse(JSON.stringify(share), {
-        status: StatusCodes.OK,
-      });
-    } else {
+    if (!share) {
       return new NextResponse(
         JSON.stringify({
           message: 'SHARE_NOT_FOUND',
@@ -34,7 +30,22 @@ export async function GET(
         }
       );
     }
-  } catch (e) {
+
+    if (share.form && share.form.organizationId !== session.organizationId) {
+      return new NextResponse(
+        JSON.stringify({
+          message: 'FORBIDDEN',
+        }),
+        {
+          status: StatusCodes.FORBIDDEN,
+        }
+      );
+    }
+
+    return new NextResponse(JSON.stringify(share), {
+      status: StatusCodes.OK,
+    });
+  } catch (e: any) {
     captureException(e);
     return new NextResponse(
       JSON.stringify({
@@ -52,19 +63,35 @@ export async function PUT(
   route: { params: { id: string } }
 ) {
   const session = await getServerSession(authOptions);
-  if (!session) {
+  if (!session?.organizationId) {
     return new NextResponse(JSON.stringify({ error: 'UNAUTHORIZED' }), {
       status: 401,
     });
   }
-  const payload = await request.json();
+
   try {
+    const existingShare: any = await getShareById(route.params.id);
+    if (!existingShare) {
+      return new NextResponse(
+        JSON.stringify({ message: 'SHARE_NOT_FOUND' }),
+        { status: StatusCodes.NOT_FOUND }
+      );
+    }
+
+    if (existingShare.form && existingShare.form.organizationId !== session.organizationId) {
+      return new NextResponse(
+        JSON.stringify({ message: 'FORBIDDEN' }),
+        { status: StatusCodes.FORBIDDEN }
+      );
+    }
+
+    const payload = await request.json();
     await validateUpdateShare(route.params.id, payload);
     const updatedShare = await updateShareById(route.params.id, payload);
     return new NextResponse(JSON.stringify(updatedShare), {
       status: 200,
     });
-  } catch (e) {
+  } catch (e: any) {
     captureException(e);
     return new NextResponse(
       JSON.stringify({

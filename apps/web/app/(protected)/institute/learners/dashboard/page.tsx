@@ -7,7 +7,7 @@ import LearnersCourseList from './_components/LearnersCourseList';
 
 export default async function Page() {
   const session = await getServerSession(authOptions);
-  if (!session.branchId || !session.organizationId) {
+  if (!session || !session.branchId || !session.organizationId) {
     return redirect('/signin?callbackUrl=/academics/course');
   }
 

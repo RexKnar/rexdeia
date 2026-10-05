@@ -30,8 +30,27 @@ yarn-error.log*
 
 # env
 **/.env
+**/.env.*
+.env
+.env.*
+env
 
 # secrets / service-account credentials (never commit)
 **/keyfile*.json
 **/*serviceaccount*.json
 *.key
+
+# media & logs
+*.mkv
+*.mp4
+*.log
+video.html
+
+# expo / mobile
+.expo/
+dist/
+*.jks
+*.p8
+*.p12
+*.mobileprovision
+

@@ -4,6 +4,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 
 import { authOptions } from '../../../lib/auth';
+import { getAuthSession } from '../../../lib/mobile-auth';
 import { Staff } from '../../../lib/domain/staff';
 import { addStaffSchema } from './schemas';
 import { addStaff, getStaffList, getStaffsBySection } from './service';
@@ -142,7 +143,7 @@ export async function GET(request: NextRequest) {
  *           description: Internal server error.
  */
 export async function PUT(request: Request) {
-  const session = await getServerSession(authOptions);
+  const session = await getAuthSession(request);
   if (!session) {
     return new NextResponse(JSON.stringify({ error: 'UNAUTHORIZED' }), {
       status: StatusCodes.UNAUTHORIZED,
@@ -152,7 +153,7 @@ export async function PUT(request: Request) {
   try {
     const payload = await request.json();
 
-    const staffsBySection = await getStaffsBySection(payload);
+    const staffsBySection = await getStaffsBySection(payload, session);
 
     return new NextResponse(JSON.stringify(staffsBySection), {
       status: StatusCodes.OK,
