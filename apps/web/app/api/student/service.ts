@@ -668,10 +668,14 @@ export async function getAllStudentsBySectionIds(ids: string[]) {
 
 export async function deleteStudentById(id: string) {
   const session = await getServerSession(authOptions);
-  return db.student.update({
+  if (!session?.branchId || !session?.organizationId) {
+    throw new Error('UNAUTHORIZED');
+  }
+  return db.student.updateMany({
     where: {
       id: id,
       branchId: session.branchId,
+      organizationId: session.organizationId,
     },
     data: {
       isDeleted: true,

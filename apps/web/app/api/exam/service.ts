@@ -4,9 +4,14 @@ import { getServerSession } from 'next-auth';
 
 import { db } from '../../../lib/db';
 
-export async function getExamsList(page: number, limit: number, batchId?: string) {
-  const session = await getServerSession(authOptions);
-  const targetBatchId = batchId || session.currentBatch;
+export async function getExamsList(
+  page: number,
+  limit: number,
+  batchId?: string,
+  sessionParam?: any
+) {
+  const session = sessionParam || (await getServerSession(authOptions));
+  const targetBatchId = batchId || session?.currentBatch;
   const [data, total] = await db.$transaction([
     db.exam.findMany({
       take: limit,

@@ -1,21 +1,28 @@
 import 'server-only';
 
-import { PrismaPg } from '@prisma/adapter-pg'
+import { PrismaPg } from '@prisma/adapter-pg';
 import { PrismaClient } from '@prisma/client';
 
 declare global {
-  var cachedPrisma: PrismaClient;
-}
-const connectionString = `${process.env.DATABASE_URL}`
-let prisma: PrismaClient;
-const adapter = new PrismaPg({ connectionString })
-if (process.env['NODE_ENV'] === 'production') {
-  prisma = new PrismaClient({ adapter });
-} else {
-  if (!global.cachedPrisma) {
-    global.cachedPrisma = new PrismaClient({ adapter });
-  }
-  prisma = global.cachedPrisma;
+  // eslint-disable-next-line no-var
+  var cachedPrisma: PrismaClient | undefined;
+  // eslint-disable-next-line no-var
+  var cachedAdapter: PrismaPg | undefined;
 }
 
-export const db = prisma;
+const connectionString = `${process.env.DATABASE_URL}`;
+
+function getClient(): PrismaClient {
+  if (process.env.NODE_ENV === 'production') {
+    const adapter = new PrismaPg({ connectionString });
+    return new PrismaClient({ adapter });
+  }
+
+  if (!global.cachedPrisma) {
+    global.cachedAdapter = new PrismaPg({ connectionString });
+    global.cachedPrisma = new PrismaClient({ adapter: global.cachedAdapter });
+  }
+  return global.cachedPrisma;
+}
+
+export const db = getClient();

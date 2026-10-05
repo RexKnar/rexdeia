@@ -11,7 +11,14 @@ export async function enterMark(markEntryPayload: EnterMarkEntryModel) {
       for (const studentMark of subjects) {
         const { marks } = studentMark;
         for (const mark of marks) {
-          if (mark.mark || mark.attendance) {
+          const hasMark =
+            mark.mark !== undefined && mark.mark !== null && mark.mark !== '';
+          const hasAttendance =
+            mark.attendance !== undefined &&
+            mark.attendance !== null &&
+            mark.attendance !== '';
+
+          if (hasMark || hasAttendance) {
             const data = {
               studentId: studentId,
               userId: markEntryPayload.userId,
@@ -19,8 +26,8 @@ export async function enterMark(markEntryPayload: EnterMarkEntryModel) {
               subjectId: studentMark.subjectId,
               assessmentFormatId: mark.assessmentFormatId,
               examSubjectPartitionId: mark.examPartitionId,
-              mark: +mark.mark,
-              attandance: +mark.attendance,
+              mark: hasMark ? +mark.mark : null,
+              attandance: hasAttendance ? +mark.attendance : null,
             };
             if (mark.id) {
               await db.mark.update({

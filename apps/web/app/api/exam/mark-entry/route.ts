@@ -34,7 +34,7 @@ import { enterMark } from './service';
  */
 export async function POST(request: Request) {
   const session = await getServerSession(authOptions);
-  if (!session) {
+  if (!session?.user?.id) {
     return new NextResponse(JSON.stringify({ error: 'UNAUTHORIZED' }), {
       status: StatusCodes.UNAUTHORIZED,
     });
@@ -42,13 +42,15 @@ export async function POST(request: Request) {
   const payload = await request.json();
 
   try {
+    // Enforce authenticated user's ID to prevent grader impersonation
+    payload.userId = session.user.id;
     const createdMarkEntry = await enterMark(payload);
     return new NextResponse(JSON.stringify(createdMarkEntry), {
       status: StatusCodes.CREATED,
     });
-  } catch (e) {
+  } catch (e: any) {
     captureException(e);
-    return new NextResponse(e, {
+    return new NextResponse(JSON.stringify({ error: e.message }), {
       status: StatusCodes.BAD_REQUEST,
     });
   }

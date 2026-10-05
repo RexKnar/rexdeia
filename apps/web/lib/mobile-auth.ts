@@ -2,14 +2,17 @@
 import bcrypt from 'bcrypt';
 import { jwtVerify, SignJWT } from 'jose';
 import { nanoid } from 'nanoid';
+import { getServerSession } from 'next-auth';
+import { NextRequest } from 'next/server';
 
+import { authOptions } from './auth';
 import { db } from './db';
 
 async function generateSecretKey() {
   // eslint-disable-next-line turbo/no-undeclared-env-vars
-  const secret = process.env.JWT_SECRET;
+  const secret = process.env.JWT_SECRET || process.env.NEXTAUTH_SECRET;
   if (!secret) throw new Error('JWT_SECRET is not defined');
-  return new TextEncoder().encode(secret);
+  return new TextEncoder().encode(secret.trim());
 }
 
 export async function createAuthTokens(user: any) {
@@ -22,7 +25,12 @@ export async function createAuthTokens(user: any) {
     },
     include: {
       createdBranches: true,
-      userOrganizations: true,
+      userOrganizations: {
+        include: {
+          organization: true,
+          branch: true,
+        },
+      },
     },
   });
 
@@ -43,12 +51,19 @@ export async function createAuthTokens(user: any) {
   }
 
   // Get academic details (matching your session logic)
-  const academicDetails = await db.batch.findFirst({
-    where: {
-      currentAcademicYear: true,
-      branchId: dbUser.userOrganizations[0]?.branchId,
-    },
-  });
+  const branchId = dbUser.userOrganizations[0]?.branchId;
+  const academicDetails = branchId
+    ? await db.batch.findFirst({
+        where: {
+          currentAcademicYear: true,
+          branchId,
+        },
+        select: {
+          id: true,
+          name: true,
+        },
+      })
+    : null;
 
   // Get staff details if applicable
   let staffId = null;
@@ -60,6 +75,12 @@ export async function createAuthTokens(user: any) {
     });
     staffId = dbStaff?.id || null;
   }
+
+  const organizationName =
+    dbUser.userOrganizations[0]?.organization?.name ||
+    dbUser.userOrganizations[0]?.branch?.name ||
+    'Rexdeia Academy';
+  const academicYear = academicDetails?.name || '2024-2025';
 
   // Create token payload matching your session data
   const tokenPayload = {
@@ -76,6 +97,8 @@ export async function createAuthTokens(user: any) {
     // Organization related data
     branchId: dbUser.userOrganizations[0]?.branchId,
     organizationId: dbUser.userOrganizations[0]?.organizationId,
+    organizationName,
+    academicYear,
     currentBatch: academicDetails?.id,
 
     // Additional data
@@ -129,10 +152,14 @@ export async function verifyToken(token: string) {
         role: payload.role as string,
         staffId: payload.staffId as string | null,
         createdBranches: payload.createdBranches as any[],
+        organizationName: (payload.organizationName as string) || 'Rexdeia Academy',
+        academicYear: (payload.academicYear as string) || '2024-2025',
       },
       branchId: payload.branchId as string,
       organizationId: payload.organizationId as string,
       currentBatch: payload.currentBatch as string,
+      organizationName: (payload.organizationName as string) || 'Rexdeia Academy',
+      academicYear: (payload.academicYear as string) || '2024-2025',
     };
   } catch (error) {
     throw new Error('Invalid token', error);
@@ -168,4 +195,29 @@ export async function mobileLogin(credentials: {
   }
 
   return createAuthTokens(user);
+}
+
+// Unified auth getter: Checks Bearer JWT first (mobile/API clients), falls back to NextAuth session (web)
+export async function getAuthSession(req?: Request | NextRequest | null) {
+  if (req) {
+    const authHeader =
+      req.headers.get('authorization') || req.headers.get('Authorization');
+    if (authHeader && authHeader.startsWith('Bearer ')) {
+      const token = authHeader.substring(7).trim();
+      if (token) {
+        try {
+          const verified = await verifyToken(token);
+          if (verified && (verified as any).user?.id) {
+            return verified as any;
+          }
+        } catch {
+          // If bearer token verification fails, return null
+          return null;
+        }
+      }
+    }
+  }
+
+  const session = await getServerSession(authOptions);
+  return session;
 }

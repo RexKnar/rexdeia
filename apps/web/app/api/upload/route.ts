@@ -141,22 +141,42 @@ export async function POST(request: NextRequest) {
 
 export async function DELETE(request: NextRequest) {
   try {
-    const filePath = request.nextUrl.searchParams.get('filePath');
-    // Check for session
     const session = await getServerSession(authOptions);
-    if (!session) {
+    if (!session || !session.organizationId) {
       return new NextResponse(JSON.stringify({ error: 'UNAUTHORIZED' }), {
         status: StatusCodes.UNAUTHORIZED,
       });
     }
+
+    const filePath = request.nextUrl.searchParams.get('filePath');
+    if (!filePath) {
+      return new NextResponse(
+        JSON.stringify({ error: 'FILE_PATH_REQUIRED' }),
+        { status: StatusCodes.BAD_REQUEST }
+      );
+    }
+
+    // Path traversal and cross-tenant validation: file must reside in caller's organization folder
+    const tenantPrefix = `${session.organizationId}/`;
+    if (
+      !filePath.startsWith(tenantPrefix) ||
+      filePath.includes('..') ||
+      filePath.includes('\\')
+    ) {
+      return new NextResponse(
+        JSON.stringify({ error: 'FORBIDDEN_FILE_ACCESS' }),
+        { status: StatusCodes.FORBIDDEN }
+      );
+    }
+
     const response = await deleteFileFromGCS(bucket, filePath);
 
     return new NextResponse(JSON.stringify(response), {
       status: StatusCodes.OK,
     });
-  } catch (error) {
+  } catch (error: any) {
     captureException(error);
-    return new NextResponse(JSON.stringify({ error: error.message }), {
+    return new NextResponse(JSON.stringify({ error: error?.message || 'DELETE_FAILED' }), {
       status: StatusCodes.INTERNAL_SERVER_ERROR,
     });
   }

@@ -7,6 +7,21 @@ import { getServerSession } from 'next-auth';
 export async function addStaffCSV(staffDetails) {
   try {
     const session = await getServerSession(authOptions);
+    const defaultStaffHash = await bcrypt.hash('Password@123', 10);
+    const staffHashCache = new Map<string, string>();
+    staffHashCache.set('Password@123', defaultStaffHash);
+
+    const resolveStaffPasswordHash = async (
+      plainPassword?: string
+    ): Promise<string> => {
+      const pwd = plainPassword || 'Password@123';
+      const cached = staffHashCache.get(pwd);
+      if (cached) return cached;
+      const hashed = await bcrypt.hash(pwd, 10);
+      staffHashCache.set(pwd, hashed);
+      return hashed;
+    };
+
     const promises = [];
     for (const staffDetail of staffDetails) {
       if (staffDetail.Name && staffDetail.AadharNumber) {
@@ -19,7 +34,7 @@ export async function addStaffCSV(staffDetails) {
         });
 
         if (!user) {
-          const hashedPassword = await bcrypt.hash(staffDetail.Mobile, 10);
+          const hashedPassword = await resolveStaffPasswordHash(staffDetail.Mobile);
           user = await db.user.create({
             data: {
               password: hashedPassword,

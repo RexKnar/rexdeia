@@ -49,15 +49,37 @@ export async function PUT(request: Request) {
     if (!currentPassword || !newPassword)
       return NextResponse.json({ error: 'MISSING_FIELDS' }, { status: 400 });
 
+    if (typeof newPassword !== 'string' || newPassword.length < 8) {
+      return NextResponse.json(
+        {
+          error: 'PASSWORD_TOO_SHORT',
+          message: 'Password must be at least 8 characters long',
+        },
+        { status: 400 }
+      );
+    }
+
     await updateUserPassword(session.user.id, currentPassword, newPassword);
     return NextResponse.json(
       { message: 'Password changed successfully' },
       { status: 200 }
     );
-  } catch (error) {
+  } catch (error: any) {
+    if (error?.message === 'INVALID_CURRENT_PASSWORD') {
+      return NextResponse.json(
+        { error: 'INVALID_CURRENT_PASSWORD', message: 'Current password is incorrect' },
+        { status: 401 }
+      );
+    }
+    if (error?.message === 'USER_NOT_FOUND') {
+      return NextResponse.json(
+        { error: 'USER_NOT_FOUND' },
+        { status: 404 }
+      );
+    }
     return NextResponse.json(
-      { error: error.message },
-      { status: error.message === 'INVALID_CREDENTIALS' ? 401 : 500 }
+      { error: error?.message || 'INTERNAL_SERVER_ERROR' },
+      { status: 500 }
     );
   }
 }

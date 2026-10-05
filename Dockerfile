@@ -27,24 +27,9 @@ WORKDIR /usr/src/app/apps/web
 # Remove the .env file
 RUN rm -f .env
 
-# Environment variables
+# Environment defaults (provide runtime secrets via docker-compose / container runner)
 ENV NODE_ENV=production
-ENV NEXTAUTH_URL=http://localhost:3000
-ENV NEXT_PUBLIC_API_URL=http://localhost:3000
-ENV NEXTAUTH_SECRET=2b7e151628aed2a6abf7158809cf4f3c762e7160f38b4da56a784d9045190cba
-ENV DATABASE_URL=postgresql://postgres:rexCoders123@rexdeia.crug228k820z.us-east-2.rds.amazonaws.com:5432/rexdeia
-ENV NEXT_SITE_NAME=rexdeia.com
-ENV NEXT_RAZORPAY_KEY_ID=rzp_test_FgPdhSoHy5q9CO
-ENV NEXT_RAZORPAY_KEY_SECRET=xt6nQmfxv4bjKZdC0xEU14ei
-# ENV NEXT_PUBLIC_ZOHO_SALESIQ_WIDGET_CODE=siq5f54d9690e6a1b3453aa252fa32856e9d676d3ef7876ff962cbdcf05a99278df
-ENV SENTRY_DSN=https://4079002e0c9397054e638dff15dd5a9f@o4507098064486400.ingest.de.sentry.io/4507098068942928
-ENV NEXT_PUBLIC_SENTRY_DSN=https://4079002e0c9397054e638dff15dd5a9f@o4507098064486400.ingest.de.sentry.io/4507098068942928
-ENV NEXT_GCLOUD_PROJECT_ID=darkcore-blog
-ENV NEXT_GCLOUD_STORAGE_BUCKET=rexdeia
-
-# Deploy Database migrations
-RUN pnpx prisma migrate deploy
-RUN pnpx prisma generate
+ENV PORT=3000
 
 # Expose the port the app runs on
 EXPOSE 3000

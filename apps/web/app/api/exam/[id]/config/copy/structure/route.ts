@@ -8,16 +8,20 @@ export async function GET(
   { params: { id } }: { params: { id: string } }
 ) {
   const session = await getServerSession(authOptions);
-  if (!session) {
+  if (!session?.branchId) {
     return new NextResponse(JSON.stringify({ error: 'UNAUTHORIZED' }), {
       status: 401,
     });
   }
 
   try {
-    // 1. Get current exam to find its batchId (academic year)
-    const exam = await db.exam.findUnique({
-      where: { id },
+    // 1. Get current exam to find its batchId (academic year) scoped to current branch
+    const exam = await db.exam.findFirst({
+      where: {
+        id,
+        branchId: session.branchId,
+        isDeleted: false,
+      },
       select: { batchId: true },
     });
 
@@ -29,12 +33,32 @@ export async function GET(
 
     const { batchId } = exam;
 
-    // 2. Get all sections for this batchId with class details
+    // 2. Find already-configured sections for this exam to skip them
+    const existingConfiguredGroups = await db.examGroup.findMany({
+      where: {
+        examId: id,
+        examSubject: {
+          some: {},
+        },
+      },
+      select: {
+        sectionId: true,
+      },
+    });
+
+    const configuredSectionIds = new Set(
+      existingConfiguredGroups.map((g) => g.sectionId)
+    );
+
+    // 3. Get all unconfigured sections for this batchId with class details
     const sections = await db.section.findMany({
       where: {
         academicYearId: batchId,
         isDeleted: false,
         isActive: true,
+        ...(configuredSectionIds.size > 0
+          ? { id: { notIn: Array.from(configuredSectionIds) } }
+          : {}),
         class: {
           branchId: session.branchId,
           isDeleted: false,

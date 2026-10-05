@@ -7,6 +7,7 @@ type GetExamConfigFilterModel = {
   classId?: string;
   sectionId?: string;
   staffId?: string;
+  subjectId?: string;
 };
 
 type MarkEntryPermission = {
@@ -128,10 +129,11 @@ async function checkMarkEntryPermission(
 }
 
 export async function getExamConfigWithSubjectPartition(
-  filter: GetExamConfigFilterModel
+  filter: GetExamConfigFilterModel,
+  sessionOverride?: any
 ) {
-  const session = await getServerSession(authOptions);
-  const { examId, classId, sectionId, staffId } = filter;
+  const session = sessionOverride || (await getServerSession(authOptions));
+  const { examId, classId, sectionId, staffId, subjectId } = filter;
 
   const [isIncharge] = session?.user?.staffId
     ? await Promise.all([
@@ -140,7 +142,7 @@ export async function getExamConfigWithSubjectPartition(
             staffId: session?.user?.staffId,
             isIncharge: true,
             sectionId: sectionId,
-            academicYearId: session.currentBatch,
+            ...(session?.currentBatch ? { academicYearId: session.currentBatch } : {}),
           },
         }),
       ])
@@ -150,7 +152,7 @@ export async function getExamConfigWithSubjectPartition(
     examId!,
     staffId,
     Boolean(isIncharge),
-    session.user.role
+    session?.user?.role || 'TeachingStaff'
   );
 
   const [examConfig] = await Promise.all([
@@ -163,7 +165,13 @@ export async function getExamConfigWithSubjectPartition(
           ExamGroup: {
             some: {
               examId: examId,
-              examSubject: staffId
+              examSubject: subjectId
+                ? {
+                    some: {
+                      subjectId: subjectId,
+                    },
+                  }
+                : staffId && !isIncharge
                 ? {
                     some: {
                       subject: {
@@ -204,7 +212,11 @@ export async function getExamConfigWithSubjectPartition(
                 exam: true,
                 examId: true,
                 examSubject: {
-                  where: staffId
+                  where: subjectId
+                    ? {
+                        subjectId: subjectId,
+                      }
+                    : staffId && !isIncharge
                     ? {
                         subject: {
                           academicSubjectForStaff: {

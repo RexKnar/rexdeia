@@ -38,7 +38,10 @@ pipeline {
                 script {
                     try {
                         sh """
+                            docker stop ${DOCKER_IMAGE} || true
+                            docker rm ${DOCKER_IMAGE} || true
                             docker run -d \
+                            --name ${DOCKER_IMAGE} \
                             -p ${APP_PORT}:${APP_PORT} \
                             --restart unless-stopped \
                             ${DOCKER_IMAGE}:${DOCKER_TAG}
@@ -80,15 +83,14 @@ pipeline {
                 echo 'Deployment failed!'
                 // Cleanup on failure
                 sh """
-                    docker ps -q --filter "ancestor=${DOCKER_IMAGE}:${DOCKER_TAG}" | xargs -r docker stop
-                    docker ps -a -q --filter "ancestor=${DOCKER_IMAGE}:${DOCKER_TAG}" | xargs -r docker rm
+                    docker stop ${DOCKER_IMAGE} || true
+                    docker rm ${DOCKER_IMAGE} || true
                 """
             }
         }
         always {
-            // Clean up old images
+            // Clean up dangling images only to preserve layer caching
             sh """
-                docker system prune -f
                 docker image prune -f
             """
             cleanWs()

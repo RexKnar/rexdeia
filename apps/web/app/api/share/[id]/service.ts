@@ -31,6 +31,9 @@ export async function getShareById(shareId: string) {
     where: {
       id: shareId,
     },
+    include: {
+      form: true,
+    },
   });
 }
 
@@ -38,6 +41,9 @@ export async function getShareByFormId(formId: string) {
   return await db.share.findMany({
     where: {
       formId: formId,
+    },
+    include: {
+      form: true,
     },
   });
 }

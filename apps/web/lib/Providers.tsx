@@ -27,7 +27,9 @@ const Providers: FC<LayoutProps> = ({ children }) => {
       <TooltipProvider delayDuration={10}>
         <ToastProvider>
           <QueryClientProvider client={queryClient}>
-            <ReactQueryDevtools initialIsOpen={false} />
+            {process.env.NODE_ENV === 'development' && (
+              <ReactQueryDevtools initialIsOpen={false} />
+            )}
             {children}
           </QueryClientProvider>
         </ToastProvider>

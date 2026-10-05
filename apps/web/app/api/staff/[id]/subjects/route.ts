@@ -1,8 +1,7 @@
 import { captureException } from '@sentry/nextjs';
 import { StatusCodes } from 'http-status-codes';
-import { authOptions } from 'lib/auth';
-import { NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth';
+import { getAuthSession } from 'lib/mobile-auth';
+import { NextRequest, NextResponse } from 'next/server';
 
 import { getSubjectByStaffId } from '../../service';
 
@@ -34,7 +33,7 @@ import { getSubjectByStaffId } from '../../service';
  *           description: Internal server error.
  */
 export async function GET(request: Request, { params: { id } }) {
-  const session = await getServerSession(authOptions);
+  const session = await getAuthSession(request);
   if (!session) {
     return new NextResponse(JSON.stringify({ error: 'UNAUTHORIZED' }), {
       status: StatusCodes.UNAUTHORIZED,
@@ -42,7 +41,7 @@ export async function GET(request: Request, { params: { id } }) {
   }
 
   try {
-    const subjects = await getSubjectByStaffId(id);
+    const subjects = await getSubjectByStaffId(id, session);
 
     return new NextResponse(JSON.stringify(subjects), {
       status: StatusCodes.OK,

@@ -45,6 +45,8 @@ model Exam {
   examType                ExamType    @relation(fields: [examTypeId], references: [id])
   term                    Term        @relation(fields: [termId], references: [id])
   examGroup               ExamGroup[]
+
+  @@index([branchId, batchId])
 }
 
 model ExamType {
@@ -83,6 +85,9 @@ model ExamGroup {
   section              Section                @relation(fields: [sectionId], references: [id])
   examSubject          ExamSubject[]
   ExamSubjectPartition ExamSubjectPartition[]
+
+  @@index([examId, sectionId])
+  @@index([classId])
 }
 
 model ExamSubject {
@@ -98,6 +103,9 @@ model ExamSubject {
   subject              Subject                @relation(fields: [subjectId], references: [id])
   examSubjectPartition ExamSubjectPartition[]
   Mark                 Mark[]
+
+  @@index([examGroupId])
+  @@index([subjectId])
 }
 
 model ExamSubjectPartition {
@@ -141,6 +149,9 @@ model Mark {
   user                   User                 @relation(fields: [userId], references: [id])
 
   @@unique([studentId, examSubjectId, examSubjectPartitionId])
+  @@index([examSubjectId])
+  @@index([studentId])
+  @@index([subjectId])
 }
 
 model Session {
@@ -735,7 +746,11 @@ model Student {
   studentMapping         StudentMapping[]
   studentAttendance      StudentAttendance[]
 
-  @@index([firstName, lastName, emisNumber, phoneNumber, emailId, aadharCardNumber])
+  @@index([branchId, organizationId])
+  @@index([phoneNumber])
+  @@index([emailId])
+  @@index([aadharCardNumber])
+  @@index([firstName, lastName])
 }
 
 model StudentMapping {
@@ -756,6 +771,9 @@ model StudentMapping {
   medium     Medium?  @relation(fields: [mediumId], references: [id])
   section    Section? @relation(fields: [sectionId], references: [id])
   student    Student  @relation(fields: [studentId], references: [id])
+
+  @@index([studentId, isCurrent])
+  @@index([classId, sectionId, batchId])
 }
 
 model Staff {
@@ -983,6 +1001,8 @@ model Section {
   timetableEntries        TimetableEntry[]
   studentAttendance       StudentAttendance[]
   timetableDayOffs        TimetableDayOff[]
+
+  @@index([classId, academicYearId])
 }
 
 model SectionToGroups {

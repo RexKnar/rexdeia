@@ -1,60 +1,66 @@
 import { captureException } from '@sentry/nextjs';
 import { StatusCodes } from 'http-status-codes';
-import { authOptions } from 'lib/auth';
-import { NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth';
+import { getAuthSession } from 'lib/mobile-auth';
+import { NextRequest, NextResponse } from 'next/server';
 
 import { getExamsBySectionId } from './service';
 
 /**
- * @swagger
- * /api/exam/list:
- *     put:
- *       summary: get Exams by class&section
- *       description:  get Exams by class&section
- *       requestBody:
- *         required: true
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *       responses:
- *         '200':
- *           description: Exams fetched successfully.
- *           content:
- *             application/json:
- *               schema:
- *                 # Define the schema of your Exam object here
- *         '400':
- *           description: Bad request due to validation error.
- *         '401':
- *           description: Unauthorized access.
- *         '500':
- *           description: Internal server error.
+ * GET /api/exam/list?classId=...&sectionId=...
+ * Fetch configured exams for a specific class and section
  */
-export async function PUT(request: Request) {
-  const session = await getServerSession(authOptions);
+export async function GET(request: NextRequest) {
+  const session = await getAuthSession(request);
   if (!session) {
-    return new NextResponse(JSON.stringify({ error: 'UNAUTHORIZED' }), {
-      status: StatusCodes.UNAUTHORIZED,
-    });
+    return NextResponse.json({ error: 'UNAUTHORIZED' }, { status: StatusCodes.UNAUTHORIZED });
+  }
+
+  try {
+    const { searchParams } = new URL(request.url);
+    const classId = searchParams.get('classId') || undefined;
+    const sectionId = searchParams.get('sectionId') || undefined;
+
+    const examsByClassSection = await getExamsBySectionId(
+      { classId, sectionId },
+      session
+    );
+
+    return NextResponse.json(examsByClassSection, { status: StatusCodes.OK });
+  } catch (e: any) {
+    captureException(e);
+    return NextResponse.json(
+      { error: e.message },
+      { status: StatusCodes.INTERNAL_SERVER_ERROR }
+    );
+  }
+}
+
+/**
+ * PUT /api/exam/list
+ * Body: { classId, sectionId }
+ */
+export async function PUT(request: NextRequest) {
+  const session = await getAuthSession(request);
+  if (!session) {
+    return NextResponse.json({ error: 'UNAUTHORIZED' }, { status: StatusCodes.UNAUTHORIZED });
   }
 
   try {
     const payload = await request.json();
 
-    const examsByClassSection = await getExamsBySectionId(payload);
+    const examsByClassSection = await getExamsBySectionId(payload, session);
 
-    return new NextResponse(JSON.stringify(examsByClassSection), {
-      status: StatusCodes.OK,
-    });
-  } catch (e) {
+    return NextResponse.json(examsByClassSection, { status: StatusCodes.OK });
+  } catch (e: any) {
     captureException(e);
-    return new NextResponse(JSON.stringify({ error: e.message }), {
-      status:
-        e.message === 'VALIDATION_ERROR'
-          ? StatusCodes.BAD_REQUEST
-          : StatusCodes.INTERNAL_SERVER_ERROR,
-    });
+    return NextResponse.json(
+      { error: e.message },
+      {
+        status:
+          e.message === 'VALIDATION_ERROR'
+            ? StatusCodes.BAD_REQUEST
+            : StatusCodes.INTERNAL_SERVER_ERROR,
+      }
+    );
   }
 }

@@ -1,6 +1,7 @@
 import { captureException } from '@sentry/nextjs';
 import { StatusCodes } from 'http-status-codes';
 import { authOptions } from 'lib/auth';
+import { getAuthSession } from 'lib/mobile-auth';
 import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 
@@ -25,11 +26,29 @@ import { createExam, getExamsList } from './service';
  *           description: Unauthorized access.
  *         '500':
  *           description: Internal server error.
+ *         '401':
+ *           description: Unauthorized access.
+ *         '500':
+ *           description: Internal server error.
+ *       parameters:
+ *         - in: query
+ *           name: page
+ *           schema:
+ *             type: integer
+ *           description: Page number
+ *         - in: query
+ *           name: limit
+ *           schema:
+ *             type: integer
+ *           description: Number of items per page
+ *         - in: query
+ *           name: batchId
+ *           schema:
+ *             type: string
+ *           description: Batch ID
  */
 export async function GET(request: NextRequest) {
-  // console.log('🍪 Incoming cookies:', request.cookies.getAll());
-  const session = await getServerSession(authOptions);
-  // console.log('exam list session', session);
+  const session = await getAuthSession(request);
   if (!session) {
     return new NextResponse(JSON.stringify({ error: 'UNAUTHORIZED' }), {
       status: StatusCodes.UNAUTHORIZED,
@@ -40,7 +59,7 @@ export async function GET(request: NextRequest) {
     const limit = parseInt(request.nextUrl.searchParams.get('limit')) || 10;
     const batchId = request.nextUrl.searchParams.get('batchId') || undefined;
 
-    const classList = await getExamsList(page, limit, batchId);
+    const classList = await getExamsList(page, limit, batchId, session);
     return new NextResponse(JSON.stringify(classList), {
       status: StatusCodes.OK,
     });

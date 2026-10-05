@@ -9,7 +9,7 @@ import { AttendanceReport } from './_components/AttendanceReport';
 
 export default async function Page() {
   const session = await getServerSession(authOptions);
-  if (!session.branchId || !session.organizationId) {
+  if (!session || !session.branchId || !session.organizationId) {
     return redirect('/signin?callbackUrl=/timeTable/attendance-report');
   }
 

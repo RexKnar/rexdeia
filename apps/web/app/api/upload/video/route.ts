@@ -133,22 +133,42 @@ export async function POST(request: NextRequest) {
 
 export async function DELETE(request: NextRequest) {
   try {
-    const filePath = request.nextUrl.searchParams.get('filePath');
-    // Check for session
     const session = await getServerSession(authOptions);
-    if (!session) {
+    if (!session || !session.organizationId) {
       return new NextResponse(JSON.stringify({ error: 'UNAUTHORIZED' }), {
         status: StatusCodes.UNAUTHORIZED,
       });
     }
+
+    const filePath = request.nextUrl.searchParams.get('filePath');
+    if (!filePath) {
+      return new NextResponse(
+        JSON.stringify({ error: 'FILE_PATH_REQUIRED' }),
+        { status: StatusCodes.BAD_REQUEST }
+      );
+    }
+
+    // Path traversal and cross-tenant validation
+    const tenantPrefix = `${session.organizationId}/`;
+    if (
+      !filePath.startsWith(tenantPrefix) ||
+      filePath.includes('..') ||
+      filePath.includes('\\')
+    ) {
+      return new NextResponse(
+        JSON.stringify({ error: 'FORBIDDEN_FILE_ACCESS' }),
+        { status: StatusCodes.FORBIDDEN }
+      );
+    }
+
     const response = await deleteFileFromGCS(bucket, filePath);
 
     return new NextResponse(JSON.stringify(response), {
       status: StatusCodes.OK,
     });
-  } catch (error) {
+  } catch (error: any) {
     captureException(error);
-    return new NextResponse(JSON.stringify({ error: error.message }), {
+    return new NextResponse(JSON.stringify({ error: error?.message || 'DELETE_FAILED' }), {
       status: StatusCodes.INTERNAL_SERVER_ERROR,
     });
   }
@@ -157,7 +177,7 @@ export async function DELETE(request: NextRequest) {
 export async function GET(request: NextRequest) {
   try {
     const session = await getServerSession(authOptions);
-    if (!session) {
+    if (!session || !session.organizationId) {
       return new NextResponse('Unauthorized', { status: 401 });
     }
 
@@ -166,6 +186,16 @@ export async function GET(request: NextRequest) {
 
     if (!filePath) {
       return new NextResponse('File path is required', { status: 400 });
+    }
+
+    // Path traversal and cross-tenant validation
+    const tenantPrefix = `${session.organizationId}/`;
+    if (
+      !filePath.startsWith(tenantPrefix) ||
+      filePath.includes('..') ||
+      filePath.includes('\\')
+    ) {
+      return new NextResponse('Forbidden', { status: 403 });
     }
 
     // Get file from GCS
@@ -205,7 +235,7 @@ export async function GET(request: NextRequest) {
         'Accept-Ranges': 'bytes',
         'Content-Length': chunkSize.toString(),
         'Content-Type': contentType,
-        'Cache-Control': 'public, max-age=31536000',
+        'Cache-Control': 'private, no-transform, max-age=3600',
       };
 
       // Return a streaming response
@@ -222,7 +252,7 @@ export async function GET(request: NextRequest) {
         'Content-Length': contentLength.toString(),
         'Content-Type': contentType,
         'Accept-Ranges': 'bytes',
-        'Cache-Control': 'public, max-age=31536000',
+        'Cache-Control': 'private, no-transform, max-age=3600',
       };
 
       // Return a streaming response for the entire file
