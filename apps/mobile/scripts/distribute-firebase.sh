@@ -11,7 +11,7 @@
 set -euo pipefail
 
 cd "$(dirname "$0")/.."                     # -> apps/mobile
-APP_ID="${FIREBASE_APP_ID:?set FIREBASE_APP_ID (Firebase console -> Project settings -> Your apps -> App ID)}"
+APP_ID="${FIREBASE_APP_ID:-1:656276815107:android:3280a6086738a9d5387d36}"
 GROUP="${2:-testers}"
 
 APK="${1:-}"
