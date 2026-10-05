@@ -10,6 +10,12 @@
     "assetBundlePatterns": [
       "**/*"
     ],
+    "updates": {
+      "url": "https://u.expo.dev/4bf592ac-7f17-4945-bf51-44c354de012b"
+    },
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.rexdeia.staff",
