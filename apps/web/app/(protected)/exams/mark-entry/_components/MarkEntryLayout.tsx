@@ -116,10 +116,107 @@ export function MarkEntryLayout() {
     }
   }, [session]);
 
-  async function submitMarkEntry(payload) {
+  function getModifiedOrNewMarks(payloadStudents: any[], initialData: any[]) {
+    const initialMarksMap = new Map<string, { mark: string; attendance: number }>();
+
+    initialData?.forEach((student) => {
+      student.examSubjects?.forEach((subj: any) => {
+        subj.examSubjectPartition?.forEach((partition: any) => {
+          if (partition.Mark?.id) {
+            const rawMark = partition.Mark.mark;
+            const normalizedMark =
+              rawMark !== null && rawMark !== undefined && rawMark !== '' && !isNaN(Number(rawMark))
+                ? String(Number(rawMark))
+                : rawMark !== null && rawMark !== undefined
+                ? String(rawMark).trim()
+                : '';
+            const normalizedAttendance = partition.Mark.attandance ? 1 : 0;
+
+            initialMarksMap.set(partition.Mark.id, {
+              mark: normalizedMark,
+              attendance: normalizedAttendance,
+            });
+          }
+        });
+      });
+    });
+
+    const modifiedStudents: any[] = [];
+
+    for (const student of payloadStudents || []) {
+      const modifiedSubjects: any[] = [];
+
+      for (const subject of student.subjects || []) {
+        const modifiedMarks: any[] = [];
+
+        for (const mark of subject.marks || []) {
+          const rawMarkVal =
+            mark.mark !== undefined && mark.mark !== null ? String(mark.mark).trim() : '';
+          const normalizedMark =
+            rawMarkVal !== '' && !isNaN(Number(rawMarkVal))
+              ? String(Number(rawMarkVal))
+              : rawMarkVal;
+          const normalizedAttendance = mark.attendance ? 1 : 0;
+
+          if (mark.id) {
+            const initial = initialMarksMap.get(mark.id);
+            const initialMark = initial ? initial.mark : '';
+            const initialAttendance = initial ? initial.attendance : 0;
+
+            const isMarkChanged = normalizedMark !== initialMark;
+            const isAttendanceChanged = normalizedAttendance !== initialAttendance;
+
+            if (isMarkChanged || isAttendanceChanged) {
+              modifiedMarks.push(mark);
+            }
+          } else {
+            const hasEnteredMark = rawMarkVal !== '';
+            const hasEnteredAttendance = normalizedAttendance === 1;
+
+            if (hasEnteredMark || hasEnteredAttendance) {
+              modifiedMarks.push(mark);
+            }
+          }
+        }
+
+        if (modifiedMarks.length > 0) {
+          modifiedSubjects.push({
+            ...subject,
+            marks: modifiedMarks,
+          });
+        }
+      }
+
+      if (modifiedSubjects.length > 0) {
+        modifiedStudents.push({
+          ...student,
+          subjects: modifiedSubjects,
+        });
+      }
+    }
+
+    return modifiedStudents;
+  }
+
+  async function submitMarkEntry(payload: any) {
+    const changedStudents = getModifiedOrNewMarks(
+      payload.studentsMarkDetails,
+      markEntryResponse
+    );
+
+    if (changedStudents.length === 0) {
+      toast({
+        title: 'No Changes Detected',
+        variant: 'default',
+        description: 'All marks are already up to date.',
+      });
+      return;
+    }
+
     const markEntryPayload = {
       userId: userId,
       ...payload,
+      studentsMarkDetails: changedStudents,
     };
     mutateNewMarkEntryAsync(markEntryPayload);
   }

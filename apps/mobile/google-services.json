@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "656276815107",
+    "project_id": "rexdeia",
+    "storage_bucket": "rexdeia.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:656276815107:android:3280a6086738a9d5387d36",
+        "android_client_info": {
+          "package_name": "com.rexdeia.staff"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCWbYWtMwmxuUjZxWChv0tFGbjUkRVP68Y"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
