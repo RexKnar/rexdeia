@@ -5,6 +5,7 @@ export async function enterMark(markEntryPayload: EnterMarkEntryModel) {
   try {
     const batchSize = 5000; // Adjust based on your needs and database capabilities
     const createMarks = [];
+    const updateMarks: { id: string; data: any }[] = [];
 
     for (const entry of markEntryPayload.studentsMarkDetails) {
       const { studentId, subjects } = entry;
@@ -30,10 +31,7 @@ export async function enterMark(markEntryPayload: EnterMarkEntryModel) {
               attandance: hasAttendance ? +mark.attendance : null,
             };
             if (mark.id) {
-              await db.mark.update({
-                where: { id: mark.id },
-                data: data,
-              });
+              updateMarks.push({ id: mark.id, data });
             } else {
               createMarks.push(data);
             }
@@ -51,6 +49,19 @@ export async function enterMark(markEntryPayload: EnterMarkEntryModel) {
         skipDuplicates: true,
       });
       createdMarkEntries.push(result);
+    }
+
+    const UPDATE_CHUNK_SIZE = 50;
+    for (let i = 0; i < updateMarks.length; i += UPDATE_CHUNK_SIZE) {
+      const chunk = updateMarks.slice(i, i + UPDATE_CHUNK_SIZE);
+      await db.$transaction(
+        chunk.map((item) =>
+          db.mark.update({
+            where: { id: item.id },
+            data: item.data,
+          })
+        )
+      );
     }
 
     return createdMarkEntries;

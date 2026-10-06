@@ -13,7 +13,7 @@ export function MarkFields({
 }) {
   const { fields, append } = useFieldArray({
     control,
-    name: `studentsMarkDetails.${nestIndex}].subjects.${subjectIndex}.marks`,
+    name: `studentsMarkDetails.${nestIndex}.subjects.${subjectIndex}.marks`,
   });
 
   const prevAssessmentFormats = useRef(null);
