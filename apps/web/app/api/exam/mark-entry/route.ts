@@ -1,37 +1,12 @@
 import { captureException } from '@sentry/nextjs';
 import { StatusCodes } from 'http-status-codes';
 import { authOptions } from 'lib/auth';
+import { resolveUserSecurityContext } from 'lib/auth/scope-resolver';
 import { NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 
 import { enterMark } from './service';
 
-/**
- * @swagger
- * /api/exam/mark-entry:
- *     post:
- *       summary: Add Marks to the Exam
- *       description: Add Marks to the Exam
- *       requestBody:
- *         required: true
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *       responses:
- *         '200':
- *           description: Marks added successfully.
- *           content:
- *             application/json:
- *               schema:
- *                 # Define the schema of your markEntry object here
- *         '400':
- *           description: Bad request due to validation error.
- *         '401':
- *           description: Unauthorized access.
- *         '500':
- *           description: Internal server error.
- */
 export async function POST(request: Request) {
   const session = await getServerSession(authOptions);
   if (!session?.user?.id) {
@@ -42,6 +17,27 @@ export async function POST(request: Request) {
   const payload = await request.json();
 
   try {
+    const security = await resolveUserSecurityContext(session);
+
+    // If not branch-wide (admin/BM/HM), verify section/subject authorization
+    if (!security.isBranchWide && payload.sectionId) {
+      const isAllowed = security.isMarkEntryAllowed(
+        payload.sectionId,
+        payload.subjectId || null
+      );
+
+      if (!isAllowed) {
+        return new NextResponse(
+          JSON.stringify({
+            error: 'FORBIDDEN',
+            message:
+              'You are not authorized to enter or modify marks for this section or subject.',
+          }),
+          { status: StatusCodes.FORBIDDEN }
+        );
+      }
+    }
+
     // Enforce authenticated user's ID to prevent grader impersonation
     payload.userId = session.user.id;
     const createdMarkEntry = await enterMark(payload);

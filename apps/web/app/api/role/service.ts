@@ -8,6 +8,7 @@ export async function addRole(rolePayload: any) {
   const createdRole = await db.role.create({
     data: {
       name: rolePayload.name,
+      ...(rolePayload.archetype ? { archetype: rolePayload.archetype } : {}),
       organization: {
         connect: {
           id: session.organizationId,
@@ -22,10 +23,11 @@ export async function addRole(rolePayload: any) {
   });
 
   await Promise.all(
-    rolePayload.moduleAccess.map((access) =>
+    rolePayload.moduleAccess.map((access: any) =>
       addModuleAccess({
         roleId: createdRole.id,
         module: access.module,
+        scope: access.scope,
         create: access.create,
         read: access.read,
         update: access.update,
@@ -54,10 +56,13 @@ export async function getAllRoleList(page: number, limit: number) {
       select: {
         id: true,
         name: true,
+        archetype: true,
+        isSystemRole: true,
         moduleAccess: {
           select: {
             id: true,
             module: true,
+            scope: true,
             create: true,
             read: true,
             update: true,
@@ -93,6 +98,7 @@ export function addModuleAccess(access: any) {
     read: access.read,
     update: access.update,
     delete: access.delete,
+    ...(access.scope ? { scope: access.scope } : {}),
   };
   return db.moduleAccess.create({
     data: createModuleAccess,
@@ -111,10 +117,13 @@ export async function getRoleById(roleId: string) {
     select: {
       id: true,
       name: true,
+      archetype: true,
+      isSystemRole: true,
       moduleAccess: {
         select: {
           id: true,
           module: true,
+          scope: true,
           create: true,
           read: true,
           update: true,

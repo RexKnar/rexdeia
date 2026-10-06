@@ -1,5 +1,6 @@
 'use client';
 
+import { SYSTEM_MODULES } from 'lib/constants/modules';
 import { AddRoleModel } from 'lib/domain/role';
 import { useCreateRoleMutationQuery } from 'lib/queries/role-management/useCreateRoleMutationQuery';
 import { Plus, PlusCircle, Trash } from 'lucide-react';
@@ -21,6 +22,21 @@ import {
   Text,
 } from 'ui';
 
+const ROLE_ARCHETYPES = [
+  { value: 'CUSTOM', label: 'Custom (Default)' },
+  { value: 'ORGANIZATION_ADMIN', label: 'Organization Admin' },
+  { value: 'BRANCH_MANAGER', label: 'Branch Manager' },
+  { value: 'HM', label: 'Headmaster / HM' },
+  { value: 'AHM', label: 'Assistant Headmaster / AHM' },
+  { value: 'CLASS_TEACHER', label: 'Class Teacher' },
+  { value: 'TEACHING_STAFF', label: 'Teaching Staff' },
+  { value: 'FINANCE_OFFICER', label: 'Finance Officer' },
+  { value: 'HR_OFFICER', label: 'HR Officer' },
+  { value: 'INSTRUCTOR', label: 'Instructor / LMS' },
+  { value: 'PARENT', label: 'Parent' },
+  { value: 'STUDENT', label: 'Student' },
+];
+
 export function RoleFlyout() {
   const pathname = usePathname();
   const router = useRouter();
@@ -36,6 +52,7 @@ export function RoleFlyout() {
   } = useForm({
     defaultValues: {
       name: '',
+      archetype: 'CUSTOM',
       isActive: false,
       moduleAccess: [],
     },
@@ -55,12 +72,14 @@ export function RoleFlyout() {
     reset();
   };
 
-  const saveRole = async (data) => {
+  const saveRole = async (data: any) => {
     try {
       const payload: AddRoleModel = {
         name: data.name,
-        moduleAccess: data.moduleAccess.map((mod) => ({
+        archetype: data.archetype || 'CUSTOM',
+        moduleAccess: data.moduleAccess.map((mod: any) => ({
           module: mod.module,
+          scope: mod.scope,
           create: !!mod.create,
           read: !!mod.read,
           update: !!mod.update,
@@ -106,6 +125,30 @@ export function RoleFlyout() {
             />
           </div>
 
+          <div className="mt-4">
+            <label className="text-sm font-semibold text-gray-700">
+              Base Archetype
+            </label>
+            <Controller
+              name="archetype"
+              control={control}
+              render={({ field }) => (
+                <Select onValueChange={field.onChange} value={field.value || 'CUSTOM'}>
+                  <SelectTrigger className="mt-2 w-full">
+                    <SelectValue placeholder="Select Archetype" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {ROLE_ARCHETYPES.map((arch) => (
+                      <SelectItem key={arch.value} value={arch.value}>
+                        {arch.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              )}
+            />
+          </div>
+
           {fields.map((field, index) => (
             <div key={field.id} className="mt-6 space-y-2">
               <div className="flex items-center gap-2">
@@ -118,15 +161,11 @@ export function RoleFlyout() {
                         <SelectValue placeholder="Select Module" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="Analytics">Analytics</SelectItem>
-                        <SelectItem value="Class">Class</SelectItem>
-                        <SelectItem value="Students">Students</SelectItem>
-                        <SelectItem value="Staffs">Staffs</SelectItem>
-                        <SelectItem value="Exams">Exams</SelectItem>
-                        <SelectItem value="Configurations">
-                          Configurations
-                        </SelectItem>
-                        <SelectItem value="TimeTable">TimeTable</SelectItem>
+                        {Object.values(SYSTEM_MODULES).map((mod) => (
+                          <SelectItem key={mod.key} value={mod.key}>
+                            {mod.label} ({mod.domain})
+                          </SelectItem>
+                        ))}
                       </SelectContent>
                     </Select>
                   )}

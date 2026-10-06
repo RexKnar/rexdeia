@@ -257,4 +257,146 @@ This document outlines the engineering remediation task list derived from the [F
 - [x] TASK-P3-01: Update GitHub Actions Deploy Node.js Version (Week 3) - COMPLETED
 - [x] TASK-P3-02: Fix Jenkins Container Port Binding & Prune Policy (Week 3) - COMPLETED
 - [x] TASK-P3-03: Repository Hygiene (Remove Tracked Binaries & Logs) (Week 3) - COMPLETED
+
+---
+
+## Phase 5: Enterprise Role Management & Scoped Authorization [ACTIVE MILESTONE 🚀]
+
+This phase implements the hybrid RBAC + Scoped Authorization (ReBAC) system designed in [role_management_implementation_plan.md](file:///C:/Users/Admin/.gemini/antigravity-ide/brain/4c4f1cbf-62ec-4643-a038-825832c83c83/role_management_implementation_plan.md).
+
+### TASK-ROLE-01: Fix Session Hydration & RBAC Type Alignment
+* **Priority:** Critical (P0)
+* **Target Files:**
+  * [apps/web/lib/auth.ts](file:///d:/Personal/Rexdeia-Master/rexdeia/apps/web/lib/auth.ts)
+  * [apps/web/types/auth.ts](file:///d:/Personal/Rexdeia-Master/rexdeia/apps/web/types/auth.ts)
+  * [apps/web/lib/auth/permission.ts](file:///d:/Personal/Rexdeia-Master/rexdeia/apps/web/lib/auth/permission.ts)
+* **Objective:**
+  * In `lib/auth.ts`, update the `jwt` callback to query `userOrganizations` with `role: { include: { moduleAccess: true } }`.
+  * Ensure `token.organizationRole` is set on standard login (not just on `trigger === 'update'`).
+  * Fix the type discrepancy where `User.organizationRole` is typed as an object in `types/auth.ts` but cast as an array in `auth.ts`.
+  * Verify `PermissionManager` executes `.find()` without `TypeError: Cannot read properties of undefined`.
+* **Status:** Ready to start.
+
+---
+
+### TASK-ROLE-02: Non-Destructive Database Schema Migration
+* **Priority:** High (P1)
+* **Target Files:**
+  * [apps/web/prisma/schema.prisma](file:///d:/Personal/Rexdeia-Master/rexdeia/apps/web/prisma/schema.prisma)
+* **Objective:**
+  * Add `enum RoleArchetype`:
+    * `ORGANIZATION_ADMIN`, `BRANCH_MANAGER`, `HM`, `AHM`, `CLASS_TEACHER`, `TEACHING_STAFF`, `FINANCE_OFFICER`, `HR_OFFICER`, `INSTRUCTOR`, `PARENT`, `STUDENT`, `CUSTOM`.
+  * Add `enum PermissionScope`:
+    * `BRANCH`, `ASSIGNED_LEVELS`, `ASSIGNED_SECTIONS`, `ASSIGNED_SUBJECTS`, `OWN_RECORDS`, `OWN_WARDS`.
+  * Add columns to `Role` model:
+    * `archetype RoleArchetype @default(CUSTOM)`
+    * `isSystemRole Boolean @default(false)`
+  * Add column to `ModuleAccess` model:
+    * `scope PermissionScope @default(BRANCH)`
+  * **Zero Data Loss Guarantee:** All new fields have `@default` values; no tables, columns, or relations are dropped.
+* **Status:** Pending Task 01.
+
+---
+
+### TASK-ROLE-03: System Modules & Multi-Domain Registry
+* **Priority:** High (P1)
+* **Target Files:**
+  * `apps/web/lib/constants/modules.ts` (New file)
+* **Objective:**
+  * Create a single source of truth for all system modules grouped by domain:
+    * **Academics:** `students`, `exams`, `classes_sections`, `academic_analytics`, `timetable`.
+    * **Finance:** `fees_collection`, `fee_structure`, `financial_audit`.
+    * **HR:** `staff_management`, `payroll`, `staff_leaves`.
+    * **LMS:** `live_classes`, `course_content`, `course_commerce`.
+    * **Parent Portal:** `parent_ward_profile`, `parent_attendance`, `parent_academic_progress`, `parent_fee_payments`, `parent_timetable`, `parent_announcements`.
+  * Define permitted actions (`create`, `read`, `update`, `delete`, `export`) and scope support for each module.
+* **Status:** Pending Task 02.
+
+---
+
+### TASK-ROLE-04: Implement Centralized Academic Scoping Engine
+* **Priority:** Critical (P0)
+* **Target Files:**
+  * `apps/web/lib/auth/scope-resolver.ts` (New file)
+* **Objective:**
+  * Implement `resolveUserSecurityContext(session)` wrapped with React's `cache()`:
+    * **Admin / Branch Manager:** Returns full branch-wide access.
+    * **AHM:** Queries `db.classLevelIncharge` to resolve assigned `classLevelId`s.
+    * **Class Teacher:** Queries `db.academicSubjectForStaff` with `isIncharge: true` to resolve `inchargeSectionIds`.
+    * **Teaching Staff:** Queries `db.academicSubjectForStaff` to resolve assigned `sectionId`s and `subjectId`s.
+    * **Parent:** Resolves linked student IDs (`ownWardStudentIds`).
+  * Expose convenience flags: `canEditStudents`, `canEditAllClassMarks(sectionId)`, `canEditSubjectMarks(sectionId, subjectId)`.
+* **Status:** Pending Task 01 & 03.
+
+---
+
+### TASK-ROLE-05: Create High-Order Route Guard (`withPermission`)
+* **Priority:** High (P1)
+* **Target Files:**
+  * `apps/web/lib/auth/api-guard.ts` (New file)
+* **Objective:**
+  * Implement `withPermission(moduleKey, action, handler)` wrapper for Next.js Route Handlers.
+  * Validates session existence and verifies Layer 1 functional permissions in-memory (`< 0.05ms`).
+  * Injects `security: UserSecurityContext` into the route handler for Layer 2 resource scoping.
+* **Status:** Pending Task 04.
+
+---
+
+### TASK-ROLE-06: Guard Student API Endpoints (Enforce Edit & View Rules)
+* **Priority:** Critical (P0)
+* **Target Files:**
+  * [apps/web/app/api/student/[id]/route.ts](file:///d:/Personal/Rexdeia-Master/rexdeia/apps/web/app/api/student/[id]/route.ts)
+  * [apps/web/app/api/student/service.ts](file:///d:/Personal/Rexdeia-Master/rexdeia/apps/web/app/api/student/service.ts)
+* **Objective:**
+  * In `PUT /api/student/[id]`:
+    * Block regular teaching staff immediately (`403 Forbidden: Staff cannot edit student details`).
+    * Permit Class Teachers **only** if the student belongs to their incharge section.
+    * Permit AHMs **only** if the student belongs to their assigned class levels.
+    * Permit Admins & Branch Managers branch-wide.
+  * In `GET /api/student`:
+    * Automatically scope student queries by teacher's assigned sections so teachers only see their own students (eliminating over-fetching and boosting performance).
+* **Status:** Pending Task 05.
+
+---
+
+### TASK-ROLE-07: Guard Exam & Mark Entry Endpoints
+* **Priority:** High (P1)
+* **Target Files:**
+  * [apps/web/app/api/exam/mark-entry/route.ts](file:///d:/Personal/Rexdeia-Master/rexdeia/apps/web/app/api/exam/mark-entry/route.ts)
+  * [apps/web/app/api/exam/[id]/mark-entry/service.ts](file:///d:/Personal/Rexdeia-Master/rexdeia/apps/web/app/api/exam/[id]/mark-entry/service.ts)
+* **Objective:**
+  * Ensure teaching staff can only enter marks for their assigned `(sectionId, subjectId)`.
+  * Allow Class Teachers to enter/review marks for all subjects in their incharge section.
+  * Allow AHMs to view and review marks across their assigned class levels.
+* **Status:** Pending Task 05.
+
+---
+
+### TASK-ROLE-08: Role Management UI & UX Enhancements
+* **Priority:** Medium (P2)
+* **Target Files:**
+  * [apps/web/app/(protected)/academics/role-management/_modals/SaveRolemanagementFlyout.tsx](file:///d:/Personal/Rexdeia-Master/rexdeia/apps/web/app/(protected)/academics/role-management/_modals/SaveRolemanagementFlyout.tsx)
+  * [apps/web/app/(protected)/academics/role-management/_modals/AddRoleModuleManagementFlyout.tsx](file:///d:/Personal/Rexdeia-Master/rexdeia/apps/web/app/(protected)/academics/role-management/_modals/AddRoleModuleManagementFlyout.tsx)
+  * [apps/web/app/(protected)/academics/role-management/[roleId]/_components/UserRoleList.tsx](file:///d:/Personal/Rexdeia-Master/rexdeia/apps/web/app/(protected)/academics/role-management/[roleId]/_components/UserRoleList.tsx)
+* **Objective:**
+  * Update Role Creation Flyout to support selecting **Base Archetype** (`Admin`, `Branch Manager`, `HM`, `AHM`, `Class Teacher`, `Staff`, `Finance`, `HR`, `LMS`, `Parent`, `Custom`).
+  * Group module privileges by Domain (Academics, Finance, HR, LMS, Parent Portal) driven by `SYSTEM_MODULES`.
+  * Replace the dummy toast in `UserRoleList.tsx` with a functioning API call to unassign users from roles.
+  * In the student profile view, hide the "Edit" button if the logged-in user is a regular subject teacher (`!security.canEditStudents`).
+* **Status:** Pending Task 06 & 07.
+
+---
+
+## Phase 5 Task Tracker
+
+```markdown
+- [x] TASK-ROLE-01: Fix Session Hydration & RBAC Type Alignment - COMPLETED
+- [x] TASK-ROLE-02: Non-Destructive Database Schema Migration - COMPLETED
+- [x] TASK-ROLE-03: System Modules & Multi-Domain Registry - COMPLETED
+- [x] TASK-ROLE-04: Implement Centralized Academic Scoping Engine - COMPLETED
+- [x] TASK-ROLE-05: Create High-Order Route Guard (withPermission) - COMPLETED
+- [x] TASK-ROLE-06: Guard Student API Endpoints (Enforce Edit & View Rules) - COMPLETED
+- [x] TASK-ROLE-07: Guard Exam & Mark Entry Endpoints - COMPLETED
+- [x] TASK-ROLE-08: Role Management UI & UX Enhancements - COMPLETED
 ```
+

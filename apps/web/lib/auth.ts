@@ -60,7 +60,7 @@ export const authOptions: NextAuthOptions = {
         session.organizationId = token.organizationId as string;
         session.currentBatch = token.currentBatch as string;
         session.user.createdBranches = token.createdBranches as any[];
-        session.user.organizationRole = token.organizationRole as any[];
+        session.user.organizationRole = (token.organizationRole as any) || null;
         session.organizationName = token.organizationName as string;
         session.institute = token.institute as string;
       }
@@ -77,7 +77,11 @@ export const authOptions: NextAuthOptions = {
           createdBranches: true,
           userOrganizations: {
             include: {
-              role: true,
+              role: {
+                include: {
+                  moduleAccess: true,
+                },
+              },
             },
           },
         },
@@ -128,6 +132,18 @@ export const authOptions: NextAuthOptions = {
           token.currentBatch = academicDetails?.id ?? '';
         }
       }
+
+      // Ensure organizationRole is hydrated from dbUser if token doesn't have it yet
+      if (!token.organizationRole && dbUser.userOrganizations?.length > 0) {
+        const activeOrg = token.branchId
+          ? dbUser.userOrganizations.find((org) => org.branchId === token.branchId) ||
+            dbUser.userOrganizations[0]
+          : dbUser.userOrganizations[0];
+        if (activeOrg?.role) {
+          token.organizationRole = activeOrg.role;
+        }
+      }
+
       return {
         ...token,
         id: dbUser.id,

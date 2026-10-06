@@ -13,9 +13,15 @@ export async function PUT(request: Request) {
     }
     const payload = await request.json();
     const userOrganizations = await getOrganisationsByUserId(session.user.id);
+    if (!userOrganizations || userOrganizations.length === 0) {
+      return NextResponse.json(
+        { error: 'NO_ORGANIZATIONS_FOUND' },
+        { status: StatusCodes.NOT_FOUND }
+      );
+    }
     const { branchId, organizationId } = userOrganizations[0];
-    const organizationName = userOrganizations[0].organization.name;
-    const institute = userOrganizations[0].organization.institute;
+    const organizationName = userOrganizations[0]?.organization?.name;
+    const institute = userOrganizations[0]?.organization?.institute;
 
     // Build the new session update object
     const updatedSessionData = {

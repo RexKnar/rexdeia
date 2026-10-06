@@ -72,3 +72,20 @@ export async function assignUsersToRoleById(roleId: string, payload: any) {
 
   return users;
 }
+
+export async function unassignUserFromRole(roleId: string, userId: string) {
+  const session = await getServerSession(authOptions);
+
+  return await db.userOrganization.updateMany({
+    where: {
+      userId: userId,
+      roleId: roleId,
+      organizationId: session.organizationId,
+      branchId: session.branchId,
+    },
+    data: {
+      roleId: null,
+    },
+  });
+}
+

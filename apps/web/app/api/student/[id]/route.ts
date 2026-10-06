@@ -123,36 +123,68 @@ export async function DELETE(_: NextRequest, { params: { id } }) {
 
 export async function PUT(request: Request, { params: { id } }) {
   const session = await getServerSession(authOptions);
-  if (!session) {
+  if (!session || !session.branchId || !session.organizationId) {
     return new NextResponse(JSON.stringify({ error: 'UNAUTHORIZED' }), {
-      status: 401,
+      status: StatusCodes.UNAUTHORIZED,
     });
   }
+
+  const { resolveUserSecurityContext } = await import('lib/auth/scope-resolver');
+  const security = await resolveUserSecurityContext(session);
+
+  // 1. Staff check: Regular teaching staff cannot edit student details!
+  if (!security.canEditStudents && !security.isBranchWide) {
+    return new NextResponse(
+      JSON.stringify({
+        error: 'FORBIDDEN',
+        message: 'Teaching staff are not permitted to edit student details.',
+      }),
+      { status: StatusCodes.FORBIDDEN }
+    );
+  }
+
   const payload = await request.json();
 
   try {
     const student = await getStudentById(id);
 
-    if (student) {
-      const updatedStudent = await updateStudentById(id, payload);
-      if (updatedStudent) {
-        return new Response(JSON.stringify(updatedStudent), {
-          status: StatusCodes.OK,
-        });
-      } else {
-        return new Response(
-          JSON.stringify({ error: 'STUDENT_UPDATION_FAILED' }),
-          {
-            status: StatusCodes.INTERNAL_SERVER_ERROR,
-          }
-        );
-      }
-    } else {
+    if (!student) {
       return new Response(JSON.stringify({ error: 'STUDENT_NOT_FOUND' }), {
         status: StatusCodes.NOT_FOUND,
       });
     }
-  } catch (e) {
+
+    // 2. Resource Boundary check: verify student belongs to teacher's section or AHM's class level
+    if (!security.isBranchWide) {
+      const studentSectionId = student.section?.id;
+      const studentClassLevelId = student.class?.classLevelId;
+
+      if (!security.isStudentEditable(studentSectionId, studentClassLevelId)) {
+        return new NextResponse(
+          JSON.stringify({
+            error: 'FORBIDDEN',
+            message:
+              'You are only authorized to edit students in your assigned class or section.',
+          }),
+          { status: StatusCodes.FORBIDDEN }
+        );
+      }
+    }
+
+    const updatedStudent = await updateStudentById(id, payload);
+    if (updatedStudent) {
+      return new Response(JSON.stringify(updatedStudent), {
+        status: StatusCodes.OK,
+      });
+    } else {
+      return new Response(
+        JSON.stringify({ error: 'STUDENT_UPDATION_FAILED' }),
+        {
+          status: StatusCodes.INTERNAL_SERVER_ERROR,
+        }
+      );
+    }
+  } catch (e: any) {
     captureException(e);
     return new Response(JSON.stringify({ error: e.message }), {
       status: StatusCodes.INTERNAL_SERVER_ERROR,

@@ -50,10 +50,16 @@ async function checkMarkEntryPermission(
     };
   }
 
+  const normalizedRole = (userRole || '').toLowerCase();
+  const isAdminOrBM =
+    normalizedRole === 'admin' ||
+    normalizedRole === 'branch_manager' ||
+    normalizedRole === 'hm';
+
   // Check if mark entry is globally blocked
   if (examConfig.blockMarkEntry) {
-    // Allow admin to bypass blockMarkEntry
-    if (userRole !== 'Admin') {
+    // Allow admin / branch manager / HM to bypass blockMarkEntry
+    if (!isAdminOrBM) {
       return {
         canEnterMarks: false,
         message: 'Mark entry is currently blocked',
@@ -61,8 +67,8 @@ async function checkMarkEntryPermission(
     }
   }
 
-  // Admin can enter marks anytime unless exam is inactive
-  if (userRole === 'Admin') {
+  // Admin / Branch Manager / HM can enter marks anytime unless exam is inactive
+  if (isAdminOrBM) {
     return { canEnterMarks: true };
   }
 

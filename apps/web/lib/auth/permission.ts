@@ -11,33 +11,48 @@ export class PermissionManager {
    * Check if user has specific permission for a module
    */
   hasPermission(module: string, permission: Permission): boolean {
-    const moduleAccess = this.session.user?.organizationRole?.moduleAccess.find(
-      (access) => access.module === module
-    );
-    if (this.hasRole('Admin')) {
+    if (this.hasRole('Admin') || this.hasRole('BRANCH_MANAGER') || this.getRoleType() === 'admin') {
       return true;
     }
+
+    const moduleAccessList = this.session.user?.organizationRole?.moduleAccess;
+    if (!Array.isArray(moduleAccessList)) {
+      return false;
+    }
+
+    const moduleAccess = moduleAccessList.find(
+      (access) => access.module?.toLowerCase() === module?.toLowerCase()
+    );
 
     if (!moduleAccess) {
       return false;
     }
 
-    return moduleAccess[permission];
+    return Boolean(moduleAccess[permission]);
   }
 
   /**
    * Check if user has any permission for a module
    */
   hasAnyPermission(module: string): boolean {
-    const moduleAccess = this.session.user?.organizationRole?.moduleAccess.find(
-      (access) => access.module === module
+    if (this.hasRole('Admin') || this.hasRole('BRANCH_MANAGER') || this.getRoleType() === 'admin') {
+      return true;
+    }
+
+    const moduleAccessList = this.session.user?.organizationRole?.moduleAccess;
+    if (!Array.isArray(moduleAccessList)) {
+      return false;
+    }
+
+    const moduleAccess = moduleAccessList.find(
+      (access) => access.module?.toLowerCase() === module?.toLowerCase()
     );
 
     if (!moduleAccess) {
       return false;
     }
 
-    return (
+    return Boolean(
       moduleAccess.create ||
       moduleAccess.read ||
       moduleAccess.update ||
@@ -49,8 +64,27 @@ export class PermissionManager {
    * Get all permissions for a specific module
    */
   getModulePermissions(module: string) {
-    const moduleAccess = this.session.user?.organizationRole?.moduleAccess.find(
-      (access) => access.module === module
+    if (this.hasRole('Admin') || this.hasRole('BRANCH_MANAGER') || this.getRoleType() === 'admin') {
+      return {
+        create: true,
+        read: true,
+        update: true,
+        delete: true,
+      };
+    }
+
+    const moduleAccessList = this.session.user?.organizationRole?.moduleAccess;
+    if (!Array.isArray(moduleAccessList)) {
+      return {
+        create: false,
+        read: false,
+        update: false,
+        delete: false,
+      };
+    }
+
+    const moduleAccess = moduleAccessList.find(
+      (access) => access.module?.toLowerCase() === module?.toLowerCase()
     );
 
     if (!moduleAccess) {
@@ -63,10 +97,10 @@ export class PermissionManager {
     }
 
     return {
-      create: moduleAccess.create,
-      read: moduleAccess.read,
-      update: moduleAccess.update,
-      delete: moduleAccess.delete,
+      create: Boolean(moduleAccess.create),
+      read: Boolean(moduleAccess.read),
+      update: Boolean(moduleAccess.update),
+      delete: Boolean(moduleAccess.delete),
     };
   }
 
@@ -74,7 +108,12 @@ export class PermissionManager {
    * Get all accessible modules
    */
   getAccessibleModules(): string[] {
-    return this.session.user?.organizationRole?.moduleAccess
+    const moduleAccessList = this.session.user?.organizationRole?.moduleAccess;
+    if (!Array.isArray(moduleAccessList)) {
+      return [];
+    }
+
+    return moduleAccessList
       .filter((access) => access.read) // At least read permission
       .map((access) => access.module);
   }

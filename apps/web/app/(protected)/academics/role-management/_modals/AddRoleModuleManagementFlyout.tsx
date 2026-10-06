@@ -1,5 +1,6 @@
 'use client';
 
+import { SYSTEM_MODULES } from 'lib/constants/modules';
 import { useCreateRoleModuleAccessQuery } from 'lib/queries/role-management/useCreateRoleModuleAccessMutationQuery';
 import { Plus, PlusCircle, Trash } from 'lucide-react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
@@ -101,15 +102,11 @@ export function AddRoleModuleFlyout() {
                         <SelectValue placeholder="Select Module" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="Analytics">Analytics</SelectItem>
-                        <SelectItem value="Class">Class</SelectItem>
-                        <SelectItem value="Students">Students</SelectItem>
-                        <SelectItem value="Staffs">Staffs</SelectItem>
-                        <SelectItem value="Exams">Exams</SelectItem>
-                        <SelectItem value="Configurations">
-                          Configurations
-                        </SelectItem>
-                        <SelectItem value="TimeTable">TimeTable</SelectItem>
+                        {Object.values(SYSTEM_MODULES).map((mod) => (
+                          <SelectItem key={mod.key} value={mod.key}>
+                            {mod.label} ({mod.domain})
+                          </SelectItem>
+                        ))}
                       </SelectContent>
                     </Select>
                   )}

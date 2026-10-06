@@ -282,6 +282,8 @@ model Role {
   id               String             @id @default(uuid()) @map("_id") @db.Uuid
   name             String
   roleType         RoleType?
+  archetype        RoleArchetype      @default(CUSTOM)
+  isSystemRole     Boolean            @default(false)
   organizationId   String             @db.Uuid
   branchId         String?            @db.Uuid
   moduleAccess     ModuleAccess[]
@@ -291,14 +293,15 @@ model Role {
 }
 
 model ModuleAccess {
-  id     String  @id @default(uuid()) @map("_id") @db.Uuid
-  roleId String  @db.Uuid
+  id     String          @id @default(uuid()) @map("_id") @db.Uuid
+  roleId String          @db.Uuid
   module String
-  create Boolean @default(false)
-  read   Boolean @default(false)
-  update Boolean @default(false)
-  delete Boolean @default(false)
-  role   Role    @relation(fields: [roleId], references: [id])
+  scope  PermissionScope @default(BRANCH)
+  create Boolean         @default(false)
+  read   Boolean         @default(false)
+  update Boolean         @default(false)
+  delete Boolean         @default(false)
+  role   Role            @relation(fields: [roleId], references: [id])
 }
 
 model AdmissionForm {
@@ -1433,6 +1436,30 @@ enum RoleType {
   ahm
   staff
   tech
+}
+
+enum RoleArchetype {
+  ORGANIZATION_ADMIN
+  BRANCH_MANAGER
+  HM
+  AHM
+  CLASS_TEACHER
+  TEACHING_STAFF
+  FINANCE_OFFICER
+  HR_OFFICER
+  INSTRUCTOR
+  PARENT
+  STUDENT
+  CUSTOM
+}
+
+enum PermissionScope {
+  BRANCH
+  ASSIGNED_LEVELS
+  ASSIGNED_SECTIONS
+  ASSIGNED_SUBJECTS
+  OWN_RECORDS
+  OWN_WARDS
 }
 
 enum TestType {
