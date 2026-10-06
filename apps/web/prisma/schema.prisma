@@ -185,6 +185,7 @@ model User {
   staff                 Staff?
   student               Student?
   userOrganizations     UserOrganization[]
+  userRoleHistories     UserRoleHistory[]
 }
 
 model Branch {
@@ -233,6 +234,7 @@ model Branch {
   StudentAttendance          StudentAttendance[]
   TimetableDayOff            TimetableDayOff[]
   Holiday                    Holiday[]
+  userRoleHistories          UserRoleHistory[]
 }
 
 model Organization {
@@ -264,6 +266,7 @@ model Organization {
   StudentAttendance    StudentAttendance[]
   TimetableDayOff      TimetableDayOff[]
   Holiday              Holiday[]
+  userRoleHistories    UserRoleHistory[]
 }
 
 model UserOrganization {
@@ -289,7 +292,31 @@ model Role {
   moduleAccess     ModuleAccess[]
   branch           Branch?            @relation(fields: [branchId], references: [id])
   organization     Organization       @relation(fields: [organizationId], references: [id])
-  UserOrganization UserOrganization[]
+  UserOrganization  UserOrganization[]
+  userRoleHistories UserRoleHistory[]
+}
+
+model UserRoleHistory {
+  id             String        @id @default(uuid()) @map("_id") @db.Uuid
+  userId         String        @db.Uuid
+  roleId         String        @db.Uuid
+  academicYearId String?       @db.Uuid
+  organizationId String        @db.Uuid
+  branchId       String?       @db.Uuid
+  startDate      DateTime      @default(now())
+  endDate        DateTime?
+  isCurrent      Boolean       @default(true)
+  assignedById   String?       @db.Uuid
+  createdAt      DateTime?     @default(now())
+  updatedAt      DateTime?     @default(now())
+  academicYear   Batch?        @relation(fields: [academicYearId], references: [id])
+  branch         Branch?       @relation(fields: [branchId], references: [id])
+  organization   Organization  @relation(fields: [organizationId], references: [id])
+  role           Role          @relation(fields: [roleId], references: [id])
+  user           User          @relation(fields: [userId], references: [id])
+
+  @@index([userId, academicYearId])
+  @@index([branchId, academicYearId])
 }
 
 model ModuleAccess {
@@ -920,6 +947,7 @@ model Batch {
   studentAttendance       StudentAttendance[]
   timetableDayOffs        TimetableDayOff[]
   holidays                Holiday[]
+  userRoleHistories       UserRoleHistory[]
 }
 
 model Class {
