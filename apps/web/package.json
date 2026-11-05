@@ -69,7 +69,7 @@
     "ui": "workspace:*",
     "utils": "workspace:*",
     "xlsx": "^0.18.5",
-    "zod": "^3.22.4"
+    "zod": "^4.0.0"
   },
   "devDependencies": {
     "@next/eslint-plugin-next": "^14.0.4",
