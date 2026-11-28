@@ -3,7 +3,7 @@
 import { RangeType } from '@prisma/client';
 import { useAddRangeScaleMutationQuery } from 'lib/queries/analytics/rangeScales/useAddRangeScaleMutationQuery';
 import { useGetClassLevelListQuery } from 'lib/queries/classLevel/useGetClassLevelsListQuery';
-import { Plus, PlusCircle, Trash } from 'lucide-react';
+import { Loader2, Plus, PlusCircle, Trash } from 'lucide-react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 import { Controller, useFieldArray, useForm } from 'react-hook-form';
@@ -23,9 +23,11 @@ import {
   Slider,
   Switch,
   Text,
+  useToast,
 } from 'ui';
 
 export function AddRangeScaleFlyout() {
+  const { toast } = useToast();
   const pathname = usePathname();
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -46,7 +48,7 @@ export function AddRangeScaleFlyout() {
   } = useForm({
     defaultValues: {
       rangeOf: 'SubjectMarks',
-      classLevelId: null,
+      classLevelId: 'all',
       scale: [
         {
           startValue: 0,
@@ -100,29 +102,70 @@ export function AddRangeScaleFlyout() {
     router.replace(pathname + '?' + params.toString());
     setSliderValues([[0, 600]]);
     setErrorMessages([false]);
+    setRangeType('SubjectMarks');
+    reset({
+      rangeOf: 'SubjectMarks',
+      classLevelId: 'all',
+      scale: [
+        {
+          startValue: 0,
+          endValue: 600,
+          order: 1,
+        },
+      ],
+    });
   };
 
   const SaveGrade = async () => {
     const hasDefaultValues = sliderValues.some(
       (value) => value[0] === 0 && value[1] === 600
     );
-    if (hasDefaultValues || errorMessages.some(Boolean)) {
+    if (hasDefaultValues) {
+      toast({
+        title: 'Adjust Range Scales',
+        description: 'Please adjust the scale range values before saving.',
+        variant: 'destructive',
+      });
+      return;
+    }
+    if (errorMessages.some(Boolean)) {
+      toast({
+        title: 'Overlapping Scales',
+        description: 'Please resolve overlapping ranges before saving.',
+        variant: 'destructive',
+      });
       return;
     }
     try {
+      const selectedClassLevel = watch('classLevelId');
+      const classLevelId =
+        !selectedClassLevel ||
+        selectedClassLevel === 'all' ||
+        selectedClassLevel === 'common'
+          ? null
+          : selectedClassLevel;
+
       const requestPayload = fields.map((field, index) => ({
         startValue: sliderValues[index][0].toString(),
         endValue: sliderValues[index][1].toString(),
         order: Number(watch(`scale.${index}.order`)) as number,
         rangeOf: watch('rangeOf') as RangeType,
-        classLevelId: watch('classLevelId') as string,
+        classLevelId: classLevelId as string | null,
       }));
       await mutateAddRangeScaleAsync(requestPayload);
+      toast({
+        title: 'Success',
+        description: 'Range scale added successfully',
+        variant: 'default',
+      });
+      await closeFlyout();
     } catch (error) {
       console.error(error);
-    } finally {
-      await closeFlyout();
-      reset();
+      toast({
+        title: 'Error',
+        description: 'Failed to save range scale',
+        variant: 'destructive',
+      });
     }
   };
 
@@ -147,57 +190,70 @@ export function AddRangeScaleFlyout() {
                     <div className="flex items-center">
                       <PlusCircle size={20} strokeWidth={1.5} />
                       <Text variant="lg-semibold" className="ml-2">
-                        New Grade System
+                        New Range Scale
                       </Text>
                     </div>
                   </div>
                 </SheetTitle>
                 <hr className="border-t border-gray-300"></hr>
               </SheetHeader>
-              <div className="mt-5 flex gap-2">
-                <div className="mt-5 flex w-full gap-2">
-                  <div className="items-right float-right flex">
-                    <Switch
-                      id="rangeType"
-                      checked={rangeType === 'SubjectMarks'}
-                      {...register('rangeOf')}
-                      onCheckedChange={(value) => {
-                        const typeValue = value ? 'SubjectMarks' : 'TotalMarks';
-                        setRangeType(typeValue);
-                        setValue('rangeOf', typeValue);
-                      }}
-                    />
-
+              <div className="mt-5 space-y-4">
+                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                  <div className="flex flex-col gap-1">
                     <label
-                      htmlFor="isActive"
-                      className="ml-2 text-sm font-semibold"
+                      htmlFor="rangeTypeSwitch"
+                      className="text-sm font-semibold text-gray-700"
                     >
-                      {rangeType}
+                      Range Scale Type
                     </label>
+                    <div className="mt-2 flex items-center gap-3">
+                      <Switch
+                        id="rangeTypeSwitch"
+                        checked={rangeType === 'SubjectMarks'}
+                        onCheckedChange={(value) => {
+                          const typeValue = value
+                            ? 'SubjectMarks'
+                            : 'TotalMarks';
+                          setRangeType(typeValue);
+                          setValue('rangeOf', typeValue);
+                        }}
+                      />
+                      <label
+                        htmlFor="rangeTypeSwitch"
+                        className="text-sm font-semibold text-gray-900"
+                      >
+                        {rangeType}
+                      </label>
+                    </div>
                   </div>
-                  <div className="items-right float-right flex">
+                  <div className="flex flex-col gap-1">
                     <label
-                      htmlFor="isActive"
-                      className="ml-2 text-sm font-semibold"
+                      htmlFor="classLevelIdSelect"
+                      className="text-sm font-semibold text-gray-700"
                     >
                       Class Level
                     </label>
                     <Controller
                       control={control}
-                      name={`classLevelId`}
+                      name="classLevelId"
                       render={({ field }) => {
                         return (
                           <Select
+                            value={field.value ?? 'all'}
                             onValueChange={field.onChange}
-                            {...field}
                             disabled={isClassLevelListLoading}
                           >
-                            {/* <Select {...register('classLevelId')}> */}
-                            <SelectTrigger className="mt-2 w-2/3">
-                              <SelectValue />
+                            <SelectTrigger
+                              id="classLevelIdSelect"
+                              className="mt-1 w-full"
+                            >
+                              <SelectValue placeholder="Select Class Level" />
                             </SelectTrigger>
                             <SelectContent>
                               <SelectGroup>
+                                <SelectItem value="all">
+                                  All / Common for all Class Levels
+                                </SelectItem>
                                 {classLevels.map((classLevel) => (
                                   <SelectItem
                                     key={classLevel.id}
@@ -212,9 +268,13 @@ export function AddRangeScaleFlyout() {
                         );
                       }}
                     />
+                    <span className="text-xs text-gray-500">
+                      Choose &quot;All / Common&quot; for all classes or select
+                      a specific class level.
+                    </span>
                   </div>
                 </div>
-                <div className="mt-8">
+                <div className="flex justify-end">
                   {fields.length === 0 && (
                     <Button
                       className="border-transparent px-2"
@@ -333,6 +393,9 @@ export function AddRangeScaleFlyout() {
                   className="mx-auto flex justify-center px-12 py-4"
                   disabled={isPendingCreateGrade || errorMessages.some(Boolean)}
                 >
+                  {isPendingCreateGrade && (
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  )}
                   Save
                 </Button>
               </div>

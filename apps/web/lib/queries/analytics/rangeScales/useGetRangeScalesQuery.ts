@@ -3,9 +3,10 @@ import { makeAPICall } from 'lib/api';
 import { GetRangeScales } from 'lib/domain/analytics/rangeAnalytics';
 import { GET_RANGE_SCALES } from 'lib/endpoints/examAnalyticsEndpoints';
 
-interface RangeScaleFilter {
+export interface RangeScaleFilter {
   rangeType: string;
   classId?: string;
+  classLevelId?: string;
   academicYearId?: string;
 }
 
@@ -15,6 +16,7 @@ const getRangeScales = async (filter: RangeScaleFilter) => {
   };
 
   if (filter.classId) queryParams.classId = filter.classId;
+  if (filter.classLevelId) queryParams.classLevelId = filter.classLevelId;
   if (filter.academicYearId) queryParams.academicYearId = filter.academicYearId;
 
   return await makeAPICall<GetRangeScales[]>(
@@ -34,6 +36,7 @@ export function useGetRangeScalesQuery(
       GET_RANGE_SCALES,
       filter.rangeType,
       filter.classId ?? null,
+      filter.classLevelId ?? null,
       filter.academicYearId ?? null,
     ],
     queryFn: () => getRangeScales(filter),

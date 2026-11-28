@@ -216,6 +216,10 @@ export default function StudentDetailScreen() {
     })();
   }, [cacheKey]);
 
+  // Ref to track student data without causing useCallback re-instantiation
+  const studentRef = React.useRef(student);
+  studentRef.current = student;
+
   // Fetch Student Details from API
   const fetchStudentDetails = useCallback(
     async (isManualRefresh = false) => {
@@ -226,7 +230,7 @@ export default function StudentDetailScreen() {
       }
       if (isManualRefresh) {
         setIsRefreshing(true);
-      } else if (!student) {
+      } else if (!studentRef.current) {
         setIsLoading(true);
       }
       setErrorMessage(null);
@@ -274,7 +278,7 @@ export default function StudentDetailScreen() {
         setIsRefreshing(false);
       }
     },
-    [id, user?.id, student, cacheKey]
+    [id, user?.id, cacheKey]
   );
 
   useEffect(() => {

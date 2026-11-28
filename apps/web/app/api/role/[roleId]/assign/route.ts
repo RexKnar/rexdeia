@@ -97,3 +97,41 @@ export async function POST(
     });
   }
 }
+
+export async function DELETE(
+  request: NextRequest,
+  { params }: { params: { roleId: string } }
+) {
+  const session = await getServerSession(authOptions);
+
+  if (!session) {
+    return new NextResponse(JSON.stringify({ error: 'UNAUTHORIZED' }), {
+      status: StatusCodes.UNAUTHORIZED,
+    });
+  }
+
+  try {
+    const roleId = params.roleId;
+    const { searchParams } = new URL(request.url);
+    const userId = searchParams.get('userId');
+
+    if (!userId) {
+      return new NextResponse(
+        JSON.stringify({ error: 'userId is required' }),
+        { status: StatusCodes.BAD_REQUEST }
+      );
+    }
+
+    const { unassignUserFromRole } = await import('./service');
+    await unassignUserFromRole(roleId, userId);
+
+    return new NextResponse(JSON.stringify({ success: true }), {
+      status: StatusCodes.OK,
+    });
+  } catch (e: any) {
+    captureException(e);
+    return new NextResponse(JSON.stringify({ error: e.message }), {
+      status: StatusCodes.INTERNAL_SERVER_ERROR,
+    });
+  }
+}

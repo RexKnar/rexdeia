@@ -3,8 +3,9 @@
 #
 # Two flags this machine needs:
 #   EAS_NO_VCS=1        EAS's default archive is `git clone --depth 1 file:///<repo>`,
-#                       which fails here (exit 128) — and it would silently skip
-#                       apps/mobile, which is currently untracked.
+#                       which fails on this box (exit 128 — git rejects that URL form).
+#                       apps/mobile is committed now, but the git path itself is still
+#                       broken, so keep packaging from the filesystem.
 #   EAS_PROJECT_ROOT    metro.config.js resolves modules from the monorepo root, so the
 #                       filesystem upload has to start there, not at apps/mobile.
 set -euo pipefail

@@ -264,7 +264,15 @@ export function ClassDetailCards({
                 style={styles.actionRow}
                 onPress={() => {
                   setActionModalVisible(false);
-                  router.push('/(tabs)/attendance');
+                  router.push({
+                    pathname: '/(tabs)/attendance',
+                    params: {
+                      classId: selectedClass?.id,
+                      className: selectedClass?.name,
+                      sectionId: selectedSectionId || undefined,
+                      sectionName: selectedSection || undefined,
+                    },
+                  });
                 }}
               >
                 <View style={[styles.actionIconCircle, { backgroundColor: '#EEF2FF' }]}>

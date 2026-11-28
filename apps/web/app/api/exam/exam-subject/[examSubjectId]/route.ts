@@ -4,7 +4,11 @@ import { authOptions } from 'lib/auth';
 import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 
-import { editExamSubject, getExamSubjectDetailById } from '../service';
+import {
+  deleteExamSubjectById,
+  editExamSubject,
+  getExamSubjectDetailById,
+} from '../service';
 
 /**
  * @swagger
@@ -110,6 +114,52 @@ export async function PUT(request: NextRequest, { params: { examSubjectId } }) {
     captureException(e);
     return new NextResponse(e, {
       status: StatusCodes.BAD_REQUEST,
+    });
+  }
+}
+
+export async function DELETE(_: NextRequest, { params: { examSubjectId } }) {
+  const session = await getServerSession(authOptions);
+  if (!session) {
+    return new NextResponse(JSON.stringify({ error: 'UNAUTHORIZED' }), {
+      status: StatusCodes.UNAUTHORIZED,
+    });
+  }
+
+  try {
+    const deletedExamSubject = await deleteExamSubjectById(
+      examSubjectId,
+      session.branchId
+    );
+
+    return new NextResponse(JSON.stringify(deletedExamSubject), {
+      status: StatusCodes.OK,
+    });
+  } catch (e) {
+    if (e?.message === 'MARK_ENTRY_EXISTS' || e?.code === 'P2003') {
+      return new NextResponse(
+        JSON.stringify({
+          error: 'MARK_ENTRY_EXISTS',
+          message:
+            'Cannot delete subject configuration because mark entries already exist.',
+        }),
+        { status: StatusCodes.CONFLICT }
+      );
+    }
+
+    if (e?.message === 'DATA_NOT_FOUND' || e?.code === 'P2025') {
+      return new NextResponse(
+        JSON.stringify({
+          error: 'DATA_NOT_FOUND',
+          message: 'Exam subject configuration not found.',
+        }),
+        { status: StatusCodes.NOT_FOUND }
+      );
+    }
+
+    captureException(e);
+    return new NextResponse(JSON.stringify({ error: e?.message }), {
+      status: StatusCodes.INTERNAL_SERVER_ERROR,
     });
   }
 }

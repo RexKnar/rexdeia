@@ -103,6 +103,23 @@ export async function createExamConfig(
     }
   }
 
+  // If the exam is already marked active, send out live notification for newly configured sections
+  const currentExam = await db.exam.findUnique({
+    where: { id: examId },
+    select: { isActive: true, branchId: true },
+  });
+
+  if (currentExam?.isActive) {
+    import('lib/services/notification.service').then(({ notifyExamLive }) => {
+      notifyExamLive({
+        examId,
+        branchId: currentExam.branchId,
+      }).catch((err) =>
+        console.error('[createExamConfig notifyExamLive] Error:', err)
+      );
+    });
+  }
+
   return { success: true };
 }
 
@@ -131,11 +148,51 @@ export async function editExamPartition(config: any, configId: string) {
   });
 }
 
-export async function deleteExamConfigEntry(configId: string) {
-  return await db.examSubjectPartition.delete({
-    where: {
-      id: configId,
-    },
+export async function deleteExamConfigEntry(
+  configId: string,
+  branchId?: string | null
+) {
+  return await db.$transaction(async (tx) => {
+    const existing = await tx.examSubjectPartition.findUnique({
+      where: {
+        id: configId,
+      },
+      select: {
+        id: true,
+        examGroup: {
+          select: {
+            exam: {
+              select: {
+                branchId: true,
+              },
+            },
+          },
+        },
+      },
+    });
+
+    if (
+      !existing ||
+      (branchId && existing.examGroup?.exam?.branchId !== branchId)
+    ) {
+      return null;
+    }
+
+    const markCount = await tx.mark.count({
+      where: {
+        examSubjectPartitionId: configId,
+      },
+    });
+
+    if (markCount > 0) {
+      throw new Error('MARK_ENTRY_EXISTS');
+    }
+
+    return await tx.examSubjectPartition.delete({
+      where: {
+        id: configId,
+      },
+    });
   });
 }
 

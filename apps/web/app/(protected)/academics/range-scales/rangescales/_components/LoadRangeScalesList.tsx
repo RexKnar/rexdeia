@@ -4,7 +4,6 @@ import {
   ColumnDef,
   flexRender,
   getCoreRowModel,
-  getFilteredRowModel,
   getSortedRowModel,
   useReactTable,
 } from '@tanstack/react-table';
@@ -13,10 +12,11 @@ import { useAddRangeScaleMutationQuery } from 'lib/queries/analytics/rangeScales
 import { useDeleteRangeMutationQuery } from 'lib/queries/analytics/rangeScales/useDeleteRangeMutationQuery';
 import { useGetRangeScalesQuery } from 'lib/queries/analytics/rangeScales/useGetRangeScalesQuery';
 import { useGetBatchesListQuery } from 'lib/queries/batches/useGetBatchesListQuery';
-import { ChevronDown, Trash2 } from 'lucide-react';
+import { ChevronDown, Loader2, Trash2 } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
 import { When } from 'react-if';
 import {
+  Badge,
   Button,
   Select,
   SelectContent,
@@ -50,33 +50,42 @@ const LoadRangeScalesList = () => {
     useState(false);
   const { toast } = useToast();
 
-  const { data: allBatchesList } = useGetBatchesListQuery({
-    page: 1,
-    limit: 100,
-    filter: { isActive: true },
-  });
+  const batchesQueryParams = useMemo(
+    () => ({
+      page: 1,
+      limit: 100,
+      filter: { isActive: true },
+    }),
+    []
+  );
+  const { data: allBatchesList } = useGetBatchesListQuery(batchesQueryParams);
+
   useEffect(() => {
-    if (
-      allBatchesList?.data?.length &&
-      (!selectedAcademicYearId ||
-        !allBatchesList.data.find((b) => b.id === selectedAcademicYearId))
-    ) {
+    if (allBatchesList?.data?.length && !selectedAcademicYearId) {
       setSelectedAcademicYearId(allBatchesList.data[0].id);
     }
-  }, [allBatchesList]);
+  }, [allBatchesList?.data, selectedAcademicYearId]);
+
+  const rangeScalesFilterParams = useMemo(
+    () => ({
+      rangeType: 'All',
+      academicYearId: selectedAcademicYearId,
+    }),
+    [selectedAcademicYearId]
+  );
 
   const {
     data: getRangeScaleListResponse,
     isLoading: isRangeScaleListLoading,
-  } = useGetRangeScalesQuery(
-    {
-      rangeType: 'All',
-      academicYearId: selectedAcademicYearId,
-    },
-    {
-      enabled: !!selectedAcademicYearId,
-    }
-  );
+    isError: isRangeScaleListError,
+    refetch: refetchRangeScales,
+  } = useGetRangeScalesQuery(rangeScalesFilterParams, {
+    enabled: !!selectedAcademicYearId,
+  });
+
+  const stableRangeScaleData = useMemo(() => {
+    return getRangeScaleListResponse ?? [];
+  }, [getRangeScaleListResponse]);
 
   const { isError: isDeleteRangeError, isSuccess: isDeleteSuccess } =
     useDeleteRangeMutationQuery();
@@ -85,18 +94,6 @@ const LoadRangeScalesList = () => {
     useAddRangeScaleMutationQuery();
 
   async function saveNewRange() {
-    stableRangeScaleData;
-    // if (selectedRange) {
-    //   const newRange = {
-    //     ...selectedRange,
-    //     rangeOf: selectedRange.rangeOf,
-    //     startValue: selectedRange.startValue,
-    //     endValue: selectedRange.endValue,
-    //     order: selectedRange.order,
-    //   };
-    //   mutateAddRangeScaleAsync(newRange);
-    // }
-
     try {
       const requestPayload = stableRangeScaleData.map((field) => ({
         startValue: field.startValue,
@@ -106,18 +103,29 @@ const LoadRangeScalesList = () => {
         classLevelId: field.classLevelId,
       }));
       await mutateAddRangeScaleAsync(requestPayload);
+      toast({
+        title: 'Success',
+        description: 'Range scales copied successfully',
+      });
     } catch (error) {
       console.error(error);
+      toast({
+        title: 'Error',
+        description: 'Failed to copy range scales',
+        variant: 'destructive',
+      });
     }
   }
+
   useEffect(() => {
     if (isDeleteRangeError) {
       toast({
         title: 'Error',
         description: 'Error while deleting range scale',
+        variant: 'destructive',
       });
     }
-  }, [isDeleteRangeError]);
+  }, [isDeleteRangeError, toast]);
 
   useEffect(() => {
     if (isDeleteSuccess) {
@@ -127,52 +135,74 @@ const LoadRangeScalesList = () => {
       });
       setSelectedRange(null);
     }
-  }, [isDeleteSuccess]);
+  }, [isDeleteSuccess, toast]);
 
-  const columns: ColumnDef<RangeScaleModel>[] = [
-    {
-      accessorKey: 'index',
-      header: () => <Button variant="ghost">#</Button>,
-      cell: ({ row }) => <div className="text-center">{row.index + 1}</div>,
-    },
-    {
-      accessorKey: 'rangeOf',
-      header: () => <Button variant="ghost">Range Type</Button>,
-      cell: ({ row }) => <div>{row.original.rangeOf}</div>,
-    },
-    {
-      accessorKey: 'startValue',
-      header: () => <Button variant="ghost">Start Value</Button>,
-      cell: ({ row }) => <div>{row.original.startValue}</div>,
-    },
-    {
-      accessorKey: 'endValue',
-      header: () => <Button variant="ghost">End Value</Button>,
-      cell: ({ row }) => <div>{row.original.endValue}</div>,
-    },
-    {
-      accessorKey: 'order',
-      header: ({ column }) => (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-        >
-          Order
-        </Button>
-      ),
-      cell: ({ row }) => <span>{row.original.order}</span>,
-    },
-  ];
-  const stableRangeScaleData = useMemo(() => {
-    return getRangeScaleListResponse || [];
-  }, [getRangeScaleListResponse]);
+  const columns: ColumnDef<RangeScaleModel>[] = useMemo(
+    () => [
+      {
+        accessorKey: 'index',
+        header: () => <Button variant="ghost">#</Button>,
+        cell: ({ row }) => <div className="text-center">{row.index + 1}</div>,
+      },
+      {
+        accessorKey: 'rangeOf',
+        header: () => <Button variant="ghost">Range Type</Button>,
+        cell: ({ row }) => <div>{row.original.rangeOf}</div>,
+      },
+      {
+        id: 'classLevel',
+        accessorFn: (row) => row.classLevel?.name ?? 'All / Common',
+        header: () => <Button variant="ghost">Class Level</Button>,
+        cell: ({ row }) => {
+          const levelName = row.original.classLevel?.name;
+          if (levelName) {
+            return (
+              <Badge
+                variant="outline"
+                className="border-gray-300 font-normal text-gray-700"
+              >
+                {levelName}
+              </Badge>
+            );
+          }
+          return (
+            <Badge className="border-none bg-blue-100 font-medium text-blue-800 hover:bg-blue-100">
+              All / Common
+            </Badge>
+          );
+        },
+      },
+      {
+        accessorKey: 'startValue',
+        header: () => <Button variant="ghost">Start Value</Button>,
+        cell: ({ row }) => <div>{row.original.startValue}</div>,
+      },
+      {
+        accessorKey: 'endValue',
+        header: () => <Button variant="ghost">End Value</Button>,
+        cell: ({ row }) => <div>{row.original.endValue}</div>,
+      },
+      {
+        accessorKey: 'order',
+        header: ({ column }) => (
+          <Button
+            variant="ghost"
+            onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+          >
+            Order
+          </Button>
+        ),
+        cell: ({ row }) => <span>{row.original.order}</span>,
+      },
+    ],
+    []
+  );
 
   const table = useReactTable({
     columns,
     data: stableRangeScaleData,
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
-    getFilteredRowModel: getFilteredRowModel(),
   });
 
   return (
@@ -204,7 +234,10 @@ const LoadRangeScalesList = () => {
       </div>
 
       {isRangeScaleListLoading ? (
-        <div className="py-10 text-center">Loading range scales...</div>
+        <div className="flex items-center justify-center gap-2 py-10 text-gray-500">
+          <Loader2 className="h-5 w-5 animate-spin text-primary" />
+          <span>Loading range scales...</span>
+        </div>
       ) : (
         <Table>
           <TableHeader>
@@ -261,8 +294,31 @@ const LoadRangeScalesList = () => {
               ))
             ) : (
               <TableRow>
-                <TableCell colSpan={6} className="text-center">
-                  No RangeScale Found
+                <TableCell colSpan={7} className="h-24 text-center">
+                  {isRangeScaleListError ? (
+                    <div className="flex flex-col items-center justify-center py-6 text-gray-500">
+                      <span className="font-semibold text-red-600">
+                        Failed to load range scales
+                      </span>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className="mt-2"
+                        onClick={() => refetchRangeScales()}
+                      >
+                        Retry
+                      </Button>
+                    </div>
+                  ) : (
+                    <div className="flex flex-col items-center justify-center py-6 text-gray-500">
+                      <span className="font-semibold text-gray-700">
+                        No Data Available
+                      </span>
+                      <span className="mt-1 text-xs text-gray-400">
+                        No range scales found for the selected academic year.
+                      </span>
+                    </div>
+                  )}
                 </TableCell>
               </TableRow>
             )}

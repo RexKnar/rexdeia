@@ -23,6 +23,7 @@ import {
   Trash2,
 } from 'lucide-react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { useSession } from 'next-auth/react';
 import React, { useCallback, useEffect, useState } from 'react';
 import { When } from 'react-if';
 import {
@@ -223,6 +224,21 @@ export function StudentsList() {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
 
+  const { data: session } = useSession();
+  const userRole = (session?.user?.role || '').toLowerCase();
+  const orgRole = session?.user?.organizationRole;
+  const archetype = (orgRole?.archetype || orgRole?.roleType || '').toLowerCase();
+
+  const isRegularStaff =
+    (userRole === 'staff' || archetype === 'teaching_staff' || archetype === 'staff') &&
+    archetype !== 'class_teacher' &&
+    archetype !== 'ahm' &&
+    archetype !== 'hm' &&
+    archetype !== 'branch_manager' &&
+    archetype !== 'admin';
+
+  const canEditStudent = !isRegularStaff;
+
   const { data: getStudentListResponse, isLoading: isStudentListLoading } =
     useGetStudentListQuery({
       page,
@@ -335,31 +351,33 @@ export function StudentsList() {
                     </TableCell>
                   ))}
                   <TableCell className="w-52">
-                    <Tooltip>
-                      <TooltipTrigger asChild>
-                        <Button
-                          onClick={() => {
-                            handleEditClick(row.original.id);
-                          }}
-                          className="mr-3 h-auto px-3 py-2"
-                          variant="mild"
-                          disabled={
-                            row.original.isNewlyAdded || row.original.isUpdating
-                          }
-                        >
-                          <Pencil
-                            size={12}
-                            className="text-center text-black"
-                          />
-                        </Button>
-                      </TooltipTrigger>
-                      <TooltipContent>
-                        <p>
-                          <span>Edit</span>
-                          <span className="mx-1 font-semibold">{`${row.original.firstName}`}</span>
-                        </p>
-                      </TooltipContent>
-                    </Tooltip>
+                    {canEditStudent && (
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <Button
+                            onClick={() => {
+                              handleEditClick(row.original.id);
+                            }}
+                            className="mr-3 h-auto px-3 py-2"
+                            variant="mild"
+                            disabled={
+                              row.original.isNewlyAdded || row.original.isUpdating
+                            }
+                          >
+                            <Pencil
+                              size={12}
+                              className="text-center text-black"
+                            />
+                          </Button>
+                        </TooltipTrigger>
+                        <TooltipContent>
+                          <p>
+                            <span>Edit</span>
+                            <span className="mx-1 font-semibold">{`${row.original.firstName}`}</span>
+                          </p>
+                        </TooltipContent>
+                      </Tooltip>
+                    )}
                     <Tooltip>
                       <TooltipTrigger asChild>
                         <Button

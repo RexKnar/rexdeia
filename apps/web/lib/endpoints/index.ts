@@ -148,6 +148,8 @@ export const UPDATE_STUDENT_STATUS = `UPDATE_STUDENT_STATUS`;
 export const GET_EXAM_DETAIL_BY_EXAM_ID = `GET_EXAM_DETAIL_BY_EXAM_ID`;
 export const GET_SUBJECT_EXAM_CONFIG_DETAIL = `GET_SUBJECT_EXAM_CONFIG_DETAIL`;
 export const EDIT_EXAM_SUBJECT_CONFIG_BY_ID = `EDIT_EXAM_SUBJECT_CONFIG_BY_ID`;
+export const DELETE_EXAM_SUBJECT_CONFIG_BY_ID = `DELETE_EXAM_SUBJECT_CONFIG_BY_ID`;
+export const ADD_EXAM_SUBJECT_PARTITION = `ADD_EXAM_SUBJECT_PARTITION`;
 export const GET_EXAM_CONFIG_SUBJECT_DETAIL_BY_SECTION_IDS = `GET_EXAM_CONFIG_SUBJECT_DETAIL_BY_SECTION_IDS`;
 export const GET_EXAM_SUBJECT_CONFIG_DETAIL_BY_ID = `GET_EXAM_SUBJECT_CONFIG_DETAIL_BY_ID`;
 export const ADD_EXAM_CONFIG = `ADD_EXAM_CONFIG`;
@@ -832,6 +834,14 @@ export default <EndpointDetails>{
   [EDIT_EXAM_SUBJECT_CONFIG_BY_ID]: {
     requestType: `PUT`,
     endpoint: `/api/exam/exam-subject/[examSubjectId]`,
+  },
+  [DELETE_EXAM_SUBJECT_CONFIG_BY_ID]: {
+    requestType: `DELETE`,
+    endpoint: `/api/exam/exam-subject/[examSubjectId]`,
+  },
+  [ADD_EXAM_SUBJECT_PARTITION]: {
+    requestType: `POST`,
+    endpoint: `/api/exam/exam-subject/[examSubjectId]/partition`,
   },
   [DELETE_EXAM_CONFIG_BY_ID]: {
     requestType: `DELETE`,

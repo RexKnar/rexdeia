@@ -185,6 +185,10 @@ model User {
   staff                 Staff?
   student               Student?
   userOrganizations     UserOrganization[]
+  userRoleHistories     UserRoleHistory[]
+  deviceTokens          DeviceToken[]
+  createdNotifications  Notification[]          @relation("NotificationCreator")
+  notifications         NotificationRecipient[]
 }
 
 model Branch {
@@ -233,6 +237,8 @@ model Branch {
   StudentAttendance          StudentAttendance[]
   TimetableDayOff            TimetableDayOff[]
   Holiday                    Holiday[]
+  notifications              Notification[]
+  userRoleHistories          UserRoleHistory[]
 }
 
 model Organization {
@@ -264,6 +270,7 @@ model Organization {
   StudentAttendance    StudentAttendance[]
   TimetableDayOff      TimetableDayOff[]
   Holiday              Holiday[]
+  userRoleHistories    UserRoleHistory[]
 }
 
 model UserOrganization {
@@ -282,23 +289,50 @@ model Role {
   id               String             @id @default(uuid()) @map("_id") @db.Uuid
   name             String
   roleType         RoleType?
+  archetype        RoleArchetype      @default(CUSTOM)
+  isSystemRole     Boolean            @default(false)
   organizationId   String             @db.Uuid
   branchId         String?            @db.Uuid
   moduleAccess     ModuleAccess[]
   branch           Branch?            @relation(fields: [branchId], references: [id])
   organization     Organization       @relation(fields: [organizationId], references: [id])
-  UserOrganization UserOrganization[]
+  UserOrganization  UserOrganization[]
+  userRoleHistories UserRoleHistory[]
+}
+
+model UserRoleHistory {
+  id             String        @id @default(uuid()) @map("_id") @db.Uuid
+  userId         String        @db.Uuid
+  roleId         String        @db.Uuid
+  academicYearId String?       @db.Uuid
+  organizationId String        @db.Uuid
+  branchId       String?       @db.Uuid
+  startDate      DateTime      @default(now())
+  endDate        DateTime?
+  isCurrent      Boolean       @default(true)
+  assignedById   String?       @db.Uuid
+  createdAt      DateTime?     @default(now())
+  updatedAt      DateTime?     @default(now())
+  academicYear   Batch?        @relation(fields: [academicYearId], references: [id])
+  branch         Branch?       @relation(fields: [branchId], references: [id])
+  organization   Organization  @relation(fields: [organizationId], references: [id])
+  role           Role          @relation(fields: [roleId], references: [id])
+  user           User          @relation(fields: [userId], references: [id])
+
+  @@index([userId, academicYearId])
+  @@index([branchId, academicYearId])
 }
 
 model ModuleAccess {
-  id     String  @id @default(uuid()) @map("_id") @db.Uuid
-  roleId String  @db.Uuid
+  id     String          @id @default(uuid()) @map("_id") @db.Uuid
+  roleId String          @db.Uuid
   module String
-  create Boolean @default(false)
-  read   Boolean @default(false)
-  update Boolean @default(false)
-  delete Boolean @default(false)
-  role   Role    @relation(fields: [roleId], references: [id])
+  scope  PermissionScope @default(BRANCH)
+  create Boolean         @default(false)
+  read   Boolean         @default(false)
+  update Boolean         @default(false)
+  delete Boolean         @default(false)
+  role   Role            @relation(fields: [roleId], references: [id])
 }
 
 model AdmissionForm {
@@ -917,6 +951,7 @@ model Batch {
   studentAttendance       StudentAttendance[]
   timetableDayOffs        TimetableDayOff[]
   holidays                Holiday[]
+  userRoleHistories       UserRoleHistory[]
 }
 
 model Class {
@@ -1435,6 +1470,30 @@ enum RoleType {
   tech
 }
 
+enum RoleArchetype {
+  ORGANIZATION_ADMIN
+  BRANCH_MANAGER
+  HM
+  AHM
+  CLASS_TEACHER
+  TEACHING_STAFF
+  FINANCE_OFFICER
+  HR_OFFICER
+  INSTRUCTOR
+  PARENT
+  STUDENT
+  CUSTOM
+}
+
+enum PermissionScope {
+  BRANCH
+  ASSIGNED_LEVELS
+  ASSIGNED_SECTIONS
+  ASSIGNED_SUBJECTS
+  OWN_RECORDS
+  OWN_WARDS
+}
+
 enum TestType {
   UnitTest
   TermTest
@@ -1695,4 +1754,53 @@ model Holiday {
 
   @@index([branchId, academicYearId])
   @@index([startDate])
+}
+
+model DeviceToken {
+  id         String   @id @default(uuid()) @map("_id") @db.Uuid
+  userId     String   @db.Uuid
+  token      String   @unique
+  platform   String
+  deviceInfo String?
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+model Notification {
+  id             String                  @id @default(uuid()) @map("_id") @db.Uuid
+  title          String
+  body           String
+  type           String
+  priority       String                  @default("NORMAL")
+  data           Json?
+  targetRole     String                  @default("ALL")
+  branchId       String                  @db.Uuid
+  organizationId String?                 @db.Uuid
+  classId        String?                 @db.Uuid
+  sectionId      String?                 @db.Uuid
+  createdById    String?                 @db.Uuid
+  createdAt      DateTime                @default(now())
+  recipients     NotificationRecipient[]
+  branch         Branch                  @relation(fields: [branchId], references: [id])
+  createdBy      User?                   @relation("NotificationCreator", fields: [createdById], references: [id])
+
+  @@index([branchId, createdAt])
+  @@index([createdById])
+}
+
+model NotificationRecipient {
+  id             String       @id @default(uuid()) @map("_id") @db.Uuid
+  notificationId String       @db.Uuid
+  userId         String       @db.Uuid
+  isRead         Boolean      @default(false)
+  readAt         DateTime?
+  createdAt      DateTime     @default(now())
+  notification   Notification @relation(fields: [notificationId], references: [id], onDelete: Cascade)
+  user           User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([notificationId, userId])
+  @@index([userId, isRead])
 }

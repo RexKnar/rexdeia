@@ -62,7 +62,7 @@ bash scripts/publish-ota.sh preview "fix: student search"
 
 - **Wrong channel** → testers never see the update, with no error anywhere.
 - **`eas.json`'s `node` field must be a concrete version** (`"24.9.0"`), never a range. If EAS CLI offers to pin the version your `.nvmrc`/`.node-version` declares, decline unless you use a concrete value: it writes `"24.x"` and then rejects *its own* file as invalid, which breaks every EAS command. (Removed; that is why it was blocking.)
-- **Untracked app directory** → a git-based EAS upload would build a project with no app in it. Keep using `EAS_NO_VCS=1`, or commit `apps/mobile`.
+- **`EAS_NO_VCS=1` is still required on this box** — EAS's archive step (`git clone --depth 1 file:///<repo>`) fails here with exit 128. `apps/mobile` is committed now, but the git path itself is still broken, so the build keeps packaging from the filesystem.
 - **Keystore lives on EAS.** Lose it and installed copies can never be upgraded in place.
 - **Lockfile must stay in sync** — the worker runs `pnpm install --frozen-lockfile`, so a dependency change without a lockfile update fails the build.
 - **`cli.appVersionSource` is unset** and EAS CLI warns it "will be required in the future". Decide once and pin it in `eas.json`: `"cli": { "appVersionSource": "remote" }` lets EAS track `versionCode` server-side (nothing to commit), `"local"` keeps it in `app.json`. Don't leave it implicit for the switchover.

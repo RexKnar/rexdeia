@@ -58,6 +58,34 @@ export async function assignUsersToRoleById(roleId: string, payload: any) {
         throw new Error(`User organization with ID ${userId} not found`);
       }
 
+      // Close out any current active role history for this user
+      await db.userRoleHistory.updateMany({
+        where: {
+          userId: userId,
+          organizationId: session.organizationId,
+          branchId: session.branchId,
+          isCurrent: true,
+        },
+        data: {
+          isCurrent: false,
+          endDate: new Date(),
+        },
+      });
+
+      // Record new role history entry for the active academic year
+      await db.userRoleHistory.create({
+        data: {
+          userId: userId,
+          roleId: role.id,
+          academicYearId: session.currentBatch || null,
+          organizationId: session.organizationId,
+          branchId: session.branchId,
+          startDate: new Date(),
+          isCurrent: true,
+          assignedById: session.user?.id || null,
+        },
+      });
+
       // Update the user organization with the new roleId
       return await db.userOrganization.update({
         where: {
@@ -72,3 +100,35 @@ export async function assignUsersToRoleById(roleId: string, payload: any) {
 
   return users;
 }
+
+export async function unassignUserFromRole(roleId: string, userId: string) {
+  const session = await getServerSession(authOptions);
+
+  // Close out the current active role history record
+  await db.userRoleHistory.updateMany({
+    where: {
+      userId: userId,
+      roleId: roleId,
+      organizationId: session.organizationId,
+      branchId: session.branchId,
+      isCurrent: true,
+    },
+    data: {
+      isCurrent: false,
+      endDate: new Date(),
+    },
+  });
+
+  return await db.userOrganization.updateMany({
+    where: {
+      userId: userId,
+      roleId: roleId,
+      organizationId: session.organizationId,
+      branchId: session.branchId,
+    },
+    data: {
+      roleId: null,
+    },
+  });
+}
+

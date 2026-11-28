@@ -54,11 +54,34 @@ const UserRoleList = () => {
     router.push(`${pathname}?${params.toString()}`);
   };
 
-  const handleDeleteRole = (role: any) => {
-    toast({
-      title: 'Delete Clicked',
-      description: `You clicked delete on ${role.user.name}`,
-    });
+  const handleDeleteRole = async (item: any) => {
+    try {
+      const targetUserId = item.user?.id || item.userId;
+      const res = await fetch(`/api/role/${roleId}/assign?userId=${targetUserId}`, {
+        method: 'DELETE',
+      });
+      if (res.ok) {
+        toast({
+          title: 'User Unassigned',
+          description: `${item.user?.name || 'User'} was unassigned from this role.`,
+        });
+        setUserList((prev) =>
+          prev.filter((u) => (u.user?.id || u.userId) !== targetUserId)
+        );
+      } else {
+        toast({
+          title: 'Error',
+          description: 'Failed to unassign user from role.',
+          variant: 'destructive',
+        });
+      }
+    } catch (err: any) {
+      toast({
+        title: 'Error',
+        description: err.message || 'Failed to unassign user.',
+        variant: 'destructive',
+      });
+    }
   };
 
   const columns: ColumnDef<any>[] = [

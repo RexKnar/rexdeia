@@ -17,7 +17,10 @@ export async function getExamsBySectionId(
 
   if (!batchId) {
     const activeBatch = await db.batch.findFirst({
-      where: { currentAcademicYear: true },
+      where: {
+        currentAcademicYear: true,
+        ...(session?.branchId ? { branchId: session.branchId } : {}),
+      },
       select: { id: true },
     });
     batchId = activeBatch?.id;
@@ -27,6 +30,7 @@ export async function getExamsBySectionId(
     exam: {
       isDeleted: false,
       ...(batchId ? { batchId } : {}),
+      ...(session?.branchId ? { branchId: session.branchId } : {}),
     },
   };
 

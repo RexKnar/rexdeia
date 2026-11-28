@@ -96,13 +96,16 @@ export async function GET(request: NextRequest) {
   try {
     const rangeType = request.nextUrl.searchParams.get('rangeType') || 'All';
     const classId = request.nextUrl.searchParams.get('classId') ?? undefined;
+    const classLevelId =
+      request.nextUrl.searchParams.get('classLevelId') ?? undefined;
     const academicYearId =
       request.nextUrl.searchParams.get('academicYearId') ?? undefined;
 
     const rangeScales = await getRangeScales(
       rangeType,
       classId,
-      academicYearId
+      academicYearId,
+      classLevelId
     );
 
     return new NextResponse(JSON.stringify(rangeScales), {

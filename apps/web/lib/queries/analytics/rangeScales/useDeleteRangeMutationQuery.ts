@@ -15,8 +15,8 @@ export function useDeleteRangeMutationQuery() {
         {},
         { id }
       );
-      await queryClient.refetchQueries({
-        queryKey: [GET_RANGE_SCALES, 'All'],
+      await queryClient.invalidateQueries({
+        queryKey: [GET_RANGE_SCALES],
       });
 
       return response;

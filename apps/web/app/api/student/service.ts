@@ -9,6 +9,9 @@ import { generateSignedUrl } from '../upload/service';
 
 export async function getStudentById(id: string) {
   const session = await getServerSession(authOptions);
+  if (!session?.branchId || !session?.organizationId) {
+    return null;
+  }
 
   const student = await db.student.findFirst({
     where: {
@@ -27,7 +30,7 @@ export async function getStudentById(id: string) {
       studentMapping: {
         where: {
           isCurrent: true,
-          batchId: session.currentBatch,
+          ...(session.currentBatch ? { batchId: session.currentBatch } : {}),
         },
         select: {
           rollNumber: true,
@@ -41,6 +44,7 @@ export async function getStudentById(id: string) {
             select: {
               id: true,
               name: true,
+              classLevelId: true,
             },
           },
           medium: {
@@ -59,6 +63,11 @@ export async function getStudentById(id: string) {
       },
     },
   });
+
+  if (!student) {
+    return null;
+  }
+
   const { studentMapping, profileImage, ...restOfStudent } = student;
 
   const profileImageUrl = profileImage
@@ -68,11 +77,11 @@ export async function getStudentById(id: string) {
   const studentDetails = {
     ...restOfStudent,
     profileImage: profileImageUrl,
-    group: studentMapping.length > 0 ? studentMapping[0].group : null,
-    class: studentMapping.length > 0 ? studentMapping[0].class : null,
-    medium: studentMapping.length > 0 ? studentMapping[0].medium : null,
-    section: studentMapping.length > 0 ? studentMapping[0].section : null,
-    rollNumber: studentMapping.length > 0 ? studentMapping[0].rollNumber : null,
+    group: studentMapping && studentMapping.length > 0 ? studentMapping[0].group : null,
+    class: studentMapping && studentMapping.length > 0 ? studentMapping[0].class : null,
+    medium: studentMapping && studentMapping.length > 0 ? studentMapping[0].medium : null,
+    section: studentMapping && studentMapping.length > 0 ? studentMapping[0].section : null,
+    rollNumber: studentMapping && studentMapping.length > 0 ? studentMapping[0].rollNumber : null,
   };
   return studentDetails;
 }
@@ -210,23 +219,58 @@ export async function addStudent(student: AddStudentModel) {
 
 export async function getStudentsList(page: number, pageSize: number) {
   const session = await getServerSession(authOptions);
+  if (!session?.branchId || !session?.organizationId) {
+    return { total: 0, page, pageSize, data: [] };
+  }
+
+  const { resolveUserSecurityContext } = await import('lib/auth/scope-resolver');
+  const security = await resolveUserSecurityContext(session);
+
+  const whereCondition: any = {
+    isDeleted: false,
+    branchId: session.branchId,
+    organizationId: session.organizationId,
+  };
+
+  // Scope non-branch-wide roles by their assigned academic boundaries
+  if (!security.isBranchWide) {
+    if (security.roleCategory === 'ClassTeacher' && security.inchargeSectionIds.length > 0) {
+      whereCondition.studentMapping = {
+        some: {
+          isCurrent: true,
+          ...(session.currentBatch ? { batchId: session.currentBatch } : {}),
+          sectionId: { in: security.inchargeSectionIds },
+        },
+      };
+    } else if (security.roleCategory === 'AHM' && security.assignedClassLevelIds.length > 0) {
+      whereCondition.studentMapping = {
+        some: {
+          isCurrent: true,
+          ...(session.currentBatch ? { batchId: session.currentBatch } : {}),
+          class: {
+            classLevelId: { in: security.assignedClassLevelIds },
+          },
+        },
+      };
+    } else if (security.roleCategory === 'TeachingStaff') {
+      whereCondition.studentMapping = {
+        some: {
+          isCurrent: true,
+          ...(session.currentBatch ? { batchId: session.currentBatch } : {}),
+          sectionId: { in: security.assignedSectionIds },
+        },
+      };
+    }
+  }
 
   const [total, studentsList] = await Promise.all([
     db.student.count({
-      where: {
-        isDeleted: false,
-        branchId: session.branchId,
-        organizationId: session.organizationId,
-      },
+      where: whereCondition,
     }),
     db.student.findMany({
       take: pageSize,
       skip: (page - 1) * pageSize,
-      where: {
-        isDeleted: false,
-        branchId: session.branchId,
-        organizationId: session.organizationId,
-      },
+      where: whereCondition,
     }),
   ]);
 
