@@ -9,7 +9,7 @@ import { RangeScaleList } from './_components/ScaleList';
 export default async function Page() {
   const session = await getServerSession(authOptions);
   if (!session || !session.branchId || !session.organizationId) {
-    return redirect('/signin?callbackUrl=/academics/grade');
+    return redirect('/signin?callbackUrl=/academics/range-scales');
   }
 
   return (

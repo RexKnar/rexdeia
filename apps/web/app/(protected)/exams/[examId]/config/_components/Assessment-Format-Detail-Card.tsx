@@ -1,7 +1,13 @@
 'use client';
 import { Pencil, Trash } from 'lucide-react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import { Button } from 'ui';
+import {
+  Button,
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from 'ui';
 import { formatDate } from 'utils';
 
 export function AssessmentFormatDetailCard(props) {
@@ -14,6 +20,7 @@ export function AssessmentFormatDetailCard(props) {
     excludeSubjectValidation,
     order,
     id: configId,
+    hasMarkEntry = false,
   } = props;
   const pathname = usePathname();
   const router = useRouter();
@@ -61,17 +68,39 @@ export function AssessmentFormatDetailCard(props) {
         >
           <Pencil size={12} className="text-center" />
         </Button>
-        <Button
-          className="h-auto bg-red-600 px-3 py-1 text-white"
-          variant="mild"
-          onClick={() => {
-            params.set('isDeleteConfigModal', 'true');
-            params.set('configId', configId);
-            router.replace(pathname + '?' + params.toString());
-          }}
-        >
-          <Trash size={12} className="text-center" />
-        </Button>
+        {hasMarkEntry ? (
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <span className="inline-flex cursor-not-allowed" tabIndex={0}>
+                  <Button
+                    className="pointer-events-none h-auto bg-red-600 px-3 py-1 text-white opacity-50"
+                    variant="mild"
+                    disabled
+                    aria-label="Cannot delete partition because mark entries exist"
+                  >
+                    <Trash size={12} className="text-center" />
+                  </Button>
+                </span>
+              </TooltipTrigger>
+              <TooltipContent className="max-w-[240px] whitespace-normal bg-gray-900 text-left text-white">
+                Cannot delete: mark entries already exist for this partition.
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+        ) : (
+          <Button
+            className="h-auto bg-red-600 px-3 py-1 text-white"
+            variant="mild"
+            onClick={() => {
+              params.set('isDeleteConfigModal', 'true');
+              params.set('configId', configId);
+              router.replace(pathname + '?' + params.toString());
+            }}
+          >
+            <Trash size={12} className="text-center" />
+          </Button>
+        )}
       </div>
     </div>
   );

@@ -3,6 +3,7 @@ import {
   File,
   FileText,
   GraduationCap,
+  Megaphone,
   SquareUserRound,
 } from 'lucide-react';
 
@@ -197,10 +198,22 @@ export const menuItems: SidebarMenuItem[] = [
       },
     ],
   },
+  {
+    id: 'announcements',
+    label: 'Announcements',
+    icon: Megaphone,
+    path: '/announcements',
+  },
 ];
 
 export const menuItem = {
   Admin: [
+    {
+      id: 'announcements',
+      label: 'Announcements',
+      icon: Megaphone,
+      path: '/announcements',
+    },
     {
       id: 'analytics',
       label: 'Analytics',
@@ -565,6 +578,12 @@ export const menuItem = {
     },
   ],
   OfficeAdmin: [
+    {
+      id: 'announcements',
+      label: 'Announcements',
+      icon: Megaphone,
+      path: '/announcements',
+    },
     {
       id: 'analytics',
       label: 'Analytics',

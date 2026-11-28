@@ -54,7 +54,13 @@ export async function updateExamById(id: string, payload: UpdateExamModel) {
   const markEntryOpenDate = new Date(payload.markEntryOpenDate);
   const markEntryEndDate = new Date(payload.markEntryEndDate);
   const markEntryCorrectionDate = new Date(payload.markEntryCorrectionDate);
-  return db.exam.update({
+
+  const prevExam = await db.exam.findUnique({
+    where: { id },
+    select: { isActive: true },
+  });
+
+  const updatedExam = await db.exam.update({
     where: {
       id: id,
     },
@@ -71,6 +77,20 @@ export async function updateExamById(id: string, payload: UpdateExamModel) {
       },
     },
   });
+
+  if (updatedExam.isActive && (!prevExam?.isActive || isActive)) {
+    import('lib/services/notification.service').then(({ notifyExamLive }) => {
+      notifyExamLive({
+        examId: id,
+        branchId: session.branchId,
+        createdById: session.user?.id,
+      }).catch((err) =>
+        console.error('[updateExamById notifyExamLive] Error:', err)
+      );
+    });
+  }
+
+  return updatedExam;
 }
 
 export async function deleteExamById(id: string) {

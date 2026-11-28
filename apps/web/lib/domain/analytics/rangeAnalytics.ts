@@ -8,16 +8,23 @@ export interface RangeScaleModel {
   endValue: string;
   order: number;
   batchId: string;
-  batch: BatchModel;
+  batch?: BatchModel;
   rangeOf: RangeType;
-  classLevelId?: string;
+  classLevelId?: string | null;
+  classLevel?: {
+    id: string;
+    name: string;
+  } | null;
   createdAt?: Date;
   updatedAt?: Date;
 }
 
-export type CreateRangeScale = Pick<
-  RangeScaleModel,
-  'startValue' | 'endValue' | 'order' | 'rangeOf' | 'classLevelId'
->;
+export type CreateRangeScale = {
+  startValue: string;
+  endValue: string;
+  order: number;
+  rangeOf: RangeType;
+  classLevelId?: string | null;
+};
 
-export type GetRangeScales = Omit<RangeScaleModel, 'createdAt' | 'updatedAt'>;
+export type GetRangeScales = RangeScaleModel;

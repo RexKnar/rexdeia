@@ -61,6 +61,7 @@ export type AssessmentFormatModel = {
   name: string;
   parentId?: string;
   isActive: boolean;
+  isDeleted?: boolean;
   hasMarkEntry: boolean;
   branchId: string;
   isDeleting?: boolean;

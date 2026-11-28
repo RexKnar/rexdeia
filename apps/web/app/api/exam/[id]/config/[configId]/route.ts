@@ -71,7 +71,10 @@ export async function DELETE(_: NextRequest, { params: { configId } }) {
       });
     }
 
-    const examConfigData = await deleteExamConfigEntry(configId);
+    const examConfigData = await deleteExamConfigEntry(
+      configId,
+      session.branchId
+    );
 
     if (examConfigData) {
       return new Response(JSON.stringify(examConfigData), {
@@ -83,8 +86,27 @@ export async function DELETE(_: NextRequest, { params: { configId } }) {
       });
     }
   } catch (e) {
+    if (e?.message === 'MARK_ENTRY_EXISTS' || e?.code === 'P2003') {
+      return new Response(
+        JSON.stringify({
+          error: 'MARK_ENTRY_EXISTS',
+          message:
+            'Cannot delete partition because mark entries already exist.',
+        }),
+        {
+          status: StatusCodes.CONFLICT,
+        }
+      );
+    }
+
+    if (e?.code === 'P2025') {
+      return new Response(JSON.stringify({ error: 'DATA_NOT_FOUND' }), {
+        status: StatusCodes.NOT_FOUND,
+      });
+    }
+
     captureException(e);
-    return new Response(JSON.stringify({ error: e.message }), {
+    return new Response(JSON.stringify({ error: e?.message }), {
       status: StatusCodes.INTERNAL_SERVER_ERROR,
     });
   }

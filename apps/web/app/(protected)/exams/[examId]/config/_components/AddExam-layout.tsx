@@ -1,14 +1,16 @@
 /* eslint-disable prettier/prettier */
 'use client';
 import { useGetClassListQuery } from 'lib/queries/class/useGetClassListQuery';
+import { useDeleteExamSubjectMutationQuery } from 'lib/queries/exams/configuration/subject/useDeleteExamSubjectMutationQuery';
 import { useGetExamConfigSubjectDetailsBySectionIdsQuery } from 'lib/queries/exams/configuration/subject/useGetExamConfigSubjectDetailsBySectionIdsQuery';
 import { useDeleteExamSubjectConfigMutationQuery } from 'lib/queries/exams/configuration/useDeleteExamConfigMutationQuery';
+import { useGetAssessmentFormatBySubjectIdQuery } from 'lib/queries/exams/subject/useGetAssessmentFormatBySubjectIdQuery';
 import { useGetExamDetailQuery } from 'lib/queries/exams/useGetExamDetailQuery';
 import { useGetExamListQuery } from 'lib/queries/exams/useGetExamListQuery';
 import { useGetSubjectsBySectionIdsMutationQuery } from 'lib/queries/section/subjects/useGetSubjectsBySectionIdsQuery';
 import { useGetAllSectionByClassIdQuery } from 'lib/queries/section/useGetAllSectionsByClassIdQuery';
 import { useGetSubjectTypeList } from 'lib/queries/subject-type/useGetSubjectTypeQuery';
-import { Loader2, Pencil } from 'lucide-react';
+import { Loader2, Pencil, Plus, Trash } from 'lucide-react';
 import dynamic from 'next/dynamic';
 import {
   useParams,
@@ -16,7 +18,7 @@ import {
   useRouter,
   useSearchParams,
 } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import {
   Button,
   Select,
@@ -26,11 +28,19 @@ import {
   SelectTrigger,
   SelectValue,
   Text,
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
   useToast,
 } from 'ui';
 
 import { DeleteConfirmationModal } from '@/components/modals/DeleteConfirmationModal';
 
+import {
+  EnableExamPartitionFlyout,
+  EnablePartitionTarget,
+} from '../_modals/EnableExamPartitionFlyout';
 import { AssessmentFormatDetailCard } from './Assessment-Format-Detail-Card';
 import { ExamConfigSectionCard } from './ExamConfigSectionCard';
 import { ExamConfigSubjectCard } from './ExamConfigSubjectCard';
@@ -80,6 +90,14 @@ export function AddExamLayout() {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars, no-unused-vars
   const [examSubjectPartition, setExamSubjectPartition] = useState([]);
   const [openFlyout, setOpenFlyout] = useState(false);
+  const [subjectConfigToDelete, setSubjectConfigToDelete] = useState<{
+    examSubjectId: string;
+    subjectName: string;
+    sectionName?: string;
+  } | null>(null);
+  const [partitionToEnable, setPartitionToEnable] =
+    useState<EnablePartitionTarget | null>(null);
+  const suppressAutoOpenRef = useRef(false);
   const { data: examDetail, isLoading: isExamDetailLoading } =
     useGetExamDetailQuery(
       { examId: routeParams.examId || examId },
@@ -108,17 +126,23 @@ export function AddExamLayout() {
   } = useGetExamConfigSubjectDetailsBySectionIdsQuery(
     { examId, sectionIds: sectionIds, subjectId },
     {
-      enabled: !!subjectId && !!sectionIds,
+      enabled: !!subjectId && sectionIds.length > 0,
     }
   );
 
   useEffect(() => {
-    if (subjectId) {
-      subjectConfigListResponse?.length
-        ? setOpenFlyout(false)
-        : setOpenFlyout(true);
+    suppressAutoOpenRef.current = false;
+  }, [subjectId]);
+
+  useEffect(() => {
+    if (subjectId && !isSubjectConfigListLoading && subjectConfigListResponse) {
+      if (subjectConfigListResponse.length > 0) {
+        setOpenFlyout(false);
+      } else if (!suppressAutoOpenRef.current) {
+        setOpenFlyout(true);
+      }
     }
-  }, [subjectConfigListResponse, subjectId]);
+  }, [subjectConfigListResponse, subjectId, isSubjectConfigListLoading]);
 
   useEffect(() => {
     if (subjectId) {
@@ -154,36 +178,20 @@ export function AddExamLayout() {
     }
   );
 
+  const { data: assessmentFormatResponse } =
+    useGetAssessmentFormatBySubjectIdQuery(subjectId, {
+      enabled: !!subjectId,
+    });
+
   const {
-    isError: isConfigDeleteError,
-    isSuccess: isConfigDeleteSuccess,
     mutateAsync: deleteExamSubjectConfigAsync,
-  } = useDeleteExamSubjectConfigMutationQuery(
-    examId,
-    (sectionIds[0] as string) || '',
-    subjectId
-  );
+    isPending: isDeletingPartition,
+  } = useDeleteExamSubjectConfigMutationQuery(examId, sectionIds, subjectId);
 
-  useEffect(() => {
-    if (isConfigDeleteError) {
-      toast({
-        title: 'Error',
-        variant: 'default',
-        description: 'Error while deleting config',
-      });
-    }
-  }, [isConfigDeleteError, toast]);
-
-  useEffect(() => {
-    if (isConfigDeleteSuccess) {
-      toast({
-        title: 'Success',
-        variant: 'default',
-        description: 'Config deleted successfully',
-      });
-      hideDeleteConfirmationModal();
-    }
-  }, [isConfigDeleteSuccess, toast]);
+  const {
+    mutateAsync: deleteExamSubjectAsync,
+    isPending: isDeletingSubject,
+  } = useDeleteExamSubjectMutationQuery(examId, sectionIds, subjectId);
 
   useEffect(() => {
     if (subjectListResponse) {
@@ -192,10 +200,15 @@ export function AddExamLayout() {
   }, [subjectListResponse]);
 
   useEffect(() => {
-    if (subjectId) {
+    if (subjectId && sectionIds.length > 0) {
       refetchSubjectConfigList();
     }
-  }, [subjectId, refetchSubjectConfigList]);
+  }, [subjectId, sectionIds.length, refetchSubjectConfigList]);
+
+  useEffect(() => {
+    setSubjectConfigToDelete(null);
+    setPartitionToEnable(null);
+  }, [classId, sectionIds, subjectId]);
 
   useEffect(() => {
     params.delete('subjectId');
@@ -445,62 +458,169 @@ export function AddExamLayout() {
           <div>
             {!isSubjectConfigListLoading ? (
               <div>
-                {subjectConfigListResponse?.map((subjectConfig) => (
-                  <div key={subjectConfig.id}>
-                    <div className="p-2 bg-blue-200 border-2 border-white rounded-2">
-                      <h2>
-                        {subjectConfig.subjectName} (
-                        {subjectConfig?.section?.name})
-                      </h2>
-                      <div className="flex flex-wrap text-left">
-                        <span className="w-1/2">Total Marks</span>
-                        <span className="w-1/2">
-                          {subjectConfig?.totalMarks?.toString()}
-                        </span>
-                      </div>
-                      <div className="flex flex-wrap text-left">
-                        <span className="w-1/2">Convert To</span>
-                        <span className="w-1/2">
-                          {subjectConfig?.convertTo?.toString()}
-                        </span>
-                      </div>
-                      <div className="flex flex-wrap text-left">
-                        <span className="w-1/2">Min-Mark</span>
-                        <span className="w-1/2">
-                          {subjectConfig?.minMark?.toString()}
-                        </span>
-                      </div>
-                      <div className="flex justify-center py-3">
-                        <Button
-                          className="h-auto px-3 py-1 text-white bg-primary-600"
-                          variant="mild"
-                          onClick={() => {
-                            params.set('isEditSubjectConfigFlyoutOpen', 'true');
-                            params.set(
-                              'examSubjectId',
-                              subjectConfig.examSubjectId
-                            );
-                            router.replace(pathname + '?' + params.toString());
-                          }}
-                        >
-                          <Pencil size={12} className="text-center" />
-                        </Button>
-                      </div>
-                    </div>
+                {subjectConfigListResponse?.map((subjectConfig) => {
+                  const existingPartitions =
+                    subjectConfig?.examSubjectPartition || [];
+                  const existingFormatIds = new Set(
+                    existingPartitions.map(
+                      (partition) =>
+                        partition.assessmentFormatId ||
+                        partition.assessmentFormat?.id
+                    )
+                  );
+                  const missingPartitions = (
+                    assessmentFormatResponse || []
+                  ).filter(
+                    (format) =>
+                      !format.isDeleted &&
+                      format.isActive !== false &&
+                      !existingFormatIds.has(format.id)
+                  );
+                  const maxOrder = existingPartitions.reduce(
+                    (max, partition) => Math.max(max, Number(partition.order) || 0),
+                    0
+                  );
 
-                    {subjectConfig?.examSubjectPartition
-                      ?.sort((a, b) => a.order - b.order)
-                      ?.map((cardData) =>
-                        cardData.assessmentFormat ? (
-                          <AssessmentFormatDetailCard
-                            {...cardData}
-                            key={cardData.id}
-                          />
-                        ) : null
+                  return (
+                    <div
+                      key={subjectConfig.examSubjectId || subjectConfig.id}
+                    >
+                      <div className="p-2 bg-blue-200 border-2 border-white rounded-2">
+                        <h2>
+                          {subjectConfig.subjectName} (
+                          {subjectConfig?.section?.name})
+                        </h2>
+                        <div className="flex flex-wrap text-left">
+                          <span className="w-1/2">Total Marks</span>
+                          <span className="w-1/2">
+                            {subjectConfig?.totalMarks?.toString()}
+                          </span>
+                        </div>
+                        <div className="flex flex-wrap text-left">
+                          <span className="w-1/2">Convert To</span>
+                          <span className="w-1/2">
+                            {subjectConfig?.convertTo?.toString()}
+                          </span>
+                        </div>
+                        <div className="flex flex-wrap text-left">
+                          <span className="w-1/2">Min-Mark</span>
+                          <span className="w-1/2">
+                            {subjectConfig?.minMark?.toString()}
+                          </span>
+                        </div>
+                        <div className="flex justify-center gap-2 py-3">
+                          <Button
+                            className="h-auto px-3 py-1 text-white bg-primary-600"
+                            variant="mild"
+                            onClick={() => {
+                              params.set(
+                                'isEditSubjectConfigFlyoutOpen',
+                                'true'
+                              );
+                              params.set(
+                                'examSubjectId',
+                                subjectConfig.examSubjectId
+                              );
+                              router.replace(pathname + '?' + params.toString());
+                            }}
+                          >
+                            <Pencil size={12} className="text-center" />
+                          </Button>
+                          {subjectConfig.hasMarkEntry ? (
+                            <TooltipProvider>
+                              <Tooltip>
+                                <TooltipTrigger asChild>
+                                  <span
+                                    className="inline-flex cursor-not-allowed"
+                                    tabIndex={0}
+                                  >
+                                    <Button
+                                      className="pointer-events-none h-auto px-3 py-1 text-white bg-red-600 opacity-50"
+                                      variant="mild"
+                                      disabled
+                                      aria-label="Cannot delete subject config because mark entries exist"
+                                    >
+                                      <Trash size={12} className="text-center" />
+                                    </Button>
+                                  </span>
+                                </TooltipTrigger>
+                                <TooltipContent className="max-w-[240px] whitespace-normal bg-gray-900 text-left text-white">
+                                  Cannot delete: mark entries already exist for
+                                  this subject or its partitions.
+                                </TooltipContent>
+                              </Tooltip>
+                            </TooltipProvider>
+                          ) : (
+                            <Button
+                              className="h-auto px-3 py-1 text-white bg-red-600"
+                              variant="mild"
+                              onClick={() => {
+                                setSubjectConfigToDelete({
+                                  examSubjectId: subjectConfig.examSubjectId,
+                                  subjectName: subjectConfig.subjectName,
+                                  sectionName: subjectConfig?.section?.name,
+                                });
+                              }}
+                            >
+                              <Trash size={12} className="text-center" />
+                            </Button>
+                          )}
+                        </div>
+                      </div>
+
+                      {[...existingPartitions]
+                        .sort((a, b) => (a.order ?? 0) - (b.order ?? 0))
+                        .map((cardData) =>
+                          cardData.assessmentFormat ? (
+                            <AssessmentFormatDetailCard
+                              {...cardData}
+                              key={cardData.id}
+                            />
+                          ) : null
+                        )}
+
+                      {missingPartitions.length > 0 && (
+                        <div className="mt-2 rounded-2 border-2 border-dashed border-amber-400 bg-amber-50 p-2 text-left">
+                          <div className="mb-1 text-xs font-semibold text-amber-900">
+                            Missing Partitions
+                          </div>
+                          <div className="flex flex-col gap-1.5">
+                            {missingPartitions.map((format, index) => (
+                              <div
+                                key={format.id}
+                                className="flex items-center justify-between rounded bg-white px-2 py-1 text-sm"
+                              >
+                                <span className="truncate font-medium text-gray-800">
+                                  {format.name}
+                                </span>
+                                <Button
+                                  type="button"
+                                  size="sm"
+                                  variant="mild"
+                                  className="h-auto bg-amber-600 px-2 py-1 text-xs text-white hover:bg-amber-700"
+                                  onClick={() => {
+                                    setPartitionToEnable({
+                                      examSubjectId: subjectConfig.examSubjectId,
+                                      assessmentFormatId: format.id,
+                                      assessmentFormatName: format.name,
+                                      subjectName: subjectConfig.subjectName,
+                                      sectionName: subjectConfig?.section?.name,
+                                      defaultOrder: maxOrder + index + 1,
+                                    });
+                                  }}
+                                >
+                                  <Plus size={12} className="mr-1" />
+                                  Enable
+                                </Button>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
                       )}
-                    <hr className="my-4" />
-                  </div>
-                ))}
+                      <hr className="my-4" />
+                    </div>
+                  );
+                })}
               </div>
             ) : (
               <div className="flex justify-center pt-36">
@@ -540,16 +660,68 @@ export function AddExamLayout() {
         sectionIds={sectionIds}
         classId={classId}
       />
+      <EnableExamPartitionFlyout
+        open={!!partitionToEnable}
+        onClose={() => setPartitionToEnable(null)}
+        examId={examId}
+        sectionIds={sectionIds}
+        subjectId={subjectId}
+        target={partitionToEnable}
+      />
       <DeleteConfirmationModal
         open={showDeleteConfirmationModal}
-        description={`Are you sure you want to delete the record?`}
+        description={`Are you sure you want to delete this partition?`}
         onDeleteClick={async () => {
-          if (configId) {
+          if (!configId || isDeletingPartition) return;
+          try {
             await deleteExamSubjectConfigAsync(configId);
+            toast({
+              title: 'Success',
+              variant: 'default',
+              description: 'Config deleted successfully',
+            });
+            hideDeleteConfirmationModal();
+          } catch (error: any) {
+            toast({
+              title: 'Error',
+              variant: 'destructive',
+              description: error?.message || 'Error while deleting config',
+            });
+            hideDeleteConfirmationModal();
           }
         }}
         onCancelClick={() => {
           hideDeleteConfirmationModal();
+        }}
+      />
+      <DeleteConfirmationModal
+        open={!!subjectConfigToDelete}
+        description={`Are you sure you want to delete "${subjectConfigToDelete?.subjectName || ''}${subjectConfigToDelete?.sectionName ? ` (${subjectConfigToDelete.sectionName})` : ''}" along with all its partitions?`}
+        onDeleteClick={async () => {
+          if (!subjectConfigToDelete || isDeletingSubject) return;
+          suppressAutoOpenRef.current = true;
+          try {
+            await deleteExamSubjectAsync(subjectConfigToDelete.examSubjectId);
+            toast({
+              title: 'Success',
+              variant: 'default',
+              description:
+                'Subject configuration and its partitions deleted successfully',
+            });
+            setSubjectConfigToDelete(null);
+          } catch (error: any) {
+            suppressAutoOpenRef.current = false;
+            toast({
+              title: 'Error',
+              variant: 'destructive',
+              description:
+                error?.message || 'Error while deleting subject configuration',
+            });
+            setSubjectConfigToDelete(null);
+          }
+        }}
+        onCancelClick={() => {
+          setSubjectConfigToDelete(null);
         }}
       />
     </>

@@ -130,6 +130,19 @@ export async function createExam(examPayload: CreateExamModel) {
         },
       },
     });
+
+    if (createdExam.isActive) {
+      import('lib/services/notification.service').then(({ notifyExamLive }) => {
+        notifyExamLive({
+          examId: createdExam.id,
+          branchId: session.branchId,
+          createdById: session.user?.id,
+        }).catch((err) =>
+          console.error('[createExam notifyExamLive] Error:', err)
+        );
+      });
+    }
+
     return createdExam;
   });
 }

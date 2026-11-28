@@ -65,7 +65,9 @@ export async function getConfigDetailBySectionIdsAndSubjectId(
   const response = await db.examGroup.findMany({
     where: {
       examId,
-      ...(sectionIds && sectionIds.length > 0 ? { sectionId: { in: sectionIds } } : {}),
+      ...(sectionIds && sectionIds.length > 0
+        ? { sectionId: { in: sectionIds } }
+        : {}),
       examSubject: {
         some: { subjectId },
       },
@@ -101,9 +103,22 @@ export async function getConfigDetailBySectionIdsAndSubjectId(
           convertTo: true,
           minMark: true,
           totalMarks: true,
+          _count: {
+            select: {
+              Mark: true,
+            },
+          },
           examSubjectPartition: {
+            orderBy: {
+              order: 'asc',
+            },
             include: {
               assessmentFormat: true,
+              _count: {
+                select: {
+                  Mark: true,
+                },
+              },
             },
           },
         },
@@ -121,23 +136,42 @@ export async function getConfigDetailBySectionIdsAndSubjectId(
     )
     .filter((subject) => subject.subjectId === subjectId);
 
-  const responseData = filteredSubjects.map((subject) => ({
-    subjectId: subject.subject?.id,
-    examSubjectId: subject.id,
-    subjectName: subject.subject?.name,
-    convertTo: subject.convertTo,
-    minMark: subject.minMark,
-    totalMarks: subject.totalMarks,
-    section: {
-      id: subject.section?.id,
-      name: subject.section?.name,
-    },
-    class: {
-      id: subject.class?.id,
-      name: subject.class?.name,
-    },
-    examSubjectPartition: subject.examSubjectPartition,
-  }));
+  const responseData = filteredSubjects.map((subject) => {
+    const partitionsWithMarkInfo = subject.examSubjectPartition.map(
+      (partition) => {
+        const partitionMarkCount = partition._count?.Mark ?? 0;
+        return {
+          ...partition,
+          markCount: partitionMarkCount,
+          hasMarkEntry: partitionMarkCount > 0,
+        };
+      }
+    );
+    const subjectMarkCount = subject._count?.Mark ?? 0;
+    const hasMarkEntry =
+      subjectMarkCount > 0 ||
+      partitionsWithMarkInfo.some((partition) => partition.hasMarkEntry);
+
+    return {
+      subjectId: subject.subject?.id,
+      examSubjectId: subject.id,
+      subjectName: subject.subject?.name,
+      convertTo: subject.convertTo,
+      minMark: subject.minMark,
+      totalMarks: subject.totalMarks,
+      markCount: subjectMarkCount,
+      hasMarkEntry,
+      section: {
+        id: subject.section?.id,
+        name: subject.section?.name,
+      },
+      class: {
+        id: subject.class?.id,
+        name: subject.class?.name,
+      },
+      examSubjectPartition: partitionsWithMarkInfo,
+    };
+  });
 
   return responseData || [];
 }
